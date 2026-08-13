@@ -116,12 +116,16 @@ export async function loadWalmartCatalog(): Promise<{
 }
 
 export async function saveWalmartCatalog(catalog: unknown): Promise<void> {
-  await mkdir(DATA_CATALOG, { recursive: true });
-  await writeFile(
-    path.join(DATA_CATALOG, "walmart_5831_latest.json"),
-    JSON.stringify(catalog, null, 2),
-    "utf8",
-  );
+  try {
+    await mkdir(DATA_CATALOG, { recursive: true });
+    await writeFile(
+      path.join(DATA_CATALOG, "walmart_5831_latest.json"),
+      JSON.stringify(catalog, null, 2),
+      "utf8",
+    );
+  } catch {
+    // Serverless read-only FS
+  }
 }
 
 export async function loadConfirmed(): Promise<ConfirmedMap> {
