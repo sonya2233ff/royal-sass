@@ -1,0 +1,11 @@
+# Local / secrets
+.env
+.env.local
+node_modules
+.next
+.vercel
+data/walmart-profile
+data/raw
+data/observations
+data/runs
+*.log
