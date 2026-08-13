@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Retailer {
+  id     String  @id @default(cuid())
+  slug   String  @unique
+  name   String
+  stores Store[]
+  retailerProducts RetailerProduct[]
+  rawResponses RawRetailerResponse[]
+}
+
+model Store {
+  id               String  @id @default(cuid())
+  retailerId       String
+  externalStoreId  String
+  name             String
+  address          String?
+  city             String?
+  postalCode       String?
+  lat              Float?
+  lng              Float?
+  active           Boolean @default(true)
+  retailer         Retailer @relation(fields: [retailerId], references: [id])
+  priceObservations PriceObservation[]
+  rawResponses     RawRetailerResponse[]
+  productMappings  ProductMapping[]
+
+  @@unique([retailerId, externalStoreId])
+}
+
+model Product {
+  id           String  @id @default(cuid())
+  genericName  String
+  brand        String?
+  category     String?
+  sizeValue    Float?
+  sizeUnit     String?
+  upc          String?
+  aliases      RestaurantAlias[]
+  mappings     ProductMapping[]
+  listItems    ShoppingListItem[]
+}
+
+model Restaurant {
+  id      String @id @default(cuid())
+  name    String
+  aliases RestaurantAlias[]
+  lists   ShoppingList[]
+}
+
+model RestaurantAlias {
+  id           String @id @default(cuid())
+  restaurantId String
+  aliasText    String
+  productId    String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  product      Product @relation(fields: [productId], references: [id])
+
+  @@unique([restaurantId, aliasText])
+}
+
+model RetailerProduct {
+  id                 String @id @default(cuid())
+  retailerId         String
+  externalProductId  String
+  name               String
+  brand              String?
+  packageSize        String?
+  upc                String?
+  rawMetadata        String? // JSON
+  retailer           Retailer @relation(fields: [retailerId], references: [id])
+  mappings           ProductMapping[]
+  priceObservations  PriceObservation[]
+
+  @@unique([retailerId, externalProductId])
+}
+
+model ProductMapping {
+  id                 String  @id @default(cuid())
+  productId          String
+  retailerProductId  String
+  storeId            String?
+  confidence         String  @default("exact")
+  confirmedByUser    Boolean @default(false)
+  product            Product @relation(fields: [productId], references: [id])
+  retailerProduct    RetailerProduct @relation(fields: [retailerProductId], references: [id])
+  store              Store? @relation(fields: [storeId], references: [id])
+}
+
+model PriceObservation {
+  id                 String   @id @default(cuid())
+  storeId            String
+  retailerProductId  String
+  priceCents         Int
+  unitPriceCents     Int?
+  currency           String   @default("CAD")
+  promoPriceCents    Int?
+  availability       String
+  confidence         String
+  checkedAt          DateTime
+  sourceUrl          String?
+  rawResponseId      String?
+  store              Store @relation(fields: [storeId], references: [id])
+  retailerProduct    RetailerProduct @relation(fields: [retailerProductId], references: [id])
+  rawResponse        RawRetailerResponse? @relation(fields: [rawResponseId], references: [id])
+}
+
+model RawRetailerResponse {
+  id          String   @id @default(cuid())
+  retailerId  String
+  storeId     String?
+  requestMeta String   // JSON
+  bodyJson    String   // JSON
+  fetchedAt   DateTime @default(now())
+  retailer    Retailer @relation(fields: [retailerId], references: [id])
+  store       Store? @relation(fields: [storeId], references: [id])
+  observations PriceObservation[]
+}
+
+model ShoppingList {
+  id           String @id @default(cuid())
+  restaurantId String
+  name         String
+  createdAt    DateTime @default(now())
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  items        ShoppingListItem[]
+  runs         ComparisonRun[]
+}
+
+model ShoppingListItem {
+  id           String @id @default(cuid())
+  listId       String
+  productId    String
+  quantity     Float
+  quantityUnit String
+  list         ShoppingList @relation(fields: [listId], references: [id])
+  product      Product @relation(fields: [productId], references: [id])
+}
+
+model ComparisonRun {
+  id               String   @id @default(cuid())
+  listId           String
+  selectedStoreIds String   // JSON array
+  resultJson       String
+  createdAt        DateTime @default(now())
+  list             ShoppingList @relation(fields: [listId], references: [id])
+}

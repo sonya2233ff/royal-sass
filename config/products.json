@@ -1,0 +1,79 @@
+{
+  "items": [
+    {
+      "id": "milk_2pct_4l",
+      "genericName": "Milk 2% 4L",
+      "category": "dairy",
+      "sizeValue": 4,
+      "sizeUnit": "L",
+      "quantity": 1,
+      "quantityUnit": "each",
+      "searchQueries": {
+        "walmart_ca": "2% milk 4L",
+        "no_frills": "2% milk 4L",
+        "sobeys": "2% milk 4L"
+      },
+      "preferredProductIds": {}
+    },
+    {
+      "id": "eggs",
+      "genericName": "Eggs",
+      "category": "dairy",
+      "sizeValue": 12,
+      "sizeUnit": "count",
+      "quantity": 1,
+      "quantityUnit": "dozen",
+      "searchQueries": {
+        "walmart_ca": "large white eggs 12",
+        "no_frills": "large eggs",
+        "sobeys": "large eggs"
+      },
+      "preferredProductIds": {}
+    },
+    {
+      "id": "chicken_breast",
+      "genericName": "Chicken breast",
+      "category": "meat",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "quantity": 1,
+      "quantityUnit": "kg",
+      "searchQueries": {
+        "walmart_ca": "chicken breast",
+        "no_frills": "chicken breast",
+        "sobeys": "chicken breast"
+      },
+      "preferredProductIds": {}
+    },
+    {
+      "id": "canola_oil",
+      "genericName": "Canola oil",
+      "category": "pantry",
+      "sizeValue": 3,
+      "sizeUnit": "L",
+      "quantity": 1,
+      "quantityUnit": "each",
+      "searchQueries": {
+        "walmart_ca": "canola oil",
+        "no_frills": "canola oil",
+        "sobeys": "canola oil"
+      },
+      "preferredProductIds": {}
+    },
+    {
+      "id": "bananas",
+      "genericName": "Bananas",
+      "category": "produce",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "quantity": 1,
+      "quantityUnit": "kg",
+      "searchQueries": {
+        "walmart_ca": "bananas",
+        "no_frills": "bananas",
+        "sobeys": "bananas"
+      },
+      "preferredProductIds": {}
+    }
+  ]
+}

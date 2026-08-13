@@ -1,0 +1,272 @@
+/**
+ * Pull cafe staples from Walmart #5831 and save a local catalog snapshot.
+ *
+ * Usage: npm run cache:walmart
+ */
+import { readFile, mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { WalmartConnector } from "@/connectors/walmart";
+import { closeWalmartBrowser } from "@/connectors/walmart-browser";
+import type { ProductOffer } from "@/connectors/types";
+import { pickBestOffer } from "@/domain/matching";
+import {
+  formatMass,
+  parseMassFromText,
+  scoreMassMatch,
+} from "@/domain/units";
+
+interface StapleItem {
+  id: string;
+  label: string;
+  queries: string[];
+  targetMassKg?: number;
+  mustIncludeAny?: string[];
+  mustNotInclude?: string[];
+  preferNameIncludes?: string[];
+  preferredProductId?: string;
+  unavailableAtWalmart?: boolean;
+  image?: string;
+  notes?: string;
+}
+
+interface StaplesConfig {
+  store: {
+    key: string;
+    retailer: string;
+    externalStoreId: string;
+    name: string;
+    address: string;
+  };
+  items: StapleItem[];
+}
+
+function slimOffer(o: ProductOffer) {
+  const mass =
+    parseMassFromText(o.packageSize ?? "") ?? parseMassFromText(o.name);
+  return {
+    productId: o.productId,
+    name: o.name,
+    brand: o.brand,
+    packageSize: o.packageSize ?? (mass ? formatMass(mass.kg) : undefined),
+    parsedMassKg: mass?.kg,
+    upc: o.upc,
+    price: o.price,
+    unitPrice: o.unitPrice,
+    availability: o.availability,
+    confidence: o.confidence,
+    checkedAt: o.checkedAt,
+    sourceUrl: o.sourceUrl,
+  };
+}
+
+function passesFilters(o: ProductOffer, item: StapleItem): boolean {
+  const n = `${o.name} ${o.packageSize ?? ""}`.toLowerCase();
+  if (item.mustIncludeAny?.length) {
+    const ok = item.mustIncludeAny.some((t) => n.includes(t.toLowerCase()));
+    if (!ok) return false;
+  }
+  if (item.mustNotInclude?.length) {
+    for (const bad of item.mustNotInclude) {
+      if (n.includes(bad.toLowerCase())) return false;
+    }
+  }
+  return true;
+}
+
+function scoreStaple(o: ProductOffer, item: StapleItem): number {
+  let score = 0;
+  const match = pickBestOffer([o], item.label);
+  if (match) score += 10;
+  else {
+    const n = o.name.toLowerCase();
+    for (const t of item.label.toLowerCase().split(/\s+/)) {
+      if (t.length > 3 && n.includes(t)) score += 2;
+    }
+  }
+  if (item.targetMassKg != null) score += scoreMassMatch(o, item.targetMassKg);
+  if (item.preferNameIncludes?.length) {
+    const n = o.name.toLowerCase();
+    for (const p of item.preferNameIncludes) {
+      if (n.includes(p.toLowerCase())) score += 3;
+    }
+  }
+  if (o.confidence === "exact") score += 1;
+  // Prefer cheaper reasonable grocery (not $38 protein bars)
+  if (o.price > 25) score -= 2;
+  // Mehadrin / dairy jugs: reject absurdly low shelf prices (e.g. $1.27 for 2L)
+  if (
+    (item.id === "milk_2pct" || item.id === "homo_milk") &&
+    o.price > 0 &&
+    o.price < 3.5
+  ) {
+    score -= 20;
+  }
+  return score;
+}
+
+function pickForStaple(
+  offers: ProductOffer[],
+  item: StapleItem,
+): ProductOffer | null {
+  if (item.preferredProductId) {
+    const locked = offers.find((o) => o.productId === item.preferredProductId);
+    if (locked) return locked;
+  }
+
+  const exact = offers.filter((o) => o.confidence === "exact");
+  const pool = (exact.length ? exact : offers).filter((o) =>
+    passesFilters(o, item),
+  );
+  if (!pool.length) return null;
+
+  let best: ProductOffer | null = null;
+  let bestScore = -Infinity;
+  for (const o of pool) {
+    const s = scoreStaple(o, item);
+    if (s > bestScore) {
+      bestScore = s;
+      best = o;
+    }
+  }
+  return bestScore < 0 ? null : best;
+}
+
+async function main() {
+  const cfgPath = path.join(process.cwd(), "config", "cafe-staples.json");
+  const cfg = JSON.parse(await readFile(cfgPath, "utf8")) as StaplesConfig;
+  const storeId = cfg.store.externalStoreId;
+  const wm = new WalmartConnector("L4J0A7");
+
+  console.log(`Caching staples @ ${cfg.store.name} (#${storeId})\n`);
+
+  const rows: Array<{
+    id: string;
+    label: string;
+    status: "ok" | "no_match" | "unavailable";
+    queriesTried: string[];
+    offer: ReturnType<typeof slimOffer> | null;
+    alternates: ReturnType<typeof slimOffer>[];
+    notes?: string;
+    image?: string;
+  }> = [];
+
+  for (const item of cfg.items) {
+    if (item.unavailableAtWalmart) {
+      rows.push({
+        id: item.id,
+        label: item.label,
+        status: "unavailable",
+        queriesTried: [],
+        offer: null,
+        alternates: [],
+        notes: item.notes ?? "Not available at this Walmart",
+        image: item.image,
+      });
+      console.log(`○ ${item.label} — UNAVAILABLE at Walmart #${storeId}`);
+      continue;
+    }
+
+    const seen = new Map<string, ProductOffer>();
+    const queries = item.preferredProductId
+      ? [item.preferredProductId, ...item.queries]
+      : item.queries;
+    for (const q of queries) {
+      try {
+        const hits = await wm.searchProducts(q, storeId);
+        for (const h of hits) {
+          if (!seen.has(h.productId)) seen.set(h.productId, h);
+        }
+        // Early stop if we already have a strong filtered hit
+        const filtered = [...seen.values()].filter((o) =>
+          passesFilters(o, item),
+        );
+        if (filtered.length >= 5) break;
+      } catch (e) {
+        console.log(
+          `  ! ${item.id} query "${q}":`,
+          e instanceof Error ? e.message.slice(0, 120) : e,
+        );
+      }
+      await new Promise((r) => setTimeout(r, 400));
+    }
+
+    const all = [...seen.values()];
+    const best = pickForStaple(all, item);
+    const alternates = all
+      .filter((o) => passesFilters(o, item) && o.productId !== best?.productId)
+      .slice(0, 4)
+      .map(slimOffer);
+
+    const row = {
+      id: item.id,
+      label: item.label,
+      status: (best ? "ok" : "no_match") as "ok" | "no_match",
+      queriesTried: item.queries,
+      offer: best ? slimOffer(best) : null,
+      alternates,
+      notes: item.notes,
+      image: item.image,
+    };
+    rows.push(row);
+
+    if (best) {
+      const mass =
+        parseMassFromText(best.packageSize ?? "") ??
+        parseMassFromText(best.name);
+      console.log(
+        `✓ ${item.label}\n    $${best.price} — ${best.name} (${best.productId})` +
+          (mass ? ` [${formatMass(mass.kg)}]` : ""),
+      );
+    } else {
+      console.log(
+        `✗ ${item.label} — NO MATCH (${all.length} raw / ${all.filter((o) => passesFilters(o, item)).length} filtered)`,
+      );
+      for (const a of all.slice(0, 3)) {
+        console.log(`    raw: $${a.price} — ${a.name.slice(0, 70)}`);
+      }
+    }
+  }
+
+  const outDir = path.join(process.cwd(), "data", "catalog");
+  await mkdir(outDir, { recursive: true });
+  const checkedAt = new Date().toISOString();
+  const payload = {
+    type: "walmart-staples-catalog",
+    store: cfg.store,
+    checkedAt,
+    itemCount: rows.length,
+    matched: rows.filter((r) => r.status === "ok").length,
+    items: rows,
+  };
+
+  const stamp = checkedAt.replace(/[:.]/g, "-");
+  const snapshot = path.join(outDir, `walmart_5831_${stamp}.json`);
+  const latest = path.join(outDir, "walmart_5831_latest.json");
+  await writeFile(snapshot, JSON.stringify(payload, null, 2), "utf8");
+  await writeFile(latest, JSON.stringify(payload, null, 2), "utf8");
+
+  const preferred: Record<string, string> = {};
+  for (const r of rows) {
+    if (r.offer?.productId) preferred[r.id] = r.offer.productId;
+  }
+  await writeFile(
+    path.join(outDir, "walmart_5831_preferred.json"),
+    JSON.stringify(
+      { storeId, updatedAt: checkedAt, preferredProductIds: preferred },
+      null,
+      2,
+    ),
+    "utf8",
+  );
+
+  console.log(
+    `\nSaved ${payload.matched}/${payload.itemCount} → data/catalog/walmart_5831_latest.json`,
+  );
+  await closeWalmartBrowser();
+}
+
+main().catch(async (e) => {
+  console.error(e);
+  await closeWalmartBrowser().catch(() => undefined);
+  process.exit(1);
+});

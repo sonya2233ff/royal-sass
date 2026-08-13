@@ -1,0 +1,33 @@
+{
+  "stores": [
+    {
+      "key": "walmart_5831",
+      "retailer": "walmart_ca",
+      "externalStoreId": "5831",
+      "name": "Walmart Supercentre #5831",
+      "city": "Thornhill",
+      "postalCode": "L4J0A7",
+      "address": "700 Centre St, Thornhill, ON L4J 0A7, Canada"
+    },
+    {
+      "key": "nofrills_3660",
+      "retailer": "no_frills",
+      "externalStoreId": "3660",
+      "name": "Anthony's No Frills #3660",
+      "city": "Vaughan",
+      "postalCode": "L4J3M8",
+      "address": "1054 Centre St, Vaughan, ON L4J 3M8, Canada"
+    },
+    {
+      "key": "sobeys_clark_hilda",
+      "retailer": "sobeys",
+      "externalStoreId": "659",
+      "name": "Sobeys Clark & Hilda",
+      "city": "Thornhill",
+      "postalCode": "L4J6W7",
+      "address": "441 Clark Ave W, Thornhill, ON L4J 6W7, Canada",
+      "active": false,
+      "notes": "Disabled for cafe staples POC — Walmart + No Frills only. Flipp merchant_store_code 659."
+    }
+  ]
+}

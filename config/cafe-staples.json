@@ -1,0 +1,112 @@
+{
+  "store": {
+    "key": "walmart_5831",
+    "retailer": "walmart_ca",
+    "externalStoreId": "5831",
+    "name": "Walmart Supercentre #5831",
+    "address": "700 Centre St, Thornhill, ON L4J 0A7"
+  },
+  "items": [
+    {
+      "id": "acai",
+      "label": "Acai 100% Pure / Acai Sweetened",
+      "queries": [],
+      "unavailableAtWalmart": true,
+      "notes": "Not sold at Walmart #5831 — treat as missing"
+    },
+    {
+      "id": "oat_beverage_original",
+      "label": "Oat Beverage Original",
+      "queries": ["earth's own oat original 1.75L", "oat beverage original", "oat milk original"],
+      "mustIncludeAny": ["oat milk", "oat beverage", "oat drink"],
+      "mustNotInclude": ["chocolate", "vanilla", "barista", "cream", "yogurt", "bar", "cookie"],
+      "preferredProductId": "2ADJVX8MAQ1Q",
+      "expectedPackKg": 1.75,
+      "image": "/products/oat_beverage_original.png"
+    },
+    {
+      "id": "almond_original",
+      "label": "So Fresh Almond Original",
+      "queries": ["so fresh almond original", "so fresh almond beverage", "almond milk original unsweetened"],
+      "mustIncludeAny": ["almond milk", "almond beverage", "almond drink"],
+      "mustNotInclude": ["bar", "protein", "chocolate", "butter", "flour", "yogurt", "creamer"],
+      "preferNameIncludes": ["so fresh", "original"]
+    },
+    {
+      "id": "homo_milk",
+      "label": "Homo Milk (Mehadrin)",
+      "queries": [
+        "mehadrin milk 3%",
+        "mehadrin homogenized",
+        "mehadrin whole milk",
+        "mehadrin 3.25%"
+      ],
+      "mustIncludeAny": ["mehadrin"],
+      "mustNotInclude": ["butter", "cream cheese", "yogurt", "sour cream", "1%", "2%"],
+      "preferNameIncludes": ["3%", "3.25%", "homo", "whole"],
+      "image": "/products/mehadrin_homo_3pct.png",
+      "expectedPackKg": 2,
+      "minPlausiblePrice": 3.5,
+      "notes": "Photo = red-cap Mehadrin 3%/homo (NOT 1%). SKU TBD at #5831."
+    },
+    {
+      "id": "milk_2pct",
+      "label": "2% Milk (Mehadrin)",
+      "queries": ["mehadrin 2% milk", "mehadrin partly skimmed 2%", "mehadrin kosher 2%"],
+      "mustIncludeAny": ["mehadrin"],
+      "mustNotInclude": ["butter", "cream cheese", "yogurt", "1%", "3%", "3.25%", "homo", "leben", "cheese"],
+      "preferNameIncludes": ["2%", "2 %"],
+      "image": "/products/mehadrin_2pct.png",
+      "expectedPackKg": 2,
+      "minPlausiblePrice": 3.5,
+      "notes": "Cafe wants ~2L Mehadrin 2% (~$5). Reject mini packs."
+    },
+    {
+      "id": "simply_egg_whites",
+      "label": "Simply Egg Whites",
+      "queries": ["naturegg simply egg whites 1kg", "simply egg whites 1 kg", "simply egg whites"],
+      "mustIncludeAny": ["egg white", "egg whites"],
+      "mustNotInclude": ["noodles", "pasta"],
+      "targetMassKg": 1,
+      "preferredProductId": "6000196635381",
+      "image": "/products/simply_egg_whites.png",
+      "notes": "Compose smaller NF packs (e.g. 2×500ml) to match 1 kg"
+    },
+    {
+      "id": "pineapple",
+      "label": "Pineapple",
+      "queries": ["fresh pineapple whole", "pineapple fruit", "golden pineapple"],
+      "mustIncludeAny": ["pineapple"],
+      "mustNotInclude": ["juice", "candy", "dried", "chunk", "tidbit", "can", "cup", "yogurt", "maid", "bottle", "soda", "zero sugar", "sparkling", "crushed", "canned", "syrup", "flavoring", "monin", "concentrate"],
+      "preferredProductId": "6000191289580"
+    },
+    {
+      "id": "red_peppers",
+      "label": "Red Peppers",
+      "queries": ["red bell pepper", "red peppers fresh", "sunset red bell pepper"],
+      "mustIncludeAny": ["bell pepper", "red pepper", "red peppers"],
+      "mustNotInclude": ["sauce", "jelly", "flake", "spice", "hummus", "chip", "corer", "tool", "gadget", "stainless", "seed remover", "cutter", "kitchen", "artificial", "fake", "decorative", "plastic"],
+      "preferredProductId": "6000191286439",
+      "image": "/products/red_peppers.png"
+    },
+    {
+      "id": "tomatoes",
+      "label": "Tomatoes",
+      "queries": ["grape tomatoes", "your fresh market grape tomatoes", "your fresh market tomato grape"],
+      "mustIncludeAny": ["grape tomato", "grape tomatoes"],
+      "mustNotInclude": ["sauce", "paste", "diced", "crushed", "can", "juice", "soup", "unico", "passata", "ketchup", "seed", "planting", "vine"],
+      "preferredProductId": "6000194960084",
+      "image": "/products/tomatoes.png",
+      "notes": "User pin: YFM Grape Tomatoes 283g @ Walmart"
+    },
+    {
+      "id": "sweet_potatoes",
+      "label": "Sweet Potatoes",
+      "queries": ["sweet potato sold in singles", "sweet potato fresh", "your fresh market sweet potatoes"],
+      "mustIncludeAny": ["sweet potato", "sweet potatoes"],
+      "mustNotInclude": ["chip", "fries", "spiral", "noodle", "pie", "baby food", "mashed", "ws", "seed"],
+      "image": "/products/sweet_potatoes.png",
+      "notes": "User pin: single 0.28–0.57 kg"
+    }
+  ]
+}
