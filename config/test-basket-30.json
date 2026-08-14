@@ -1,0 +1,284 @@
+{
+  "stores": ["walmart_5831", "nofrills_3660"],
+  "notes": "30-item test basket for WM vs NF. Priority: receipt-backed UPCs, then cafe staples that exercise pack/kg/compose/sanity.",
+  "items": [
+    {
+      "id": "simply_egg_whites",
+      "label": "Simply Egg Whites 1kg",
+      "category": "eggs",
+      "why": "Receipt UPC lock; compose test on NF",
+      "receiptUpc": "065651002470",
+      "receiptPrice": 9.47,
+      "receiptStore": "walmart_5831",
+      "compare": "pack_or_compose",
+      "priority": 1
+    },
+    {
+      "id": "tomatoes_grape",
+      "label": "Grape Tomatoes (pack)",
+      "category": "produce",
+      "why": "Receipt TOM GRAPE UPC; easy pack compare",
+      "receiptUpc": "628915235420",
+      "receiptPrice": 3.47,
+      "receiptStore": "walmart_5831",
+      "compare": "per_pack",
+      "priority": 1
+    },
+    {
+      "id": "eggs_30ct",
+      "label": "Eggs 30ct",
+      "category": "eggs",
+      "why": "Receipt UPC; pack compare",
+      "receiptUpc": "627735279720",
+      "receiptPrice": 9.18,
+      "receiptStore": "walmart_5831",
+      "compare": "per_pack",
+      "priority": 1
+    },
+    {
+      "id": "grayridge_eggs",
+      "label": "Grayridge Eggs (dozen)",
+      "category": "eggs",
+      "why": "Receipt UPC; alternate egg SKU",
+      "receiptUpc": "064767343050",
+      "receiptPrice": 6.98,
+      "receiptStore": "walmart_5831",
+      "compare": "per_pack",
+      "priority": 1
+    },
+    {
+      "id": "lemons_2lb",
+      "label": "YFM Lemons 2lb",
+      "category": "produce",
+      "why": "Receipt UPC; pack produce",
+      "receiptUpc": "033383119060",
+      "receiptPrice": 4.97,
+      "receiptStore": "walmart_5831",
+      "compare": "per_pack",
+      "priority": 1
+    },
+    {
+      "id": "pear_bosc_kg",
+      "label": "Bosc Pear (by kg)",
+      "category": "produce",
+      "why": "Receipt weighed produce; $/kg",
+      "receiptUpc": "0000000044130",
+      "receiptPricePerKg": 6.55,
+      "receiptStore": "walmart_5831",
+      "compare": "per_kg",
+      "priority": 1
+    },
+    {
+      "id": "folgers_coffee",
+      "label": "Folgers Coffee (green can)",
+      "category": "dry",
+      "why": "Receipt UPC; dry goods",
+      "receiptUpc": "082785400724",
+      "receiptPrice": 10.47,
+      "receiptStore": "walmart_5831",
+      "compare": "per_pack",
+      "priority": 1
+    },
+    {
+      "id": "eggplant_kg",
+      "label": "Eggplant (by kg)",
+      "category": "produce",
+      "why": "NF receipt weighed; $/kg",
+      "receiptUpc": "4081",
+      "receiptPricePerKg": 6.59,
+      "receiptStore": "nofrills",
+      "compare": "per_kg",
+      "priority": 1
+    },
+    {
+      "id": "tomato_gh_red_kg",
+      "label": "Greenhouse Red Tomato (by kg)",
+      "category": "produce",
+      "why": "NF receipt weighed; $/kg",
+      "receiptUpc": "4799",
+      "receiptPricePerKg": 6.59,
+      "receiptStore": "nofrills",
+      "compare": "per_kg",
+      "priority": 1
+    },
+    {
+      "id": "rogers_wheat_bran",
+      "label": "Rogers Wheat Bran",
+      "category": "dry",
+      "why": "NF receipt dry goods",
+      "receiptUpc": "006017911015",
+      "receiptPrice": 2.99,
+      "receiptStore": "nofrills",
+      "compare": "per_pack",
+      "priority": 1
+    },
+
+    {
+      "id": "oat_beverage_original",
+      "label": "Earth's Own Oat Original 1.75L",
+      "category": "dairy_alt",
+      "why": "Already working in app; pack lock",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "red_peppers_kg",
+      "label": "Red Bell Pepper (by kg)",
+      "category": "produce",
+      "why": "Already working; NF much cheaper $/kg",
+      "compare": "per_kg",
+      "priority": 2
+    },
+    {
+      "id": "sweet_potatoes_kg",
+      "label": "Sweet Potato (by kg)",
+      "category": "produce",
+      "why": "Already working; singles vs bag",
+      "compare": "per_kg",
+      "priority": 2
+    },
+    {
+      "id": "pineapple_whole",
+      "label": "Whole Pineapple",
+      "category": "produce",
+      "why": "Already in staples; pack/each",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "almond_original",
+      "label": "Earth's Own Almond Original",
+      "category": "dairy_alt",
+      "why": "Same brand as oat (Earth's Own)",
+      "compare": "per_pack",
+      "priority": 2
+    },
+
+    {
+      "id": "bananas_kg",
+      "label": "Bananas (by kg)",
+      "category": "produce",
+      "why": "Universal; $/kg; WC receipt signal",
+      "compare": "per_kg",
+      "priority": 2
+    },
+    {
+      "id": "cucumber_english",
+      "label": "English Cucumber",
+      "category": "produce",
+      "why": "Cafe salad; each/pack",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "garlic_1kg",
+      "label": "Garlic 1kg",
+      "category": "produce",
+      "why": "WC receipt; pack",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "blueberries",
+      "label": "Blueberries (pint/clamshell)",
+      "category": "produce",
+      "why": "Cafe garnish; pack",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "strawberries",
+      "label": "Strawberries (clamshell)",
+      "category": "produce",
+      "why": "Cafe; pack",
+      "compare": "per_pack",
+      "priority": 2
+    },
+
+    {
+      "id": "milk_2pct_2l",
+      "label": "Mehadrin 2% Milk 2L",
+      "category": "dairy",
+      "why": "Cafe dairy — Mehadrin only",
+      "compare": "per_pack",
+      "expectedPackKg": 2,
+      "minPlausiblePrice": 3.5,
+      "priority": 2
+    },
+    {
+      "id": "homo_milk_2l",
+      "label": "Mehadrin Homo 3.25% Milk 2L",
+      "category": "dairy",
+      "why": "Cafe dairy — Mehadrin homo (same brand)",
+      "compare": "per_pack",
+      "expectedPackKg": 2,
+      "minPlausiblePrice": 3.5,
+      "priority": 2
+    },
+    {
+      "id": "butter_454g",
+      "label": "Butter 454g",
+      "category": "dairy",
+      "why": "Classic basket POC item",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "large_eggs_dozen",
+      "label": "Large Eggs Dozen",
+      "category": "eggs",
+      "why": "Compose vs 18/30 packs",
+      "compare": "pack_or_compose",
+      "priority": 2
+    },
+    {
+      "id": "canola_oil_3l",
+      "label": "Canola Oil 3L",
+      "category": "dry",
+      "why": "Kitchen staple; pack",
+      "compare": "per_pack",
+      "priority": 2
+    },
+
+    {
+      "id": "white_sugar_2kg",
+      "label": "White Sugar 2kg",
+      "category": "dry",
+      "why": "Kitchen staple; pack",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "ap_flour_2_5kg",
+      "label": "All-Purpose Flour 2.5kg",
+      "category": "dry",
+      "why": "Kitchen staple; pack",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "pasta_elbows",
+      "label": "Elbow Pasta ~900g",
+      "category": "dry",
+      "why": "WC receipt signal; pack",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "chicken_breast_kg",
+      "label": "Chicken Breast (by kg)",
+      "category": "protein",
+      "why": "Cafe protein; $/kg",
+      "compare": "per_kg",
+      "priority": 2
+    },
+    {
+      "id": "orange_juice_pulp",
+      "label": "Orange Juice with Pulp ~2.5L",
+      "category": "beverage",
+      "why": "WC Tropicana signal; pack",
+      "compare": "per_pack",
+      "priority": 2
+    }
+  ]
+}

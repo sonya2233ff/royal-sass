@@ -8,8 +8,14 @@ data/observations
 data/walmart-profile
 data/runs
 data/catalog/walmart_5831_20*
+data/receipts/*.JPG
+data/receipts/*.jpg
+data/receipts/*.JPEG
+data/receipts/*.png
+data/receipts/*.webp
 .DS_Store
 dist
 prisma/*.db
 prisma/*.db-journal
 .vercel
+.env*

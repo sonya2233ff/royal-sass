@@ -5,10 +5,10 @@
  */
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { WalmartConnector } from "@/connectors/walmart";
+import { createWalmartConnector } from "@/connectors/walmart-source";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
-import { pickBestOffer } from "@/domain/matching";
+import { pickBestOffer, pickCheapestOffer } from "@/domain/matching";
 import {
   formatMass,
   parseMassFromText,
@@ -27,6 +27,8 @@ interface StapleItem {
   unavailableAtWalmart?: boolean;
   image?: string;
   notes?: string;
+  matchMode?: "preferred" | "cheapest";
+  category?: string;
 }
 
 interface StaplesConfig {
@@ -95,7 +97,11 @@ function scoreStaple(o: ProductOffer, item: StapleItem): number {
   if (o.price > 25) score -= 2;
   // Mehadrin / dairy jugs: reject absurdly low shelf prices (e.g. $1.27 for 2L)
   if (
-    (item.id === "milk_2pct" || item.id === "homo_milk") &&
+    (item.id === "milk_2pct" ||
+      item.id === "homo_milk" ||
+      item.id === "milk_2pct_2l" ||
+      item.id === "milk_1pct_2l" ||
+      item.id === "homo_milk_2l") &&
     o.price > 0 &&
     o.price < 3.5
   ) {
@@ -108,34 +114,40 @@ function pickForStaple(
   offers: ProductOffer[],
   item: StapleItem,
 ): ProductOffer | null {
-  if (item.preferredProductId) {
-    const locked = offers.find((o) => o.productId === item.preferredProductId);
-    if (locked) return locked;
-  }
-
   const exact = offers.filter((o) => o.confidence === "exact");
   const pool = (exact.length ? exact : offers).filter((o) =>
     passesFilters(o, item),
   );
   if (!pool.length) return null;
 
-  let best: ProductOffer | null = null;
-  let bestScore = -Infinity;
-  for (const o of pool) {
-    const s = scoreStaple(o, item);
-    if (s > bestScore) {
-      bestScore = s;
-      best = o;
-    }
+  const cheapest =
+    item.matchMode === "cheapest" || item.category === "produce";
+
+  if (cheapest) {
+    return (
+      pickCheapestOffer(pool, item.label, {
+        targetMassKg: item.targetMassKg,
+      }) ?? null
+    );
   }
-  return bestScore < 0 ? null : best;
+
+  if (item.preferredProductId) {
+    const locked = offers.find((o) => o.productId === item.preferredProductId);
+    if (locked) return locked;
+  }
+
+  return (
+    pickBestOffer(pool, item.label, item.preferredProductId, {
+      targetMassKg: item.targetMassKg,
+    }) ?? null
+  );
 }
 
 async function main() {
   const cfgPath = path.join(process.cwd(), "config", "cafe-staples.json");
   const cfg = JSON.parse(await readFile(cfgPath, "utf8")) as StaplesConfig;
   const storeId = cfg.store.externalStoreId;
-  const wm = new WalmartConnector("L4J0A7");
+  const wm = createWalmartConnector("L4J0A7");
 
   console.log(`Caching staples @ ${cfg.store.name} (#${storeId})\n`);
 
@@ -167,9 +179,12 @@ async function main() {
     }
 
     const seen = new Map<string, ProductOffer>();
-    const queries = item.preferredProductId
-      ? [item.preferredProductId, ...item.queries]
-      : item.queries;
+    const queries =
+      item.matchMode === "cheapest" || item.category === "produce"
+        ? item.queries
+        : item.preferredProductId
+          ? [item.preferredProductId, ...item.queries]
+          : item.queries;
     for (const q of queries) {
       try {
         const hits = await wm.searchProducts(q, storeId);

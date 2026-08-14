@@ -1,0 +1,482 @@
+{
+  "storeId": "3660",
+  "checkedAt": "2026-08-14T22:15:28.124Z",
+  "items": [
+    {
+      "id": "simply_egg_whites",
+      "label": "Simply Egg Whites 1kg",
+      "status": "ok",
+      "offer": {
+        "productId": "20820355001_EA",
+        "name": "Naturegg Simply Egg Whites",
+        "price": 5.49,
+        "packageSize": "500 ml, $1.10/100ml",
+        "parsedMassKg": 0.5,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:35.886Z",
+        "sourceUrl": "https://www.nofrills.ca/en/naturegg-simply-egg-whites/p/20820355001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "oat_beverage_original",
+      "label": "Oat Beverage Original 1.75L",
+      "status": "ok",
+      "offer": {
+        "productId": "21037796_EA",
+        "name": "Gluten-Free Original Oat Milk Alternative",
+        "price": 4,
+        "packageSize": "1.75 l, $0.23/100ml",
+        "parsedMassKg": 1.75,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:55.699Z",
+        "sourceUrl": "https://www.nofrills.ca/en/gluten-free-original-oat-milk-alternative/p/21037796_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "pineapple_whole",
+      "label": "Whole Pineapple",
+      "status": "ok",
+      "offer": {
+        "productId": "20160992001_EA",
+        "name": "Pineapple",
+        "price": 4.99,
+        "packageSize": "1 ea, $4.99/1ea",
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:00.461Z",
+        "sourceUrl": "https://www.nofrills.ca/en/pineapple/p/20160992001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "bananas_kg",
+      "label": "Bananas (by kg)",
+      "status": "ok",
+      "offer": {
+        "productId": "20175355001_KG",
+        "name": "Bananas, Bunch",
+        "price": 1.75,
+        "packageSize": "$1.52/1kg $0.69/1lb",
+        "parsedMassKg": 1,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:03.978Z",
+        "sourceUrl": "https://www.nofrills.ca/en/bananas-bunch/p/20175355001_KG"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "cucumber_english",
+      "label": "English Cucumber",
+      "status": "ok",
+      "offer": {
+        "productId": "20070132001_EA",
+        "name": "English Cucumber",
+        "price": 0.99,
+        "packageSize": "1 ea, $0.99/1ea",
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:05.354Z",
+        "sourceUrl": "https://www.nofrills.ca/en/english-cucumber/p/20070132001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "homo_milk_2l",
+      "label": "Mehadrin Homo 3.25% Milk 2L",
+      "status": "ok",
+      "offer": {
+        "productId": "20094120002_EA",
+        "name": "Kosher Homogenized Milk",
+        "price": 5.67,
+        "packageSize": "2 l, $0.28/100ml",
+        "parsedMassKg": 2,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:13.834Z",
+        "sourceUrl": "https://www.nofrills.ca/en/kosher-homogenized-milk/p/20094120002_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "blueberries",
+      "label": "Blueberries",
+      "status": "ok",
+      "offer": {
+        "productId": "20141763001_EA",
+        "name": "2 LB Blueberries",
+        "price": 7.99,
+        "packageSize": "907 g, $0.88/100g",
+        "parsedMassKg": 0.907,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:08.757Z",
+        "sourceUrl": "https://www.nofrills.ca/en/2-lb-blueberries/p/20141763001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "almond_original",
+      "label": "Earth's Own Almond Original",
+      "status": "ok",
+      "offer": {
+        "productId": "20299698001_EA",
+        "name": "Original Almond Milk Alternative",
+        "price": 4,
+        "packageSize": "1.89 l, $0.21/100ml",
+        "parsedMassKg": 1.89,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:01.967Z",
+        "sourceUrl": "https://www.nofrills.ca/en/original-almond-milk-alternative/p/20299698001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "milk_2pct_2l",
+      "label": "Mehadrin 2% Milk 2L",
+      "status": "ok",
+      "offer": {
+        "productId": "20094120003_EA",
+        "name": "Kosher 2% Milk",
+        "price": 5.67,
+        "packageSize": "2 l, $0.28/100ml",
+        "parsedMassKg": 2,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:11.999Z",
+        "sourceUrl": "https://www.nofrills.ca/en/kosher-2-milk/p/20094120003_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "tomatoes_grape",
+      "label": "Grape Tomatoes (pack)",
+      "status": "ok",
+      "offer": {
+        "productId": "20840038001_EA",
+        "name": "Grape Tomato",
+        "price": 7.99,
+        "packageSize": "907 g, $0.88/100g",
+        "parsedMassKg": 0.907,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:37.171Z",
+        "sourceUrl": "https://www.nofrills.ca/en/grape-tomato/p/20840038001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "eggs_30ct",
+      "label": "Eggs 30ct",
+      "status": "ok",
+      "offer": {
+        "productId": "21205224001_EA",
+        "name": "Free-Range Large Brown Eggs, Club Pack (30 Count)",
+        "price": 17.5,
+        "packageSize": "30 ea, $0.58/1ea",
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:39.018Z",
+        "sourceUrl": "https://www.nofrills.ca/en/free-range-large-brown-eggs-club-pack-30-count/p/21205224001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "grayridge_eggs",
+      "label": "Grayridge Eggs",
+      "status": "ok",
+      "offer": {
+        "productId": "21685186001_EA",
+        "name": "Eggs, Medium",
+        "price": 7.99,
+        "packageSize": "30 ea, $0.27/1ea",
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:40.451Z",
+        "sourceUrl": "https://www.nofrills.ca/en/eggs-medium/p/21685186001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "lemons_2lb",
+      "label": "Lemons (bag ~2lb)",
+      "status": "ok",
+      "offer": {
+        "productId": "20795315001_EA",
+        "name": "Lemons, 2 lb Bag",
+        "price": 4.99,
+        "packageSize": "907 g, $0.55/100g",
+        "parsedMassKg": 0.907,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:42.365Z",
+        "sourceUrl": "https://www.nofrills.ca/en/lemons-2-lb-bag/p/20795315001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "pear_bosc_kg",
+      "label": "Bosc Pear (by kg)",
+      "status": "ok",
+      "offer": {
+        "productId": "20129549001_KG",
+        "name": "Rocha Pears",
+        "price": 0.92,
+        "packageSize": "$6.59/1kg $2.99/1lb",
+        "parsedMassKg": 1,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:44.593Z",
+        "sourceUrl": "https://www.nofrills.ca/en/rocha-pears/p/20129549001_KG"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "folgers_coffee",
+      "label": "Folgers Coffee",
+      "status": "ok",
+      "offer": {
+        "productId": "21393374_EA",
+        "name": "Gourmet West Coast Dark Roast Fine Grind Coffee",
+        "price": 20,
+        "packageSize": "875 g, $2.29/100g",
+        "parsedMassKg": 0.875,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:46.522Z",
+        "sourceUrl": "https://www.nofrills.ca/en/gourmet-west-coast-dark-roast-fine-grind-coffee/p/21393374_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "eggplant_kg",
+      "label": "Eggplant (by kg)",
+      "status": "ok",
+      "offer": {
+        "productId": "20055882001_KG",
+        "name": "Indian Eggplant",
+        "price": 0.77,
+        "packageSize": "$7.69/1kg $3.49/1lb",
+        "parsedMassKg": 1,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:49.296Z",
+        "sourceUrl": "https://www.nofrills.ca/en/indian-eggplant/p/20055882001_KG"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "tomato_gh_red_kg",
+      "label": "Greenhouse Red Tomato (by kg)",
+      "status": "ok",
+      "offer": {
+        "productId": "21219102_EA",
+        "name": "Accents Diced Tomatoes with Green Pepper",
+        "price": 2.5,
+        "packageSize": "540 ml, $0.46/100ml",
+        "parsedMassKg": 0.54,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:51.294Z",
+        "sourceUrl": "https://www.nofrills.ca/en/accents-diced-tomatoes-with-green-pepper/p/21219102_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "rogers_wheat_bran",
+      "label": "Rogers Wheat Bran",
+      "status": "ok",
+      "offer": {
+        "productId": "20744484_EA",
+        "name": "Wheat Bran",
+        "price": 2.99,
+        "packageSize": "450 g, $0.66/100g",
+        "parsedMassKg": 0.45,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:54.202Z",
+        "sourceUrl": "https://www.nofrills.ca/en/wheat-bran/p/20744484_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "red_peppers_kg",
+      "label": "Red Bell Pepper (by kg)",
+      "status": "ok",
+      "offer": {
+        "productId": "20007535001_KG",
+        "name": "Red Peppers    ",
+        "price": 2.11,
+        "packageSize": "$8.80/1kg $3.99/1lb",
+        "parsedMassKg": 1,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:57.669Z",
+        "sourceUrl": "https://www.nofrills.ca/en/red-peppers/p/20007535001_KG"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "sweet_potatoes_kg",
+      "label": "Sweet Potato (by kg)",
+      "status": "ok",
+      "offer": {
+        "productId": "20169868001_KG",
+        "name": "Caribbean Sweet Potatoes",
+        "price": 1.36,
+        "packageSize": "$4.39/1kg $1.99/1lb",
+        "parsedMassKg": 1,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:14:59.102Z",
+        "sourceUrl": "https://www.nofrills.ca/en/caribbean-sweet-potatoes/p/20169868001_KG"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "garlic_1kg",
+      "label": "Garlic 1kg",
+      "status": "ok",
+      "offer": {
+        "productId": "20135581001_KG",
+        "name": "Colossal Fresh Garlic",
+        "price": 1.32,
+        "packageSize": "$13.21/1kg $5.99/1lb",
+        "parsedMassKg": 1,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:06.752Z",
+        "sourceUrl": "https://www.nofrills.ca/en/colossal-fresh-garlic/p/20135581001_KG"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "strawberries",
+      "label": "Strawberries",
+      "status": "ok",
+      "offer": {
+        "productId": "20069661001_EA",
+        "name": "Strawberries 2LB",
+        "price": 8.99,
+        "packageSize": "907 g, $0.99/100g",
+        "parsedMassKg": 0.907,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:10.295Z",
+        "sourceUrl": "https://www.nofrills.ca/en/strawberries-2lb/p/20069661001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "butter_454g",
+      "label": "Butter 454g",
+      "status": "ok",
+      "offer": {
+        "productId": "21747634_EA",
+        "name": "Chef's Signature with 8% Clarified Butter, Salted",
+        "price": 4.5,
+        "packageSize": "454 g, $0.99/100g",
+        "parsedMassKg": 0.454,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:15.727Z",
+        "sourceUrl": "https://www.nofrills.ca/en/chef-s-signature-with-8-clarified-butter-salted/p/21747634_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "large_eggs_dozen",
+      "label": "Large Eggs Dozen",
+      "status": "ok",
+      "offer": {
+        "productId": "20812144001_EA",
+        "name": "Large Size Eggs 12 Pack",
+        "price": 3.93,
+        "packageSize": "12 ea, $0.33/1ea",
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:17.806Z",
+        "sourceUrl": "https://www.nofrills.ca/en/large-size-eggs-12-pack/p/20812144001_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "canola_oil_3l",
+      "label": "Canola Oil 3L",
+      "status": "ok",
+      "offer": {
+        "productId": "20028656_EA",
+        "name": "100% Pure Canola Oil",
+        "price": 7.99,
+        "packageSize": "3 l, $0.27/100ml",
+        "parsedMassKg": 3,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:19.850Z",
+        "sourceUrl": "https://www.nofrills.ca/en/100-pure-canola-oil/p/20028656_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "white_sugar_2kg",
+      "label": "White Sugar 2kg",
+      "status": "ok",
+      "offer": {
+        "productId": "20145033_EA",
+        "name": "Granulated Sugar",
+        "price": 2.99,
+        "packageSize": "2 kg, $0.15/100g",
+        "parsedMassKg": 2,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:21.137Z",
+        "sourceUrl": "https://www.nofrills.ca/en/granulated-sugar/p/20145033_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "ap_flour_2_5kg",
+      "label": "All-Purpose Flour 2.5kg",
+      "status": "ok",
+      "offer": {
+        "productId": "20013256_EA",
+        "name": "All-Purpose Flour",
+        "price": 3.79,
+        "packageSize": "2.5 kg, $0.15/100g",
+        "parsedMassKg": 2.5,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:22.326Z",
+        "sourceUrl": "https://www.nofrills.ca/en/all-purpose-flour/p/20013256_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "pasta_elbows",
+      "label": "Elbow Pasta",
+      "status": "ok",
+      "offer": {
+        "productId": "21661873_EA",
+        "name": "Protein+ White Pasta Made With Added Protein Elbows",
+        "price": 3,
+        "packageSize": "340 g, $0.88/100g",
+        "parsedMassKg": 0.34,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:23.732Z",
+        "sourceUrl": "https://www.nofrills.ca/en/protein-white-pasta-made-with-added-protein-elbows/p/21661873_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "chicken_breast_kg",
+      "label": "Chicken Breast (by kg)",
+      "status": "ok",
+      "offer": {
+        "productId": "20568928_EA",
+        "name": "Boneless Skinless Chicken Breasts, Raised on Canadian Farms",
+        "price": 14,
+        "packageSize": "401 g, $3.49/100g",
+        "parsedMassKg": 0.401,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:25.874Z",
+        "sourceUrl": "https://www.nofrills.ca/en/boneless-skinless-chicken-breasts-raised-on-canadi/p/20568928_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    },
+    {
+      "id": "orange_juice_pulp",
+      "label": "Orange Juice with Pulp",
+      "status": "ok",
+      "offer": {
+        "productId": "21622077_EA",
+        "name": "Orange Juice Lots of Pulp",
+        "price": 5.49,
+        "packageSize": "1.36 l, $0.40/100ml",
+        "parsedMassKg": 1.36,
+        "confidence": "exact",
+        "checkedAt": "2026-08-14T22:15:27.516Z",
+        "sourceUrl": "https://www.nofrills.ca/en/orange-juice-lots-of-pulp/p/21622077_EA"
+      },
+      "notes": "Live NF refresh (TTL 72h)"
+    }
+  ],
+  "updatedAt": "2026-08-14T22:15:28.124Z"
+}

@@ -9,7 +9,7 @@ export type OfferStatus =
   | "no_match"
   | "rejected";
 
-export type CompareUnit = "per_pack" | "per_kg" | "composed_packs";
+export type CompareUnit = "per_pack" | "per_kg" | "per_lb" | "composed_packs";
 
 export interface SanityInput {
   itemId: string;
@@ -137,7 +137,11 @@ export function sanityCheckOffer(input: SanityInput): SanityResult {
 
   // Dairy jugs: unit-price implying <400ml when expecting multi-litre
   if (
-    (input.itemId === "milk_2pct" || input.itemId === "homo_milk") &&
+    (input.itemId === "milk_2pct" ||
+      input.itemId === "homo_milk" ||
+      input.itemId === "milk_2pct_2l" ||
+      input.itemId === "milk_1pct_2l" ||
+      input.itemId === "homo_milk_2l") &&
     inferred != null &&
     inferred < 0.4
   ) {
@@ -180,6 +184,8 @@ export function compareUnitLabel(unit: CompareUnit): string {
       return "\u0437\u0430 \u043f\u0430\u0447\u043a\u0443";
     case "per_kg":
       return "\u0437\u0430 1 kg";
+    case "per_lb":
+      return "\u0437\u0430 1 lb";
     case "composed_packs":
       return "\u043d\u0430\u0431\u0440\u0430\u043d\u043e \u0437 \u043c\u0435\u043d\u0448\u0438\u0445 \u043f\u0430\u0447\u043e\u043a";
   }

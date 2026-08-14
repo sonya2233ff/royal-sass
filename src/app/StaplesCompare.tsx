@@ -27,12 +27,34 @@ type Staple = {
   ageLabel?: string | null;
   confirmed?: boolean;
   preferredProductId?: string | null;
+  matchMode?: "preferred" | "cheapest";
+  weightCompare?: boolean;
   walmartCached: {
     name: string;
     price: number;
     productId: string;
     packageSize?: string;
     checkedAt?: string;
+    pricePerKg?: number | null;
+    pricePerLb?: number | null;
+    nativeUnit?: "kg" | "lb" | null;
+    nativeUnitPrice?: number | null;
+    nativeUnitLabel?: string | null;
+    nativeUnitPriceLabel?: string | null;
+  } | null;
+  noFrillsCached: {
+    name: string;
+    price: number;
+    productId: string;
+    packageSize?: string;
+    checkedAt?: string;
+    ageLabel?: string | null;
+    pricePerKg?: number | null;
+    pricePerLb?: number | null;
+    nativeUnit?: "kg" | "lb" | null;
+    nativeUnitPrice?: number | null;
+    nativeUnitLabel?: string | null;
+    nativeUnitPriceLabel?: string | null;
   } | null;
 };
 
@@ -46,6 +68,12 @@ type SideResult = {
   statusReason?: string;
   ageLabel?: string | null;
   productId?: string;
+  pricePerKg?: number;
+  pricePerLb?: number;
+  nativeUnit?: "kg" | "lb";
+  nativeUnitPrice?: number;
+  nativeUnitLabel?: string;
+  nativeUnitPriceLabel?: string;
 };
 
 type CompareRow = {
@@ -96,6 +124,7 @@ export function StaplesCompare() {
   const [pending, startTransition] = useTransition();
   const [busy, setBusy] = useState<string | null>(null);
   const [catalogAt, setCatalogAt] = useState<string | null>(null);
+  const [nfCatalogAt, setNfCatalogAt] = useState<string | null>(null);
   const [staleHours, setStaleHours] = useState(24);
 
   const reload = useCallback(async () => {
@@ -103,7 +132,8 @@ export function StaplesCompare() {
     const data = await res.json();
     if (!data.ok) throw new Error(data.error ?? "load failed");
     setItems(data.items);
-    setCatalogAt(data.catalogCheckedAt);
+    setCatalogAt(data.catalogCheckedAt ?? null);
+    setNfCatalogAt(data.noFrillsCatalogCheckedAt ?? null);
     setStaleHours(data.cacheStaleHours ?? 24);
     setSelected((prev) => {
       if (prev.size) return prev;
@@ -172,6 +202,29 @@ export function StaplesCompare() {
     });
   }
 
+  function refreshNoFrillsSelected() {
+    setError(null);
+    setBusy("refresh-nf");
+    startTransition(async () => {
+      try {
+        const res = await fetch("/api/staples/refresh-nf", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: [...selected] }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error ?? "NF refresh failed");
+        setMatchLogId(data.matchLogId ?? null);
+        setLogPreview(data.entries ?? null);
+        await reload();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      } finally {
+        setBusy(null);
+      }
+    });
+  }
+
   async function vote(
     id: string,
     vote: "up" | "down",
@@ -200,14 +253,19 @@ export function StaplesCompare() {
         <p className="brand">Royal SASS</p>
         <h1>Cafe staples</h1>
         <p className="sub">
-          Walmart #5831 vs No Frills #3660 only (Sobeys off). Sanity + statuses
-          on every match.
+          Walmart #5831 vs No Frills #3660. Для овочів/фруктів: WM —{" "}
+          <strong>за 1 kg</strong>, No Frills — <strong>за 1 lb</strong>. Решта
+          товарів — ціна за пачку. Produce — найдешевший матч (бренд не
+          важливий).
         </p>
         <p className="meta">
           Cache TTL {staleHours}h
           {catalogAt
-            ? ` · WM cache ${new Date(catalogAt).toLocaleString()}`
+            ? ` · WM ${new Date(catalogAt).toLocaleString()}`
             : ""}
+          {nfCatalogAt
+            ? ` · NF ${new Date(nfCatalogAt).toLocaleString()}`
+            : " · NF — після першого Compare"}
         </p>
       </header>
 
@@ -234,17 +292,55 @@ export function StaplesCompare() {
                   <span className={`pill ${item.status}`}>
                     {statusLabel(item.status)}
                   </span>
+                  {item.matchMode === "cheapest" && (
+                    <span className="pill cheapest">cheapest</span>
+                  )}
                   {item.walmartCached ? (
-                    <span className="price">
-                      WM ${item.walmartCached.price.toFixed(2)}
-                    </span>
+                    <>
+                      <span className="price">
+                        WM ${item.walmartCached.price.toFixed(2)}
+                        {item.walmartCached.packageSize
+                          ? ` · ${item.walmartCached.packageSize}`
+                          : ""}
+                      </span>
+                      {item.weightCompare &&
+                        item.walmartCached.nativeUnitPriceLabel && (
+                          <span className="unitprice">
+                            {item.walmartCached.nativeUnitPriceLabel}
+                          </span>
+                        )}
+                    </>
                   ) : (
                     <span className="price mute">немає WM ціни</span>
                   )}
+                  {item.noFrillsCached ? (
+                    <>
+                      <span className="price">
+                        NF ${item.noFrillsCached.price.toFixed(2)}
+                        {item.noFrillsCached.packageSize
+                          ? ` · ${item.noFrillsCached.packageSize}`
+                          : ""}
+                      </span>
+                      {item.weightCompare &&
+                        item.noFrillsCached.nativeUnitPriceLabel && (
+                          <span className="unitprice">
+                            {item.noFrillsCached.nativeUnitPriceLabel}
+                          </span>
+                        )}
+                    </>
+                  ) : (
+                    <span className="price mute">немає NF ціни</span>
+                  )}
                   {item.ageLabel && (
                     <span className="age">
-                      {"\u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
+                      {"WM \u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
                       {item.ageLabel}
+                    </span>
+                  )}
+                  {item.noFrillsCached?.ageLabel && (
+                    <span className="age">
+                      {"NF \u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
+                      {item.noFrillsCached.ageLabel}
                     </span>
                   )}
                   {item.statusReason && (
@@ -296,6 +392,16 @@ export function StaplesCompare() {
           {busy === "refresh"
             ? "Refreshing WM…"
             : `Refresh WM (${selected.size})`}
+        </button>
+        <button
+          type="button"
+          className="cta secondary"
+          disabled={pending || selected.size === 0 || busy != null}
+          onClick={refreshNoFrillsSelected}
+        >
+          {busy === "refresh-nf"
+            ? "Refreshing NF…"
+            : `Refresh NF (${selected.size})`}
         </button>
       </div>
 
@@ -478,9 +584,19 @@ export function StaplesCompare() {
         .pill.rejected {
           background: #ecd5d0;
         }
+        .pill.cheapest {
+          background: #d7e4ef;
+          text-transform: none;
+          letter-spacing: 0.02em;
+        }
         .price {
           font-size: 0.8rem;
           color: #2f4a3a;
+        }
+        .unitprice {
+          font-size: 0.72rem;
+          color: #2f4a3a;
+          font-weight: 600;
         }
         .age,
         .reason {
@@ -631,6 +747,20 @@ function Side({ title, side }: { title: string; side: SideResult }) {
   const usable =
     side.lineTotal != null &&
     (side.status === "ok" || side.status === "stale" || !side.status);
+  const byWeight = side.nativeUnitPrice != null && side.nativeUnit != null;
+  const primary = byWeight
+    ? side.nativeUnitPrice!
+    : (side.lineTotal ?? null);
+  const unitLabel = byWeight
+    ? (side.nativeUnitLabel ?? side.compareUnitLabel ?? null)
+    : (side.compareUnitLabel ?? null);
+  const otherUnit =
+    byWeight && side.nativeUnit === "kg" && side.pricePerLb != null
+      ? `= $${side.pricePerLb.toFixed(2)} / lb`
+      : byWeight && side.nativeUnit === "lb" && side.pricePerKg != null
+        ? `= $${side.pricePerKg.toFixed(2)} / kg`
+        : null;
+
   return (
     <div>
       <span className="store">{title}</span>
@@ -639,12 +769,19 @@ function Side({ title, side }: { title: string; side: SideResult }) {
           {statusLabel(side.status)}
         </span>
       </div>
-      {usable ? (
+      {usable && primary != null ? (
         <>
-          <div className="big">${side.lineTotal!.toFixed(2)}</div>
-          {side.compareUnitLabel && (
-            <div className="unit">{side.compareUnitLabel}</div>
-          )}
+          <div className="big">${primary.toFixed(2)}</div>
+          {unitLabel && <div className="unit">{unitLabel}</div>}
+          {otherUnit && <div className="tiny mute">{otherUnit}</div>}
+          {byWeight &&
+            side.shelfPrice != null &&
+            side.nativeUnitPrice != null &&
+            Math.abs(side.shelfPrice - side.nativeUnitPrice) > 0.005 && (
+              <div className="tiny mute">
+                полиця ${side.shelfPrice.toFixed(2)}
+              </div>
+            )}
           {side.name && <div className="tiny">{side.name}</div>}
           {side.note && <div className="tiny mute">{side.note}</div>}
           {side.ageLabel && (
@@ -696,7 +833,8 @@ function Side({ title, side }: { title: string; side: SideResult }) {
           margin: 0.15rem 0;
         }
         .unit {
-          font-size: 0.72rem;
+          font-size: 0.78rem;
+          font-weight: 650;
           color: #2f4a3a;
         }
         .tiny {

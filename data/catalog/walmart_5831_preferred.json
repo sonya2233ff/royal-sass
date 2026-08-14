@@ -1,15 +1,15 @@
 {
   "storeId": "5831",
-  "updatedAt": "2026-08-13T01:00:12.471Z",
+  "updatedAt": "2026-08-14T21:43:34.573Z",
   "preferredProductIds": {
-    "acai": "5BYTBURFUMOZ",
-    "oat_beverage_original": "2ADJVX8MAQ1Q",
-    "almond_original": "10207134",
     "simply_egg_whites": "6000196635381",
-    "pineapple": "6000191289580",
-    "red_peppers": "6000191286439",
-    "tomatoes": "6000198459494",
-    "sweet_potatoes": "6000207004497"
-  },
-  "notes": "Mehadrin SKUs TBD when found at Walmart 5831"
+    "eggs_30ct": "10052944",
+    "folgers_coffee": "6000205233307",
+    "rogers_wheat_bran": "577OATLSOV6G",
+    "oat_beverage_original": "2ADJVX8MAQ1Q",
+    "almond_original": "10184853",
+    "milk_2pct_2l": "6000198384699",
+    "homo_milk_2l": "6000198386424",
+    "butter_454g": "6000200959561"
+  }
 }

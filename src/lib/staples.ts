@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { NoFrillsConnector } from "@/connectors/nofrills";
-import { WalmartConnector } from "@/connectors/walmart";
+import { createWalmartConnector } from "@/connectors/walmart-source";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import { pickBestOffer } from "@/domain/matching";
@@ -14,12 +14,50 @@ import {
   sanityCheckOffer,
 } from "@/domain/sanity";
 import {
+  defaultWeightUnit,
   formatMass,
+  formatMoneyPerWeight,
   parseMassFromText,
   priceByPackCount,
-  priceForMassKg,
+  resolveUnitPrices,
   round2,
+  weightUnitLabel,
+  type WeightPriceUnit,
 } from "@/domain/units";
+
+/** Produce sold by weight — show $/kg (WM) or $/lb (NF). Not for packaged milk/dry. */
+const PRODUCE_WEIGHT_IDS = new Set([
+  "red_peppers",
+  "red_peppers_kg",
+  "sweet_potatoes",
+  "sweet_potatoes_kg",
+  "pineapple",
+  "pineapple_whole",
+  "pear_bosc_kg",
+  "eggplant_kg",
+  "tomato_gh_red_kg",
+  "bananas_kg",
+  "garlic_1kg",
+  "cucumber_english",
+]);
+
+/** Packaged produce — compare by shelf pack, no kg/lb conversion UI. */
+const PACK_COMPARE_IDS = new Set([
+  "tomatoes",
+  "tomatoes_grape",
+  "lemons_2lb",
+  "blueberries",
+  "strawberries",
+]);
+
+export function isProduceItem(item: StapleItem): boolean {
+  return item.category === "produce" || PRODUCE_IDS.has(item.id);
+}
+
+/** Only weighed produce gets kg/lb unit-price display. */
+export function isProduceWeightItem(item: StapleItem): boolean {
+  return PRODUCE_WEIGHT_IDS.has(item.id);
+}
 
 export interface StapleItem {
   id: string;
@@ -37,6 +75,43 @@ export interface StapleItem {
   mustIncludeAny?: string[];
   mustNotInclude?: string[];
   preferNameIncludes?: string[];
+  /**
+   * preferred = lock brand/SKU when set (dairy, branded dry).
+   * cheapest = produce: any brand OK, pick lowest $/kg (or shelf) in-store.
+   */
+  matchMode?: "preferred" | "cheapest";
+  category?: string;
+}
+
+/** Produce / fruit — brand irrelevant; cheapest matching unit wins. */
+export const PRODUCE_IDS = new Set([
+  "tomatoes_grape",
+  "tomatoes",
+  "lemons_2lb",
+  "pear_bosc_kg",
+  "eggplant_kg",
+  "tomato_gh_red_kg",
+  "red_peppers",
+  "red_peppers_kg",
+  "sweet_potatoes",
+  "sweet_potatoes_kg",
+  "pineapple",
+  "pineapple_whole",
+  "bananas_kg",
+  "cucumber_english",
+  "garlic_1kg",
+  "blueberries",
+  "strawberries",
+]);
+
+export function resolveMatchMode(
+  item: StapleItem,
+): "preferred" | "cheapest" {
+  if (item.matchMode) return item.matchMode;
+  if (item.category === "produce" || PRODUCE_IDS.has(item.id)) {
+    return "cheapest";
+  }
+  return "preferred";
 }
 
 export interface CatalogOffer {
@@ -67,13 +142,36 @@ export type ConfirmedMap = Record<
 >;
 
 export const PINNED_IDS = [
-  "oat_beverage_original",
-  "homo_milk",
-  "milk_2pct",
   "simply_egg_whites",
-  "red_peppers",
-  "tomatoes",
-  "sweet_potatoes",
+  "tomatoes_grape",
+  "eggs_30ct",
+  "grayridge_eggs",
+  "lemons_2lb",
+  "pear_bosc_kg",
+  "folgers_coffee",
+  "eggplant_kg",
+  "tomato_gh_red_kg",
+  "rogers_wheat_bran",
+  "oat_beverage_original",
+  "red_peppers_kg",
+  "sweet_potatoes_kg",
+  "pineapple_whole",
+  "almond_original",
+  "bananas_kg",
+  "cucumber_english",
+  "garlic_1kg",
+  "blueberries",
+  "strawberries",
+  "milk_2pct_2l",
+  "homo_milk_2l",
+  "butter_454g",
+  "large_eggs_dozen",
+  "canola_oil_3l",
+  "white_sugar_2kg",
+  "ap_flour_2_5kg",
+  "pasta_elbows",
+  "chicken_breast_kg",
+  "orange_juice_pulp",
 ] as const;
 
 export const CACHE_STALE_HOURS = Number(
@@ -81,6 +179,26 @@ export const CACHE_STALE_HOURS = Number(
 );
 
 const DATA_CATALOG = path.join(process.cwd(), "data", "catalog");
+
+export type ReceiptSkuMap = {
+  updatedAt: string;
+  preferredByStapleId: Record<
+    string,
+    { productId?: string; upc?: string; store: string; name: string }
+  >;
+};
+
+export async function loadReceiptSkuMap(): Promise<ReceiptSkuMap | null> {
+  try {
+    const raw = await readFile(
+      path.join(DATA_CATALOG, "receipt_sku_map.json"),
+      "utf8",
+    );
+    return JSON.parse(raw) as ReceiptSkuMap;
+  } catch {
+    return null;
+  }
+}
 
 export async function loadStaplesConfig(): Promise<{
   store: { externalStoreId: string; name: string; address: string };
@@ -90,7 +208,29 @@ export async function loadStaplesConfig(): Promise<{
     path.join(process.cwd(), "config", "cafe-staples.json"),
     "utf8",
   );
-  return JSON.parse(raw);
+  const cfg = JSON.parse(raw) as {
+    store: { externalStoreId: string; name: string; address: string };
+    items: StapleItem[];
+  };
+  const receipts = await loadReceiptSkuMap();
+  if (receipts?.preferredByStapleId) {
+    for (const item of cfg.items) {
+      // Produce: never lock receipt brand/SKU — cheapest in-store wins
+      if (resolveMatchMode(item) === "cheapest") continue;
+      const pref = receipts.preferredByStapleId[item.id];
+      if (!pref) continue;
+      if (pref.productId && !item.preferredProductId) {
+        item.preferredProductId = pref.productId;
+      }
+      if (pref.upc) {
+        const upcQ = pref.upc;
+        if (!item.queries.includes(upcQ)) {
+          item.queries = [upcQ, ...item.queries];
+        }
+      }
+    }
+  }
+  return cfg;
 }
 
 export async function loadWalmartCatalog(): Promise<{
@@ -126,6 +266,76 @@ export async function saveWalmartCatalog(catalog: unknown): Promise<void> {
   } catch {
     // Serverless read-only FS
   }
+}
+
+export type StoreCatalog = {
+  checkedAt?: string;
+  updatedAt?: string;
+  storeId?: string;
+  items: Array<{
+    id: string;
+    status: string;
+    offer: CatalogOffer | null;
+    image?: string;
+    notes?: string;
+  }>;
+};
+
+export async function loadNoFrillsCatalog(): Promise<StoreCatalog | null> {
+  try {
+    const raw = await readFile(
+      path.join(DATA_CATALOG, "nofrills_3660_latest.json"),
+      "utf8",
+    );
+    return JSON.parse(raw) as StoreCatalog;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveNoFrillsCatalog(catalog: unknown): Promise<void> {
+  try {
+    await mkdir(DATA_CATALOG, { recursive: true });
+    await writeFile(
+      path.join(DATA_CATALOG, "nofrills_3660_latest.json"),
+      JSON.stringify(catalog, null, 2),
+      "utf8",
+    );
+  } catch {
+    // Serverless read-only FS
+  }
+}
+
+/** Merge one No Frills offer into the on-disk cache (avoids re-hitting NF API). */
+export async function upsertNoFrillsCatalogItem(input: {
+  id: string;
+  label?: string;
+  status: OfferStatus;
+  offer: CatalogOffer | null;
+  notes?: string;
+}): Promise<void> {
+  const existing =
+    (await loadNoFrillsCatalog()) ??
+    ({
+      storeId: "3660",
+      checkedAt: new Date().toISOString(),
+      items: [],
+    } as StoreCatalog);
+
+  const idx = existing.items.findIndex((x) => x.id === input.id);
+  const row = {
+    id: input.id,
+    label: input.label,
+    status: input.status,
+    offer: input.offer,
+    notes: input.notes,
+  };
+  if (idx >= 0) existing.items[idx] = { ...existing.items[idx], ...row };
+  else existing.items.push(row);
+
+  existing.checkedAt = new Date().toISOString();
+  existing.updatedAt = existing.checkedAt;
+  await saveNoFrillsCatalog(existing);
 }
 
 export async function loadConfirmed(): Promise<ConfirmedMap> {
@@ -173,8 +383,30 @@ export async function appendMatchLog(entries: MatchLogEntry[]): Promise<string> 
   return id;
 }
 
-function passesFilters(name: string, item: StapleItem): boolean {
-  const n = name.toLowerCase();
+function matchQueryForPick(item: StapleItem): string {
+  // Mehadrin often listed as "Kosher … Milk" at No Frills (brand omitted).
+  if (item.id === "milk_2pct_2l") return "kosher 2% milk 2l";
+  if (item.id === "homo_milk_2l" || item.id === "homo_milk") {
+    return "kosher homogenized milk 2l";
+  }
+  if (resolveMatchMode(item) === "cheapest") {
+    // Prefer short produce query so brand/variety tokens in the label
+    // don't disqualify cheaper alternatives (e.g. any pear, not only Bosc).
+    return (
+      item.queries.find((q) => q && !/^\d+$/.test(q)) ??
+      item.mustIncludeAny?.[0] ??
+      item.label
+    );
+  }
+  return item.label;
+}
+
+function passesFilters(
+  offer: { name: string; brand?: string },
+  item: StapleItem,
+): boolean {
+  // NF often puts brand only in `brand`, not title (e.g. Earth's Own oat).
+  const n = `${offer.brand ?? ""} ${offer.name}`.toLowerCase();
   if (item.mustIncludeAny?.length) {
     if (!item.mustIncludeAny.some((t) => n.includes(t.toLowerCase()))) {
       return false;
@@ -191,7 +423,14 @@ function passesFilters(name: string, item: StapleItem): boolean {
 function expectedPackFor(item: StapleItem): number | undefined {
   if (item.expectedPackKg != null) return item.expectedPackKg;
   if (item.targetMassKg != null) return item.targetMassKg;
-  if (item.id === "milk_2pct" || item.id === "homo_milk") return 2;
+  if (
+    item.id === "milk_2pct" ||
+    item.id === "homo_milk" ||
+    item.id === "milk_2pct_2l" ||
+    item.id === "milk_1pct_2l" ||
+    item.id === "homo_milk_2l"
+  )
+    return 2;
   if (item.id === "oat_beverage_original") return 1.75;
   return undefined;
 }
@@ -258,7 +497,7 @@ export async function searchNoFrills(
 
   const all = [...seen.values()];
   for (const o of all) {
-    if (!passesFilters(o.name, item)) {
+    if (!passesFilters(o, item)) {
       log?.rejected.push({
         productId: o.productId,
         name: o.name,
@@ -268,13 +507,20 @@ export async function searchNoFrills(
     }
   }
 
-  const pool = all.filter((o) => passesFilters(o.name, item));
+  const pool = all.filter((o) => passesFilters(o, item));
   let best: ProductOffer | null = null;
   if (pool.length) {
+    const mode = resolveMatchMode(item);
     best =
-      pickBestOffer(pool, item.label, item.preferredProductId, {
-        targetMassKg: item.targetMassKg,
-      }) ?? pool[0] ?? null;
+      pickBestOffer(
+        pool,
+        matchQueryForPick(item),
+        mode === "cheapest" ? undefined : item.preferredProductId,
+        {
+          targetMassKg: item.targetMassKg ?? expectedPackFor(item),
+          mode,
+        },
+      ) ?? pool[0] ?? null;
   }
 
   if (best) {
@@ -319,6 +565,7 @@ export interface SummarizedOffer {
   name: string;
   productId: string;
   shelfPrice: number;
+  /** Fair compare amount (1 kg for weight items; pack/composed otherwise). */
   lineTotal: number | null;
   pack?: string;
   note?: string;
@@ -327,6 +574,14 @@ export interface SummarizedOffer {
   compareUnitLabel: string;
   status: OfferStatus;
   statusReason?: string;
+  /** Always present when mass/unit known — for apples-to-apples delta. */
+  pricePerKg?: number;
+  pricePerLb?: number;
+  /** Store-native display: Walmart $/kg, No Frills $/lb. */
+  nativeUnit?: WeightPriceUnit;
+  nativeUnitPrice?: number;
+  nativeUnitLabel?: string;
+  nativeUnitPriceLabel?: string;
 }
 
 export function summarizeOffer(
@@ -339,10 +594,55 @@ export function summarizeOffer(
     unitPrice?: number;
     confidence?: string;
     checkedAt?: string;
+    retailer?: string;
   } | null,
   qty = 1,
+  retailer: "walmart_ca" | "no_frills" = "walmart_ca",
 ): SummarizedOffer | null {
   if (!offer) return null;
+
+  const displayUnit = defaultWeightUnit(retailer);
+  const asProduct: ProductOffer = {
+    retailer,
+    storeId: "x",
+    productId: offer.productId,
+    name: offer.name,
+    packageSize: offer.packageSize,
+    price: offer.price,
+    unitPrice: offer.unitPrice,
+    availability: "unknown",
+    confidence: "exact",
+    checkedAt: offer.checkedAt ?? new Date().toISOString(),
+  };
+
+  const byWeight = isProduceWeightItem(item);
+  const units = byWeight
+    ? resolveUnitPrices(asProduct, {
+        displayUnit,
+        // Only force sold-by-weight when we cannot derive from pack mass
+        // (e.g. Loblaw *_KG / *_LB with no size). Singles like "240 g pepper"
+        // must use pack math — shelf $ is NOT already $/kg.
+        forceSoldByWeight: !(
+          parseMassFromText(offer.packageSize ?? "") ??
+          parseMassFromText(offer.name)
+        ),
+      })
+    : null;
+
+  // kg/lb labels only for produce — never milk, flour, eggs, etc.
+  const unitFields = byWeight && units
+    ? {
+        pricePerKg: units.pricePerKg,
+        pricePerLb: units.pricePerLb,
+        nativeUnit: units.nativeUnit,
+        nativeUnitPrice: units.nativePrice,
+        nativeUnitLabel: weightUnitLabel(units.nativeUnit),
+        nativeUnitPriceLabel: formatMoneyPerWeight(
+          units.nativePrice,
+          units.nativeUnit,
+        ),
+      }
+    : {};
 
   const sanity = sanityCheckOffer({
     itemId: item.id,
@@ -370,6 +670,7 @@ export function summarizeOffer(
       status: sanity.status,
       statusReason: sanity.reason,
       note: sanity.reason,
+      ...unitFields,
     };
   }
 
@@ -380,20 +681,7 @@ export function summarizeOffer(
 
   if (item.targetMassKg != null) {
     const need = item.targetMassKg * qty;
-    const asPacks = priceByPackCount(
-      {
-        retailer: "x",
-        storeId: "x",
-        productId: offer.productId,
-        name: offer.name,
-        packageSize: offer.packageSize,
-        price: offer.price,
-        availability: "unknown",
-        confidence: "exact",
-        checkedAt: new Date().toISOString(),
-      },
-      need,
-    );
+    const asPacks = priceByPackCount(asProduct, need);
     if (asPacks) {
       const sameSize =
         Math.abs(asPacks.packKg - item.targetMassKg) / item.targetMassKg <= 0.2;
@@ -412,11 +700,12 @@ export function summarizeOffer(
         compareUnitLabel: compareUnitLabel(unit),
         status: sanity.status,
         statusReason: sanity.reason,
+        ...unitFields,
       };
     }
   }
 
-  if (["tomatoes"].includes(item.id)) {
+  if (PACK_COMPARE_IDS.has(item.id)) {
     return {
       name: offer.name,
       productId: offer.productId,
@@ -429,40 +718,31 @@ export function summarizeOffer(
       compareUnitLabel: compareUnitLabel("per_pack"),
       status: sanity.status,
       statusReason: sanity.reason,
+      ...unitFields,
     };
   }
 
-  if (["red_peppers", "sweet_potatoes", "pineapple"].includes(item.id)) {
-    const priced = priceForMassKg(
-      {
-        retailer: "x",
-        storeId: "x",
-        productId: offer.productId,
-        name: offer.name,
-        packageSize: offer.packageSize,
-        price: offer.price,
-        unitPrice: offer.unitPrice,
-        availability: "unknown",
-        confidence: "exact",
-        checkedAt: new Date().toISOString(),
-      },
-      1,
-    );
-    if (priced) {
-      return {
-        name: offer.name,
-        productId: offer.productId,
-        shelfPrice: offer.price,
-        lineTotal: priced.lineTotal,
-        pack,
-        note: `1 kg · ${priced.basis}`,
-        confidence: offer.confidence,
-        compareUnit: "per_kg",
-        compareUnitLabel: compareUnitLabel("per_kg"),
-        status: sanity.status,
-        statusReason: sanity.reason,
-      };
-    }
+  if (byWeight && units) {
+    const compareUnit: CompareUnit =
+      units.nativeUnit === "lb" ? "per_lb" : "per_kg";
+    return {
+      name: offer.name,
+      productId: offer.productId,
+      shelfPrice: offer.price,
+      // Fair basket math always uses 1 kg
+      lineTotal: units.pricePerKg,
+      pack,
+      note: `${formatMoneyPerWeight(units.nativePrice, units.nativeUnit)} · також ${formatMoneyPerWeight(
+        units.nativeUnit === "lb" ? units.pricePerKg : units.pricePerLb,
+        units.nativeUnit === "lb" ? "kg" : "lb",
+      )}`,
+      confidence: offer.confidence,
+      compareUnit,
+      compareUnitLabel: weightUnitLabel(units.nativeUnit),
+      status: sanity.status,
+      statusReason: sanity.reason,
+      ...unitFields,
+    };
   }
 
   return {
@@ -471,6 +751,7 @@ export function summarizeOffer(
     shelfPrice: offer.price,
     lineTotal: round2(offer.price * qty),
     pack,
+    note: pack ? `пачка ${pack}` : undefined,
     confidence: offer.confidence,
     compareUnit: "per_pack",
     compareUnitLabel: compareUnitLabel("per_pack"),
@@ -515,7 +796,7 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
     });
 
   const byId = new Map(cfg.items.map((i) => [i.id, i]));
-  const wm = new WalmartConnector("L4J0A7");
+  const wm = createWalmartConnector("L4J0A7");
   const entries: MatchLogEntry[] = [];
   const updated: string[] = [];
 
@@ -548,13 +829,16 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
     }
 
     const lockedId = confirmed[id]?.productId ?? null;
-    const preferred = lockedId ?? item.preferredProductId ?? null;
-    // 👍 confirmed → only that SKU, no fuzzy queries
+    const mode = resolveMatchMode(item);
+    // Produce (cheapest): never pin preferred brand SKU — only 👍 confirmed locks
+    const preferred =
+      lockedId ??
+      (mode === "cheapest" ? null : item.preferredProductId ?? null);
     const queries = lockedId
       ? [lockedId]
       : [
-          ...(preferred ? [preferred] : []),
-          ...item.queries.filter(Boolean).slice(0, 3),
+          ...(preferred && mode !== "cheapest" ? [preferred] : []),
+          ...item.queries.filter(Boolean).slice(0, 4),
         ];
     log.queries = queries;
 
@@ -595,9 +879,11 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
         }
       }
     } else {
-      let pool = [...seen.values()].filter((o) => passesFilters(o.name, item));
+      const pool = [...seen.values()].filter((o) =>
+        passesFilters(o, item),
+      );
       for (const o of seen.values()) {
-        if (!passesFilters(o.name, item)) {
+        if (!passesFilters(o, item)) {
           log.rejected.push({
             productId: o.productId,
             name: o.name,
@@ -606,16 +892,16 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
           });
         }
       }
-      if (preferred) {
-        const locked = [...seen.values()].find((o) => o.productId === preferred);
-        if (locked) {
-          pool = [locked, ...pool.filter((p) => p.productId !== preferred)];
-        }
-      }
       best =
-        pickBestOffer(pool, item.label, preferred ?? undefined, {
-          targetMassKg: item.targetMassKg,
-        }) ?? pool[0] ?? null;
+        pickBestOffer(pool, matchQueryForPick(item), preferred ?? undefined, {
+          targetMassKg: item.targetMassKg ?? expectedPackFor(item),
+          mode,
+        }) ?? null;
+      if (best && mode === "cheapest") {
+        log.rejected.push({
+          reason: `cheapest produce pick among ${pool.length} filtered hits`,
+        });
+      }
     }
 
     if (best) {
@@ -680,5 +966,71 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
   await saveWalmartCatalog(catalog);
   const logId = await appendMatchLog(entries);
   await closeWalmartBrowser().catch(() => undefined);
+  return { updated, logId, entries };
+}
+
+/** Live-refresh No Frills offers into nofrills_3660_latest.json (skips TTL cache). */
+export async function refreshNoFrillsSelected(ids: string[]): Promise<{
+  updated: string[];
+  logId: string;
+  entries: MatchLogEntry[];
+}> {
+  const cfg = await loadStaplesConfig();
+  const byId = new Map(cfg.items.map((i) => [i.id, i]));
+  const entries: MatchLogEntry[] = [];
+  const updated: string[] = [];
+
+  for (const id of ids) {
+    const item = byId.get(id);
+    if (!item) continue;
+
+    const log: MatchLogEntry = {
+      at: new Date().toISOString(),
+      itemId: id,
+      retailer: "no_frills",
+      queries: [],
+      rejected: [],
+      status: "no_match",
+    };
+
+    const offer = await searchNoFrills(item, log);
+    entries.push(log);
+    updated.push(id);
+
+    if (offer) {
+      const mass =
+        parseMassFromText(offer.packageSize ?? "") ??
+        parseMassFromText(offer.name);
+      await upsertNoFrillsCatalogItem({
+        id,
+        label: item.label,
+        status: log.status,
+        offer: {
+          productId: offer.productId,
+          name: offer.name,
+          price: offer.price,
+          packageSize: offer.packageSize,
+          parsedMassKg: mass?.kg,
+          unitPrice: offer.unitPrice,
+          confidence: offer.confidence,
+          checkedAt: offer.checkedAt,
+          sourceUrl: offer.sourceUrl,
+        },
+        notes: `Live NF refresh (TTL ${CACHE_STALE_HOURS}h)`,
+      });
+    } else {
+      await upsertNoFrillsCatalogItem({
+        id,
+        label: item.label,
+        status: log.status,
+        offer: null,
+        notes: log.rejected.at(-1)?.reason,
+      });
+    }
+
+    await new Promise((r) => setTimeout(r, 250));
+  }
+
+  const logId = await appendMatchLog(entries);
   return { updated, logId, entries };
 }

@@ -1,5 +1,5 @@
 import type { ProductOffer } from "@/connectors/types";
-import { scoreMassMatch } from "@/domain/units";
+import { scoreMassMatch, resolveUnitPrices } from "@/domain/units";
 
 const STOP = new Set([
   "the",
@@ -122,13 +122,70 @@ export function scoreOfferMatch(
   return 10 + confBonus + softBonus + massBonus - pricePenalty;
 }
 
+export type OfferPickMode = "preferred" | "cheapest";
+
+/**
+ * Among offers that match the query, pick the lowest fair price.
+ * Uses $/kg when mass/unit price is known (produce), otherwise shelf price.
+ * Brand / preferred SKU is ignored — call only when matchMode=cheapest.
+ */
+export function pickCheapestOffer(
+  offers: ProductOffer[],
+  query: string,
+  opts?: {
+    targetMassKg?: number;
+    /** Prefer comparing by $/kg when resolvable (default true). */
+    byUnitPrice?: boolean;
+  },
+): ProductOffer | null {
+  if (offers.length === 0) return null;
+
+  const byUnit = opts?.byUnitPrice !== false;
+  type Ranked = {
+    offer: ProductOffer;
+    matchScore: number;
+    sortPrice: number;
+  };
+  const ranked: Ranked[] = [];
+
+  for (const offer of offers) {
+    const matchScore = scoreOfferMatch(offer, query, opts);
+    if (matchScore === -Infinity) continue;
+
+    let sortPrice = offer.price;
+    if (byUnit) {
+      const units = resolveUnitPrices(offer, {
+        forceSoldByWeight: false,
+      });
+      if (units?.pricePerKg && units.pricePerKg > 0) {
+        sortPrice = units.pricePerKg;
+      }
+    }
+    if (!(sortPrice > 0)) continue;
+    ranked.push({ offer, matchScore, sortPrice });
+  }
+
+  if (!ranked.length) return null;
+
+  ranked.sort((a, b) => {
+    if (a.sortPrice !== b.sortPrice) return a.sortPrice - b.sortPrice;
+    return b.matchScore - a.matchScore;
+  });
+  return ranked[0]!.offer;
+}
+
 export function pickBestOffer(
   offers: ProductOffer[],
   query: string,
   preferredId?: string,
-  opts?: { targetMassKg?: number },
+  opts?: { targetMassKg?: number; mode?: OfferPickMode },
 ): ProductOffer | null {
   if (offers.length === 0) return null;
+
+  if (opts?.mode === "cheapest") {
+    return pickCheapestOffer(offers, query, opts);
+  }
+
   if (preferredId) {
     const hit = offers.find((o) => o.productId === preferredId);
     if (hit) return hit;

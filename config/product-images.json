@@ -1,6 +1,6 @@
 {
-  "note": "Pinned cafe product images. Cap colours: Mehadrin 2%=blue, 3%/homo=red. Google once titled red jug as 1% — that was wrong.",
-  "updatedAt": "2026-08-13T04:40:00.000Z",
+  "note": "Pinned cafe product images. Dairy milk = Mehadrin 2% + Homo 3.25% only.",
+  "updatedAt": "2026-08-14T21:05:00.000Z",
   "images": {
     "oat_beverage_original": {
       "file": "/products/oat_beverage_original.png",
@@ -27,15 +27,17 @@
       "caption": "Sweet Potato, sold in singles 0.28–0.57 kg",
       "source": "user_screenshot_walmart"
     },
-    "milk_2pct": {
-      "file": "/products/mehadrin_2pct.png",
-      "caption": "Mehadrin 2% M.F. — blue cap (NOT 1%)",
-      "source": "user_screenshot_loblaws_ref"
+    "milk_2pct_2l": {
+      "file": "/products/mehadrin_2pct.jpg",
+      "caption": "Mehadrin 2% M.F. Partly Skimmed Milk 2L — blue cap",
+      "source": "user_photo",
+      "walmartProductId": "6000198384699"
     },
-    "homo_milk": {
+    "homo_milk_2l": {
       "file": "/products/mehadrin_homo_3pct.png",
-      "caption": "Mehadrin 3%/homo — red cap (Google wrongly titled this 1%)",
-      "source": "user_screenshot_google"
+      "caption": "Mehadrin Homogenized 3.25% Milk 2L",
+      "source": "user_screenshot",
+      "walmartProductId": "6000198386424"
     }
   },
   "unavailableAtWalmart": {

@@ -1,0 +1,177 @@
+{
+  "updatedAt": "2026-08-14T01:07:37.846Z",
+  "sourceFiles": [
+    "C:\\Users\\mykol\\OneDrive\\Desktop\\royal SASS\\data\\receipts\\sample.csv",
+    "C:\\Users\\mykol\\OneDrive\\Desktop\\royal SASS\\data\\receipts\\walmart_from_photos.csv"
+  ],
+  "byStoreUpc": {
+    "walmart_5831::065651002470": {
+      "upc": "065651002470",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Simply Egg Whites 1kg",
+      "preferredProductId": "6000196635381",
+      "lastUnitPrice": 9.47,
+      "lastLineTotal": 28.41,
+      "lastQty": 3,
+      "lastSeenAt": "2026-06-29",
+      "purchaseCount": 1,
+      "names": {
+        "Simply Egg Whites 1kg": 1
+      }
+    },
+    "walmart_5831::655772019780": {
+      "upc": "655772019780",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Double Burner",
+      "lastUnitPrice": 32.98,
+      "lastLineTotal": 32.98,
+      "lastQty": 1,
+      "lastSeenAt": "2026-06-29",
+      "purchaseCount": 1,
+      "names": {
+        "Double Burner": 1
+      }
+    },
+    "walmart_5831::082785400724": {
+      "upc": "082785400724",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Foil Green 4.27",
+      "lastUnitPrice": 10.47,
+      "lastLineTotal": 20.94,
+      "lastQty": 2,
+      "lastSeenAt": "2026-06-29",
+      "purchaseCount": 1,
+      "names": {
+        "Foil Green 4.27": 1
+      }
+    },
+    "walmart_5831::0000000044130": {
+      "upc": "0000000044130",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Pear Bosc",
+      "lastUnitPrice": 14.8,
+      "lastLineTotal": 14.8,
+      "lastQty": 1,
+      "lastSeenAt": "2026-06-26",
+      "purchaseCount": 1,
+      "names": {
+        "Pear Bosc": 1
+      }
+    },
+    "walmart_5831::763679000230": {
+      "upc": "763679000230",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Ice Cubes",
+      "lastUnitPrice": 3.98,
+      "lastLineTotal": 11.94,
+      "lastQty": 3,
+      "lastSeenAt": "2026-07-01",
+      "purchaseCount": 1,
+      "names": {
+        "Ice Cubes": 1
+      }
+    },
+    "walmart_5831::810097978120": {
+      "upc": "810097978120",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Magic Bullet",
+      "lastUnitPrice": 34.97,
+      "lastLineTotal": 34.97,
+      "lastQty": 1,
+      "lastSeenAt": "2026-05-27",
+      "purchaseCount": 1,
+      "names": {
+        "Magic Bullet": 1
+      }
+    },
+    "walmart_5831::064767343050": {
+      "upc": "064767343050",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Grayridge Eggs (6x)",
+      "lastUnitPrice": 6.98,
+      "lastLineTotal": 41.88,
+      "lastQty": 6,
+      "lastSeenAt": "2026-05-27",
+      "purchaseCount": 1,
+      "names": {
+        "Grayridge Eggs (6x)": 1
+      }
+    },
+    "walmart_5831::067914544890": {
+      "upc": "067914544890",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Shopping Bag",
+      "lastUnitPrice": 2.97,
+      "lastLineTotal": 2.97,
+      "lastQty": 1,
+      "lastSeenAt": "2026-05-27",
+      "purchaseCount": 1,
+      "names": {
+        "Shopping Bag": 1
+      }
+    },
+    "walmart_5831::033383119060": {
+      "upc": "033383119060",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "YFM 2lb Lemons",
+      "lastUnitPrice": 4.97,
+      "lastLineTotal": 4.97,
+      "lastQty": 1,
+      "lastSeenAt": "2026-05-27",
+      "purchaseCount": 1,
+      "names": {
+        "YFM 2lb Lemons": 1
+      }
+    },
+    "walmart_5831::627735279720": {
+      "upc": "627735279720",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Eggs 30ct",
+      "lastUnitPrice": 9.18,
+      "lastLineTotal": 27.54,
+      "lastQty": 3,
+      "lastSeenAt": "2026-06-01",
+      "purchaseCount": 1,
+      "names": {
+        "Eggs 30ct": 1
+      }
+    },
+    "walmart_5831::628915235420": {
+      "upc": "628915235420",
+      "store": "walmart_5831",
+      "retailer": "walmart_ca",
+      "name": "Tomatoes Grape",
+      "lastUnitPrice": 3.47,
+      "lastLineTotal": 20.82,
+      "lastQty": 6,
+      "lastSeenAt": "2026-06-01",
+      "purchaseCount": 1,
+      "names": {
+        "Tomatoes Grape": 1
+      }
+    }
+  },
+  "preferredByStapleId": {
+    "simply_egg_whites": {
+      "productId": "6000196635381",
+      "upc": "065651002470",
+      "store": "walmart_5831",
+      "name": "Simply Egg Whites 1kg"
+    },
+    "tomatoes": {
+      "upc": "628915235420",
+      "store": "walmart_5831",
+      "name": "Tomatoes Grape"
+    }
+  }
+}

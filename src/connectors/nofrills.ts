@@ -125,14 +125,51 @@ function mapProduct(
     parseMoney(pricing.wasPrice) ??
     parseMoney(pricing.memberPrice);
 
-  const unitPrice = parseMoney(pricing.unitPrice);
+  const unitPrice =
+    parseMoney(pricing.unitPrice) ??
+    parseMoney(pricingUnits.unitPrice) ??
+    parseMoney(pricingUnits.price);
+
+  // Prefer Loblaw sold-by suffix; else keep productId as-is
+  const uom = String(
+    pricing.unitOfSize ??
+      pricing.unitMeasure ??
+      pricingUnits.unitOfSize ??
+      pricingUnits.type ??
+      "",
+  ).toLowerCase();
+  let normalizedId = productId;
+  if (!/_KG$|_LB$|_EA$/i.test(productId)) {
+    if (/\blb|lbs\b/.test(uom)) normalizedId = `${productId}_LB`;
+    else if (/\bkg\b/.test(uom)) normalizedId = `${productId}_KG`;
+  }
 
   const stockStatus = raw.inventoryIndicator ?? raw.stockStatus ?? raw.isAvailable;
+
+  const linkRaw = typeof raw.link === "string" ? raw.link.trim() : "";
+  let sourceUrl: string;
+  if (linkRaw.startsWith("http")) {
+    sourceUrl = linkRaw;
+  } else if (linkRaw.startsWith("/")) {
+    sourceUrl = `https://www.nofrills.ca${linkRaw}`;
+  } else {
+    // PCX product pages are /en/{slug}/p/{liam}_EA|KG|LB — not /product/{article}
+    const slug =
+      name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 80) || "product";
+    const pageId = /_(EA|KG|LB|C\d+)$/i.test(normalizedId)
+      ? normalizedId
+      : `${normalizedId}_EA`;
+    sourceUrl = `https://www.nofrills.ca/en/${slug}/p/${pageId}`;
+  }
 
   return {
     retailer: "no_frills",
     storeId,
-    productId,
+    productId: normalizedId,
     name,
     brand,
     packageSize,
@@ -144,7 +181,7 @@ function mapProduct(
     availability: mapAvailability(stockStatus),
     confidence: "exact",
     checkedAt: new Date().toISOString(),
-    sourceUrl: `https://www.nofrills.ca/product/${String(raw.articleNumber ?? productId).replace(/_EA$/, "")}`,
+    sourceUrl,
     raw,
   };
 }
@@ -174,6 +211,186 @@ function buildHeaders(originHost: string): Record<string, string> {
   };
 }
 
+export type NoFrillsProbeResult = {
+  ok: boolean;
+  query: string;
+  storeId: string;
+  searchUrl: string;
+  originTried: string | null;
+  httpStatus: number | null;
+  mappedCount: number;
+  tileCount: number;
+  offers: ProductOffer[];
+  /** First few raw tiles (before map) — for debugging price fields. */
+  rawTiles?: Record<string, unknown>[];
+  bodyPreview?: string;
+  error?: string;
+  ms: number;
+};
+
+/** Live PCX BFF search with diagnostics (for manual debugging). */
+export async function probeNoFrillsSearch(opts: {
+  query: string;
+  storeId?: string;
+  includeRaw?: boolean;
+  rawLimit?: number;
+}): Promise<NoFrillsProbeResult> {
+  const started = Date.now();
+  const query = opts.query.trim();
+  const storeId = String(opts.storeId ?? "3660");
+  const includeRaw = Boolean(opts.includeRaw);
+  const rawLimit = Math.min(Math.max(opts.rawLimit ?? 5, 1), 20);
+
+  if (!query) {
+    return {
+      ok: false,
+      query,
+      storeId,
+      searchUrl: SEARCH_URL,
+      originTried: null,
+      httpStatus: null,
+      mappedCount: 0,
+      tileCount: 0,
+      offers: [],
+      error: "query is required",
+      ms: Date.now() - started,
+    };
+  }
+
+  const payload = {
+    cart: { cartId: crypto.randomUUID() },
+    fulfillmentInfo: {
+      storeId,
+      pickupType: "STORE",
+      offerType: "OG",
+      date: todayDdmmyyyy(),
+      timeSlot: null,
+    },
+    listingInfo: {
+      filters: { "search-bar": [query] },
+      sort: {},
+      pagination: { from: 1 },
+      includeFiltersInResponse: false,
+    },
+    banner: BANNER,
+    userData: {
+      domainUserId: crypto.randomUUID(),
+      sessionId: crypto.randomUUID(),
+    },
+    device: { screenSize: 1358 },
+    searchRelatedInfo: {
+      term: query,
+      options: [{ name: "rmp.unifiedSearchVariant", value: "Y" }],
+    },
+  };
+
+  const origins = [
+    "https://www.nofrills.ca",
+    "https://www.realcanadiansuperstore.ca",
+  ];
+
+  let lastStatus = 0;
+  let lastBody = "";
+  let lastOrigin: string | null = null;
+
+  for (const origin of origins) {
+    lastOrigin = origin;
+    const res = await fetch(SEARCH_URL, {
+      method: "POST",
+      headers: buildHeaders(origin),
+      body: JSON.stringify(payload),
+    });
+    lastStatus = res.status;
+    lastBody = await res.text();
+
+    if (res.status === 403 || res.status === 401) {
+      continue;
+    }
+    if (!res.ok) {
+      return {
+        ok: false,
+        query,
+        storeId,
+        searchUrl: SEARCH_URL,
+        originTried: origin,
+        httpStatus: res.status,
+        mappedCount: 0,
+        tileCount: 0,
+        offers: [],
+        bodyPreview: lastBody.slice(0, 500),
+        error: `HTTP ${res.status}`,
+        ms: Date.now() - started,
+      };
+    }
+
+    let json: unknown;
+    try {
+      json = JSON.parse(lastBody);
+    } catch {
+      return {
+        ok: false,
+        query,
+        storeId,
+        searchUrl: SEARCH_URL,
+        originTried: origin,
+        httpStatus: res.status,
+        mappedCount: 0,
+        tileCount: 0,
+        offers: [],
+        bodyPreview: lastBody.slice(0, 500),
+        error: "non-JSON body",
+        ms: Date.now() - started,
+      };
+    }
+
+    const tiles = walkProducts(json);
+    const offers = tiles
+      .map((r) => mapProduct(r, storeId))
+      .filter((o): o is ProductOffer => o != null);
+
+    const seen = new Set<string>();
+    const unique = offers.filter((o) => {
+      if (seen.has(o.productId)) return false;
+      seen.add(o.productId);
+      return true;
+    });
+
+    return {
+      ok: true,
+      query,
+      storeId,
+      searchUrl: SEARCH_URL,
+      originTried: origin,
+      httpStatus: res.status,
+      mappedCount: unique.length,
+      tileCount: tiles.length,
+      offers: includeRaw
+        ? unique
+        : unique.map((o) => {
+            const { raw: _raw, ...rest } = o;
+            return rest;
+          }),
+      rawTiles: includeRaw ? tiles.slice(0, rawLimit) : undefined,
+      ms: Date.now() - started,
+    };
+  }
+
+  return {
+    ok: false,
+    query,
+    storeId,
+    searchUrl: SEARCH_URL,
+    originTried: lastOrigin,
+    httpStatus: lastStatus || null,
+    mappedCount: 0,
+    tileCount: 0,
+    offers: [],
+    bodyPreview: lastBody.slice(0, 500),
+    error: `blocked or unauthorized (HTTP ${lastStatus})`,
+    ms: Date.now() - started,
+  };
+}
+
 export class NoFrillsConnector implements RetailerConnector {
   readonly id = "no_frills";
 
@@ -189,85 +406,26 @@ export class NoFrillsConnector implements RetailerConnector {
       );
     }
 
-    const payload = {
-      cart: { cartId: crypto.randomUUID() },
-      fulfillmentInfo: {
-        storeId: String(storeId),
-        pickupType: "STORE",
-        offerType: "OG",
-        date: todayDdmmyyyy(),
-        timeSlot: null,
-      },
-      listingInfo: {
-        filters: { "search-bar": [query] },
-        sort: {},
-        pagination: { from: 1 },
-        includeFiltersInResponse: false,
-      },
-      banner: BANNER,
-      userData: {
-        domainUserId: crypto.randomUUID(),
-        sessionId: crypto.randomUUID(),
-      },
-      device: { screenSize: 1358 },
-      searchRelatedInfo: {
-        term: query,
-        options: [{ name: "rmp.unifiedSearchVariant", value: "Y" }],
-      },
-    };
+    const probed = await probeNoFrillsSearch({
+      query,
+      storeId,
+      includeRaw: true,
+    });
+    if (probed.ok) return probed.offers;
 
-    const origins = [
-      "https://www.nofrills.ca",
-      "https://www.realcanadiansuperstore.ca",
-    ];
-
-    let lastStatus = 0;
-    let lastBody = "";
-
-    for (const origin of origins) {
-      const res = await fetch(SEARCH_URL, {
-        method: "POST",
-        headers: buildHeaders(origin),
-        body: JSON.stringify(payload),
-      });
-      lastStatus = res.status;
-      lastBody = await res.text();
-
-      if (res.status === 403 || res.status === 401) {
-        continue;
-      }
-      if (!res.ok) {
-        throw new ConnectorError(
-          `No Frills search HTTP ${res.status}: ${lastBody.slice(0, 180)}`,
-          this.id,
-          "http",
-        );
-      }
-
-      let json: unknown;
-      try {
-        json = JSON.parse(lastBody);
-      } catch {
-        throw new ConnectorError(
-          "No Frills returned non-JSON body",
-          this.id,
-          "parse",
-        );
-      }
-
-      const offers = walkProducts(json)
-        .map((r) => mapProduct(r, storeId))
-        .filter((o): o is ProductOffer => o != null);
-
-      // Deduplicate by productId
-      const seen = new Set<string>();
-      const unique = offers.filter((o) => {
-        if (seen.has(o.productId)) return false;
-        seen.add(o.productId);
-        return true;
-      });
-
-      return unique;
+    if (probed.error?.startsWith("HTTP ")) {
+      throw new ConnectorError(
+        `No Frills search ${probed.error}: ${(probed.bodyPreview ?? "").slice(0, 180)}`,
+        this.id,
+        "http",
+      );
+    }
+    if (probed.error === "non-JSON body") {
+      throw new ConnectorError(
+        "No Frills returned non-JSON body",
+        this.id,
+        "parse",
+      );
     }
 
     if (process.env.NOFRILLS_ALLOW_FLIPP_FALLBACK === "1") {
@@ -275,7 +433,7 @@ export class NoFrillsConnector implements RetailerConnector {
     }
 
     throw new ConnectorError(
-      `No Frills blocked or unauthorized (HTTP ${lastStatus}). Akamai edge may be filtering this IP — set NOFRILLS_API_KEY from a browser session, or NOFRILLS_ALLOW_FLIPP_FALLBACK=1 for estimated flyer prices. Body: ${lastBody.slice(0, 120)}`,
+      `No Frills blocked or unauthorized (HTTP ${probed.httpStatus ?? "?"}). Akamai edge may be filtering this IP — set NOFRILLS_API_KEY from a browser session, or NOFRILLS_ALLOW_FLIPP_FALLBACK=1 for estimated flyer prices. Body: ${(probed.bodyPreview ?? "").slice(0, 120)}`,
       this.id,
       "blocked",
     );

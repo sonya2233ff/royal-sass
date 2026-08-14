@@ -1,14 +1,26 @@
 import type { ProductOffer } from "@/connectors/types";
 
-const KG_PER_LB = 0.45359237;
+export const KG_PER_LB = 0.45359237;
+export const LB_PER_KG = 1 / KG_PER_LB;
 
 export type MassUnit = "kg" | "g" | "lb" | "oz" | "ml" | "l";
+/** Shelf weight-price unit (produce / sold-by-weight). */
+export type WeightPriceUnit = "kg" | "lb";
 
 export interface ParsedMass {
   value: number;
   unit: MassUnit;
   /** Always in kilograms */
   kg: number;
+}
+
+export interface UnitPriceBreakdown {
+  pricePerKg: number;
+  pricePerLb: number;
+  /** Store-native unit for display (Walmart → kg, No Frills → lb by default). */
+  nativeUnit: WeightPriceUnit;
+  nativePrice: number;
+  basis: string;
 }
 
 /** Parse first mass token from product name / packageSize (handles kg, g, lb, oz, ml≈g). */
@@ -98,6 +110,113 @@ export function pickBestSizedOffer(
   });
 }
 
+export function round2(n: number): number {
+  return Math.round(n * 100) / 100;
+}
+
+export function formatMass(kg: number): string {
+  if (kg >= 1) return `${round2(kg)} kg`;
+  return `${Math.round(kg * 1000)} g`;
+}
+
+export function kgToLb(kg: number): number {
+  return kg * LB_PER_KG;
+}
+
+export function lbToKg(lb: number): number {
+  return lb * KG_PER_LB;
+}
+
+/** Default shelf unit by retailer — Walmart CA uses kg; No Frills shelves often $/lb. */
+export function defaultWeightUnit(
+  retailer: string | undefined,
+): WeightPriceUnit {
+  if (retailer === "no_frills") return "lb";
+  return "kg";
+}
+
+/**
+ * Detect whether an offer's unitPrice / shelf price is per kg or per lb.
+ * Prefer productId suffixes from Loblaw (_KG / _LB), then text hints, then retailer default.
+ */
+export function detectWeightPriceUnit(
+  offer: Pick<ProductOffer, "productId" | "name" | "packageSize" | "retailer">,
+  retailerDefault?: WeightPriceUnit,
+): WeightPriceUnit {
+  const id = offer.productId.toUpperCase();
+  if (id.endsWith("_LB") || id.includes("_LB_")) return "lb";
+  if (id.endsWith("_KG") || id.includes("_KG_")) return "kg";
+
+  const hint = `${offer.name} ${offer.packageSize ?? ""}`.toLowerCase();
+  const hasLb = /(?:^|[\s/])(?:lb|lbs)\b|\/\s*lb|per\s*lb/.test(hint);
+  const hasKg = /(?:^|[\s/])kg\b|\/\s*kg|per\s*kg/.test(hint);
+  if (hasLb && !hasKg) return "lb";
+  if (hasKg && !hasLb) return "kg";
+
+  return retailerDefault ?? defaultWeightUnit(offer.retailer);
+}
+
+/**
+ * Derive $/kg and $/lb for an offer. Returns null when mass/unit price cannot be resolved.
+ *
+ * `displayUnit` is what we show in the UI (Walmart → kg, No Frills → lb).
+ * Shelf denomination is detected separately, then converted.
+ */
+export function resolveUnitPrices(
+  offer: ProductOffer,
+  opts?: {
+    displayUnit?: WeightPriceUnit;
+    /** Treat shelf `price` as already per-kg/per-lb (produce). */
+    forceSoldByWeight?: boolean;
+  },
+): UnitPriceBreakdown | null {
+  const displayUnit =
+    opts?.displayUnit ?? defaultWeightUnit(offer.retailer);
+
+  const mass =
+    parseMassFromText(offer.packageSize ?? "") ??
+    parseMassFromText(offer.name);
+
+  const id = offer.productId.toUpperCase();
+  const soldByWeight =
+    opts?.forceSoldByWeight === true ||
+    id.endsWith("_KG") ||
+    id.endsWith("_LB") ||
+    /\b(?:per|\/)\s*(?:kg|lb)\b/i.test(
+      `${offer.name} ${offer.packageSize ?? ""}`,
+    );
+
+  let pricePerKg: number | null = null;
+  let basis = "";
+
+  if (soldByWeight) {
+    const shelfIs = detectWeightPriceUnit(offer, displayUnit);
+    pricePerKg = shelfIs === "lb" ? offer.price / KG_PER_LB : offer.price;
+    basis = `sold_by_${shelfIs}`;
+  } else if (offer.unitPrice != null && Number.isFinite(offer.unitPrice)) {
+    const unitIs = detectWeightPriceUnit(offer, displayUnit);
+    pricePerKg =
+      unitIs === "lb" ? offer.unitPrice / KG_PER_LB : offer.unitPrice;
+    basis = "unitPrice";
+  } else if (mass && mass.kg > 0) {
+    pricePerKg = offer.price / mass.kg;
+    basis = `pack_${mass.value}${mass.unit}`;
+  }
+
+  if (pricePerKg == null || !Number.isFinite(pricePerKg) || pricePerKg <= 0) {
+    return null;
+  }
+
+  const pricePerLb = pricePerKg * KG_PER_LB;
+  return {
+    pricePerKg: round2(pricePerKg),
+    pricePerLb: round2(pricePerLb),
+    nativeUnit: displayUnit,
+    nativePrice: round2(displayUnit === "lb" ? pricePerLb : pricePerKg),
+    basis,
+  };
+}
+
 /**
  * Normalize an offer price to CAD for a given purchase mass in kg.
  * Uses unitPrice when present; otherwise derives from package mass or treats price as per-kg if name says kg.
@@ -111,53 +230,22 @@ export function priceForMassKg(
   basis: string;
 } | null {
   if (purchaseKg <= 0) return null;
-
-  const mass =
-    parseMassFromText(offer.packageSize ?? "") ??
-    parseMassFromText(offer.name);
-
-  // Explicit unit price (often already $/kg or $/lb — detect from name)
-  if (offer.unitPrice != null && Number.isFinite(offer.unitPrice)) {
-    const unitHint = `${offer.name} ${offer.packageSize ?? ""}`.toLowerCase();
-    let perKg = offer.unitPrice;
-    if (/\b\/\s*lb\b|\bper\s*lb\b|\blb\b/.test(unitHint) && !/\bkg\b/.test(unitHint)) {
-      perKg = offer.unitPrice / KG_PER_LB;
-    }
-    // productId ending _KG from Loblaw often means price is already for sold-by-kg item
-    if (offer.productId.endsWith("_KG") && !mass) {
-      perKg = offer.price; // shelf price is typically $/kg for variable-weight
-      return {
-        lineTotal: round2(perKg * purchaseKg),
-        pricePerKg: perKg,
-        basis: "sold_by_kg",
-      };
-    }
+  const units = resolveUnitPrices(offer, { forceSoldByWeight: false });
+  if (!units) {
+    // Produce fallback: try treating shelf as sold-by-weight
+    const sold = resolveUnitPrices(offer, { forceSoldByWeight: true });
+    if (!sold) return null;
     return {
-      lineTotal: round2(perKg * purchaseKg),
-      pricePerKg: perKg,
-      basis: "unitPrice",
+      lineTotal: round2(sold.pricePerKg * purchaseKg),
+      pricePerKg: sold.pricePerKg,
+      basis: sold.basis,
     };
   }
-
-  if (offer.productId.endsWith("_KG")) {
-    return {
-      lineTotal: round2(offer.price * purchaseKg),
-      pricePerKg: offer.price,
-      basis: "sold_by_kg",
-    };
-  }
-
-  if (mass && mass.kg > 0) {
-    const perKg = offer.price / mass.kg;
-    return {
-      lineTotal: round2(perKg * purchaseKg),
-      pricePerKg: perKg,
-      basis: `pack_${mass.value}${mass.unit}`,
-    };
-  }
-
-  // Single item with unknown mass — cannot fair-compare to weighted receipt line
-  return null;
+  return {
+    lineTotal: round2(units.pricePerKg * purchaseKg),
+    pricePerKg: units.pricePerKg,
+    basis: units.basis,
+  };
 }
 
 /**
@@ -195,11 +283,13 @@ export function priceByPackCount(
   };
 }
 
-export function round2(n: number): number {
-  return Math.round(n * 100) / 100;
+export function weightUnitLabel(unit: WeightPriceUnit): string {
+  return unit === "lb" ? "\u0437\u0430 1 lb" : "\u0437\u0430 1 kg";
 }
 
-export function formatMass(kg: number): string {
-  if (kg >= 1) return `${round2(kg)} kg`;
-  return `${Math.round(kg * 1000)} g`;
+export function formatMoneyPerWeight(
+  price: number,
+  unit: WeightPriceUnit,
+): string {
+  return `$${round2(price).toFixed(2)} / ${unit}`;
 }
