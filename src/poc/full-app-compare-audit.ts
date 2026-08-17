@@ -165,10 +165,7 @@ async function main() {
     grape!.fairBasis === "needed_weight",
     `grape basis ${grape!.fairBasis}`,
   );
-  assert(
-    grape!.cheaper === "walmart" || grape!.cheaper === "nofrills" || grape!.cheaper === "tie",
-    `grape cheaper ${grape!.cheaper}`,
-  );
+  assert(grape!.cheaper === "walmart", `grape cheaper ${grape!.cheaper}`);
   assert(
     grape!.resolveReason?.walmart === "mapped_sku_rapid_alias" ||
       grape!.resolveReason?.walmart === "mapped_sku",
