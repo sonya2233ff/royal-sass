@@ -1,0 +1,2265 @@
+[
+  {
+    "id": "exact_01",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "6000196635381",
+      "name": "Burnbrae Farms Naturegg Simply Egg Whites 1KG",
+      "brand": "Burnbrae Farms",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "eggs",
+      "upc": "065651002470"
+    },
+    "right": {
+      "retailer": "receipt",
+      "retailerProductId": "r_egg_whites",
+      "name": "Simply Egg Whites 1kg",
+      "brand": "Burnbrae Farms",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "eggs",
+      "upc": "065651002470"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_02",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_gaylea",
+      "name": "Gay Lea Unsalted Butter 454g",
+      "brand": "Gay Lea",
+      "sizeValue": 454,
+      "sizeUnit": "g",
+      "category": "dairy",
+      "upc": "066181001557"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_gaylea",
+      "name": "Gay Lea Unsalted Butter 454g",
+      "brand": "Gay Lea",
+      "sizeValue": 454,
+      "sizeUnit": "g",
+      "category": "dairy",
+      "upc": "066181001557"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_03",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_oat",
+      "name": "Earth's Own Original Oat Milk Alternative 1.75L",
+      "brand": "Earth's Own",
+      "sizeValue": 1.75,
+      "sizeUnit": "l",
+      "category": "beverage",
+      "upc": "062356547119"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_oat",
+      "name": "Earth's Own Original Oat Milk Alternative 1.75L",
+      "brand": "Earth's Own",
+      "sizeValue": 1.75,
+      "sizeUnit": "l",
+      "category": "beverage",
+      "upc": "062356547119"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_04",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_folgers",
+      "name": "Folgers Classic Medium Roast Ground Coffee 816 g",
+      "brand": "Folgers",
+      "sizeValue": 816,
+      "sizeUnit": "g",
+      "category": "coffee",
+      "upc": "025500000134"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_folgers",
+      "name": "Folgers Classic Medium Roast Ground Coffee 816 g",
+      "brand": "Folgers",
+      "sizeValue": 816,
+      "sizeUnit": "g",
+      "category": "coffee",
+      "upc": "025500000134"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_05",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_ziploc",
+      "name": "Ziploc Sandwich Bags 150 ct",
+      "brand": "Ziploc",
+      "sizeValue": 150,
+      "sizeUnit": "ct",
+      "category": "household",
+      "upc": "025700000153"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_ziploc",
+      "name": "Ziploc Sandwich Bags 150 ct",
+      "brand": "Ziploc",
+      "sizeValue": 150,
+      "sizeUnit": "ct",
+      "category": "household",
+      "upc": "025700000153"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_06",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_oil",
+      "name": "No Name 100% Pure Canola Oil 3L",
+      "brand": "No Name",
+      "sizeValue": 3,
+      "sizeUnit": "l",
+      "category": "oil",
+      "upc": "060383007018"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_oil",
+      "name": "No Name 100% Pure Canola Oil 3L",
+      "brand": "No Name",
+      "sizeValue": 3,
+      "sizeUnit": "l",
+      "category": "oil",
+      "upc": "060383007018"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_07",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_sugar",
+      "name": "No Name Granulated Sugar 2kg",
+      "brand": "No Name",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "baking",
+      "upc": "060383039019"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_sugar",
+      "name": "No Name Granulated Sugar 2kg",
+      "brand": "No Name",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "baking",
+      "upc": "060383039019"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_08",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_flour",
+      "name": "No Name All-Purpose Flour 2.5kg",
+      "brand": "No Name",
+      "sizeValue": 2.5,
+      "sizeUnit": "kg",
+      "category": "baking",
+      "upc": "060383011015"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_flour",
+      "name": "No Name All-Purpose Flour 2.5kg",
+      "brand": "No Name",
+      "sizeValue": 2.5,
+      "sizeUnit": "kg",
+      "category": "baking",
+      "upc": "060383011015"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_09",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_milk",
+      "name": "Neilson Homogenized Milk 2L",
+      "brand": "Neilson",
+      "sizeValue": 2,
+      "sizeUnit": "l",
+      "category": "dairy",
+      "upc": "066800001234"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_milk",
+      "name": "Neilson Homogenized Milk 2L",
+      "brand": "Neilson",
+      "sizeValue": 2,
+      "sizeUnit": "l",
+      "category": "dairy",
+      "upc": "066800001234"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_10",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_lemons",
+      "name": "Your Fresh Market Lemons 2 lb",
+      "brand": "Your Fresh Market",
+      "sizeValue": 2,
+      "sizeUnit": "lb",
+      "category": "produce",
+      "upc": "628915235420"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_lemons",
+      "name": "Your Fresh Market Lemons 2 lb",
+      "brand": "Your Fresh Market",
+      "sizeValue": 2,
+      "sizeUnit": "lb",
+      "category": "produce",
+      "upc": "628915235420"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_11",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_heinz",
+      "name": "Heinz Tomato Ketchup 1L",
+      "brand": "Heinz",
+      "sizeValue": 1,
+      "sizeUnit": "l",
+      "category": "condiment",
+      "upc": "057000001234"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_heinz",
+      "name": "Heinz Tomato Ketchup 1L",
+      "brand": "Heinz",
+      "sizeValue": 1,
+      "sizeUnit": "l",
+      "category": "condiment",
+      "upc": "057000001234"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_12",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_mayo",
+      "name": "Hellmann's Real Mayonnaise 890ml",
+      "brand": "Hellmann's",
+      "sizeValue": 890,
+      "sizeUnit": "ml",
+      "category": "condiment",
+      "upc": "069000001111"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_mayo",
+      "name": "Hellmann's Real Mayonnaise 890ml",
+      "brand": "Hellmann's",
+      "sizeValue": 890,
+      "sizeUnit": "ml",
+      "category": "condiment",
+      "upc": "069000001111"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_13",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pb",
+      "name": "Kraft Smooth Peanut Butter 1kg",
+      "brand": "Kraft",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry",
+      "upc": "068100001222"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_pb",
+      "name": "Kraft Smooth Peanut Butter 1kg",
+      "brand": "Kraft",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry",
+      "upc": "068100001222"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_14",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_philly",
+      "name": "Philadelphia Original Cream Cheese 250g",
+      "brand": "Philadelphia",
+      "sizeValue": 250,
+      "sizeUnit": "g",
+      "category": "dairy",
+      "upc": "068100003333"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_philly",
+      "name": "Philadelphia Original Cream Cheese 250g",
+      "brand": "Philadelphia",
+      "sizeValue": 250,
+      "sizeUnit": "g",
+      "category": "dairy",
+      "upc": "068100003333"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_15",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_jello",
+      "name": "Jell-O Vanilla Instant Pudding Mix 147g",
+      "brand": "Jell-O",
+      "sizeValue": 147,
+      "sizeUnit": "g",
+      "category": "baking",
+      "upc": "043000004444"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_jello",
+      "name": "Jell-O Vanilla Instant Pudding Mix 147g",
+      "brand": "Jell-O",
+      "sizeValue": 147,
+      "sizeUnit": "g",
+      "category": "baking",
+      "upc": "043000004444"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_16",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_bran",
+      "name": "Rogers Wheat Bran 625g",
+      "brand": "Rogers",
+      "sizeValue": 625,
+      "sizeUnit": "g",
+      "category": "baking",
+      "upc": "055872001555"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_bran",
+      "name": "Rogers Wheat Bran 625g",
+      "brand": "Rogers",
+      "sizeValue": 625,
+      "sizeUnit": "g",
+      "category": "baking",
+      "upc": "055872001555"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_17",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_realemon",
+      "name": "ReaLemon Lemon Juice 440ml",
+      "brand": "ReaLemon",
+      "sizeValue": 440,
+      "sizeUnit": "ml",
+      "category": "beverage",
+      "upc": "058000006666"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_realemon",
+      "name": "ReaLemon Lemon Juice 440ml",
+      "brand": "ReaLemon",
+      "sizeValue": 440,
+      "sizeUnit": "ml",
+      "category": "beverage",
+      "upc": "058000006666"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_18",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_salt",
+      "name": "Windsor Table Salt 1kg",
+      "brand": "Windsor",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry",
+      "upc": "060383007777"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_salt",
+      "name": "Windsor Table Salt 1kg",
+      "brand": "Windsor",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry",
+      "upc": "060383007777"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_19",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_elbows",
+      "name": "Catelli Elbows Pasta 900g",
+      "brand": "Catelli",
+      "sizeValue": 900,
+      "sizeUnit": "g",
+      "category": "pasta",
+      "upc": "060410008888"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_elbows",
+      "name": "Catelli Elbows Pasta 900g",
+      "brand": "Catelli",
+      "sizeValue": 900,
+      "sizeUnit": "g",
+      "category": "pasta",
+      "upc": "060410008888"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "exact_20",
+    "kind": "exact",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_ice",
+      "name": "Great Value Ice Cubes 2kg",
+      "brand": "Great Value",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "frozen",
+      "upc": "763679000230"
+    },
+    "right": {
+      "retailer": "receipt",
+      "retailerProductId": "r_ice",
+      "name": "Ice Cubes",
+      "brand": "Great Value",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "frozen",
+      "upc": "763679000230"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_01",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_egg_alias",
+      "name": "Burnbrae Farms Naturegg Simply Egg Whites 1KG",
+      "brand": "Burnbrae Farms",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "eggs"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_egg_alias",
+      "name": "Naturegg Simply Egg Whites 1 kg carton",
+      "brand": "Burnbrae",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "eggs"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_02",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_grape_alias",
+      "name": "Your Fresh Market Tomato, Grape, 10 oz",
+      "brand": "Your Fresh Market",
+      "sizeValue": 10,
+      "sizeUnit": "oz",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_grape_alias",
+      "name": "YFM Grape Tomatoes 283g",
+      "brand": "Your Fresh Market",
+      "sizeValue": 283,
+      "sizeUnit": "g",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_03",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_butter_alias",
+      "name": "Gay Lea Unsalted Butter 454g",
+      "brand": "Gay Lea",
+      "sizeValue": 454,
+      "sizeUnit": "g",
+      "category": "dairy"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_butter_alias",
+      "name": "Gay Lea Butter Unsalted 454 Grams",
+      "brand": "Gay Lea",
+      "sizeValue": 454,
+      "sizeUnit": "g",
+      "category": "dairy"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_04",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_oat_alias",
+      "name": "Earth's Own Gluten-Free, Zero Sugar Original Oat Milk Alternative, 1.75L",
+      "brand": "Earth's Own",
+      "sizeValue": 1.75,
+      "sizeUnit": "l",
+      "category": "beverage"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_oat_alias",
+      "name": "Gluten-Free Original Oat Milk Alternative 1.75 L",
+      "brand": "Earth's Own",
+      "sizeValue": 1.75,
+      "sizeUnit": "l",
+      "category": "beverage"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_05",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_coffee_alias",
+      "name": "Folgers Classic Medium Roast Ground Coffee 816 g",
+      "brand": "Folgers",
+      "sizeValue": 816,
+      "sizeUnit": "g",
+      "category": "coffee"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_coffee_alias",
+      "name": "Folgers Classic Roast Ground Coffee 816g",
+      "brand": "Folgers",
+      "sizeValue": 816,
+      "sizeUnit": "g",
+      "category": "coffee"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_06",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_lemon_alias",
+      "name": "Lemons, Your Fresh Market, 2 lb",
+      "brand": "Your Fresh Market",
+      "sizeValue": 2,
+      "sizeUnit": "lb",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_lemon_alias",
+      "name": "Lemons, 2 lb Bag",
+      "brand": "Your Fresh Market",
+      "sizeValue": 2,
+      "sizeUnit": "lb",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_07",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_flour_alias",
+      "name": "Great Value All Purpose Flour 2.5 kg",
+      "brand": "Great Value",
+      "sizeValue": 2.5,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_flour_alias",
+      "name": "Great Value All-Purpose Flour 2.5kg",
+      "brand": "Great Value",
+      "sizeValue": 2.5,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_08",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_sugar_alias",
+      "name": "No Name Granulated White Sugar 2kg",
+      "brand": "No Name",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_sugar_alias",
+      "name": "Granulated Sugar 2 kg",
+      "brand": "No Name",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_09",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_ketchup_alias",
+      "name": "Heinz Tomato Ketchup 1 L",
+      "brand": "Heinz",
+      "sizeValue": 1,
+      "sizeUnit": "l",
+      "category": "condiment"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_ketchup_alias",
+      "name": "Heinz Ketchup Tomato 1 Litre",
+      "brand": "Heinz",
+      "sizeValue": 1,
+      "sizeUnit": "l",
+      "category": "condiment"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_10",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_ziploc_alias",
+      "name": "Ziploc Sandwich Bags, with Grip n Seal Technology",
+      "brand": "Ziploc",
+      "sizeValue": 150,
+      "sizeUnit": "ct",
+      "category": "household"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_ziploc_alias",
+      "name": "Ziploc Sandwich Bags 150",
+      "brand": "Ziploc",
+      "sizeValue": 150,
+      "sizeUnit": "ct",
+      "category": "household"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_11",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pb_alias",
+      "name": "Kraft Smooth Peanut Butter 1 kg",
+      "brand": "Kraft",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_pb_alias",
+      "name": "Kraft Peanut Butter Smooth 1kg",
+      "brand": "Kraft",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_12",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_mayo_alias",
+      "name": "Hellmann's Real Mayonnaise 890 mL",
+      "brand": "Hellmann's",
+      "sizeValue": 890,
+      "sizeUnit": "ml",
+      "category": "condiment"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_mayo_alias",
+      "name": "Hellmanns Mayo Real 890ml",
+      "brand": "Hellmanns",
+      "sizeValue": 890,
+      "sizeUnit": "ml",
+      "category": "condiment"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_13",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_cream_alias",
+      "name": "Philadelphia Original Cream Cheese 250 g",
+      "brand": "Philadelphia",
+      "sizeValue": 250,
+      "sizeUnit": "g",
+      "category": "dairy"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_cream_alias",
+      "name": "Philly Original Cream Cheese 250g",
+      "brand": "Philadelphia",
+      "sizeValue": 250,
+      "sizeUnit": "g",
+      "category": "dairy"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_14",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_jello_alias",
+      "name": "Jell-O Vanilla Instant Pudding Mix",
+      "brand": "Jell-O",
+      "sizeValue": 147,
+      "sizeUnit": "g",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_jello_alias",
+      "name": "Jello Vanilla Instant Pudding 147g",
+      "brand": "Jell-O",
+      "sizeValue": 147,
+      "sizeUnit": "g",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_15",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_oil_alias",
+      "name": "100% Pure Canola Oil 3L",
+      "brand": "No Name",
+      "sizeValue": 3,
+      "sizeUnit": "l",
+      "category": "oil"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_oil_alias",
+      "name": "No Name Canola Oil 3 litre",
+      "brand": "No Name",
+      "sizeValue": 3,
+      "sizeUnit": "l",
+      "category": "oil"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_16",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pasta_alias",
+      "name": "Catelli Elbows Pasta 900g",
+      "brand": "Catelli",
+      "sizeValue": 900,
+      "sizeUnit": "g",
+      "category": "pasta"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_pasta_alias",
+      "name": "Catelli Pasta Elbows 900 g",
+      "brand": "Catelli",
+      "sizeValue": 900,
+      "sizeUnit": "g",
+      "category": "pasta"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_17",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_salt_alias",
+      "name": "Windsor Table Salt 1kg",
+      "brand": "Windsor",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_salt_alias",
+      "name": "Windsor Salt Table 1 kg",
+      "brand": "Windsor",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_18",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_realemon_alias",
+      "name": "ReaLemon 100% Lemon Juice 440ml",
+      "brand": "ReaLemon",
+      "sizeValue": 440,
+      "sizeUnit": "ml",
+      "category": "beverage"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_realemon_alias",
+      "name": "ReaLemon Juice 440 mL",
+      "brand": "ReaLemon",
+      "sizeValue": 440,
+      "sizeUnit": "ml",
+      "category": "beverage"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_19",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_bran_alias",
+      "name": "Rogers Wheat Bran 625g",
+      "brand": "Rogers",
+      "sizeValue": 625,
+      "sizeUnit": "g",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_bran_alias",
+      "name": "Wheat Bran Rogers 625 g",
+      "brand": "Rogers",
+      "sizeValue": 625,
+      "sizeUnit": "g",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_20",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_banana_alias",
+      "name": "Bananas, Bunch",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_banana_alias",
+      "name": "Bananas",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_21",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_cucumber_alias",
+      "name": "English Cucumber",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_cucumber_alias",
+      "name": "Cucumber English",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_22",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pepper_alias",
+      "name": "SUNSET Red Bell Pepper, Single",
+      "brand": "SUNSET",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_pepper_alias",
+      "name": "SUNSET Red Bell Peppers",
+      "brand": "SUNSET",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_23",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pineapple_alias",
+      "name": "Pineapple, Whole",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_pineapple_alias",
+      "name": "Pineapple",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "alias_24",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "receipt",
+      "retailerProductId": "r_foil",
+      "name": "Foil Green 4.27",
+      "category": "household",
+      "upc": "082785400724"
+    },
+    "right": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_foil",
+      "name": "Reynolds Wrap Heavy Duty Aluminum Foil 75 sq ft",
+      "brand": "Reynolds",
+      "category": "household"
+    },
+    "hasMapping": true
+  },
+  {
+    "id": "alias_25",
+    "kind": "alias",
+    "shouldMatch": true,
+    "left": {
+      "retailer": "receipt",
+      "retailerProductId": "r_burner",
+      "name": "Double Burner",
+      "category": "household",
+      "upc": "655772019780"
+    },
+    "right": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_burner",
+      "name": "Mainstays Portable Double Electric Burner",
+      "brand": "Mainstays",
+      "category": "household"
+    },
+    "hasMapping": true
+  },
+  {
+    "id": "size_01",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_oat_175",
+      "name": "Earth's Own Original Oat Milk 1.75L",
+      "brand": "Earth's Own",
+      "sizeValue": 1.75,
+      "sizeUnit": "l",
+      "category": "beverage"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_oat_946",
+      "name": "Earth's Own Original Oat Milk 946ml",
+      "brand": "Earth's Own",
+      "sizeValue": 946,
+      "sizeUnit": "ml",
+      "category": "beverage"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_02",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_butter_454",
+      "name": "Gay Lea Unsalted Butter 454g",
+      "brand": "Gay Lea",
+      "sizeValue": 454,
+      "sizeUnit": "g",
+      "category": "dairy"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_butter_1kg",
+      "name": "Gay Lea Unsalted Butter 1kg",
+      "brand": "Gay Lea",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "dairy"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_03",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_eggs_12",
+      "name": "Great Value Large Eggs 12 Pack",
+      "brand": "Great Value",
+      "sizeValue": 12,
+      "sizeUnit": "ct",
+      "category": "eggs"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_eggs_18",
+      "name": "Great Value Large Eggs 18 Pack",
+      "brand": "Great Value",
+      "sizeValue": 18,
+      "sizeUnit": "ct",
+      "category": "eggs"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_04",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_sugar_2",
+      "name": "No Name Granulated Sugar 2kg",
+      "brand": "No Name",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_sugar_4",
+      "name": "No Name Granulated Sugar 4kg",
+      "brand": "No Name",
+      "sizeValue": 4,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_05",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_flour_25",
+      "name": "No Name All-Purpose Flour 2.5kg",
+      "brand": "No Name",
+      "sizeValue": 2.5,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_flour_10",
+      "name": "No Name All-Purpose Flour 10kg",
+      "brand": "No Name",
+      "sizeValue": 10,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_06",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_oil_3",
+      "name": "Canola Oil 3L",
+      "brand": "No Name",
+      "sizeValue": 3,
+      "sizeUnit": "l",
+      "category": "oil"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_oil_1",
+      "name": "Canola Oil 1L",
+      "brand": "No Name",
+      "sizeValue": 1,
+      "sizeUnit": "l",
+      "category": "oil"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_07",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_coffee_816",
+      "name": "Folgers Classic Medium Roast Ground Coffee 816g",
+      "brand": "Folgers",
+      "sizeValue": 816,
+      "sizeUnit": "g",
+      "category": "coffee"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_coffee_1210",
+      "name": "Folgers Classic Roast Ground Coffee 1.21 kg 2 PACK",
+      "brand": "Folgers",
+      "sizeValue": 1.21,
+      "sizeUnit": "kg",
+      "category": "coffee"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_08",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_milk_2",
+      "name": "Neilson Homogenized Milk 2L",
+      "brand": "Neilson",
+      "sizeValue": 2,
+      "sizeUnit": "l",
+      "category": "dairy"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_milk_4",
+      "name": "Neilson Homogenized Milk 4L",
+      "brand": "Neilson",
+      "sizeValue": 4,
+      "sizeUnit": "l",
+      "category": "dairy"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_09",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pb_1",
+      "name": "Kraft Smooth Peanut Butter 1kg",
+      "brand": "Kraft",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_pb_500",
+      "name": "Kraft Smooth Peanut Butter 500g",
+      "brand": "Kraft",
+      "sizeValue": 500,
+      "sizeUnit": "g",
+      "category": "pantry"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_10",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_ketchup_1",
+      "name": "Heinz Tomato Ketchup 1L",
+      "brand": "Heinz",
+      "sizeValue": 1,
+      "sizeUnit": "l",
+      "category": "condiment"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_ketchup_375",
+      "name": "Heinz Tomato Ketchup 375ml",
+      "brand": "Heinz",
+      "sizeValue": 375,
+      "sizeUnit": "ml",
+      "category": "condiment"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_11",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_ziploc_150",
+      "name": "Ziploc Sandwich Bags 150 ct",
+      "brand": "Ziploc",
+      "sizeValue": 150,
+      "sizeUnit": "ct",
+      "category": "household"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_ziploc_50",
+      "name": "Ziploc Sandwich Bags 50 ct",
+      "brand": "Ziploc",
+      "sizeValue": 50,
+      "sizeUnit": "ct",
+      "category": "household"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_12",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_mayo_890",
+      "name": "Hellmann's Real Mayonnaise 890ml",
+      "brand": "Hellmann's",
+      "sizeValue": 890,
+      "sizeUnit": "ml",
+      "category": "condiment"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_mayo_395",
+      "name": "Hellmann's Real Mayonnaise 395ml",
+      "brand": "Hellmann's",
+      "sizeValue": 395,
+      "sizeUnit": "ml",
+      "category": "condiment"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_13",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_philly_250",
+      "name": "Philadelphia Cream Cheese 250g",
+      "brand": "Philadelphia",
+      "sizeValue": 250,
+      "sizeUnit": "g",
+      "category": "dairy"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_philly_750",
+      "name": "Philadelphia Cream Cheese 750g",
+      "brand": "Philadelphia",
+      "sizeValue": 750,
+      "sizeUnit": "g",
+      "category": "dairy"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_14",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_salt_1",
+      "name": "Windsor Table Salt 1kg",
+      "brand": "Windsor",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "pantry"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_salt_2",
+      "name": "Windsor Table Salt 2kg",
+      "brand": "Windsor",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "pantry"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_15",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pasta_900",
+      "name": "Catelli Elbows 900g",
+      "brand": "Catelli",
+      "sizeValue": 900,
+      "sizeUnit": "g",
+      "category": "pasta"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_pasta_2kg",
+      "name": "Catelli Elbows 2kg",
+      "brand": "Catelli",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "pasta"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_16",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_grape_10oz",
+      "name": "Your Fresh Market Grape Tomatoes 10 oz",
+      "brand": "Your Fresh Market",
+      "sizeValue": 10,
+      "sizeUnit": "oz",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_grape_907",
+      "name": "No Name Grape Tomatoes 907g",
+      "brand": "No Name",
+      "sizeValue": 907,
+      "sizeUnit": "g",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_17",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_blue_1",
+      "name": "Great Value Blueberries 1 lb",
+      "brand": "Great Value",
+      "sizeValue": 1,
+      "sizeUnit": "lb",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_blue_2",
+      "name": "Great Value Blueberries 2 lb",
+      "brand": "Great Value",
+      "sizeValue": 2,
+      "sizeUnit": "lb",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_18",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_straw_1",
+      "name": "Strawberries 1 lb",
+      "sizeValue": 1,
+      "sizeUnit": "lb",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_straw_2",
+      "name": "Strawberries 2LB",
+      "sizeValue": 2,
+      "sizeUnit": "lb",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_19",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_eggwhite_500",
+      "name": "Simply Egg Whites 500g",
+      "brand": "Burnbrae Farms",
+      "sizeValue": 500,
+      "sizeUnit": "g",
+      "category": "eggs"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_eggwhite_1kg",
+      "name": "Simply Egg Whites 1kg",
+      "brand": "Burnbrae Farms",
+      "sizeValue": 1,
+      "sizeUnit": "kg",
+      "category": "eggs"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "size_20",
+    "kind": "size_mismatch",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_oj_175",
+      "name": "Tropicana Orange Juice 1.75L",
+      "brand": "Tropicana",
+      "sizeValue": 1.75,
+      "sizeUnit": "l",
+      "category": "beverage"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_oj_355",
+      "name": "Tropicana Orange Juice 355ml",
+      "brand": "Tropicana",
+      "sizeValue": 355,
+      "sizeUnit": "ml",
+      "category": "beverage"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_01",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_oat_sub",
+      "name": "Earth's Own Original Oat Milk 1.75L",
+      "brand": "Earth's Own",
+      "sizeValue": 1.75,
+      "sizeUnit": "l",
+      "category": "beverage"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_almond_sub",
+      "name": "Earth's Own Original Almond Milk 1.75L",
+      "brand": "Earth's Own",
+      "sizeValue": 1.75,
+      "sizeUnit": "l",
+      "category": "beverage"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_02",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_grape_sub",
+      "name": "Grape Tomatoes 283g",
+      "sizeValue": 283,
+      "sizeUnit": "g",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_cherry_sub",
+      "name": "Cherry Tomatoes 283g",
+      "sizeValue": 283,
+      "sizeUnit": "g",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_03",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_unsalted",
+      "name": "Gay Lea Unsalted Butter 454g",
+      "brand": "Gay Lea",
+      "sizeValue": 454,
+      "sizeUnit": "g",
+      "category": "dairy"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_salted",
+      "name": "Gay Lea Salted Butter 454g",
+      "brand": "Gay Lea",
+      "sizeValue": 454,
+      "sizeUnit": "g",
+      "category": "dairy"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_04",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_classic_c",
+      "name": "Folgers Classic Medium Roast Ground Coffee 816g",
+      "brand": "Folgers",
+      "sizeValue": 816,
+      "sizeUnit": "g",
+      "category": "coffee"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_decaf_c",
+      "name": "Folgers Classic Decaf Medium Roast Ground Coffee 544g",
+      "brand": "Folgers",
+      "sizeValue": 544,
+      "sizeUnit": "g",
+      "category": "coffee"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_05",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_white_sug",
+      "name": "No Name White Granulated Sugar 2kg",
+      "brand": "No Name",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_brown_sug",
+      "name": "No Name Brown Sugar 2kg",
+      "brand": "No Name",
+      "sizeValue": 2,
+      "sizeUnit": "kg",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_06",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_canola_sub",
+      "name": "No Name Canola Oil 3L",
+      "brand": "No Name",
+      "sizeValue": 3,
+      "sizeUnit": "l",
+      "category": "oil"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_olive_sub",
+      "name": "No Name Olive Oil 3L",
+      "brand": "No Name",
+      "sizeValue": 3,
+      "sizeUnit": "l",
+      "category": "oil"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_07",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_homo_sub",
+      "name": "Neilson Homogenized Milk 2L",
+      "brand": "Neilson",
+      "sizeValue": 2,
+      "sizeUnit": "l",
+      "category": "dairy"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_2pct_sub",
+      "name": "Neilson 2% Milk 2L",
+      "brand": "Neilson",
+      "sizeValue": 2,
+      "sizeUnit": "l",
+      "category": "dairy"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_08",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_large_egg",
+      "name": "Large Size Eggs 12 Pack",
+      "sizeValue": 12,
+      "sizeUnit": "ct",
+      "category": "eggs"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_med_egg",
+      "name": "Eggs, Medium 12 Pack",
+      "sizeValue": 12,
+      "sizeUnit": "ct",
+      "category": "eggs"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_09",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_wheat_bran",
+      "name": "Rogers Wheat Bran 625g",
+      "brand": "Rogers",
+      "sizeValue": 625,
+      "sizeUnit": "g",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_oat_bran",
+      "name": "Rogers Oat Bran 625g",
+      "brand": "Rogers",
+      "sizeValue": 625,
+      "sizeUnit": "g",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_10",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_breast",
+      "name": "Boneless Skinless Chicken Breast",
+      "category": "meat"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_thigh",
+      "name": "Boneless Skinless Chicken Thigh",
+      "category": "meat"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_11",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_fresh_straw",
+      "name": "Fresh Strawberries 1 lb",
+      "sizeValue": 1,
+      "sizeUnit": "lb",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_froz_straw",
+      "name": "Frozen Sliced Strawberries 1 lb",
+      "sizeValue": 1,
+      "sizeUnit": "lb",
+      "category": "frozen"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_12",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_eng_cuke",
+      "name": "English Cucumber",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_field_cuke",
+      "name": "Field Cucumber",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_13",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_red_pep",
+      "name": "Red Bell Pepper",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_green_pep",
+      "name": "Green Bell Pepper",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_14",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_van_pud",
+      "name": "Jell-O Vanilla Instant Pudding Mix 147g",
+      "brand": "Jell-O",
+      "sizeValue": 147,
+      "sizeUnit": "g",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_choc_pud",
+      "name": "Jell-O Chocolate Instant Pudding Mix 147g",
+      "brand": "Jell-O",
+      "sizeValue": 147,
+      "sizeUnit": "g",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "subst_15",
+    "kind": "substitute",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_grape_vs_beef",
+      "name": "Grape Tomato 283g",
+      "sizeValue": 283,
+      "sizeUnit": "g",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_beefsteak",
+      "name": "Tomato, Beefsteak, Sold in singles",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_01",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_eggs_d",
+      "name": "Great Value Large 12 Eggs",
+      "category": "eggs"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_lemons_d",
+      "name": "Lemons, 2 lb Bag",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_02",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_butter_d",
+      "name": "Gay Lea Unsalted Butter 454g",
+      "brand": "Gay Lea",
+      "category": "dairy"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_oil_d",
+      "name": "100% Pure Canola Oil 3L",
+      "category": "oil"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_03",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_flour_d",
+      "name": "All-Purpose Flour 2.5kg",
+      "category": "baking"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_sugar_d",
+      "name": "Granulated Sugar 2kg",
+      "category": "baking"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_04",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_coffee_d",
+      "name": "Folgers Classic Ground Coffee 816g",
+      "brand": "Folgers",
+      "category": "coffee"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_oat_d",
+      "name": "Earth's Own Oat Milk 1.75L",
+      "brand": "Earth's Own",
+      "category": "beverage"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_05",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_ziploc_d",
+      "name": "Ziploc Sandwich Bags",
+      "brand": "Ziploc"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_foil_d",
+      "name": "Reynolds Aluminum Foil",
+      "brand": "Reynolds"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_06",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pine_d",
+      "name": "Pineapple",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_banana_d",
+      "name": "Bananas, Bunch",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_07",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_eggplant_d",
+      "name": "Eggplant, Sold in singles",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_tomato_d",
+      "name": "Tomato, Beefsteak",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_08",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_chicken_d",
+      "name": "Chicken Breast",
+      "category": "meat"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_butter_d2",
+      "name": "Gay Lea Butter",
+      "category": "dairy"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_09",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_seeds_d",
+      "name": "HJADGG Cherry Pink Grape Tomato Seeds 200pcs",
+      "category": "garden"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_grape_d",
+      "name": "Grape Tomato",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_10",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pepper_d",
+      "name": "SUNSET Red Bell Pepper",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_sweet_d",
+      "name": "Caribbean Sweet Potatoes",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_11",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_garlic_d",
+      "name": "Colossal Fresh Garlic",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_onion_d",
+      "name": "Yellow Onions 3lb",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_12",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_kiwi_d",
+      "name": "Fresh Kiwi Fruit",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_lime_d",
+      "name": "Limes 1lb",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_13",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_acai_d",
+      "name": "Acai Puree Packets",
+      "category": "frozen"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_ice_d",
+      "name": "Ice Cubes 2kg",
+      "category": "frozen"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_14",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_spinach_d",
+      "name": "Chopped Spinach Frozen",
+      "category": "frozen"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_pasta_d",
+      "name": "Catelli Elbows Pasta",
+      "category": "pasta"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_15",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_oj_d",
+      "name": "Orange Juice Pulp Free",
+      "category": "beverage"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_realemon_d",
+      "name": "ReaLemon Lemon Juice",
+      "category": "beverage"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_16",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_pear_d",
+      "name": "Pear, Bosc",
+      "category": "produce"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_apple_d",
+      "name": "Gala Apples",
+      "category": "produce"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_17",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_salt_d",
+      "name": "Windsor Table Salt",
+      "brand": "Windsor"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_pepper_spice_d",
+      "name": "Black Pepper Ground",
+      "category": "spice"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_18",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_heinz_d",
+      "name": "Heinz Tomato Ketchup",
+      "brand": "Heinz"
+    },
+    "right": {
+      "retailer": "sobeys",
+      "retailerProductId": "sob_mustard_d",
+      "name": "French's Yellow Mustard",
+      "brand": "French's"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_19",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_philly_d",
+      "name": "Philadelphia Cream Cheese",
+      "brand": "Philadelphia"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_yogurt_d",
+      "name": "Astro Original Yogurt",
+      "brand": "Astro"
+    },
+    "hasMapping": false
+  },
+  {
+    "id": "diff_20",
+    "kind": "different",
+    "shouldMatch": false,
+    "left": {
+      "retailer": "walmart_ca",
+      "retailerProductId": "wm_burner_d",
+      "name": "Double Electric Burner",
+      "category": "household"
+    },
+    "right": {
+      "retailer": "nofrills",
+      "retailerProductId": "nf_eggs_d2",
+      "name": "Large Size Eggs 12 Pack",
+      "category": "eggs"
+    },
+    "hasMapping": false
+  }
+]

@@ -152,3 +152,26 @@ model ComparisonRun {
   createdAt        DateTime @default(now())
   list             ShoppingList @relation(fields: [listId], references: [id])
 }
+
+/// Pairwise identity between two retailer (or receipt) product records.
+/// Do not auto-link when matchConfidence < threshold; those stay needs_review.
+/// Live staples compare still uses JSON catalogs; this table is the target store.
+model ProductMatch {
+  id               String   @id @default(cuid())
+  leftRetailer     String
+  leftProductId    String
+  rightRetailer    String
+  rightProductId   String
+  matchMethod      String
+  matchConfidence  Float
+  verified         Boolean  @default(false)
+  verifiedAt       DateTime?
+  decision         String   @default("needs_review") // auto_linked | needs_review | rejected
+  explainJson      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([leftRetailer, leftProductId, rightRetailer, rightProductId])
+  @@index([decision])
+  @@index([verified])
+}

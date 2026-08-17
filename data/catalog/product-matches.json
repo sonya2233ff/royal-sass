@@ -1,0 +1,25 @@
+{
+  "updatedAt": "2026-08-17T03:45:13.028Z",
+  "autoLinkThreshold": 0.85,
+  "matches": [
+    {
+      "id": "receipt::r_egg_whites||walmart_ca::6000196635381",
+      "leftRetailer": "receipt",
+      "leftProductId": "r_egg_whites",
+      "rightRetailer": "walmart_ca",
+      "rightProductId": "6000196635381",
+      "matchMethod": "upc",
+      "matchConfidence": 1,
+      "verified": false,
+      "decision": "auto_linked",
+      "explain": [
+        {
+          "stage": "upc",
+          "score": 1,
+          "reason": "GTIN/UPC match 65651002470"
+        }
+      ],
+      "updatedAt": "2026-08-17T03:45:13.028Z"
+    }
+  ]
+}

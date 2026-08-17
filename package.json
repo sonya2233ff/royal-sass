@@ -22,6 +22,7 @@
     "cache:nofrills": "tsx --env-file=.env src/poc/cache-nofrills-staples.ts",
     "poc:discover-sobeys": "tsx -e \"import { discoverSobeysClarkHilda } from './src/connectors/sobeys.ts'; discoverSobeysClarkHilda().then(r=>console.log(JSON.stringify(r,null,2)))\"",
     "poc:discover-freshco": "tsx src/poc/discover-freshco.ts",
+    "poc:entity-match": "tsx src/poc/entity-match-benchmark.ts",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"

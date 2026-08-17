@@ -1,0 +1,55 @@
+{
+  "threshold": 0.85,
+  "n": 100,
+  "counts": {
+    "exact": 20,
+    "alias": 25,
+    "size_mismatch": 20,
+    "substitute": 15,
+    "different": 20
+  },
+  "tp": 45,
+  "fp": 0,
+  "tn": 55,
+  "fn": 0,
+  "precision": 1,
+  "recall": 1,
+  "falsePositiveRate": 0,
+  "explainability": 1,
+  "elapsedMs": 31.0255,
+  "pairsPerMs": 3.2232,
+  "byKind": {
+    "exact": {
+      "n": 20,
+      "auto": 20,
+      "correct": 20
+    },
+    "alias": {
+      "n": 25,
+      "auto": 25,
+      "correct": 25
+    },
+    "size_mismatch": {
+      "n": 20,
+      "auto": 0,
+      "correct": 20
+    },
+    "substitute": {
+      "n": 15,
+      "auto": 0,
+      "correct": 15
+    },
+    "different": {
+      "n": 20,
+      "auto": 0,
+      "correct": 20
+    }
+  },
+  "methodCounts": {
+    "upc": 20,
+    "structured": 49,
+    "fellegi_sunter": 29,
+    "manual_mapping": 2
+  },
+  "errors": []
+}
