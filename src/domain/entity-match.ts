@@ -25,6 +25,8 @@ export const AUTO_LINK_THRESHOLD = Number.parseFloat(
 export type MatchMethod =
   | "upc"
   | "manual_mapping"
+  | "seed_catalog"
+  | "locked_sku"
   | "structured"
   | "fellegi_sunter"
   | "semantic_fallback"

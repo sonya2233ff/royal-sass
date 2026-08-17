@@ -118,7 +118,25 @@ Not wired into `/api/staples/compare`, `walmart-rapid.ts`, or `nofrills.ts`.
 
 ```bash
 npm run poc:entity-match
+npm run poc:seed-match
 ```
+
+---
+
+## 6. Seed + retailer mapping (existing staples)
+
+Master id = cafe staple id (`simply_egg_whites`). No Frills PCX ids (`20820130001_EA`) are retailer SKUs only.
+
+`npm run poc:seed-match` reads cached `nofrills_3660_latest.json` + `walmart_5831_latest.json` (no live Rapid/PCX):
+
+1. Seed `Master → nofrills` as `seed_catalog`
+2. If `confirmed.json` / `preferredProductId` / receipt lock exists → `locked_sku`, **do not rematch**
+3. Else score NF vs WM with `matchProducts`; cheapest staples stay `staple_winner` unless UPC
+4. Attach catalog prices with `LIVE_VERIFIED` / `RECEIPT_VERIFIED` / `MULTI_SOURCE_CONFIRMED` / `ESTIMATED` / `UNKNOWN`
+5. Instacart/Uber helper `deliveryValidation()` is never usable as shelf
+
+Output: `data/catalog/retailer-mappings.json`.
+
 
 ---
 

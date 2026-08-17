@@ -88,6 +88,9 @@ model ProductMapping {
   retailerProductId  String
   storeId            String?
   confidence         String  @default("exact")
+  matchMethod        String?
+  matchConfidence    Float?
+  verified           Boolean @default(false)
   confirmedByUser    Boolean @default(false)
   product            Product @relation(fields: [productId], references: [id])
   retailerProduct    RetailerProduct @relation(fields: [retailerProductId], references: [id])
@@ -103,7 +106,7 @@ model PriceObservation {
   currency           String   @default("CAD")
   promoPriceCents    Int?
   availability       String
-  confidence         String
+  confidence         String   // LIVE_VERIFIED | RECEIPT_VERIFIED | MULTI_SOURCE_CONFIRMED | ESTIMATED | UNKNOWN (legacy: exact/estimated/stale)
   checkedAt          DateTime
   sourceUrl          String?
   rawResponseId      String?

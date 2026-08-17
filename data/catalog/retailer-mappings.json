@@ -1,0 +1,2848 @@
+{
+  "updatedAt": "2026-08-17T04:12:46.227Z",
+  "autoLinkThreshold": 0.85,
+  "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
+  "products": {
+    "simply_egg_whites": {
+      "masterId": "simply_egg_whites",
+      "label": "Egg Whites (cheapest carton)",
+      "category": "eggs",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20820130001_EA",
+          "name": "Burnbrae Farms Naturegg Free Run Egg Whites",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.219Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000196635381",
+          "name": "Simply Egg Whites 1kg",
+          "upc": "065651002470",
+          "matchMethod": "manual_mapping",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.992Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.992Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20820130001_EA",
+          "price": 5.5,
+          "checkedAt": "2026-08-16T00:49:30.338Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000196635381",
+          "price": 9.47,
+          "checkedAt": "2026-08-16T00:47:55.276Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        }
+      ]
+    },
+    "tomatoes_grape": {
+      "masterId": "tomatoes_grape",
+      "label": "Grape Tomatoes (pack)",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20840038001_EA",
+          "name": "Grape Tomato",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.219Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000194960084",
+          "name": "Your Fresh Market Tomato, Grape, 10 oz",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-13T04:59:30.360Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.993Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20840038001_EA",
+          "price": 7.99,
+          "checkedAt": "2026-08-16T00:49:34.848Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "eggs_30ct": {
+      "masterId": "eggs_30ct",
+      "label": "Large Eggs (cheapest pack)",
+      "category": "eggs",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20812144001_EA",
+          "name": "No Name Large Size Eggs 12 Pack",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.219Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "10052944",
+          "name": "Great Value Large 12 Eggs",
+          "upc": "10052944",
+          "matchMethod": "structured",
+          "matchConfidence": 0.467,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.333,
+              "reason": "name token Jaccard 0.33"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0.22,
+              "reason": "size same"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.3333333333333333,
+              "reason": "name Jaccard 0.33"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 3.5,
+              "reason": "size same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.467,
+              "reason": "best score 0.47 below threshold 0.85"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.222Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20812144001_EA",
+          "price": 3.93,
+          "checkedAt": "2026-08-16T00:49:35.380Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "10052944",
+          "price": 3.93,
+          "checkedAt": "2026-08-16T00:48:07.928Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "grayridge_eggs": {
+      "masterId": "grayridge_eggs",
+      "label": "Grayridge Eggs",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21685186001_EA",
+          "name": "Eggs, Medium",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.222Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21685186001_EA",
+          "price": 7.99,
+          "checkedAt": "2026-08-16T00:49:35.877Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "lemons_2lb": {
+      "masterId": "lemons_2lb",
+      "label": "Lemons (bag ~2lb)",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20795315001_EA",
+          "name": "Lemons, 2 lb Bag",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.222Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000199360629",
+          "name": "Lemons, Your Fresh Market, 2 lb",
+          "upc": "6000199360629",
+          "matchMethod": "semantic_fallback",
+          "matchConfidence": 0.525,
+          "verified": false,
+          "decision": "needs_review",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.5,
+              "reason": "name token Jaccard 0.50"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0.22,
+              "reason": "size same"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.5,
+              "reason": "name Jaccard 0.50"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 3.5,
+              "reason": "size same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "semantic_fallback",
+              "score": 0.525,
+              "reason": "name overlap only — semantic/image fallback, never auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.222Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20795315001_EA",
+          "price": 4.99,
+          "checkedAt": "2026-08-16T00:49:36.329Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000199360629",
+          "price": 4.97,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:31:07.668Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "pear_bosc_kg": {
+      "masterId": "pear_bosc_kg",
+      "label": "Bosc Pear (by kg)",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20129549001_KG",
+          "name": "Rocha Pears",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.222Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000195494141",
+          "name": "Pear, Bosc, Sold in singles, 0.18 - 0.30 KG",
+          "upc": "6000195494141",
+          "matchMethod": "structured",
+          "matchConfidence": 0.205,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.25,
+              "reason": "name token Jaccard 0.25"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.25,
+              "reason": "name Jaccard 0.25"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.205,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.223Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20129549001_KG",
+          "price": 0.92,
+          "checkedAt": "2026-08-16T00:49:36.823Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000195494141",
+          "price": 1.57,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:31:13.161Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "folgers_coffee": {
+      "masterId": "folgers_coffee",
+      "label": "Folgers Coffee",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21393374_EA",
+          "name": "Gourmet West Coast Dark Roast Fine Grind Coffee",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.223Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000205233307",
+          "name": "Folgers Classic Medium Roast Ground Coffee 816 g",
+          "upc": "6000205233307",
+          "matchMethod": "structured",
+          "matchConfidence": 0.4,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "identity",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.182,
+              "reason": "name token Jaccard 0.18"
+            },
+            {
+              "stage": "structured",
+              "score": 0.28,
+              "reason": "brand exact"
+            },
+            {
+              "stage": "structured",
+              "score": 0.22,
+              "reason": "size same"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "category unknown"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "brand + size corroboration"
+            },
+            {
+              "stage": "gate",
+              "score": 0.4,
+              "reason": "substitute conflict: dark vs medium"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.18181818181818182,
+              "reason": "name Jaccard 0.18"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 4,
+              "reason": "brand exact"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 3.5,
+              "reason": "size same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "category unknown"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -6,
+              "reason": "substitute conflict: dark vs medium"
+            },
+            {
+              "stage": "gate",
+              "score": 0.4,
+              "reason": "substitute blocked auto-link (dark vs medium)"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.223Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21393374_EA",
+          "price": 20,
+          "checkedAt": "2026-08-16T00:49:37.374Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000205233307",
+          "price": 21.96,
+          "availability": "unknown",
+          "checkedAt": "2026-08-16T00:48:25.105Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "eggplant_kg": {
+      "masterId": "eggplant_kg",
+      "label": "Eggplant (by kg)",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21681207001_EA",
+          "name": "Naturally Imperfect Long Eggplants",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.223Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000191270102",
+          "name": "Eggplant, Sold in singles, 0.39 - 0.51 KG",
+          "upc": "6000191270102",
+          "matchMethod": "structured",
+          "matchConfidence": 0.18,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.2,
+              "reason": "name token Jaccard 0.20"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.2,
+              "reason": "name Jaccard 0.20"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.18,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.223Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21681207001_EA",
+          "price": 3.5,
+          "checkedAt": "2026-08-16T00:49:37.859Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000191270102",
+          "price": 2.17,
+          "checkedAt": "2026-08-15T23:45:40.516Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "tomato_gh_red_kg": {
+      "masterId": "tomato_gh_red_kg",
+      "label": "Greenhouse Red Tomato (by kg)",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21219102_EA",
+          "name": "Accents Diced Tomatoes with Green Pepper",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.223Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000190008474",
+          "name": "Tomato, Beefsteak, Sold in singles, 0.23 - 0.39 KG",
+          "upc": "6000190008474",
+          "matchMethod": "structured",
+          "matchConfidence": 0.151,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.143,
+              "reason": "name token Jaccard 0.14"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.14285714285714285,
+              "reason": "name Jaccard 0.14"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.151,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.224Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21219102_EA",
+          "price": 2.5,
+          "checkedAt": "2026-08-16T00:49:38.421Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000190008474",
+          "price": 1.63,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:31:31.364Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "rogers_wheat_bran": {
+      "masterId": "rogers_wheat_bran",
+      "label": "Rogers Wheat Bran",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20744484_EA",
+          "name": "Wheat Bran",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.224Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "577OATLSOV6G",
+          "name": "Bob's Red Mill Wheat Bran",
+          "matchMethod": "semantic_fallback",
+          "matchConfidence": 0.525,
+          "verified": false,
+          "decision": "needs_review",
+          "kind": "identity",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.5,
+              "reason": "name token Jaccard 0.50"
+            },
+            {
+              "stage": "structured",
+              "score": -0.2,
+              "reason": "brand mismatch"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size unknown"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "category unknown"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.5,
+              "reason": "name Jaccard 0.50"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -3,
+              "reason": "brand mismatch"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "size unknown"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "category unknown"
+            },
+            {
+              "stage": "semantic_fallback",
+              "score": 0.525,
+              "reason": "name overlap only — semantic/image fallback, never auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.225Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20744484_EA",
+          "price": 2.99,
+          "checkedAt": "2026-08-16T00:49:38.923Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "577OATLSOV6G",
+          "price": 4.47,
+          "availability": "unknown",
+          "checkedAt": "2026-08-16T00:48:31.952Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "oat_beverage_original": {
+      "masterId": "oat_beverage_original",
+      "label": "Oat Beverage Original 1.75L",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21037796_EA",
+          "name": "Gluten-Free Original Oat Milk Alternative",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.225Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "2ADJVX8MAQ1Q",
+          "name": "Earth's Own Gluten-Free, Zero Sugar Original Oat Milk Alternative, 1.75L",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.997Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.997Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21037796_EA",
+          "price": 4,
+          "checkedAt": "2026-08-16T00:49:30.879Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "2ADJVX8MAQ1Q",
+          "price": 4.47,
+          "availability": "out_of_stock",
+          "checkedAt": "2026-08-16T00:48:34.870Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        }
+      ]
+    },
+    "red_peppers_kg": {
+      "masterId": "red_peppers_kg",
+      "label": "Red Bell Pepper (by kg)",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20007535001_KG",
+          "name": "Red Peppers    ",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.225Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000195506337",
+          "name": "SUNSET Red Bell Pepper, Single, 0.12 - 0.24 KG",
+          "upc": "6000195506337",
+          "matchMethod": "structured",
+          "matchConfidence": 0.28,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.4,
+              "reason": "name token Jaccard 0.40"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.4,
+              "reason": "name Jaccard 0.40"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.28,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.225Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20007535001_KG",
+          "price": 2.11,
+          "checkedAt": "2026-08-16T00:49:39.474Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000195506337",
+          "price": 1.28,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:31:49.526Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "sweet_potatoes_kg": {
+      "masterId": "sweet_potatoes_kg",
+      "label": "Sweet Potato (by kg)",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20169868001_KG",
+          "name": "Caribbean Sweet Potatoes",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.225Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000190025745",
+          "name": "Sweet Potato, Sold in singles, 0.28 - 0.57 KG",
+          "upc": "6000190025745",
+          "matchMethod": "structured",
+          "matchConfidence": 0.33,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.5,
+              "reason": "name token Jaccard 0.50"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.5,
+              "reason": "name Jaccard 0.50"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.33,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.225Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20169868001_KG",
+          "price": 1.36,
+          "checkedAt": "2026-08-16T00:49:39.916Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000190025745",
+          "price": 1.8,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:31:55.543Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "pineapple_whole": {
+      "masterId": "pineapple_whole",
+      "label": "Whole Pineapple",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20160992001_EA",
+          "name": "Pineapple",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000191289579",
+          "name": "Pineapple, Golden Jumbo, 2.05-2.29 kg each",
+          "upc": "6000191289579",
+          "matchMethod": "structured",
+          "matchConfidence": 0.247,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.333,
+              "reason": "name token Jaccard 0.33"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size unknown"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.3333333333333333,
+              "reason": "name Jaccard 0.33"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "size unknown"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.247,
+              "reason": "best score 0.25 below threshold 0.85"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20160992001_EA",
+          "price": 4.99,
+          "checkedAt": "2026-08-16T00:49:31.365Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000191289579",
+          "price": 3.97,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:32:02.603Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "almond_original": {
+      "masterId": "almond_original",
+      "label": "Earth's Own Almond Original",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20299698001_EA",
+          "name": "Original Almond Milk Alternative",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "10184853",
+          "name": "Earth's Own Original Almond Milk Alternative, 1.89L",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.997Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.997Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20299698001_EA",
+          "price": 4,
+          "checkedAt": "2026-08-16T00:49:33.931Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "10184853",
+          "price": 4.47,
+          "availability": "unknown",
+          "checkedAt": "2026-08-16T00:48:45.329Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        }
+      ]
+    },
+    "bananas_kg": {
+      "masterId": "bananas_kg",
+      "label": "Bananas (cheapest by kg)",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20175355001_KG",
+          "name": "Bananas, Bunch",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "875805",
+          "name": "Banana, Sold in singles, 0.15 - 0.23 KG",
+          "matchMethod": "semantic_fallback",
+          "matchConfidence": 0.525,
+          "verified": false,
+          "decision": "needs_review",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.5,
+              "reason": "name token Jaccard 0.50"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size unknown"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.5,
+              "reason": "name Jaccard 0.50"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "size unknown"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "semantic_fallback",
+              "score": 0.525,
+              "reason": "name overlap only — semantic/image fallback, never auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20175355001_KG",
+          "price": 1.75,
+          "checkedAt": "2026-08-16T00:49:31.867Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "875805",
+          "price": 0.35,
+          "checkedAt": "2026-08-16T00:22:07.731Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "kiwi_kg": {
+      "masterId": "kiwi_kg",
+      "label": "Kiwi (cheapest by kg)",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21099138001_EA",
+          "name": "Fresh Kiwi Fruit",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6GYYS29T8E05",
+          "name": "Green Kiwi, 2 lb",
+          "matchMethod": "structured",
+          "matchConfidence": 0.205,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.25,
+              "reason": "name token Jaccard 0.25"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.25,
+              "reason": "name Jaccard 0.25"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.205,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21099138001_EA",
+          "price": 4.99,
+          "checkedAt": "2026-08-16T00:49:46.778Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6GYYS29T8E05",
+          "price": 9.97,
+          "checkedAt": "2026-08-16T00:49:23.446Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cucumber_english": {
+      "masterId": "cucumber_english",
+      "label": "English Cucumber",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20070132001_EA",
+          "name": "English Cucumber",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000188920591",
+          "name": "Cucumber, English, Sold in Single Wrap",
+          "upc": "6000188920591",
+          "matchMethod": "semantic_fallback",
+          "matchConfidence": 0.525,
+          "verified": false,
+          "decision": "needs_review",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.5,
+              "reason": "name token Jaccard 0.50"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size unknown"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.5,
+              "reason": "name Jaccard 0.50"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "size unknown"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "semantic_fallback",
+              "score": 0.525,
+              "reason": "name overlap only — semantic/image fallback, never auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20070132001_EA",
+          "price": 0.99,
+          "checkedAt": "2026-08-16T00:49:32.323Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000188920591",
+          "price": 0.94,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:32:25.130Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "garlic_1kg": {
+      "masterId": "garlic_1kg",
+      "label": "Garlic 1kg",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20135581001_KG",
+          "name": "Colossal Fresh Garlic",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000196795580",
+          "name": "Garlic, 1 kg Bag",
+          "upc": "6000196795580",
+          "matchMethod": "structured",
+          "matchConfidence": 0.425,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.25,
+              "reason": "name token Jaccard 0.25"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0.22,
+              "reason": "size same"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.25,
+              "reason": "name Jaccard 0.25"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 3.5,
+              "reason": "size same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.425,
+              "reason": "best score 0.42 below threshold 0.85"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20135581001_KG",
+          "price": 1.32,
+          "checkedAt": "2026-08-16T00:49:40.388Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000196795580",
+          "price": 5.97,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:32:29.585Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "blueberries": {
+      "masterId": "blueberries",
+      "label": "Blueberries",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20141763001_EA",
+          "name": "2 LB Blueberries",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000204089919",
+          "name": "Blueberries, 312 g",
+          "upc": "6000204089919",
+          "matchMethod": "structured",
+          "matchConfidence": 0.5,
+          "verified": false,
+          "decision": "needs_review",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 1,
+              "reason": "name token Jaccard 1.00"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1,
+              "reason": "name Jaccard 1.00"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.5,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20141763001_EA",
+          "price": 7.99,
+          "checkedAt": "2026-08-16T00:49:33.287Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000204089919",
+          "price": 3.44,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:32:34.370Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "strawberries": {
+      "masterId": "strawberries",
+      "label": "Strawberries",
+      "category": "produce",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20069661001_EA",
+          "name": "Strawberries 2LB",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000196024969",
+          "name": "Fresh Organic Strawberries, 1 lb",
+          "upc": "6000196024969",
+          "matchMethod": "structured",
+          "matchConfidence": 0.247,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.333,
+              "reason": "name token Jaccard 0.33"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.3333333333333333,
+              "reason": "name Jaccard 0.33"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "brand missing"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.247,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.226Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20069661001_EA",
+          "price": 8.99,
+          "checkedAt": "2026-08-16T00:49:40.882Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000196024969",
+          "price": 5.97,
+          "availability": "unknown",
+          "checkedAt": "2026-08-14T01:32:42.205Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        }
+      ]
+    },
+    "milk_2pct_2l": {
+      "masterId": "milk_2pct_2l",
+      "label": "Mehadrin 2% Milk 2L",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20094120003_EA",
+          "name": "Kosher 2% Milk",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000198384699",
+          "name": "Mehadrin 2% 2LT milk",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.999Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.999Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20094120003_EA",
+          "price": 5.67,
+          "checkedAt": "2026-08-16T00:49:34.389Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000198384699",
+          "price": 6.47,
+          "availability": "out_of_stock",
+          "checkedAt": "2026-08-16T00:48:59.607Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        }
+      ]
+    },
+    "homo_milk_2l": {
+      "masterId": "homo_milk_2l",
+      "label": "Mehadrin Homo 3.25% Milk 2L",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20094120002_EA",
+          "name": "Kosher Homogenized Milk",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000198386424",
+          "name": "Mehadrin Homogenized 3,25% 2LT Milk",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.999Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.999Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20094120002_EA",
+          "price": 5.67,
+          "checkedAt": "2026-08-16T00:49:32.846Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000198386424",
+          "price": 6.47,
+          "availability": "out_of_stock",
+          "checkedAt": "2026-08-16T00:49:08.126Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        }
+      ]
+    },
+    "butter_454g": {
+      "masterId": "butter_454g",
+      "label": "Gay Lea Unsalted Butter 454g",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20559466_EA",
+          "name": "Gay Lea Unsalted Butter",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000201029320",
+          "name": "Gay Lea Unsalted Butter",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.999Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.999Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20559466_EA",
+          "price": 8.29,
+          "checkedAt": "2026-08-16T00:49:41.345Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000201029320",
+          "price": 7.96,
+          "checkedAt": "2026-08-16T00:49:02.626Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        }
+      ]
+    },
+    "large_eggs_dozen": {
+      "masterId": "large_eggs_dozen",
+      "label": "Large Eggs Dozen",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20812144001_EA",
+          "name": "Large Size Eggs 12 Pack",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20812144001_EA",
+          "price": 3.93,
+          "checkedAt": "2026-08-16T00:49:41.753Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "canola_oil_3l": {
+      "masterId": "canola_oil_3l",
+      "label": "Canola Oil 3L",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20028656_EA",
+          "name": "100% Pure Canola Oil",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20028656_EA",
+          "price": 7.99,
+          "checkedAt": "2026-08-16T00:49:42.201Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "white_sugar_2kg": {
+      "masterId": "white_sugar_2kg",
+      "label": "White Sugar 2kg",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20145033_EA",
+          "name": "Granulated Sugar",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20145033_EA",
+          "price": 2.99,
+          "checkedAt": "2026-08-16T00:49:42.634Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "ap_flour_2_5kg": {
+      "masterId": "ap_flour_2_5kg",
+      "label": "All-Purpose Flour 2.5kg",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20013256_EA",
+          "name": "All-Purpose Flour",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20013256_EA",
+          "price": 3.79,
+          "checkedAt": "2026-08-16T00:49:43.052Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "pasta_elbows": {
+      "masterId": "pasta_elbows",
+      "label": "Elbow Pasta",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21661873_EA",
+          "name": "Protein+ White Pasta Made With Added Protein Elbows",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21661873_EA",
+          "price": 3,
+          "checkedAt": "2026-08-16T00:49:43.518Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "chicken_breast_kg": {
+      "masterId": "chicken_breast_kg",
+      "label": "Chicken Breast (by kg)",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20568928_EA",
+          "name": "Boneless Skinless Chicken Breasts, Raised on Canadian Farms",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20568928_EA",
+          "price": 14,
+          "checkedAt": "2026-08-16T00:49:44.068Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "orange_juice_pulp": {
+      "masterId": "orange_juice_pulp",
+      "label": "Tropicana OJ No Pulp 2.63L",
+      "retailers": {
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "205804",
+          "name": "Tropicana 100% Pure Orange Juice No Pulp",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.999Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.999Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "205804",
+          "price": 10.24,
+          "checkedAt": "2026-08-16T00:49:05.408Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "realemon_440ml": {
+      "masterId": "realemon_440ml",
+      "label": "ReaLemon Juice 440ml",
+      "retailers": {
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "1BUHM1GPVP5J",
+          "name": "Realemon Juice 440ml",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.999Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.999Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "1BUHM1GPVP5J",
+          "price": 2.47,
+          "checkedAt": "2026-08-16T00:49:26.448Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "jello_vanilla_instant": {
+      "masterId": "jello_vanilla_instant",
+      "label": "Jell-O Vanilla Instant Pudding 102g",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20307001001_EA",
+          "name": "Jell-O Vanilla Instant Pudding Mix",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "10306574",
+          "name": "Jell-O Vanilla Instant Pudding Mix, Box, Caseine-Free",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.999Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.999Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20307001001_EA",
+          "price": 1.99,
+          "checkedAt": "2026-08-16T00:49:47.194Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "10306574",
+          "price": 2.07,
+          "checkedAt": "2026-08-16T00:49:29.767Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        }
+      ]
+    },
+    "ziploc_sandwich": {
+      "masterId": "ziploc_sandwich",
+      "label": "Ziploc Sandwich Bags",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21196100_EA",
+          "name": "Ziploc Sandwich Bags, with Grip 'n Seal Technology",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000195369896",
+          "name": "Ziploc® Sandwich Bags with Grip 'n Seal Technology",
+          "matchMethod": "locked_sku",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T04:11:20.999Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T04:11:20.999Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21196100_EA",
+          "price": 12.99,
+          "checkedAt": "2026-08-16T00:54:21.307Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "frozen_banana": {
+      "masterId": "frozen_banana",
+      "label": "Frozen Sliced Banana",
+      "category": "frozen",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21289947_EA",
+          "name": "Banana - Sliced",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21289947_EA",
+          "price": 5.5,
+          "checkedAt": "2026-08-16T00:49:44.559Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "frozen_blueberry": {
+      "masterId": "frozen_blueberry",
+      "label": "Frozen Blueberries",
+      "category": "frozen",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21377841_EA",
+          "name": "Blueberries Cultivated",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "4NK2M15KFE8I",
+          "name": "Great Value Frozen Wild Blueberries, 400 g",
+          "matchMethod": "structured",
+          "matchConfidence": 0.36,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "name token Jaccard 0.00"
+            },
+            {
+              "stage": "structured",
+              "score": 0.28,
+              "reason": "brand exact"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0,
+              "reason": "name Jaccard 0.00"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 4,
+              "reason": "brand exact"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.36,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21377841_EA",
+          "price": 5.5,
+          "checkedAt": "2026-08-16T00:49:45.191Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "4NK2M15KFE8I",
+          "price": 5.98,
+          "checkedAt": "2026-08-16T00:49:10.852Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "frozen_strawberry": {
+      "masterId": "frozen_strawberry",
+      "label": "Frozen Sliced Strawberries",
+      "category": "frozen",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20312227_EA",
+          "name": "Sliced Strawberries",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000191288178",
+          "name": "Great Value Sliced Frozen Strawberries, 600 g",
+          "upc": "6000191288178",
+          "matchMethod": "structured",
+          "matchConfidence": 0.827,
+          "verified": false,
+          "decision": "needs_review",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.333,
+              "reason": "name token Jaccard 0.33"
+            },
+            {
+              "stage": "structured",
+              "score": 0.28,
+              "reason": "brand exact"
+            },
+            {
+              "stage": "structured",
+              "score": 0.22,
+              "reason": "size same"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "brand + size corroboration"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.3333333333333333,
+              "reason": "name Jaccard 0.33"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 4,
+              "reason": "brand exact"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 3.5,
+              "reason": "size same"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.827,
+              "reason": "best score 0.83 below threshold 0.85"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20312227_EA",
+          "price": 5.5,
+          "checkedAt": "2026-08-16T00:49:45.678Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000191288178",
+          "price": 4.66,
+          "checkedAt": "2026-08-16T00:49:13.209Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "frozen_spinach": {
+      "masterId": "frozen_spinach",
+      "label": "Frozen Chopped Spinach",
+      "category": "frozen",
+      "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20611796_EA",
+          "name": "Chopped Spinach",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000198574809",
+          "name": "Great Value Frozen Chopped Spinach Nuggets, 500 g",
+          "upc": "6000198574809",
+          "matchMethod": "structured",
+          "matchConfidence": 0.46,
+          "verified": false,
+          "decision": "rejected",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "structured",
+              "score": 0.2,
+              "reason": "name token Jaccard 0.20"
+            },
+            {
+              "stage": "structured",
+              "score": 0.28,
+              "reason": "brand exact"
+            },
+            {
+              "stage": "structured",
+              "score": 0,
+              "reason": "size different"
+            },
+            {
+              "stage": "structured",
+              "score": 0.08,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.42,
+              "reason": "same-brand different size is not the same pack entity"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -4.6,
+              "reason": "prior log2-odds two random SKUs match"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 0.2,
+              "reason": "name Jaccard 0.20"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 4,
+              "reason": "brand exact"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": -5,
+              "reason": "size different"
+            },
+            {
+              "stage": "fellegi_sunter",
+              "score": 1.5,
+              "reason": "category same"
+            },
+            {
+              "stage": "gate",
+              "score": 0.46,
+              "reason": "size mismatch blocked auto-link"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20611796_EA",
+          "price": 2,
+          "checkedAt": "2026-08-16T00:49:46.150Z",
+          "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000198574809",
+          "price": 3.37,
+          "checkedAt": "2026-08-16T00:49:15.757Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "acai": {
+      "masterId": "acai",
+      "label": "Sambazon Berry Bliss Acai Bowl",
+      "category": "frozen",
+      "retailers": {
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "5BYTBURFUMOZ",
+          "name": "Berry Bliss Acai Bowl, Berry Bliss Acai Bowl",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.5,
+          "verified": false,
+          "decision": "needs_review",
+          "kind": "staple_winner",
+          "explain": [
+            {
+              "stage": "gate",
+              "score": 0.5,
+              "reason": "Walmart catalog winner without No Frills seed to score against"
+            }
+          ],
+          "updatedAt": "2026-08-17T04:12:46.227Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "5BYTBURFUMOZ",
+          "price": 5.47,
+          "checkedAt": "2026-08-16T00:49:20.647Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    }
+  }
+}
