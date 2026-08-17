@@ -149,14 +149,21 @@ async function main() {
 
   const grape = byId.get("tomatoes_grape");
   assert(grape, "grape row");
-  assert(grape!.cheaper === "incomplete", `grape cheaper ${grape!.cheaper}`);
+  assert(grape!.cheaper === "nofrills", `grape cheaper ${grape!.cheaper}`);
+  assert(grape!.fairBasis === "per_kg", `grape basis ${grape!.fairBasis}`);
   assert(
-    grape!.resolveReason?.walmart === "mapped_sku_missing",
+    grape!.resolveReason?.walmart === "mapped_sku_rapid_alias" ||
+      grape!.resolveReason?.walmart === "mapped_sku",
     `grape wm reason ${grape!.resolveReason?.walmart}`,
   );
+  const gWm = grape!.walmart as { shelfPrice?: number; name?: string };
   assert(
-    !/seed/i.test(String((grape!.walmart as { name?: string }).name ?? "")),
+    !/seed/i.test(gWm.name ?? ""),
     "grape must not show seeds",
+  );
+  assert(
+    Math.abs((gWm.shelfPrice ?? 0) - 2.97) < 0.01,
+    `grape wm shelf ${gWm.shelfPrice}`,
   );
 
   const ziploc = byId.get("ziploc_sandwich");
@@ -259,10 +266,6 @@ async function main() {
   assert(
     !complete.some((r) => r.id === "folgers_coffee"),
     "folgers excluded from basket",
-  );
-  assert(
-    !complete.some((r) => r.id === "tomatoes_grape"),
-    "grape without mapped price excluded from basket",
   );
 
   const wmSum = complete.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);

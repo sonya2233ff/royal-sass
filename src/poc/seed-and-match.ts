@@ -46,8 +46,8 @@ async function main() {
   assert(!/seed/i.test(grapeWm?.name ?? ""), "confirmed grape mapping must not be tomato seeds");
   const grapeWmPrice = grape.prices.find((p) => p.retailer === WALMART_RETAILER);
   assert(
-    grapeWmPrice?.retailerProductId !== "24D9FUYGIT3L",
-    "do not attach tomato-seed catalog price to locked YFM grape SKU",
+    grapeWmPrice?.price === 2.97,
+    `grape WM YFM price via Rapid alias, got ${grapeWmPrice?.price}`,
   );
 
   const bran = store.products.rogers_wheat_bran?.retailers[WALMART_RETAILER];

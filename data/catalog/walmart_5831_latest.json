@@ -54,15 +54,17 @@
         "cherry grape tomatoes"
       ],
       "offer": {
-        "productId": "24D9FUYGIT3L",
-        "name": "HJADGG Cherry Pink Grape Tomato Seeds, 200pcs, Heirloom, Non-GMO, with Planting Instructions, for Home Vegetable Gardens",
-        "price": 16.99,
+        "productId": "6000194960083",
+        "name": "Your Fresh Market Tomato, Grape, 10 oz",
+        "packageSize": "283 g",
+        "parsedMassKg": 0.283,
+        "price": 2.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-16T21:21:41.189Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/HJADGG-Cherry-Pink-Grape-Tomato-Seeds-200pcs-Heirloom-Non-GMO-with-Planting-Instructions-for-Home-Vegetable-Gardens/24D9FUYGIT3L?classType=REGULAR"
+        "checkedAt": "2026-08-14T01:30:32.147Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/grape-tomatoes/6000194960084"
       },
       "alternates": [],
-      "notes": "Produce: cheapest grape tomato pack (brand irrelevant)",
+      "notes": "Pinned YFM 10 oz from live Rapid (id ±1 vs confirmed 6000194960084)",
       "image": "/products/tomatoes_grape.jpg"
     },
     {
