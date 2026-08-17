@@ -1,4 +1,5 @@
 import { buildFixtureOffers } from "@/connectors/fixtures";
+import { resolveWalmartSource } from "@/connectors/walmart-source";
 import { compareBaskets, type BasketLineInput } from "@/domain/basket";
 import { calculateProcurementCost } from "@/domain/procurement-cost";
 
@@ -52,3 +53,24 @@ console.log(
 console.log(
   `mixed: $${result.mixed.productTotal} (savings $${result.savingsVsBestOneStore.toFixed(2)})`,
 );
+
+{
+  const cases: Array<[Record<string, string | undefined>, string]> = [
+    [{ WALMART_SOURCE: "rapid" }, "missing_key"],
+    [{ WALMART_SOURCE: "rapid", OPENWEBNINJA_API_KEY: "" }, "missing_key"],
+    [{ WALMART_SOURCE: "rapid", OPENWEBNINJA_API_KEY: "  " }, "missing_key"],
+    [{ WALMART_SOURCE: "rapid", RAPIDAPI_KEY: "k" }, "rapid"],
+    [{ WALMART_SOURCE: "browser", RAPIDAPI_KEY: "k" }, "browser"],
+    [{}, "browser"],
+    [{ OPENWEBNINJA_API_KEY: "k" }, "rapid"],
+  ];
+  for (const [env, expected] of cases) {
+    const got = resolveWalmartSource(env);
+    if (got !== expected) {
+      throw new Error(
+        `walmart source ${JSON.stringify(env)} => ${got}, expected ${expected}`,
+      );
+    }
+  }
+  console.log("walmart-source self-check OK");
+}

@@ -180,6 +180,24 @@ function statusLabel(s?: OfferStatus | string | null): string {
 
 const HIDDEN_KEY = "royal-sass-hidden-staples";
 
+function friendlyError(msg: string): string {
+  if (/Refusing to scrape walmart\.ca|RAPIDAPI_KEY are empty/i.test(msg)) {
+    return "RapidAPI вибрано, але ключ порожній. Сайт walmart.ca не чіпаємо (PerimeterX). Додай OPENWEBNINJA_API_KEY або RAPIDAPI_KEY у .env і на Vercel.";
+  }
+  return msg;
+}
+
+function walmartSourceLabel(
+  source: "rapid" | "browser" | "missing_key" | null,
+): string {
+  if (source === "rapid") return "WM ціни: RapidAPI";
+  if (source === "missing_key") {
+    return "WM ціни: RapidAPI без ключа — сайт не чіпаємо";
+  }
+  if (source === "browser") return "WM ціни: сайт walmart.ca";
+  return "";
+}
+
 function loadHiddenIds(): string[] {
   if (typeof window === "undefined") return [];
   try {
@@ -214,6 +232,12 @@ export function StaplesCompare() {
   const [qtyById, setQtyById] = useState<Record<string, string>>({});
   const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
+  const [walmartSource, setWalmartSource] = useState<
+    "rapid" | "browser" | "missing_key" | null
+  >(null);
+  const [walmartSourceWarning, setWalmartSourceWarning] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     setHiddenIds(new Set(loadHiddenIds()));
@@ -227,6 +251,8 @@ export function StaplesCompare() {
     setCatalogAt(data.catalogCheckedAt ?? null);
     setNfCatalogAt(data.noFrillsCatalogCheckedAt ?? null);
     setStaleHours(data.cacheStaleHours ?? 24);
+    setWalmartSource(data.walmartSource ?? null);
+    setWalmartSourceWarning(data.walmartSourceWarning ?? null);
   }, []);
 
   useEffect(() => {
@@ -431,7 +457,7 @@ export function StaplesCompare() {
         setLogPreview(null);
         await reload();
       } catch (e) {
-        setError(e instanceof Error ? e.message : String(e));
+        setError(e instanceof Error ? friendlyError(e.message) : String(e));
       } finally {
         setBusy(null);
       }
@@ -454,7 +480,7 @@ export function StaplesCompare() {
         setLogPreview(data.entries ?? null);
         await reload();
       } catch (e) {
-        setError(e instanceof Error ? e.message : String(e));
+        setError(e instanceof Error ? friendlyError(e.message) : String(e));
       } finally {
         setBusy(null);
       }
@@ -477,7 +503,7 @@ export function StaplesCompare() {
         setLogPreview(data.entries ?? null);
         await reload();
       } catch (e) {
-        setError(e instanceof Error ? e.message : String(e));
+        setError(e instanceof Error ? friendlyError(e.message) : String(e));
       } finally {
         setBusy(null);
       }
@@ -503,7 +529,11 @@ export function StaplesCompare() {
         const nfBlock = data.noFrills?.blocked as string | undefined;
         setLogPreview(data);
         await reload();
-        if (nfBlock) {
+        if (data.walmartSource === "missing_key") {
+          setError(
+            `No Frills ${nfN ? `оновлено ${nfN}` : "без змін"}. RapidAPI ключ порожній — ціни WM не чіпали.`,
+          );
+        } else if (nfBlock) {
           setError(
             `WM оновлено ${wmN}. No Frills зараз недоступний з цього сервера (401) — NF кеш не змінювався.`,
           );
@@ -511,7 +541,7 @@ export function StaplesCompare() {
           setError("Жодної ціни не вдалося оновити.");
         }
       } catch (e) {
-        setError(e instanceof Error ? e.message : String(e));
+        setError(e instanceof Error ? friendlyError(e.message) : String(e));
       } finally {
         setBusy(null);
       }
@@ -554,8 +584,17 @@ export function StaplesCompare() {
           <strong>А</strong> — саме цей продукт. <strong>Б</strong> — овочі й
           фрукти (найдешевший, бренд не важливий).
         </p>
-        <p className={cacheIsOld ? "meta cache-warn" : "meta"}>
+        <p
+          className={
+            cacheIsOld || walmartSource === "missing_key" || walmartSource === "browser"
+              ? "meta cache-warn"
+              : "meta"
+          }
+        >
           Cache TTL {staleHours}h
+          {walmartSourceLabel(walmartSource)
+            ? ` · ${walmartSourceLabel(walmartSource)}`
+            : ""}
           {catalogAt
             ? ` · WM ${new Date(catalogAt).toLocaleString()}`
             : ""}
@@ -564,6 +603,9 @@ export function StaplesCompare() {
             : " · NF — після першого Compare"}
           {cacheIsOld
             ? " · кеш застарів — натисни «Оновити ціни»"
+            : ""}
+          {walmartSource === "missing_key" && walmartSourceWarning
+            ? " · додай RapidAPI ключ у .env / Vercel"
             : ""}
           {" · × на картці ховає її (можна відновити)"}
         </p>
@@ -863,7 +905,12 @@ export function StaplesCompare() {
         <button
           type="button"
           className="cta secondary"
-          disabled={pending || selected.size === 0 || busy != null}
+          disabled={
+            pending ||
+            selected.size === 0 ||
+            busy != null ||
+            walmartSource === "missing_key"
+          }
           onClick={refreshSelected}
         >
           {busy === "refresh"

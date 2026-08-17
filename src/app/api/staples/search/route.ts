@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { createWalmartConnector } from "@/connectors/walmart-source";
+import {
+  createWalmartConnector,
+  walmartSourceApiFields,
+} from "@/connectors/walmart-source";
 import { NoFrillsConnector } from "@/connectors/nofrills";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
@@ -139,32 +142,38 @@ export async function GET(request: Request) {
     if (nf) nfIdByProduct.set(nf, item.id);
   }
 
-  const wm = createWalmartConnector("L4J0A7");
-  const nf = new NoFrillsConnector();
-  const productId = parseWalmartProductId(q);
-
+  const wmFields = walmartSourceApiFields();
+  let walmartWarning = wmFields.walmartSourceWarning;
   let walmart: StoreHit[] = [];
   let noFrills: StoreHit[] = [];
   try {
-    const [wmHits, nfHits] = await Promise.all([
-      (async () => {
-        const out: ProductOffer[] = [];
-        if (productId) {
-          try {
-            const direct = await wm.getProduct(productId, "5831");
-            if (direct) out.push(direct);
-          } catch {
-            /* search fallback */
-          }
+    const nf = new NoFrillsConnector();
+    const productId = parseWalmartProductId(q);
+    const nfHitsP = nf.searchProducts(q, "3660").then((hits) => hits.slice(0, 8));
+
+    let wmHits: ProductOffer[] = [];
+    try {
+      const wm = createWalmartConnector("L4J0A7");
+      const out: ProductOffer[] = [];
+      if (productId) {
+        try {
+          const direct = await wm.getProduct(productId, "5831");
+          if (direct) out.push(direct);
+        } catch {
+          /* search fallback */
         }
-        const hits = await wm.searchProducts(productId ?? q, "5831");
-        for (const h of hits) {
-          if (!out.some((x) => x.productId === h.productId)) out.push(h);
-        }
-        return out.slice(0, 8);
-      })(),
-      nf.searchProducts(q, "3660").then((hits) => hits.slice(0, 8)),
-    ]);
+      }
+      const hits = await wm.searchProducts(productId ?? q, "5831");
+      for (const h of hits) {
+        if (!out.some((x) => x.productId === h.productId)) out.push(h);
+      }
+      wmHits = out.slice(0, 8);
+    } catch (e) {
+      walmartWarning =
+        walmartWarning ?? (e instanceof Error ? e.message : String(e));
+    }
+
+    const nfHits = await nfHitsP;
     walmart = wmHits.map((o) =>
       toHit("walmart_ca", o, wmIdByProduct.get(o.productId) ?? null),
     );
@@ -181,5 +190,7 @@ export async function GET(request: Request) {
     staples,
     walmart,
     noFrills,
+    ...wmFields,
+    walmartSourceWarning: walmartWarning,
   });
 }

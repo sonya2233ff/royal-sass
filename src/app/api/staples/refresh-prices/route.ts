@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { resolveWalmartSource } from "@/connectors/walmart-source";
+import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import { refreshCatalogPrices } from "@/lib/refresh-catalog-prices";
 import { isShownStaple, loadStaplesConfig } from "@/lib/staples";
 
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const result = await refreshCatalogPrices(ids);
     return NextResponse.json({
       ok: true,
-      walmartSource: resolveWalmartSource(),
+      ...walmartSourceApiFields(),
       ...result,
     });
   } catch (e) {

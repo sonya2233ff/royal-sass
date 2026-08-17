@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { resolveWalmartSource } from "@/connectors/walmart-source";
+import {
+  resolveWalmartSource,
+  WALMART_RAPID_MISSING_KEY,
+  walmartSourceApiFields,
+} from "@/connectors/walmart-source";
 import {
   isShownStaple,
   loadStaplesConfig,
@@ -23,11 +27,22 @@ export async function POST(request: Request) {
     );
   }
 
+  if (resolveWalmartSource() === "missing_key") {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: WALMART_RAPID_MISSING_KEY,
+        ...walmartSourceApiFields(),
+      },
+      { status: 503 },
+    );
+  }
+
   try {
     const result = await refreshWalmartSelected(ids);
     return NextResponse.json({
       ok: true,
-      walmartSource: resolveWalmartSource(),
+      ...walmartSourceApiFields(),
       updated: result.updated,
       matchLogId: result.logId,
       entries: result.entries,

@@ -4,7 +4,11 @@
  */
 import { NoFrillsConnector } from "@/connectors/nofrills";
 import type { ProductOffer, RetailerConnector } from "@/connectors/types";
-import { createWalmartConnector } from "@/connectors/walmart-source";
+import {
+  createWalmartConnector,
+  resolveWalmartSource,
+  WALMART_RAPID_MISSING_KEY,
+} from "@/connectors/walmart-source";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import { offerMatchesRetailerSku } from "@/domain/compare-resolve";
 import { formatMass, parseMassFromText } from "@/domain/units";
@@ -214,9 +218,12 @@ export async function refreshCatalogPrices(
     noFrills: { updated: [], failed: [], skipped: [] },
   };
 
-  const wm = createWalmartConnector("L4J0A7");
-  result.walmart.source = wm.id;
-  let wmBlocked: string | null = null;
+  const wmSource = resolveWalmartSource();
+  const wm =
+    wmSource === "missing_key" ? null : createWalmartConnector("L4J0A7");
+  result.walmart.source = wm?.id ?? wmSource;
+  let wmBlocked: string | null =
+    wmSource === "missing_key" ? WALMART_RAPID_MISSING_KEY : null;
 
   for (const id of ids) {
     const item = byId.get(id);
@@ -242,8 +249,11 @@ export async function refreshCatalogPrices(
       result.walmart.skipped.push({ id, reason: "no locked/catalog SKU" });
       continue;
     }
-    if (wmBlocked) {
-      result.walmart.failed.push({ id, reason: wmBlocked });
+    if (!wm || wmBlocked) {
+      result.walmart.failed.push({
+        id,
+        reason: wmBlocked ?? WALMART_RAPID_MISSING_KEY,
+      });
       continue;
     }
     try {
@@ -316,8 +326,10 @@ export async function refreshCatalogPrices(
     }
   }
 
-  (wmCatalog as { checkedAt: string }).checkedAt = new Date().toISOString();
-  await saveWalmartCatalog(wmCatalog);
+  if (wm && result.walmart.updated.length > 0) {
+    (wmCatalog as { checkedAt: string }).checkedAt = new Date().toISOString();
+    await saveWalmartCatalog(wmCatalog);
+  }
   await closeWalmartBrowser().catch(() => undefined);
 
   const nf = new NoFrillsConnector();

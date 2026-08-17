@@ -71,6 +71,11 @@ export function ProductSearch({
           setStaples(data.staples ?? []);
           setWalmart(data.walmart ?? []);
           setNoFrills(data.noFrills ?? []);
+          if (data.walmartSourceWarning && !(data.walmart ?? []).length) {
+            setErr(
+              "WM пошук через RapidAPI вимкнено — немає ключа. No Frills нижче.",
+            );
+          }
           setOpen(true);
           setActive(0);
         })

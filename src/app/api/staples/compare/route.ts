@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { resolveWalmartSource } from "@/connectors/walmart-source";
+import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import {
   appendMatchLog,
   catalogOfferFromLive,
@@ -310,7 +310,7 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ok: true,
     comparedAt: new Date().toISOString(),
-    walmartSource: resolveWalmartSource(),
+    ...walmartSourceApiFields(),
     noFrillsSource:
       nfLiveHits === 0 && nfCacheHits > 0
         ? "catalog_cache"

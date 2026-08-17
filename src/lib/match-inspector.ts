@@ -126,7 +126,10 @@ function priceSourceFor(
 ): PriceSource {
   if (!live) return "catalog_json";
   if (retailer === "no_frills") return "pcx_bff";
-  return resolveWalmartSource() === "rapid" ? "walmart_rapid" : "walmart_ssr";
+  const src = resolveWalmartSource();
+  if (src === "rapid") return "walmart_rapid";
+  if (src === "missing_key") return "walmart_rapid";
+  return "walmart_ssr";
 }
 
 function queryRecord(query: string, item?: StapleItem): ProductRecord {

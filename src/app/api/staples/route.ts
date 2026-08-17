@@ -12,7 +12,7 @@ import {
   isSoldByWeightItem,
   isEggPackItem,
 } from "@/lib/staples";
-import { resolveWalmartSource } from "@/connectors/walmart-source";
+import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import {
   defaultWeightUnit,
   formatMoneyPerWeight,
@@ -283,7 +283,7 @@ export async function GET() {
       { key: "nofrills_3660", name: "No Frills #3660" },
     ],
     sobeysEnabled: false,
-    walmartSource: resolveWalmartSource(),
+    ...walmartSourceApiFields(),
     cacheStaleHours: CACHE_STALE_HOURS,
     catalogCheckedAt: catalog?.checkedAt ?? null,
     noFrillsCatalogCheckedAt: nfCatalog?.checkedAt ?? null,

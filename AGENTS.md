@@ -49,7 +49,7 @@ Refresh routes set `maxDuration = 60`.
 
 ## Retailer integrations
 
-- **Walmart #5831:** `createWalmartConnector` (`walmart-source.ts`). `WALMART_SOURCE=rapid` uses OpenWeb Ninja/RapidAPI when `OPENWEBNINJA_API_KEY` or `RAPIDAPI_KEY` is set; otherwise Walmart.ca SSR (`walmart.ts`). Playwright if `WALMART_USE_BROWSER` is not `0`. Postal `WALMART_POSTAL_CODE` (default L4J0A7). Rapid ids may be **±1** vs PDP; compare treats that as the same SKU (`offerMatchesRetailerSku`).
+- **Walmart #5831:** `createWalmartConnector` (`walmart-source.ts`). `WALMART_SOURCE=rapid` uses OpenWeb Ninja/RapidAPI when `OPENWEBNINJA_API_KEY` or `RAPIDAPI_KEY` is set. If Rapid is requested and both keys are blank, **do not** scrape walmart.ca (PerimeterX); fail with `missing_key` and keep the last catalog price. Unset `WALMART_SOURCE` still means Rapid when a key is present, else browser. Playwright if `WALMART_USE_BROWSER` is not `0`. Postal `WALMART_POSTAL_CODE` (default L4J0A7). Rapid ids may be **±1** vs PDP; compare treats that as the same SKU (`offerMatchesRetailerSku`).
 - **No Frills #3660:** `NoFrillsConnector` / PCX BFF (`NOFRILLS_SEARCH_URL`, `NOFRILLS_API_KEY`). Blank `NOFRILLS_API_KEY` uses the public web fallback in the connector; sending a blank `X-Apikey` is 401 `invalid_client`. Akamai may still 403 some IPs. Flipp only if `NOFRILLS_ALLOW_FLIPP_FALLBACK=1` (not shelf).
 - **Sobeys / FreshCo / MVR / Wholesale Club:** connectors or `src/poc/probe-*.ts` only. Not in the staples UI. Sobeys store is disabled in `config/stores.json`.
 - **Mappings:** `data/catalog/retailer-mappings.json` via `src/lib/retailer-mappings.ts`. Pairwise `product-matches.json` and Prisma `ProductMatch` are **not** read by live compare.

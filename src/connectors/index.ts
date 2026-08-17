@@ -28,7 +28,12 @@ export * from "./store-connector";
 export { NoFrillsConnector } from "./nofrills";
 export { WalmartConnector } from "./walmart";
 export { WalmartRapidConnector, isWalmartRapidConfigured } from "./walmart-rapid";
-export { createWalmartConnector, resolveWalmartSource } from "./walmart-source";
+export {
+  createWalmartConnector,
+  resolveWalmartSource,
+  walmartSourceApiFields,
+  WALMART_RAPID_MISSING_KEY,
+} from "./walmart-source";
 export { resolveWalmartStorePage } from "./walmart-store";
 export {
   SobeysConnector,
