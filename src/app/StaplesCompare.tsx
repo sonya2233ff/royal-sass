@@ -359,6 +359,35 @@ export function StaplesCompare() {
     setHiddenIds(new Set());
   }
 
+  const allVisibleSelected =
+    visibleItems.length > 0 &&
+    visibleItems.every((item) => selected.has(item.id));
+
+  function selectAllVisible() {
+    const ids = visibleItems.map((item) => item.id);
+    setSelected((prev) => {
+      const next = new Set(prev);
+      for (const id of ids) next.add(id);
+      return next;
+    });
+    setQtyById((prev) => {
+      const next = { ...prev };
+      for (const id of ids) {
+        if (!next[id]) next[id] = "1";
+      }
+      return next;
+    });
+  }
+
+  function clearVisibleSelection() {
+    const ids = new Set(visibleItems.map((item) => item.id));
+    setSelected((prev) => {
+      const next = new Set(prev);
+      for (const id of ids) next.delete(id);
+      return next;
+    });
+  }
+
   function runCompare() {
     setError(null);
     setBusy("compare");
@@ -777,6 +806,16 @@ export function StaplesCompare() {
       </section>
 
       <div className="actions">
+        <button
+          type="button"
+          className="cta secondary"
+          disabled={pending || visibleItems.length === 0 || busy != null}
+          onClick={allVisibleSelected ? clearVisibleSelection : selectAllVisible}
+        >
+          {allVisibleSelected
+            ? "Зняти всі"
+            : `Виділити всі (${visibleItems.length})`}
+        </button>
         <button
           type="button"
           className="cta"
