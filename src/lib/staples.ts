@@ -52,7 +52,6 @@ const PRODUCE_WEIGHT_IDS = new Set([
   "kiwi_kg",
   "garlic_1kg",
   "cucumber_english",
-  "chicken_breast_kg",
 ]);
 
 /** Frozen bags — pick cheapest $/kg, any brand; show unit price for fair bag-size compare. */
@@ -62,7 +61,6 @@ const FROZEN_BAG_IDS = new Set([
   "frozen_blueberry",
   "frozen_strawberry",
   "frozen_spinach",
-  "acai",
 ]);
 
 /** Packaged produce — compare by shelf pack, no kg/lb conversion UI. */
@@ -95,12 +93,10 @@ const SOLD_BY_WEIGHT_IDS = new Set([
   "bananas_kg",
   "kiwi_kg",
   "garlic_1kg",
-  "chicken_breast_kg",
 ]);
 
 /** Shell-egg cartons — cheapest $/egg, prefer bigger packs (18/30). */
 const EGG_PACK_IDS = new Set([
-  "eggs_30ct",
   "grayridge_eggs",
   "large_eggs_dozen",
 ]);
@@ -217,13 +213,10 @@ export type ConfirmedMap = Record<
 export const PINNED_IDS = [
   "simply_egg_whites",
   "tomatoes_grape",
-  "eggs_30ct",
   "lemons_2lb",
   "pear_bosc_kg",
-  "folgers_coffee",
   "eggplant_kg",
   "tomato_gh_red_kg",
-  "rogers_wheat_bran",
   "oat_beverage_original",
   "red_peppers_kg",
   "sweet_potatoes_kg",
@@ -238,11 +231,6 @@ export const PINNED_IDS = [
   "milk_2pct_2l",
   "homo_milk_2l",
   "butter_454g",
-  "canola_oil_3l",
-  "white_sugar_2kg",
-  "ap_flour_2_5kg",
-  "pasta_elbows",
-  "chicken_breast_kg",
   "orange_juice_pulp",
   "realemon_440ml",
   "jello_vanilla_instant",
@@ -252,7 +240,6 @@ export const PINNED_IDS = [
   "frozen_blueberry",
   "frozen_strawberry",
   "frozen_spinach",
-  "acai",
 ] as const;
 
 export function isShownStaple(item: { id: string; custom?: boolean }): boolean {
@@ -294,6 +281,7 @@ export async function loadReceiptSkuMap(): Promise<ReceiptSkuMap | null> {
 }
 
 const CUSTOM_STAPLES = path.join(process.cwd(), "config", "custom-staples.json");
+const CAFE_STAPLES = path.join(process.cwd(), "config", "cafe-staples.json");
 
 export async function loadCustomStaples(): Promise<StapleItem[]> {
   try {
@@ -322,44 +310,6 @@ export async function saveCustomStaple(item: StapleItem): Promise<void> {
   await saveCustomStaples(items);
 }
 
-const REMOVED_STAPLES = path.join(DATA_CATALOG, "removed-staples.json");
-
-export type RemovedStaplesStore = {
-  updatedAt: string;
-  ids: string[];
-  customItems: StapleItem[];
-};
-
-async function loadRemovedStore(): Promise<RemovedStaplesStore> {
-  try {
-    const raw = await readFile(REMOVED_STAPLES, "utf8");
-    const data = JSON.parse(raw) as Partial<RemovedStaplesStore>;
-    return {
-      updatedAt: data.updatedAt ?? new Date().toISOString(),
-      ids: Array.isArray(data.ids) ? data.ids.filter((id) => typeof id === "string") : [],
-      customItems: Array.isArray(data.customItems)
-        ? data.customItems.filter((item) => item?.id)
-        : [],
-    };
-  } catch {
-    return { updatedAt: new Date().toISOString(), ids: [], customItems: [] };
-  }
-}
-
-async function saveRemovedStore(store: RemovedStaplesStore): Promise<void> {
-  try {
-    await mkdir(DATA_CATALOG, { recursive: true });
-    store.updatedAt = new Date().toISOString();
-    await writeFile(REMOVED_STAPLES, JSON.stringify(store, null, 2), "utf8");
-  } catch {
-    // Serverless read-only FS
-  }
-}
-
-export async function loadRemovedStapleIds(): Promise<string[]> {
-  return (await loadRemovedStore()).ids;
-}
-
 export async function deleteStaplesCompletely(ids: string[]): Promise<{
   deleted: string[];
   skipped: string[];
@@ -367,23 +317,21 @@ export async function deleteStaplesCompletely(ids: string[]): Promise<{
   const unique = [...new Set(ids.filter(Boolean))];
   if (!unique.length) return { deleted: [], skipped: [] };
 
-  const cfg = await loadStaplesConfig({ includeRemoved: true });
-  const known = new Set(cfg.items.map((item) => item.id));
+  const raw = await readFile(CAFE_STAPLES, "utf8");
+  const cafe = JSON.parse(raw) as { items: StapleItem[]; [k: string]: unknown };
+  const custom = await loadCustomStaples();
+  const known = new Set(
+    [...cafe.items, ...custom].map((item) => item.id).filter(Boolean),
+  );
   const deleted = unique.filter((id) => known.has(id));
   const skipped = unique.filter((id) => !known.has(id));
   if (!deleted.length) return { deleted, skipped };
 
   const gone = new Set(deleted);
-  const removed = await loadRemovedStore();
-  const custom = await loadCustomStaples();
-  const leavingCustom = custom.filter((item) => gone.has(item.id));
-  const keptCustom = custom.filter((item) => !gone.has(item.id));
-  await saveCustomStaples(keptCustom);
-
-  const customKeptInRemoved = removed.customItems.filter((item) => !gone.has(item.id));
-  removed.customItems = [...customKeptInRemoved, ...leavingCustom];
-  removed.ids = [...new Set([...removed.ids, ...deleted])];
-  await saveRemovedStore(removed);
+  cafe.items = cafe.items.filter((item) => !gone.has(item.id));
+  await mkdir(path.dirname(CAFE_STAPLES), { recursive: true });
+  await writeFile(CAFE_STAPLES, JSON.stringify(cafe, null, 2) + "\n", "utf8");
+  await saveCustomStaples(custom.filter((item) => !gone.has(item.id)));
 
   const wm = await loadWalmartCatalog();
   if (wm) {
@@ -423,25 +371,6 @@ export async function deleteStaplesCompletely(ids: string[]): Promise<{
   return { deleted, skipped };
 }
 
-export async function restoreRemovedStaples(ids?: string[]): Promise<{
-  restored: string[];
-}> {
-  const removed = await loadRemovedStore();
-  const want = ids?.length ? new Set(ids) : new Set(removed.ids);
-  const restored = removed.ids.filter((id) => want.has(id));
-  removed.ids = removed.ids.filter((id) => !want.has(id));
-  const bringBack = removed.customItems.filter((item) => want.has(item.id));
-  removed.customItems = removed.customItems.filter((item) => !want.has(item.id));
-  await saveRemovedStore(removed);
-  if (bringBack.length) {
-    const custom = await loadCustomStaples();
-    const byId = new Map(custom.map((item) => [item.id, item]));
-    for (const item of bringBack) byId.set(item.id, item);
-    await saveCustomStaples([...byId.values()]);
-  }
-  return { restored };
-}
-
 export async function upsertWalmartCatalogItem(input: {
   id: string;
   label?: string;
@@ -476,16 +405,11 @@ export async function upsertWalmartCatalogItem(input: {
   await saveWalmartCatalog(existing);
 }
 
-export async function loadStaplesConfig(opts?: {
-  includeRemoved?: boolean;
-}): Promise<{
+export async function loadStaplesConfig(): Promise<{
   store: { externalStoreId: string; name: string; address: string };
   items: StapleItem[];
 }> {
-  const raw = await readFile(
-    path.join(process.cwd(), "config", "cafe-staples.json"),
-    "utf8",
-  );
+  const raw = await readFile(CAFE_STAPLES, "utf8");
   const cfg = JSON.parse(raw) as {
     store: { externalStoreId: string; name: string; address: string };
     items: StapleItem[];
@@ -496,10 +420,6 @@ export async function loadStaplesConfig(opts?: {
     if (seen.has(item.id)) continue;
     cfg.items.push(item);
     seen.add(item.id);
-  }
-  if (!opts?.includeRemoved) {
-    const removed = await loadRemovedStapleIds();
-    cfg.items = applyRemovedStapleIds(cfg.items, removed);
   }
   const receipts = await loadReceiptSkuMap();
   if (receipts?.preferredByStapleId) {

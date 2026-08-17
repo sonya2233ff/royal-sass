@@ -220,7 +220,6 @@ export function StaplesCompare() {
   const [staleHours, setStaleHours] = useState(24);
   const [gramsById, setGramsById] = useState<Record<string, string>>({});
   const [qtyById, setQtyById] = useState<Record<string, string>>({});
-  const [removedCount, setRemovedCount] = useState(0);
   const [query, setQuery] = useState("");
   const [walmartSource, setWalmartSource] = useState<
     "rapid" | "browser" | "missing_key" | null
@@ -245,7 +244,6 @@ export function StaplesCompare() {
     setStaleHours(data.cacheStaleHours ?? 24);
     setWalmartSource(data.walmartSource ?? null);
     setWalmartSourceWarning(data.walmartSourceWarning ?? null);
-    setRemovedCount(data.removedCount ?? 0);
   }, []);
 
   useEffect(() => {
@@ -376,7 +374,7 @@ export function StaplesCompare() {
         ? `«${label ?? ids[0]}»`
         : `${ids.length} вибраних товарів`;
     const ok = window.confirm(
-      `Видалити ${who} повністю зі списку, цін і матчів?`,
+      `Видалити ${who} з проєкту назавжди (список, ціни, матчі)?`,
     );
     if (!ok) return;
     setError(null);
@@ -398,25 +396,6 @@ export function StaplesCompare() {
         return next;
       });
       setRows((prev) => (prev ? prev.filter((r) => !gone.has(r.id)) : prev));
-      await reload();
-    } catch (e) {
-      setError(e instanceof Error ? friendlyError(e.message) : String(e));
-    } finally {
-      setBusy(null);
-    }
-  }
-
-  async function restoreDeletedStaples() {
-    setError(null);
-    setBusy("restore");
-    try {
-      const res = await fetch("/api/staples/restore-deleted", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
-      });
-      const data = await res.json();
-      if (!data.ok) throw new Error(data.error ?? "restore failed");
       await reload();
     } catch (e) {
       setError(e instanceof Error ? friendlyError(e.message) : String(e));
@@ -626,7 +605,7 @@ export function StaplesCompare() {
           {walmartSource === "missing_key" && walmartSourceWarning
             ? " · додай RapidAPI ключ у .env / Vercel"
             : ""}
-          {" · × на картці видаляє товар повністю"}
+          {" · × на картці видаляє товар з проєкту"}
         </p>
         <ProductSearch
           query={query}
@@ -792,7 +771,7 @@ export function StaplesCompare() {
               <button
                 type="button"
                 className="hide-card"
-                title="Видалити товар повністю"
+                title="Видалити товар з проєкту"
                 onClick={(e) => {
                   e.stopPropagation();
                   void deleteStaples([item.id], item.label);
@@ -959,18 +938,6 @@ export function StaplesCompare() {
             ? "Видаляю…"
             : `Видалити вибрані (${selected.size})`}
         </button>
-        {removedCount > 0 && (
-          <button
-            type="button"
-            className="cta secondary"
-            disabled={pending || busy != null}
-            onClick={() => void restoreDeletedStaples()}
-          >
-            {busy === "restore"
-              ? "Відновлюю…"
-              : `Відновити видалені (${removedCount})`}
-          </button>
-        )}
       </div>
 
       {error && <p className="err">{error}</p>}

@@ -149,8 +149,8 @@ function pickForStaple(
       pickCheapestOffer(pool, pickQuery, {
         targetMassKg: item.targetMassKg,
         preferNameIncludes: item.preferNameIncludes,
-        byEach: item.id === "eggs_30ct" || item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
-        preferLargerPack: item.id === "eggs_30ct" || item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
+        byEach: item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
+        preferLargerPack: item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
       }) ?? null
     );
   }

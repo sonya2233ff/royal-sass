@@ -182,23 +182,6 @@ async function main() {
   );
   assert(/ziploc/i.test(zWm.name ?? ""), "ziploc name");
 
-  const folgers = byId.get("folgers_coffee");
-  assert(folgers, "folgers row");
-  assert(
-    folgers!.cheaper === "incomplete",
-    `folgers must not be a deal (${folgers!.cheaper})`,
-  );
-  assert(
-    folgers!.fairBasis === "incomparable" ||
-      folgers!.resolveReason?.noFrills === "rejected_filter",
-    `folgers basis ${folgers!.fairBasis} nf ${folgers!.resolveReason?.noFrills}`,
-  );
-
-  const eggs = byId.get("eggs_30ct");
-  assert(eggs, "eggs row");
-  assert(eggs!.fairBasis === "per_egg", `eggs basis ${eggs!.fairBasis}`);
-  assert(eggs!.cheaper === "tie" || eggs!.cheaper === "walmart" || eggs!.cheaper === "nofrills", "eggs comparable");
-
   const whites = byId.get("simply_egg_whites");
   assert(whites, "egg whites");
   assert(
@@ -275,10 +258,6 @@ async function main() {
   assert(/tropicana/i.test(ojNf.name ?? ""), `OJ NF name ${ojNf.name}`);
 
   const complete = rows.filter((r) => r.cheaper !== "incomplete");
-  assert(
-    !complete.some((r) => r.id === "folgers_coffee"),
-    "folgers excluded from basket",
-  );
 
   const wmSum = complete.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);
   const nfSum = complete.reduce((s, r) => s + (r.basketNoFrills ?? 0), 0);
@@ -295,7 +274,6 @@ async function main() {
     nfBasket: Math.round(nfSum * 100) / 100,
     grape: grape!.resolveReason,
     ziploc: { cheaper: ziploc!.cheaper, reason: ziploc!.resolveReason?.walmart },
-    folgers: { cheaper: folgers!.cheaper, basis: folgers!.fairBasis },
     eggWhites: { cheaper: whites!.cheaper, basis: whites!.fairBasis },
     pears: { cheaper: pears!.cheaper, nfPerKg: pNf.pricePerKg },
     bananas: { cheaper: bananas!.cheaper, nfPerKg: bRowNf.pricePerKg },

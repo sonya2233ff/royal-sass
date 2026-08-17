@@ -69,41 +69,6 @@
       "category": "produce"
     },
     {
-      "id": "eggs_30ct",
-      "label": "Large Eggs (cheapest pack)",
-      "queries": [
-        "large eggs 30",
-        "large eggs 18",
-        "eggs 30 pack",
-        "large eggs 12"
-      ],
-      "mustIncludeAny": [
-        "eggs",
-        "egg"
-      ],
-      "mustNotInclude": [
-        "egg white",
-        "egg whites",
-        "chocolate",
-        "easter",
-        "quail",
-        "pickled",
-        "liquid",
-        "boiled",
-        "noodles",
-        "pasta"
-      ],
-      "preferNameIncludes": [
-        "large"
-      ],
-      "matchMode": "cheapest",
-      "category": "eggs",
-      "minPlausiblePrice": 2.5,
-      "maxPlausiblePrice": 22,
-      "notes": "Any brand. Cheapest $/egg; if close, bigger carton (18/30).",
-      "image": "/products/eggs_30ct.jpg"
-    },
-    {
       "id": "grayridge_eggs",
       "label": "Grayridge Eggs",
       "queries": [
@@ -172,26 +137,6 @@
       "category": "produce"
     },
     {
-      "id": "folgers_coffee",
-      "label": "Folgers Coffee",
-      "queries": [
-        "082785400724",
-        "folgers coffee",
-        "folgers classic roast"
-      ],
-      "mustIncludeAny": [
-        "folgers"
-      ],
-      "mustNotInclude": [
-        "k-cup",
-        "pod",
-        "creamer",
-        "filter"
-      ],
-      "notes": "Receipt UPC 082785400724 @ $10.47",
-      "image": "/products/folgers_coffee.jpg"
-    },
-    {
       "id": "eggplant_kg",
       "label": "Eggplant (by kg)",
       "queries": [
@@ -253,24 +198,6 @@
       "matchMode": "cheapest",
       "category": "produce",
       "notes": "Produce: cheapest matching offer (brand irrelevant)"
-    },
-    {
-      "id": "rogers_wheat_bran",
-      "label": "Rogers Wheat Bran",
-      "queries": [
-        "006017911015",
-        "rogers wheat bran",
-        "wheat bran"
-      ],
-      "mustIncludeAny": [
-        "bran",
-        "wheat bran"
-      ],
-      "mustNotInclude": [
-        "muffin",
-        "cereal bar"
-      ],
-      "image": "/products/rogers_wheat_bran.jpg"
     },
     {
       "id": "oat_beverage_original",
@@ -737,103 +664,6 @@
       "image": "/products/large_eggs_dozen.jpg"
     },
     {
-      "id": "canola_oil_3l",
-      "label": "Canola Oil 3L",
-      "queries": [
-        "canola oil 3L",
-        "canola oil 3 litre"
-      ],
-      "mustIncludeAny": [
-        "canola"
-      ],
-      "mustNotInclude": [
-        "spray",
-        "olive",
-        "coconut",
-        "avocado"
-      ],
-      "image": "/products/canola_oil_3l.jpg"
-    },
-    {
-      "id": "white_sugar_2kg",
-      "label": "White Sugar 2kg",
-      "queries": [
-        "white sugar 2kg",
-        "granulated sugar 2 kg"
-      ],
-      "mustIncludeAny": [
-        "sugar"
-      ],
-      "mustNotInclude": [
-        "brown",
-        "icing",
-        "powdered",
-        "stevia",
-        "packet"
-      ],
-      "image": "/products/white_sugar_2kg.jpg"
-    },
-    {
-      "id": "ap_flour_2_5kg",
-      "label": "All-Purpose Flour 2.5kg",
-      "queries": [
-        "all purpose flour 2.5kg",
-        "robin hood flour 2.5"
-      ],
-      "mustIncludeAny": [
-        "flour"
-      ],
-      "mustNotInclude": [
-        "cake",
-        "bread",
-        "almond",
-        "coconut",
-        "gluten free"
-      ],
-      "image": "/products/ap_flour_2_5kg.jpg"
-    },
-    {
-      "id": "pasta_elbows",
-      "label": "Elbow Pasta",
-      "queries": [
-        "elbow pasta",
-        "italpasta elbows",
-        "macaroni elbows"
-      ],
-      "mustIncludeAny": [
-        "elbow",
-        "macaroni"
-      ],
-      "mustNotInclude": [
-        "sauce",
-        "dinner",
-        "kraft",
-        "box meal"
-      ],
-      "image": "/products/pasta_elbows.jpg"
-    },
-    {
-      "id": "chicken_breast_kg",
-      "label": "Chicken Breast (by kg)",
-      "queries": [
-        "chicken breast boneless",
-        "fresh chicken breast"
-      ],
-      "mustIncludeAny": [
-        "chicken breast",
-        "chicken breasts"
-      ],
-      "mustNotInclude": [
-        "nugget",
-        "burger",
-        "seasoned",
-        "frozen",
-        "stuffed",
-        "breaded"
-      ],
-      "image": "/products/chicken_breast_kg.jpg"
-    },
-    {
       "id": "orange_juice_pulp",
       "label": "Tropicana OJ No Pulp 2.63L",
       "queries": [
@@ -1200,46 +1030,6 @@
       "category": "frozen",
       "notes": "Prefer cube/nugget bags; else cheapest chopped spinach, any brand",
       "image": "/products/frozen_spinach.jpg"
-    },
-    {
-      "id": "acai",
-      "label": "Sambazon Berry Bliss Acai Bowl",
-      "queries": [
-        "acai bowl",
-        "frozen acai",
-        "sambazon acai",
-        "acai puree"
-      ],
-      "mustIncludeAny": [
-        "acai bowl",
-        "açaí bowl",
-        "acai puree",
-        "açaí puree",
-        "sambazon"
-      ],
-      "mustNotInclude": [
-        "capsule",
-        "pill",
-        "supplement",
-        "granola",
-        "juice",
-        "tea",
-        "shot",
-        "baby",
-        "seltzer",
-        "energy",
-        "lemon",
-        "masala"
-      ],
-      "preferNameIncludes": [
-        "puree",
-        "unsweetened",
-        "sambazon"
-      ],
-      "matchMode": "cheapest",
-      "category": "frozen",
-      "notes": "No unsweetened puree packs at WM #5831 / NF #3660; WM has frozen acai bowls",
-      "image": "/products/acai.jpg"
     }
   ]
 }

@@ -50,11 +50,6 @@ async function main() {
     `grape WM YFM price via Rapid alias, got ${grapeWmPrice?.price}`,
   );
 
-  const bran = store.products.rogers_wheat_bran?.retailers[WALMART_RETAILER];
-  if (bran && !bran.skippedRematch) {
-    assert(bran.matchMethod !== "upc", "do not treat staple search queries as shared UPC");
-  }
-
   const butter = store.products.butter_454g;
   assert(butter?.retailers[NOFRILLS_RETAILER]?.retailerProductId === "20559466_EA", "NF butter sku");
 

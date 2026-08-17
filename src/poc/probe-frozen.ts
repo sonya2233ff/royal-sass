@@ -13,9 +13,6 @@ const QUERIES: Array<{ id: string; q: string }> = [
   { id: "frozen_strawberry", q: "frozen strawberries" },
   { id: "frozen_spinach", q: "frozen spinach" },
   { id: "frozen_spinach2", q: "spinach cubes" },
-  { id: "acai", q: "frozen acai" },
-  { id: "acai2", q: "sambazon acai" },
-  { id: "acai3", q: "acai puree" },
 ];
 
 async function main() {
