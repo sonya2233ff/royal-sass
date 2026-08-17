@@ -16,6 +16,10 @@ import {
 } from "@/lib/retailer-mappings";
 import { offerMatchesRetailerSku } from "@/domain/compare-resolve";
 import {
+  mergeDistinctPackSizes,
+  splitOfferAndAlternates,
+} from "@/domain/pack-size-candidates";
+import {
   type CompareUnit,
   type OfferStatus,
   ageHours,
@@ -392,6 +396,7 @@ export async function upsertWalmartCatalogItem(input: {
   offer: CatalogOffer | null;
   image?: string;
   notes?: string;
+  alternates?: CatalogOffer[];
 }): Promise<void> {
   const existing =
     (await loadWalmartCatalog()) ??
@@ -399,12 +404,10 @@ export async function upsertWalmartCatalogItem(input: {
       type: "walmart-staples-catalog",
       checkedAt: new Date().toISOString(),
       items: [],
-    } as {
-      checkedAt: string;
-      items: Array<Record<string, unknown>>;
-    });
+    } as NonNullable<Awaited<ReturnType<typeof loadWalmartCatalog>>>);
 
   const idx = existing.items.findIndex((x) => x.id === input.id);
+  const prev = idx >= 0 ? existing.items[idx] : undefined;
   const row = {
     id: input.id,
     label: input.label,
@@ -412,8 +415,9 @@ export async function upsertWalmartCatalogItem(input: {
     offer: input.offer,
     image: input.image,
     notes: input.notes,
+    alternates: input.alternates ?? prev?.alternates ?? [],
   };
-  if (idx >= 0) existing.items[idx] = { ...existing.items[idx], ...row };
+  if (idx >= 0) existing.items[idx] = { ...prev, ...row };
   else existing.items.push(row);
   existing.checkedAt = new Date().toISOString();
   await saveWalmartCatalog(existing);
@@ -538,6 +542,7 @@ export async function upsertNoFrillsCatalogItem(input: {
   status: OfferStatus;
   offer: CatalogOffer | null;
   notes?: string;
+  alternates?: CatalogOffer[];
 }): Promise<void> {
   const existing =
     (await loadNoFrillsCatalog()) ??
@@ -554,9 +559,16 @@ export async function upsertNoFrillsCatalogItem(input: {
     status: input.status,
     offer: input.offer,
     notes: input.notes,
+    alternates: input.alternates,
   };
-  if (idx >= 0) existing.items[idx] = { ...existing.items[idx], ...row };
-  else existing.items.push(row);
+  if (idx >= 0) {
+    const prev = existing.items[idx];
+    existing.items[idx] = {
+      ...prev,
+      ...row,
+      alternates: input.alternates ?? prev.alternates,
+    };
+  } else existing.items.push(row);
 
   existing.checkedAt = new Date().toISOString();
   existing.updatedAt = existing.checkedAt;
@@ -693,10 +705,11 @@ export function evaluateOfferStatus(
   };
 }
 
-export async function searchNoFrills(
+/** Live PCX hits that pass staple filters. Category B uses the full pool as pack sizes. */
+export async function searchNoFrillsPool(
   item: StapleItem,
   log?: MatchLogEntry,
-): Promise<ProductOffer | null> {
+): Promise<ProductOffer[]> {
   const nf = new NoFrillsConnector();
   const seen = new Map<string, ProductOffer>();
   const mappings = await loadRetailerMappings();
@@ -743,7 +756,7 @@ export async function searchNoFrills(
     }
   }
 
-  const pool = all.filter((o) => {
+  return all.filter((o) => {
     if (lockedNfSku && o.productId === lockedNfSku) return true;
     if (!passesFilters(o, item)) return false;
     if (item.minPlausiblePrice != null && o.price < item.minPlausiblePrice) {
@@ -766,6 +779,14 @@ export async function searchNoFrills(
     }
     return true;
   });
+}
+
+export function pickStapleSearchWinner(
+  item: StapleItem,
+  pool: ProductOffer[],
+  log?: MatchLogEntry,
+  preferredId?: string | null,
+): ProductOffer | null {
   let best: ProductOffer | null = null;
   if (pool.length) {
     const mode = resolveMatchMode(item);
@@ -773,9 +794,7 @@ export async function searchNoFrills(
       pickBestOffer(
         pool,
         matchQueryForPick(item),
-        mode === "cheapest"
-          ? undefined
-          : (lockedNfSku ?? item.preferredProductId),
+        mode === "cheapest" ? undefined : (preferredId ?? item.preferredProductId),
         {
           targetMassKg: item.targetMassKg ?? expectedPackFor(item),
           mode,
@@ -809,8 +828,6 @@ export async function searchNoFrills(
       });
       const expected = expectedPackFor(item);
       const packKg = sanity.inferredPackKg;
-      // Same branded juice/milk in a smaller bottle is not "out of stock".
-      // Fair compare uses $/kg when packs differ.
       const keepDifferentPack =
         sanity.status === "wrong_size" &&
         isComparablePackKg(packKg, expected);
@@ -836,12 +853,77 @@ export async function searchNoFrills(
       };
       log.status = sanity.status;
     }
-  } else if (log) {
+    return best;
+  }
+  if (log) {
     log.status = "no_match";
     log.rejected.push({ reason: "no relevant hits after filters" });
   }
+  return null;
+}
 
-  return best;
+export async function searchNoFrills(
+  item: StapleItem,
+  log?: MatchLogEntry,
+): Promise<ProductOffer | null> {
+  const mappings = await loadRetailerMappings();
+  const nfLink = mappings.products[item.id]?.retailers.nofrills;
+  const lockedNfSku =
+    nfLink && isLockedIdentityLink(nfLink) ? nfLink.retailerProductId : null;
+  const pool = await searchNoFrillsPool(item, log);
+  return pickStapleSearchWinner(item, pool, log, lockedNfSku);
+}
+
+/** Category B only: other pack sizes at Walmart. Does not follow locked SKUs. */
+export async function searchWalmartPackPool(
+  item: StapleItem,
+  log?: MatchLogEntry,
+): Promise<ProductOffer[]> {
+  if (item.unavailableAtWalmart) return [];
+  if (resolveMatchMode(item) !== "cheapest") return [];
+  let wm: ReturnType<typeof createWalmartConnector>;
+  try {
+    wm = createWalmartConnector("L4J0A7");
+  } catch (e) {
+    log?.rejected.push({
+      reason: e instanceof Error ? e.message.slice(0, 120) : String(e),
+    });
+    return [];
+  }
+  const seen = new Map<string, ProductOffer>();
+  const queries = item.queries.filter(Boolean).slice(0, 4);
+  if (log) log.queries = [...queries];
+  for (const q of queries) {
+    try {
+      const hits = await wm.searchProducts(q, "5831");
+      for (const h of hits) {
+        if (!seen.has(h.productId)) seen.set(h.productId, h);
+      }
+    } catch (e) {
+      log?.rejected.push({
+        reason: `search error: ${e instanceof Error ? e.message.slice(0, 100) : String(e)}`,
+      });
+    }
+    await new Promise((r) => setTimeout(r, 300));
+  }
+  return [...seen.values()].filter((o) => {
+    if (!passesFilters(o, item)) {
+      log?.rejected.push({
+        productId: o.productId,
+        name: o.name,
+        price: o.price,
+        reason: "name filter",
+      });
+      return false;
+    }
+    if (item.minPlausiblePrice != null && o.price < item.minPlausiblePrice) {
+      return false;
+    }
+    if (item.maxPlausiblePrice != null && o.price > item.maxPlausiblePrice) {
+      return false;
+    }
+    return true;
+  });
 }
 
 export interface SummarizedOffer {
@@ -1346,6 +1428,21 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
       row.offer = catalogOfferFromLive(best);
       row.notes = item.notes;
       delete row.rejected;
+      if (
+        resolveMatchMode(item) === "cheapest" &&
+        usesNeededWeightPick(item) &&
+        !isSoldByWeightItem(item)
+      ) {
+        const sizes = mergeDistinctPackSizes(
+          [...seen.values()]
+            .filter((o) => passesFilters(o, item))
+            .map(catalogOfferFromLive),
+        );
+        row.alternates = splitOfferAndAlternates(
+          sizes,
+          best.productId,
+        ).alternates;
+      }
     } else {
       const previous = row.offer as CatalogOffer | null | undefined;
       if (previous && previous.price > 0) {
@@ -1401,16 +1498,23 @@ export async function refreshNoFrillsSelected(ids: string[]): Promise<{
       status: "no_match",
     };
 
-    const offer = await searchNoFrills(item, log);
+    const pool = await searchNoFrillsPool(item, log);
+    const offer = pickStapleSearchWinner(item, pool, log);
     entries.push(log);
     updated.push(id);
 
     if (offer) {
+      const sizes = mergeDistinctPackSizes(pool.map(catalogOfferFromLive));
+      const split = splitOfferAndAlternates(sizes, offer.productId);
       await upsertNoFrillsCatalogItem({
         id,
         label: item.label,
         status: log.status,
-        offer: catalogOfferFromLive(offer),
+        offer: split.offer ?? catalogOfferFromLive(offer),
+        alternates:
+          usesNeededWeightPick(item) && !isSoldByWeightItem(item)
+            ? split.alternates
+            : [],
         notes: `Live NF refresh (TTL ${CACHE_STALE_HOURS}h)`,
       });
     } else {
@@ -1419,6 +1523,7 @@ export async function refreshNoFrillsSelected(ids: string[]): Promise<{
         label: item.label,
         status: log.status,
         offer: null,
+        alternates: [],
         notes: log.rejected.at(-1)?.reason,
       });
     }

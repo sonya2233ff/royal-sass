@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import {
   appendMatchLog,
-  catalogOfferFromLive,
   CACHE_STALE_HOURS,
   evaluateOfferStatus,
   isShownStaple,
@@ -10,8 +9,9 @@ import {
   loadNoFrillsCatalog,
   loadStaplesConfig,
   loadWalmartCatalog,
-  searchNoFrills,
-  upsertNoFrillsCatalogItem,
+  pickStapleSearchWinner,
+  searchNoFrillsPool,
+  searchWalmartPackPool,
   defaultNeededGrams,
   isSoldByWeightItem,
   resolveMatchMode,
@@ -21,6 +21,12 @@ import {
 } from "@/lib/staples";
 import { resolveCatalogOffer } from "@/domain/compare-resolve";
 import { buildStapleCompareRow } from "@/lib/staple-compare-row";
+import {
+  mergeLivePackSizes,
+  packSizeNotes,
+  persistPackSizeRow,
+  shouldExpandPackSizes,
+} from "@/lib/expand-pack-sizes";
 import {
   loadRetailerMappings,
   lookupConfirmed,
@@ -121,14 +127,67 @@ export async function POST(request: Request) {
     const packPickGrams =
       neededPick && !soldByWeight && grams != null ? grams : undefined;
 
-    const cat = catById.get(id);
-    const wmResolved = resolveCatalogOffer({
+    let wmRow = catById.get(id) ?? null;
+    let wmResolved = resolveCatalogOffer({
       item,
-      row: cat,
+      row: wmRow,
       link: wmLink,
       matchMode: mode,
       neededGrams: packPickGrams,
     });
+
+    const wmLog: MatchLogEntry = {
+      at: new Date().toISOString(),
+      itemId: id,
+      retailer: "walmart_ca",
+      queries: wmRow ? ["catalog_cache"] : [],
+      rejected: [],
+      status: "no_match",
+    };
+    if (
+      shouldExpandPackSizes({
+        item,
+        neededGrams: packPickGrams,
+        link: wmLink,
+        row: wmRow,
+      })
+    ) {
+      const pool = await searchWalmartPackPool(item, wmLog);
+      if (pool.length) {
+        const merged = mergeLivePackSizes({
+          row: wmRow,
+          live: pool,
+          keepProductId: wmRow?.offer?.productId,
+        });
+        await persistPackSizeRow({
+          retailer: "walmart_ca",
+          id,
+          label: item.label,
+          offer: merged.offer,
+          alternates: merged.alternates,
+          notes: packSizeNotes(
+            "walmart_ca",
+            1 + merged.alternates.length,
+          ),
+          image: item.image,
+        });
+        wmRow = {
+          id,
+          status: merged.offer ? "ok" : "no_match",
+          offer: merged.offer,
+          alternates: merged.alternates,
+        };
+        catById.set(id, wmRow);
+        wmResolved = resolveCatalogOffer({
+          item,
+          row: wmRow,
+          link: wmLink,
+          matchMode: mode,
+          neededGrams: packPickGrams,
+        });
+      }
+    }
+
     const wmOffer = toCatalogOffer(wmResolved.offer);
     const wmEval = evaluateOfferStatus(item, wmOffer, {
       unavailable: item.unavailableAtWalmart,
@@ -136,7 +195,7 @@ export async function POST(request: Request) {
         wmResolved.reason === "mapped_sku_missing" ||
         wmResolved.reason === "rejected_filter"
           ? "no_match"
-          : cat?.status,
+          : wmRow?.status,
     });
     if (wmResolved.reason === "mapped_sku_missing") {
       wmEval.status = "no_match";
@@ -149,12 +208,28 @@ export async function POST(request: Request) {
     const wmUsable =
       Boolean(wmOffer) &&
       (wmEval.status === "ok" || wmEval.status === "stale") &&
-      cat?.status !== "unavailable";
+      wmRow?.status !== "unavailable";
+    wmLog.status = wmEval.status;
+    if (wmUsable && wmOffer) {
+      wmLog.accepted = {
+        productId: wmOffer.productId,
+        name: wmOffer.name,
+        price: wmOffer.price,
+      };
+    } else {
+      wmLog.rejected.push({
+        reason: wmEval.reason ?? wmResolved.detail ?? wmEval.status,
+        productId: wmRow?.offer?.productId,
+        name: wmRow?.offer?.name,
+        price: wmRow?.offer?.price,
+      });
+    }
+    entries.push(wmLog);
 
-    const nfCached = nfById.get(id);
-    const nfResolved = resolveCatalogOffer({
+    let nfRow = nfById.get(id) ?? null;
+    let nfResolved = resolveCatalogOffer({
       item,
-      row: nfCached,
+      row: nfRow,
       link: nfLink,
       matchMode: mode,
       neededGrams: packPickGrams,
@@ -163,10 +238,17 @@ export async function POST(request: Request) {
       catalogStatus:
         nfResolved.reason === "rejected_filter"
           ? "no_match"
-          : nfCached?.status,
+          : nfRow?.status,
+    });
+    const needNfExpand = shouldExpandPackSizes({
+      item,
+      neededGrams: packPickGrams,
+      link: nfLink,
+      row: nfRow,
     });
     const nfCacheUsable =
       !body.refreshNoFrills &&
+      !needNfExpand &&
       Boolean(nfResolved.offer) &&
       (nfCacheEval.status === "ok" || nfCacheEval.status === "stale");
 
@@ -179,88 +261,98 @@ export async function POST(request: Request) {
       status: "no_match",
     };
 
-    let nfOffer = null as Awaited<ReturnType<typeof searchNoFrills>>;
+    let nfOfferUpc: string | undefined;
     let nfCatalogOffer: CatalogOffer | null = null;
-    const cacheRowExists = Boolean(nfCached?.offer);
     if (nfCacheUsable && nfResolved.offer) {
       nfCacheHits += 1;
       nfCatalogOffer = toCatalogOffer(nfResolved.offer);
-      nfOffer = {
-        retailer: "no_frills",
-        storeId: "3660",
-        productId: nfResolved.offer.productId,
-        name: nfResolved.offer.name,
-        packageSize: nfResolved.offer.packageSize,
-        price: nfResolved.offer.price,
-        unitPrice: nfResolved.offer.unitPrice,
-        availability: "unknown",
-        confidence: (nfResolved.offer.confidence as "exact") ?? "exact",
-        checkedAt: nfResolved.offer.checkedAt ?? new Date().toISOString(),
-        image: nfResolved.offer.image,
-      };
       nfLog.queries = ["catalog_cache"];
       nfLog.status = nfCacheEval.status;
       nfLog.accepted = {
-        productId: nfOffer.productId,
-        name: nfOffer.name,
-        price: nfOffer.price,
+        productId: nfResolved.offer.productId,
+        name: nfResolved.offer.name,
+        price: nfResolved.offer.price,
       };
-    } else if (body.refreshNoFrills || !cacheRowExists) {
-      nfOffer = await searchNoFrills(item, nfLog);
+    } else if (body.refreshNoFrills || !nfRow?.offer || needNfExpand) {
+      const pool = await searchNoFrillsPool(item, nfLog);
       nfLiveHits += 1;
-      if (nfOffer) {
-        nfCatalogOffer = catalogOfferFromLive(nfOffer);
-        await upsertNoFrillsCatalogItem({
-          id,
-          label: item.label,
-          status: nfLog.status,
-          offer: nfCatalogOffer,
-          notes: `Cached from live NF search (TTL ${CACHE_STALE_HOURS}h)`,
+      const best = pickStapleSearchWinner(item, pool, nfLog);
+      if (pool.length || best) {
+        const merged = mergeLivePackSizes({
+          row: nfRow,
+          live: pool,
+          keepProductId: body.refreshNoFrills
+            ? best?.productId
+            : (nfRow?.offer?.productId ?? best?.productId),
         });
-      } else {
-        await upsertNoFrillsCatalogItem({
+        const offer = merged.offer ?? (best ? {
+          productId: best.productId,
+          name: best.name,
+          price: best.price,
+          packageSize: best.packageSize,
+          image: best.image,
+        } : null);
+        await persistPackSizeRow({
+          retailer: "no_frills",
           id,
           label: item.label,
-          status: nfLog.status,
+          offer,
+          alternates: merged.alternates,
+          notes:
+            merged.alternates.length > 0
+              ? packSizeNotes("no_frills", 1 + merged.alternates.length)
+              : `Cached from live NF search (TTL ${CACHE_STALE_HOURS}h)`,
+        });
+        nfRow = {
+          id,
+          status: offer ? "ok" : "no_match",
+          offer,
+          alternates: merged.alternates,
+        };
+        nfById.set(id, nfRow);
+        nfResolved = resolveCatalogOffer({
+          item,
+          row: nfRow,
+          link: nfLink,
+          matchMode: mode,
+          neededGrams: packPickGrams,
+        });
+        nfCatalogOffer = toCatalogOffer(nfResolved.offer);
+        nfOfferUpc = best?.upc;
+      } else if (nfRow?.offer && !body.refreshNoFrills) {
+        nfCatalogOffer = toCatalogOffer(nfResolved.offer);
+        nfLog.rejected.push({
+          reason: "pack-size search missed — kept catalog offer",
+        });
+        if (nfResolved.offer) {
+          nfLog.status = nfCacheEval.status;
+          nfLog.accepted = {
+            productId: nfResolved.offer.productId,
+            name: nfResolved.offer.name,
+            price: nfResolved.offer.price,
+          };
+        }
+      } else {
+        await persistPackSizeRow({
+          retailer: "no_frills",
+          id,
+          label: item.label,
           offer: null,
-          notes: nfLog.rejected.at(-1)?.reason,
+          alternates: [],
+          notes: nfLog.rejected.at(-1)?.reason ?? "no_match",
         });
       }
     } else {
       nfLog.queries = ["catalog_cache"];
       nfLog.status = "rejected";
       nfLog.rejected.push({
-        productId: nfCached?.offer?.productId,
-        name: nfCached?.offer?.name,
-        price: nfCached?.offer?.price,
+        productId: nfRow?.offer?.productId,
+        name: nfRow?.offer?.name,
+        price: nfRow?.offer?.price,
         reason: nfResolved.detail ?? "filter",
       });
     }
     entries.push(nfLog);
-
-    const wmLog: MatchLogEntry = {
-      at: new Date().toISOString(),
-      itemId: id,
-      retailer: "walmart_ca",
-      queries: cat ? ["catalog_cache"] : [],
-      rejected: [],
-      status: wmEval.status,
-    };
-    if (wmUsable && wmOffer) {
-      wmLog.accepted = {
-        productId: wmOffer.productId,
-        name: wmOffer.name,
-        price: wmOffer.price,
-      };
-    } else {
-      wmLog.rejected.push({
-        reason: wmEval.reason ?? wmResolved.detail ?? wmEval.status,
-        productId: cat?.offer?.productId,
-        name: cat?.offer?.name,
-        price: cat?.offer?.price,
-      });
-    }
-    entries.push(wmLog);
 
     const rawQty = Number(body.qty?.[id]);
     const qty =
@@ -270,11 +362,15 @@ export async function POST(request: Request) {
 
     const nfEval = nfCacheUsable
       ? nfCacheEval
-      : {
-          status: nfLog.status,
-          reason: nfLog.rejected.at(-1)?.reason,
-          ageLabel: null as string | null,
-        };
+      : nfCatalogOffer
+        ? evaluateOfferStatus(item, nfCatalogOffer, {
+            catalogStatus: nfRow?.status,
+          })
+        : {
+            status: nfLog.status,
+            reason: nfLog.rejected.at(-1)?.reason,
+            ageLabel: null as string | null,
+          };
 
     const nfUsable = Boolean(
       nfCatalogOffer &&
@@ -296,9 +392,9 @@ export async function POST(request: Request) {
         mappingDecision: wmLink?.decision,
         resolveReason: {
           walmart: wmResolved.reason,
-          noFrills: nfCacheUsable ? nfResolved.reason : undefined,
+          noFrills: nfResolved.reason,
         },
-        nfUpc: nfOffer?.upc,
+        nfUpc: nfOfferUpc,
       }),
     );
   }

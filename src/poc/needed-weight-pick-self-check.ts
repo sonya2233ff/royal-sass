@@ -9,6 +9,12 @@ import {
   pickNeededWeightPurchase,
   purchasePlanForPack,
 } from "@/domain/needed-weight-pick";
+import {
+  mergeDistinctPackSizes,
+  needsMorePackSizes,
+} from "@/domain/pack-size-candidates";
+import { resolveCatalogOffer } from "@/domain/compare-resolve";
+import { shouldExpandPackSizes } from "@/lib/expand-pack-sizes";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -103,8 +109,84 @@ assert(isInNeededWeightRange(550, 500), "550 in");
 assert(!isInNeededWeightRange(600, 500), "600 out");
 assert(!isInNeededWeightRange(2000, 500), "2000 out");
 
+const nf283 = {
+  productId: "21367888001_EA",
+  name: "Farmer's Market Grape Tomatoes",
+  price: 2.99,
+  packageSize: "283 g",
+  parsedMassKg: 0.283,
+};
+const nf907 = {
+  productId: "20840038001_EA",
+  name: "Farmer's Market Grape Tomato",
+  price: 7.99,
+  packageSize: "907 g",
+  parsedMassKg: 0.907,
+};
+const grapePick = pickNeededWeightPurchase(500, [nf907, nf283]);
+assert(grapePick?.productId === nf283.productId, `grape winner ${grapePick?.productId}`);
+assert(grapePick?.packs === 2, `grape packs ${grapePick?.packs}`);
+assert(grapePick?.inRange === true, "2×283g in 500g window");
+assert(grapePick?.totalPrice === 5.98, `grape total ${grapePick?.totalPrice}`);
+assert(needsMorePackSizes(500, [nf907]) === true, "907g alone needs more sizes");
+assert(needsMorePackSizes(500, [nf907, nf283]) === false, "283g present — no expand");
+
+const merged = mergeDistinctPackSizes([
+  nf907,
+  nf283,
+  { ...nf283, productId: "dup283", price: 3.49 },
+]);
+assert(merged.length === 2, `merged sizes ${merged.length}`);
+assert(
+  merged.find((o) => packSizeNear(o, 283))?.price === 2.99,
+  "keep cheaper 283g",
+);
+
+function packSizeNear(
+  offer: { packageSize?: string; parsedMassKg?: number },
+  grams: number,
+): boolean {
+  const kg = offer.parsedMassKg ?? 0;
+  return Math.abs(kg * 1000 - grams) < 6;
+}
+
+const grapeItem = {
+  id: "tomatoes_grape",
+  matchMode: "cheapest" as const,
+  mustIncludeAny: ["grape tomato", "grape tomatoes"],
+  mustNotInclude: ["seed", "seeds"],
+};
+const grapeRow = { offer: nf907, alternates: [nf283] };
+const grapeResolved = resolveCatalogOffer({
+  item: grapeItem,
+  row: grapeRow,
+  matchMode: "cheapest",
+  neededGrams: 500,
+});
+assert(
+  grapeResolved.offer?.productId === nf283.productId,
+  `resolve grape ${grapeResolved.offer?.productId}`,
+);
+assert(
+  shouldExpandPackSizes({
+    item: { ...grapeItem, queries: ["grape tomatoes"], label: "Grape Tomatoes" },
+    neededGrams: 500,
+    row: { offer: nf907, alternates: [] },
+  }) === true,
+  "NF 907g-only should expand",
+);
+assert(
+  shouldExpandPackSizes({
+    item: { ...grapeItem, queries: ["grape tomatoes"], label: "Grape Tomatoes" },
+    neededGrams: 500,
+    row: grapeRow,
+  }) === false,
+  "NF with 283g alternate should not expand",
+);
+
 console.log("needed-weight-pick-self-check ok", {
   winner500: winner500?.productId,
   twoSmall: { packs: twoSmall?.packs, total: twoSmall?.totalPrice },
   loose: loose?.totalPrice,
+  grape: { id: grapePick?.productId, packs: grapePick?.packs },
 });
