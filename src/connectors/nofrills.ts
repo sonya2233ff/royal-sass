@@ -9,11 +9,26 @@ import {
 const BANNER = "nofrills";
 /** Current Loblaw PCX BFF search (replaces older product-facade path for many banners). */
 const SEARCH_URL =
-  process.env.NOFRILLS_SEARCH_URL ??
+  process.env.NOFRILLS_SEARCH_URL?.trim() ||
   "https://api.pcexpress.ca/pcx-bff/api/v2/products/search";
-/** Key used by Loblaw web properties; override via env if rotated. */
-const API_KEY =
-  process.env.NOFRILLS_API_KEY ?? "C1xujSegT5j3ap3yexJjqhOfELwGKYvz";
+/**
+ * Public web X-Apikey sent by nofrills.ca. `.env` copies often set
+ * `NOFRILLS_API_KEY=` (empty). `??` does not treat "" as missing, so the
+ * request went out with `X-Apikey: ` and PCX returned 401 invalid_client.
+ */
+const PUBLIC_WEB_API_KEY = "C1xujSegT5j3ap3yexJjqhOfELwGKYvz";
+
+function resolveApiKey(): string {
+  return process.env.NOFRILLS_API_KEY?.trim() || PUBLIC_WEB_API_KEY;
+}
+
+function productIdsMatch(a: string, b: string): boolean {
+  if (a === b) return true;
+  const strip = (id: string) => id.replace(/_(EA|KG|LB|C\d+)$/i, "");
+  const left = strip(a);
+  const right = strip(b);
+  return left.length > 0 && left === right;
+}
 
 function todayDdmmyyyy(): string {
   const d = new Date();
@@ -212,7 +227,7 @@ function buildHeaders(originHost: string): Record<string, string> {
     Accept: "*/*",
     "Content-Type": "application/json",
     "Accept-Language": "en",
-    "X-Apikey": API_KEY,
+    "X-Apikey": resolveApiKey(),
     "X-Application-Type": "Web",
     "X-Channel": "web",
     "X-Loblaw-Tenant-Id": "ONLINE_GROCERIES",
@@ -454,7 +469,7 @@ export class NoFrillsConnector implements RetailerConnector {
     }
 
     throw new ConnectorError(
-      `No Frills blocked or unauthorized (HTTP ${probed.httpStatus ?? "?"}). Akamai edge may be filtering this IP — set NOFRILLS_API_KEY from a browser session, or NOFRILLS_ALLOW_FLIPP_FALLBACK=1 for estimated flyer prices. Body: ${(probed.bodyPreview ?? "").slice(0, 120)}`,
+      `No Frills blocked or unauthorized (HTTP ${probed.httpStatus ?? "?"}). Empty NOFRILLS_API_KEY is ignored (public web key is used). If this is still 401/403, the edge may be filtering this IP — paste a fresh X-Apikey from a nofrills.ca Network tab into NOFRILLS_API_KEY, or set NOFRILLS_ALLOW_FLIPP_FALLBACK=1 for estimated flyer prices. Body: ${(probed.bodyPreview ?? "").slice(0, 120)}`,
       this.id,
       "blocked",
     );
@@ -527,7 +542,13 @@ export class NoFrillsConnector implements RetailerConnector {
     storeId: string,
   ): Promise<ProductOffer | null> {
     const hits = await this.searchProducts(productId, storeId);
-    return hits.find((h) => h.productId === productId) ?? hits[0] ?? null;
+    const exact = hits.find((h) => productIdsMatch(h.productId, productId));
+    if (exact) return exact;
+    // LIAM / article searches must not return an unrelated first tile.
+    if (/^\d{5,}/.test(productId) || /_(EA|KG|LB|C\d+)$/i.test(productId)) {
+      return null;
+    }
+    return hits[0] ?? null;
   }
 
   async getPrice(
