@@ -42,6 +42,7 @@ export interface SeedCatalogRow {
   id: string;
   status: string;
   offer: SeedCatalogOffer | null;
+  alternates?: SeedCatalogOffer[];
 }
 
 export async function loadSeedStaples(): Promise<SeedStapleItem[]> {

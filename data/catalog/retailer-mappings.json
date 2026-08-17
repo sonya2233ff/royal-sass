@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-17T04:12:46.227Z",
+  "updatedAt": "2026-08-17T04:28:19.340Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -18,7 +18,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.219Z"
+          "updatedAt": "2026-08-17T04:28:19.325Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -72,7 +72,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.219Z"
+          "updatedAt": "2026-08-17T04:28:19.326Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -116,7 +116,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.219Z"
+          "updatedAt": "2026-08-17T04:28:19.326Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -181,7 +181,7 @@
               "reason": "best score 0.47 below threshold 0.85"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.222Z"
+          "updatedAt": "2026-08-17T04:28:19.328Z"
         }
       },
       "prices": [
@@ -219,7 +219,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.222Z"
+          "updatedAt": "2026-08-17T04:28:19.328Z"
         }
       },
       "prices": [
@@ -249,7 +249,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.222Z"
+          "updatedAt": "2026-08-17T04:28:19.328Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -314,7 +314,7 @@
               "reason": "name overlap only — semantic/image fallback, never auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.222Z"
+          "updatedAt": "2026-08-17T04:28:19.329Z"
         }
       },
       "prices": [
@@ -354,7 +354,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.222Z"
+          "updatedAt": "2026-08-17T04:28:19.329Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -424,7 +424,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.223Z"
+          "updatedAt": "2026-08-17T04:28:19.330Z"
         }
       },
       "prices": [
@@ -463,7 +463,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.223Z"
+          "updatedAt": "2026-08-17T04:28:19.330Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -543,7 +543,7 @@
               "reason": "substitute blocked auto-link (dark vs medium)"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.223Z"
+          "updatedAt": "2026-08-17T04:28:19.330Z"
         }
       },
       "prices": [
@@ -583,7 +583,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.223Z"
+          "updatedAt": "2026-08-17T04:28:19.330Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -653,7 +653,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.223Z"
+          "updatedAt": "2026-08-17T04:28:19.331Z"
         }
       },
       "prices": [
@@ -692,7 +692,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.223Z"
+          "updatedAt": "2026-08-17T04:28:19.331Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -762,7 +762,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.224Z"
+          "updatedAt": "2026-08-17T04:28:19.333Z"
         }
       },
       "prices": [
@@ -801,7 +801,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.224Z"
+          "updatedAt": "2026-08-17T04:28:19.333Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -865,7 +865,7 @@
               "reason": "name overlap only — semantic/image fallback, never auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.225Z"
+          "updatedAt": "2026-08-17T04:28:19.333Z"
         }
       },
       "prices": [
@@ -904,7 +904,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.225Z"
+          "updatedAt": "2026-08-17T04:28:19.333Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -958,7 +958,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.225Z"
+          "updatedAt": "2026-08-17T04:28:19.333Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1028,7 +1028,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.225Z"
+          "updatedAt": "2026-08-17T04:28:19.334Z"
         }
       },
       "prices": [
@@ -1068,7 +1068,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.225Z"
+          "updatedAt": "2026-08-17T04:28:19.334Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1138,7 +1138,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.225Z"
+          "updatedAt": "2026-08-17T04:28:19.334Z"
         }
       },
       "prices": [
@@ -1178,7 +1178,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.334Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1243,7 +1243,7 @@
               "reason": "best score 0.25 below threshold 0.85"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.335Z"
         }
       },
       "prices": [
@@ -1282,7 +1282,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.335Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1336,7 +1336,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.335Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1400,7 +1400,7 @@
               "reason": "name overlap only — semantic/image fallback, never auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.335Z"
         }
       },
       "prices": [
@@ -1439,7 +1439,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.335Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1508,7 +1508,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.336Z"
         }
       },
       "prices": [
@@ -1547,7 +1547,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.336Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1612,7 +1612,7 @@
               "reason": "name overlap only — semantic/image fallback, never auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.336Z"
         }
       },
       "prices": [
@@ -1652,7 +1652,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1717,7 +1717,7 @@
               "reason": "best score 0.42 below threshold 0.85"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -1757,7 +1757,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1827,7 +1827,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -1867,7 +1867,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -1937,7 +1937,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.226Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -1976,7 +1976,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -2029,7 +2029,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -2082,7 +2082,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -2134,7 +2134,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -2163,7 +2163,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -2192,7 +2192,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -2221,7 +2221,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -2250,7 +2250,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -2279,7 +2279,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -2370,7 +2370,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -2422,7 +2422,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -2448,6 +2448,15 @@
           "checkedAt": "2026-08-16T00:54:21.307Z",
           "source": "catalog_nofrills_3660_latest",
           "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6000195369895",
+          "price": 9.97,
+          "checkedAt": "2026-08-16T00:51:57.188Z",
+          "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -2466,7 +2475,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         }
       },
       "prices": [
@@ -2496,7 +2505,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.337Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -2565,7 +2574,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.338Z"
         }
       },
       "prices": [
@@ -2604,7 +2613,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.338Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -2674,7 +2683,7 @@
               "reason": "best score 0.83 below threshold 0.85"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.339Z"
         }
       },
       "prices": [
@@ -2713,7 +2722,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.339Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -2783,7 +2792,7 @@
               "reason": "size mismatch blocked auto-link"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.339Z"
         }
       },
       "prices": [
@@ -2829,7 +2838,7 @@
               "reason": "Walmart catalog winner without No Frills seed to score against"
             }
           ],
-          "updatedAt": "2026-08-17T04:12:46.227Z"
+          "updatedAt": "2026-08-17T04:28:19.339Z"
         }
       },
       "prices": [

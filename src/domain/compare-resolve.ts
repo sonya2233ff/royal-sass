@@ -1,0 +1,188 @@
+/**
+ * Pick the catalog offer that compare may use.
+ *
+ * Locked / verified identity → mapped SKU only (Rapid off-by-one allowed).
+ * Cheapest produce → catalog winner if staple filters pass, else an alternate.
+ * Never use a filtered-out winner (tomato seeds) as a grape-tomato price.
+ *
+ * Does not call Rapid or PCX.
+ */
+import {
+  offerFailsStapleFilters,
+  type StapleFilterItem,
+} from "@/domain/catalog-normalize";
+
+/** Minimal mapping fields — avoid importing lib from domain. */
+export interface MappingLinkRef {
+  retailerProductId?: string;
+  verified?: boolean;
+  decision?: string;
+  kind?: string;
+  skippedRematch?: boolean;
+}
+
+export function mappingIsLockedIdentity(link?: MappingLinkRef): boolean {
+  if (!link?.retailerProductId) return false;
+  if (link.verified) return true;
+  return (
+    link.decision === "auto_linked" &&
+    (link.kind === "identity" || Boolean(link.skippedRematch))
+  );
+}
+
+export interface CatalogOfferRef {
+  productId: string;
+  name: string;
+  price: number;
+  packageSize?: string;
+  parsedMassKg?: number;
+  brand?: string;
+  unitPrice?: number;
+  wasPrice?: number;
+  onSale?: boolean;
+  confidence?: string;
+  checkedAt?: string;
+  sourceUrl?: string;
+  availability?: string;
+}
+
+export interface CatalogRowRef {
+  id?: string;
+  status?: string;
+  offer: CatalogOfferRef | null;
+  alternates?: CatalogOfferRef[] | null;
+}
+
+export type ResolveReason =
+  | "catalog"
+  | "mapped_sku"
+  | "mapped_sku_rapid_alias"
+  | "filtered_alternate"
+  | "rejected_filter"
+  | "mapped_sku_missing"
+  | "no_offer";
+
+function numericIdsOffByOne(left: string, right: string): boolean {
+  if (!/^\d+$/.test(left) || !/^\d+$/.test(right)) return false;
+  if (left.length !== right.length || left.length < 6) return false;
+  try {
+    const a = BigInt(left);
+    const b = BigInt(right);
+    return (a > b ? a - b : b - a) === 1n;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Rapid sometimes returns Walmart.ca id ±1 vs the PDP URL.
+ * URL matching belongs on offerMatchesRetailerSku (URL contains the *locked* id).
+ */
+export function retailerSkusEquivalent(
+  left?: string | null,
+  right?: string | null,
+): boolean {
+  if (!left || !right) return false;
+  if (left === right) return true;
+  return numericIdsOffByOne(left, right);
+}
+
+export function offerMatchesRetailerSku(
+  offer: { productId: string; sourceUrl?: string | null },
+  sku: string,
+): boolean {
+  if (!sku || !offer.productId) return false;
+  if (offer.productId === sku) return true;
+  if (offer.sourceUrl?.includes(sku)) return true;
+  return numericIdsOffByOne(offer.productId, sku);
+}
+
+export function catalogCandidates(
+  row?: CatalogRowRef | null,
+): CatalogOfferRef[] {
+  if (!row) return [];
+  const out: CatalogOfferRef[] = [];
+  if (row.offer?.productId) out.push(row.offer);
+  for (const alt of row.alternates ?? []) {
+    if (alt?.productId && !out.some((o) => o.productId === alt.productId)) {
+      out.push(alt);
+    }
+  }
+  return out;
+}
+
+export function findOfferForSku(
+  row: CatalogRowRef | null | undefined,
+  sku: string,
+): CatalogOfferRef | null {
+  if (!sku) return null;
+  for (const offer of catalogCandidates(row)) {
+    if (offerMatchesRetailerSku(offer, sku)) {
+      return offer;
+    }
+  }
+  return null;
+}
+
+export function offerPassesStapleFilters(
+  item: StapleFilterItem,
+  offer: { name: string; brand?: string },
+): boolean {
+  return offerFailsStapleFilters(item, offer.name, offer.brand) == null;
+}
+
+export function resolveCatalogOffer(input: {
+  item: StapleFilterItem;
+  row?: CatalogRowRef | null;
+  link?: MappingLinkRef;
+  matchMode: "preferred" | "cheapest";
+}): {
+  offer: CatalogOfferRef | null;
+  reason: ResolveReason;
+  detail?: string;
+} {
+  const mappedSku = input.link?.retailerProductId;
+  if (mappingIsLockedIdentity(input.link) && mappedSku) {
+    const hit = findOfferForSku(input.row, mappedSku);
+    if (!hit) {
+      return {
+        offer: null,
+        reason: "mapped_sku_missing",
+        detail: `locked SKU ${mappedSku} not in catalog`,
+      };
+    }
+    // Preferred / confirmed locks win over staple filters (Earth's Own
+    // preferred id may be the Zero Sugar SKU even if filters ban that phrase).
+    const alias = hit.productId !== mappedSku;
+    return {
+      offer: hit,
+      reason: alias ? "mapped_sku_rapid_alias" : "mapped_sku",
+      detail: alias ? `Rapid id ${hit.productId} ≈ lock ${mappedSku}` : mappedSku,
+    };
+  }
+
+  for (const offer of catalogCandidates(input.row)) {
+    const filter = offerFailsStapleFilters(input.item, offer.name, offer.brand);
+    if (filter) continue;
+    const fromWinner = offer.productId === input.row?.offer?.productId;
+    return {
+      offer,
+      reason: fromWinner ? "catalog" : "filtered_alternate",
+    };
+  }
+
+  if (input.row?.offer) {
+    return {
+      offer: null,
+      reason: "rejected_filter",
+      detail:
+        offerFailsStapleFilters(
+          input.item,
+          input.row.offer.name,
+          input.row.offer.brand,
+        ) ?? "filter",
+    };
+  }
+
+  return { offer: null, reason: "no_offer" };
+}

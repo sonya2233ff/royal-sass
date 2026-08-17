@@ -23,6 +23,11 @@ import {
 } from "@/domain/units";
 import type { ProductOffer } from "@/connectors/types";
 import { offerIsOnSale } from "@/connectors/types";
+import { resolveCatalogOffer } from "@/domain/compare-resolve";
+import {
+  loadRetailerMappings,
+  lookupConfirmed,
+} from "@/lib/retailer-mappings";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -82,6 +87,7 @@ export async function GET() {
   const catalog = await loadWalmartCatalog();
   const nfCatalog = await loadNoFrillsCatalog();
   const confirmed = await loadConfirmed();
+  const mappings = await loadRetailerMappings();
   const byId = new Map(catalog?.items.map((i) => [i.id, i]) ?? []);
   const nfById = new Map(nfCatalog?.items.map((i) => [i.id, i]) ?? []);
 
@@ -89,18 +95,32 @@ export async function GET() {
     .filter(isShownStaple)
     .map((i) => {
       const cat = byId.get(i.id);
-      const offer =
-        cat?.status === "ok" || cat?.status === "stale" ? cat.offer : cat?.offer;
+      const mode = resolveMatchMode(i);
+      const wmLink = mappings.products[i.id]?.retailers.walmart_ca;
+      const nfLink = mappings.products[i.id]?.retailers.nofrills;
+      const wmResolved = resolveCatalogOffer({
+        item: i,
+        row: cat,
+        link: wmLink,
+        matchMode: mode,
+      });
+      const offer = wmResolved.offer;
       const evalStatus = evaluateOfferStatus(i, offer ?? null, {
         unavailable: i.unavailableAtWalmart,
-        catalogStatus: cat?.status,
+        catalogStatus:
+          wmResolved.reason === "mapped_sku_missing" ||
+          wmResolved.reason === "rejected_filter"
+            ? "no_match"
+            : cat?.status,
       });
 
       let status = evalStatus.status;
+      if (wmResolved.reason === "mapped_sku_missing") status = "no_match";
+      if (wmResolved.reason === "rejected_filter") status = "rejected";
       if (!offer && cat?.status === "wrong_pack") status = "wrong_pack";
       if (!offer && cat?.status === "wrong_size") status = "wrong_size";
       if (!offer && cat?.status === "unavailable") status = "unavailable";
-      if (!offer && (cat?.status === "no_match" || !cat)) {
+      if (!offer && (cat?.status === "no_match" || !cat) && status === evalStatus.status) {
         status = i.unavailableAtWalmart ? "unavailable" : "no_match";
       }
 
@@ -111,16 +131,23 @@ export async function GET() {
           cat?.status !== "wrong_size",
       );
 
+      const conf = lookupConfirmed(confirmed, i.id);
       const lockedSku =
-        i.preferredProductId ?? confirmed[i.id]?.productId ?? null;
-      let statusReason = evalStatus.reason ?? null;
+        i.preferredProductId ?? conf?.productId ?? wmLink?.retailerProductId ?? null;
+      let statusReason = evalStatus.reason ?? wmResolved.detail ?? null;
+      if (wmResolved.reason === "mapped_sku_missing") {
+        statusReason = wmResolved.detail ?? statusReason;
+      }
       if (
         !usable &&
         lockedSku &&
         (status === "no_match" || status === "unavailable")
       ) {
         statusReason =
-          "SKU \u0437\u0430\u043b\u043e\u0447\u0435\u043d\u0438\u0439, \u0436\u0438\u0432\u0430 \u0446\u0456\u043d\u0430 \u0437 WM API \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430 (Rapid 429 / \u0431\u043b\u043e\u043a \u0441\u0430\u0439\u0442\u0443)";
+          wmResolved.reason === "mapped_sku_missing"
+            ? `залочений SKU ${lockedSku} немає в каталозі`
+            : statusReason ??
+              "SKU \u0437\u0430\u043b\u043e\u0447\u0435\u043d\u0438\u0439, \u0436\u0438\u0432\u0430 \u0446\u0456\u043d\u0430 \u0437 WM API \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430 (Rapid 429 / \u0431\u043b\u043e\u043a \u0441\u0430\u0439\u0442\u0443)";
       }
 
       const showWeightUnits = isProduceWeightItem(i);
@@ -145,9 +172,16 @@ export async function GET() {
         usable && offer && eggItem ? eggUnitFields(offer) : null;
 
       const nfCat = nfById.get(i.id);
-      const nfOffer = nfCat?.offer ?? null;
+      const nfResolved = resolveCatalogOffer({
+        item: i,
+        row: nfCat,
+        link: nfLink,
+        matchMode: mode,
+      });
+      const nfOffer = nfResolved.offer ?? null;
       const nfEval = evaluateOfferStatus(i, nfOffer, {
-        catalogStatus: nfCat?.status,
+        catalogStatus:
+          nfResolved.reason === "rejected_filter" ? "no_match" : nfCat?.status,
       });
       const nfUsable = Boolean(
         nfOffer &&
@@ -189,8 +223,8 @@ export async function GET() {
         statusReason,
         ageLabel: evalStatus.ageLabel,
         ageHours: evalStatus.ageHours ?? null,
-        confirmed: Boolean(confirmed[i.id]),
-        confirmedProductId: confirmed[i.id]?.productId ?? null,
+        confirmed: Boolean(conf),
+        confirmedProductId: conf?.productId ?? null,
         preferredProductId: lockedSku,
         matchMode: resolveMatchMode(i),
         weightCompare: showWeightUnits || eggItem,

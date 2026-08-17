@@ -684,7 +684,9 @@ export function StaplesCompare() {
                         ? "No Frills cheaper"
                         : r.cheaper === "tie"
                           ? "Tie"
-                          : "Incomplete"}
+                          : r.fairBasis === "incomparable"
+                            ? "Incomparable"
+                            : "Incomplete"}
                     {r.delta != null && r.cheaper !== "tie"
                       ? ` · Δ $${Math.abs(r.delta).toFixed(2)}`
                       : ""}

@@ -6,6 +6,8 @@ import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
+import { offerFailsStapleFilters } from "@/domain/catalog-normalize";
+import { lookupConfirmed } from "@/lib/retailer-mappings";
 import {
   type CompareUnit,
   type OfferStatus,
@@ -181,6 +183,7 @@ export interface CatalogOffer {
   price: number;
   packageSize?: string;
   parsedMassKg?: number;
+  brand?: string;
   unitPrice?: number;
   wasPrice?: number;
   onSale?: boolean;
@@ -383,6 +386,7 @@ export async function loadWalmartCatalog(): Promise<{
     image?: string;
     rejected?: unknown;
     notes?: string;
+    alternates?: CatalogOffer[];
   }>;
 } | null> {
   try {
@@ -419,6 +423,7 @@ export type StoreCatalog = {
     offer: CatalogOffer | null;
     image?: string;
     notes?: string;
+    alternates?: CatalogOffer[];
   }>;
 };
 
@@ -549,41 +554,11 @@ function matchQueryForPick(item: StapleItem): string {
   return item.label;
 }
 
-function nameHaystack(offer: { name: string; brand?: string }): string {
-  return `${offer.brand ?? ""} ${offer.name}`.toLowerCase();
-}
-
-/** Phrase = substring; single token = word boundary (apple ≠ pineapple, waffle = waffles). */
-function hayIncludes(hay: string, needle: string): boolean {
-  const n = needle.toLowerCase().trim();
-  if (!n) return false;
-  if (n.includes(" ")) return hay.includes(n);
-  const esc = n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return new RegExp(`(^|[^a-z0-9])${esc}(?:es|s)?([^a-z0-9]|$)`).test(hay);
-}
-
 function passesFilters(
   offer: { name: string; brand?: string },
   item: StapleItem,
 ): boolean {
-  // NF often puts brand only in `brand`, not title (e.g. Earth's Own oat).
-  const n = nameHaystack(offer);
-  if (item.mustIncludeAny?.length) {
-    if (!item.mustIncludeAny.some((t) => hayIncludes(n, t))) {
-      return false;
-    }
-  }
-  if (item.mustIncludeAll?.length) {
-    if (!item.mustIncludeAll.every((t) => hayIncludes(n, t))) {
-      return false;
-    }
-  }
-  if (item.mustNotInclude?.length) {
-    for (const bad of item.mustNotInclude) {
-      if (n.includes(bad.toLowerCase())) return false;
-    }
-  }
-  return true;
+  return offerFailsStapleFilters(item, offer.name, offer.brand) == null;
 }
 
 function expectedPackFor(item: StapleItem): number | undefined {
@@ -910,6 +885,8 @@ export function summarizeOffer(
         compareUnitLabel: compareUnitLabel(unit),
         status: sanity.status,
         statusReason: sanity.reason,
+        pricePerKg: asPacks.pricePerKg,
+        pricePerLb: round2(asPacks.pricePerKg * 0.45359237),
         ...unitFields,
       };
     }
@@ -1074,7 +1051,7 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
       continue;
     }
 
-    const lockedId = confirmed[id]?.productId ?? null;
+    const lockedId = lookupConfirmed(confirmed, id)?.productId ?? null;
     const mode = resolveMatchMode(item);
     // Produce (cheapest): never pin preferred brand SKU — only 👍 confirmed locks
     const preferred =

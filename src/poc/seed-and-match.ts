@@ -42,14 +42,13 @@ async function main() {
   const grape = store.products.tomatoes_grape;
   assert(grape, "tomatoes_grape mapped");
   const grapeWm = grape.retailers[WALMART_RETAILER];
-  if (grapeWm?.skippedRematch) {
-    assert(
-      !/seed/i.test(grapeWm.name ?? ""),
-      "confirmed grape mapping must not be tomato seeds",
-    );
-  } else if (grapeWm) {
-    assert(grapeWm.decision !== "auto_linked" || grapeWm.kind !== "identity", "seeds must not identity-link");
-  }
+  assert(grapeWm?.retailerProductId === "6000194960084", "locked YFM grape sku");
+  assert(!/seed/i.test(grapeWm?.name ?? ""), "confirmed grape mapping must not be tomato seeds");
+  const grapeWmPrice = grape.prices.find((p) => p.retailer === WALMART_RETAILER);
+  assert(
+    grapeWmPrice?.retailerProductId !== "24D9FUYGIT3L",
+    "do not attach tomato-seed catalog price to locked YFM grape SKU",
+  );
 
   const bran = store.products.rogers_wheat_bran?.retailers[WALMART_RETAILER];
   if (bran && !bran.skippedRematch) {
@@ -58,6 +57,14 @@ async function main() {
 
   const butter = store.products.butter_454g;
   assert(butter?.retailers[NOFRILLS_RETAILER]?.retailerProductId === "20559466_EA", "NF butter sku");
+
+  const ziplocWmPrice = store.products.ziploc_sandwich?.prices.find(
+    (p) => p.retailer === WALMART_RETAILER,
+  );
+  assert(
+    ziplocWmPrice?.price === 9.97,
+    `ziploc WM price via Rapid alias, got ${ziplocWmPrice?.price}`,
+  );
 
   const eggWhites = matchProducts(
     {

@@ -114,11 +114,12 @@ Measured on this gold set (2026-08-16, threshold 0.85): **precision 1.00, recall
 | `src/poc/entity-match-benchmark.ts` | Metrics + self-check |
 | `data/catalog/product-matches.json` | Written on benchmark run (sample upsert) |
 
-Not wired into `/api/staples/compare`, `walmart-rapid.ts`, or `nofrills.ts`.
+Compare (`/api/staples/compare` and `/api/staples`) **reads** `retailer-mappings.json` for locked/verified SKUs and staple filters. It does **not** rewrite Rapid or PCX. `matchProducts()` still does not run on the request path.
 
 ```bash
 npm run poc:entity-match
 npm run poc:seed-match
+npm run poc:compare-audit
 ```
 
 ---
@@ -140,9 +141,22 @@ Output: `data/catalog/retailer-mappings.json`.
 
 ---
 
-## 5. Later (not in this slice)
+## 7. Live compare wiring
+
+`src/domain/compare-resolve.ts` chooses the catalog offer:
+
+1. **Locked identity** (`verified`, receipt, confirmed, preferred SKU) → that Walmart id only. Rapid off-by-one vs the walmart.ca URL is treated as the same SKU (Ziploc `…896` vs `…895`).
+2. If the locked SKU is missing (grape tomatoes catalog currently has garden seeds) → **no Walmart price**, not the wrong winner.
+3. **Cheapest** produce/eggs → catalog winner if `mustNotInclude` passes (word-boundary so `seed` ≠ `seedless`), else an alternate.
+4. **Preferred** identity `rejected` (Folgers vs Gourmet West Coast) → both shelves may still display, but fair compare is **incomparable** and the row is excluded from the basket.
+
+`confirmed.json` key `tomatoes` aliases to staple `tomatoes_grape`.
+
+---
+
+## 8. Later (not in this slice)
 
 - Confirm UI for `needs_review` pairs (reuse `/api/staples/confirm` pattern)
 - Optional `scripts/splink_train.py` to emit weights JSON
 - Image embeddings / CLIP only after UPC + structured miss
-- Wire `matchProducts` into compare only behind a flag, after the 100-pair set is replaced with real catalog/receipt labels
+- Wire `matchProducts` scoring into live search only behind a flag, after the 100-pair set is replaced with real catalog/receipt labels

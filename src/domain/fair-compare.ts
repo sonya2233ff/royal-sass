@@ -219,6 +219,7 @@ export function basketAmountForSide(
   side: "walmart" | "nofrills",
   fallbackLine: number | null,
 ): number | null {
+  if (fair.fairBasis === "incomparable") return null;
   const v = side === "walmart" ? fair.wmFair : fair.nfFair;
   if (fair.fairBasis === "per_kg" && v != null) return v;
   if (fair.fairBasis === "per_egg" && v != null) {

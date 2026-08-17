@@ -34,8 +34,11 @@ import {
   type SeedCatalogOffer,
   type SeedStapleItem,
 } from "@/lib/catalog-json";
+import { findOfferForSku } from "@/domain/compare-resolve";
 import {
+  isLockedIdentityLink,
   isVerifiedLink,
+  lookupConfirmed,
   loadRetailerMappings,
   saveRetailerMappings,
   type MappedPrice,
@@ -48,10 +51,6 @@ import {
 const NF_STORE = "3660";
 const WM_STORE = "5831";
 
-const CONFIRMED_ALIASES: Record<string, string[]> = {
-  tomatoes_grape: ["tomatoes_grape", "tomatoes"],
-};
-
 function nowIso(): string {
   return new Date().toISOString();
 }
@@ -62,15 +61,11 @@ function link(
   return { ...partial, updatedAt: partial.updatedAt ?? nowIso() };
 }
 
-function lookupConfirmed(
+function lookupConfirmedRow(
   confirmed: Awaited<ReturnType<typeof loadSeedConfirmed>>,
   masterId: string,
 ): { productId: string; confirmedAt: string; label?: string } | undefined {
-  const keys = CONFIRMED_ALIASES[masterId] ?? [masterId];
-  for (const k of keys) {
-    if (confirmed[k]) return confirmed[k];
-  }
-  return undefined;
+  return lookupConfirmed(confirmed, masterId);
 }
 
 function receiptLock(
@@ -78,12 +73,7 @@ function receiptLock(
   masterId: string,
 ): { productId?: string; upc?: string; name?: string } | undefined {
   if (!receipts?.preferredByStapleId) return undefined;
-  const keys = CONFIRMED_ALIASES[masterId] ?? [masterId];
-  for (const k of keys) {
-    const row = receipts.preferredByStapleId[k];
-    if (row) return row;
-  }
-  return undefined;
+  return lookupConfirmed(receipts.preferredByStapleId, masterId);
 }
 
 function receiptPriceFor(
@@ -286,7 +276,7 @@ export async function runSeedAndMatch(): Promise<{
       seeded += 1;
     }
 
-    const conf = lookupConfirmed(confirmed, masterId);
+    const conf = lookupConfirmedRow(confirmed, masterId);
     const rec = receiptLock(receipts, masterId);
     const preferred = item.preferredProductId;
 
@@ -362,16 +352,13 @@ export async function runSeedAndMatch(): Promise<{
     }
 
     const identityLinked =
-      (wmLink?.kind === "identity" && wmLink.decision === "auto_linked") ||
-      Boolean(wmLink?.verified);
+      isLockedIdentityLink(wmLink) ||
+      (wmLink?.kind === "identity" && wmLink.decision === "auto_linked");
 
-    const wmPriceOffer =
-      wmOffer &&
-      (!wmLink ||
-        wmLink.kind === "staple_winner" ||
-        wmOffer.productId === wmLink.retailerProductId)
-        ? wmOffer
-        : null;
+    const wmPriceOffer = wmLink
+      ? findOfferForSku(wmRow ?? undefined, wmLink.retailerProductId) ??
+        (wmLink.kind === "staple_winner" ? wmOffer : null)
+      : wmOffer;
 
     const nfAge = ageHours(nfOffer?.checkedAt);
     const wmAge = ageHours(wmPriceOffer?.checkedAt);

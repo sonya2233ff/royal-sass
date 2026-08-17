@@ -10,25 +10,55 @@ import {
   loadStaplesConfig,
   loadWalmartCatalog,
   searchNoFrills,
-  summarizeOffer,
   upsertNoFrillsCatalogItem,
   isSoldByWeightItem,
-  isEggPackItem,
   resolveMatchMode,
+  type CatalogOffer,
   type MatchLogEntry,
 } from "@/lib/staples";
 import { parseMassFromText } from "@/domain/units";
+import { resolveCatalogOffer } from "@/domain/compare-resolve";
+import { buildStapleCompareRow } from "@/lib/staple-compare-row";
 import {
-  basketAmountForSide,
-  classifyMatchKind,
-  extractBarcodes,
-  fairCompareSides,
-  packMassKg,
-} from "@/domain/fair-compare";
+  loadRetailerMappings,
+  lookupConfirmed,
+  type RetailerSkuLink,
+} from "@/lib/retailer-mappings";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
+
+function toCatalogOffer(
+  offer: {
+    productId: string;
+    name: string;
+    price: number;
+    packageSize?: string;
+    unitPrice?: number;
+    wasPrice?: number;
+    onSale?: boolean;
+    confidence?: string;
+    checkedAt?: string;
+    sourceUrl?: string;
+    brand?: string;
+  } | null,
+): CatalogOffer | null {
+  if (!offer) return null;
+  return {
+    productId: offer.productId,
+    name: offer.name,
+    price: offer.price,
+    packageSize: offer.packageSize,
+    unitPrice: offer.unitPrice,
+    wasPrice: offer.wasPrice,
+    onSale: offer.onSale,
+    confidence: offer.confidence,
+    checkedAt: offer.checkedAt,
+    sourceUrl: offer.sourceUrl,
+    brand: offer.brand,
+  };
+}
 
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => ({}))) as {
@@ -47,6 +77,7 @@ export async function POST(request: Request) {
   const catalog = await loadWalmartCatalog();
   const nfCatalog = await loadNoFrillsCatalog();
   const confirmed = await loadConfirmed();
+  const mappings = await loadRetailerMappings();
   const byId = new Map(cfg.items.map((i) => [i.id, i]));
   const catById = new Map(catalog?.items.map((i) => [i.id, i]) ?? []);
   const nfById = new Map(nfCatalog?.items.map((i) => [i.id, i]) ?? []);
@@ -60,46 +91,68 @@ export async function POST(request: Request) {
     const item = byId.get(id);
     if (!item) continue;
 
-    // Apply confirmed preferred id
-    if (confirmed[id]?.productId) {
-      item.preferredProductId = confirmed[id].productId;
+    const conf = lookupConfirmed(confirmed, id);
+    if (conf?.productId) {
+      item.preferredProductId = conf.productId;
     }
 
+    const mode = resolveMatchMode(item);
+    const productMap = mappings.products[id];
+    const wmLink: RetailerSkuLink | undefined =
+      productMap?.retailers.walmart_ca;
+    const nfLink: RetailerSkuLink | undefined =
+      productMap?.retailers.nofrills;
+
     const cat = catById.get(id);
-    const wmEval = evaluateOfferStatus(item, cat?.offer ?? null, {
-      unavailable: item.unavailableAtWalmart,
-      catalogStatus: cat?.status,
+    const wmResolved = resolveCatalogOffer({
+      item,
+      row: cat,
+      link: wmLink,
+      matchMode: mode,
     });
+    const wmOffer = toCatalogOffer(wmResolved.offer);
+    const wmEval = evaluateOfferStatus(item, wmOffer, {
+      unavailable: item.unavailableAtWalmart,
+      catalogStatus:
+        wmResolved.reason === "mapped_sku_missing" ||
+        wmResolved.reason === "rejected_filter"
+          ? "no_match"
+          : cat?.status,
+    });
+    if (wmResolved.reason === "mapped_sku_missing") {
+      wmEval.status = "no_match";
+      wmEval.reason = wmResolved.detail;
+    } else if (wmResolved.reason === "rejected_filter") {
+      wmEval.status = "rejected";
+      wmEval.reason = wmResolved.detail;
+    }
 
     const wmUsable =
-      cat?.offer &&
+      Boolean(wmOffer) &&
       (wmEval.status === "ok" || wmEval.status === "stale") &&
-      cat.status !== "wrong_pack" &&
-      cat.status !== "wrong_size" &&
-      cat.status !== "unavailable";
-
-    const wmRaw = wmUsable
-      ? {
-          name: cat!.offer!.name,
-          price: cat!.offer!.price,
-          productId: cat!.offer!.productId,
-          packageSize: cat!.offer!.packageSize,
-          unitPrice: cat!.offer!.unitPrice,
-          confidence: cat!.offer!.confidence,
-          checkedAt: cat!.offer!.checkedAt,
-        }
-      : null;
+      cat?.status !== "wrong_pack" &&
+      cat?.status !== "wrong_size" &&
+      cat?.status !== "unavailable";
 
     const nfCached = nfById.get(id);
-    const nfCacheEval = evaluateOfferStatus(item, nfCached?.offer ?? null, {
-      catalogStatus: nfCached?.status,
+    const nfResolved = resolveCatalogOffer({
+      item,
+      row: nfCached,
+      link: nfLink,
+      matchMode: mode,
+    });
+    const nfCacheEval = evaluateOfferStatus(item, nfResolved.offer, {
+      catalogStatus:
+        nfResolved.reason === "rejected_filter"
+          ? "no_match"
+          : nfCached?.status,
     });
     const nfCacheUsable =
       !body.refreshNoFrills &&
-      nfCached?.offer &&
+      Boolean(nfResolved.offer) &&
       (nfCacheEval.status === "ok" || nfCacheEval.status === "stale") &&
-      nfCached.status !== "wrong_pack" &&
-      nfCached.status !== "wrong_size";
+      nfCached?.status !== "wrong_pack" &&
+      nfCached?.status !== "wrong_size";
 
     const nfLog: MatchLogEntry = {
       at: new Date().toISOString(),
@@ -111,19 +164,20 @@ export async function POST(request: Request) {
     };
 
     let nfOffer = null as Awaited<ReturnType<typeof searchNoFrills>>;
-    if (nfCacheUsable && nfCached?.offer) {
+    const cacheRowExists = Boolean(nfCached?.offer);
+    if (nfCacheUsable && nfResolved.offer) {
       nfCacheHits += 1;
       nfOffer = {
         retailer: "no_frills",
         storeId: "3660",
-        productId: nfCached.offer.productId,
-        name: nfCached.offer.name,
-        packageSize: nfCached.offer.packageSize,
-        price: nfCached.offer.price,
-        unitPrice: nfCached.offer.unitPrice,
+        productId: nfResolved.offer.productId,
+        name: nfResolved.offer.name,
+        packageSize: nfResolved.offer.packageSize,
+        price: nfResolved.offer.price,
+        unitPrice: nfResolved.offer.unitPrice,
         availability: "unknown",
-        confidence: (nfCached.offer.confidence as "exact") ?? "exact",
-        checkedAt: nfCached.offer.checkedAt ?? new Date().toISOString(),
+        confidence: (nfResolved.offer.confidence as "exact") ?? "exact",
+        checkedAt: nfResolved.offer.checkedAt ?? new Date().toISOString(),
       };
       nfLog.queries = ["catalog_cache"];
       nfLog.status = nfCacheEval.status;
@@ -132,7 +186,7 @@ export async function POST(request: Request) {
         name: nfOffer.name,
         price: nfOffer.price,
       };
-    } else {
+    } else if (body.refreshNoFrills || !cacheRowExists) {
       nfOffer = await searchNoFrills(item, nfLog);
       nfLiveHits += 1;
       if (nfOffer) {
@@ -165,6 +219,15 @@ export async function POST(request: Request) {
           notes: nfLog.rejected.at(-1)?.reason,
         });
       }
+    } else {
+      nfLog.queries = ["catalog_cache"];
+      nfLog.status = "rejected";
+      nfLog.rejected.push({
+        productId: nfCached?.offer?.productId,
+        name: nfCached?.offer?.name,
+        price: nfCached?.offer?.price,
+        reason: nfResolved.detail ?? "filter",
+      });
     }
     entries.push(nfLog);
 
@@ -176,15 +239,15 @@ export async function POST(request: Request) {
       rejected: [],
       status: wmEval.status,
     };
-    if (wmRaw) {
+    if (wmUsable && wmOffer) {
       wmLog.accepted = {
-        productId: wmRaw.productId,
-        name: wmRaw.name,
-        price: wmRaw.price,
+        productId: wmOffer.productId,
+        name: wmOffer.name,
+        price: wmOffer.price,
       };
     } else {
       wmLog.rejected.push({
-        reason: wmEval.reason ?? wmEval.status,
+        reason: wmEval.reason ?? wmResolved.detail ?? wmEval.status,
         productId: cat?.offer?.productId,
         name: cat?.offer?.name,
         price: cat?.offer?.price,
@@ -200,115 +263,51 @@ export async function POST(request: Request) {
         : soldByWeight
           ? 1000
           : null;
-    const qtyKg = grams != null ? grams / 1000 : 1;
 
-    const walmart = summarizeOffer(item, wmRaw, qtyKg, "walmart_ca");
-    const noFrills = summarizeOffer(
-      item,
-      nfOffer
-        ? {
-            name: nfOffer.name,
-            price: nfOffer.price,
-            productId: nfOffer.productId,
-            packageSize: nfOffer.packageSize,
-            unitPrice: nfOffer.unitPrice,
-            confidence: nfOffer.confidence,
-            checkedAt: nfOffer.checkedAt,
-            retailer: "no_frills",
-          }
-        : null,
-      qtyKg,
-      "no_frills",
+    const nfEval = nfCacheUsable
+      ? nfCacheEval
+      : {
+          status: nfLog.status,
+          reason: nfLog.rejected.at(-1)?.reason,
+          ageLabel: null as string | null,
+        };
+
+    const nfCatalogOffer: CatalogOffer | null = nfOffer
+      ? {
+          productId: nfOffer.productId,
+          name: nfOffer.name,
+          price: nfOffer.price,
+          packageSize: nfOffer.packageSize,
+          unitPrice: nfOffer.unitPrice,
+          confidence: nfOffer.confidence,
+          checkedAt: nfOffer.checkedAt,
+          sourceUrl: nfOffer.sourceUrl,
+        }
+      : null;
+    const nfUsable = Boolean(
+      nfCatalogOffer &&
+        (nfEval.status === "ok" || nfEval.status === "stale"),
     );
 
-    const egg = isEggPackItem(item);
-    const wmOk =
-      walmart &&
-      (walmart.status === "ok" || walmart.status === "stale") &&
-      walmart.lineTotal != null;
-    const nfOk =
-      noFrills &&
-      (noFrills.status === "ok" || noFrills.status === "stale") &&
-      noFrills.lineTotal != null;
-
-    const fair = fairCompareSides(
-      {
-        ok: Boolean(wmOk),
-        shelfPrice: walmart?.shelfPrice,
-        lineTotal: walmart?.lineTotal,
-        pricePerKg: egg ? null : walmart?.pricePerKg,
-        pricePerEach: walmart?.pricePerEach,
-        packKg: packMassKg(walmart?.name, walmart?.pack),
-        isEgg: egg,
-      },
-      {
-        ok: Boolean(nfOk),
-        shelfPrice: noFrills?.shelfPrice,
-        lineTotal: noFrills?.lineTotal,
-        pricePerKg: egg ? null : noFrills?.pricePerKg,
-        pricePerEach: noFrills?.pricePerEach,
-        packKg: packMassKg(noFrills?.name, noFrills?.pack),
-        isEgg: egg,
-      },
+    rows.push(
+      buildStapleCompareRow({
+        item,
+        wmOffer: wmUsable ? wmOffer : null,
+        nfOffer: nfUsable ? nfCatalogOffer : null,
+        wmEval,
+        nfEval,
+        wmUsable,
+        nfUsable,
+        grams,
+        confirmed: Boolean(conf),
+        mappingDecision: wmLink?.decision,
+        resolveReason: {
+          walmart: wmResolved.reason,
+          noFrills: nfCacheUsable ? nfResolved.reason : undefined,
+        },
+        nfUpc: nfOffer?.upc,
+      }),
     );
-
-    const wmBasket = basketAmountForSide(
-      fair,
-      "walmart",
-      wmOk ? walmart!.lineTotal : null,
-    );
-    const nfBasket = basketAmountForSide(
-      fair,
-      "nofrills",
-      nfOk ? noFrills!.lineTotal : null,
-    );
-
-    const matchKind = classifyMatchKind({
-      mode: resolveMatchMode(item),
-      preferredId: item.preferredProductId,
-      productId: walmart?.productId ?? noFrills?.productId ?? "",
-      upc: nfOffer?.upc,
-      targetUpcs: extractBarcodes(...item.queries, item.preferredProductId),
-    });
-
-    rows.push({
-      id: item.id,
-      label: item.label,
-      image: item.image ?? null,
-      confirmed: Boolean(confirmed[id]),
-      soldByWeight,
-      grams,
-      matchKind,
-      fairBasis: fair.fairBasis,
-      fairLabel: fair.fairLabel,
-      walmart: walmart
-        ? {
-            ...walmart,
-            ageLabel: wmEval.ageLabel,
-            cardStatus: wmUsable ? wmEval.status : wmEval.status,
-          }
-        : {
-            status: wmEval.status,
-            statusReason: wmEval.reason,
-            lineTotal: null,
-            compareUnitLabel: null,
-          },
-      noFrills: noFrills
-        ? {
-            ...noFrills,
-            ageLabel: nfCacheUsable ? nfCacheEval.ageLabel : null,
-          }
-        : {
-            status: nfLog.status,
-            statusReason: nfLog.rejected.at(-1)?.reason,
-            lineTotal: null,
-            compareUnitLabel: null,
-          },
-      cheaper: fair.cheaper,
-      delta: fair.delta,
-      basketWalmart: wmBasket,
-      basketNoFrills: nfBasket,
-    });
   }
 
   const complete = rows.filter((r) => r.cheaper !== "incomplete");
@@ -326,7 +325,9 @@ export async function POST(request: Request) {
         ? "catalog_cache"
         : nfCacheHits > 0
           ? "cache_and_live"
-          : "live_api",
+          : nfLiveHits > 0
+            ? "live_api"
+            : "catalog_cache",
     nfCacheHits,
     nfLiveHits,
     stores: ["walmart_5831", "nofrills_3660"],
@@ -345,7 +346,7 @@ export async function POST(request: Request) {
             : nfSum < wmSum
               ? "nofrills"
               : "tie",
-      note: "Порівнянна сума: різні пачки → $/kg, яйця → 30 шт, схожі пачки → ціна полиці.",
+      note: "Порівнянна сума: різні пачки → $/kg, яйця → 30 шт, схожі пачки → ціна полиці. Відхилена identity (різний товар) не входить у кошик.",
     },
   });
 }

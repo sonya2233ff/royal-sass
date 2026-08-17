@@ -28,6 +28,7 @@
     "poc:fair-compare": "tsx src/poc/fair-compare-self-check.ts",
     "poc:entity-match": "tsx src/poc/entity-match-benchmark.ts",
     "poc:seed-match": "tsx src/poc/seed-and-match.ts",
+    "poc:compare-audit": "tsx src/poc/full-app-compare-audit.ts",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"

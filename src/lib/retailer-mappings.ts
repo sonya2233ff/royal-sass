@@ -84,3 +84,38 @@ export async function saveRetailerMappings(
 export function isVerifiedLink(link?: RetailerSkuLink): boolean {
   return Boolean(link?.verified && link.retailerProductId);
 }
+
+/** confirmed.json used "tomatoes" for the grape-tomato staple. */
+export const CONFIRMED_STAPLE_ALIASES: Record<string, string[]> = {
+  tomatoes_grape: ["tomatoes_grape", "tomatoes"],
+};
+
+export function lookupConfirmed<T>(
+  map: Record<string, T> | undefined,
+  masterId: string,
+): T | undefined {
+  if (!map) return undefined;
+  const keys = CONFIRMED_STAPLE_ALIASES[masterId] ?? [masterId];
+  for (const k of keys) {
+    if (map[k]) return map[k];
+  }
+  return undefined;
+}
+
+import { mappingIsLockedIdentity } from "@/domain/compare-resolve";
+
+/** Human lock / receipt / preferred SKU — do not rematch or swap catalog winners. */
+export function isLockedIdentityLink(link?: RetailerSkuLink): boolean {
+  return mappingIsLockedIdentity(link);
+}
+
+/**
+ * Preferred-brand staples whose NF vs WM identity was rejected (Folgers vs
+ * a different coffee). Still show both shelves, but never call that a deal.
+ */
+export function isPreferredIdentityRejected(
+  mode: "preferred" | "cheapest",
+  link?: { decision?: string },
+): boolean {
+  return mode === "preferred" && link?.decision === "rejected";
+}

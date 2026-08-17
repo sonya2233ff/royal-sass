@@ -112,7 +112,8 @@
         "gray ridge eggs"
       ],
       "mustIncludeAny": [
-        "egg"
+        "grayridge",
+        "gray ridge"
       ],
       "mustNotInclude": [
         "white",
@@ -122,6 +123,7 @@
         "grayridge",
         "gray ridge"
       ],
+      "matchMode": "preferred",
       "notes": "Receipt UPC 064767343050 @ $6.98",
       "image": "/products/grayridge_eggs.jpg"
     },
@@ -178,8 +180,7 @@
         "folgers classic roast"
       ],
       "mustIncludeAny": [
-        "folgers",
-        "coffee"
+        "folgers"
       ],
       "mustNotInclude": [
         "k-cup",

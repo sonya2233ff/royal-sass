@@ -11,8 +11,10 @@
  * Do not auto-link below AUTO_LINK_THRESHOLD. Persist matchMethod,
  * matchConfidence, and verified via src/lib/product-matches.ts.
  *
- * Not wired into compare / connectors. Optional batch Splink lives outside
- * the Next.js request path (see docs/product-entity-matching.md).
+ * Wired into `/api/staples/compare` via `src/domain/compare-resolve.ts`
+ * (locked SKU / filters). Not used to rewrite Rapid or PCX connectors.
+ * Optional batch Splink lives outside the Next.js request path
+ * (see docs/product-entity-matching.md).
  */
 import type { ProductOffer } from "@/connectors/types";
 import { normalizeUpc, packsSimilar, upcsMatch } from "@/domain/fair-compare";

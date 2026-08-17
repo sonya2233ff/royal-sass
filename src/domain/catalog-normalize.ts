@@ -90,20 +90,33 @@ export function stapleBrandHint(item: StapleFilterItem): string | undefined {
   return brandish;
 }
 
+/**
+ * Phrase = substring; single token = word boundary (seed ≠ seedless, waffle = waffles).
+ */
+export function nameMatchesFilterToken(hay: string, needle: string): boolean {
+  const n = needle.toLowerCase().trim();
+  if (!n) return false;
+  const h = hay.toLowerCase();
+  if (n.includes(" ")) return h.includes(n);
+  const esc = n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^a-z0-9])${esc}(?:es|s)?([^a-z0-9]|$)`).test(h);
+}
+
 export function offerFailsStapleFilters(
   item: StapleFilterItem,
   name: string,
+  brand?: string,
 ): string | null {
-  const n = name.toLowerCase();
+  const n = `${brand ?? ""} ${name}`.toLowerCase();
   for (const bad of item.mustNotInclude ?? []) {
-    if (bad && n.includes(bad.toLowerCase())) return `mustNotInclude:${bad}`;
+    if (bad && nameMatchesFilterToken(n, bad)) return `mustNotInclude:${bad}`;
   }
   const all = item.mustIncludeAll ?? [];
   for (const need of all) {
-    if (need && !n.includes(need.toLowerCase())) return `mustIncludeAll:${need}`;
+    if (need && !nameMatchesFilterToken(n, need)) return `mustIncludeAll:${need}`;
   }
   const any = item.mustIncludeAny ?? [];
-  if (any.length > 0 && !any.some((s) => s && n.includes(s.toLowerCase()))) {
+  if (any.length > 0 && !any.some((s) => s && nameMatchesFilterToken(n, s))) {
     return "mustIncludeAny";
   }
   return null;

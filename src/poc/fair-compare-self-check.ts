@@ -95,6 +95,20 @@ const upcHit = pickBestOffer(
 );
 assert(upcHit?.productId === "6000198384699", "UPC-first pick");
 
+const incomparableBasket = basketAmountForSide(
+  {
+    cheaper: "incomplete",
+    delta: null,
+    fairBasis: "incomparable",
+    fairLabel: "x",
+    wmFair: 9.97,
+    nfFair: 12.99,
+  },
+  "walmart",
+  9.97,
+);
+assert(incomparableBasket == null, "incomparable must not enter the basket");
+
 console.log("fair-compare-self-check ok", {
   grape: { cheaper: grape.cheaper, basis: grape.fairBasis, wm: grape.wmFair, nf: grape.nfFair },
   butter: { cheaper: butter.cheaper, basis: butter.fairBasis },
