@@ -155,6 +155,7 @@ export async function POST(request: Request) {
       const pool = await searchWalmartPackPool(item, wmLog);
       if (pool.length) {
         const merged = mergeLivePackSizes({
+          item,
           row: wmRow,
           live: pool,
           keepProductId: wmRow?.offer?.productId,
@@ -279,6 +280,7 @@ export async function POST(request: Request) {
       const best = pickStapleSearchWinner(item, pool, nfLog);
       if (pool.length || best) {
         const merged = mergeLivePackSizes({
+          item,
           row: nfRow,
           live: pool,
           keepProductId: body.refreshNoFrills

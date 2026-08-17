@@ -12,6 +12,11 @@ import {
   type StapleFilterItem,
 } from "@/domain/catalog-normalize";
 import { pickNeededWeightPurchase } from "@/domain/needed-weight-pick";
+import {
+  isActualCategoryBOffer,
+  samePackedItemCandidates,
+  usesCategoryBIdentity,
+} from "@/domain/same-packed-item";
 
 /** Minimal mapping fields — avoid importing lib from domain. */
 export interface MappingLinkRef {
@@ -170,8 +175,10 @@ export function resolveCatalogOffer(input: {
     input.neededGrams != null &&
     input.neededGrams > 0
   ) {
-    const passing = catalogCandidates(input.row).filter((offer) =>
-      offerPassesStapleFilters(input.item, offer),
+    const passing = samePackedItemCandidates(
+      input.item,
+      catalogCandidates(input.row),
+      input.row?.offer,
     );
     const picked = pickNeededWeightPurchase(input.neededGrams, passing);
     if (picked) {
@@ -189,8 +196,11 @@ export function resolveCatalogOffer(input: {
   }
 
   for (const offer of catalogCandidates(input.row)) {
-    const filter = offerFailsStapleFilters(input.item, offer.name, offer.brand);
-    if (filter) continue;
+    if (usesCategoryBIdentity(input.item)) {
+      if (!isActualCategoryBOffer(input.item, offer)) continue;
+    } else if (offerFailsStapleFilters(input.item, offer.name, offer.brand)) {
+      continue;
+    }
     const fromWinner = offer.productId === input.row?.offer?.productId;
     return {
       offer,

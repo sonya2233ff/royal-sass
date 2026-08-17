@@ -20,6 +20,11 @@ import {
   splitOfferAndAlternates,
 } from "@/domain/pack-size-candidates";
 import {
+  isActualCategoryBOffer,
+  samePackedItemCandidates,
+  usesCategoryBIdentity,
+} from "@/domain/same-packed-item";
+import {
   type CompareUnit,
   type OfferStatus,
   ageHours,
@@ -131,6 +136,10 @@ export interface StapleItem {
   /** All of these substrings must appear (e.g. frozen + fruit). */
   mustIncludeAll?: string[];
   mustNotInclude?: string[];
+  /** Extra impostor words for this staple (category B produce). */
+  rejectNameIncludes?: string[];
+  /** Average grams for a 1-ea produce item with no pack mass. */
+  typicalEachGrams?: number;
   preferNameIncludes?: string[];
   /**
    * preferred = lock brand/SKU when set (dairy, branded dry).
@@ -646,10 +655,28 @@ function matchQueryForPick(item: StapleItem): string {
 }
 
 function passesFilters(
-  offer: { name: string; brand?: string },
+  offer: {
+    productId?: string;
+    name: string;
+    brand?: string;
+    packageSize?: string;
+    sourceUrl?: string;
+    parsedMassKg?: number;
+  },
   item: StapleItem,
 ): boolean {
-  return offerFailsStapleFilters(item, offer.name, offer.brand) == null;
+  if (offerFailsStapleFilters(item, offer.name, offer.brand) != null) {
+    return false;
+  }
+  if (!usesCategoryBIdentity(item)) return true;
+  return isActualCategoryBOffer(item, {
+    productId: offer.productId ?? offer.name,
+    name: offer.name,
+    brand: offer.brand,
+    packageSize: offer.packageSize,
+    parsedMassKg: offer.parsedMassKg,
+    sourceUrl: offer.sourceUrl,
+  });
 }
 
 function expectedPackFor(item: StapleItem): number | undefined {
@@ -751,7 +778,10 @@ export async function searchNoFrillsPool(
         productId: o.productId,
         name: o.name,
         price: o.price,
-        reason: "filter mustInclude/mustNotInclude",
+        reason:
+          offerFailsStapleFilters(item, o.name, o.brand) != null
+            ? "filter mustInclude/mustNotInclude"
+            : "not the actual category B item",
       });
     }
   }
@@ -1434,9 +1464,11 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
         !isSoldByWeightItem(item)
       ) {
         const sizes = mergeDistinctPackSizes(
-          [...seen.values()]
-            .filter((o) => passesFilters(o, item))
-            .map(catalogOfferFromLive),
+          samePackedItemCandidates(
+            item,
+            [...seen.values()].map(catalogOfferFromLive),
+            catalogOfferFromLive(best),
+          ),
         );
         row.alternates = splitOfferAndAlternates(
           sizes,
@@ -1504,7 +1536,13 @@ export async function refreshNoFrillsSelected(ids: string[]): Promise<{
     updated.push(id);
 
     if (offer) {
-      const sizes = mergeDistinctPackSizes(pool.map(catalogOfferFromLive));
+      const sizes = mergeDistinctPackSizes(
+        samePackedItemCandidates(
+          item,
+          pool.map(catalogOfferFromLive),
+          catalogOfferFromLive(offer),
+        ),
+      );
       const split = splitOfferAndAlternates(sizes, offer.productId);
       await upsertNoFrillsCatalogItem({
         id,

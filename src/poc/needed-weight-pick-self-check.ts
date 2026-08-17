@@ -15,6 +15,11 @@ import {
 } from "@/domain/pack-size-candidates";
 import { resolveCatalogOffer } from "@/domain/compare-resolve";
 import { shouldExpandPackSizes } from "@/lib/expand-pack-sizes";
+import {
+  isActualCategoryBOffer,
+  offerMassKg,
+  samePackedItemCandidates,
+} from "@/domain/same-packed-item";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -152,6 +157,7 @@ function packSizeNear(
 
 const grapeItem = {
   id: "tomatoes_grape",
+  category: "produce",
   matchMode: "cheapest" as const,
   mustIncludeAny: ["grape tomato", "grape tomatoes"],
   mustNotInclude: ["seed", "seeds"],
@@ -182,6 +188,256 @@ assert(
     row: grapeRow,
   }) === false,
   "NF with 283g alternate should not expand",
+);
+
+const lemonItem = {
+  id: "lemons_2lb",
+  category: "produce",
+  matchMode: "cheapest" as const,
+  mustIncludeAny: ["lemon"],
+  // Product-specific only. Shared DEFAULT_PRODUCE_JUNK must drop pops/tea/extract.
+  mustNotInclude: ["juice", "concentrate", "cleaner", "dish"],
+  typicalEachGrams: 110,
+  queries: ["fresh lemons"],
+  label: "Lemons (bag ~2lb)",
+};
+const lemonBag = {
+  productId: "20795315001_EA",
+  name: "Farmer's Market Lemons, 2 lb Bag",
+  brand: "Farmer's Market",
+  packageSize: "907 g",
+  parsedMassKg: 0.907,
+  price: 4.99,
+  sourceUrl: "https://www.nofrills.ca/en/lemons-2-lb-bag/p/20795315001_EA",
+};
+const lemonEach = {
+  productId: "20028593001_EA",
+  name: "Lemon",
+  packageSize: "1 ea, $0.99/1ea",
+  price: 0.99,
+  sourceUrl: "https://www.nofrills.ca/en/lemon/p/20028593001_EA",
+};
+const lemonPops = {
+  productId: "21469809_EA",
+  name: "PC Organics Blood Orange and Lemon Fruit Pops, Organic",
+  brand: "PC Organics",
+  packageSize: "70 g",
+  parsedMassKg: 0.07,
+  price: 6,
+  sourceUrl:
+    "https://www.nofrills.ca/en/blood-orange-and-lemon-fruit-pops-organic/p/21469809_EA",
+};
+assert(isActualCategoryBOffer(lemonItem, lemonBag) === true, "lemon bag is fruit");
+assert(isActualCategoryBOffer(lemonItem, lemonEach) === true, "single lemon is fruit");
+assert(isActualCategoryBOffer(lemonItem, lemonPops) === false, "pops are not lemons");
+assert(Math.abs((offerMassKg(lemonItem, lemonEach) ?? 0) - 0.11) < 1e-6, "each lemon 110g");
+
+const lemonSiblings = samePackedItemCandidates(
+  lemonItem,
+  [lemonBag, lemonEach, lemonPops],
+  lemonBag,
+);
+assert(
+  lemonSiblings.every((o) => o.productId !== lemonPops.productId),
+  "pops dropped from lemon candidates",
+);
+const lemonPick = pickNeededWeightPurchase(500, lemonSiblings);
+assert(lemonPick?.productId === lemonEach.productId, `lemon pick ${lemonPick?.productId}`);
+assert(lemonPick?.packs === 5, `5 singles ${lemonPick?.packs}`);
+assert(lemonPick?.inRange === true, "5×110g in 500g window");
+assert(lemonPick?.totalPrice === 4.95, `lemon each total ${lemonPick?.totalPrice}`);
+
+const lemonResolved = resolveCatalogOffer({
+  item: lemonItem,
+  row: { offer: lemonBag, alternates: [lemonEach, lemonPops] },
+  matchMode: "cheapest",
+  neededGrams: 500,
+});
+assert(
+  lemonResolved.offer?.productId === lemonEach.productId,
+  `resolve lemon ${lemonResolved.offer?.productId}`,
+);
+
+const lemonImperfect = {
+  productId: "21124487001_EA",
+  name: "No Name Naturally Imperfect Lemons 3lb Bag",
+  brand: "No Name",
+  packageSize: "1.36 kg",
+  parsedMassKg: 1.36,
+  price: 6,
+  sourceUrl:
+    "https://www.nofrills.ca/en/naturally-imperfect-lemons-3lb-bag/p/21124487001_EA",
+};
+const lemonWmEach = {
+  productId: "6000191268545",
+  name: "Lemon, Sold in singles",
+  price: 0.87,
+  sourceUrl: "https://www.walmart.ca/en/ip/lemon/6000191268551",
+};
+const lemonFaux = {
+  productId: "4QE20M13U072",
+  name: "CUITING Garden Fresh™ Faux Large Lemons by ®",
+  brand: "CUITING",
+  price: 27.34,
+  sourceUrl:
+    "https://www.walmart.ca/en/ip/CUITING-Garden-Fresh-Faux-Large-Lemons-by/6E92AXVZFFFK",
+};
+const lemonBook = {
+  productId: "4FX06LLA3HZR",
+  name: "Facsimile Publisher Prices and spreads for apples, grapefruit, grapes, lemons, and oranges sold fresh in selected markets, 1962/63-1966/67 Volume no.888 1970 [Leather Bound]",
+  brand: "Facsimile Publisher",
+  price: 80.99,
+  sourceUrl:
+    "https://www.walmart.ca/en/ip/Prices-spreads-apples-grapefruit-grapes-lemons-oranges-sold-fresh-selected-markets/4FX06LLA3HZR",
+};
+const lemonTea = {
+  productId: "21522182_EA",
+  name: "Snapple Lemon Tea",
+  brand: "Snapple",
+  packageSize: "945 ml",
+  parsedMassKg: 0.945,
+  price: 1.75,
+  sourceUrl: "https://www.nofrills.ca/en/lemon-tea/p/21522182_EA",
+};
+const lemonExtract = {
+  productId: "20669647001_EA",
+  name: "Gefen Pure Lemon Extract, 2Oz",
+  brand: "Gefen",
+  packageSize: "59 ml",
+  parsedMassKg: 0.059,
+  price: 8.99,
+  sourceUrl: "https://www.nofrills.ca/en/pure-lemon-extract-2oz/p/20669647001_EA",
+};
+const lemonSticks = {
+  productId: "21709999_EA",
+  name: "Klein's Delights Lemon Sticks (12-pk)",
+  brand: "Klein's Delights",
+  packageSize: "586 ml",
+  parsedMassKg: 0.586,
+  price: 11,
+  sourceUrl: "https://www.nofrills.ca/en/lemon-sticks-12-pk/p/21709999_EA",
+};
+assert(isActualCategoryBOffer(lemonItem, lemonImperfect) === true, "imperfect 3lb is fruit");
+assert(isActualCategoryBOffer(lemonItem, lemonWmEach) === true, "WM singles are fruit");
+assert(isActualCategoryBOffer(lemonItem, lemonFaux) === false, "faux lemons rejected");
+assert(isActualCategoryBOffer(lemonItem, lemonBook) === false, "lemon book rejected");
+assert(isActualCategoryBOffer(lemonItem, lemonTea) === false, "lemon tea rejected by shared junk");
+assert(isActualCategoryBOffer(lemonItem, lemonExtract) === false, "extract rejected by shared junk");
+assert(isActualCategoryBOffer(lemonItem, lemonSticks) === false, "sticks rejected by shared junk");
+assert(
+  Math.abs((offerMassKg(lemonItem, lemonWmEach) ?? 0) - 0.11) < 1e-6,
+  "WM singles 110g",
+);
+
+const dirtyLemon = samePackedItemCandidates(
+  lemonItem,
+  [
+    lemonBag,
+    lemonEach,
+    lemonImperfect,
+    lemonPops,
+    lemonTea,
+    lemonExtract,
+    lemonSticks,
+    lemonFaux,
+    lemonBook,
+  ],
+  lemonBag,
+);
+assert(
+  dirtyLemon.map((o) => o.productId).sort().join(",") ===
+    [lemonBag.productId, lemonEach.productId, lemonImperfect.productId].sort().join(","),
+  `dirty lemon pool ${dirtyLemon.map((o) => o.productId).join(",")}`,
+);
+
+const berryItem = {
+  id: "strawberries",
+  category: "produce",
+  matchMode: "cheapest" as const,
+  mustIncludeAny: ["strawberry", "strawberries"],
+  mustNotInclude: ["jam", "syrup"],
+};
+assert(
+  isActualCategoryBOffer(berryItem, {
+    productId: "straw-pack",
+    name: "Driscoll Strawberries",
+    brand: "Driscoll's",
+    packageSize: "454 g",
+    parsedMassKg: 0.454,
+    price: 4,
+  }) === true,
+  "branded strawberry clamshell is fruit",
+);
+assert(
+  isActualCategoryBOffer(berryItem, {
+    productId: "straw-ice",
+    name: "Strawberry Ice Cream",
+    packageSize: "1.5 L",
+    parsedMassKg: 1.5,
+    price: 5,
+  }) === false,
+  "strawberry ice cream rejected by shared junk",
+);
+
+const frozenBerry = {
+  id: "frozen_blueberry",
+  category: "frozen",
+  matchMode: "cheapest" as const,
+  mustIncludeAny: ["blueberry", "blueberries"],
+  mustNotInclude: ["muffin", "jam", "juice"],
+};
+assert(
+  isActualCategoryBOffer(frozenBerry, {
+    productId: "gv-frozen",
+    name: "Great Value Frozen Blueberries",
+    brand: "Great Value",
+    packageSize: "600 g",
+    parsedMassKg: 0.6,
+    price: 5,
+  }) === true,
+  "frozen bag may say frozen",
+);
+assert(
+  isActualCategoryBOffer(frozenBerry, {
+    productId: "bb-pops",
+    name: "Blueberry Fruit Pops",
+    packageSize: "70 g",
+    parsedMassKg: 0.07,
+    price: 6,
+  }) === false,
+  "frozen staple still rejects pops",
+);
+
+const cucumberItem = {
+  id: "cucumber_english",
+  category: "produce",
+  matchMode: "cheapest" as const,
+  mustIncludeAny: ["cucumber"],
+  mustNotInclude: ["pickle", "relish"],
+  rejectNameIncludes: ["melon"],
+  typicalEachGrams: 350,
+};
+const cucumberEach = {
+  productId: "cuke-1",
+  name: "English Cucumber",
+  packageSize: "1 ea",
+  price: 1.49,
+};
+assert(isActualCategoryBOffer(cucumberItem, cucumberEach) === true, "single cucumber is veg");
+assert(Math.abs((offerMassKg(cucumberItem, cucumberEach) ?? 0) - 0.35) < 1e-6, "cucumber 350g");
+assert(
+  isActualCategoryBOffer(cucumberItem, {
+    productId: "cuke-melon",
+    name: "Cucumber Melon",
+    packageSize: "250 g",
+    parsedMassKg: 0.25,
+    price: 4,
+  }) === false,
+  "per-staple rejectNameIncludes drops extra words",
+);
+assert(
+  isActualCategoryBOffer(grapeItem, nf283) === true,
+  "grape 283g still the actual pack",
 );
 
 console.log("needed-weight-pick-self-check ok", {

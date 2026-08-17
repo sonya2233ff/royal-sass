@@ -21,7 +21,7 @@ import {
   type CatalogOffer,
   type StapleItem,
 } from "@/lib/staples";
-import { offerFailsStapleFilters } from "@/domain/catalog-normalize";
+import { samePackedItemCandidates } from "@/domain/same-packed-item";
 
 export function shouldExpandPackSizes(input: {
   item: StapleItem;
@@ -38,14 +38,17 @@ export function shouldExpandPackSizes(input: {
   }
   if (resolveMatchMode(input.item) !== "cheapest") return false;
   if (mappingIsLockedIdentity(input.link)) return false;
-  const passing = catalogCandidates(input.row).filter(
-    (offer) =>
-      offerFailsStapleFilters(input.item, offer.name, offer.brand) == null,
+  const passing = samePackedItemCandidates(
+    input.item,
+    catalogCandidates(input.row),
+    input.row?.offer,
   );
+  if (passing.length >= 2) return false;
   return needsMorePackSizes(input.neededGrams, passing);
 }
 
 export function mergeLivePackSizes(input: {
+  item: StapleItem;
   row?: {
     offer: CatalogOffer | null;
     alternates?: CatalogOffer[] | null;
@@ -58,10 +61,12 @@ export function mergeLivePackSizes(input: {
   alternates: CatalogOffer[];
 } {
   const incoming = input.live.map(catalogOfferFromLive);
-  const merged = mergeDistinctPackSizes([
-    ...catalogCandidates(input.row),
-    ...incoming,
-  ]);
+  const siblings = samePackedItemCandidates(
+    input.item,
+    [...catalogCandidates(input.row), ...incoming],
+    input.row?.offer,
+  );
+  const merged = mergeDistinctPackSizes(siblings);
   return splitOfferAndAlternates(merged, input.keepProductId);
 }
 

@@ -15,6 +15,10 @@ export interface StapleFilterItem {
   mustIncludeAny?: string[];
   mustIncludeAll?: string[];
   mustNotInclude?: string[];
+  /** Extra impostor words for this staple only (on top of the produce default). */
+  rejectNameIncludes?: string[];
+  /** When the offer is sold as 1 ea with no grams, use this average fruit/veg weight. */
+  typicalEachGrams?: number;
 }
 
 export interface CatalogOfferLike {
@@ -109,7 +113,11 @@ export function offerFailsStapleFilters(
   brand?: string,
 ): string | null {
   const n = `${brand ?? ""} ${name}`.toLowerCase();
-  for (const bad of item.mustNotInclude ?? []) {
+  const banned = [
+    ...(item.mustNotInclude ?? []),
+    ...(item.rejectNameIncludes ?? []),
+  ];
+  for (const bad of banned) {
     if (bad && nameMatchesFilterToken(n, bad)) return `mustNotInclude:${bad}`;
   }
   const all = item.mustIncludeAll ?? [];

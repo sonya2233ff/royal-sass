@@ -112,7 +112,8 @@
         "cleaner",
         "dish"
       ],
-      "notes": "Produce: cheapest matching bag (brand irrelevant)",
+      "typicalEachGrams": 110,
+      "notes": "Produce: bag or single lemon (avg 110 g). Shared B identity drops pops/tea/extract; add rejectNameIncludes for extras.",
       "image": "/products/lemons_2lb.jpg",
       "matchMode": "cheapest",
       "category": "produce"
@@ -302,6 +303,7 @@
         "cup",
         "soda"
       ],
+      "typicalEachGrams": 1000,
       "image": "/products/pineapple_whole.jpg",
       "matchMode": "cheapest",
       "category": "produce",
@@ -437,6 +439,7 @@
         "relish",
         "salad kit"
       ],
+      "typicalEachGrams": 350,
       "image": "/products/cucumber_english.jpg",
       "matchMode": "cheapest",
       "category": "produce",
