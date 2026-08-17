@@ -40,6 +40,7 @@ const FIXTURE_SEARCH = {
         package_size: "283 g",
         upc: "628915485012",
         url: "https://www.walmart.ca/en/ip/grape-tomatoes/6000194960084",
+        image: "https://i5.walmartimages.ca/asr/grape-fixture.jpeg",
         out_of_stock: false,
         availability: "IN_STOCK",
       },
@@ -61,6 +62,9 @@ function fixtureCheck(): void {
   const b = mapRapidProduct(rows[1]!, STORE);
   if (!a || a.price !== 2.97 || a.productId !== "6000194960084") {
     throw new Error(`fixture tomato map failed: ${JSON.stringify(a)}`);
+  }
+  if (a.image !== "https://i5.walmartimages.ca/asr/grape-fixture.jpeg") {
+    throw new Error(`fixture tomato image failed: ${a.image}`);
   }
   if (!b || b.price !== 9.47) {
     throw new Error(`fixture eggs map failed: ${JSON.stringify(b)}`);

@@ -42,6 +42,7 @@ function toCatalogOffer(
     checkedAt?: string;
     sourceUrl?: string;
     brand?: string;
+    image?: string;
   } | null,
 ): CatalogOffer | null {
   if (!offer) return null;
@@ -57,6 +58,7 @@ function toCatalogOffer(
     checkedAt: offer.checkedAt,
     sourceUrl: offer.sourceUrl,
     brand: offer.brand,
+    image: offer.image,
   };
 }
 

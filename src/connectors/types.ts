@@ -27,6 +27,8 @@ export interface ProductOffer {
   /** ISO timestamp when this price was retrieved */
   checkedAt: string;
   sourceUrl?: string;
+  /** Product photo URL from the retailer payload (Rapid `image` / `images[]`). */
+  image?: string;
   /** Debug payload; prefer persisting via raw_retailer_responses */
   raw?: unknown;
 }

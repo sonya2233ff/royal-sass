@@ -103,6 +103,7 @@ export async function POST(request: Request) {
     confidence: "exact" as const,
     checkedAt: new Date().toISOString(),
     sourceUrl: body.sourceUrl,
+    image: body.image ?? undefined,
   };
 
   if (retailer === "walmart_ca") {
@@ -144,6 +145,7 @@ export async function POST(request: Request) {
             confidence: nfOffer.confidence,
             checkedAt: nfOffer.checkedAt,
             sourceUrl: nfOffer.sourceUrl,
+            image: nfOffer.image,
           },
           notes: "Matched from search adopt",
         });
@@ -190,6 +192,7 @@ export async function POST(request: Request) {
             confidence: best.confidence,
             checkedAt: best.checkedAt,
             sourceUrl: best.sourceUrl,
+            image: best.image,
           },
           image: item.image,
           notes: "WM match from NF adopt",

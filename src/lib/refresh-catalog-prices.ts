@@ -25,9 +25,11 @@ import {
   loadWalmartCatalog,
   saveWalmartCatalog,
   upsertNoFrillsCatalogItem,
+  resolveMatchMode,
   type CatalogOffer,
   type StapleItem,
 } from "@/lib/staples";
+import { extractRetailerImage, isHttpImageUrl } from "@/lib/product-image";
 
 const WM_STORE = "5831";
 const NF_STORE = "3660";
@@ -60,7 +62,7 @@ function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function slimOffer(o: ProductOffer): CatalogOffer {
+function slimOffer(o: ProductOffer, previous?: CatalogOffer | null): CatalogOffer {
   const mass =
     parseMassFromText(o.packageSize ?? "") ?? parseMassFromText(o.name);
   const fromPack = mass && mass.kg > 0 && o.price > 0 ? o.price / mass.kg : null;
@@ -72,6 +74,8 @@ function slimOffer(o: ProductOffer): CatalogOffer {
       ? o.unitPrice
       : undefined;
   const brand = (o.brand ?? "").replace(/\s+Foods$/i, "").trim();
+  const image =
+    o.image ?? extractRetailerImage(o.raw) ?? previous?.image;
   return {
     productId: o.productId,
     name:
@@ -91,6 +95,7 @@ function slimOffer(o: ProductOffer): CatalogOffer {
     confidence: o.confidence,
     checkedAt: o.checkedAt,
     sourceUrl: o.sourceUrl,
+    image,
   };
 }
 
@@ -296,19 +301,27 @@ export async function refreshCatalogPrices(
         });
         continue;
       }
-      const offer = slimOffer(live);
+      const prevOffer = row?.offer as CatalogOffer | undefined;
+      const offer = slimOffer(live, prevOffer);
       if (!row) {
         (wmCatalog.items as Array<Record<string, unknown>>).push({
           id,
           label: item.label,
           status: "ok",
           offer,
+          image: isHttpImageUrl(offer.image) ? offer.image : item.image,
           notes: item.notes,
         });
       } else {
         row.status = "ok";
         row.offer = offer;
         row.label = item.label;
+        if (
+          resolveMatchMode(item) === "preferred" &&
+          isHttpImageUrl(offer.image)
+        ) {
+          row.image = offer.image;
+        }
       }
       result.walmart.updated.push({
         id,
@@ -361,7 +374,7 @@ export async function refreshCatalogPrices(
         });
         continue;
       }
-      const offer = slimOffer(live);
+      const offer = slimOffer(live, row?.offer);
       await upsertNoFrillsCatalogItem({
         id,
         label: item.label,

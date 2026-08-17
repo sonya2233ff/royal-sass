@@ -20,6 +20,7 @@ import {
   type StapleItem,
 } from "@/lib/staples";
 import { isPreferredIdentityRejected } from "@/lib/retailer-mappings";
+import { preferredStapleImage } from "@/lib/product-image";
 import type { OfferStatus } from "@/domain/sanity";
 
 export interface SideEval {
@@ -172,7 +173,12 @@ export function buildStapleCompareRow(input: {
   return {
     id: item.id,
     label: item.label,
-    image: item.image ?? null,
+    image: preferredStapleImage({
+      matchMode: mode,
+      stapleImage: item.image,
+      wmOffer: wmRaw,
+      nfOffer: nfRaw,
+    }),
     confirmed: input.confirmed,
     soldByWeight,
     grams: input.grams,

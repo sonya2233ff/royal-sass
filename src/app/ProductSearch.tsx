@@ -201,7 +201,7 @@ export function ProductSearch({
             >
               {hit.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={hit.image} alt="" />
+                <img src={hit.image} alt="" referrerPolicy="no-referrer" />
               ) : (
                 <span className="ph" />
               )}
@@ -229,7 +229,7 @@ export function ProductSearch({
               >
                 {hit.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={hit.image} alt="" />
+                  <img src={hit.image} alt="" referrerPolicy="no-referrer" />
                 ) : (
                   <span className="ph" />
                 )}
@@ -258,7 +258,7 @@ export function ProductSearch({
               >
                 {hit.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={hit.image} alt="" />
+                  <img src={hit.image} alt="" referrerPolicy="no-referrer" />
                 ) : (
                   <span className="ph" />
                 )}

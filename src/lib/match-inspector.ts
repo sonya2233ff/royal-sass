@@ -166,6 +166,7 @@ function offerAsCatalog(offer: ProductOffer): CatalogOffer {
     confidence: offer.confidence,
     checkedAt: offer.checkedAt,
     sourceUrl: offer.sourceUrl,
+    image: offer.image,
   };
 }
 
@@ -191,6 +192,7 @@ function catalogAsOffer(
         : "stale",
     checkedAt: offer.checkedAt ?? new Date().toISOString(),
     sourceUrl: offer.sourceUrl,
+    image: offer.image,
   };
 }
 

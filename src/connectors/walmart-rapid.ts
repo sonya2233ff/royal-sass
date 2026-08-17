@@ -14,6 +14,7 @@ import {
   type ProductOffer,
   type RetailerConnector,
 } from "./types";
+import { extractRetailerImage } from "@/lib/product-image";
 
 const OWN_BASE = "https://api.openwebninja.com/real-time-walmart-data";
 const RAPID_HOST =
@@ -216,6 +217,7 @@ export function mapRapidProduct(
     confidence: "exact",
     checkedAt: new Date().toISOString(),
     sourceUrl,
+    image: extractRetailerImage(item),
     raw: item,
   };
 }

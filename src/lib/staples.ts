@@ -7,6 +7,7 @@ import type { ProductOffer } from "@/connectors/types";
 import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
 import { offerFailsStapleFilters } from "@/domain/catalog-normalize";
+import { extractRetailerImage } from "@/lib/product-image";
 import {
   isLockedIdentityLink,
   loadRetailerMappings,
@@ -193,6 +194,8 @@ export interface CatalogOffer {
   confidence?: string;
   checkedAt?: string;
   sourceUrl?: string;
+  /** Retailer product photo (Rapid CDN for category A). */
+  image?: string;
 }
 
 export interface MatchLogEntry {
@@ -1118,6 +1121,7 @@ export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
     confidence: o.confidence,
     checkedAt: o.checkedAt,
     sourceUrl: o.sourceUrl,
+    image: o.image ?? extractRetailerImage(o.raw),
   };
 }
 

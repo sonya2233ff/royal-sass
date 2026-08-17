@@ -4,6 +4,7 @@ import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import { NoFrillsConnector } from "@/connectors/nofrills";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
+import { offerImageUrl } from "@/lib/product-image";
 import {
   isShownStaple,
   loadNoFrillsCatalog,
@@ -44,34 +45,6 @@ function parseWalmartProductId(q: string): string | null {
   return null;
 }
 
-function asRecord(v: unknown): Record<string, unknown> | null {
-  return v && typeof v === "object" && !Array.isArray(v)
-    ? (v as Record<string, unknown>)
-    : null;
-}
-
-function offerImage(offer: ProductOffer): string | null {
-  const raw = asRecord(offer.raw);
-  if (!raw) return null;
-  const data = asRecord(raw.data) ?? raw;
-  for (const c of [
-    data.image,
-    data.thumbnail,
-    Array.isArray(data.images) ? data.images[0] : null,
-  ]) {
-    if (typeof c === "string" && c.startsWith("http")) return c;
-  }
-  const imgs = data.productImage ?? data.productImages;
-  if (Array.isArray(imgs) && imgs[0]) {
-    const first = asRecord(imgs[0]);
-    for (const key of ["thumbnailUrl", "smallUrl", "imageUrl"]) {
-      const u = first?.[key];
-      if (typeof u === "string" && u.startsWith("http")) return u;
-    }
-  }
-  return null;
-}
-
 function toHit(
   retailer: StoreHit["retailer"],
   offer: ProductOffer,
@@ -84,7 +57,7 @@ function toHit(
     price: offer.price,
     packageSize: offer.packageSize,
     sourceUrl: offer.sourceUrl,
-    image: offerImage(offer),
+    image: offerImageUrl(offer) ?? null,
     onSale: offer.onSale,
     wasPrice: offer.wasPrice,
     stapleId,

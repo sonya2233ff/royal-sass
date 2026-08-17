@@ -44,6 +44,7 @@ export interface CatalogOfferRef {
   checkedAt?: string;
   sourceUrl?: string;
   availability?: string;
+  image?: string;
 }
 
 export interface CatalogRowRef {

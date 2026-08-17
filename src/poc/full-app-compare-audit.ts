@@ -184,22 +184,43 @@ async function main() {
 
   const whites = byId.get("simply_egg_whites");
   assert(whites, "egg whites");
+  const wWm = whites!.walmart as {
+    pricePerKg?: number;
+    shelfPrice?: number;
+    name?: string;
+    productId?: string;
+  };
+  const wNf = whites!.noFrills as {
+    pricePerKg?: number;
+    shelfPrice?: number;
+    name?: string;
+  };
   assert(
-    whites!.fairBasis === "per_100g" || whites!.fairBasis === "per_pack",
-    `egg whites basis ${whites!.fairBasis}`,
+    /simply egg whites/i.test(wWm.name ?? ""),
+    `egg whites WM must be Simply Egg Whites, got ${wWm.name}`,
   );
-  const wWm = whites!.walmart as { pricePerKg?: number; shelfPrice?: number; name?: string };
-  const wNf = whites!.noFrills as { pricePerKg?: number; shelfPrice?: number };
-  if (whites!.fairBasis === "per_100g") {
-    assert(
-      (wWm.pricePerKg ?? 0) < 11 && (wNf.pricePerKg ?? 0) > 10,
-      `egg whites $/kg wm=${wWm.pricePerKg} nf=${wNf.pricePerKg}`,
-    );
-  }
   assert(
     Math.abs((wWm.shelfPrice ?? 0) - 9.47) < 0.01,
     `egg whites wm shelf ${wWm.shelfPrice}`,
   );
+  assert(
+    whites!.matchKind === "preferred_sku" || whites!.matchKind === "upc",
+    `egg whites matchKind ${whites!.matchKind}`,
+  );
+  // Category A: Free Run 500g is a different product — not a deal vs 1kg Simply.
+  if (/free run/i.test(wNf.name ?? "")) {
+    assert(
+      whites!.cheaper === "incomplete",
+      `egg whites Free Run analogue must not be a deal (${whites!.cheaper})`,
+    );
+  } else if (whites!.fairBasis === "per_100g" || whites!.fairBasis === "per_pack") {
+    assert(whites!.cheaper !== "incomplete", "egg whites same-product compare");
+  } else {
+    assert(
+      whites!.cheaper === "incomplete",
+      `egg whites expected incomplete until NF has Simply 1kg, got ${whites!.fairBasis}`,
+    );
+  }
 
   const butter = byId.get("butter_454g");
   assert(butter, "butter");

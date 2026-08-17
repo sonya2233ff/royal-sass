@@ -1,8 +1,14 @@
 import { buildFixtureOffers } from "@/connectors/fixtures";
 import { resolveWalmartSource } from "@/connectors/walmart-source";
-import { applyRemovedStapleIds } from "@/lib/staples";
+import { applyRemovedStapleIds, resolveMatchMode } from "@/lib/staples";
 import { compareBaskets, type BasketLineInput } from "@/domain/basket";
 import { calculateProcurementCost } from "@/domain/procurement-cost";
+import {
+  extractRetailerImage,
+  preferredStapleImage,
+} from "@/lib/product-image";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
 const stores = [
   { key: "walmart_5831", retailer: "walmart_ca", id: "5831" },
@@ -85,4 +91,52 @@ console.log(
     throw new Error(`removed filter => ${kept.map((i) => i.id)}`);
   }
   console.log("removed-staples self-check OK");
+}
+
+{
+  const cafe = JSON.parse(
+    readFileSync(path.join(process.cwd(), "config/cafe-staples.json"), "utf8"),
+  ) as {
+    items: Array<{
+      id: string;
+      matchMode?: "preferred" | "cheapest";
+      category?: string;
+      preferredProductId?: string;
+    }>;
+  };
+  const whites = cafe.items.find((i) => i.id === "simply_egg_whites");
+  if (!whites) throw new Error("simply_egg_whites missing from cafe-staples");
+  if (resolveMatchMode(whites) !== "preferred") {
+    throw new Error("simply_egg_whites must be category A (preferred)");
+  }
+  if (whites.preferredProductId !== "6000196635381") {
+    throw new Error(`egg whites SKU ${whites.preferredProductId}`);
+  }
+
+  const rapidImg =
+    "https://i5.walmartimages.ca/asr/egg-whites.jpeg";
+  const extracted = extractRetailerImage({
+    image: rapidImg,
+    images: [rapidImg],
+  });
+  if (extracted !== rapidImg) {
+    throw new Error(`extractRetailerImage ${extracted}`);
+  }
+  const catA = preferredStapleImage({
+    matchMode: "preferred",
+    stapleImage: "/products/simply_egg_whites.png",
+    wmOffer: { image: rapidImg },
+  });
+  if (catA !== rapidImg) {
+    throw new Error(`category A should use Rapid photo, got ${catA}`);
+  }
+  const catB = preferredStapleImage({
+    matchMode: "cheapest",
+    stapleImage: "/products/tomatoes_grape.jpg",
+    wmOffer: { image: rapidImg },
+  });
+  if (catB !== "/products/tomatoes_grape.jpg") {
+    throw new Error(`category B should keep static photo, got ${catB}`);
+  }
+  console.log("category-A Rapid photo self-check OK");
 }

@@ -61,6 +61,7 @@ function slimOffer(o: ProductOffer) {
     confidence: o.confidence,
     checkedAt: o.checkedAt,
     sourceUrl: o.sourceUrl,
+    image: o.image,
   };
 }
 

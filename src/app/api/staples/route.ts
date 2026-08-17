@@ -28,6 +28,7 @@ import {
   loadRetailerMappings,
   lookupConfirmed,
 } from "@/lib/retailer-mappings";
+import { preferredStapleImage } from "@/lib/product-image";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -209,7 +210,12 @@ export async function GET() {
       return {
         id: i.id,
         label: i.label,
-        image: i.image ?? null,
+        image: preferredStapleImage({
+          matchMode: resolveMatchMode(i),
+          stapleImage: i.image,
+          wmOffer: offer,
+          nfOffer,
+        }),
         notes: i.notes,
         status,
         statusReason,

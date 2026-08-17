@@ -7,9 +7,9 @@
   "items": [
     {
       "id": "simply_egg_whites",
-      "label": "Egg Whites (cheapest carton)",
-      "category": "eggs",
-      "why": "Receipt UPC lock; compose test on NF",
+      "label": "Naturegg Simply Egg Whites 1kg",
+      "category": "dairy",
+      "why": "Category A: lock Simply Egg Whites 1kg (receipt UPC), do not substitute Free Run",
       "receiptUpc": "065651002470",
       "receiptPrice": 9.47,
       "receiptStore": "walmart_5831",

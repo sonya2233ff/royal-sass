@@ -146,7 +146,7 @@ function matchCategory(mode?: "preferred" | "cheapest"): {
       key: "b",
       short: "Б · найдешевший",
       title:
-        "Категорія Б: овочі, фрукти, яйця, frozen — будь-який бренд, беремо найдешевший за одиницю",
+        "Категорія Б: овочі, фрукти, яйця в шкаралупі, frozen — будь-який бренд, беремо найдешевший за одиницю",
     };
   }
   return {
@@ -668,7 +668,11 @@ export function StaplesCompare() {
                 <div className="thumb">
                   {item.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={item.image} alt={item.label} />
+                    <img
+                      src={item.image}
+                      alt={item.label}
+                      referrerPolicy="no-referrer"
+                    />
                   ) : (
                     <div className="ph">No photo</div>
                   )}
@@ -953,7 +957,12 @@ export function StaplesCompare() {
               <div className="row-head">
                 {r.image && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={r.image} alt="" className="mini" />
+                  <img
+                    src={r.image}
+                    alt=""
+                    className="mini"
+                    referrerPolicy="no-referrer"
+                  />
                 )}
                 <div>
                   <strong>
