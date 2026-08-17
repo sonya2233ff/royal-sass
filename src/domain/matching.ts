@@ -15,6 +15,8 @@ const STOP = new Set([
   "pk",
   "size",
   "bunch",
+  // "no pulp" vs "pulp free" — "no" is not a product token
+  "no",
 ]);
 
 /** Size / unit tokens are soft preferences, not hard requirements. */
@@ -87,7 +89,8 @@ export function scoreOfferMatch(
   const qAll = tokens(query);
   const qCore = qAll.filter((t) => !SOFT.has(t));
   const qSoft = qAll.filter((t) => SOFT.has(t));
-  const name = tokens(offer.name);
+  // PCX often puts Tropicana (etc.) on `brand`, not in `title`.
+  const name = tokens(`${offer.brand ?? ""} ${offer.name}`);
   if (qCore.length === 0 || name.length === 0) return -Infinity;
 
   const nameJoined = name.join(" ");

@@ -124,12 +124,7 @@ export async function GET() {
         status = i.unavailableAtWalmart ? "unavailable" : "no_match";
       }
 
-      const usable = Boolean(
-        offer &&
-          (status === "ok" || status === "stale") &&
-          cat?.status !== "wrong_pack" &&
-          cat?.status !== "wrong_size",
-      );
+      const usable = Boolean(offer && (status === "ok" || status === "stale"));
 
       const conf = lookupConfirmed(confirmed, i.id);
       const lockedSku =
@@ -184,10 +179,7 @@ export async function GET() {
           nfResolved.reason === "rejected_filter" ? "no_match" : nfCat?.status,
       });
       const nfUsable = Boolean(
-        nfOffer &&
-          (nfEval.status === "ok" || nfEval.status === "stale") &&
-          nfCat?.status !== "wrong_pack" &&
-          nfCat?.status !== "wrong_size",
+        nfOffer && (nfEval.status === "ok" || nfEval.status === "stale"),
       );
       const nfUnits =
         nfUsable && nfOffer && showWeightUnits

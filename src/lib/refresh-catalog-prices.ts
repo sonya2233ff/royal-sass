@@ -67,9 +67,13 @@ function slimOffer(o: ProductOffer): CatalogOffer {
     !(o.price > 0 && o.unitPrice > Math.max(o.price * 50, 80))
       ? o.unitPrice
       : undefined;
+  const brand = (o.brand ?? "").replace(/\s+Foods$/i, "").trim();
   return {
     productId: o.productId,
-    name: o.name,
+    name:
+      brand && !o.name.toLowerCase().includes(brand.toLowerCase())
+        ? `${brand} ${o.name}`
+        : o.name,
     brand: o.brand,
     packageSize: o.packageSize ?? (mass ? formatMass(mass.kg) : undefined),
     parsedMassKg: mass?.kg,

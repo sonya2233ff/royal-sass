@@ -19,6 +19,7 @@ import {
   ageHours,
   compareUnitLabel,
   formatAge,
+  isComparablePackKg,
   sanityCheckOffer,
 } from "@/domain/sanity";
 import {
@@ -625,8 +626,24 @@ export async function searchNoFrills(
 ): Promise<ProductOffer | null> {
   const nf = new NoFrillsConnector();
   const seen = new Map<string, ProductOffer>();
+  const mappings = await loadRetailerMappings();
+  const nfLink = mappings.products[item.id]?.retailers.nofrills;
+  const lockedNfSku =
+    nfLink && isLockedIdentityLink(nfLink) ? nfLink.retailerProductId : null;
   const queries = item.queries.filter(Boolean).slice(0, 3);
-  if (log) log.queries = [...queries];
+  if (log) log.queries = lockedNfSku ? [lockedNfSku, ...queries] : [...queries];
+
+  if (lockedNfSku) {
+    try {
+      const direct = await nf.getProduct(lockedNfSku, "3660");
+      if (direct) seen.set(direct.productId, direct);
+    } catch (e) {
+      log?.rejected.push({
+        productId: lockedNfSku,
+        reason: `locked SKU: ${e instanceof Error ? e.message.slice(0, 80) : String(e)}`,
+      });
+    }
+  }
 
   for (const q of queries) {
     try {
@@ -654,6 +671,7 @@ export async function searchNoFrills(
   }
 
   const pool = all.filter((o) => {
+    if (lockedNfSku && o.productId === lockedNfSku) return true;
     if (!passesFilters(o, item)) return false;
     if (item.minPlausiblePrice != null && o.price < item.minPlausiblePrice) {
       log?.rejected.push({
@@ -682,7 +700,9 @@ export async function searchNoFrills(
       pickBestOffer(
         pool,
         matchQueryForPick(item),
-        mode === "cheapest" ? undefined : item.preferredProductId,
+        mode === "cheapest"
+          ? undefined
+          : (lockedNfSku ?? item.preferredProductId),
         {
           targetMassKg: item.targetMassKg ?? expectedPackFor(item),
           mode,
@@ -714,8 +734,26 @@ export async function searchNoFrills(
         price: best.price,
         reason: sanity.reason ?? sanity.status,
       });
-      if (log) log.status = sanity.status;
-      return null;
+      const expected = expectedPackFor(item);
+      const packKg = sanity.inferredPackKg;
+      // Same branded juice/milk in a smaller bottle is not "out of stock".
+      // Fair compare uses $/kg when packs differ.
+      const keepDifferentPack =
+        sanity.status === "wrong_size" &&
+        isComparablePackKg(packKg, expected);
+      if (!keepDifferentPack) {
+        if (log) log.status = sanity.status;
+        return null;
+      }
+      if (log) {
+        log.accepted = {
+          productId: best.productId,
+          name: best.name,
+          price: best.price,
+        };
+        log.status = "ok";
+      }
+      return best;
     }
     if (log) {
       log.accepted = {
@@ -989,12 +1027,21 @@ export function summarizeOffer(
   };
 }
 
-function slimOffer(o: ProductOffer): CatalogOffer {
+function offerDisplayName(o: { name: string; brand?: string }): string {
+  const brand = (o.brand ?? "").replace(/\s+Foods$/i, "").trim();
+  if (brand && !o.name.toLowerCase().includes(brand.toLowerCase())) {
+    return `${brand} ${o.name}`;
+  }
+  return o.name;
+}
+
+export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
   const mass =
     parseMassFromText(o.packageSize ?? "") ?? parseMassFromText(o.name);
   return {
     productId: o.productId,
-    name: o.name,
+    name: offerDisplayName(o),
+    brand: o.brand,
     packageSize: o.packageSize ?? (mass ? formatMass(mass.kg) : undefined),
     parsedMassKg: mass?.kg,
     price: o.price,
@@ -1209,7 +1256,7 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
     row.queriesTried = queries;
     if (best) {
       row.status = log.status === "stale" ? "ok" : log.status;
-      row.offer = slimOffer(best);
+      row.offer = catalogOfferFromLive(best);
       row.notes = item.notes;
       delete row.rejected;
     } else {
@@ -1260,34 +1307,11 @@ export async function refreshNoFrillsSelected(ids: string[]): Promise<{
     updated.push(id);
 
     if (offer) {
-      const mass =
-        parseMassFromText(offer.packageSize ?? "") ??
-        parseMassFromText(offer.name);
-      const brand = (offer.brand ?? "").replace(/\s+Foods$/i, "").trim();
-      const name =
-        brand && !offer.name.toLowerCase().includes(brand.toLowerCase())
-          ? `${brand} ${offer.name}`
-          : offer.name;
       await upsertNoFrillsCatalogItem({
         id,
         label: item.label,
         status: log.status,
-        offer: {
-          productId: offer.productId,
-          name,
-          price: offer.price,
-          packageSize: offer.packageSize,
-          parsedMassKg: mass?.kg,
-          unitPrice: offer.unitPrice,
-          wasPrice: offer.wasPrice,
-          onSale:
-            offer.onSale ||
-            (offer.wasPrice != null && offer.wasPrice > offer.price + 0.005) ||
-            undefined,
-          confidence: offer.confidence,
-          checkedAt: offer.checkedAt,
-          sourceUrl: offer.sourceUrl,
-        },
+        offer: catalogOfferFromLive(offer),
         notes: `Live NF refresh (TTL ${CACHE_STALE_HOURS}h)`,
       });
     } else {

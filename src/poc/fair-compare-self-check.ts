@@ -12,7 +12,9 @@ import {
   scaleBasketAmount,
   upcsMatch,
 } from "@/domain/fair-compare";
-import { pickBestOffer } from "@/domain/matching";
+import { pickBestOffer, scoreOfferMatch } from "@/domain/matching";
+import { stapleBrandHint } from "@/domain/catalog-normalize";
+import { sanityCheckOffer } from "@/domain/sanity";
 import type { ProductOffer } from "@/connectors/types";
 
 function assert(cond: unknown, msg: string) {
@@ -126,6 +128,62 @@ const incomparableBasket = basketAmountForSide(
   9.97,
 );
 assert(incomparableBasket == null, "incomparable must not enter the basket");
+
+assert(
+  stapleBrandHint({
+    id: "orange_juice_pulp",
+    mustIncludeAll: ["tropicana"],
+    mustIncludeAny: ["no pulp", "pulp free"],
+  }) === "tropicana",
+  "OJ brand hint is tropicana, not 'no pulp'",
+);
+
+const tropicanaFit = scoreOfferMatch(
+  offer({
+    productId: "20119756001_EA",
+    name: "Pure Premium Orange Juice (Pulp Free)",
+    brand: "Tropicana",
+    price: 8.99,
+    packageSize: "1.36 l",
+  }),
+  "tropicana orange juice no pulp",
+);
+assert(
+  tropicanaFit > 0 && tropicanaFit !== -Infinity,
+  `Tropicana brand+title must score, got ${tropicanaFit}`,
+);
+
+const pulpFreeOk = sanityCheckOffer({
+  itemId: "orange_juice_pulp",
+  name: "Tropicana Pure Premium Orange Juice (Pulp Free)",
+  price: 8.99,
+  packageSize: "1.36 l",
+  expectedPackKg: 2.63,
+  minPlausiblePrice: 5,
+  maxPlausiblePrice: 16,
+});
+assert(
+  pulpFreeOk.ok && pulpFreeOk.status === "ok",
+  `1.36L vs 2.63L must stay comparable (${pulpFreeOk.status} ${pulpFreeOk.reason})`,
+);
+
+const miniOj = sanityCheckOffer({
+  itemId: "orange_juice_pulp",
+  name: "Tropicana mini",
+  price: 8.99,
+  packageSize: "200 ml",
+  expectedPackKg: 2.63,
+  minPlausiblePrice: 5,
+  maxPlausiblePrice: 16,
+});
+assert(miniOj.status === "wrong_size", `200ml vs 2.63L is mini, got ${miniOj.status}`);
+
+const juiceFair = fairCompareSides(
+  { ok: true, shelfPrice: 10.24, lineTotal: 10.24, packKg: 2.63 },
+  { ok: true, shelfPrice: 8.99, lineTotal: 8.99, packKg: 1.36 },
+);
+assert(juiceFair.fairBasis === "per_kg", `OJ packs use $/kg, got ${juiceFair.fairBasis}`);
+assert(juiceFair.cheaper === "walmart", `WM cheaper per litre, got ${juiceFair.cheaper}`);
 
 console.log("fair-compare-self-check ok", {
   grape: { cheaper: grape.cheaper, basis: grape.fairBasis, wm: grape.wmFair, nf: grape.nfFair },

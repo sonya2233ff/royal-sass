@@ -42,6 +42,18 @@ export interface SanityResult {
 
 const DEFAULT_STALE_HOURS = 24;
 
+/** Reject only mini packs. Same branded 1.36L vs expected 2.63L is still cafe-size. */
+export const MIN_COMPARABLE_PACK_RATIO = 0.35;
+
+export function isComparablePackKg(
+  inferredKg: number | undefined,
+  expectedKg: number | undefined,
+): boolean {
+  if (expectedKg == null || !(expectedKg > 0)) return true;
+  if (inferredKg == null || !(inferredKg > 0)) return true;
+  return inferredKg >= expectedKg * MIN_COMPARABLE_PACK_RATIO;
+}
+
 /** Infer pack volume/mass from unit price string math: price / (unitPer100ml) */
 export function inferPackKgFromUnitPrice(
   price: number,
@@ -108,7 +120,6 @@ export function sanityCheckOffer(input: SanityInput): SanityResult {
   }
 
   if (input.expectedPackKg != null && inferred != null) {
-    const rel = Math.abs(inferred - input.expectedPackKg) / input.expectedPackKg;
     // Smaller packs: allow when we can compose (eggs 500ml → 2× for 1kg)
     if (input.allowCompose && inferred > 0 && inferred < input.expectedPackKg) {
       const packs = Math.ceil(input.expectedPackKg / inferred - 1e-9);
@@ -123,8 +134,9 @@ export function sanityCheckOffer(input: SanityInput): SanityResult {
           ageHours: age,
         };
       }
-    } else if (rel > 0.45) {
-      // e.g. expect 2L milk, got ~0.2L — not a compose candidate
+    } else if (!isComparablePackKg(inferred, input.expectedPackKg)) {
+      // Mini bottles only (e.g. 200ml vs 2.63L). Tropicana 1.36L vs 2.63L
+      // stays comparable — fair compare uses $/kg, not "out of stock".
       return {
         ok: false,
         status: "wrong_size",

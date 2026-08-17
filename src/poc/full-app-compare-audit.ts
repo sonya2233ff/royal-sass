@@ -263,6 +263,17 @@ async function main() {
   assert(almond, "almond");
   assert(almond!.cheaper !== "incomplete", `almond should compare (${almond!.cheaper})`);
 
+  const oj = byId.get("orange_juice_pulp");
+  assert(oj, "orange juice");
+  assert(oj!.cheaper !== "incomplete", `OJ should compare (${oj!.cheaper})`);
+  assert(
+    oj!.fairBasis === "per_kg" || oj!.fairBasis === "per_pack",
+    `OJ basis ${oj!.fairBasis}`,
+  );
+  const ojNf = oj!.noFrills as { shelfPrice?: number; name?: string };
+  assert((ojNf.shelfPrice ?? 0) > 0, `OJ missing NF shelf ${ojNf.shelfPrice}`);
+  assert(/tropicana/i.test(ojNf.name ?? ""), `OJ NF name ${ojNf.name}`);
+
   const complete = rows.filter((r) => r.cheaper !== "incomplete");
   assert(
     !complete.some((r) => r.id === "folgers_coffee"),

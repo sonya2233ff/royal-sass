@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { resolveWalmartSource } from "@/connectors/walmart-source";
 import {
   appendMatchLog,
+  catalogOfferFromLive,
   CACHE_STALE_HOURS,
   evaluateOfferStatus,
   isShownStaple,
@@ -16,7 +17,6 @@ import {
   type CatalogOffer,
   type MatchLogEntry,
 } from "@/lib/staples";
-import { parseMassFromText } from "@/domain/units";
 import { resolveCatalogOffer } from "@/domain/compare-resolve";
 import { buildStapleCompareRow } from "@/lib/staple-compare-row";
 import {
@@ -132,8 +132,6 @@ export async function POST(request: Request) {
     const wmUsable =
       Boolean(wmOffer) &&
       (wmEval.status === "ok" || wmEval.status === "stale") &&
-      cat?.status !== "wrong_pack" &&
-      cat?.status !== "wrong_size" &&
       cat?.status !== "unavailable";
 
     const nfCached = nfById.get(id);
@@ -152,9 +150,7 @@ export async function POST(request: Request) {
     const nfCacheUsable =
       !body.refreshNoFrills &&
       Boolean(nfResolved.offer) &&
-      (nfCacheEval.status === "ok" || nfCacheEval.status === "stale") &&
-      nfCached?.status !== "wrong_pack" &&
-      nfCached?.status !== "wrong_size";
+      (nfCacheEval.status === "ok" || nfCacheEval.status === "stale");
 
     const nfLog: MatchLogEntry = {
       at: new Date().toISOString(),
@@ -192,24 +188,11 @@ export async function POST(request: Request) {
       nfOffer = await searchNoFrills(item, nfLog);
       nfLiveHits += 1;
       if (nfOffer) {
-        const mass =
-          parseMassFromText(nfOffer.packageSize ?? "") ??
-          parseMassFromText(nfOffer.name);
         await upsertNoFrillsCatalogItem({
           id,
           label: item.label,
           status: nfLog.status,
-          offer: {
-            productId: nfOffer.productId,
-            name: nfOffer.name,
-            price: nfOffer.price,
-            packageSize: nfOffer.packageSize,
-            parsedMassKg: mass?.kg,
-            unitPrice: nfOffer.unitPrice,
-            confidence: nfOffer.confidence,
-            checkedAt: nfOffer.checkedAt,
-            sourceUrl: nfOffer.sourceUrl,
-          },
+          offer: catalogOfferFromLive(nfOffer),
           notes: `Cached from live NF search (TTL ${CACHE_STALE_HOURS}h)`,
         });
       } else {

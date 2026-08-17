@@ -145,9 +145,13 @@ function queryRecord(query: string, item?: StapleItem): ProductRecord {
 function offerAsCatalog(offer: ProductOffer): CatalogOffer {
   const mass =
     parseMassFromText(offer.packageSize ?? "") ?? parseMassFromText(offer.name);
+  const brand = (offer.brand ?? "").trim();
   return {
     productId: offer.productId,
-    name: offer.name,
+    name:
+      brand && !offer.name.toLowerCase().includes(brand.toLowerCase())
+        ? `${brand} ${offer.name}`
+        : offer.name,
     price: offer.price,
     packageSize: offer.packageSize,
     parsedMassKg: mass?.kg,

@@ -1,6 +1,6 @@
 {
   "storeId": "3660",
-  "checkedAt": "2026-08-16T00:54:22.343Z",
+  "checkedAt": "2026-08-17T19:38:46.584Z",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -479,9 +479,19 @@
     {
       "id": "orange_juice_pulp",
       "label": "Tropicana OJ No Pulp 2.63L",
-      "status": "wrong_size",
-      "offer": null,
-      "notes": "pack ~1.36 kg vs expected ~2.63 kg"
+      "status": "ok",
+      "offer": {
+        "productId": "20119756001_EA",
+        "name": "Tropicana Pure Premium Orange Juice (Pulp Free)",
+        "brand": "Tropicana",
+        "packageSize": "2.63 l, $0.34/100ml",
+        "parsedMassKg": 2.63,
+        "price": 8.99,
+        "confidence": "exact",
+        "checkedAt": "2026-08-17T19:38:46.583Z",
+        "sourceUrl": "https://www.nofrills.ca/en/pure-premium-orange-juice-pulp-free/p/20119756001_EA"
+      },
+      "notes": "Live NF SKU 20119756001_EA (Tropicana brand on PCX field)"
     },
     {
       "id": "frozen_apple",
@@ -618,5 +628,5 @@
       "notes": "Live NF refresh (TTL 72h)"
     }
   ],
-  "updatedAt": "2026-08-16T00:54:22.343Z"
+  "updatedAt": "2026-08-17T19:38:46.584Z"
 }

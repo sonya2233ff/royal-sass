@@ -80,12 +80,13 @@ export function catalogOfferToRecord(input: {
 
 export function stapleBrandHint(item: StapleFilterItem): string | undefined {
   if (item.category === "produce") return undefined;
-  const hits = item.mustIncludeAny ?? [];
+  const hits = [...(item.mustIncludeAll ?? []), ...(item.mustIncludeAny ?? [])];
   const brandish = hits.find(
     (s) =>
       s.length >= 4 &&
+      !s.includes(" ") &&
       !/\d/.test(s) &&
-      !/(tomato|milk|egg|oil|sugar|flour|butter)/i.test(s),
+      !/(tomato|milk|egg|oil|sugar|flour|butter|pulp)/i.test(s),
   );
   return brandish;
 }

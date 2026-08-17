@@ -2320,6 +2320,20 @@
           "kind": "identity",
           "skippedRematch": true,
           "updatedAt": "2026-08-17T04:11:20.999Z"
+        },
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20119756001_EA",
+          "name": "Tropicana Pure Premium Orange Juice (Pulp Free)",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-17T19:38:46.588Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-17T19:38:46.588Z"
         }
       },
       "prices": [
@@ -2330,6 +2344,15 @@
           "price": 10.24,
           "checkedAt": "2026-08-16T00:49:05.408Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "20119756001_EA",
+          "price": 8.99,
+          "checkedAt": "2026-08-17T19:38:46.583Z",
+          "source": "pcx_bff",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
