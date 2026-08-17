@@ -29,6 +29,7 @@
     "poc:entity-match": "tsx src/poc/entity-match-benchmark.ts",
     "poc:seed-match": "tsx src/poc/seed-and-match.ts",
     "poc:compare-audit": "tsx src/poc/full-app-compare-audit.ts",
+    "cache:prices": "tsx --env-file=.env src/poc/refresh-locked-prices.ts",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"

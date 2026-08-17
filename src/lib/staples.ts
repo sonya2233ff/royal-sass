@@ -7,7 +7,12 @@ import type { ProductOffer } from "@/connectors/types";
 import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
 import { offerFailsStapleFilters } from "@/domain/catalog-normalize";
-import { lookupConfirmed } from "@/lib/retailer-mappings";
+import {
+  isLockedIdentityLink,
+  loadRetailerMappings,
+  lookupConfirmed,
+} from "@/lib/retailer-mappings";
+import { offerMatchesRetailerSku } from "@/domain/compare-resolve";
 import {
   type CompareUnit,
   type OfferStatus,
@@ -1019,6 +1024,7 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
     });
 
   const byId = new Map(cfg.items.map((i) => [i.id, i]));
+  const mappings = await loadRetailerMappings();
   const wm = createWalmartConnector("L4J0A7");
   const entries: MatchLogEntry[] = [];
   const updated: string[] = [];
@@ -1051,7 +1057,11 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
       continue;
     }
 
-    const lockedId = lookupConfirmed(confirmed, id)?.productId ?? null;
+    const mappedWm = mappings.products[id]?.retailers.walmart_ca;
+    const lockedId =
+      (isLockedIdentityLink(mappedWm) ? mappedWm.retailerProductId : null) ??
+      lookupConfirmed(confirmed, id)?.productId ??
+      null;
     const mode = resolveMatchMode(item);
     // Produce (cheapest): never pin preferred brand SKU — only 👍 confirmed locks
     const preferred =
@@ -1082,7 +1092,10 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
 
     // Alphanumeric WM ids (e.g. 1BUHM1GPVP5J) often miss in /search — fetch PDP.
     const pinId = lockedId ?? preferred;
-    if (pinId && !seen.has(pinId)) {
+    const pinAlreadySeen =
+      pinId != null &&
+      [...seen.values()].some((o) => offerMatchesRetailerSku(o, pinId));
+    if (pinId && !pinAlreadySeen) {
       try {
         const direct = await wm.getProduct(pinId, "5831");
         if (direct) seen.set(direct.productId, direct);
@@ -1095,10 +1108,13 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
     }
 
     let best: ProductOffer | null = null;
-    if (lockedId || (preferred && seen.has(preferred))) {
+    const pinHit =
+      pinId != null
+        ? [...seen.values()].find((o) => offerMatchesRetailerSku(o, pinId))
+        : undefined;
+    if (lockedId || pinHit) {
       const pin = lockedId ?? preferred!;
-      best =
-        [...seen.values()].find((o) => o.productId === pin) ?? null;
+      best = pinHit ?? null;
       if (!best) {
         log.rejected.push({
           productId: pin,
@@ -1107,7 +1123,7 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
         log.status = "no_match";
       }
       for (const o of seen.values()) {
-        if (o.productId !== pin) {
+        if (!offerMatchesRetailerSku(o, pin)) {
           log.rejected.push({
             productId: o.productId,
             name: o.name,

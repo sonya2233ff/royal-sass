@@ -410,7 +410,11 @@ export class WalmartConnector implements RetailerConnector {
     storeId: string,
   ): Promise<ProductOffer | null> {
     const hits = await this.searchProducts(productId, storeId);
-    return hits.find((h) => h.productId === productId) ?? hits[0] ?? null;
+    return (
+      hits.find((h) => h.productId === productId) ??
+      hits.find((h) => h.sourceUrl?.includes(productId)) ??
+      null
+    );
   }
 
   async getPrice(

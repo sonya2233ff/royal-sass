@@ -229,6 +229,16 @@ export function StaplesCompare() {
     });
   }, [items, hiddenIds, query]);
 
+  const cacheIsOld = useMemo(() => {
+    const cutoffMs = 12 * 36e5;
+    const isOld = (iso: string | null) => {
+      if (!iso) return false;
+      const age = Date.now() - new Date(iso).getTime();
+      return Number.isFinite(age) && age > cutoffMs;
+    };
+    return isOld(catalogAt) || isOld(nfCatalogAt);
+  }, [catalogAt, nfCatalogAt]);
+
   function toggle(id: string) {
     setSelected((prev) => {
       const next = new Set(prev);
@@ -370,6 +380,40 @@ export function StaplesCompare() {
     });
   }
 
+  function refreshAllPrices() {
+    const ids = visibleItems.map((item) => item.id);
+    if (!ids.length) return;
+    setError(null);
+    setBusy("refresh-prices");
+    startTransition(async () => {
+      try {
+        const res = await fetch("/api/staples/refresh-prices", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error ?? "price refresh failed");
+        const wmN = data.walmart?.updated?.length ?? 0;
+        const nfN = data.noFrills?.updated?.length ?? 0;
+        const nfBlock = data.noFrills?.blocked as string | undefined;
+        setLogPreview(data);
+        await reload();
+        if (nfBlock) {
+          setError(
+            `WM оновлено ${wmN}. No Frills зараз недоступний з цього сервера (401) — NF кеш не змінювався.`,
+          );
+        } else if (wmN === 0 && nfN === 0) {
+          setError("Жодної ціни не вдалося оновити.");
+        }
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      } finally {
+        setBusy(null);
+      }
+    });
+  }
+
   async function vote(
     id: string,
     vote: "up" | "down",
@@ -404,7 +448,7 @@ export function StaplesCompare() {
           Решта — ціна за пачку. Produce/frozen — найдешевший матч (бренд не
           важливий).
         </p>
-        <p className="meta">
+        <p className={cacheIsOld ? "meta cache-warn" : "meta"}>
           Cache TTL {staleHours}h
           {catalogAt
             ? ` · WM ${new Date(catalogAt).toLocaleString()}`
@@ -412,6 +456,9 @@ export function StaplesCompare() {
           {nfCatalogAt
             ? ` · NF ${new Date(nfCatalogAt).toLocaleString()}`
             : " · NF — після першого Compare"}
+          {cacheIsOld
+            ? " · кеш застарів — натисни «Оновити ціни»"
+            : ""}
           {" · × на картці ховає її (можна відновити)"}
         </p>
         <ProductSearch
@@ -616,6 +663,16 @@ export function StaplesCompare() {
         <button
           type="button"
           className="cta"
+          disabled={pending || visibleItems.length === 0 || busy != null}
+          onClick={refreshAllPrices}
+        >
+          {busy === "refresh-prices"
+            ? "Оновлюю ціни…"
+            : "Оновити ціни"}
+        </button>
+        <button
+          type="button"
+          className="cta"
           disabled={pending || selected.size === 0 || busy != null}
           onClick={runCompare}
         >
@@ -764,6 +821,11 @@ export function StaplesCompare() {
           font-size: 0.8rem;
           opacity: 0.55;
         }
+        .meta.cache-warn {
+          opacity: 1;
+          color: #8a3b1a;
+          font-weight: 600;
+        }
         .empty-grid {
           grid-column: 1 / -1;
           margin: 0.5rem 0 0;
@@ -903,8 +965,9 @@ export function StaplesCompare() {
         .age,
         .reason {
           font-size: 0.72rem;
-          opacity: 0.65;
+          opacity: 0.9;
           line-height: 1.25;
+          color: #7a4a32;
         }
         .mute {
           opacity: 0.55;
