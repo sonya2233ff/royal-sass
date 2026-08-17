@@ -80,7 +80,7 @@ export function ProductSearch({
           setActive(0);
         })
         .catch((e) => {
-          if (e?.name === "AbortError") return;
+          if (e?.name === "AbortError" || ac.signal.aborted) return;
           setErr(e instanceof Error ? e.message : String(e));
         })
         .finally(() => setLoading(false));

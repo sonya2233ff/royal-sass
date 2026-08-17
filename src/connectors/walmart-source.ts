@@ -1,12 +1,11 @@
 /**
- * Factory: Walmart source = rapid (OpenWeb Ninja / RapidAPI) | browser (Playwright).
+ * Which Walmart live path is configured (RapidAPI vs walmart.ca SSR).
+ * Does not import Playwright — homepage GET /api/staples only needs this file.
  *
  * WALMART_SOURCE=rapid with a blank key must not scrape walmart.ca (PerimeterX).
  * Unset WALMART_SOURCE still means: Rapid when a key is present, else browser.
  */
-import { ConnectorError, type RetailerConnector } from "./types";
-import { WalmartConnector } from "./walmart";
-import { WalmartRapidConnector } from "./walmart-rapid";
+import { ConnectorError } from "./types";
 
 export type WalmartSource = "rapid" | "browser" | "missing_key";
 export type WalmartSourceRequest = "rapid" | "browser" | "auto";
@@ -67,12 +66,3 @@ export function assertWalmartLiveSourceReady(
   }
 }
 
-export function createWalmartConnector(
-  postalCode = process.env.WALMART_POSTAL_CODE ?? "L4J0A7",
-): RetailerConnector {
-  assertWalmartLiveSourceReady();
-  if (resolveWalmartSource() === "rapid") {
-    return new WalmartRapidConnector(postalCode);
-  }
-  return new WalmartConnector(postalCode);
-}

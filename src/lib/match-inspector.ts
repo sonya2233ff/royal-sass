@@ -2,7 +2,8 @@
  * Developer-only match inspector. Does not change compare, catalog pick,
  * or customer UI. Reuses entity-match + query scoring as-is.
  */
-import { createWalmartConnector, resolveWalmartSource } from "@/connectors/walmart-source";
+import { createWalmartConnector } from "@/connectors/create-walmart-connector";
+import { resolveWalmartSource } from "@/connectors/walmart-source";
 import { NoFrillsConnector } from "@/connectors/nofrills";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";

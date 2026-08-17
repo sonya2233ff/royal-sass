@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createWalmartConnector } from "@/connectors/walmart-source";
+import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import { parseMassFromText } from "@/domain/units";
 import {

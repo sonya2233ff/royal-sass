@@ -1,7 +1,7 @@
 import { NoFrillsConnector } from "./nofrills";
 import { SobeysConnector } from "./sobeys";
 import type { RetailerConnector } from "./types";
-import { createWalmartConnector } from "./walmart-source";
+import { createWalmartConnector } from "./create-walmart-connector";
 
 export function getConnector(
   retailer: string,
@@ -28,8 +28,8 @@ export * from "./store-connector";
 export { NoFrillsConnector } from "./nofrills";
 export { WalmartConnector } from "./walmart";
 export { WalmartRapidConnector, isWalmartRapidConfigured } from "./walmart-rapid";
+export { createWalmartConnector } from "./create-walmart-connector";
 export {
-  createWalmartConnector,
   resolveWalmartSource,
   walmartSourceApiFields,
   WALMART_RAPID_MISSING_KEY,

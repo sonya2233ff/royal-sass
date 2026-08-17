@@ -181,6 +181,9 @@ function statusLabel(s?: OfferStatus | string | null): string {
 const HIDDEN_KEY = "royal-sass-hidden-staples";
 
 function friendlyError(msg: string): string {
+  if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) {
+    return "Немає зв'язку з локальним API (/api/staples). Перевір, що `npm run dev` ще запущений, і відкривай http://localhost:3000 (не з телефону на 127.0.0.1).";
+  }
   if (/Refusing to scrape walmart\.ca|RAPIDAPI_KEY are empty/i.test(msg)) {
     return "RapidAPI вибрано, але ключ порожній. Сайт walmart.ca не чіпаємо (PerimeterX). Додай OPENWEBNINJA_API_KEY або RAPIDAPI_KEY у .env і на Vercel.";
   }
@@ -245,6 +248,12 @@ export function StaplesCompare() {
 
   const reload = useCallback(async () => {
     const res = await fetch("/api/staples");
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(
+        `GET /api/staples ${res.status}${text ? `: ${text.slice(0, 160)}` : ""}`,
+      );
+    }
     const data = await res.json();
     if (!data.ok) throw new Error(data.error ?? "load failed");
     setItems(data.items);
@@ -256,7 +265,9 @@ export function StaplesCompare() {
   }, []);
 
   useEffect(() => {
-    reload().catch((e) => setError(String(e.message ?? e)));
+    reload().catch((e) =>
+      setError(friendlyError(e instanceof Error ? e.message : String(e))),
+    );
   }, [reload]);
 
   const visibleItems = useMemo(() => {

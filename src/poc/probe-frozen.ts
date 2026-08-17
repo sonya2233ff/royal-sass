@@ -2,7 +2,7 @@
  * Raw search dump for frozen staples (WM Rapid + NF).
  *   npx tsx --env-file=.env src/poc/probe-frozen.ts
  */
-import { createWalmartConnector } from "@/connectors/walmart-source";
+import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { NoFrillsConnector } from "@/connectors/nofrills";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 

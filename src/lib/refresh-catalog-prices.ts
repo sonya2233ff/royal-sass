@@ -4,8 +4,8 @@
  */
 import { NoFrillsConnector } from "@/connectors/nofrills";
 import type { ProductOffer, RetailerConnector } from "@/connectors/types";
+import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import {
-  createWalmartConnector,
   resolveWalmartSource,
   WALMART_RAPID_MISSING_KEY,
 } from "@/connectors/walmart-source";

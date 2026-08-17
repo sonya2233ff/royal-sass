@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { NoFrillsConnector } from "@/connectors/nofrills";
-import { createWalmartConnector } from "@/connectors/walmart-source";
+import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import { pickBestOffer } from "@/domain/matching";

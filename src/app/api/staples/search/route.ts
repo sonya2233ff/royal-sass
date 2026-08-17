@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import {
-  createWalmartConnector,
-  walmartSourceApiFields,
-} from "@/connectors/walmart-source";
+import { createWalmartConnector } from "@/connectors/create-walmart-connector";
+import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import { NoFrillsConnector } from "@/connectors/nofrills";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
