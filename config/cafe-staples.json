@@ -112,8 +112,8 @@
         "cleaner",
         "dish"
       ],
-      "typicalEachGrams": 110,
-      "notes": "Produce: bag or single lemon (avg 110 g). Shared B identity drops pops/tea/extract; add rejectNameIncludes for extras.",
+      "typicalEachGrams": 120,
+      "notes": "Produce: bag or single lemon (avg 120 g). Per-each price uses that weight to compare.",
       "image": "/products/lemons_2lb.jpg",
       "matchMode": "cheapest",
       "category": "produce"

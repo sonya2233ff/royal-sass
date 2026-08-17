@@ -36,11 +36,13 @@ type Staple = {
   matchMode?: "preferred" | "cheapest";
   weightCompare?: boolean;
   soldByWeight?: boolean;
+  typicalEachGrams?: number | null;
   walmartCached: {
     name: string;
     price: number;
     productId: string;
     packageSize?: string;
+    parsedMassKg?: number | null;
     checkedAt?: string;
     pricePerKg?: number | null;
     pricePerLb?: number | null;
@@ -57,6 +59,7 @@ type Staple = {
     price: number;
     productId: string;
     packageSize?: string;
+    parsedMassKg?: number | null;
     checkedAt?: string;
     ageLabel?: string | null;
     pricePerKg?: number | null;
@@ -214,6 +217,7 @@ function categoryBPreview(
   side: Staple["walmartCached"],
   neededG: number | null,
   soldByWeight: boolean,
+  typicalEachGrams?: number | null,
 ) {
   if (!side || neededG == null || !(neededG > 0)) return null;
   if (soldByWeight && side.pricePerKg) {
@@ -232,6 +236,8 @@ function categoryBPreview(
     name: side.name,
     price: side.price,
     packageSize: side.packageSize,
+    parsedMassKg: side.parsedMassKg ?? undefined,
+    typicalEachGrams: typicalEachGrams ?? undefined,
     image: side.image ?? undefined,
   });
 }
@@ -849,11 +855,13 @@ export function StaplesCompare() {
                         item.walmartCached,
                         neededG,
                         Boolean(item.soldByWeight),
+                        item.typicalEachGrams,
                       );
                       const nfBuy = categoryBPreview(
                         item.noFrillsCached,
                         neededG,
                         Boolean(item.soldByWeight),
+                        item.typicalEachGrams,
                       );
                       if (!wmBuy && !nfBuy) return null;
                       return (

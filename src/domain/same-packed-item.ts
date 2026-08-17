@@ -155,7 +155,7 @@ const SIZE_OR_FORM = new Set([
 ]);
 
 const TYPICAL_EACH_G: Record<string, number> = {
-  lemons_2lb: 110,
+  lemons_2lb: 120,
   cucumber_english: 350,
   pineapple_whole: 1000,
 };
@@ -267,20 +267,21 @@ export function offerMassKg(
   item: StapleFilterItem,
   offer: CategoryBOffer,
 ): number | null {
-  const kg = packMassKg(offer.name, offer.packageSize, offer.parsedMassKg);
-  if (kg != null && kg > 0) return kg;
   const each = typicalEachGramsOf(item);
-  if (!each) return null;
-  if (isEachSoldOffer(offer)) return each / 1000;
+  // Printed g/lb wins. Inferred parsedMassKg on a 1-ea SKU is not a real pack.
+  const printedKg = packMassKg(offer.name, offer.packageSize, null);
+  if (printedKg != null && printedKg > 0) return printedKg;
+  if (each && isEachSoldOffer(offer)) return each / 1000;
   const cores = coreProduceTokens(item);
   const nameTok = tokens(offer.name);
   if (
+    each &&
     nameTok.length > 0 &&
     nameTok.every((t) => tokenIn(t, cores) || isSizeToken(t) || tokenIn(t, HOUSE_TOKENS))
   ) {
     return each / 1000;
   }
-  return null;
+  return packMassKg(offer.name, offer.packageSize, offer.parsedMassKg);
 }
 
 function slugTokens(sourceUrl?: string): string[] {
@@ -376,7 +377,13 @@ export function withTypicalEachMass<T extends CategoryBOffer>(
 ): T {
   const kg = offerMassKg(item, offer);
   if (kg == null) return offer;
-  if (offer.parsedMassKg != null && offer.parsedMassKg > 0) return offer;
+  if (
+    offer.parsedMassKg != null &&
+    offer.parsedMassKg > 0 &&
+    !isEachSoldOffer(offer)
+  ) {
+    return offer;
+  }
   return { ...offer, parsedMassKg: kg };
 }
 

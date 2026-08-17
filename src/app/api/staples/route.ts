@@ -14,6 +14,7 @@ import {
   isEggPackItem,
   usesNeededWeightPick,
 } from "@/lib/staples";
+import { typicalEachGramsOf } from "@/domain/same-packed-item";
 import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import {
   defaultWeightUnit,
@@ -235,6 +236,7 @@ export async function GET() {
         matchMode: resolveMatchMode(i),
         weightCompare: showWeightUnits || eggItem,
         soldByWeight: isSoldByWeightItem(i),
+        typicalEachGrams: typicalEachGramsOf(i) ?? null,
         onSale: wmOnSale || nfOnSale,
         walmartCached: usable
           ? {
@@ -242,6 +244,7 @@ export async function GET() {
               price: offer!.price,
               productId: offer!.productId,
               packageSize: offer!.packageSize,
+              parsedMassKg: offer!.parsedMassKg ?? null,
               checkedAt: offer!.checkedAt ?? catalog?.checkedAt,
               wasPrice: offer!.wasPrice ?? null,
               onSale: wmOnSale,
@@ -268,6 +271,7 @@ export async function GET() {
               price: nfOffer!.price,
               productId: nfOffer!.productId,
               packageSize: nfOffer!.packageSize,
+              parsedMassKg: nfOffer!.parsedMassKg ?? null,
               checkedAt: nfOffer!.checkedAt ?? nfCatalog?.checkedAt,
               wasPrice: nfOffer!.wasPrice ?? null,
               onSale: nfOnSale,

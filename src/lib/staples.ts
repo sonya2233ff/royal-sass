@@ -21,7 +21,10 @@ import {
 } from "@/domain/pack-size-candidates";
 import {
   isActualCategoryBOffer,
+  isEachSoldOffer,
+  offerMassKg,
   samePackedItemCandidates,
+  typicalEachGramsOf,
   usesCategoryBIdentity,
 } from "@/domain/same-packed-item";
 import {
@@ -988,6 +991,7 @@ export function summarizeOffer(
     price: number;
     productId: string;
     packageSize?: string;
+    parsedMassKg?: number;
     unitPrice?: number;
     confidence?: string;
     checkedAt?: string;
@@ -1087,10 +1091,18 @@ export function summarizeOffer(
     };
   }
 
-  const mass =
-    parseMassFromText(offer.packageSize ?? "") ??
-    parseMassFromText(offer.name);
-  const pack = offer.packageSize ?? (mass ? formatMass(mass.kg) : undefined);
+  const typicalEach = typicalEachGramsOf(item);
+  const eachKg =
+    typicalEach && isEachSoldOffer(offer) ? typicalEach / 1000 : null;
+  const massKg = offerMassKg(item, offer) ?? eachKg;
+  const mass = massKg != null && massKg > 0 ? { kg: massKg } : null;
+  const pack =
+    offer.packageSize ??
+    (mass
+      ? eachKg && Math.abs(mass.kg - eachKg) < 1e-9
+        ? `1 ea ≈ ${typicalEach} g`
+        : formatMass(mass.kg)
+      : undefined);
 
   if (item.targetMassKg != null) {
     const need = item.targetMassKg * qty;
@@ -1153,7 +1165,9 @@ export function summarizeOffer(
       pack,
       note: pack
         ? packPerKg
-          ? `пачка ${pack} · $${packPerKg.toFixed(2)}/kg`
+          ? eachKg && typicalEach
+            ? `1 шт ≈ ${typicalEach} g · $${packPerKg.toFixed(2)}/kg`
+            : `пачка ${pack} · $${packPerKg.toFixed(2)}/kg`
           : `пачка ${pack}`
         : undefined,
       confidence: offer.confidence,

@@ -3,6 +3,7 @@
  * Do not use for category A.
  */
 import { packMassKg, pricePer100gFromKg } from "@/domain/fair-compare";
+import { isEachSoldOffer } from "@/domain/same-packed-item";
 import { round2 } from "@/domain/units";
 
 /** Allowed shortfall vs needed weight. */
@@ -16,6 +17,8 @@ export interface NeededWeightCandidate {
   price: number;
   packageSize?: string;
   parsedMassKg?: number;
+  /** When the shelf price is per piece (1 ea), use this average fruit/veg weight. */
+  typicalEachGrams?: number;
   image?: string;
 }
 
@@ -95,15 +98,28 @@ export function purchasePlanForPack(
   neededGrams: number,
   candidate: NeededWeightCandidate,
 ): WeightPurchasePlan | null {
-  const packKg = packMassKg(
+  const printedKg = packMassKg(candidate.name, candidate.packageSize, null);
+  const eachKg =
+    candidate.typicalEachGrams != null &&
+    candidate.typicalEachGrams > 0 &&
+    isEachSoldOffer(candidate)
+      ? candidate.typicalEachGrams / 1000
+      : null;
+  const storedKg = packMassKg(
     candidate.name,
     candidate.packageSize,
     candidate.parsedMassKg,
   );
-  if (!packKg || packKg <= 0 || !(candidate.price > 0) || !(neededGrams > 0)) {
+  const useKg =
+    printedKg && printedKg > 0
+      ? printedKg
+      : eachKg && eachKg > 0
+        ? eachKg
+        : storedKg;
+  if (!useKg || useKg <= 0 || !(candidate.price > 0) || !(neededGrams > 0)) {
     return null;
   }
-  const packGrams = packKg * 1000;
+  const packGrams = useKg * 1000;
   const { minGrams, maxGrams } = neededWeightBounds(neededGrams);
   const nMin = Math.max(1, Math.ceil(minGrams / packGrams - 1e-9));
   const nMax = Math.floor(maxGrams / packGrams + 1e-9);

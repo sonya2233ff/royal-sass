@@ -43,6 +43,7 @@ function toCatalogOffer(
     name: string;
     price: number;
     packageSize?: string;
+    parsedMassKg?: number;
     unitPrice?: number;
     wasPrice?: number;
     onSale?: boolean;
@@ -59,6 +60,7 @@ function toCatalogOffer(
     name: offer.name,
     price: offer.price,
     packageSize: offer.packageSize,
+    parsedMassKg: offer.parsedMassKg,
     unitPrice: offer.unitPrice,
     wasPrice: offer.wasPrice,
     onSale: offer.onSale,

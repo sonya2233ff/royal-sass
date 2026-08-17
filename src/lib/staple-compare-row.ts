@@ -21,6 +21,10 @@ import {
   type CatalogOffer,
   type StapleItem,
 } from "@/lib/staples";
+import {
+  typicalEachGramsOf,
+  withTypicalEachMass,
+} from "@/domain/same-packed-item";
 import { isPreferredIdentityRejected } from "@/lib/retailer-mappings";
 import { preferredStapleImage, retailerSideImage } from "@/lib/product-image";
 import {
@@ -106,8 +110,11 @@ export function buildStapleCompareRow(input: {
         : 1;
   const summarizeQty = soldByWeight ? qtyKg : packQty;
 
-  const wmRaw = input.wmUsable ? asCatalogOffer(input.wmOffer) : null;
-  const nfRaw = input.nfUsable ? asCatalogOffer(input.nfOffer) : null;
+  const wmOffer = input.wmUsable ? asCatalogOffer(input.wmOffer) : null;
+  const nfOffer = input.nfUsable ? asCatalogOffer(input.nfOffer) : null;
+  const wmRaw = wmOffer ? withTypicalEachMass(item, wmOffer) : null;
+  const nfRaw = nfOffer ? withTypicalEachMass(item, nfOffer) : null;
+  const typicalEachGrams = typicalEachGramsOf(item);
 
   const walmart = summarizeOffer(item, wmRaw, summarizeQty, "walmart_ca");
   const noFrills = summarizeOffer(
@@ -118,6 +125,7 @@ export function buildStapleCompareRow(input: {
           price: nfRaw.price,
           productId: nfRaw.productId,
           packageSize: nfRaw.packageSize,
+          parsedMassKg: nfRaw.parsedMassKg,
           unitPrice: nfRaw.unitPrice,
           confidence: nfRaw.confidence,
           checkedAt: nfRaw.checkedAt,
@@ -151,7 +159,10 @@ export function buildStapleCompareRow(input: {
           })
         : soldByWeight
           ? null
-          : purchasePlanForPack(neededGrams, wmRaw)
+          : purchasePlanForPack(neededGrams, {
+              ...wmRaw,
+              typicalEachGrams,
+            })
       : null;
   const nfPlan: WeightPurchasePlan | null =
     neededPick && neededGrams != null && nfRaw
@@ -166,7 +177,10 @@ export function buildStapleCompareRow(input: {
           })
         : soldByWeight
           ? null
-          : purchasePlanForPack(neededGrams, nfRaw)
+          : purchasePlanForPack(neededGrams, {
+              ...nfRaw,
+              typicalEachGrams,
+            })
       : null;
 
   let fair = fairCompareSides(

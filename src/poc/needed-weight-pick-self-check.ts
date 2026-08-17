@@ -15,6 +15,7 @@ import {
 } from "@/domain/pack-size-candidates";
 import { resolveCatalogOffer } from "@/domain/compare-resolve";
 import { shouldExpandPackSizes } from "@/lib/expand-pack-sizes";
+import { buildStapleCompareRow } from "@/lib/staple-compare-row";
 import {
   isActualCategoryBOffer,
   offerMassKg,
@@ -197,7 +198,7 @@ const lemonItem = {
   mustIncludeAny: ["lemon"],
   // Product-specific only. Shared DEFAULT_PRODUCE_JUNK must drop pops/tea/extract.
   mustNotInclude: ["juice", "concentrate", "cleaner", "dish"],
-  typicalEachGrams: 110,
+  typicalEachGrams: 120,
   queries: ["fresh lemons"],
   label: "Lemons (bag ~2lb)",
 };
@@ -230,7 +231,7 @@ const lemonPops = {
 assert(isActualCategoryBOffer(lemonItem, lemonBag) === true, "lemon bag is fruit");
 assert(isActualCategoryBOffer(lemonItem, lemonEach) === true, "single lemon is fruit");
 assert(isActualCategoryBOffer(lemonItem, lemonPops) === false, "pops are not lemons");
-assert(Math.abs((offerMassKg(lemonItem, lemonEach) ?? 0) - 0.11) < 1e-6, "each lemon 110g");
+assert(Math.abs((offerMassKg(lemonItem, lemonEach) ?? 0) - 0.12) < 1e-6, "each lemon 120g");
 
 const lemonSiblings = samePackedItemCandidates(
   lemonItem,
@@ -243,9 +244,10 @@ assert(
 );
 const lemonPick = pickNeededWeightPurchase(500, lemonSiblings);
 assert(lemonPick?.productId === lemonEach.productId, `lemon pick ${lemonPick?.productId}`);
-assert(lemonPick?.packs === 5, `5 singles ${lemonPick?.packs}`);
-assert(lemonPick?.inRange === true, "5×110g in 500g window");
-assert(lemonPick?.totalPrice === 4.95, `lemon each total ${lemonPick?.totalPrice}`);
+assert(lemonPick?.packs === 4, `4 singles ${lemonPick?.packs}`);
+assert(lemonPick?.inRange === true, "4×120g in 500g window");
+assert(lemonPick?.totalPrice === 3.96, `lemon each total ${lemonPick?.totalPrice}`);
+assert(lemonPick?.packGrams === 120, `each pack grams ${lemonPick?.packGrams}`);
 
 const lemonResolved = resolveCatalogOffer({
   item: lemonItem,
@@ -257,6 +259,34 @@ assert(
   lemonResolved.offer?.productId === lemonEach.productId,
   `resolve lemon ${lemonResolved.offer?.productId}`,
 );
+
+const lemonRow = buildStapleCompareRow({
+  item: lemonItem,
+  wmOffer: {
+    productId: "wm-bag",
+    name: "Lemons, Your Fresh Market, 2 lb",
+    packageSize: "907 g",
+    parsedMassKg: 0.907,
+    price: 4.97,
+  },
+  nfOffer: {
+    productId: lemonEach.productId,
+    name: lemonEach.name,
+    packageSize: lemonEach.packageSize,
+    price: lemonEach.price,
+  },
+  wmEval: { status: "ok", ageLabel: null },
+  nfEval: { status: "ok", ageLabel: null },
+  wmUsable: true,
+  nfUsable: true,
+  grams: 500,
+  confirmed: false,
+});
+assert(lemonRow.cheaper === "nofrills", `lemon cheaper ${lemonRow.cheaper}`);
+assert(lemonRow.basketNoFrills === 3.96, `NF 4×120g ${lemonRow.basketNoFrills}`);
+assert(lemonRow.basketWalmart === 4.97, `WM bag ${lemonRow.basketWalmart}`);
+const nfPurchase = lemonRow.noFrills.purchase as { packs?: number; packGrams?: number } | undefined;
+assert(nfPurchase?.packs === 4 && nfPurchase.packGrams === 120, "compare uses 120 g each");
 
 const lemonImperfect = {
   productId: "21124487001_EA",
@@ -325,9 +355,39 @@ assert(isActualCategoryBOffer(lemonItem, lemonTea) === false, "lemon tea rejecte
 assert(isActualCategoryBOffer(lemonItem, lemonExtract) === false, "extract rejected by shared junk");
 assert(isActualCategoryBOffer(lemonItem, lemonSticks) === false, "sticks rejected by shared junk");
 assert(
-  Math.abs((offerMassKg(lemonItem, lemonWmEach) ?? 0) - 0.11) < 1e-6,
-  "WM singles 110g",
+  Math.abs((offerMassKg(lemonItem, lemonWmEach) ?? 0) - 0.12) < 1e-6,
+  "WM singles 120g",
 );
+
+const eachNoMass = purchasePlanForPack(500, {
+  productId: lemonEach.productId,
+  name: lemonEach.name,
+  price: lemonEach.price,
+  packageSize: lemonEach.packageSize,
+  typicalEachGrams: 120,
+});
+assert(eachNoMass?.packs === 4, `1 ea plan without parsed mass ${eachNoMass?.packs}`);
+assert(eachNoMass?.packGrams === 120, "1 ea uses 120 g");
+assert(eachNoMass?.totalPrice === 3.96, `1 ea 500g spend ${eachNoMass?.totalPrice}`);
+assert(
+  purchasePlanForPack(500, {
+    productId: lemonEach.productId,
+    name: lemonEach.name,
+    price: lemonEach.price,
+    packageSize: lemonEach.packageSize,
+  }) == null,
+  "1 ea without typical weight cannot compare",
+);
+const staleEach = purchasePlanForPack(500, {
+  productId: lemonWmEach.productId,
+  name: lemonWmEach.name,
+  price: 0.87,
+  packageSize: undefined,
+  parsedMassKg: 0.11,
+  typicalEachGrams: 120,
+});
+assert(staleEach?.packGrams === 120, `stale 110g catalog still 120g ${staleEach?.packGrams}`);
+assert(staleEach?.packs === 4, `stale each packs ${staleEach?.packs}`);
 
 const dirtyLemon = samePackedItemCandidates(
   lemonItem,
