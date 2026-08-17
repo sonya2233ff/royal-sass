@@ -1,8 +1,10 @@
 /**
- * Download product photos for staples from Walmart PDP og:image / CDN.
+ * Download product photos for staples from Walmart / No Frills PDP og:image / CDN.
  * Updates config/cafe-staples.json image paths.
  *
- * Usage: npx tsx src/poc/fetch-product-images.ts
+ * Usage:
+ *   npx tsx src/poc/fetch-product-images.ts
+ *   npx tsx src/poc/fetch-product-images.ts frozen_blueberry acai
  */
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
@@ -15,14 +17,14 @@ interface StapleItem {
   image?: string;
 }
 
-async function loadCatalog(): Promise<
-  Array<{ id: string; offer?: { productId?: string; sourceUrl?: string; name?: string } | null }>
-> {
-  const raw = await readFile(
-    path.join(process.cwd(), "data", "catalog", "walmart_5831_latest.json"),
-    "utf8",
-  );
-  return JSON.parse(raw).items;
+type CatalogRow = {
+  id: string;
+  offer?: { productId?: string; sourceUrl?: string; name?: string } | null;
+};
+
+async function loadJsonItems(rel: string): Promise<CatalogRow[]> {
+  const raw = await readFile(path.join(process.cwd(), rel), "utf8");
+  return JSON.parse(raw).items ?? [];
 }
 
 function extractImageUrl(html: string): string | null {
@@ -32,6 +34,8 @@ function extractImageUrl(html: string): string | null {
     /"imageUrl"\s*:\s*"(https:\\\/\\\/i5\.walmartimages[^"]+)"/i,
     /"(https:\/\/i5\.walmartimages\.ca\/[^"]+)"/i,
     /"(https:\/\/i5\.walmartimages\.com\/[^"]+)"/i,
+    /"(https:\/\/assets\.shop\.loblaws\.ca\/[^"]+\.(?:png|jpg|jpeg|webp))"/i,
+    /"(https:\/\/digital\.loblaws\.ca\/[^"]+\.(?:png|jpg|jpeg|webp))"/i,
   ];
   for (const re of patterns) {
     const m = html.match(re);
@@ -42,13 +46,31 @@ function extractImageUrl(html: string): string | null {
   return null;
 }
 
-async function download(url: string, dest: string): Promise<boolean> {
+function loblawsCandidates(productId: string): string[] {
+  const id = productId.replace(/_EA$/i, "");
+  if (!/^\d+$/.test(id)) return [];
+  const out: string[] = [];
+  for (const brand of ["b2", "b1"]) {
+    for (const variant of ["a06", "a01", "a02", "a03"]) {
+      out.push(
+        `https://assets.shop.loblaws.ca/products/${id}/${brand}/en/front/${id}_front_${variant}_@2.png`,
+      );
+    }
+  }
+  return out;
+}
+
+async function download(
+  url: string,
+  dest: string,
+  referer?: string,
+): Promise<boolean> {
   const res = await fetch(url, {
     headers: {
       "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-      Accept: "image/avif,image/webp,image/*,*/*;q=0.8",
-      Referer: "https://www.walmart.ca/",
+      Accept: "image/jpeg,image/png,image/webp,image/*,*/*;q=0.8",
+      Referer: referer ?? "https://www.walmart.ca/",
     },
     redirect: "follow",
   });
@@ -79,12 +101,17 @@ async function imageFromPdp(sourceUrl: string): Promise<string | null> {
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
+  const only = new Set(process.argv.slice(2).filter((a) => !a.startsWith("-")));
   const cfgPath = path.join(process.cwd(), "config", "cafe-staples.json");
   const cfg = JSON.parse(await readFile(cfgPath, "utf8")) as {
     items: StapleItem[];
   };
-  const catalog = await loadCatalog();
-  const byId = new Map(catalog.map((c) => [c.id, c]));
+  const wmCatalog = await loadJsonItems("data/catalog/walmart_5831_latest.json");
+  const nfCatalog = await loadJsonItems(
+    "data/catalog/nofrills_3660_latest.json",
+  ).catch(() => [] as CatalogRow[]);
+  const wmById = new Map(wmCatalog.map((c) => [c.id, c]));
+  const nfById = new Map(nfCatalog.map((c) => [c.id, c]));
 
   // Remap existing photos onto renamed ids
   const aliases: Record<string, string> = {
@@ -93,18 +120,55 @@ async function main() {
     sweet_potatoes_kg: "sweet_potatoes.png",
     milk_2pct_2l: "mehadrin_2pct.jpg",
     milk_1pct_2l: "mehadrin_1pct.jpg",
+    homo_milk_2l: "mehadrin_homo_3pct.png",
   };
 
   let ok = 0;
   let fail = 0;
 
   for (const item of cfg.items) {
+    if (only.size && !only.has(item.id)) continue;
+
     const destJpg = path.join(OUT_DIR, `${item.id}.jpg`);
     const destPng = path.join(OUT_DIR, `${item.id}.png`);
-    const cat = byId.get(item.id);
-    const sourceUrl = cat?.offer?.sourceUrl;
+    const wm = wmById.get(item.id);
+    const nf = nfById.get(item.id);
+    const sourceUrl = wm?.offer?.sourceUrl ?? nf?.offer?.sourceUrl;
+    const nfProductId = nf?.offer?.productId;
 
-    // Keep existing dedicated file
+    // Keep an already-correct dedicated photo (do not prefer {id}.jpg over it)
+    if (item.image?.startsWith("/products/")) {
+      const current = path.join(
+        process.cwd(),
+        "public",
+        item.image.replace(/^\//, ""),
+      );
+      try {
+        await readFile(current);
+        console.log(`= ${item.id} (keep ${item.image})`);
+        ok++;
+        continue;
+      } catch {
+        /* missing */
+      }
+    }
+
+    // Alias from older / brand-correct filenames
+    const alias = aliases[item.id];
+    if (alias) {
+      try {
+        const src = path.join(OUT_DIR, alias);
+        await readFile(src);
+        item.image = `/products/${alias}`;
+        console.log(`~ ${item.id} using ${alias}`);
+        ok++;
+        continue;
+      } catch {
+        /* no alias file */
+      }
+    }
+
+    // Keep existing dedicated file named after id
     try {
       await readFile(destJpg);
       item.image = `/products/${item.id}.jpg`;
@@ -124,49 +188,49 @@ async function main() {
       /* missing */
     }
 
-    // Alias from older filenames
-    const alias = aliases[item.id];
-    if (alias) {
+    let saved = false;
+    if (nfProductId && !wm?.offer?.sourceUrl) {
+      for (const url of loblawsCandidates(nfProductId)) {
+        console.log(`… ${item.id} trying NF CDN`);
+        if (await download(url, destJpg, "https://www.nofrills.ca/")) {
+          item.image = `/products/${item.id}.jpg`;
+          console.log(`✓ ${item.id} ← ${url.slice(0, 90)}`);
+          saved = true;
+          break;
+        }
+      }
+    }
+
+    if (!saved && sourceUrl) {
+      console.log(`… ${item.id} fetching PDP`);
       try {
-        const src = path.join(OUT_DIR, alias);
-        const buf = await readFile(src);
-        await writeFile(destJpg, buf);
-        item.image = `/products/${item.id}.jpg`;
-        console.log(`~ ${item.id} aliased from ${alias}`);
-        ok++;
-        continue;
-      } catch {
-        /* no alias file */
+        const imgUrl = await imageFromPdp(sourceUrl);
+        if (imgUrl) {
+          const referer = sourceUrl.includes("nofrills")
+            ? "https://www.nofrills.ca/"
+            : "https://www.walmart.ca/";
+          saved = await download(imgUrl, destJpg, referer);
+          if (saved) {
+            item.image = `/products/${item.id}.jpg`;
+            console.log(`✓ ${item.id} ← ${imgUrl.slice(0, 90)}`);
+          } else {
+            console.log(`✗ ${item.id} — download failed ${imgUrl.slice(0, 80)}`);
+          }
+        } else {
+          console.log(`✗ ${item.id} — no image in PDP`);
+        }
+      } catch (e) {
+        console.log(
+          `✗ ${item.id} — ${e instanceof Error ? e.message.slice(0, 80) : e}`,
+        );
       }
     }
 
-    if (!sourceUrl) {
-      console.log(`✗ ${item.id} — no sourceUrl (no_match?)`);
-      fail++;
-      continue;
-    }
-
-    console.log(`… ${item.id} fetching PDP`);
-    try {
-      const imgUrl = await imageFromPdp(sourceUrl);
-      if (!imgUrl) {
-        console.log(`✗ ${item.id} — no image in PDP`);
-        fail++;
-        continue;
+    if (saved) ok++;
+    else {
+      if (!sourceUrl && !nfProductId) {
+        console.log(`✗ ${item.id} — no sourceUrl (no_match?)`);
       }
-      const saved = await download(imgUrl, destJpg);
-      if (!saved) {
-        console.log(`✗ ${item.id} — download failed ${imgUrl.slice(0, 80)}`);
-        fail++;
-        continue;
-      }
-      item.image = `/products/${item.id}.jpg`;
-      console.log(`✓ ${item.id} ← ${imgUrl.slice(0, 90)}`);
-      ok++;
-    } catch (e) {
-      console.log(
-        `✗ ${item.id} — ${e instanceof Error ? e.message.slice(0, 80) : e}`,
-      );
       fail++;
     }
     await new Promise((r) => setTimeout(r, 400));

@@ -5,6 +5,7 @@ import { createWalmartConnector } from "@/connectors/walmart-source";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import { pickBestOffer } from "@/domain/matching";
+import { extractBarcodes } from "@/domain/fair-compare";
 import {
   type CompareUnit,
   type OfferStatus,
@@ -17,7 +18,9 @@ import {
   defaultWeightUnit,
   formatMass,
   formatMoneyPerWeight,
+  formatMoneyPerEach,
   parseMassFromText,
+  parsePackCount,
   priceByPackCount,
   resolveUnitPrices,
   round2,
@@ -37,8 +40,20 @@ const PRODUCE_WEIGHT_IDS = new Set([
   "eggplant_kg",
   "tomato_gh_red_kg",
   "bananas_kg",
+  "kiwi_kg",
   "garlic_1kg",
   "cucumber_english",
+  "chicken_breast_kg",
+]);
+
+/** Frozen bags — pick cheapest $/kg, any brand; show unit price for fair bag-size compare. */
+const FROZEN_BAG_IDS = new Set([
+  "frozen_apple",
+  "frozen_banana",
+  "frozen_blueberry",
+  "frozen_strawberry",
+  "frozen_spinach",
+  "acai",
 ]);
 
 /** Packaged produce — compare by shelf pack, no kg/lb conversion UI. */
@@ -56,7 +71,37 @@ export function isProduceItem(item: StapleItem): boolean {
 
 /** Only weighed produce gets kg/lb unit-price display. */
 export function isProduceWeightItem(item: StapleItem): boolean {
-  return PRODUCE_WEIGHT_IDS.has(item.id);
+  return PRODUCE_WEIGHT_IDS.has(item.id) || FROZEN_BAG_IDS.has(item.id);
+}
+
+/** Loose produce / protein sold by weight — user can enter grams when selected. */
+const SOLD_BY_WEIGHT_IDS = new Set([
+  "red_peppers",
+  "red_peppers_kg",
+  "sweet_potatoes",
+  "sweet_potatoes_kg",
+  "pear_bosc_kg",
+  "eggplant_kg",
+  "tomato_gh_red_kg",
+  "bananas_kg",
+  "kiwi_kg",
+  "garlic_1kg",
+  "chicken_breast_kg",
+]);
+
+/** Shell-egg cartons — cheapest $/egg, prefer bigger packs (18/30). */
+const EGG_PACK_IDS = new Set([
+  "eggs_30ct",
+  "grayridge_eggs",
+  "large_eggs_dozen",
+]);
+
+export function isEggPackItem(item: StapleItem): boolean {
+  return EGG_PACK_IDS.has(item.id);
+}
+
+export function isSoldByWeightItem(item: StapleItem): boolean {
+  return SOLD_BY_WEIGHT_IDS.has(item.id);
 }
 
 export interface StapleItem {
@@ -73,6 +118,8 @@ export interface StapleItem {
   image?: string;
   notes?: string;
   mustIncludeAny?: string[];
+  /** All of these substrings must appear (e.g. frozen + fruit). */
+  mustIncludeAll?: string[];
   mustNotInclude?: string[];
   preferNameIncludes?: string[];
   /**
@@ -81,6 +128,8 @@ export interface StapleItem {
    */
   matchMode?: "preferred" | "cheapest";
   category?: string;
+  /** Added from in-app search; shown alongside PINNED_IDS. */
+  custom?: boolean;
 }
 
 /** Produce / fruit — brand irrelevant; cheapest matching unit wins. */
@@ -98,17 +147,29 @@ export const PRODUCE_IDS = new Set([
   "pineapple",
   "pineapple_whole",
   "bananas_kg",
+  "kiwi_kg",
   "cucumber_english",
   "garlic_1kg",
   "blueberries",
   "strawberries",
 ]);
 
+export function itemPreferredUpc(item: StapleItem): string | undefined {
+  return extractBarcodes(...item.queries, item.preferredProductId)[0];
+}
+
 export function resolveMatchMode(
   item: StapleItem,
 ): "preferred" | "cheapest" {
   if (item.matchMode) return item.matchMode;
-  if (item.category === "produce" || PRODUCE_IDS.has(item.id)) {
+  if (
+    item.category === "produce" ||
+    item.category === "frozen" ||
+    item.category === "eggs" ||
+    PRODUCE_IDS.has(item.id) ||
+    FROZEN_BAG_IDS.has(item.id) ||
+    EGG_PACK_IDS.has(item.id)
+  ) {
     return "cheapest";
   }
   return "preferred";
@@ -121,6 +182,8 @@ export interface CatalogOffer {
   packageSize?: string;
   parsedMassKg?: number;
   unitPrice?: number;
+  wasPrice?: number;
+  onSale?: boolean;
   confidence?: string;
   checkedAt?: string;
   sourceUrl?: string;
@@ -145,7 +208,6 @@ export const PINNED_IDS = [
   "simply_egg_whites",
   "tomatoes_grape",
   "eggs_30ct",
-  "grayridge_eggs",
   "lemons_2lb",
   "pear_bosc_kg",
   "folgers_coffee",
@@ -158,6 +220,7 @@ export const PINNED_IDS = [
   "pineapple_whole",
   "almond_original",
   "bananas_kg",
+  "kiwi_kg",
   "cucumber_english",
   "garlic_1kg",
   "blueberries",
@@ -165,14 +228,26 @@ export const PINNED_IDS = [
   "milk_2pct_2l",
   "homo_milk_2l",
   "butter_454g",
-  "large_eggs_dozen",
   "canola_oil_3l",
   "white_sugar_2kg",
   "ap_flour_2_5kg",
   "pasta_elbows",
   "chicken_breast_kg",
   "orange_juice_pulp",
+  "realemon_440ml",
+  "jello_vanilla_instant",
+  "ziploc_sandwich",
+  "frozen_apple",
+  "frozen_banana",
+  "frozen_blueberry",
+  "frozen_strawberry",
+  "frozen_spinach",
+  "acai",
 ] as const;
+
+export function isShownStaple(item: { id: string; custom?: boolean }): boolean {
+  return item.custom === true || (PINNED_IDS as readonly string[]).includes(item.id);
+}
 
 export const CACHE_STALE_HOURS = Number(
   process.env.STAPLES_CACHE_STALE_HOURS ?? "72",
@@ -200,6 +275,65 @@ export async function loadReceiptSkuMap(): Promise<ReceiptSkuMap | null> {
   }
 }
 
+const CUSTOM_STAPLES = path.join(process.cwd(), "config", "custom-staples.json");
+
+export async function loadCustomStaples(): Promise<StapleItem[]> {
+  try {
+    const raw = await readFile(CUSTOM_STAPLES, "utf8");
+    const data = JSON.parse(raw) as { items?: StapleItem[] };
+    return Array.isArray(data.items) ? data.items.filter((i) => i?.id) : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function saveCustomStaple(item: StapleItem): Promise<void> {
+  const items = await loadCustomStaples();
+  const idx = items.findIndex((x) => x.id === item.id);
+  if (idx >= 0) items[idx] = item;
+  else items.push(item);
+  await mkdir(path.dirname(CUSTOM_STAPLES), { recursive: true });
+  await writeFile(
+    CUSTOM_STAPLES,
+    JSON.stringify({ updatedAt: new Date().toISOString(), items }, null, 2),
+    "utf8",
+  );
+}
+
+export async function upsertWalmartCatalogItem(input: {
+  id: string;
+  label?: string;
+  status: OfferStatus;
+  offer: CatalogOffer | null;
+  image?: string;
+  notes?: string;
+}): Promise<void> {
+  const existing =
+    (await loadWalmartCatalog()) ??
+    ({
+      type: "walmart-staples-catalog",
+      checkedAt: new Date().toISOString(),
+      items: [],
+    } as {
+      checkedAt: string;
+      items: Array<Record<string, unknown>>;
+    });
+
+  const idx = existing.items.findIndex((x) => x.id === input.id);
+  const row = {
+    id: input.id,
+    label: input.label,
+    status: input.status,
+    offer: input.offer,
+    image: input.image,
+    notes: input.notes,
+  };
+  if (idx >= 0) existing.items[idx] = { ...existing.items[idx], ...row };
+  else existing.items.push(row);
+  existing.checkedAt = new Date().toISOString();
+  await saveWalmartCatalog(existing);
+}
+
 export async function loadStaplesConfig(): Promise<{
   store: { externalStoreId: string; name: string; address: string };
   items: StapleItem[];
@@ -212,6 +346,13 @@ export async function loadStaplesConfig(): Promise<{
     store: { externalStoreId: string; name: string; address: string };
     items: StapleItem[];
   };
+  const custom = await loadCustomStaples();
+  const seen = new Set(cfg.items.map((i) => i.id));
+  for (const item of custom) {
+    if (seen.has(item.id)) continue;
+    cfg.items.push(item);
+    seen.add(item.id);
+  }
   const receipts = await loadReceiptSkuMap();
   if (receipts?.preferredByStapleId) {
     for (const item of cfg.items) {
@@ -390,6 +531,13 @@ function matchQueryForPick(item: StapleItem): string {
     return "kosher homogenized milk 2l";
   }
   if (resolveMatchMode(item) === "cheapest") {
+    if (item.category === "frozen" || item.category === "eggs") {
+      return (
+        item.mustIncludeAny?.[0] ??
+        item.queries.find((q) => q && !/^\d+$/.test(q)) ??
+        item.label
+      );
+    }
     // Prefer short produce query so brand/variety tokens in the label
     // don't disqualify cheaper alternatives (e.g. any pear, not only Bosc).
     return (
@@ -401,14 +549,32 @@ function matchQueryForPick(item: StapleItem): string {
   return item.label;
 }
 
+function nameHaystack(offer: { name: string; brand?: string }): string {
+  return `${offer.brand ?? ""} ${offer.name}`.toLowerCase();
+}
+
+/** Phrase = substring; single token = word boundary (apple ≠ pineapple, waffle = waffles). */
+function hayIncludes(hay: string, needle: string): boolean {
+  const n = needle.toLowerCase().trim();
+  if (!n) return false;
+  if (n.includes(" ")) return hay.includes(n);
+  const esc = n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^a-z0-9])${esc}(?:es|s)?([^a-z0-9]|$)`).test(hay);
+}
+
 function passesFilters(
   offer: { name: string; brand?: string },
   item: StapleItem,
 ): boolean {
   // NF often puts brand only in `brand`, not title (e.g. Earth's Own oat).
-  const n = `${offer.brand ?? ""} ${offer.name}`.toLowerCase();
+  const n = nameHaystack(offer);
   if (item.mustIncludeAny?.length) {
-    if (!item.mustIncludeAny.some((t) => n.includes(t.toLowerCase()))) {
+    if (!item.mustIncludeAny.some((t) => hayIncludes(n, t))) {
+      return false;
+    }
+  }
+  if (item.mustIncludeAll?.length) {
+    if (!item.mustIncludeAll.every((t) => hayIncludes(n, t))) {
       return false;
     }
   }
@@ -507,7 +673,28 @@ export async function searchNoFrills(
     }
   }
 
-  const pool = all.filter((o) => passesFilters(o, item));
+  const pool = all.filter((o) => {
+    if (!passesFilters(o, item)) return false;
+    if (item.minPlausiblePrice != null && o.price < item.minPlausiblePrice) {
+      log?.rejected.push({
+        productId: o.productId,
+        name: o.name,
+        price: o.price,
+        reason: `price $${o.price} < min plausible $${item.minPlausiblePrice}`,
+      });
+      return false;
+    }
+    if (item.maxPlausiblePrice != null && o.price > item.maxPlausiblePrice) {
+      log?.rejected.push({
+        productId: o.productId,
+        name: o.name,
+        price: o.price,
+        reason: `price $${o.price} > max plausible $${item.maxPlausiblePrice}`,
+      });
+      return false;
+    }
+    return true;
+  });
   let best: ProductOffer | null = null;
   if (pool.length) {
     const mode = resolveMatchMode(item);
@@ -519,6 +706,10 @@ export async function searchNoFrills(
         {
           targetMassKg: item.targetMassKg ?? expectedPackFor(item),
           mode,
+          preferNameIncludes: item.preferNameIncludes,
+          byEach: isEggPackItem(item),
+          preferLargerPack: isEggPackItem(item),
+          preferredUpc: itemPreferredUpc(item),
         },
       ) ?? pool[0] ?? null;
   }
@@ -533,6 +724,7 @@ export async function searchNoFrills(
       expectedPackKg: expectedPackFor(item),
       allowCompose: item.targetMassKg != null,
       minPlausiblePrice: item.minPlausiblePrice,
+      maxPlausiblePrice: item.maxPlausiblePrice,
       checkedAt: best.checkedAt,
     });
     if (!sanity.ok && sanity.status !== "stale") {
@@ -577,6 +769,8 @@ export interface SummarizedOffer {
   /** Always present when mass/unit known — for apples-to-apples delta. */
   pricePerKg?: number;
   pricePerLb?: number;
+  /** Eggs: dollars per egg. Not stored in pricePerKg. */
+  pricePerEach?: number;
   /** Store-native display: Walmart $/kg, No Frills $/lb. */
   nativeUnit?: WeightPriceUnit;
   nativeUnitPrice?: number;
@@ -616,6 +810,21 @@ export function summarizeOffer(
   };
 
   const byWeight = isProduceWeightItem(item);
+  const eggPack = isEggPackItem(item);
+  const eggCount = eggPack
+    ? parsePackCount(offer.name, offer.packageSize)
+    : null;
+  const pricePerEgg =
+    eggCount && eggCount > 0 ? round2(offer.price / eggCount) : null;
+  const eggFields =
+    pricePerEgg != null
+      ? {
+          pricePerEach: pricePerEgg,
+          nativeUnitPrice: pricePerEgg,
+          nativeUnitLabel: `за ${eggCount} шт`,
+          nativeUnitPriceLabel: formatMoneyPerEach(pricePerEgg),
+        }
+      : {};
   const units = byWeight
     ? resolveUnitPrices(asProduct, {
         displayUnit,
@@ -630,19 +839,20 @@ export function summarizeOffer(
     : null;
 
   // kg/lb labels only for produce — never milk, flour, eggs, etc.
-  const unitFields = byWeight && units
-    ? {
-        pricePerKg: units.pricePerKg,
-        pricePerLb: units.pricePerLb,
-        nativeUnit: units.nativeUnit,
-        nativeUnitPrice: units.nativePrice,
-        nativeUnitLabel: weightUnitLabel(units.nativeUnit),
-        nativeUnitPriceLabel: formatMoneyPerWeight(
-          units.nativePrice,
-          units.nativeUnit,
-        ),
-      }
-    : {};
+  const unitFields =
+    byWeight && units
+      ? {
+          pricePerKg: units.pricePerKg,
+          pricePerLb: units.pricePerLb,
+          nativeUnit: units.nativeUnit,
+          nativeUnitPrice: units.nativePrice,
+          nativeUnitLabel: weightUnitLabel(units.nativeUnit),
+          nativeUnitPriceLabel: formatMoneyPerWeight(
+            units.nativePrice,
+            units.nativeUnit,
+          ),
+        }
+      : eggFields;
 
   const sanity = sanityCheckOffer({
     itemId: item.id,
@@ -705,40 +915,74 @@ export function summarizeOffer(
     }
   }
 
-  if (PACK_COMPARE_IDS.has(item.id)) {
+  if (eggPack && pricePerEgg != null) {
+    const compareCount = 30;
     return {
       name: offer.name,
       productId: offer.productId,
       shelfPrice: offer.price,
-      lineTotal: round2(offer.price * qty),
-      pack,
-      note: pack ? `пачка ${pack}` : undefined,
+      lineTotal: round2(pricePerEgg * compareCount),
+      pack: pack ?? `${eggCount} шт`,
+      note: `${eggCount} шт · ${formatMoneyPerEach(pricePerEgg)} · порівняння за ${compareCount}`,
       confidence: offer.confidence,
       compareUnit: "per_pack",
-      compareUnitLabel: compareUnitLabel("per_pack"),
+      compareUnitLabel: "за 1 яйце",
       status: sanity.status,
       statusReason: sanity.reason,
       ...unitFields,
     };
   }
 
-  if (byWeight && units) {
-    const compareUnit: CompareUnit =
-      units.nativeUnit === "lb" ? "per_lb" : "per_kg";
+  if (PACK_COMPARE_IDS.has(item.id)) {
+    const packKg = mass?.kg;
+    const packPerKg =
+      packKg && packKg > 0 ? round2(offer.price / packKg) : undefined;
     return {
       name: offer.name,
       productId: offer.productId,
       shelfPrice: offer.price,
-      // Fair basket math always uses 1 kg
-      lineTotal: units.pricePerKg,
+      lineTotal: round2(offer.price * qty),
       pack,
-      note: `${formatMoneyPerWeight(units.nativePrice, units.nativeUnit)} · також ${formatMoneyPerWeight(
-        units.nativeUnit === "lb" ? units.pricePerKg : units.pricePerLb,
-        units.nativeUnit === "lb" ? "kg" : "lb",
-      )}`,
+      note: pack
+        ? packPerKg
+          ? `пачка ${pack} · $${packPerKg.toFixed(2)}/kg`
+          : `пачка ${pack}`
+        : undefined,
+      confidence: offer.confidence,
+      compareUnit: "per_pack",
+      compareUnitLabel: compareUnitLabel("per_pack"),
+      status: sanity.status,
+      statusReason: sanity.reason,
+      pricePerKg: packPerKg,
+      pricePerLb: packPerKg ? round2(packPerKg * 0.45359237) : undefined,
+      ...unitFields,
+    };
+  }
+
+  if (byWeight && units) {
+    const kg = qty > 0 ? qty : 1;
+    const compareUnit: CompareUnit =
+      units.nativeUnit === "lb" ? "per_lb" : "per_kg";
+    const grams = Math.round(kg * 1000);
+    return {
+      name: offer.name,
+      productId: offer.productId,
+      shelfPrice: offer.price,
+      lineTotal: round2(units.pricePerKg * kg),
+      pack,
+      note:
+        kg === 1
+          ? `${formatMoneyPerWeight(units.nativePrice, units.nativeUnit)} · також ${formatMoneyPerWeight(
+              units.nativeUnit === "lb" ? units.pricePerKg : units.pricePerLb,
+              units.nativeUnit === "lb" ? "kg" : "lb",
+            )}`
+          : `${grams} g`,
       confidence: offer.confidence,
       compareUnit,
-      compareUnitLabel: weightUnitLabel(units.nativeUnit),
+      compareUnitLabel:
+        kg === 1
+          ? weightUnitLabel(units.nativeUnit)
+          : `за ${grams} g`,
       status: sanity.status,
       statusReason: sanity.reason,
       ...unitFields,
@@ -770,6 +1014,8 @@ function slimOffer(o: ProductOffer): CatalogOffer {
     parsedMassKg: mass?.kg,
     price: o.price,
     unitPrice: o.unitPrice,
+    wasPrice: o.wasPrice,
+    onSale: o.onSale || (o.wasPrice != null && o.wasPrice > o.price + 0.005) || undefined,
     confidence: o.confidence,
     checkedAt: o.checkedAt,
     sourceUrl: o.sourceUrl,
@@ -857,19 +1103,34 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
       await new Promise((r) => setTimeout(r, 300));
     }
 
+    // Alphanumeric WM ids (e.g. 1BUHM1GPVP5J) often miss in /search — fetch PDP.
+    const pinId = lockedId ?? preferred;
+    if (pinId && !seen.has(pinId)) {
+      try {
+        const direct = await wm.getProduct(pinId, "5831");
+        if (direct) seen.set(direct.productId, direct);
+      } catch (e) {
+        log.rejected.push({
+          productId: pinId,
+          reason: `getProduct: ${e instanceof Error ? e.message.slice(0, 100) : String(e)}`,
+        });
+      }
+    }
+
     let best: ProductOffer | null = null;
-    if (lockedId) {
+    if (lockedId || (preferred && seen.has(preferred))) {
+      const pin = lockedId ?? preferred!;
       best =
-        [...seen.values()].find((o) => o.productId === lockedId) ?? null;
+        [...seen.values()].find((o) => o.productId === pin) ?? null;
       if (!best) {
         log.rejected.push({
-          productId: lockedId,
+          productId: pin,
           reason: "confirmed SKU not found on refresh",
         });
         log.status = "no_match";
       }
       for (const o of seen.values()) {
-        if (o.productId !== lockedId) {
+        if (o.productId !== pin) {
           log.rejected.push({
             productId: o.productId,
             name: o.name,
@@ -896,7 +1157,11 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
         pickBestOffer(pool, matchQueryForPick(item), preferred ?? undefined, {
           targetMassKg: item.targetMassKg ?? expectedPackFor(item),
           mode,
-        }) ?? null;
+          preferNameIncludes: item.preferNameIncludes,
+          byEach: isEggPackItem(item),
+          preferLargerPack: isEggPackItem(item),
+          preferredUpc: itemPreferredUpc(item),
+        }) ?? (mode === "cheapest" ? pool[0] ?? null : null);
       if (best && mode === "cheapest") {
         log.rejected.push({
           reason: `cheapest produce pick among ${pool.length} filtered hits`,
@@ -914,6 +1179,7 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
         expectedPackKg: expectedPackFor(item),
         allowCompose: item.targetMassKg != null,
         minPlausiblePrice: item.minPlausiblePrice,
+        maxPlausiblePrice: item.maxPlausiblePrice,
         checkedAt: best.checkedAt,
       });
       if (!sanity.ok && sanity.status !== "stale") {
@@ -1001,17 +1267,27 @@ export async function refreshNoFrillsSelected(ids: string[]): Promise<{
       const mass =
         parseMassFromText(offer.packageSize ?? "") ??
         parseMassFromText(offer.name);
+      const brand = (offer.brand ?? "").replace(/\s+Foods$/i, "").trim();
+      const name =
+        brand && !offer.name.toLowerCase().includes(brand.toLowerCase())
+          ? `${brand} ${offer.name}`
+          : offer.name;
       await upsertNoFrillsCatalogItem({
         id,
         label: item.label,
         status: log.status,
         offer: {
           productId: offer.productId,
-          name: offer.name,
+          name,
           price: offer.price,
           packageSize: offer.packageSize,
           parsedMassKg: mass?.kg,
           unitPrice: offer.unitPrice,
+          wasPrice: offer.wasPrice,
+          onSale:
+            offer.onSale ||
+            (offer.wasPrice != null && offer.wasPrice > offer.price + 0.005) ||
+            undefined,
           confidence: offer.confidence,
           checkedAt: offer.checkedAt,
           sourceUrl: offer.sourceUrl,

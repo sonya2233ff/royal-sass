@@ -2,22 +2,27 @@ import { NextResponse } from "next/server";
 import {
   CACHE_STALE_HOURS,
   evaluateOfferStatus,
+  isShownStaple,
   loadConfirmed,
   loadNoFrillsCatalog,
   loadStaplesConfig,
   loadWalmartCatalog,
-  PINNED_IDS,
   resolveMatchMode,
   isProduceWeightItem,
+  isSoldByWeightItem,
+  isEggPackItem,
 } from "@/lib/staples";
 import { resolveWalmartSource } from "@/connectors/walmart-source";
 import {
   defaultWeightUnit,
   formatMoneyPerWeight,
+  formatMoneyPerEach,
+  parsePackCount,
   resolveUnitPrices,
   weightUnitLabel,
 } from "@/domain/units";
 import type { ProductOffer } from "@/connectors/types";
+import { offerIsOnSale } from "@/connectors/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -53,6 +58,25 @@ function unitFields(
   });
 }
 
+function eggUnitFields(offer: {
+  name: string;
+  packageSize?: string;
+  price: number;
+}): {
+  count: number;
+  priceEach: number;
+  label: string;
+} | null {
+  const count = parsePackCount(offer.name, offer.packageSize);
+  if (!count || count <= 0 || !(offer.price > 0)) return null;
+  const priceEach = offer.price / count;
+  return {
+    count,
+    priceEach,
+    label: formatMoneyPerEach(priceEach),
+  };
+}
+
 export async function GET() {
   const cfg = await loadStaplesConfig();
   const catalog = await loadWalmartCatalog();
@@ -62,7 +86,7 @@ export async function GET() {
   const nfById = new Map(nfCatalog?.items.map((i) => [i.id, i]) ?? []);
 
   const items = cfg.items
-    .filter((i) => (PINNED_IDS as readonly string[]).includes(i.id))
+    .filter(isShownStaple)
     .map((i) => {
       const cat = byId.get(i.id);
       const offer =
@@ -100,8 +124,9 @@ export async function GET() {
       }
 
       const showWeightUnits = isProduceWeightItem(i);
+      const eggItem = isEggPackItem(i);
       const units =
-        usable && offer
+        usable && offer && showWeightUnits
           ? unitFields(
               "walmart_ca",
               "5831",
@@ -113,9 +138,11 @@ export async function GET() {
                 unitPrice: offer.unitPrice,
                 checkedAt: offer.checkedAt,
               },
-              showWeightUnits,
+              true,
             )
           : null;
+      const eggWm =
+        usable && offer && eggItem ? eggUnitFields(offer) : null;
 
       const nfCat = nfById.get(i.id);
       const nfOffer = nfCat?.offer ?? null;
@@ -129,7 +156,7 @@ export async function GET() {
           nfCat?.status !== "wrong_size",
       );
       const nfUnits =
-        nfUsable && nfOffer
+        nfUsable && nfOffer && showWeightUnits
           ? unitFields(
               "no_frills",
               "3660",
@@ -141,9 +168,17 @@ export async function GET() {
                 unitPrice: nfOffer.unitPrice,
                 checkedAt: nfOffer.checkedAt,
               },
-              showWeightUnits,
+              true,
             )
           : null;
+      const eggNf =
+        nfUsable && nfOffer && eggItem ? eggUnitFields(nfOffer) : null;
+
+      const wmOnSale = usable
+        ? offerIsOnSale(offer) ||
+          /athbdg=L1300/i.test(offer?.sourceUrl ?? "")
+        : false;
+      const nfOnSale = nfUsable ? offerIsOnSale(nfOffer) : false;
 
       return {
         id: i.id,
@@ -158,7 +193,9 @@ export async function GET() {
         confirmedProductId: confirmed[i.id]?.productId ?? null,
         preferredProductId: lockedSku,
         matchMode: resolveMatchMode(i),
-        weightCompare: showWeightUnits,
+        weightCompare: showWeightUnits || eggItem,
+        soldByWeight: isSoldByWeightItem(i),
+        onSale: wmOnSale || nfOnSale,
         walmartCached: usable
           ? {
               name: offer!.name,
@@ -166,16 +203,22 @@ export async function GET() {
               productId: offer!.productId,
               packageSize: offer!.packageSize,
               checkedAt: offer!.checkedAt ?? catalog?.checkedAt,
+              wasPrice: offer!.wasPrice ?? null,
+              onSale: wmOnSale,
               pricePerKg: units?.pricePerKg ?? null,
               pricePerLb: units?.pricePerLb ?? null,
               nativeUnit: units?.nativeUnit ?? null,
-              nativeUnitPrice: units?.nativePrice ?? null,
-              nativeUnitLabel: units
-                ? weightUnitLabel(units.nativeUnit)
-                : null,
-              nativeUnitPriceLabel: units
-                ? formatMoneyPerWeight(units.nativePrice, units.nativeUnit)
-                : null,
+              nativeUnitPrice: eggWm?.priceEach ?? units?.nativePrice ?? null,
+              nativeUnitLabel: eggWm
+                ? `за ${eggWm.count} шт`
+                : units
+                  ? weightUnitLabel(units.nativeUnit)
+                  : null,
+              nativeUnitPriceLabel: eggWm
+                ? eggWm.label
+                : units
+                  ? formatMoneyPerWeight(units.nativePrice, units.nativeUnit)
+                  : null,
             }
           : null,
         noFrillsCached: nfUsable
@@ -185,17 +228,23 @@ export async function GET() {
               productId: nfOffer!.productId,
               packageSize: nfOffer!.packageSize,
               checkedAt: nfOffer!.checkedAt ?? nfCatalog?.checkedAt,
+              wasPrice: nfOffer!.wasPrice ?? null,
+              onSale: nfOnSale,
               ageLabel: nfEval.ageLabel,
               pricePerKg: nfUnits?.pricePerKg ?? null,
               pricePerLb: nfUnits?.pricePerLb ?? null,
               nativeUnit: nfUnits?.nativeUnit ?? null,
-              nativeUnitPrice: nfUnits?.nativePrice ?? null,
-              nativeUnitLabel: nfUnits
-                ? weightUnitLabel(nfUnits.nativeUnit)
-                : null,
-              nativeUnitPriceLabel: nfUnits
-                ? formatMoneyPerWeight(nfUnits.nativePrice, nfUnits.nativeUnit)
-                : null,
+              nativeUnitPrice: eggNf?.priceEach ?? nfUnits?.nativePrice ?? null,
+              nativeUnitLabel: eggNf
+                ? `за ${eggNf.count} шт`
+                : nfUnits
+                  ? weightUnitLabel(nfUnits.nativeUnit)
+                  : null,
+              nativeUnitPriceLabel: eggNf
+                ? eggNf.label
+                : nfUnits
+                  ? formatMoneyPerWeight(nfUnits.nativePrice, nfUnits.nativeUnit)
+                  : null,
             }
           : null,
       };

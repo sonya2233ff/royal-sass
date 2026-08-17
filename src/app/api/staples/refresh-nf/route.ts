@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { PINNED_IDS, refreshNoFrillsSelected } from "@/lib/staples";
+import {
+  isShownStaple,
+  loadStaplesConfig,
+  refreshNoFrillsSelected,
+} from "@/lib/staples";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -8,8 +12,10 @@ export const maxDuration = 180;
 /** Force live No Frills refresh for selected staple ids (writes NF catalog cache). */
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => ({}))) as { ids?: string[] };
-  const ids = (body.ids?.length ? body.ids : [...PINNED_IDS]).filter((id) =>
-    (PINNED_IDS as readonly string[]).includes(id),
+  const cfg = await loadStaplesConfig();
+  const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
+  const ids = (body.ids?.length ? body.ids : [...allowed]).filter((id) =>
+    allowed.has(id),
   );
   if (!ids.length) {
     return NextResponse.json(

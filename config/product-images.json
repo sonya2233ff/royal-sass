@@ -33,7 +33,11 @@
       "source": "user_photo",
       "walmartProductId": "6000198384699"
     },
-    "homo_milk_2l": {
+    "almond_original": {
+      "file": "/products/almond_earths_own.jpg",
+      "caption": "Earth's Own Original Almond Beverage 1.89L",
+      "source": "brand_pack_photo"
+    },
       "file": "/products/mehadrin_homo_3pct.png",
       "caption": "Mehadrin Homogenized 3.25% Milk 2L",
       "source": "user_screenshot",
@@ -41,10 +45,10 @@
     }
   },
   "unavailableAtWalmart": {
-    "acai": {
-      "label": "Acai 100% Pure / Acai Sweetened",
-      "reason": "Product not available at Walmart #5831"
+    "acai_puree": {
+      "label": "Acai unsweetened puree packets",
+      "reason": "Not at Walmart #5831. Store has frozen acai bowls (Berry Bliss / Amazon Superberry), not Sambazon-style puree packs. No Frills has no puree either."
     }
   },
-  "missingImages": ["almond_original", "pineapple"]
+  "missingImages": ["pineapple"]
 }

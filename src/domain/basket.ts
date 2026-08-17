@@ -4,6 +4,7 @@ import {
   type ProcurementCostInputs,
   calculateProcurementCost,
 } from "./procurement-cost";
+import { packMassKg, packsSimilar } from "@/domain/fair-compare";
 
 export interface BasketLineInput {
   itemId: string;
@@ -67,6 +68,23 @@ function effectivePrice(offer: ProductOffer): number {
     return offer.promoPrice;
   }
   return offer.price;
+}
+
+/** Rank offers: $/kg when pack sizes differ, else shelf. */
+function rankOffer(offer: ProductOffer, peers: ProductOffer[]): number {
+  const price = effectivePrice(offer);
+  const ownKg = packMassKg(offer.name, offer.packageSize);
+  const peerKg = peers
+    .map((p) => packMassKg(p.name, p.packageSize))
+    .filter((k): k is number => k != null);
+  if (
+    ownKg &&
+    peerKg.length > 0 &&
+    peerKg.some((k) => !packsSimilar(ownKg, k))
+  ) {
+    return price / ownKg;
+  }
+  return price;
 }
 
 export function compareBaskets(
@@ -150,16 +168,24 @@ function buildMixedBasket(
   const byStore: MixedBasketResult["byStore"] = {};
 
   for (const line of lines) {
-    let best: { storeKey: string; offer: ProductOffer; price: number } | null =
+    const peers: ProductOffer[] = [];
+    for (const storeKey of storeKeys) {
+      const offer = line.offersByStore[storeKey] ?? null;
+      if (!offer) continue;
+      if (offer.availability === "out_of_stock") continue;
+      peers.push(offer);
+    }
+
+    let best: { storeKey: string; offer: ProductOffer; rank: number } | null =
       null;
 
     for (const storeKey of storeKeys) {
       const offer = line.offersByStore[storeKey] ?? null;
       if (!offer) continue;
       if (offer.availability === "out_of_stock") continue;
-      const price = effectivePrice(offer);
-      if (!best || price < best.price) {
-        best = { storeKey, offer, price };
+      const rank = rankOffer(offer, peers);
+      if (!best || rank < best.rank) {
+        best = { storeKey, offer, rank };
       }
     }
 
@@ -168,7 +194,7 @@ function buildMixedBasket(
       continue;
     }
 
-    const lineTotal = round2(best.price * line.quantity);
+    const lineTotal = round2(effectivePrice(best.offer) * line.quantity);
     assignments.push({
       itemId: line.itemId,
       label: line.label,

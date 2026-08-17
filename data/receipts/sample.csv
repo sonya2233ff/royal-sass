@@ -1,0 +1,10 @@
+date,store,upc,name,qty,unit_price,line_total,product_id,retailer
+2026-02-10,walmart_5831,065651002470,Naturegg Simply Egg Whites 1kg,4,9.47,37.88,6000196635381,walmart_ca
+2026-02-10,walmart_5831,46880,Red Bell Pepper,1,5.38,4.52,,walmart_ca
+2026-03-01,walmart_5831,628915485012,YFM Grape Tomatoes 10oz,2,2.97,5.94,6000194960084,walmart_ca
+2026-03-15,nofrills_3660,065651002470,Simply Egg Whites 500ml,8,5.49,43.92,,no_frills
+2026-04-02,walmart_5831,628915220001,Earths Own Oat Original 1.75L,2,4.47,8.94,2ADJVX8MAQ1Q,walmart_ca
+2026-04-20,walmart_5831,060383689012,Organic Sweet Potatoes 3lb,1,6.97,6.97,6000207004497,walmart_ca
+2026-05-05,walmart_5831,068700101234,Mehadrin 2% Milk 2L,3,5.49,16.47,,walmart_ca
+2026-05-05,nofrills_3660,068700101234,Mehadrin 2% Milk 2L,2,5.29,10.58,,no_frills
+2026-06-01,walmart_5831,060383012345,Sunset Red Bell Pepper,6,1.28,7.68,6000191286439,walmart_ca

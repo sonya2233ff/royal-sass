@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { resolveWalmartSource } from "@/connectors/walmart-source";
-import { PINNED_IDS, refreshWalmartSelected } from "@/lib/staples";
+import {
+  isShownStaple,
+  loadStaplesConfig,
+  refreshWalmartSelected,
+} from "@/lib/staples";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,9 +13,9 @@ export const maxDuration = 180;
 /** Refresh Walmart prices for selected staple ids only. */
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => ({}))) as { ids?: string[] };
-  const ids = (body.ids ?? []).filter((id) =>
-    (PINNED_IDS as readonly string[]).includes(id),
-  );
+  const cfg = await loadStaplesConfig();
+  const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
+  const ids = (body.ids ?? []).filter((id) => allowed.has(id));
   if (!ids.length) {
     return NextResponse.json(
       { ok: false, error: "ids required (selected SKUs only)" },

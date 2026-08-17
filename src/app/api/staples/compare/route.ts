@@ -4,17 +4,27 @@ import {
   appendMatchLog,
   CACHE_STALE_HOURS,
   evaluateOfferStatus,
+  isShownStaple,
   loadConfirmed,
   loadNoFrillsCatalog,
   loadStaplesConfig,
   loadWalmartCatalog,
-  PINNED_IDS,
   searchNoFrills,
   summarizeOffer,
   upsertNoFrillsCatalogItem,
+  isSoldByWeightItem,
+  isEggPackItem,
+  resolveMatchMode,
   type MatchLogEntry,
 } from "@/lib/staples";
 import { parseMassFromText } from "@/domain/units";
+import {
+  basketAmountForSide,
+  classifyMatchKind,
+  extractBarcodes,
+  fairCompareSides,
+  packMassKg,
+} from "@/domain/fair-compare";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,12 +35,15 @@ export async function POST(request: Request) {
     ids?: string[];
     /** If true, always hit No Frills live API (skip NF cache). */
     refreshNoFrills?: boolean;
+    /** Grams needed for sold-by-weight items (id → grams). */
+    grams?: Record<string, number>;
   };
-  const wanted = (body.ids?.length ? body.ids : [...PINNED_IDS]).filter((id) =>
-    (PINNED_IDS as readonly string[]).includes(id),
+  const cfg = await loadStaplesConfig();
+  const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
+  const wanted = (body.ids?.length ? body.ids : [...allowed]).filter((id) =>
+    allowed.has(id),
   );
 
-  const cfg = await loadStaplesConfig();
   const catalog = await loadWalmartCatalog();
   const nfCatalog = await loadNoFrillsCatalog();
   const confirmed = await loadConfirmed();
@@ -179,7 +192,17 @@ export async function POST(request: Request) {
     }
     entries.push(wmLog);
 
-    const walmart = summarizeOffer(item, wmRaw, 1, "walmart_ca");
+    const rawGrams = Number(body.grams?.[id]);
+    const soldByWeight = isSoldByWeightItem(item);
+    const grams =
+      soldByWeight && Number.isFinite(rawGrams) && rawGrams > 0
+        ? rawGrams
+        : soldByWeight
+          ? 1000
+          : null;
+    const qtyKg = grams != null ? grams / 1000 : 1;
+
+    const walmart = summarizeOffer(item, wmRaw, qtyKg, "walmart_ca");
     const noFrills = summarizeOffer(
       item,
       nfOffer
@@ -194,47 +217,73 @@ export async function POST(request: Request) {
             retailer: "no_frills",
           }
         : null,
-      1,
+      qtyKg,
       "no_frills",
     );
 
-    // Fair delta always on $/kg when both sides have weight prices; else pack lineTotal
-    const wmFair =
-      walmart?.pricePerKg ??
-      (walmart && (walmart.status === "ok" || walmart.status === "stale")
-        ? walmart.lineTotal
-        : null);
-    const nfFair =
-      noFrills?.pricePerKg ??
-      (noFrills && (noFrills.status === "ok" || noFrills.status === "stale")
-        ? noFrills.lineTotal
-        : null);
+    const egg = isEggPackItem(item);
+    const wmOk =
+      walmart &&
+      (walmart.status === "ok" || walmart.status === "stale") &&
+      walmart.lineTotal != null;
+    const nfOk =
+      noFrills &&
+      (noFrills.status === "ok" || noFrills.status === "stale") &&
+      noFrills.lineTotal != null;
 
-    const wmLine =
-      walmart && (walmart.status === "ok" || walmart.status === "stale")
-        ? (walmart.nativeUnitPrice ?? walmart.lineTotal)
-        : null;
-    const nfLine =
-      noFrills && (noFrills.status === "ok" || noFrills.status === "stale")
-        ? (noFrills.nativeUnitPrice ?? noFrills.lineTotal)
-        : null;
+    const fair = fairCompareSides(
+      {
+        ok: Boolean(wmOk),
+        shelfPrice: walmart?.shelfPrice,
+        lineTotal: walmart?.lineTotal,
+        pricePerKg: egg ? null : walmart?.pricePerKg,
+        pricePerEach: walmart?.pricePerEach,
+        packKg: packMassKg(walmart?.name, walmart?.pack),
+        isEgg: egg,
+      },
+      {
+        ok: Boolean(nfOk),
+        shelfPrice: noFrills?.shelfPrice,
+        lineTotal: noFrills?.lineTotal,
+        pricePerKg: egg ? null : noFrills?.pricePerKg,
+        pricePerEach: noFrills?.pricePerEach,
+        packKg: packMassKg(noFrills?.name, noFrills?.pack),
+        isEgg: egg,
+      },
+    );
 
-    let cheaper: "walmart" | "nofrills" | "tie" | "incomplete" = "incomplete";
-    if (wmFair != null && nfFair != null) {
-      if (wmFair < nfFair) cheaper = "walmart";
-      else if (nfFair < wmFair) cheaper = "nofrills";
-      else cheaper = "tie";
-    }
+    const wmBasket = basketAmountForSide(
+      fair,
+      "walmart",
+      wmOk ? walmart!.lineTotal : null,
+    );
+    const nfBasket = basketAmountForSide(
+      fair,
+      "nofrills",
+      nfOk ? noFrills!.lineTotal : null,
+    );
+
+    const matchKind = classifyMatchKind({
+      mode: resolveMatchMode(item),
+      preferredId: item.preferredProductId,
+      productId: walmart?.productId ?? noFrills?.productId ?? "",
+      upc: nfOffer?.upc,
+      targetUpcs: extractBarcodes(...item.queries, item.preferredProductId),
+    });
 
     rows.push({
       id: item.id,
       label: item.label,
       image: item.image ?? null,
       confirmed: Boolean(confirmed[id]),
+      soldByWeight,
+      grams,
+      matchKind,
+      fairBasis: fair.fairBasis,
+      fairLabel: fair.fairLabel,
       walmart: walmart
         ? {
             ...walmart,
-            lineTotal: wmLine,
             ageLabel: wmEval.ageLabel,
             cardStatus: wmUsable ? wmEval.status : wmEval.status,
           }
@@ -247,7 +296,6 @@ export async function POST(request: Request) {
       noFrills: noFrills
         ? {
             ...noFrills,
-            lineTotal: nfLine,
             ageLabel: nfCacheUsable ? nfCacheEval.ageLabel : null,
           }
         : {
@@ -256,30 +304,16 @@ export async function POST(request: Request) {
             lineTotal: null,
             compareUnitLabel: null,
           },
-      cheaper,
-      delta:
-        wmFair != null && nfFair != null
-          ? Math.round((wmFair - nfFair) * 100) / 100
-          : null,
-      fairBasis: wmFair != null && nfFair != null ? "per_kg" : null,
+      cheaper: fair.cheaper,
+      delta: fair.delta,
+      basketWalmart: wmBasket,
+      basketNoFrills: nfBasket,
     });
   }
 
   const complete = rows.filter((r) => r.cheaper !== "incomplete");
-  const wmSum = complete.reduce((s, r) => {
-    const w = r.walmart as {
-      pricePerKg?: number;
-      lineTotal?: number | null;
-    };
-    return s + (w.pricePerKg ?? w.lineTotal ?? 0);
-  }, 0);
-  const nfSum = complete.reduce((s, r) => {
-    const n = r.noFrills as {
-      pricePerKg?: number;
-      lineTotal?: number | null;
-    };
-    return s + (n.pricePerKg ?? n.lineTotal ?? 0);
-  }, 0);
+  const wmSum = complete.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);
+  const nfSum = complete.reduce((s, r) => s + (r.basketNoFrills ?? 0), 0);
 
   const logId = await appendMatchLog(entries);
 
@@ -311,6 +345,7 @@ export async function POST(request: Request) {
             : nfSum < wmSum
               ? "nofrills"
               : "tie",
+      note: "Порівнянна сума: різні пачки → $/kg, яйця → 30 шт, схожі пачки → ціна полиці.",
     },
   });
 }

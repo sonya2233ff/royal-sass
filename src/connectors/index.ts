@@ -24,6 +24,7 @@ export function getConnector(
 }
 
 export * from "./types";
+export * from "./store-connector";
 export { NoFrillsConnector } from "./nofrills";
 export { WalmartConnector } from "./walmart";
 export { WalmartRapidConnector, isWalmartRapidConfigured } from "./walmart-rapid";

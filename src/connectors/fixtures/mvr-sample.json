@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-08-16T05:01:15.365Z",
+  "source": "https://plus.mvrwholesale.com/products.json?limit=1",
+  "note": "Public Shopify products.json. variant.price is online; INSTOREPRICE tag is shelf estimate. Online ≈ in-store × MARKUP 1.1.",
+  "products": [
+    {
+      "id": 8463654846634,
+      "title": "PUR - MINTS TANGERINE TANGO 12x30 GR",
+      "handle": "pur-mints-tangerine-tango-12x30-gr",
+      "vendor": "PUR",
+      "tags": [
+        "CATEGORY_CHEWING GUM",
+        "INSTOREPRICE:16.59",
+        "LASTUPDATED:2026-08-16T05:01:15.365Z",
+        "MARGIN:0.90",
+        "MARKUP:1.1",
+        "SHELFLOCATION:NEW"
+      ],
+      "variants": [
+        {
+          "sku": "0083002800906",
+          "available": true,
+          "price": "18.43"
+        }
+      ]
+    }
+  ]
+}

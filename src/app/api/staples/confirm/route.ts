@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import {
+  isShownStaple,
   loadConfirmed,
   loadStaplesConfig,
   loadWalmartCatalog,
-  PINNED_IDS,
   saveConfirmed,
 } from "@/lib/staples";
 
@@ -21,7 +21,8 @@ export async function POST(request: Request) {
     productId?: string;
   };
 
-  if (!body.id || !(PINNED_IDS as readonly string[]).includes(body.id)) {
+  const cfg = await loadStaplesConfig();
+  if (!body.id || !cfg.items.some((i) => i.id === body.id && isShownStaple(i))) {
     return NextResponse.json({ ok: false, error: "invalid id" }, { status: 400 });
   }
   if (body.vote !== "up" && body.vote !== "down") {
@@ -29,7 +30,6 @@ export async function POST(request: Request) {
   }
 
   const confirmed = await loadConfirmed();
-  const cfg = await loadStaplesConfig();
   const catalog = await loadWalmartCatalog();
   const item = cfg.items.find((i) => i.id === body.id);
   const cat = catalog?.items.find((i) => i.id === body.id);

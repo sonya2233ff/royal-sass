@@ -4,7 +4,7 @@
   "items": [
     {
       "id": "simply_egg_whites",
-      "label": "Simply Egg Whites 1kg",
+      "label": "Egg Whites (cheapest carton)",
       "category": "eggs",
       "why": "Receipt UPC lock; compose test on NF",
       "receiptUpc": "065651002470",
@@ -26,7 +26,7 @@
     },
     {
       "id": "eggs_30ct",
-      "label": "Eggs 30ct",
+      "label": "Large Eggs (cheapest pack)",
       "category": "eggs",
       "why": "Receipt UPC; pack compare",
       "receiptUpc": "627735279720",
@@ -156,9 +156,17 @@
 
     {
       "id": "bananas_kg",
-      "label": "Bananas (by kg)",
+      "label": "Bananas (cheapest by kg)",
       "category": "produce",
-      "why": "Universal; $/kg; WC receipt signal",
+      "why": "Cheapest $/kg any brand",
+      "compare": "per_kg",
+      "priority": 2
+    },
+    {
+      "id": "kiwi_kg",
+      "label": "Kiwi (cheapest by kg)",
+      "category": "produce",
+      "why": "Cheapest $/kg any brand",
       "compare": "per_kg",
       "priority": 2
     },
@@ -217,9 +225,9 @@
     },
     {
       "id": "butter_454g",
-      "label": "Butter 454g",
+      "label": "Gay Lea Unsalted Butter 454g",
       "category": "dairy",
-      "why": "Classic basket POC item",
+      "why": "Locked Gay Lea Unsalted 454g (WM 6000201029320)",
       "compare": "per_pack",
       "priority": 2
     },
@@ -274,9 +282,33 @@
     },
     {
       "id": "orange_juice_pulp",
-      "label": "Orange Juice with Pulp ~2.5L",
+      "label": "Tropicana OJ No Pulp 2.63L",
       "category": "beverage",
-      "why": "WC Tropicana signal; pack",
+      "why": "Locked Tropicana 100% Pure No Pulp 2.63L (WM 205804)",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "realemon_440ml",
+      "label": "ReaLemon Juice 440ml",
+      "category": "beverage",
+      "why": "Locked ReaLemon 440ml (WM 1BUHM1GPVP5J)",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "jello_vanilla_instant",
+      "label": "Jell-O Vanilla Instant Pudding 102g",
+      "category": "dry",
+      "why": "Locked Jell-O Vanilla Instant 102g (WM 10306574)",
+      "compare": "per_pack",
+      "priority": 2
+    },
+    {
+      "id": "ziploc_sandwich",
+      "label": "Ziploc Sandwich Bags",
+      "category": "dry",
+      "why": "Locked Ziploc Sandwich Bags Grip n Seal (WM 6000195369896)",
       "compare": "per_pack",
       "priority": 2
     }

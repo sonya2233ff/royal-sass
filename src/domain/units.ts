@@ -28,16 +28,44 @@ export function parseMassFromText(text: string): ParsedMass | null {
   const s = text.toLowerCase().replace(/,/g, "");
   const all = [
     ...s.matchAll(/(\d+(?:\.\d+)?)\s*(kg|g|lb|lbs|oz|ounce|ounces|ml|l)\b/g),
-  ];
+  ].filter((m) => {
+    // Skip unit-price crumbs: "$7.69/1kg" or "/ lb"
+    const i = m.index ?? 0;
+    const prev = s[i - 1];
+    if (prev === "/" || prev === "$") return false;
+    const before = s.slice(Math.max(0, i - 3), i);
+    if (before.includes("/")) return false;
+    return true;
+  });
   if (all.length === 0) {
-    const m2 = s.match(/(\d+(?:\.\d+)?)(kg|g|lb|lbs|oz|ml)\b/);
+    const m2 = s.match(/(^|[^$/])(\d+(?:\.\d+)?)(kg|g|lb|lbs|oz|ml)\b/);
     if (!m2) return null;
-    return toMass(Number(m2[1]), normalizeUnit(m2[2]));
+    return toMass(Number(m2[2]), normalizeUnit(m2[3]));
   }
   // Prefer the largest pack size (skip "100ml" unit-price crumbs)
   const parsed = all.map((x) => toMass(Number(x[1]), normalizeUnit(x[2])));
   parsed.sort((a, b) => b.kg - a.kg);
   return parsed[0] ?? null;
+}
+
+/** "$7.69/1kg $3.49/1lb" from Loblaw packageSizing — real by-weight rate. */
+export function parseEmbeddedWeightRates(text: string): {
+  perKg?: number;
+  perLb?: number;
+} {
+  const s = text.toLowerCase().replace(/,/g, "");
+  let perKg: number | undefined;
+  let perLb: number | undefined;
+  for (const m of s.matchAll(
+    /\$?\s*(\d+(?:\.\d+)?)\s*\/\s*(?:1\s*)?(kg|lb|lbs)\b/g,
+  )) {
+    const n = Number(m[1]);
+    if (!Number.isFinite(n) || n <= 0) continue;
+    const u = m[2];
+    if (u === "kg") perKg = n;
+    else perLb = n;
+  }
+  return { perKg, perLb };
 }
 
 function normalizeUnit(u: string): MassUnit {
@@ -173,6 +201,25 @@ export function resolveUnitPrices(
   const displayUnit =
     opts?.displayUnit ?? defaultWeightUnit(offer.retailer);
 
+  const embedded = parseEmbeddedWeightRates(
+    `${offer.packageSize ?? ""} ${offer.name}`,
+  );
+  if (embedded.perKg != null || embedded.perLb != null) {
+    const pricePerKg =
+      embedded.perKg ??
+      (embedded.perLb != null ? embedded.perLb / KG_PER_LB : 0);
+    if (pricePerKg > 0) {
+      const pricePerLb = pricePerKg * KG_PER_LB;
+      return {
+        pricePerKg: round2(pricePerKg),
+        pricePerLb: round2(pricePerLb),
+        nativeUnit: displayUnit,
+        nativePrice: round2(displayUnit === "lb" ? pricePerLb : pricePerKg),
+        basis: "embedded_rate",
+      };
+    }
+  }
+
   const mass =
     parseMassFromText(offer.packageSize ?? "") ??
     parseMassFromText(offer.name);
@@ -291,5 +338,27 @@ export function formatMoneyPerWeight(
   price: number,
   unit: WeightPriceUnit,
 ): string {
+  return `$${round2(price).toFixed(2)} / ${unit}`;
+}
+
+/** Carton / dozen count from name or "30 ea, $0.58/1ea". */
+export function parsePackCount(
+  ...parts: Array<string | undefined | null>
+): number | null {
+  const t = parts.filter(Boolean).join(" ").toLowerCase();
+  if (!t) return null;
+  let best: number | null = null;
+  for (const m of t.matchAll(/(\d+)\s*(?:ea|count|ct|eggs?)\b/g)) {
+    const n = Number(m[1]);
+    if (n >= 6 && n <= 60 && (best == null || n > best)) best = n;
+  }
+  if (best != null) return best;
+  if (/\bdozen\b/.test(t)) return 12;
+  const bare = t.match(/\b(6|12|18|24|30|36|60)\b/);
+  if (bare) return Number(bare[1]);
+  return null;
+}
+
+export function formatMoneyPerEach(price: number, unit = "egg"): string {
   return `$${round2(price).toFixed(2)} / ${unit}`;
 }

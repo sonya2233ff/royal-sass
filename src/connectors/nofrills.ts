@@ -1,5 +1,6 @@
 import {
   ConnectorError,
+  pickWasPrice,
   type Availability,
   type ProductOffer,
   type RetailerConnector,
@@ -120,6 +121,24 @@ function mapProduct(
     (typeof raw.price === "number" ? raw.price : undefined);
   if (price == null) return null;
 
+  const deal =
+    raw.deal && typeof raw.deal === "object"
+      ? (raw.deal as Record<string, unknown>)
+      : null;
+  const promotions = Array.isArray(raw.promotions) ? raw.promotions : [];
+  const badgeBlob = `${raw.textBadge ?? ""} ${JSON.stringify(raw.productBadge ?? "")}`;
+  const saleFlagged =
+    deal != null ||
+    promotions.length > 0 ||
+    /sale|save|promo|deal|special/i.test(badgeBlob);
+  const wasPrice = pickWasPrice(
+    price,
+    parseMoney(pricing.wasPrice),
+    parseMoney(pricing.regularPrice),
+    parseMoney(pricing.originalPrice),
+    parseMoney(deal?.wasPrice),
+    parseMoney(deal?.regularPrice),
+  );
   const promoPrice =
     parseMoney(pricing.salePrice) ??
     parseMoney(pricing.wasPrice) ??
@@ -178,6 +197,8 @@ function mapProduct(
     unitPrice,
     promoPrice:
       promoPrice != null && promoPrice !== price ? promoPrice : undefined,
+    wasPrice,
+    onSale: wasPrice != null || saleFlagged ? true : undefined,
     availability: mapAvailability(stockStatus),
     confidence: "exact",
     checkedAt: new Date().toISOString(),

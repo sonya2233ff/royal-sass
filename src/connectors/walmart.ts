@@ -89,6 +89,7 @@ function mapItem(
   if (price == null) return null;
 
   const wasPrice = parseMoney(was.price);
+  const saleWas = wasPrice != null && wasPrice > price ? wasPrice : undefined;
 
   return {
     retailer: "walmart_ca",
@@ -99,7 +100,9 @@ function mapItem(
     packageSize:
       typeof item.salesUnit === "string" ? item.salesUnit : undefined,
     price,
-    promoPrice: wasPrice != null && wasPrice > price ? price : undefined,
+    promoPrice: saleWas != null ? price : undefined,
+    wasPrice: saleWas,
+    onSale: saleWas != null ? true : undefined,
     unitPrice: parseMoney(unit.price),
     availability: mapAvailability(
       item.availabilityStatus ?? item.availability,

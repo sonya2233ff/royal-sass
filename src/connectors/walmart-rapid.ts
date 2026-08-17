@@ -9,6 +9,7 @@
  */
 import {
   ConnectorError,
+  pickWasPrice,
   type Availability,
   type ProductOffer,
   type RetailerConnector,
@@ -181,6 +182,24 @@ export function mapRapidProduct(
     item.out_of_stock === true ||
     String(item.availability ?? "").toLowerCase().includes("out");
 
+  const savings = parseMoney(item.savings_amount);
+  const wasPrice = pickWasPrice(
+    price,
+    parseMoney(item.list_price),
+    parseMoney(asRecord(item.price_info)?.was_price),
+    parseMoney(asRecord(item.price_info)?.wasPrice),
+    parseMoney(asRecord(item.priceInfo)?.wasPrice),
+    savings != null && savings > 0.005 ? price + savings : undefined,
+  );
+  const badges = Array.isArray(item.badge_flags) ? item.badge_flags : [];
+  const saleBadge = badges.some((b) => {
+    const rec = asRecord(b);
+    const blob = `${rec?.key ?? ""} ${rec?.text ?? ""} ${String(b)}`;
+    return /rollback|sale|save/i.test(blob);
+  });
+  const urlSale = /athbdg=L1300/i.test(sourceUrl ?? "");
+  const onSale = Boolean(wasPrice || saleBadge || urlSale);
+
   return {
     retailer: "walmart_ca",
     storeId,
@@ -191,6 +210,8 @@ export function mapRapidProduct(
     upc,
     price,
     unitPrice,
+    wasPrice,
+    onSale: onSale || undefined,
     availability: outOfStock ? "out_of_stock" : mapAvailability(item.availability),
     confidence: "exact",
     checkedAt: new Date().toISOString(),

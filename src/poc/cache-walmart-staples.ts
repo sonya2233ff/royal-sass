@@ -21,6 +21,7 @@ interface StapleItem {
   queries: string[];
   targetMassKg?: number;
   mustIncludeAny?: string[];
+  mustIncludeAll?: string[];
   mustNotInclude?: string[];
   preferNameIncludes?: string[];
   preferredProductId?: string;
@@ -54,6 +55,8 @@ function slimOffer(o: ProductOffer) {
     upc: o.upc,
     price: o.price,
     unitPrice: o.unitPrice,
+    wasPrice: o.wasPrice,
+    onSale: o.onSale || undefined,
     availability: o.availability,
     confidence: o.confidence,
     checkedAt: o.checkedAt,
@@ -61,11 +64,21 @@ function slimOffer(o: ProductOffer) {
   };
 }
 
+function hayIncludes(hay: string, needle: string): boolean {
+  const n = needle.toLowerCase().trim();
+  if (!n) return false;
+  if (n.includes(" ")) return hay.includes(n);
+  const esc = n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^a-z0-9])${esc}(?:es|s)?([^a-z0-9]|$)`).test(hay);
+}
+
 function passesFilters(o: ProductOffer, item: StapleItem): boolean {
   const n = `${o.name} ${o.packageSize ?? ""}`.toLowerCase();
   if (item.mustIncludeAny?.length) {
-    const ok = item.mustIncludeAny.some((t) => n.includes(t.toLowerCase()));
-    if (!ok) return false;
+    if (!item.mustIncludeAny.some((t) => hayIncludes(n, t))) return false;
+  }
+  if (item.mustIncludeAll?.length) {
+    if (!item.mustIncludeAll.every((t) => hayIncludes(n, t))) return false;
   }
   if (item.mustNotInclude?.length) {
     for (const bad of item.mustNotInclude) {
@@ -121,12 +134,23 @@ function pickForStaple(
   if (!pool.length) return null;
 
   const cheapest =
-    item.matchMode === "cheapest" || item.category === "produce";
+    item.matchMode === "cheapest" ||
+    item.category === "produce" ||
+    item.category === "frozen" ||
+    item.category === "eggs";
+
+  const pickQuery =
+    item.category === "frozen" || item.category === "eggs"
+      ? (item.mustIncludeAny?.[0] ?? item.label)
+      : (item.queries.find((q) => q && !/^\d+$/.test(q)) ?? item.label);
 
   if (cheapest) {
     return (
-      pickCheapestOffer(pool, item.label, {
+      pickCheapestOffer(pool, pickQuery, {
         targetMassKg: item.targetMassKg,
+        preferNameIncludes: item.preferNameIncludes,
+        byEach: item.id === "eggs_30ct" || item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
+        preferLargerPack: item.id === "eggs_30ct" || item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
       }) ?? null
     );
   }
@@ -144,6 +168,33 @@ function pickForStaple(
 }
 
 async function main() {
+  const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
+  if (args.length) {
+    const { refreshWalmartSelected, PINNED_IDS } = await import("@/lib/staples");
+    const ids = args.filter((id) =>
+      (PINNED_IDS as readonly string[]).includes(id),
+    );
+    if (!ids.length) {
+      console.error("No valid staple ids");
+      process.exit(1);
+    }
+    console.error(`Refreshing WM for ${ids.length} items…`);
+    const result = await refreshWalmartSelected(ids);
+    for (const e of result.entries) {
+      const a = e.accepted;
+      console.log(
+        [
+          e.itemId.padEnd(28),
+          e.status.padEnd(12),
+          a ? `$${a.price.toFixed(2)}` : "—",
+          a?.name ?? e.rejected.at(-1)?.reason ?? "",
+        ].join("  "),
+      );
+    }
+    console.error(`\nDone. log=${result.logId} updated=${result.updated.length}`);
+    return;
+  }
+
   const cfgPath = path.join(process.cwd(), "config", "cafe-staples.json");
   const cfg = JSON.parse(await readFile(cfgPath, "utf8")) as StaplesConfig;
   const storeId = cfg.store.externalStoreId;

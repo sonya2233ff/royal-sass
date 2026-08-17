@@ -9,11 +9,11 @@
   "items": [
     {
       "id": "simply_egg_whites",
-      "label": "Simply Egg Whites 1kg",
+      "label": "Egg Whites (cheapest carton)",
       "queries": [
-        "065651002470",
-        "naturegg simply egg whites 1kg",
-        "simply egg whites 1 kg"
+        "liquid egg whites",
+        "egg whites carton",
+        "simply egg whites 1kg"
       ],
       "mustIncludeAny": [
         "egg white",
@@ -21,12 +21,19 @@
       ],
       "mustNotInclude": [
         "noodles",
-        "pasta"
+        "pasta",
+        "chocolate"
+      ],
+      "preferNameIncludes": [
+        "1kg",
+        "1 kg",
+        "1000"
       ],
       "targetMassKg": 1,
-      "preferredProductId": "6000196635381",
+      "matchMode": "cheapest",
+      "category": "eggs",
       "image": "/products/simply_egg_whites.png",
-      "notes": "Receipt UPC 065651002470 @ $9.47"
+      "notes": "Cheapest liquid egg whites $/kg, prefer 1kg carton"
     },
     {
       "id": "tomatoes_grape",
@@ -37,7 +44,9 @@
       ],
       "mustIncludeAny": [
         "grape tomato",
-        "grape tomatoes"
+        "grape tomatoes",
+        "tomato, grape",
+        "tomato grape"
       ],
       "mustNotInclude": [
         "sauce",
@@ -49,7 +58,10 @@
         "soup",
         "vine",
         "1.5lb",
-        "1.5 lb"
+        "1.5 lb",
+        "seed",
+        "seeds",
+        "plant"
       ],
       "image": "/products/tomatoes_grape.jpg",
       "notes": "Produce: cheapest grape tomato pack (brand irrelevant)",
@@ -58,25 +70,37 @@
     },
     {
       "id": "eggs_30ct",
-      "label": "Eggs 30ct",
+      "label": "Large Eggs (cheapest pack)",
       "queries": [
-        "627735279720",
-        "eggs 30",
-        "large eggs 30 pack"
+        "large eggs 30",
+        "large eggs 18",
+        "eggs 30 pack",
+        "large eggs 12"
       ],
       "mustIncludeAny": [
+        "eggs",
         "egg"
       ],
       "mustNotInclude": [
-        "white",
+        "egg white",
         "egg whites",
         "chocolate",
-        "easter"
+        "easter",
+        "quail",
+        "pickled",
+        "liquid",
+        "boiled",
+        "noodles",
+        "pasta"
       ],
       "preferNameIncludes": [
-        "30"
+        "large"
       ],
-      "notes": "Receipt UPC 627735279720 @ $9.18",
+      "matchMode": "cheapest",
+      "category": "eggs",
+      "minPlausiblePrice": 2.5,
+      "maxPlausiblePrice": 22,
+      "notes": "Any brand. Cheapest $/egg; if close, bigger carton (18/30).",
       "image": "/products/eggs_30ct.jpg"
     },
     {
@@ -181,8 +205,25 @@
         "jar",
         "sauce",
         "can",
-        "dip"
+        "dip",
+        "herb",
+        "spice",
+        "flavour",
+        "flavor",
+        "pickled",
+        "pickeled",
+        "stuffed",
+        "basil",
+        "thyme",
+        "oregano",
+        "rosemary",
+        "kit",
+        "genovese"
       ],
+      "preferNameIncludes": [
+        "sold in singles"
+      ],
+      "maxPlausiblePrice": 10,
       "image": "/products/eggplant_kg.jpg",
       "matchMode": "cheapest",
       "category": "produce",
@@ -366,11 +407,11 @@
       ],
       "preferredProductId": "10184853",
       "notes": "Same brand as oat — Earth's Own (not Silk)",
-      "image": "/products/almond_original.jpg"
+      "image": "/products/almond_earths_own.jpg"
     },
     {
       "id": "bananas_kg",
-      "label": "Bananas (by kg)",
+      "label": "Bananas (cheapest by kg)",
       "queries": [
         "bananas",
         "fresh bananas"
@@ -383,12 +424,72 @@
         "bread",
         "baby",
         "dried",
-        "candy"
+        "candy",
+        "frozen",
+        "leaf",
+        "leaves",
+        "plantain"
       ],
       "image": "/products/bananas_kg.jpg",
       "matchMode": "cheapest",
       "category": "produce",
       "notes": "Produce: cheapest matching offer (brand irrelevant)"
+    },
+    {
+      "id": "kiwi_kg",
+      "label": "Kiwi (cheapest by kg)",
+      "queries": [
+        "kiwi",
+        "kiwis",
+        "fresh kiwi",
+        "kiwi sold in singles"
+      ],
+      "mustIncludeAny": [
+        "kiwi",
+        "kiwis",
+        "kiwifruit"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "dried",
+        "candy",
+        "frozen",
+        "jam",
+        "smoothie",
+        "blend",
+        "yogurt",
+        "sparkling",
+        "water",
+        "soda",
+        "drink",
+        "beverage",
+        "seltzer",
+        "tea",
+        "gummy",
+        "popsicle",
+        "mold",
+        "vitamin",
+        "bottle",
+        "aquafina",
+        "591",
+        "ml",
+        "kombucha",
+        "1l",
+        "litre",
+        "strawberry",
+        "pineapple",
+        "banana",
+        "pouch",
+        "puree"
+      ],
+      "preferNameIncludes": [
+        "sold in singles"
+      ],
+      "maxPlausiblePrice": 12,
+      "image": "/products/kiwi_kg.jpg",
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "Produce: cheapest kiwi by kg (brand irrelevant)"
     },
     {
       "id": "cucumber_english",
@@ -522,7 +623,7 @@
       "expectedPackKg": 2,
       "minPlausiblePrice": 3.5,
       "notes": "Mehadrin 2% 2L — WM product_id 6000198384699; NF often titled Kosher 2% Milk",
-      "image": "/products/mehadrin_2pct.jpg"
+      "image": "/products/milk_2pct_2l.jpg"
     },
     {
       "id": "homo_milk_2l",
@@ -570,14 +671,17 @@
     },
     {
       "id": "butter_454g",
-      "label": "Butter 454g",
+      "label": "Gay Lea Unsalted Butter 454g",
       "queries": [
-        "butter 454g",
-        "salted butter 454",
-        "lactantia butter 454"
+        "gay lea unsalted butter",
+        "gay lea unsalted butter 454g"
       ],
       "mustIncludeAny": [
-        "butter"
+        "gay lea",
+        "gaylea"
+      ],
+      "mustIncludeAll": [
+        "unsalted"
       ],
       "mustNotInclude": [
         "peanut",
@@ -585,8 +689,24 @@
         "cookie",
         "chicken",
         "spray",
-        "ghee"
+        "ghee",
+        "clarified",
+        "plant butter",
+        "becel",
+        "margarine",
+        "whipped",
+        "dairy free",
+        "dairy-free"
       ],
+      "preferNameIncludes": [
+        "unsalted",
+        "454"
+      ],
+      "preferredProductId": "6000201029320",
+      "expectedPackKg": 0.454,
+      "minPlausiblePrice": 4,
+      "maxPlausiblePrice": 14,
+      "notes": "Gay Lea Unsalted Butter 454g — WM product_id 6000201029320",
       "image": "/products/butter_454g.jpg"
     },
     {
@@ -714,22 +834,411 @@
     },
     {
       "id": "orange_juice_pulp",
-      "label": "Orange Juice with Pulp",
+      "label": "Tropicana OJ No Pulp 2.63L",
       "queries": [
-        "tropicana orange juice pulp",
-        "orange juice with pulp"
+        "tropicana orange juice no pulp",
+        "tropicana 100% pure orange juice no pulp 2.63"
+      ],
+      "mustIncludeAll": [
+        "tropicana"
       ],
       "mustIncludeAny": [
-        "orange juice"
+        "no pulp",
+        "sans pulpe",
+        "pulp-free",
+        "pulp free"
       ],
       "mustNotInclude": [
+        "lots of pulp",
+        "some pulp",
+        "with pulp",
+        "extra pulp",
+        "homestyle",
         "drink",
         "cocktail",
         "sparkling",
         "zero",
-        "concentrate"
+        "concentrate",
+        "calcium"
       ],
+      "preferNameIncludes": [
+        "no pulp",
+        "2.63"
+      ],
+      "preferredProductId": "205804",
+      "expectedPackKg": 2.63,
+      "minPlausiblePrice": 5,
+      "maxPlausiblePrice": 16,
+      "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L — WM product_id 205804",
       "image": "/products/orange_juice_pulp.jpg"
+    },
+    {
+      "id": "realemon_440ml",
+      "label": "ReaLemon Juice 440ml",
+      "queries": [
+        "realemon",
+        "realemon juice 440ml",
+        "rea lemon juice 440"
+      ],
+      "mustIncludeAny": [
+        "realemon",
+        "rea lemon",
+        "rea-lemon"
+      ],
+      "mustNotInclude": [
+        "lime",
+        "lemonade",
+        "sparkling",
+        "cleaner",
+        "dish",
+        "wipes",
+        "seltzer"
+      ],
+      "preferNameIncludes": [
+        "440"
+      ],
+      "preferredProductId": "1BUHM1GPVP5J",
+      "expectedPackKg": 0.44,
+      "minPlausiblePrice": 1.5,
+      "maxPlausiblePrice": 8,
+      "notes": "ReaLemon Juice 440ml — WM product_id 1BUHM1GPVP5J",
+      "image": "/products/realemon_440ml.jpg"
+    },
+    {
+      "id": "jello_vanilla_instant",
+      "label": "Jell-O Vanilla Instant Pudding 102g",
+      "queries": [
+        "jell-o vanilla instant pudding",
+        "jello vanilla pudding 102g",
+        "jell-o instant pudding vanilla"
+      ],
+      "mustIncludeAny": [
+        "jell-o",
+        "jello",
+        "jell o"
+      ],
+      "mustIncludeAll": [
+        "vanilla"
+      ],
+      "mustNotInclude": [
+        "chocolate",
+        "butterscotch",
+        "pistachio",
+        "cheesecake",
+        "banana",
+        "strawberry",
+        "cook and serve",
+        "cook & serve",
+        "gelatin",
+        "sugar free",
+        "cups",
+        "snack pack"
+      ],
+      "preferNameIncludes": [
+        "instant",
+        "102"
+      ],
+      "preferredProductId": "10306574",
+      "expectedPackKg": 0.102,
+      "minPlausiblePrice": 1,
+      "maxPlausiblePrice": 5,
+      "notes": "Jell-O Vanilla Instant Pudding Mix 102g casein-free — WM product_id 10306574",
+      "image": "/products/jello_vanilla_instant.jpg"
+    },
+    {
+      "id": "ziploc_sandwich",
+      "label": "Ziploc Sandwich Bags",
+      "queries": [
+        "ziploc sandwich bags",
+        "ziploc sandwich bags grip n seal",
+        "ziploc sandwich 180"
+      ],
+      "mustIncludeAny": [
+        "ziploc",
+        "zip-loc",
+        "zip loc"
+      ],
+      "mustIncludeAll": [
+        "sandwich"
+      ],
+      "mustNotInclude": [
+        "freezer",
+        "gallon",
+        "snack",
+        "quart",
+        "slider",
+        "vacuum",
+        "container",
+        "wrap",
+        "paper",
+        "compostable"
+      ],
+      "preferNameIncludes": [
+        "grip",
+        "180",
+        "200",
+        "270"
+      ],
+      "preferredProductId": "6000195369896",
+      "minPlausiblePrice": 5,
+      "maxPlausiblePrice": 16,
+      "notes": "Ziploc Sandwich Bags Grip n Seal — WM product_id 6000195369896",
+      "image": "/products/ziploc_sandwich.jpg"
+    },
+    {
+      "id": "frozen_apple",
+      "label": "Frozen Apple Slices",
+      "queries": [
+        "frozen sliced apples",
+        "frozen apple slices",
+        "frozen apples"
+      ],
+      "mustIncludeAny": [
+        "apple",
+        "apples"
+      ],
+      "mustIncludeAll": [
+        "frozen"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "pie",
+        "chip",
+        "cider",
+        "crisp",
+        "muffin",
+        "blintz",
+        "fillo",
+        "filo",
+        "pastry",
+        "twister",
+        "cinnamon",
+        "raisin",
+        "strudel",
+        "gala",
+        "granny",
+        "delicious",
+        "blend",
+        "pineapple"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "Frozen fruit bag, cheapest $/kg any brand. Often not stocked at WM/NF."
+    },
+    {
+      "id": "frozen_banana",
+      "label": "Frozen Sliced Banana",
+      "queries": [
+        "frozen banana slices",
+        "banana sliced",
+        "frozen bananas"
+      ],
+      "mustIncludeAny": [
+        "banana - sliced",
+        "sliced banana",
+        "banana sliced",
+        "frozen banana",
+        "frozen bananas"
+      ],
+      "mustNotInclude": [
+        "chip",
+        "bread",
+        "baby",
+        "candy",
+        "yogurt",
+        "muffin",
+        "blend",
+        "chocolate",
+        "peanut",
+        "plantain",
+        "saba",
+        "bunch",
+        "waffle",
+        "kiwi",
+        "loaf",
+        "cake"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "Frozen: cheapest sliced banana bag, any brand (not blends)",
+      "image": "/products/frozen_banana.png"
+    },
+    {
+      "id": "frozen_blueberry",
+      "label": "Frozen Blueberries",
+      "queries": [
+        "frozen blueberries",
+        "frozen cultivated blueberries",
+        "frozen wild blueberries"
+      ],
+      "mustIncludeAny": [
+        "blueberry",
+        "blueberries"
+      ],
+      "mustNotInclude": [
+        "muffin",
+        "jam",
+        "juice",
+        "dried",
+        "yogurt",
+        "waffle",
+        "pancake",
+        "flavour",
+        "flavor",
+        "blend",
+        "mixed",
+        "acai",
+        "pie",
+        "filling",
+        "strudel",
+        "pastry",
+        "toaster",
+        "sorbet",
+        "sorbetto",
+        "gelato",
+        "cheesecake",
+        "cake",
+        "topped",
+        "blintz"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "Frozen: cheapest blueberry bag, any brand",
+      "image": "/products/frozen_blueberry.jpg"
+    },
+    {
+      "id": "frozen_strawberry",
+      "label": "Frozen Sliced Strawberries",
+      "queries": [
+        "frozen strawberries",
+        "frozen sliced strawberries",
+        "frozen whole strawberries"
+      ],
+      "mustIncludeAny": [
+        "frozen strawberry",
+        "frozen strawberries",
+        "sliced strawberry",
+        "sliced strawberries",
+        "whole strawberry",
+        "whole strawberries"
+      ],
+      "mustNotInclude": [
+        "jam",
+        "syrup",
+        "candy",
+        "yogurt",
+        "muffin",
+        "blend",
+        "mixed",
+        "ice pop",
+        "popsicle",
+        "ice cream",
+        "cream bar",
+        "chocolate",
+        "smoothie cube",
+        "waffle",
+        "fruit bar",
+        "strudel",
+        "pastry",
+        "toaster",
+        "pie",
+        "cookie",
+        "creme",
+        "hershey",
+        "quart",
+        "pint",
+        "sorbet",
+        "sorbetto",
+        "rhubarb"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "Frozen: cheapest strawberry bag, any brand",
+      "image": "/products/frozen_strawberry.jpg"
+    },
+    {
+      "id": "frozen_spinach",
+      "label": "Frozen Chopped Spinach",
+      "queries": [
+        "frozen chopped spinach",
+        "frozen spinach nuggets",
+        "frozen spinach cubes",
+        "chopped spinach"
+      ],
+      "mustIncludeAny": [
+        "spinach"
+      ],
+      "mustNotInclude": [
+        "soup",
+        "dip",
+        "salad",
+        "cream",
+        "canned",
+        "quiche",
+        "pizza",
+        "baby",
+        "cello",
+        "bunch",
+        "cooking",
+        "onion",
+        "chicken",
+        "paneer",
+        "your fresh market",
+        "sold in"
+      ],
+      "preferNameIncludes": [
+        "nugget",
+        "nuggets",
+        "cube",
+        "cubes",
+        "portion",
+        "chopped"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "Prefer cube/nugget bags; else cheapest chopped spinach, any brand",
+      "image": "/products/frozen_spinach.jpg"
+    },
+    {
+      "id": "acai",
+      "label": "Sambazon Berry Bliss Acai Bowl",
+      "queries": [
+        "acai bowl",
+        "frozen acai",
+        "sambazon acai",
+        "acai puree"
+      ],
+      "mustIncludeAny": [
+        "acai bowl",
+        "açaí bowl",
+        "acai puree",
+        "açaí puree",
+        "sambazon"
+      ],
+      "mustNotInclude": [
+        "capsule",
+        "pill",
+        "supplement",
+        "granola",
+        "juice",
+        "tea",
+        "shot",
+        "baby",
+        "seltzer",
+        "energy",
+        "lemon",
+        "masala"
+      ],
+      "preferNameIncludes": [
+        "puree",
+        "unsweetened",
+        "sambazon"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "No unsweetened puree packs at WM #5831 / NF #3660; WM has frozen acai bowls",
+      "image": "/products/acai.jpg"
     }
   ]
 }

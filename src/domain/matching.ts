@@ -1,5 +1,6 @@
 import type { ProductOffer } from "@/connectors/types";
-import { scoreMassMatch, resolveUnitPrices } from "@/domain/units";
+import { scoreMassMatch, resolveUnitPrices, parsePackCount } from "@/domain/units";
+import { extractBarcodes, upcsMatch } from "@/domain/fair-compare";
 
 const STOP = new Set([
   "the",
@@ -136,59 +137,136 @@ export function pickCheapestOffer(
     targetMassKg?: number;
     /** Prefer comparing by $/kg when resolvable (default true). */
     byUnitPrice?: boolean;
+    /** Compare by shelf ÷ pack count (eggs 12 vs 30). */
+    byEach?: boolean;
+    /** When unit prices are close, keep the bigger carton. */
+    preferLargerPack?: boolean;
+    /** If any hit matches, restrict to those (e.g. spinach cubes). */
+    preferNameIncludes?: string[];
   },
 ): ProductOffer | null {
   if (offers.length === 0) return null;
 
-  const byUnit = opts?.byUnitPrice !== false;
+  const byUnit = opts?.byUnitPrice !== false && !opts?.byEach;
   type Ranked = {
     offer: ProductOffer;
     matchScore: number;
     sortPrice: number;
+    hasUnit: boolean;
+    packCount: number;
   };
-  const ranked: Ranked[] = [];
+  let ranked: Ranked[] = [];
 
   for (const offer of offers) {
     const matchScore = scoreOfferMatch(offer, query, opts);
     if (matchScore === -Infinity) continue;
 
-    let sortPrice = offer.price;
-    if (byUnit) {
-      const units = resolveUnitPrices(offer, {
-        forceSoldByWeight: false,
+    const count = parsePackCount(offer.name, offer.packageSize);
+    if (opts?.byEach) {
+      const each =
+        count && count > 0
+          ? offer.price / count
+          : offer.unitPrice != null && offer.unitPrice > 0 && offer.unitPrice < 3
+            ? offer.unitPrice
+            : null;
+      if (each == null || !(each > 0)) continue;
+      ranked.push({
+        offer,
+        matchScore,
+        sortPrice: each,
+        hasUnit: true,
+        packCount: count ?? 0,
       });
-      if (units?.pricePerKg && units.pricePerKg > 0) {
-        sortPrice = units.pricePerKg;
-      }
+      continue;
     }
+
+    const units = byUnit
+      ? resolveUnitPrices(offer, { forceSoldByWeight: false })
+      : null;
+    const hasUnit = Boolean(units?.pricePerKg && units.pricePerKg > 0);
+    const sortPrice = hasUnit ? units!.pricePerKg : offer.price;
     if (!(sortPrice > 0)) continue;
-    ranked.push({ offer, matchScore, sortPrice });
+    ranked.push({
+      offer,
+      matchScore,
+      sortPrice,
+      hasUnit,
+      packCount: count ?? 0,
+    });
   }
 
   if (!ranked.length) return null;
 
+  const withUnit = ranked.filter((r) => r.hasUnit);
+  if (withUnit.length) ranked = withUnit;
+
+  if (opts?.preferNameIncludes?.length) {
+    const pref = ranked.filter((r) => {
+      const n = `${r.offer.brand ?? ""} ${r.offer.name}`.toLowerCase();
+      return opts.preferNameIncludes!.some((p) => n.includes(p.toLowerCase()));
+    });
+    if (pref.length) ranked = pref;
+  }
+
   ranked.sort((a, b) => {
+    if (opts?.preferLargerPack && a.packCount > 0 && b.packCount > 0) {
+      const rel =
+        Math.abs(a.sortPrice - b.sortPrice) / Math.min(a.sortPrice, b.sortPrice);
+      if (rel <= 0.08 && a.packCount !== b.packCount) {
+        return b.packCount - a.packCount;
+      }
+    }
     if (a.sortPrice !== b.sortPrice) return a.sortPrice - b.sortPrice;
+    if (opts?.preferLargerPack && a.packCount !== b.packCount) {
+      return b.packCount - a.packCount;
+    }
     return b.matchScore - a.matchScore;
   });
   return ranked[0]!.offer;
+}
+
+function findUpcHit(
+  offers: ProductOffer[],
+  query: string,
+  preferredUpc?: string,
+): ProductOffer | undefined {
+  const codes = [
+    ...extractBarcodes(query, preferredUpc),
+    ...(preferredUpc ? [preferredUpc] : []),
+  ];
+  if (!codes.length) return undefined;
+  return offers.find((o) =>
+    codes.some(
+      (c) => upcsMatch(o.upc, c) || upcsMatch(o.productId, c),
+    ),
+  );
 }
 
 export function pickBestOffer(
   offers: ProductOffer[],
   query: string,
   preferredId?: string,
-  opts?: { targetMassKg?: number; mode?: OfferPickMode },
+  opts?: {
+    targetMassKg?: number;
+    mode?: OfferPickMode;
+    preferNameIncludes?: string[];
+    byEach?: boolean;
+    preferLargerPack?: boolean;
+    preferredUpc?: string;
+  },
 ): ProductOffer | null {
   if (offers.length === 0) return null;
-
-  if (opts?.mode === "cheapest") {
-    return pickCheapestOffer(offers, query, opts);
-  }
 
   if (preferredId) {
     const hit = offers.find((o) => o.productId === preferredId);
     if (hit) return hit;
+  }
+
+  const upcHit = findUpcHit(offers, query, opts?.preferredUpc);
+  if (upcHit && opts?.mode !== "cheapest") return upcHit;
+
+  if (opts?.mode === "cheapest") {
+    return pickCheapestOffer(offers, query, opts);
   }
 
   let best: ProductOffer | null = null;
