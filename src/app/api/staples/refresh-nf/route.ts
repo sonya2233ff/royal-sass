@@ -7,7 +7,7 @@ import {
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 180;
+export const maxDuration = 60;
 
 /** Force live No Frills refresh for selected staple ids (writes NF catalog cache). */
 export async function POST(request: Request) {
