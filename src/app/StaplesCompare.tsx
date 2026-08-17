@@ -1557,6 +1557,8 @@ function Side({
   qty?: number;
 }) {
   const buy = side.purchase;
+  const productName = side.name ?? buy?.name ?? null;
+  const productImage = side.image ?? buy?.image ?? null;
   const usable =
     side.lineTotal != null &&
     (side.status === "ok" || side.status === "stale" || !side.status);
@@ -1601,6 +1603,22 @@ function Side({
   return (
     <div>
       <span className="store">{title}</span>
+      <div className="product">
+        {productImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={productImage}
+            alt={productName ?? title}
+            className="product-photo"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div className="product-ph">No photo</div>
+        )}
+        <div className="product-name">
+          {productName ? tidyOfferName(productName) : "немає товару"}
+        </div>
+      </div>
       <div>
         <span className={`pill ${side.status ?? "no_match"}`}>
           {statusLabel(side.status)}
@@ -1619,16 +1637,6 @@ function Side({
                 полиця ${side.shelfPrice.toFixed(2)}
               </div>
             )}
-          {buy?.image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={buy.image}
-              alt=""
-              referrerPolicy="no-referrer"
-              style={{ width: 48, height: 48, objectFit: "cover", margin: "0.25rem 0" }}
-            />
-          )}
-          {side.name && <div className="tiny">{side.name}</div>}
           {buy && (
             <>
               <div className="tiny">потрібно {buy.neededGrams} g</div>
@@ -1668,10 +1676,34 @@ function Side({
           {side.statusReason && (
             <div className="tiny mute">{side.statusReason}</div>
           )}
-          {side.name && <div className="tiny mute">saw: {side.name}</div>}
         </>
       )}
       <style jsx>{`
+        .product {
+          display: flex;
+          gap: 0.55rem;
+          align-items: center;
+          margin: 0.35rem 0 0.2rem;
+        }
+        .product-photo,
+        .product-ph {
+          width: 72px;
+          height: 72px;
+          object-fit: cover;
+          flex-shrink: 0;
+          background: #e9e4da;
+        }
+        .product-ph {
+          display: grid;
+          place-items: center;
+          font-size: 0.62rem;
+          color: #7a7468;
+        }
+        .product-name {
+          font-size: 0.88rem;
+          font-weight: 650;
+          line-height: 1.25;
+        }
         .store {
           font-size: 0.72rem;
           letter-spacing: 0.08em;

@@ -273,6 +273,7 @@ export function buildStapleCompareRow(input: {
           ageLabel: input.wmEval.ageLabel,
           cardStatus: input.wmUsable ? input.wmEval.status : input.wmEval.status,
           purchase: wmPlan,
+          image: wmPlan?.image ?? wmRaw?.image ?? item.image ?? null,
         }
       : {
           status: input.wmEval.status,
@@ -286,6 +287,7 @@ export function buildStapleCompareRow(input: {
           lineTotal: nfPlan?.totalPrice ?? noFrills.lineTotal,
           ageLabel: input.nfEval.ageLabel,
           purchase: nfPlan,
+          image: nfPlan?.image ?? nfRaw?.image ?? item.image ?? null,
         }
       : {
           status: input.nfEval.status,
