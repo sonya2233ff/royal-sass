@@ -9,6 +9,10 @@ import {
   type MouseEvent,
 } from "react";
 import { ProductSearch } from "./ProductSearch";
+import {
+  looseWeightPurchase,
+  purchasePlanForPack,
+} from "@/domain/needed-weight-pick";
 
 type OfferStatus =
   | "ok"
@@ -46,6 +50,7 @@ type Staple = {
     nativeUnitPriceLabel?: string | null;
     wasPrice?: number | null;
     onSale?: boolean;
+    image?: string | null;
   } | null;
   noFrillsCached: {
     name: string;
@@ -62,6 +67,7 @@ type Staple = {
     nativeUnitPriceLabel?: string | null;
     wasPrice?: number | null;
     onSale?: boolean;
+    image?: string | null;
   } | null;
   onSale?: boolean;
 };
@@ -82,6 +88,22 @@ type SideResult = {
   nativeUnitPrice?: number;
   nativeUnitLabel?: string;
   nativeUnitPriceLabel?: string;
+  image?: string | null;
+  purchase?: {
+    neededGrams: number;
+    packGrams: number;
+    packs: number;
+    gotGrams: number;
+    deltaGrams: number;
+    deltaPct: number;
+    totalPrice: number;
+    pricePer100g: number;
+    inRange: boolean;
+    coverFallback: boolean;
+    soldByWeight: boolean;
+    name: string;
+    image?: string;
+  } | null;
 };
 
 type CompareRow = {
@@ -186,6 +208,46 @@ function friendlyError(msg: string): string {
     return "RapidAPI вибрано, але ключ порожній. Сайт walmart.ca не чіпаємо (PerimeterX). Додай OPENWEBNINJA_API_KEY або RAPIDAPI_KEY у .env і на Vercel.";
   }
   return msg;
+}
+
+function categoryBPreview(
+  side: Staple["walmartCached"],
+  neededG: number | null,
+  soldByWeight: boolean,
+) {
+  if (!side || neededG == null || !(neededG > 0)) return null;
+  if (soldByWeight && side.pricePerKg) {
+    return looseWeightPurchase({
+      neededGrams: neededG,
+      pricePerKg: side.pricePerKg,
+      productId: side.productId,
+      name: side.name,
+      image: side.image ?? undefined,
+      shelfPrice: side.price,
+    });
+  }
+  if (soldByWeight) return null;
+  return purchasePlanForPack(neededG, {
+    productId: side.productId,
+    name: side.name,
+    price: side.price,
+    packageSize: side.packageSize,
+    image: side.image ?? undefined,
+  });
+}
+
+function formatBBuy(plan: NonNullable<ReturnType<typeof categoryBPreview>>): string {
+  if (plan.soldByWeight) {
+    return `потрібно ${plan.neededGrams} g · $${plan.totalPrice.toFixed(2)} · $${plan.pricePer100g.toFixed(2)}/100g`;
+  }
+  const gap =
+    plan.deltaGrams === 0
+      ? "без відхилення"
+      : plan.deltaGrams < 0
+        ? `недостача ${Math.abs(plan.deltaGrams)} g (${Math.abs(plan.deltaPct)}%)`
+        : `надлишок ${plan.deltaGrams} g (+${plan.deltaPct}%)`;
+  const extra = plan.coverFallback ? " · перевищує бажану кількість" : "";
+  return `потрібно ${plan.neededGrams} g · ${plan.packs} × ${plan.packGrams} g = ${plan.gotGrams} g · ${gap} · $${plan.totalPrice.toFixed(2)} · $${plan.pricePer100g.toFixed(2)}/100g${extra}`;
 }
 
 function walmartSourceLabel(
@@ -620,12 +682,19 @@ export function StaplesCompare() {
       <section className="grid">
         {visibleItems.map((item) => {
           const on = selected.has(item.id);
+          const isCatB = item.matchMode === "cheapest";
           const gramsVal = gramsById[item.id] ?? "";
           const gramsN = Number.parseFloat(gramsVal);
+          const neededG =
+            Number.isFinite(gramsN) && gramsN > 0
+              ? gramsN
+              : on && isCatB
+                ? item.soldByWeight
+                  ? 1000
+                  : 500
+                : null;
           const estKg =
-            item.soldByWeight && Number.isFinite(gramsN) && gramsN > 0
-              ? gramsN / 1000
-              : null;
+            item.soldByWeight && neededG != null ? neededG / 1000 : null;
           const wmEst =
             estKg != null && item.walmartCached?.pricePerKg
               ? item.walmartCached.pricePerKg * estKg
@@ -640,9 +709,12 @@ export function StaplesCompare() {
             10,
           );
           const packN =
-            !item.soldByWeight && Number.isFinite(packParsed) && packParsed > 0
+            !isCatB &&
+            !item.soldByWeight &&
+            Number.isFinite(packParsed) &&
+            packParsed > 0
               ? packParsed
-              : on && !item.soldByWeight
+              : on && !isCatB && !item.soldByWeight
                 ? 1
                 : 0;
           const wmPackEst =
@@ -654,6 +726,10 @@ export function StaplesCompare() {
               ? item.noFrillsCached.price * packN
               : null;
           const cat = matchCategory(item.matchMode);
+          const thumb =
+            isCatB && item.walmartCached?.image
+              ? item.walmartCached.image
+              : item.image;
           return (
             <div
               key={item.id}
@@ -666,10 +742,10 @@ export function StaplesCompare() {
                 onClick={() => toggle(item.id)}
               >
                 <div className="thumb">
-                  {item.image ? (
+                  {thumb ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={item.image}
+                      src={thumb}
                       alt={item.label}
                       referrerPolicy="no-referrer"
                     />
@@ -766,6 +842,35 @@ export function StaplesCompare() {
                       {item.noFrillsCached.ageLabel}
                     </span>
                   )}
+                  {isCatB &&
+                    neededG != null &&
+                    (() => {
+                      const wmBuy = categoryBPreview(
+                        item.walmartCached,
+                        neededG,
+                        Boolean(item.soldByWeight),
+                      );
+                      const nfBuy = categoryBPreview(
+                        item.noFrillsCached,
+                        neededG,
+                        Boolean(item.soldByWeight),
+                      );
+                      if (!wmBuy && !nfBuy) return null;
+                      return (
+                        <>
+                          {wmBuy && (
+                            <span className="unitprice">
+                              WM {formatBBuy(wmBuy)}
+                            </span>
+                          )}
+                          {nfBuy && (
+                            <span className="unitprice">
+                              NF {formatBBuy(nfBuy)}
+                            </span>
+                          )}
+                        </>
+                      );
+                    })()}
                   {item.statusReason && (
                     <span className="reason">{item.statusReason}</span>
                   )}
@@ -783,7 +888,7 @@ export function StaplesCompare() {
               >
                 ×
               </button>
-              {item.soldByWeight ? (
+              {isCatB || item.soldByWeight ? (
                 on && (
                   <label className="grams">
                     <span>грам</span>
@@ -792,7 +897,7 @@ export function StaplesCompare() {
                       min={1}
                       step={50}
                       inputMode="numeric"
-                      placeholder="1000"
+                      placeholder={item.soldByWeight ? "1000" : "500"}
                       value={gramsVal}
                       onClick={(e) => e.stopPropagation()}
                       onChange={(e) => setGrams(item.id, e.target.value)}
@@ -968,7 +1073,7 @@ export function StaplesCompare() {
                   <strong>
                     {r.label}
                     {r.confirmed ? " · locked" : ""}
-                    {r.soldByWeight && r.grams
+                    {r.grams
                       ? ` · ${r.grams} g`
                       : r.qty != null && r.qty > 1
                         ? ` · ×${r.qty}`
@@ -1451,6 +1556,7 @@ function Side({
   grams?: number | null;
   qty?: number;
 }) {
+  const buy = side.purchase;
   const usable =
     side.lineTotal != null &&
     (side.status === "ok" || side.status === "stale" || !side.status);
@@ -1464,21 +1570,27 @@ function Side({
       : null;
   const packQty = qty != null && qty > 1 ? qty : null;
   const primary =
-    scaled != null
-      ? scaled
-      : packQty != null && side.lineTotal != null
-        ? side.lineTotal
-        : byWeight
-          ? side.nativeUnitPrice!
-          : (side.lineTotal ?? null);
+    buy != null
+      ? buy.totalPrice
+      : scaled != null
+        ? scaled
+        : packQty != null && side.lineTotal != null
+          ? side.lineTotal
+          : byWeight
+            ? side.nativeUnitPrice!
+            : (side.lineTotal ?? null);
   const unitLabel =
-    scaled != null
-      ? `за ${grams} g`
-      : packQty != null
-        ? `×${packQty}`
-        : byWeight
-          ? (side.nativeUnitLabel ?? side.compareUnitLabel ?? null)
-          : (side.compareUnitLabel ?? null);
+    buy != null
+      ? buy.soldByWeight
+        ? `за ${buy.neededGrams} g`
+        : `${buy.packs} × ${buy.packGrams} g`
+      : scaled != null
+        ? `за ${grams} g`
+        : packQty != null
+          ? `×${packQty}`
+          : byWeight
+            ? (side.nativeUnitLabel ?? side.compareUnitLabel ?? null)
+            : (side.compareUnitLabel ?? null);
   const otherUnit =
     byWeight && side.nativeUnit === "kg" && side.pricePerLb != null
       ? `= $${side.pricePerLb.toFixed(2)} / lb`
@@ -1507,7 +1619,41 @@ function Side({
                 полиця ${side.shelfPrice.toFixed(2)}
               </div>
             )}
+          {buy?.image && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={buy.image}
+              alt=""
+              referrerPolicy="no-referrer"
+              style={{ width: 48, height: 48, objectFit: "cover", margin: "0.25rem 0" }}
+            />
+          )}
           {side.name && <div className="tiny">{side.name}</div>}
+          {buy && (
+            <>
+              <div className="tiny">потрібно {buy.neededGrams} g</div>
+              {buy.soldByWeight ? (
+                <div className="tiny mute">на вагу, без пачки</div>
+              ) : (
+                <>
+                  <div className="tiny">
+                    пачка {buy.packGrams} g · {buy.packs} шт · разом {buy.gotGrams} g
+                  </div>
+                  <div className="tiny mute">
+                    {buy.deltaGrams === 0
+                      ? "без відхилення"
+                      : buy.deltaGrams < 0
+                        ? `недостача ${Math.abs(buy.deltaGrams)} g (${Math.abs(buy.deltaPct)}%)`
+                        : `надлишок ${buy.deltaGrams} g (+${buy.deltaPct}%)`}
+                    {buy.coverFallback ? " · перевищує бажану кількість" : ""}
+                  </div>
+                </>
+              )}
+              <div className="tiny mute">
+                ${buy.pricePer100g.toFixed(2)}/100g
+              </div>
+            </>
+          )}
           {side.note && <div className="tiny mute">{side.note}</div>}
           {side.ageLabel && (
             <div className="tiny mute">

@@ -7,7 +7,12 @@
  */
 import { parseMassFromText, round2 } from "@/domain/units";
 
-export type FairBasis = "per_100g" | "per_egg" | "per_pack" | "incomparable";
+export type FairBasis =
+  | "per_100g"
+  | "per_egg"
+  | "per_pack"
+  | "needed_weight"
+  | "incomparable";
 
 export type MatchKind =
   | "upc"
@@ -230,6 +235,7 @@ export function basketAmountForSide(
 ): number | null {
   if (fair.fairBasis === "incomparable") return null;
   const v = side === "walmart" ? fair.wmFair : fair.nfFair;
+  if (fair.fairBasis === "needed_weight" && v != null) return v;
   // Quote the deal per 100 g; basket line is still 1 kg (10 × 100 g).
   if (fair.fairBasis === "per_100g" && v != null) return round2(v * 10);
   if (fair.fairBasis === "per_egg" && v != null) {
@@ -246,6 +252,7 @@ export function scaleBasketAmount(
   opts?: { packQty?: number; qtyKg?: number },
 ): number | null {
   if (amount == null || fair.fairBasis === "incomparable") return null;
+  if (fair.fairBasis === "needed_weight") return amount;
   if (fair.fairBasis === "per_100g") {
     const kg = opts?.qtyKg != null && opts.qtyKg > 0 ? opts.qtyKg : 1;
     return round2(amount * kg);

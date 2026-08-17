@@ -8,9 +8,11 @@ import {
   loadStaplesConfig,
   loadWalmartCatalog,
   resolveMatchMode,
+  defaultNeededGrams,
   isProduceWeightItem,
   isSoldByWeightItem,
   isEggPackItem,
+  usesNeededWeightPick,
 } from "@/lib/staples";
 import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import {
@@ -99,11 +101,16 @@ export async function GET() {
       const mode = resolveMatchMode(i);
       const wmLink = mappings.products[i.id]?.retailers.walmart_ca;
       const nfLink = mappings.products[i.id]?.retailers.nofrills;
+      const packPickGrams =
+        usesNeededWeightPick(i) && !isSoldByWeightItem(i)
+          ? defaultNeededGrams(i)
+          : undefined;
       const wmResolved = resolveCatalogOffer({
         item: i,
         row: cat,
         link: wmLink,
         matchMode: mode,
+        neededGrams: packPickGrams,
       });
       const offer = wmResolved.offer;
       const evalStatus = evaluateOfferStatus(i, offer ?? null, {
@@ -173,6 +180,7 @@ export async function GET() {
         row: nfCat,
         link: nfLink,
         matchMode: mode,
+        neededGrams: packPickGrams,
       });
       const nfOffer = nfResolved.offer ?? null;
       const nfEval = evaluateOfferStatus(i, nfOffer, {
@@ -251,6 +259,7 @@ export async function GET() {
                 : units
                   ? formatMoneyPerWeight(units.nativePrice, units.nativeUnit)
                   : null,
+              image: offer!.image ?? null,
             }
           : null,
         noFrillsCached: nfUsable
@@ -277,6 +286,7 @@ export async function GET() {
                 : nfUnits
                   ? formatMoneyPerWeight(nfUnits.nativePrice, nfUnits.nativeUnit)
                   : null,
+              image: nfOffer!.image ?? null,
             }
           : null,
       };

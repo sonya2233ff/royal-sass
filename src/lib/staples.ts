@@ -181,6 +181,17 @@ export function resolveMatchMode(
   return "preferred";
 }
 
+/** Category B pack/weight buy — user enters grams. Not eggs, not category A. */
+export function usesNeededWeightPick(item: StapleItem): boolean {
+  return resolveMatchMode(item) === "cheapest" && !isEggPackItem(item);
+}
+
+export function defaultNeededGrams(item: StapleItem): number {
+  if (isSoldByWeightItem(item)) return 1000;
+  if (usesNeededWeightPick(item)) return 500;
+  return 0;
+}
+
 export interface CatalogOffer {
   productId: string;
   name: string;

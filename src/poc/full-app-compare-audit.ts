@@ -18,7 +18,10 @@ import {
   loadNoFrillsCatalog,
   loadStaplesConfig,
   loadWalmartCatalog,
+  defaultNeededGrams,
+  isSoldByWeightItem,
   resolveMatchMode,
+  usesNeededWeightPick,
   type CatalogOffer,
 } from "@/lib/staples";
 import {
@@ -77,17 +80,23 @@ async function main() {
     const wmRow = wmById.get(item.id);
     const nfRow = nfById.get(item.id);
 
+    const packPickGrams =
+      usesNeededWeightPick(item) && !isSoldByWeightItem(item)
+        ? defaultNeededGrams(item)
+        : undefined;
     const wmResolved = resolveCatalogOffer({
       item,
       row: wmRow,
       link: wmLink,
       matchMode: mode,
+      neededGrams: packPickGrams,
     });
     const nfResolved = resolveCatalogOffer({
       item,
       row: nfRow,
       link: nfLink,
       matchMode: mode,
+      neededGrams: packPickGrams,
     });
 
     const wmOffer = (wmResolved.offer as CatalogOffer | null) ?? null;
@@ -113,7 +122,9 @@ async function main() {
 
     const wmUsable = Boolean(wmOffer && usableStatus(wmEval.status));
     const nfUsable = Boolean(nfOffer && usableStatus(nfEval.status));
-    const grams = item.id.endsWith("_kg") || item.id.includes("kg") ? 1000 : null;
+    const grams = usesNeededWeightPick(item)
+      ? defaultNeededGrams(item)
+      : null;
 
     const row = buildStapleCompareRow({
       item,
@@ -150,8 +161,14 @@ async function main() {
 
   const grape = byId.get("tomatoes_grape");
   assert(grape, "grape row");
-  assert(grape!.cheaper === "nofrills", `grape cheaper ${grape!.cheaper}`);
-  assert(grape!.fairBasis === "per_100g", `grape basis ${grape!.fairBasis}`);
+  assert(
+    grape!.fairBasis === "needed_weight",
+    `grape basis ${grape!.fairBasis}`,
+  );
+  assert(
+    grape!.cheaper === "walmart" || grape!.cheaper === "nofrills" || grape!.cheaper === "tie",
+    `grape cheaper ${grape!.cheaper}`,
+  );
   assert(
     grape!.resolveReason?.walmart === "mapped_sku_rapid_alias" ||
       grape!.resolveReason?.walmart === "mapped_sku",

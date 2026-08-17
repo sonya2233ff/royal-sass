@@ -12,8 +12,10 @@ import {
   loadWalmartCatalog,
   searchNoFrills,
   upsertNoFrillsCatalogItem,
+  defaultNeededGrams,
   isSoldByWeightItem,
   resolveMatchMode,
+  usesNeededWeightPick,
   type CatalogOffer,
   type MatchLogEntry,
 } from "@/lib/staples";
@@ -107,12 +109,25 @@ export async function POST(request: Request) {
     const nfLink: RetailerSkuLink | undefined =
       productMap?.retailers.nofrills;
 
+    const rawGrams = Number(body.grams?.[id]);
+    const neededPick = usesNeededWeightPick(item);
+    const soldByWeight = isSoldByWeightItem(item);
+    const grams =
+      neededPick && Number.isFinite(rawGrams) && rawGrams > 0
+        ? rawGrams
+        : neededPick
+          ? defaultNeededGrams(item)
+          : null;
+    const packPickGrams =
+      neededPick && !soldByWeight && grams != null ? grams : undefined;
+
     const cat = catById.get(id);
     const wmResolved = resolveCatalogOffer({
       item,
       row: cat,
       link: wmLink,
       matchMode: mode,
+      neededGrams: packPickGrams,
     });
     const wmOffer = toCatalogOffer(wmResolved.offer);
     const wmEval = evaluateOfferStatus(item, wmOffer, {
@@ -142,6 +157,7 @@ export async function POST(request: Request) {
       row: nfCached,
       link: nfLink,
       matchMode: mode,
+      neededGrams: packPickGrams,
     });
     const nfCacheEval = evaluateOfferStatus(item, nfResolved.offer, {
       catalogStatus:
@@ -242,14 +258,6 @@ export async function POST(request: Request) {
     }
     entries.push(wmLog);
 
-    const rawGrams = Number(body.grams?.[id]);
-    const soldByWeight = isSoldByWeightItem(item);
-    const grams =
-      soldByWeight && Number.isFinite(rawGrams) && rawGrams > 0
-        ? rawGrams
-        : soldByWeight
-          ? 1000
-          : null;
     const rawQty = Number(body.qty?.[id]);
     const qty =
       !soldByWeight && Number.isFinite(rawQty) && rawQty > 0
@@ -274,6 +282,7 @@ export async function POST(request: Request) {
           confidence: nfOffer.confidence,
           checkedAt: nfOffer.checkedAt,
           sourceUrl: nfOffer.sourceUrl,
+          image: nfOffer.image,
         }
       : null;
     const nfUsable = Boolean(

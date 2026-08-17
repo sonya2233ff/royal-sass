@@ -11,6 +11,7 @@ import {
   offerFailsStapleFilters,
   type StapleFilterItem,
 } from "@/domain/catalog-normalize";
+import { pickNeededWeightPurchase } from "@/domain/needed-weight-pick";
 
 /** Minimal mapping fields — avoid importing lib from domain. */
 export interface MappingLinkRef {
@@ -137,6 +138,8 @@ export function resolveCatalogOffer(input: {
   row?: CatalogRowRef | null;
   link?: MappingLinkRef;
   matchMode: "preferred" | "cheapest";
+  /** Category B only: pick among catalog sizes for this needed weight. */
+  neededGrams?: number;
 }): {
   offer: CatalogOfferRef | null;
   reason: ResolveReason;
@@ -160,6 +163,29 @@ export function resolveCatalogOffer(input: {
       reason: alias ? "mapped_sku_rapid_alias" : "mapped_sku",
       detail: alias ? `Rapid id ${hit.productId} ≈ lock ${mappedSku}` : mappedSku,
     };
+  }
+
+  if (
+    input.matchMode === "cheapest" &&
+    input.neededGrams != null &&
+    input.neededGrams > 0
+  ) {
+    const passing = catalogCandidates(input.row).filter((offer) =>
+      offerPassesStapleFilters(input.item, offer),
+    );
+    const picked = pickNeededWeightPurchase(input.neededGrams, passing);
+    if (picked) {
+      const offer =
+        passing.find((o) => o.productId === picked.productId) ?? passing[0];
+      if (offer) {
+        const fromWinner = offer.productId === input.row?.offer?.productId;
+        return {
+          offer,
+          reason: fromWinner ? "catalog" : "filtered_alternate",
+          detail: `needed ${input.neededGrams}g → ${picked.packs}×${picked.packGrams}g`,
+        };
+      }
+    }
   }
 
   for (const offer of catalogCandidates(input.row)) {
