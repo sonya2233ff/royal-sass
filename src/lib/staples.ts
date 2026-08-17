@@ -1038,6 +1038,14 @@ function offerDisplayName(o: { name: string; brand?: string }): string {
 export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
   const mass =
     parseMassFromText(o.packageSize ?? "") ?? parseMassFromText(o.name);
+  const fromPack = mass && mass.kg > 0 && o.price > 0 ? o.price / mass.kg : null;
+  const unitPrice =
+    o.unitPrice != null &&
+    o.unitPrice > 0 &&
+    !(fromPack != null && o.unitPrice > fromPack * 20) &&
+    !(o.price > 0 && o.unitPrice > Math.max(o.price * 50, 80))
+      ? o.unitPrice
+      : undefined;
   return {
     productId: o.productId,
     name: offerDisplayName(o),
@@ -1045,7 +1053,7 @@ export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
     packageSize: o.packageSize ?? (mass ? formatMass(mass.kg) : undefined),
     parsedMassKg: mass?.kg,
     price: o.price,
-    unitPrice: o.unitPrice,
+    unitPrice,
     wasPrice: o.wasPrice,
     onSale: o.onSale || (o.wasPrice != null && o.wasPrice > o.price + 0.005) || undefined,
     confidence: o.confidence,
@@ -1117,43 +1125,48 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
     const preferred =
       lockedId ??
       (mode === "cheapest" ? null : item.preferredProductId ?? null);
+    const pinId = lockedId ?? preferred;
     const queries = lockedId
       ? [lockedId]
       : [
           ...(preferred && mode !== "cheapest" ? [preferred] : []),
           ...item.queries.filter(Boolean).slice(0, 4),
         ];
-    log.queries = queries;
+    log.queries = pinId ? [pinId, ...queries.filter((q) => q !== pinId)] : queries;
 
     const seen = new Map<string, ProductOffer>();
-    for (const q of queries) {
-      try {
-        const hits = await wm.searchProducts(q, "5831");
-        for (const h of hits) {
-          if (!seen.has(h.productId)) seen.set(h.productId, h);
-        }
-      } catch (e) {
-        log.rejected.push({
-          reason: `search error: ${e instanceof Error ? e.message.slice(0, 100) : String(e)}`,
-        });
-      }
-      await new Promise((r) => setTimeout(r, 300));
-    }
-
-    // Alphanumeric WM ids (e.g. 1BUHM1GPVP5J) often miss in /search — fetch PDP.
-    const pinId = lockedId ?? preferred;
-    const pinAlreadySeen =
-      pinId != null &&
-      [...seen.values()].some((o) => offerMatchesRetailerSku(o, pinId));
-    if (pinId && !pinAlreadySeen) {
+    // Category A: product_id + store first. Search trips PerimeterX and is not needed
+    // when the locked SKU already resolves.
+    if (pinId) {
       try {
         const direct = await wm.getProduct(pinId, "5831");
-        if (direct) seen.set(direct.productId, direct);
+        if (direct && offerMatchesRetailerSku(direct, pinId)) {
+          seen.set(direct.productId, direct);
+        }
       } catch (e) {
         log.rejected.push({
           productId: pinId,
           reason: `getProduct: ${e instanceof Error ? e.message.slice(0, 100) : String(e)}`,
         });
+      }
+    }
+
+    const pinAlreadySeen =
+      pinId != null &&
+      [...seen.values()].some((o) => offerMatchesRetailerSku(o, pinId));
+    if (!pinAlreadySeen) {
+      for (const q of queries) {
+        try {
+          const hits = await wm.searchProducts(q, "5831");
+          for (const h of hits) {
+            if (!seen.has(h.productId)) seen.set(h.productId, h);
+          }
+        } catch (e) {
+          log.rejected.push({
+            reason: `search error: ${e instanceof Error ? e.message.slice(0, 100) : String(e)}`,
+          });
+        }
+        await new Promise((r) => setTimeout(r, 300));
       }
     }
 
@@ -1260,12 +1273,24 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
       row.notes = item.notes;
       delete row.rejected;
     } else {
-      row.status = log.status;
-      row.offer = null;
-      row.rejected = log.rejected[log.rejected.length - 1] ?? {
-        reason: "no_match",
-      };
-      row.notes = item.notes;
+      const previous = row.offer as CatalogOffer | null | undefined;
+      if (previous && previous.price > 0) {
+        const why =
+          log.rejected.at(-1)?.reason ?? "live WM refresh missed";
+        log.status = "stale";
+        row.status = "ok";
+        row.rejected = {
+          reason: `kept last price — ${why}`.slice(0, 180),
+        };
+        row.notes = `${item.notes ?? ""} · kept last WM price`.trim();
+      } else {
+        row.status = log.status;
+        row.offer = null;
+        row.rejected = log.rejected[log.rejected.length - 1] ?? {
+          reason: "no_match",
+        };
+        row.notes = item.notes;
+      }
     }
     updated.push(id);
     entries.push(log);
