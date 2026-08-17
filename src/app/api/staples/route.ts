@@ -11,6 +11,7 @@ import {
   isProduceWeightItem,
   isSoldByWeightItem,
   isEggPackItem,
+  loadRemovedStapleIds,
 } from "@/lib/staples";
 import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import {
@@ -290,5 +291,6 @@ export async function GET() {
     unitNote:
       "кг/lb лише для овочів і фруктів (WM $/kg, NF $/lb). Решта — ціна за пачку.",
     items,
+    removedCount: (await loadRemovedStapleIds()).length,
   });
 }

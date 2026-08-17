@@ -1,5 +1,6 @@
 import { buildFixtureOffers } from "@/connectors/fixtures";
 import { resolveWalmartSource } from "@/connectors/walmart-source";
+import { applyRemovedStapleIds } from "@/lib/staples";
 import { compareBaskets, type BasketLineInput } from "@/domain/basket";
 import { calculateProcurementCost } from "@/domain/procurement-cost";
 
@@ -73,4 +74,15 @@ console.log(
     }
   }
   console.log("walmart-source self-check OK");
+}
+
+{
+  const kept = applyRemovedStapleIds(
+    [{ id: "a" }, { id: "b" }, { id: "c" }],
+    ["b", "missing"],
+  );
+  if (kept.map((i) => i.id).join(",") !== "a,c") {
+    throw new Error(`removed filter => ${kept.map((i) => i.id)}`);
+  }
+  console.log("removed-staples self-check OK");
 }

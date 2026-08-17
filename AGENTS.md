@@ -8,7 +8,7 @@ Cafe staples price POC for GTA procurement: **Walmart Supercentre #5831** (Thorn
 
 Stack: Next.js App Router, TypeScript, Zod, Playwright (Walmart browser path), tsx POCs. Prisma/SQLite schema exists (`prisma/schema.prisma`) but **no `PrismaClient` usage in `src/`** — planned store, not the live path.
 
-Shown staples = `PINNED_IDS` in `src/lib/staples.ts` plus `custom: true` items (`config/custom-staples.json`). Master product id is the cafe staple id (`simply_egg_whites`), never a PCX/Walmart SKU.
+Shown staples = `PINNED_IDS` in `src/lib/staples.ts` plus `custom: true` items (`config/custom-staples.json`), minus `data/catalog/removed-staples.json`. Master product id is the cafe staple id (`simply_egg_whites`), never a PCX/Walmart SKU.
 
 ## Architecture
 
@@ -40,7 +40,7 @@ Shown staples = `PINNED_IDS` in `src/lib/staples.ts` plus `custom: true` items (
 - `POST /api/staples/refresh` — rematch selected WM SKUs (search)
 - `POST /api/staples/refresh-nf` — live NF search, writes NF catalog
 - `POST /api/staples/refresh-prices` — price-only `getProduct` on locked/catalog SKUs (no rematch)
-- `POST /api/staples/search` | `adopt` | `confirm` — find/add staple; 👍/👎 lock
+- `POST /api/staples/search` | `adopt` | `confirm` | `delete` | `restore-deleted` — find/add staple; 👍/👎 lock; remove from list+catalogs or restore
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
 - `/dev/match-inspector` + `POST /api/dev/match-inspector` — developer match inspector (404 in production unless `ALLOW_MATCH_INSPECTOR=1`). Does not change customer UI.
 - `GET /api/compare` — **legacy** `runComparison` (`config/products.json` + `src/domain/basket.ts`), not the staples UI

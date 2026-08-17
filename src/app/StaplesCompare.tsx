@@ -178,8 +178,6 @@ function statusLabel(s?: OfferStatus | string | null): string {
   }
 }
 
-const HIDDEN_KEY = "royal-sass-hidden-staples";
-
 function friendlyError(msg: string): string {
   if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) {
     return "Немає зв'язку з локальним API (/api/staples). Перевір, що `npm run dev` ще запущений, і відкривай http://localhost:3000 (не з телефону на 127.0.0.1).";
@@ -199,17 +197,6 @@ function walmartSourceLabel(
   }
   if (source === "browser") return "WM ціни: сайт walmart.ca";
   return "";
-}
-
-function loadHiddenIds(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(HIDDEN_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.filter((x) => typeof x === "string") : [];
-  } catch {
-    return [];
-  }
 }
 
 export function StaplesCompare() {
@@ -233,7 +220,7 @@ export function StaplesCompare() {
   const [staleHours, setStaleHours] = useState(24);
   const [gramsById, setGramsById] = useState<Record<string, string>>({});
   const [qtyById, setQtyById] = useState<Record<string, string>>({});
-  const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
+  const [removedCount, setRemovedCount] = useState(0);
   const [query, setQuery] = useState("");
   const [walmartSource, setWalmartSource] = useState<
     "rapid" | "browser" | "missing_key" | null
@@ -241,10 +228,6 @@ export function StaplesCompare() {
   const [walmartSourceWarning, setWalmartSourceWarning] = useState<
     string | null
   >(null);
-
-  useEffect(() => {
-    setHiddenIds(new Set(loadHiddenIds()));
-  }, []);
 
   const reload = useCallback(async () => {
     const res = await fetch("/api/staples");
@@ -262,6 +245,7 @@ export function StaplesCompare() {
     setStaleHours(data.cacheStaleHours ?? 24);
     setWalmartSource(data.walmartSource ?? null);
     setWalmartSourceWarning(data.walmartSourceWarning ?? null);
+    setRemovedCount(data.removedCount ?? 0);
   }, []);
 
   useEffect(() => {
@@ -273,7 +257,6 @@ export function StaplesCompare() {
   const visibleItems = useMemo(() => {
     const q = query.trim().toLowerCase();
     return items.filter((item) => {
-      if (hiddenIds.has(item.id)) return false;
       if (!q) return true;
       const blob = [
         item.label,
@@ -287,7 +270,7 @@ export function StaplesCompare() {
         .toLowerCase();
       return blob.includes(q);
     });
-  }, [items, hiddenIds, query]);
+  }, [items, query]);
 
   const cacheIsOld = useMemo(() => {
     const cutoffMs = 12 * 36e5;
@@ -312,13 +295,6 @@ export function StaplesCompare() {
   }
 
   function pickStaple(id: string) {
-    setHiddenIds((prev) => {
-      if (!prev.has(id)) return prev;
-      const next = new Set(prev);
-      next.delete(id);
-      window.localStorage.setItem(HIDDEN_KEY, JSON.stringify([...next]));
-      return next;
-    });
     setSelected((prev) => new Set(prev).add(id));
     setQtyById((q) => (q[id] ? q : { ...q, [id]: "1" }));
     setQuery("");
@@ -378,7 +354,6 @@ export function StaplesCompare() {
   function gramsPayload(): Record<string, number> {
     const out: Record<string, number> = {};
     for (const id of selected) {
-      if (hiddenIds.has(id)) continue;
       const n = Number.parseFloat(gramsById[id] ?? "");
       if (Number.isFinite(n) && n > 0) out[id] = n;
     }
@@ -388,33 +363,66 @@ export function StaplesCompare() {
   function qtyPayload(): Record<string, number> {
     const out: Record<string, number> = {};
     for (const id of selected) {
-      if (hiddenIds.has(id)) continue;
       const n = Number.parseInt(qtyById[id] ?? "1", 10);
       if (Number.isFinite(n) && n > 0) out[id] = n;
     }
     return out;
   }
 
-  function hideCard(id: string, e?: MouseEvent) {
-    e?.stopPropagation();
-    e?.preventDefault();
-    setHiddenIds((prev) => {
-      const next = new Set(prev);
-      next.add(id);
-      window.localStorage.setItem(HIDDEN_KEY, JSON.stringify([...next]));
-      return next;
-    });
-    setSelected((prev) => {
-      const next = new Set(prev);
-      next.delete(id);
-      return next;
-    });
-    setRows((prev) => (prev ? prev.filter((r) => r.id !== id) : prev));
+  async function deleteStaples(ids: string[], label?: string) {
+    if (!ids.length) return;
+    const who =
+      ids.length === 1
+        ? `«${label ?? ids[0]}»`
+        : `${ids.length} вибраних товарів`;
+    const ok = window.confirm(
+      `Видалити ${who} повністю зі списку, цін і матчів?`,
+    );
+    if (!ok) return;
+    setError(null);
+    setBusy("delete");
+    try {
+      const res = await fetch("/api/staples/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error ?? "delete failed");
+      const gone = new Set<string>(
+        Array.isArray(data.deleted) ? data.deleted.filter((x: unknown) => typeof x === "string") : ids,
+      );
+      setSelected((prev) => {
+        const next = new Set(prev);
+        for (const id of gone) next.delete(id);
+        return next;
+      });
+      setRows((prev) => (prev ? prev.filter((r) => !gone.has(r.id)) : prev));
+      await reload();
+    } catch (e) {
+      setError(e instanceof Error ? friendlyError(e.message) : String(e));
+    } finally {
+      setBusy(null);
+    }
   }
 
-  function restoreHiddenCards() {
-    window.localStorage.removeItem(HIDDEN_KEY);
-    setHiddenIds(new Set());
+  async function restoreDeletedStaples() {
+    setError(null);
+    setBusy("restore");
+    try {
+      const res = await fetch("/api/staples/restore-deleted", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error ?? "restore failed");
+      await reload();
+    } catch (e) {
+      setError(e instanceof Error ? friendlyError(e.message) : String(e));
+    } finally {
+      setBusy(null);
+    }
   }
 
   const allVisibleSelected =
@@ -455,7 +463,7 @@ export function StaplesCompare() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            ids: [...selected].filter((id) => !hiddenIds.has(id)),
+            ids: [...selected],
             grams: gramsPayload(),
             qty: qtyPayload(),
           }),
@@ -618,7 +626,7 @@ export function StaplesCompare() {
           {walmartSource === "missing_key" && walmartSourceWarning
             ? " · додай RapidAPI ключ у .env / Vercel"
             : ""}
-          {" · × на картці ховає її (можна відновити)"}
+          {" · × на картці видаляє товар повністю"}
         </p>
         <ProductSearch
           query={query}
@@ -784,8 +792,11 @@ export function StaplesCompare() {
               <button
                 type="button"
                 className="hide-card"
-                title="Видалити картку (dev)"
-                onClick={(e) => hideCard(item.id, e)}
+                title="Видалити товар повністю"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  void deleteStaples([item.id], item.label);
+                }}
               >
                 ×
               </button>
@@ -938,13 +949,26 @@ export function StaplesCompare() {
             ? "Refreshing NF…"
             : `Refresh NF (${selected.size})`}
         </button>
-        {hiddenIds.size > 0 && (
+        <button
+          type="button"
+          className="cta secondary"
+          disabled={pending || selected.size === 0 || busy != null}
+          onClick={() => void deleteStaples([...selected])}
+        >
+          {busy === "delete"
+            ? "Видаляю…"
+            : `Видалити вибрані (${selected.size})`}
+        </button>
+        {removedCount > 0 && (
           <button
             type="button"
             className="cta secondary"
-            onClick={restoreHiddenCards}
+            disabled={pending || busy != null}
+            onClick={() => void restoreDeletedStaples()}
           >
-            Restore {hiddenIds.size} hidden
+            {busy === "restore"
+              ? "Відновлюю…"
+              : `Відновити видалені (${removedCount})`}
           </button>
         )}
       </div>

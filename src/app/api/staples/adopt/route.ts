@@ -7,6 +7,7 @@ import {
   loadNoFrillsCatalog,
   loadStaplesConfig,
   loadWalmartCatalog,
+  restoreRemovedStaples,
   saveCustomStaple,
   searchNoFrills,
   upsertNoFrillsCatalogItem,
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const cfg = await loadStaplesConfig();
+  const cfg = await loadStaplesConfig({ includeRemoved: true });
   const wmCat = await loadWalmartCatalog();
   const nfCat = await loadNoFrillsCatalog();
   const existing = cfg.items.filter(isShownStaple).find((item) => {
@@ -72,6 +73,7 @@ export async function POST(request: Request) {
     return wm?.productId === productId || nf?.productId === productId;
   });
   if (existing) {
+    await restoreRemovedStaples([existing.id]);
     return NextResponse.json({ ok: true, id: existing.id, existed: true });
   }
 
@@ -88,6 +90,7 @@ export async function POST(request: Request) {
     notes: `Added from search (${retailer} ${productId})`,
     custom: true,
   };
+  await restoreRemovedStaples([id]);
   await saveCustomStaple(item);
 
   const mass =

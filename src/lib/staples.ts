@@ -11,6 +11,7 @@ import {
   isLockedIdentityLink,
   loadRetailerMappings,
   lookupConfirmed,
+  saveRetailerMappings,
 } from "@/lib/retailer-mappings";
 import { offerMatchesRetailerSku } from "@/domain/compare-resolve";
 import {
@@ -258,6 +259,14 @@ export function isShownStaple(item: { id: string; custom?: boolean }): boolean {
   return item.custom === true || (PINNED_IDS as readonly string[]).includes(item.id);
 }
 
+export function applyRemovedStapleIds<T extends { id: string }>(
+  items: T[],
+  removedIds: Iterable<string>,
+): T[] {
+  const gone = new Set(removedIds);
+  return items.filter((item) => !gone.has(item.id));
+}
+
 export const CACHE_STALE_HOURS = Number(
   process.env.STAPLES_CACHE_STALE_HOURS ?? "72",
 );
@@ -296,17 +305,141 @@ export async function loadCustomStaples(): Promise<StapleItem[]> {
   }
 }
 
-export async function saveCustomStaple(item: StapleItem): Promise<void> {
-  const items = await loadCustomStaples();
-  const idx = items.findIndex((x) => x.id === item.id);
-  if (idx >= 0) items[idx] = item;
-  else items.push(item);
+export async function saveCustomStaples(items: StapleItem[]): Promise<void> {
   await mkdir(path.dirname(CUSTOM_STAPLES), { recursive: true });
   await writeFile(
     CUSTOM_STAPLES,
     JSON.stringify({ updatedAt: new Date().toISOString(), items }, null, 2),
     "utf8",
   );
+}
+
+export async function saveCustomStaple(item: StapleItem): Promise<void> {
+  const items = await loadCustomStaples();
+  const idx = items.findIndex((x) => x.id === item.id);
+  if (idx >= 0) items[idx] = item;
+  else items.push(item);
+  await saveCustomStaples(items);
+}
+
+const REMOVED_STAPLES = path.join(DATA_CATALOG, "removed-staples.json");
+
+export type RemovedStaplesStore = {
+  updatedAt: string;
+  ids: string[];
+  customItems: StapleItem[];
+};
+
+async function loadRemovedStore(): Promise<RemovedStaplesStore> {
+  try {
+    const raw = await readFile(REMOVED_STAPLES, "utf8");
+    const data = JSON.parse(raw) as Partial<RemovedStaplesStore>;
+    return {
+      updatedAt: data.updatedAt ?? new Date().toISOString(),
+      ids: Array.isArray(data.ids) ? data.ids.filter((id) => typeof id === "string") : [],
+      customItems: Array.isArray(data.customItems)
+        ? data.customItems.filter((item) => item?.id)
+        : [],
+    };
+  } catch {
+    return { updatedAt: new Date().toISOString(), ids: [], customItems: [] };
+  }
+}
+
+async function saveRemovedStore(store: RemovedStaplesStore): Promise<void> {
+  try {
+    await mkdir(DATA_CATALOG, { recursive: true });
+    store.updatedAt = new Date().toISOString();
+    await writeFile(REMOVED_STAPLES, JSON.stringify(store, null, 2), "utf8");
+  } catch {
+    // Serverless read-only FS
+  }
+}
+
+export async function loadRemovedStapleIds(): Promise<string[]> {
+  return (await loadRemovedStore()).ids;
+}
+
+export async function deleteStaplesCompletely(ids: string[]): Promise<{
+  deleted: string[];
+  skipped: string[];
+}> {
+  const unique = [...new Set(ids.filter(Boolean))];
+  if (!unique.length) return { deleted: [], skipped: [] };
+
+  const cfg = await loadStaplesConfig({ includeRemoved: true });
+  const known = new Set(cfg.items.map((item) => item.id));
+  const deleted = unique.filter((id) => known.has(id));
+  const skipped = unique.filter((id) => !known.has(id));
+  if (!deleted.length) return { deleted, skipped };
+
+  const gone = new Set(deleted);
+  const removed = await loadRemovedStore();
+  const custom = await loadCustomStaples();
+  const leavingCustom = custom.filter((item) => gone.has(item.id));
+  const keptCustom = custom.filter((item) => !gone.has(item.id));
+  await saveCustomStaples(keptCustom);
+
+  const customKeptInRemoved = removed.customItems.filter((item) => !gone.has(item.id));
+  removed.customItems = [...customKeptInRemoved, ...leavingCustom];
+  removed.ids = [...new Set([...removed.ids, ...deleted])];
+  await saveRemovedStore(removed);
+
+  const wm = await loadWalmartCatalog();
+  if (wm) {
+    wm.items = wm.items.filter((row) => !gone.has(row.id));
+    await saveWalmartCatalog(wm);
+  }
+  const nf = await loadNoFrillsCatalog();
+  if (nf) {
+    nf.items = nf.items.filter((row) => !gone.has(row.id));
+    await saveNoFrillsCatalog(nf);
+  }
+
+  const confirmed = await loadConfirmed();
+  let confirmedChanged = false;
+  for (const id of deleted) {
+    if (confirmed[id]) {
+      delete confirmed[id];
+      confirmedChanged = true;
+    }
+  }
+  if (confirmedChanged) await saveConfirmed(confirmed);
+
+  try {
+    const mappings = await loadRetailerMappings();
+    let mappingChanged = false;
+    for (const id of deleted) {
+      if (mappings.products[id]) {
+        delete mappings.products[id];
+        mappingChanged = true;
+      }
+    }
+    if (mappingChanged) await saveRetailerMappings(mappings);
+  } catch {
+    /* mappings optional */
+  }
+
+  return { deleted, skipped };
+}
+
+export async function restoreRemovedStaples(ids?: string[]): Promise<{
+  restored: string[];
+}> {
+  const removed = await loadRemovedStore();
+  const want = ids?.length ? new Set(ids) : new Set(removed.ids);
+  const restored = removed.ids.filter((id) => want.has(id));
+  removed.ids = removed.ids.filter((id) => !want.has(id));
+  const bringBack = removed.customItems.filter((item) => want.has(item.id));
+  removed.customItems = removed.customItems.filter((item) => !want.has(item.id));
+  await saveRemovedStore(removed);
+  if (bringBack.length) {
+    const custom = await loadCustomStaples();
+    const byId = new Map(custom.map((item) => [item.id, item]));
+    for (const item of bringBack) byId.set(item.id, item);
+    await saveCustomStaples([...byId.values()]);
+  }
+  return { restored };
 }
 
 export async function upsertWalmartCatalogItem(input: {
@@ -343,7 +476,9 @@ export async function upsertWalmartCatalogItem(input: {
   await saveWalmartCatalog(existing);
 }
 
-export async function loadStaplesConfig(): Promise<{
+export async function loadStaplesConfig(opts?: {
+  includeRemoved?: boolean;
+}): Promise<{
   store: { externalStoreId: string; name: string; address: string };
   items: StapleItem[];
 }> {
@@ -361,6 +496,10 @@ export async function loadStaplesConfig(): Promise<{
     if (seen.has(item.id)) continue;
     cfg.items.push(item);
     seen.add(item.id);
+  }
+  if (!opts?.includeRemoved) {
+    const removed = await loadRemovedStapleIds();
+    cfg.items = applyRemovedStapleIds(cfg.items, removed);
   }
   const receipts = await loadReceiptSkuMap();
   if (receipts?.preferredByStapleId) {
