@@ -525,8 +525,9 @@ export function StaplesCompare() {
         <p className="brand">Royal SASS</p>
         <h1>Cafe staples</h1>
         <p className="sub">
-          Walmart #5831 vs No Frills #3660. Для овочів/фруктів і frozen: WM —{" "}
-          <strong>за 1 kg</strong>, No Frills — <strong>за 1 lb</strong>. Товари
+          Walmart #5831 vs No Frills #3660. Для овочів/фруктів і frozen на картці: WM —{" "}
+          <strong>за 1 kg</strong>, No Frills — <strong>за 1 lb</strong>. Угода при
+          різних пачках — <strong>за 100 г</strong>. Товари
           на вагу: після вибору вкажи скільки <strong>грам</strong> потрібно.
           Решта — <strong>кількість пачок</strong> (за замовчуванням 1). Produce/frozen —
           найдешевший матч (бренд не важливий).

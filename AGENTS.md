@@ -68,14 +68,14 @@ Refresh routes set `maxDuration = 60`.
 **Price / size / qty**
 
 - Line math: `summarizeOffer` in `src/lib/staples.ts`. Pack items: `shelf × qty` (UI pack stepper, default 1). Weight items (`isSoldByWeightItem`): grams (default 1000 in compare). Eggs (`isEggPackItem`): fair **per egg**; basket line is **30 eggs × pack qty**.
-- Different pack masses → fair **$/kg**; similar packs → **per pack**; eggs → **per egg** (`fair-compare.ts`).
+- Different pack masses → fair **$/100g** (same ranking as $/kg; Canadian shelf unit). Similar packs → **per pack**; eggs → **per egg** (`fair-compare.ts`).
 - `wasPrice` / `onSale` are display-only on staples cards. Staples totals use `offer.price`, not `promoPrice`. (`promoPrice` is used in legacy `basket.ts` only.)
 - `availability` exists on `ProductOffer` but staples compare does **not** filter `in_stock`. Verify before adding stock gates.
 - Ignore absurd WM `unitPrice` (orders of magnitude above pack math) in `resolveUnitPrices`.
 
 **Basket / “recommended store”**
 
-- Row `cheaper` + `delta` are unit-fair (per pack / kg / egg), not “who has the smaller pack”.
+- Row `cheaper` + `delta` are unit-fair (per pack / 100 g / egg), not “who has the smaller pack”.
 - Totals: `scaleBasketAmount` then sum `basketWalmart` / `basketNoFrills` for non-incomparable rows. `totals.cheaper` is the lower comparable basket. There is no separate savings engine.
 
 **Planned / not live:** Prisma persistence, `StoreConnector` (`store-connector.ts` says do not wire into `getConnector` yet), Splink/Python, semantic/image entity-match (stub, never auto-links), Uber/Instacart as shelf (explicitly not `LIVE_VERIFIED`).

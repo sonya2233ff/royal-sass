@@ -3,10 +3,11 @@
  * and SmartCart (EAN/UPC first, then size-checked fuzzy).
  *
  * Do not compare different pack masses as raw shelf prices.
+ * Mass deals are quoted per 100 g (Canadian shelf unit).
  */
 import { parseMassFromText, round2 } from "@/domain/units";
 
-export type FairBasis = "per_kg" | "per_egg" | "per_pack" | "incomparable";
+export type FairBasis = "per_100g" | "per_egg" | "per_pack" | "incomparable";
 
 export type MatchKind =
   | "upc"
@@ -67,6 +68,11 @@ export function pricePerKgFromPack(
   return round2(price / kg);
 }
 
+/** Canadian shelf unit. Same ranking as $/kg (÷10). */
+export function pricePer100gFromKg(perKg: number): number {
+  return round2(perKg / 10);
+}
+
 export function packsSimilar(aKg: number, bKg: number, tol = 0.2): boolean {
   const denom = Math.min(aKg, bKg);
   if (!(denom > 0)) return false;
@@ -111,6 +117,23 @@ export interface FairCompareResult {
 
 function usable(side: FairSideInput): boolean {
   return side.ok;
+}
+
+function per100gDeal(
+  wmPerKg: number,
+  nfPerKg: number,
+  fairLabel: string,
+): FairCompareResult {
+  const wmFair = pricePer100gFromKg(wmPerKg);
+  const nfFair = pricePer100gFromKg(nfPerKg);
+  return {
+    cheaper: winner(wmFair, nfFair),
+    delta: round2(wmFair - nfFair),
+    fairBasis: "per_100g",
+    fairLabel,
+    wmFair,
+    nfFair,
+  };
 }
 
 function winner(
@@ -172,26 +195,12 @@ export function fairCompareSides(
       };
     }
     if (wmKg && nfKg) {
-      return {
-        cheaper: winner(wmKg, nfKg),
-        delta: round2(wmKg - nfKg),
-        fairBasis: "per_kg",
-        fairLabel: "за 1 kg (різні пачки)",
-        wmFair: wmKg,
-        nfFair: nfKg,
-      };
+      return per100gDeal(wmKg, nfKg, "за 100 г (різні пачки)");
     }
   }
 
   if (wmKg && nfKg) {
-    return {
-      cheaper: winner(wmKg, nfKg),
-      delta: round2(wmKg - nfKg),
-      fairBasis: "per_kg",
-      fairLabel: "за 1 kg",
-      wmFair: wmKg,
-      nfFair: nfKg,
-    };
+    return per100gDeal(wmKg, nfKg, "за 100 г");
   }
 
   if (
@@ -221,7 +230,8 @@ export function basketAmountForSide(
 ): number | null {
   if (fair.fairBasis === "incomparable") return null;
   const v = side === "walmart" ? fair.wmFair : fair.nfFair;
-  if (fair.fairBasis === "per_kg" && v != null) return v;
+  // Quote the deal per 100 g; basket line is still 1 kg (10 × 100 g).
+  if (fair.fairBasis === "per_100g" && v != null) return round2(v * 10);
   if (fair.fairBasis === "per_egg" && v != null) {
     return round2(v * 30);
   }
@@ -236,7 +246,7 @@ export function scaleBasketAmount(
   opts?: { packQty?: number; qtyKg?: number },
 ): number | null {
   if (amount == null || fair.fairBasis === "incomparable") return null;
-  if (fair.fairBasis === "per_kg") {
+  if (fair.fairBasis === "per_100g") {
     const kg = opts?.qtyKg != null && opts.qtyKg > 0 ? opts.qtyKg : 1;
     return round2(amount * kg);
   }

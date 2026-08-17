@@ -151,7 +151,7 @@ async function main() {
   const grape = byId.get("tomatoes_grape");
   assert(grape, "grape row");
   assert(grape!.cheaper === "nofrills", `grape cheaper ${grape!.cheaper}`);
-  assert(grape!.fairBasis === "per_kg", `grape basis ${grape!.fairBasis}`);
+  assert(grape!.fairBasis === "per_100g", `grape basis ${grape!.fairBasis}`);
   assert(
     grape!.resolveReason?.walmart === "mapped_sku_rapid_alias" ||
       grape!.resolveReason?.walmart === "mapped_sku",
@@ -202,12 +202,12 @@ async function main() {
   const whites = byId.get("simply_egg_whites");
   assert(whites, "egg whites");
   assert(
-    whites!.fairBasis === "per_kg" || whites!.fairBasis === "per_pack",
+    whites!.fairBasis === "per_100g" || whites!.fairBasis === "per_pack",
     `egg whites basis ${whites!.fairBasis}`,
   );
   const wWm = whites!.walmart as { pricePerKg?: number; shelfPrice?: number; name?: string };
   const wNf = whites!.noFrills as { pricePerKg?: number; shelfPrice?: number };
-  if (whites!.fairBasis === "per_kg") {
+  if (whites!.fairBasis === "per_100g") {
     assert(
       (wWm.pricePerKg ?? 0) < 11 && (wNf.pricePerKg ?? 0) > 10,
       `egg whites $/kg wm=${wWm.pricePerKg} nf=${wNf.pricePerKg}`,
@@ -226,7 +226,7 @@ async function main() {
   const milk = byId.get("milk_2pct_2l");
   assert(milk, "milk");
   assert(
-    milk!.fairBasis === "per_pack" || milk!.fairBasis === "per_kg",
+    milk!.fairBasis === "per_pack" || milk!.fairBasis === "per_100g",
     `milk basis ${milk!.fairBasis}`,
   );
 
@@ -253,7 +253,7 @@ async function main() {
     (pNf.pricePerKg ?? 0) > 5,
     `pear nf must use $6.59/kg not shelf $0.92 (got ${pNf.pricePerKg})`,
   );
-  assert(pears!.fairBasis === "per_kg", `pears ${pears!.fairBasis}`);
+  assert(pears!.fairBasis === "per_100g", `pears ${pears!.fairBasis}`);
 
   const oat = byId.get("oat_beverage_original");
   assert(oat, "oat");
@@ -267,7 +267,7 @@ async function main() {
   assert(oj, "orange juice");
   assert(oj!.cheaper !== "incomplete", `OJ should compare (${oj!.cheaper})`);
   assert(
-    oj!.fairBasis === "per_kg" || oj!.fairBasis === "per_pack",
+    oj!.fairBasis === "per_100g" || oj!.fairBasis === "per_pack",
     `OJ basis ${oj!.fairBasis}`,
   );
   const ojNf = oj!.noFrills as { shelfPrice?: number; name?: string };

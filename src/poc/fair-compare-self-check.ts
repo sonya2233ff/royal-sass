@@ -61,20 +61,27 @@ const grape = fairCompareSides(
     packKg: 0.907,
   },
 );
-assert(grape.fairBasis === "per_kg", `grape basis ${grape.fairBasis}`);
+assert(grape.fairBasis === "per_100g", `grape basis ${grape.fairBasis}`);
 assert(grape.cheaper === "nofrills", `grape cheaper ${grape.cheaper}`);
 assert(
+  grape.wmFair != null &&
+    grape.wmFair < 2 &&
+    grape.nfFair != null &&
+    grape.nfFair < 2,
+  `grape deal is $/100g, got wm=${grape.wmFair} nf=${grape.nfFair}`,
+);
+assert(
   (basketAmountForSide(grape, "walmart", 2.97) ?? 0) > 8,
-  "basket uses $/kg not tiny pack",
+  "basket uses 1 kg, not the tiny pack",
 );
 assert(
   Math.abs(
     (scaleBasketAmount(basketAmountForSide(grape, "walmart", 2.97), grape, {
       qtyKg: 2,
     }) ?? 0) -
-      2 * (grape.wmFair ?? 0),
+      2 * (basketAmountForSide(grape, "walmart", 2.97) ?? 0),
   ) < 0.02,
-  "qtyKg scales per-kg basket",
+  "qtyKg scales mass basket",
 );
 
 const butter = fairCompareSides(
@@ -182,7 +189,7 @@ const juiceFair = fairCompareSides(
   { ok: true, shelfPrice: 10.24, lineTotal: 10.24, packKg: 2.63 },
   { ok: true, shelfPrice: 8.99, lineTotal: 8.99, packKg: 1.36 },
 );
-assert(juiceFair.fairBasis === "per_kg", `OJ packs use $/kg, got ${juiceFair.fairBasis}`);
+assert(juiceFair.fairBasis === "per_100g", `OJ packs use $/100g, got ${juiceFair.fairBasis}`);
 assert(juiceFair.cheaper === "walmart", `WM cheaper per litre, got ${juiceFair.cheaper}`);
 
 console.log("fair-compare-self-check ok", {
