@@ -180,9 +180,11 @@ export async function POST(request: Request) {
     };
 
     let nfOffer = null as Awaited<ReturnType<typeof searchNoFrills>>;
+    let nfCatalogOffer: CatalogOffer | null = null;
     const cacheRowExists = Boolean(nfCached?.offer);
     if (nfCacheUsable && nfResolved.offer) {
       nfCacheHits += 1;
+      nfCatalogOffer = toCatalogOffer(nfResolved.offer);
       nfOffer = {
         retailer: "no_frills",
         storeId: "3660",
@@ -194,6 +196,7 @@ export async function POST(request: Request) {
         availability: "unknown",
         confidence: (nfResolved.offer.confidence as "exact") ?? "exact",
         checkedAt: nfResolved.offer.checkedAt ?? new Date().toISOString(),
+        image: nfResolved.offer.image,
       };
       nfLog.queries = ["catalog_cache"];
       nfLog.status = nfCacheEval.status;
@@ -206,11 +209,12 @@ export async function POST(request: Request) {
       nfOffer = await searchNoFrills(item, nfLog);
       nfLiveHits += 1;
       if (nfOffer) {
+        nfCatalogOffer = catalogOfferFromLive(nfOffer);
         await upsertNoFrillsCatalogItem({
           id,
           label: item.label,
           status: nfLog.status,
-          offer: catalogOfferFromLive(nfOffer),
+          offer: nfCatalogOffer,
           notes: `Cached from live NF search (TTL ${CACHE_STALE_HOURS}h)`,
         });
       } else {
@@ -272,19 +276,6 @@ export async function POST(request: Request) {
           ageLabel: null as string | null,
         };
 
-    const nfCatalogOffer: CatalogOffer | null = nfOffer
-      ? {
-          productId: nfOffer.productId,
-          name: nfOffer.name,
-          price: nfOffer.price,
-          packageSize: nfOffer.packageSize,
-          unitPrice: nfOffer.unitPrice,
-          confidence: nfOffer.confidence,
-          checkedAt: nfOffer.checkedAt,
-          sourceUrl: nfOffer.sourceUrl,
-          image: nfOffer.image,
-        }
-      : null;
     const nfUsable = Boolean(
       nfCatalogOffer &&
         (nfEval.status === "ok" || nfEval.status === "stale"),

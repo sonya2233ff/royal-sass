@@ -6,6 +6,7 @@ import { calculateProcurementCost } from "@/domain/procurement-cost";
 import {
   extractRetailerImage,
   preferredStapleImage,
+  retailerSideImage,
 } from "@/lib/product-image";
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -139,4 +140,89 @@ console.log(
     throw new Error(`category B should keep static photo, got ${catB}`);
   }
   console.log("category-A Rapid photo self-check OK");
+
+  const nfImg =
+    "https://digital.loblaws.ca/PCX/20820355001_EA/en/1/front_1200.png";
+  const pcxThumb =
+    "https://digital.loblaws.ca/PCX/20820355001_EA/en/1/front_120.png";
+  const fromPcx = extractRetailerImage({
+    productImage: [{ thumbnailUrl: pcxThumb, imageUrl: nfImg }],
+  });
+  if (fromPcx !== nfImg) {
+    throw new Error(`PCX productImage should prefer imageUrl, got ${fromPcx}`);
+  }
+  if (
+    retailerSideImage({
+      retailer: "walmart_ca",
+      offer: { image: rapidImg },
+      stapleImage: "/products/simply_egg_whites.png",
+    }) !== rapidImg
+  ) {
+    throw new Error("WM column must use the Walmart offer photo");
+  }
+  if (
+    retailerSideImage({
+      retailer: "no_frills",
+      offer: { image: nfImg },
+      stapleImage: rapidImg,
+    }) !== nfImg
+  ) {
+    throw new Error("NF column must use the No Frills offer photo");
+  }
+  if (
+    retailerSideImage({
+      retailer: "no_frills",
+      offer: {},
+      stapleImage: rapidImg,
+    }) != null
+  ) {
+    throw new Error("NF must not reuse the Walmart / staple photo");
+  }
+  if (
+    retailerSideImage({
+      retailer: "no_frills",
+      offer: { image: rapidImg },
+      stapleImage: rapidImg,
+    }) != null
+  ) {
+    throw new Error("NF must not display a Walmart CDN photo");
+  }
+  if (
+    retailerSideImage({
+      retailer: "walmart_ca",
+      offer: {},
+      stapleImage: "/products/simply_egg_whites.png",
+    }) != null
+  ) {
+    throw new Error("WM Results must not use shared /products/ art");
+  }
+  const offerImgs = JSON.parse(
+    readFileSync(
+      path.join(process.cwd(), "config/retailer-offer-images.json"),
+      "utf8",
+    ),
+  ) as {
+    walmart_ca: Record<string, string>;
+    no_frills: Record<string, string>;
+  };
+  const wmEgg = offerImgs.walmart_ca["6000196635381"];
+  const nfEgg = offerImgs.no_frills["20820355001_EA"];
+  if (!wmEgg || !/walmartimages\./i.test(wmEgg)) {
+    throw new Error("egg whites WM photo missing from retailer-offer-images");
+  }
+  if (!nfEgg || !/loblaws\.ca/i.test(nfEgg)) {
+    throw new Error("egg whites NF photo missing from retailer-offer-images");
+  }
+  if (wmEgg === nfEgg) {
+    throw new Error("egg whites WM and NF must not share one photo URL");
+  }
+  const fromSku = retailerSideImage({
+    retailer: "no_frills",
+    offer: { productId: "20820355001_EA" },
+    stapleImage: rapidImg,
+  });
+  if (fromSku !== nfEgg) {
+    throw new Error(`NF SKU lookup should use PCX photo, got ${fromSku}`);
+  }
+  console.log("per-store Results photo self-check OK");
 }

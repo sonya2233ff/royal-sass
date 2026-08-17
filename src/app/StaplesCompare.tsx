@@ -1558,7 +1558,8 @@ function Side({
 }) {
   const buy = side.purchase;
   const productName = side.name ?? buy?.name ?? null;
-  const productImage = side.image ?? buy?.image ?? null;
+  // Only this store's offer photo — never the shared staple / other column.
+  const productImage = side.image ?? null;
   const usable =
     side.lineTotal != null &&
     (side.status === "ok" || side.status === "stale" || !side.status);
