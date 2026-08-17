@@ -228,3 +228,21 @@ export function basketAmountForSide(
   if (v != null && fair.fairBasis === "per_pack") return v;
   return fallbackLine;
 }
+
+/** Scale a 1-unit basket line by the shopper's qty (kg or pack count). */
+export function scaleBasketAmount(
+  amount: number | null,
+  fair: FairCompareResult,
+  opts?: { packQty?: number; qtyKg?: number },
+): number | null {
+  if (amount == null || fair.fairBasis === "incomparable") return null;
+  if (fair.fairBasis === "per_kg") {
+    const kg = opts?.qtyKg != null && opts.qtyKg > 0 ? opts.qtyKg : 1;
+    return round2(amount * kg);
+  }
+  const packs =
+    opts?.packQty != null && Number.isFinite(opts.packQty) && opts.packQty > 0
+      ? opts.packQty
+      : 1;
+  return round2(amount * packs);
+}

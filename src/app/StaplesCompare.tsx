@@ -95,6 +95,7 @@ type CompareRow = {
   delta: number | null;
   soldByWeight?: boolean;
   grams?: number | null;
+  qty?: number;
   fairLabel?: string | null;
   fairBasis?: string | null;
   matchKind?: string | null;
@@ -189,6 +190,7 @@ export function StaplesCompare() {
   const [nfCatalogAt, setNfCatalogAt] = useState<string | null>(null);
   const [staleHours, setStaleHours] = useState(24);
   const [gramsById, setGramsById] = useState<Record<string, string>>({});
+  const [qtyById, setQtyById] = useState<Record<string, string>>({});
   const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
 
@@ -243,7 +245,10 @@ export function StaplesCompare() {
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
-      else next.add(id);
+      else {
+        next.add(id);
+        setQtyById((q) => (q[id] ? q : { ...q, [id]: "1" }));
+      }
       return next;
     });
   }
@@ -257,6 +262,7 @@ export function StaplesCompare() {
       return next;
     });
     setSelected((prev) => new Set(prev).add(id));
+    setQtyById((q) => (q[id] ? q : { ...q, [id]: "1" }));
     setQuery("");
     window.setTimeout(() => {
       document
@@ -272,6 +278,43 @@ export function StaplesCompare() {
 
   function setGrams(id: string, value: string) {
     setGramsById((prev) => ({ ...prev, [id]: value }));
+    const n = Number.parseFloat(value);
+    if (Number.isFinite(n) && n > 0) {
+      setSelected((prev) => new Set(prev).add(id));
+    }
+  }
+
+  function setPackQty(id: string, value: string) {
+    const cleaned = value.replace(/[^\d]/g, "");
+    setQtyById((prev) => ({ ...prev, [id]: cleaned }));
+    const n = Number.parseInt(cleaned, 10);
+    if (Number.isFinite(n) && n > 0) {
+      setSelected((prev) => new Set(prev).add(id));
+    } else {
+      setSelected((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  }
+
+  function bumpPackQty(id: string, delta: number, e?: MouseEvent) {
+    e?.stopPropagation();
+    e?.preventDefault();
+    const current = Number.parseInt(qtyById[id] ?? (selected.has(id) ? "1" : "0"), 10);
+    const next = Math.max(0, (Number.isFinite(current) ? current : 0) + delta);
+    if (next < 1) {
+      setQtyById((prev) => ({ ...prev, [id]: "" }));
+      setSelected((prev) => {
+        const copy = new Set(prev);
+        copy.delete(id);
+        return copy;
+      });
+      return;
+    }
+    setQtyById((prev) => ({ ...prev, [id]: String(next) }));
+    setSelected((prev) => new Set(prev).add(id));
   }
 
   function gramsPayload(): Record<string, number> {
@@ -279,6 +322,16 @@ export function StaplesCompare() {
     for (const id of selected) {
       if (hiddenIds.has(id)) continue;
       const n = Number.parseFloat(gramsById[id] ?? "");
+      if (Number.isFinite(n) && n > 0) out[id] = n;
+    }
+    return out;
+  }
+
+  function qtyPayload(): Record<string, number> {
+    const out: Record<string, number> = {};
+    for (const id of selected) {
+      if (hiddenIds.has(id)) continue;
+      const n = Number.parseInt(qtyById[id] ?? "1", 10);
       if (Number.isFinite(n) && n > 0) out[id] = n;
     }
     return out;
@@ -317,6 +370,7 @@ export function StaplesCompare() {
           body: JSON.stringify({
             ids: [...selected].filter((id) => !hiddenIds.has(id)),
             grams: gramsPayload(),
+            qty: qtyPayload(),
           }),
         });
         const data = await res.json();
@@ -444,9 +498,9 @@ export function StaplesCompare() {
         <p className="sub">
           Walmart #5831 vs No Frills #3660. Для овочів/фруктів і frozen: WM —{" "}
           <strong>за 1 kg</strong>, No Frills — <strong>за 1 lb</strong>. Товари
-          на вагу: після галочки вкажи скільки <strong>грам</strong> потрібно.
-          Решта — ціна за пачку. Produce/frozen — найдешевший матч (бренд не
-          важливий).
+          на вагу: після вибору вкажи скільки <strong>грам</strong> потрібно.
+          Решта — <strong>кількість пачок</strong> (за замовчуванням 1). Produce/frozen —
+          найдешевший матч (бренд не важливий).
         </p>
         <p className={cacheIsOld ? "meta cache-warn" : "meta"}>
           Cache TTL {staleHours}h
@@ -488,6 +542,25 @@ export function StaplesCompare() {
             estKg != null && item.noFrillsCached?.pricePerKg
               ? item.noFrillsCached.pricePerKg * estKg
               : null;
+          const packRaw = qtyById[item.id];
+          const packParsed = Number.parseInt(
+            packRaw ?? (on ? "1" : "0"),
+            10,
+          );
+          const packN =
+            !item.soldByWeight && Number.isFinite(packParsed) && packParsed > 0
+              ? packParsed
+              : on && !item.soldByWeight
+                ? 1
+                : 0;
+          const wmPackEst =
+            packN > 1 && item.walmartCached
+              ? item.walmartCached.price * packN
+              : null;
+          const nfPackEst =
+            packN > 1 && item.noFrillsCached
+              ? item.noFrillsCached.price * packN
+              : null;
           return (
             <div
               key={item.id}
@@ -519,6 +592,9 @@ export function StaplesCompare() {
                       <span className="sale-mark" title={saleTitle(item)}>
                         !
                       </span>
+                    ) : null}
+                    {packN > 1 ? (
+                      <span className="qty-mark"> ×{packN}</span>
                     ) : null}
                   </strong>
                   <span className={`pill ${item.status}`}>
@@ -607,27 +683,68 @@ export function StaplesCompare() {
               >
                 ×
               </button>
-              {on && item.soldByWeight && (
-                <label className="grams">
-                  <span>грам</span>
+              {item.soldByWeight ? (
+                on && (
+                  <label className="grams">
+                    <span>грам</span>
+                    <input
+                      type="number"
+                      min={1}
+                      step={50}
+                      inputMode="numeric"
+                      placeholder="1000"
+                      value={gramsVal}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => setGrams(item.id, e.target.value)}
+                    />
+                    {(wmEst != null || nfEst != null) && (
+                      <span className="grams-est">
+                        {wmEst != null ? `WM $${wmEst.toFixed(2)}` : ""}
+                        {wmEst != null && nfEst != null ? " · " : ""}
+                        {nfEst != null ? `NF $${nfEst.toFixed(2)}` : ""}
+                      </span>
+                    )}
+                  </label>
+                )
+              ) : (
+                <div className="qty-row">
+                  <span>кількість</span>
+                  <button
+                    type="button"
+                    className="qty-btn"
+                    aria-label="менше"
+                    onClick={(e) => bumpPackQty(item.id, -1, e)}
+                  >
+                    −
+                  </button>
                   <input
                     type="number"
-                    min={1}
-                    step={50}
+                    min={0}
+                    step={1}
                     inputMode="numeric"
-                    placeholder="1000"
-                    value={gramsVal}
+                    className="qty-input"
+                    value={packRaw ?? (on ? "1" : "")}
+                    placeholder="0"
                     onClick={(e) => e.stopPropagation()}
-                    onChange={(e) => setGrams(item.id, e.target.value)}
+                    onChange={(e) => setPackQty(item.id, e.target.value)}
                   />
-                  {(wmEst != null || nfEst != null) && (
+                  <button
+                    type="button"
+                    className="qty-btn"
+                    aria-label="більше"
+                    onClick={(e) => bumpPackQty(item.id, 1, e)}
+                  >
+                    +
+                  </button>
+                  <span className="qty-unit">пачок</span>
+                  {(wmPackEst != null || nfPackEst != null) && (
                     <span className="grams-est">
-                      {wmEst != null ? `WM $${wmEst.toFixed(2)}` : ""}
-                      {wmEst != null && nfEst != null ? " · " : ""}
-                      {nfEst != null ? `NF $${nfEst.toFixed(2)}` : ""}
+                      {wmPackEst != null ? `WM $${wmPackEst.toFixed(2)}` : ""}
+                      {wmPackEst != null && nfPackEst != null ? " · " : ""}
+                      {nfPackEst != null ? `NF $${nfPackEst.toFixed(2)}` : ""}
                     </span>
                   )}
-                </label>
+                </div>
               )}
               <div className="votes">
                 <button
@@ -732,7 +849,9 @@ export function StaplesCompare() {
                     {r.confirmed ? " · locked" : ""}
                     {r.soldByWeight && r.grams
                       ? ` · ${r.grams} g`
-                      : ""}
+                      : r.qty != null && r.qty > 1
+                        ? ` · ×${r.qty}`
+                        : ""}
                   </strong>
                   <div className="badge">
                     {r.cheaper === "walmart"
@@ -752,8 +871,18 @@ export function StaplesCompare() {
                 </div>
               </div>
               <div className="cols">
-                <Side title="Walmart" side={r.walmart} grams={r.grams} />
-                <Side title="No Frills" side={r.noFrills} grams={r.grams} />
+                <Side
+                  title="Walmart"
+                  side={r.walmart}
+                  grams={r.grams}
+                  qty={r.qty}
+                />
+                <Side
+                  title="No Frills"
+                  side={r.noFrills}
+                  grams={r.grams}
+                  qty={r.qty}
+                />
               </div>
             </article>
           ))}
@@ -886,6 +1015,11 @@ export function StaplesCompare() {
           font-weight: 800;
           font-size: 1.05rem;
           line-height: 1;
+        }
+        .qty-mark {
+          margin-left: 0.15rem;
+          color: #1f3d2f;
+          font-weight: 700;
         }
         .was {
           margin-left: 0.3rem;
@@ -1042,6 +1176,35 @@ export function StaplesCompare() {
           color: #2f4a3a;
           font-weight: 600;
         }
+        .qty-row {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0.3rem;
+          padding: 0 0.55rem 0.45rem;
+          font-size: 0.75rem;
+        }
+        .qty-input {
+          width: 3.2rem;
+          text-align: center;
+          border: 1px solid rgba(30, 40, 30, 0.25);
+          background: #fff;
+          padding: 0.28rem 0.2rem;
+          font-size: 0.9rem;
+        }
+        .qty-btn {
+          width: 1.85rem;
+          height: 1.85rem;
+          border: 1px solid rgba(30, 40, 30, 0.25);
+          background: #fff;
+          cursor: pointer;
+          font-size: 1.05rem;
+          line-height: 1;
+          padding: 0;
+        }
+        .qty-unit {
+          opacity: 0.7;
+        }
         .actions {
           margin: 1.25rem 0;
           display: flex;
@@ -1154,10 +1317,12 @@ function Side({
   title,
   side,
   grams,
+  qty,
 }: {
   title: string;
   side: SideResult;
   grams?: number | null;
+  qty?: number;
 }) {
   const usable =
     side.lineTotal != null &&
@@ -1170,18 +1335,23 @@ function Side({
     (side.status === "ok" || side.status === "stale" || !side.status)
       ? side.pricePerKg * (grams / 1000)
       : null;
+  const packQty = qty != null && qty > 1 ? qty : null;
   const primary =
     scaled != null
       ? scaled
-      : byWeight
-        ? side.nativeUnitPrice!
-        : (side.lineTotal ?? null);
+      : packQty != null && side.lineTotal != null
+        ? side.lineTotal
+        : byWeight
+          ? side.nativeUnitPrice!
+          : (side.lineTotal ?? null);
   const unitLabel =
     scaled != null
       ? `за ${grams} g`
-      : byWeight
-        ? (side.nativeUnitLabel ?? side.compareUnitLabel ?? null)
-        : (side.compareUnitLabel ?? null);
+      : packQty != null
+        ? `×${packQty}`
+        : byWeight
+          ? (side.nativeUnitLabel ?? side.compareUnitLabel ?? null)
+          : (side.compareUnitLabel ?? null);
   const otherUnit =
     byWeight && side.nativeUnit === "kg" && side.pricePerLb != null
       ? `= $${side.pricePerLb.toFixed(2)} / lb`

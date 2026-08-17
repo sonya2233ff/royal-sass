@@ -9,6 +9,7 @@ import {
   normalizeUpc,
   packsSimilar,
   pricePerKgFromPack,
+  scaleBasketAmount,
   upcsMatch,
 } from "@/domain/fair-compare";
 import { pickBestOffer } from "@/domain/matching";
@@ -64,6 +65,15 @@ assert(
   (basketAmountForSide(grape, "walmart", 2.97) ?? 0) > 8,
   "basket uses $/kg not tiny pack",
 );
+assert(
+  Math.abs(
+    (scaleBasketAmount(basketAmountForSide(grape, "walmart", 2.97), grape, {
+      qtyKg: 2,
+    }) ?? 0) -
+      2 * (grape.wmFair ?? 0),
+  ) < 0.02,
+  "qtyKg scales per-kg basket",
+);
 
 const butter = fairCompareSides(
   { ok: true, shelfPrice: 7.96, lineTotal: 7.96, packKg: 0.454 },
@@ -71,6 +81,14 @@ const butter = fairCompareSides(
 );
 assert(butter.fairBasis === "per_pack", `butter ${butter.fairBasis}`);
 assert(butter.cheaper === "walmart", "butter WM");
+assert(
+  Math.abs(
+    (scaleBasketAmount(basketAmountForSide(butter, "walmart", 7.96), butter, {
+      packQty: 2,
+    }) ?? 0) - 15.92,
+  ) < 0.02,
+  "pack qty doubles per-pack basket",
+);
 
 const eggs = fairCompareSides(
   { ok: true, isEgg: true, pricePerEach: 3.93 / 12, lineTotal: 9.825 },

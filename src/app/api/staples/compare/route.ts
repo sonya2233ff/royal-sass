@@ -67,6 +67,8 @@ export async function POST(request: Request) {
     refreshNoFrills?: boolean;
     /** Grams needed for sold-by-weight items (id → grams). */
     grams?: Record<string, number>;
+    /** Pack / carton count for other staples (id → qty). Default 1. */
+    qty?: Record<string, number>;
   };
   const cfg = await loadStaplesConfig();
   const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
@@ -263,6 +265,11 @@ export async function POST(request: Request) {
         : soldByWeight
           ? 1000
           : null;
+    const rawQty = Number(body.qty?.[id]);
+    const qty =
+      !soldByWeight && Number.isFinite(rawQty) && rawQty > 0
+        ? Math.max(1, Math.round(rawQty))
+        : 1;
 
     const nfEval = nfCacheUsable
       ? nfCacheEval
@@ -299,6 +306,7 @@ export async function POST(request: Request) {
         wmUsable,
         nfUsable,
         grams,
+        qty,
         confirmed: Boolean(conf),
         mappingDecision: wmLink?.decision,
         resolveReason: {
@@ -346,7 +354,7 @@ export async function POST(request: Request) {
             : nfSum < wmSum
               ? "nofrills"
               : "tie",
-      note: "Порівнянна сума: різні пачки → $/kg, яйця → 30 шт, схожі пачки → ціна полиці. Відхилена identity (різний товар) не входить у кошик.",
+      note: "Порівнянна сума: різні пачки → $/kg × кг, яйця → 30 шт × пачки, схожі пачки → ціна полиці × кількість. Відхилена identity не входить у кошик.",
     },
   });
 }

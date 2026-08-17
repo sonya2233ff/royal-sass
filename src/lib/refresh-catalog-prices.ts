@@ -59,6 +59,14 @@ function sleep(ms: number) {
 function slimOffer(o: ProductOffer): CatalogOffer {
   const mass =
     parseMassFromText(o.packageSize ?? "") ?? parseMassFromText(o.name);
+  const fromPack = mass && mass.kg > 0 && o.price > 0 ? o.price / mass.kg : null;
+  const unitPrice =
+    o.unitPrice != null &&
+    o.unitPrice > 0 &&
+    !(fromPack != null && o.unitPrice > fromPack * 20) &&
+    !(o.price > 0 && o.unitPrice > Math.max(o.price * 50, 80))
+      ? o.unitPrice
+      : undefined;
   return {
     productId: o.productId,
     name: o.name,
@@ -66,7 +74,7 @@ function slimOffer(o: ProductOffer): CatalogOffer {
     packageSize: o.packageSize ?? (mass ? formatMass(mass.kg) : undefined),
     parsedMassKg: mass?.kg,
     price: o.price,
-    unitPrice: o.unitPrice,
+    unitPrice,
     wasPrice: o.wasPrice,
     onSale:
       o.onSale ||

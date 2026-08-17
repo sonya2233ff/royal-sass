@@ -8,6 +8,7 @@ import {
   extractBarcodes,
   fairCompareSides,
   packMassKg,
+  scaleBasketAmount,
 } from "@/domain/fair-compare";
 import type { ResolveReason } from "@/domain/compare-resolve";
 import {
@@ -34,6 +35,7 @@ export interface StapleCompareRow {
   confirmed: boolean;
   soldByWeight: boolean;
   grams: number | null;
+  qty: number;
   matchKind: string;
   fairBasis: string;
   fairLabel: string;
@@ -62,21 +64,31 @@ export function buildStapleCompareRow(input: {
   wmUsable: boolean;
   nfUsable: boolean;
   grams: number | null;
+  /** Pack / carton count for non-weight staples. Default 1. */
+  qty?: number;
   confirmed: boolean;
   mappingDecision?: string;
   resolveReason?: { walmart?: ResolveReason; noFrills?: ResolveReason };
   nfUpc?: string;
 }): StapleCompareRow {
   const item = input.item;
+  const soldByWeight = isSoldByWeightItem(item);
+  const packQty = soldByWeight
+    ? 1
+    : Math.max(1, Math.round(Number(input.qty) || 1));
   const qtyKg =
-    input.grams != null && Number.isFinite(input.grams) && input.grams > 0
+    soldByWeight &&
+    input.grams != null &&
+    Number.isFinite(input.grams) &&
+    input.grams > 0
       ? input.grams / 1000
       : 1;
+  const summarizeQty = soldByWeight ? qtyKg : packQty;
 
   const wmRaw = input.wmUsable ? asCatalogOffer(input.wmOffer) : null;
   const nfRaw = input.nfUsable ? asCatalogOffer(input.nfOffer) : null;
 
-  const walmart = summarizeOffer(item, wmRaw, qtyKg, "walmart_ca");
+  const walmart = summarizeOffer(item, wmRaw, summarizeQty, "walmart_ca");
   const noFrills = summarizeOffer(
     item,
     nfRaw
@@ -91,7 +103,7 @@ export function buildStapleCompareRow(input: {
           retailer: "no_frills",
         }
       : null,
-    qtyKg,
+    summarizeQty,
     "no_frills",
   );
 
@@ -138,15 +150,15 @@ export function buildStapleCompareRow(input: {
     };
   }
 
-  const wmBasket = basketAmountForSide(
+  const wmBasket = scaleBasketAmount(
+    basketAmountForSide(fair, "walmart", wmOk ? walmart!.lineTotal : null),
     fair,
-    "walmart",
-    wmOk ? walmart!.lineTotal : null,
+    { packQty, qtyKg },
   );
-  const nfBasket = basketAmountForSide(
+  const nfBasket = scaleBasketAmount(
+    basketAmountForSide(fair, "nofrills", nfOk ? noFrills!.lineTotal : null),
     fair,
-    "nofrills",
-    nfOk ? noFrills!.lineTotal : null,
+    { packQty, qtyKg },
   );
 
   const matchKind = classifyMatchKind({
@@ -162,8 +174,9 @@ export function buildStapleCompareRow(input: {
     label: item.label,
     image: item.image ?? null,
     confirmed: input.confirmed,
-    soldByWeight: isSoldByWeightItem(item),
+    soldByWeight,
     grams: input.grams,
+    qty: soldByWeight ? 1 : packQty,
     matchKind,
     fairBasis: fair.fairBasis,
     fairLabel: fair.fairLabel,

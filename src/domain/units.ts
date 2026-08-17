@@ -240,7 +240,18 @@ export function resolveUnitPrices(
     const shelfIs = detectWeightPriceUnit(offer, displayUnit);
     pricePerKg = shelfIs === "lb" ? offer.price / KG_PER_LB : offer.price;
     basis = `sold_by_${shelfIs}`;
-  } else if (offer.unitPrice != null && Number.isFinite(offer.unitPrice)) {
+  } else if (
+    offer.unitPrice != null &&
+    Number.isFinite(offer.unitPrice) &&
+    offer.unitPrice > 0 &&
+    !(
+      mass &&
+      mass.kg > 0 &&
+      offer.price > 0 &&
+      offer.unitPrice > (offer.price / mass.kg) * 20
+    ) &&
+    !(offer.price > 0 && offer.unitPrice > Math.max(offer.price * 50, 80))
+  ) {
     const unitIs = detectWeightPriceUnit(offer, displayUnit);
     pricePerKg =
       unitIs === "lb" ? offer.unitPrice / KG_PER_LB : offer.unitPrice;

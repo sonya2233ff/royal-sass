@@ -899,13 +899,16 @@ export function summarizeOffer(
 
   if (eggPack && pricePerEgg != null) {
     const compareCount = 30;
+    const packs = qty > 0 ? qty : 1;
     return {
       name: offer.name,
       productId: offer.productId,
       shelfPrice: offer.price,
-      lineTotal: round2(pricePerEgg * compareCount),
+      lineTotal: round2(pricePerEgg * compareCount * packs),
       pack: pack ?? `${eggCount} шт`,
-      note: `${eggCount} шт · ${formatMoneyPerEach(pricePerEgg)} · порівняння за ${compareCount}`,
+      note: `${eggCount} шт · ${formatMoneyPerEach(pricePerEgg)} · порівняння за ${compareCount}${
+        packs > 1 ? ` ×${packs}` : ""
+      }`,
       confidence: offer.confidence,
       compareUnit: "per_pack",
       compareUnitLabel: "за 1 яйце",
