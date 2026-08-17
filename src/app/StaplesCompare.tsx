@@ -136,6 +136,27 @@ function saleTitle(item: Staple): string {
   return bits.join(" · ") || "Зараз на знижці";
 }
 
+function matchCategory(mode?: "preferred" | "cheapest"): {
+  key: "a" | "b";
+  short: string;
+  title: string;
+} {
+  if (mode === "cheapest") {
+    return {
+      key: "b",
+      short: "Б · найдешевший",
+      title:
+        "Категорія Б: овочі, фрукти, яйця, frozen — будь-який бренд, беремо найдешевший за одиницю",
+    };
+  }
+  return {
+    key: "a",
+    short: "А · саме цей",
+    title:
+      "Категорія А: саме цей продукт (бренд і SKU). Не підміняємо дешевшим аналогом",
+  };
+}
+
 function statusLabel(s?: OfferStatus | string | null): string {
   switch (s) {
     case "ok":
@@ -529,8 +550,9 @@ export function StaplesCompare() {
           <strong>за 1 kg</strong>, No Frills — <strong>за 1 lb</strong>. Угода при
           різних пачках — <strong>за 100 г</strong>. Товари
           на вагу: після вибору вкажи скільки <strong>грам</strong> потрібно.
-          Решта — <strong>кількість пачок</strong> (за замовчуванням 1). Produce/frozen —
-          найдешевший матч (бренд не важливий).
+          Решта — <strong>кількість пачок</strong> (за замовчуванням 1).{" "}
+          <strong>А</strong> — саме цей продукт. <strong>Б</strong> — овочі й
+          фрукти (найдешевший, бренд не важливий).
         </p>
         <p className={cacheIsOld ? "meta cache-warn" : "meta"}>
           Cache TTL {staleHours}h
@@ -591,6 +613,7 @@ export function StaplesCompare() {
             packN > 1 && item.noFrillsCached
               ? item.noFrillsCached.price * packN
               : null;
+          const cat = matchCategory(item.matchMode);
           return (
             <div
               key={item.id}
@@ -630,9 +653,9 @@ export function StaplesCompare() {
                   <span className={`pill ${item.status}`}>
                     {statusLabel(item.status)}
                   </span>
-                  {item.matchMode === "cheapest" && (
-                    <span className="pill cheapest">cheapest</span>
-                  )}
+                  <span className={`pill cat-${cat.key}`} title={cat.title}>
+                    {cat.short}
+                  </span>
                   {item.walmartCached ? (
                     <>
                       <span className="sku">
@@ -1113,8 +1136,14 @@ export function StaplesCompare() {
         .pill.rejected {
           background: #ecd5d0;
         }
-        .pill.cheapest {
+        .pill.cheapest,
+        .pill.cat-b {
           background: #d7e4ef;
+          text-transform: none;
+          letter-spacing: 0.02em;
+        }
+        .pill.cat-a {
+          background: #eadcc8;
           text-transform: none;
           letter-spacing: 0.02em;
         }
