@@ -42,6 +42,7 @@ Shown staples = `PINNED_IDS` in `src/lib/staples.ts` plus `custom: true` items (
 - `POST /api/staples/refresh-prices` — price-only `getProduct` on locked/catalog SKUs (no rematch)
 - `POST /api/staples/search` | `adopt` | `confirm` — find/add staple; 👍/👎 lock
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
+- `/dev/match-inspector` + `POST /api/dev/match-inspector` — developer match inspector (404 in production unless `ALLOW_MATCH_INSPECTOR=1`). Does not change customer UI.
 - `GET /api/compare` — **legacy** `runComparison` (`config/products.json` + `src/domain/basket.ts`), not the staples UI
 
 Refresh routes set `maxDuration = 60`.
@@ -106,7 +107,7 @@ If a script is not run, say so. Do not claim tests passed.
 
 ## Environment and security
 
-Names only (see `.env.example`): `DATABASE_URL`, `WALMART_SOURCE`, `WALMART_USE_BROWSER`, `WALMART_ALLOW_FLIPP_FALLBACK`, `WALMART_POSTAL_CODE`, `OPENWEBNINJA_API_KEY`, `RAPIDAPI_KEY`, `WALMART_RAPID_HOST`, `NOFRILLS_API_KEY`, `NOFRILLS_SEARCH_URL`, `NOFRILLS_ALLOW_FLIPP_FALLBACK`, `WHOLESALECLUB_BANNER`, `WHOLESALECLUB_STORE_ID`, `SOBEYS_POSTAL_CODE`, `FRESHCO_POSTAL_CODE`, `MVR_SHOPIFY_BASE`, `STAPLES_CACHE_STALE_HOURS`, `ENTITY_MATCH_AUTO_LINK_THRESHOLD`.
+Names only (see `.env.example`): `DATABASE_URL`, `WALMART_SOURCE`, `WALMART_USE_BROWSER`, `WALMART_ALLOW_FLIPP_FALLBACK`, `WALMART_POSTAL_CODE`, `OPENWEBNINJA_API_KEY`, `RAPIDAPI_KEY`, `WALMART_RAPID_HOST`, `NOFRILLS_API_KEY`, `NOFRILLS_SEARCH_URL`, `NOFRILLS_ALLOW_FLIPP_FALLBACK`, `WHOLESALECLUB_BANNER`, `WHOLESALECLUB_STORE_ID`, `SOBEYS_POSTAL_CODE`, `FRESHCO_POSTAL_CODE`, `MVR_SHOPIFY_BASE`, `STAPLES_CACHE_STALE_HOURS`, `ENTITY_MATCH_AUTO_LINK_THRESHOLD`, `ALLOW_MATCH_INSPECTOR`.
 
 Serverless catalog writes may no-op (read-only FS). Verify before assuming refresh persisted.
 
