@@ -399,6 +399,99 @@ type StatsSummary = {
   }>;
 };
 
+const STATS_STORAGE_KEY = "royal-sass-compare-history-v1";
+
+function isStatsRun(value: unknown): value is StatsRun {
+  if (!value || typeof value !== "object") return false;
+  const row = value as StatsRun;
+  return (
+    typeof row.id === "string" &&
+    typeof row.comparedAt === "string" &&
+    Array.isArray(row.items) &&
+    row.totals != null
+  );
+}
+
+function readLocalStatsRuns(): StatsRun[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(STATS_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as { runs?: unknown } | unknown;
+    const runs = Array.isArray(parsed)
+      ? parsed
+      : parsed && typeof parsed === "object" && Array.isArray((parsed as { runs?: unknown }).runs)
+        ? (parsed as { runs: unknown[] }).runs
+        : [];
+    return runs.filter(isStatsRun);
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalStatsRuns(runs: StatsRun[]) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(
+      STATS_STORAGE_KEY,
+      JSON.stringify({
+        updatedAt: new Date().toISOString(),
+        runs: runs.slice(0, 200),
+      }),
+    );
+  } catch {
+    // Private mode / quota — stats stay in memory for this visit.
+  }
+}
+
+function mergeStatsRuns(server: StatsRun[], local: StatsRun[]): StatsRun[] {
+  const map = new Map<string, StatsRun>();
+  for (const row of [...local, ...server]) {
+    if (isStatsRun(row)) map.set(row.id, row);
+  }
+  return [...map.values()]
+    .sort((a, b) =>
+      a.comparedAt === b.comparedAt
+        ? b.id.localeCompare(a.id)
+        : a.comparedAt < b.comparedAt
+          ? 1
+          : -1,
+    )
+    .slice(0, 200);
+}
+
+function summarizeLocalStats(runs: StatsRun[]): StatsSummary {
+  const basketWins: Record<string, number> = {};
+  const byItem = new Map<string, StatsSummary["topItems"][number]>();
+  for (const run of runs) {
+    const winner = run.totals.cheaper || "incomplete";
+    basketWins[winner] = (basketWins[winner] ?? 0) + 1;
+    for (const item of run.items) {
+      const cur = byItem.get(item.id) ?? {
+        id: item.id,
+        label: item.label,
+        times: 0,
+        wins: {},
+      };
+      cur.times += 1;
+      cur.label = item.label;
+      const key = item.cheaper || "incomplete";
+      cur.wins[key] = (cur.wins[key] ?? 0) + 1;
+      byItem.set(item.id, cur);
+    }
+  }
+  return {
+    runCount: runs.length,
+    lastComparedAt: runs[0]?.comparedAt ?? null,
+    itemCompares: runs.reduce((sum, run) => sum + run.itemCount, 0),
+    uniqueItems: byItem.size,
+    basketWins,
+    topItems: [...byItem.values()]
+      .sort((a, b) => b.times - a.times || a.label.localeCompare(b.label, "uk"))
+      .slice(0, 20),
+  };
+}
+
 function winLine(wins: Record<string, number> | undefined): string {
   if (!wins) return "";
   const order = ["walmart", "nofrills", "wholesaleclub", "mvr", "tie", "incomplete"];
@@ -462,9 +555,13 @@ export function StaplesCompare() {
 
   const applyStats = useCallback(
     (payload: { summary?: StatsSummary; runs?: StatsRun[] } | null | undefined) => {
-      if (!payload?.summary) return;
-      setStatsSummary(payload.summary);
-      setStatsRuns(Array.isArray(payload.runs) ? payload.runs : []);
+      const merged = mergeStatsRuns(
+        Array.isArray(payload?.runs) ? payload.runs : [],
+        readLocalStatsRuns(),
+      );
+      writeLocalStatsRuns(merged);
+      setStatsRuns(merged.slice(0, 40));
+      setStatsSummary(summarizeLocalStats(merged));
     },
     [],
   );
@@ -491,11 +588,13 @@ export function StaplesCompare() {
   }, []);
 
   const reloadStats = useCallback(async () => {
-    const res = await fetch("/api/staples/compare-stats");
-    if (!res.ok) return;
-    const data = await res.json();
-    if (!data.ok) return;
-    applyStats(data);
+    try {
+      const res = await fetch("/api/staples/compare-stats");
+      const data = res.ok ? await res.json() : null;
+      applyStats(data?.ok ? data : { runs: [] });
+    } catch {
+      applyStats({ runs: [] });
+    }
   }, [applyStats]);
 
   useEffect(() => {
@@ -681,7 +780,6 @@ export function StaplesCompare() {
         setMatchLogId(data.matchLogId ?? null);
         setLogPreview(null);
         applyStats(data.stats);
-        if (!data.stats) await reloadStats();
         if (typeof data.savedRunId === "string") setOpenRunId(data.savedRunId);
         await reload();
       } catch (e) {

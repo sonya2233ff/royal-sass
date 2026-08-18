@@ -908,9 +908,8 @@ export async function POST(request: Request) {
     matchLogId: logId,
     rows,
     totals,
-    savedRunId: saved?.run.id ?? null,
-    stats: saved
-      ? { summary: saved.summary, runs: saved.runs.slice(0, 40) }
-      : null,
+    savedRunId: saved.run.id,
+    statsPersisted: saved.persisted,
+    stats: { summary: saved.summary, runs: saved.runs.slice(0, 40) },
   });
 }

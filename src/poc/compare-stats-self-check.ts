@@ -125,7 +125,8 @@ async function main() {
       file,
     });
     assert(saved != null, "first save");
-    assert(saved!.runs.length === 1, "one run on disk");
+    assert(saved.persisted === true, "disk persist");
+    assert(saved.runs.length === 1, "one run on disk");
     const again = await appendCompareRun(runB, file);
     assert(again.length === 2, "second run");
     const loaded = await loadCompareHistory(file);

@@ -233,13 +233,25 @@ export async function recordCompareResult(input: {
   run: CompareRunRecord;
   runs: CompareRunRecord[];
   summary: CompareStatsSummary;
-} | null> {
+  persisted: boolean;
+}> {
+  const run = buildCompareRunRecord(input);
   try {
-    const run = buildCompareRunRecord(input);
     const runs = await appendCompareRun(run, input.file ?? COMPARE_STATS_FILE);
-    return { run, runs, summary: summarizeCompareHistory(runs) };
+    return {
+      run,
+      runs,
+      summary: summarizeCompareHistory(runs),
+      persisted: true,
+    };
   } catch {
-    return null;
+    // Vercel / serverless: read-only FS. Caller still gets the run to keep.
+    return {
+      run,
+      runs: [run],
+      summary: summarizeCompareHistory([run]),
+      persisted: false,
+    };
   }
 }
 
