@@ -330,6 +330,84 @@ function cheaperLabel(cheaper: string): string {
   return "Incomplete";
 }
 
+function storeShort(cheaper: string): string {
+  if (cheaper === "walmart") return "Walmart";
+  if (cheaper === "nofrills") return "No Frills";
+  if (cheaper === "wholesaleclub") return "Wholesale Club";
+  if (cheaper === "mvr") return "MVR";
+  if (cheaper === "tie") return "нічия";
+  return "неповне";
+}
+
+function money(n: number | null | undefined): string {
+  if (n == null || !Number.isFinite(n)) return "—";
+  return `$${n.toFixed(2)}`;
+}
+
+function torontoWhen(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString("uk-UA", {
+    timeZone: "America/Toronto",
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+}
+
+type StatsRunItem = {
+  id: string;
+  label: string;
+  qty: number;
+  grams: number | null;
+  cheaper: string;
+  delta: number | null;
+  walmart: number | null;
+  noFrills: number | null;
+  wholesaleClub: number | null;
+  mvr: number | null;
+};
+
+type StatsRun = {
+  id: string;
+  comparedAt: string;
+  itemCount: number;
+  items: StatsRunItem[];
+  totals: {
+    completeCount: number;
+    walmart: number;
+    noFrills: number;
+    wholesaleClub: number;
+    mvr: number;
+    cheaper: string;
+    tripleCount?: number;
+    quadCount?: number;
+  };
+};
+
+type StatsSummary = {
+  runCount: number;
+  lastComparedAt: string | null;
+  itemCompares: number;
+  uniqueItems: number;
+  basketWins: Record<string, number>;
+  topItems: Array<{
+    id: string;
+    label: string;
+    times: number;
+    wins: Record<string, number>;
+  }>;
+};
+
+function winLine(wins: Record<string, number> | undefined): string {
+  if (!wins) return "";
+  const order = ["walmart", "nofrills", "wholesaleclub", "mvr", "tie", "incomplete"];
+  return order
+    .filter((key) => (wins[key] ?? 0) > 0)
+    .map((key) => `${storeShort(key)} ${wins[key]}`)
+    .join(" · ");
+}
+
 function walmartSourceLabel(
   source: "rapid" | "browser" | "missing_key" | null,
 ): string {
@@ -378,6 +456,18 @@ export function StaplesCompare() {
   const [walmartSourceWarning, setWalmartSourceWarning] = useState<
     string | null
   >(null);
+  const [statsSummary, setStatsSummary] = useState<StatsSummary | null>(null);
+  const [statsRuns, setStatsRuns] = useState<StatsRun[]>([]);
+  const [openRunId, setOpenRunId] = useState<string | null>(null);
+
+  const applyStats = useCallback(
+    (payload: { summary?: StatsSummary; runs?: StatsRun[] } | null | undefined) => {
+      if (!payload?.summary) return;
+      setStatsSummary(payload.summary);
+      setStatsRuns(Array.isArray(payload.runs) ? payload.runs : []);
+    },
+    [],
+  );
 
   const reload = useCallback(async () => {
     const res = await fetch("/api/staples");
@@ -400,11 +490,20 @@ export function StaplesCompare() {
     setWalmartSourceWarning(data.walmartSourceWarning ?? null);
   }, []);
 
+  const reloadStats = useCallback(async () => {
+    const res = await fetch("/api/staples/compare-stats");
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.ok) return;
+    applyStats(data);
+  }, [applyStats]);
+
   useEffect(() => {
     reload().catch((e) =>
       setError(friendlyError(e instanceof Error ? e.message : String(e))),
     );
-  }, [reload]);
+    reloadStats().catch(() => undefined);
+  }, [reload, reloadStats]);
 
   const visibleItems = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -581,6 +680,9 @@ export function StaplesCompare() {
         setTotals(data.totals);
         setMatchLogId(data.matchLogId ?? null);
         setLogPreview(null);
+        applyStats(data.stats);
+        if (!data.stats) await reloadStats();
+        if (typeof data.savedRunId === "string") setOpenRunId(data.savedRunId);
         await reload();
       } catch (e) {
         setError(e instanceof Error ? friendlyError(e.message) : String(e));
@@ -827,7 +929,9 @@ export function StaplesCompare() {
           {walmartSource === "missing_key" && walmartSourceWarning
             ? " · додай RapidAPI ключ у .env / Vercel"
             : ""}
-          {" · × на картці видаляє товар з проєкту"}
+          {statsSummary?.runCount
+            ? ` · статистика: ${statsSummary.runCount} порівнянь`
+            : " · кожне Compare зберігається в статистику"}
         </p>
         <ProductSearch
           query={query}
@@ -1480,8 +1584,107 @@ export function StaplesCompare() {
               {totals.note && <div className="tiny mute">{totals.note}</div>}
             </div>
           )}
+          <p className="meta">Збережено в статистику порівнянь</p>
         </section>
       )}
+
+      <section className="stats">
+        <h2>Статистика порівнянь</h2>
+        {!statsSummary || statsSummary.runCount === 0 ? (
+          <p className="meta">
+            Ще немає збережених порівнянь. Натисни Compare — кошик, товари й
+            хто дешевший залишаться тут після оновлення сторінки.
+          </p>
+        ) : (
+          <>
+            <p className="meta">
+              {statsSummary.runCount} порівнянь · {statsSummary.itemCompares}{" "}
+              позицій · {statsSummary.uniqueItems} унікальних товарів
+              {statsSummary.lastComparedAt
+                ? ` · останнє ${torontoWhen(statsSummary.lastComparedAt)}`
+                : ""}
+            </p>
+            <div className="stats-wins">
+              <span>Хто частіше дешевший (кошик):</span>
+              <strong>{winLine(statsSummary.basketWins) || "—"}</strong>
+            </div>
+            {statsSummary.topItems.length > 0 && (
+              <div className="stats-top">
+                <h3>Товари, які порівнювали найчастіше</h3>
+                <ul>
+                  {statsSummary.topItems.slice(0, 12).map((item) => (
+                    <li key={item.id}>
+                      <span>{item.label}</span>
+                      <span className="mute">
+                        {item.times}× · {winLine(item.wins)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="stats-runs">
+              <h3>Останні порівняння</h3>
+              {statsRuns.map((run) => {
+                const open = openRunId === run.id;
+                return (
+                  <article key={run.id} className={open ? "stat-run open" : "stat-run"}>
+                    <button
+                      type="button"
+                      className="stat-run-head"
+                      onClick={() =>
+                        setOpenRunId(open ? null : run.id)
+                      }
+                    >
+                      <span>
+                        {torontoWhen(run.comparedAt)} · {run.itemCount} товарів
+                      </span>
+                      <span>
+                        {storeShort(run.totals.cheaper)}
+                        {" · WM "}
+                        {money(run.totals.walmart)}
+                        {" · NF "}
+                        {money(run.totals.noFrills)}
+                        {" · WC "}
+                        {money(run.totals.wholesaleClub)}
+                        {" · MVR "}
+                        {money(run.totals.mvr)}
+                      </span>
+                    </button>
+                    {open && (
+                      <ul className="stat-run-items">
+                        {run.items.map((item) => (
+                          <li key={item.id}>
+                            <strong>
+                              {item.label}
+                              {item.grams
+                                ? ` · ${item.grams} g`
+                                : item.qty > 1
+                                  ? ` · ×${item.qty}`
+                                  : ""}
+                            </strong>
+                            <span>
+                              {storeShort(item.cheaper)}
+                              {item.delta != null && item.cheaper !== "tie"
+                                ? ` · Δ $${Math.abs(item.delta).toFixed(2)}`
+                                : ""}
+                            </span>
+                            <span className="mute">
+                              WM {money(item.walmart)} · NF {money(item.noFrills)}{" "}
+                              · WC {money(item.wholesaleClub)} · MVR{" "}
+                              {money(item.mvr)}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </section>
 
       {logPreview && (
         <section className="log">
@@ -1872,6 +2075,64 @@ export function StaplesCompare() {
           font-size: 0.72rem;
           background: rgba(0, 0, 0, 0.04);
           padding: 0.75rem;
+        }
+        .stats {
+          margin-top: 2rem;
+        }
+        .stats h2 {
+          margin: 0 0 0.35rem;
+          font-size: 1.15rem;
+        }
+        .stats h3 {
+          margin: 0.85rem 0 0.35rem;
+          font-size: 0.92rem;
+        }
+        .stats-wins {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.35rem 0.7rem;
+          margin-top: 0.55rem;
+          padding: 0.75rem 1rem;
+          background: rgba(47, 74, 58, 0.08);
+        }
+        .stats-top ul,
+        .stat-run-items {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        .stats-top li,
+        .stat-run-items li {
+          display: grid;
+          gap: 0.1rem;
+          padding: 0.4rem 0;
+          border-bottom: 1px solid rgba(40, 50, 40, 0.1);
+          font-size: 0.88rem;
+        }
+        .stat-run {
+          border: 1px solid rgba(40, 50, 40, 0.14);
+          background: rgba(255, 252, 246, 0.72);
+          margin-top: 0.45rem;
+        }
+        .stat-run-head {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.15rem;
+          width: 100%;
+          text-align: left;
+          border: 0;
+          background: transparent;
+          padding: 0.7rem 0.85rem;
+          cursor: pointer;
+          color: inherit;
+          font: inherit;
+        }
+        .stat-run.open .stat-run-head {
+          background: rgba(47, 74, 58, 0.06);
+        }
+        .stat-run-items {
+          padding: 0 0.85rem 0.7rem;
         }
       `}</style>
     </div>

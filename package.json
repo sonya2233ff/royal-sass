@@ -30,6 +30,7 @@
     "probe:pcx-banner": "tsx --env-file=.env.local src/poc/probe-pcx-banner.ts",
     "poc:store-connector": "tsx src/poc/store-connector-self-check.ts",
     "poc:fair-compare": "tsx src/poc/fair-compare-self-check.ts",
+    "poc:compare-stats": "tsx src/poc/compare-stats-self-check.ts",
     "poc:staple-filter": "tsx src/poc/staple-filter-self-check.ts",
     "poc:entity-match": "tsx src/poc/entity-match-benchmark.ts",
     "poc:seed-match": "tsx src/poc/seed-and-match.ts",

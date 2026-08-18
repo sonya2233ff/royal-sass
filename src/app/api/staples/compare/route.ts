@@ -38,6 +38,7 @@ import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
 import { searchWholesaleClubPool } from "@/lib/wholesaleclub-observe";
 import { loadMvrCatalog } from "@/lib/mvr-catalog";
 import { searchMvrPool } from "@/lib/mvr-observe";
+import { recordCompareResult } from "@/lib/compare-stats";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -826,10 +827,44 @@ export async function POST(request: Request) {
       : cheaperThree;
 
   const logId = await appendMatchLog(entries);
+  const comparedAt = new Date().toISOString();
+  const totals = {
+    completeCount: wmNfRows.length,
+    walmart: roundMoney(wmSum),
+    noFrills: roundMoney(nfSum),
+    wholesaleClub: roundMoney(tripleRows.length ? tripleWc : wcAllSum),
+    mvr: roundMoney(quadRows.length ? quadMvr : mvrAllSum),
+    cheaper: cheaperFour,
+    cheaperTwoWay,
+    cheaperThree,
+    tripleCount: tripleRows.length,
+    tripleWalmart: roundMoney(tripleWm),
+    tripleNoFrills: roundMoney(tripleNf),
+    tripleWholesaleClub: roundMoney(tripleWc),
+    wholesaleClubItemCount: wcAllRows.length,
+    quadCount: quadRows.length,
+    quadWalmart: roundMoney(quadWm),
+    quadNoFrills: roundMoney(quadNf),
+    quadWholesaleClub: roundMoney(quadWc),
+    quadMvr: roundMoney(quadMvr),
+    mvrItemCount: mvrAllRows.length,
+    note:
+      quadRows.length > 0
+        ? `Порівнянна сума. 4 магазини: ${quadRows.length} спільних позицій. 3 магазини: ${tripleRows.length}. WM vs NF окремо: ${wmNfRows.length} позицій. Різні пачки → $/kg × кг, яйця → 30 шт × пачки. Відхилена identity не входить у кошик.`
+        : tripleRows.length > 0
+        ? `Порівнянна сума. 3 магазини: ${tripleRows.length} спільних позицій. WM vs NF окремо: ${wmNfRows.length} позицій. Різні пачки → $/kg × кг, яйця → 30 шт × пачки. Відхилена identity не входить у кошик.`
+        : "Порівнянна сума: різні пачки → $/kg × кг, яйця → 30 шт × пачки, схожі пачки → ціна полиці × кількість. Відхилена identity не входить у кошик.",
+  };
+  const saved = await recordCompareResult({
+    comparedAt,
+    matchLogId: logId,
+    rows,
+    totals,
+  });
 
   return NextResponse.json({
     ok: true,
-    comparedAt: new Date().toISOString(),
+    comparedAt,
     ...walmartSourceApiFields(),
     noFrillsSource:
       nfLiveHits === 0 && nfCacheHits > 0
@@ -872,32 +907,10 @@ export async function POST(request: Request) {
     mvrEnabled: true,
     matchLogId: logId,
     rows,
-    totals: {
-      completeCount: wmNfRows.length,
-      walmart: roundMoney(wmSum),
-      noFrills: roundMoney(nfSum),
-      wholesaleClub: roundMoney(tripleRows.length ? tripleWc : wcAllSum),
-      mvr: roundMoney(quadRows.length ? quadMvr : mvrAllSum),
-      cheaper: cheaperFour,
-      cheaperTwoWay,
-      cheaperThree,
-      tripleCount: tripleRows.length,
-      tripleWalmart: roundMoney(tripleWm),
-      tripleNoFrills: roundMoney(tripleNf),
-      tripleWholesaleClub: roundMoney(tripleWc),
-      wholesaleClubItemCount: wcAllRows.length,
-      quadCount: quadRows.length,
-      quadWalmart: roundMoney(quadWm),
-      quadNoFrills: roundMoney(quadNf),
-      quadWholesaleClub: roundMoney(quadWc),
-      quadMvr: roundMoney(quadMvr),
-      mvrItemCount: mvrAllRows.length,
-      note:
-        quadRows.length > 0
-          ? `Порівнянна сума. 4 магазини: ${quadRows.length} спільних позицій. 3 магазини: ${tripleRows.length}. WM vs NF окремо: ${wmNfRows.length} позицій. Різні пачки → $/kg × кг, яйця → 30 шт × пачки. Відхилена identity не входить у кошик.`
-          : tripleRows.length > 0
-          ? `Порівнянна сума. 3 магазини: ${tripleRows.length} спільних позицій. WM vs NF окремо: ${wmNfRows.length} позицій. Різні пачки → $/kg × кг, яйця → 30 шт × пачки. Відхилена identity не входить у кошик.`
-          : "Порівнянна сума: різні пачки → $/kg × кг, яйця → 30 шт × пачки, схожі пачки → ціна полиці × кількість. Відхилена identity не входить у кошик.",
-    },
+    totals,
+    savedRunId: saved?.run.id ?? null,
+    stats: saved
+      ? { summary: saved.summary, runs: saved.runs.slice(0, 40) }
+      : null,
   });
 }
