@@ -13,7 +13,7 @@ import {
   scaleBasketAmount,
   upcsMatch,
 } from "@/domain/fair-compare";
-import { pickBestOffer, scoreOfferMatch } from "@/domain/matching";
+import { pickBestOffer, pickCheapestOffer, scoreOfferMatch } from "@/domain/matching";
 import { stapleBrandHint } from "@/domain/catalog-normalize";
 import { sanityCheckOffer } from "@/domain/sanity";
 import type { ProductOffer } from "@/connectors/types";
@@ -290,6 +290,31 @@ const grapeThreeWcWins = fairCompareThree(
 assert(
   grapeThreeWcWins.cheaper === "wholesaleclub",
   `WC cheapest per 100g, got ${grapeThreeWcWins.cheaper}`,
+);
+
+const organicBlue = offer({
+  productId: "6000197209331",
+  name: "Fresh Organic Blueberries, 6 oz",
+  packageSize: "170 g",
+  price: 5.44,
+});
+const cheapBlue = offer({
+  productId: "6000204089919",
+  name: "Blueberries, 312 g",
+  packageSize: "312 g",
+  price: 3.44,
+});
+assert(
+  scoreOfferMatch(cheapBlue, "blueberries fresh") !== -Infinity,
+  "conventional blueberries still match a 'fresh' produce query",
+);
+const bluePick = pickCheapestOffer(
+  [organicBlue, cheapBlue],
+  "blueberries fresh",
+);
+assert(
+  bluePick?.productId === cheapBlue.productId,
+  `cheapest WM blueberries is 312g not organic 6oz, got ${bluePick?.productId}`,
 );
 
 console.log("fair-compare-self-check ok", {

@@ -2,7 +2,7 @@
  * Pick the catalog offer that compare may use.
  *
  * Locked / verified identity → mapped SKU only (Rapid off-by-one allowed).
- * Cheapest produce → catalog winner if staple filters pass, else an alternate.
+ * Cheapest produce → cheapest suitable catalog SKU (fair $/kg), else an alternate.
  * Never use a filtered-out winner (tomato seeds) as a grape-tomato price.
  *
  * Does not call Rapid or PCX.
@@ -11,6 +11,7 @@ import {
   offerFailsStapleOfferFilters,
   type StapleFilterItem,
 } from "@/domain/catalog-normalize";
+import { pickCheapestByFairUnit } from "@/domain/matching";
 import { pickNeededWeightPurchase } from "@/domain/needed-weight-pick";
 import {
   isActualCategoryBOffer,
@@ -113,6 +114,40 @@ export function offerMatchesRetailerSku(
   return numericIdsOffByOne(offer.productId, sku);
 }
 
+function passingCatalogOffers(
+  item: StapleFilterItem,
+  row?: CatalogRowRef | null,
+): CatalogOfferRef[] {
+  const out: CatalogOfferRef[] = [];
+  for (const offer of catalogCandidates(row)) {
+    if (!offerIsOnShelf(offer)) continue;
+    if (usesCategoryBIdentity(item)) {
+      if (!isActualCategoryBOffer(item, offer)) continue;
+    } else if (offerFailsStapleOfferFilters(item, offer)) {
+      continue;
+    }
+    out.push(offer);
+  }
+  return out;
+}
+
+function resolveFromOffer(
+  offer: CatalogOfferRef,
+  row?: CatalogRowRef | null,
+  detail?: string,
+): {
+  offer: CatalogOfferRef;
+  reason: ResolveReason;
+  detail?: string;
+} {
+  const fromWinner = offer.productId === row?.offer?.productId;
+  return {
+    offer,
+    reason: fromWinner ? "catalog" : "filtered_alternate",
+    detail,
+  };
+}
+
 export function catalogCandidates(
   row?: CatalogRowRef | null,
 ): CatalogOfferRef[] {
@@ -200,18 +235,13 @@ export function resolveCatalogOffer(input: {
     }
   }
 
-  for (const offer of catalogCandidates(input.row)) {
-    if (!offerIsOnShelf(offer)) continue;
-    if (usesCategoryBIdentity(input.item)) {
-      if (!isActualCategoryBOffer(input.item, offer)) continue;
-    } else if (offerFailsStapleOfferFilters(input.item, offer)) {
-      continue;
+  const passing = passingCatalogOffers(input.item, input.row);
+  if (passing.length) {
+    if (input.matchMode === "cheapest") {
+      const cheapest = pickCheapestByFairUnit(passing);
+      if (cheapest) return resolveFromOffer(cheapest, input.row);
     }
-    const fromWinner = offer.productId === input.row?.offer?.productId;
-    return {
-      offer,
-      reason: fromWinner ? "catalog" : "filtered_alternate",
-    };
+    return resolveFromOffer(passing[0]!, input.row);
   }
 
   if (input.row?.offer) {

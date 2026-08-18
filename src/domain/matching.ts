@@ -1,6 +1,6 @@
 import type { ProductOffer } from "@/connectors/types";
 import { scoreMassMatch, resolveUnitPrices, parsePackCount } from "@/domain/units";
-import { extractBarcodes, upcsMatch } from "@/domain/fair-compare";
+import { extractBarcodes, packMassKg, upcsMatch } from "@/domain/fair-compare";
 
 const STOP = new Set([
   "the",
@@ -40,6 +40,10 @@ const SOFT = new Set([
   "1kg",
   "500g",
   "1000g",
+  // Produce search often adds "fresh"; conventional packs rarely say it.
+  "fresh",
+  "pint",
+  "clamshell",
 ]);
 
 const REJECT_IF_PRESENT = [
@@ -129,9 +133,48 @@ export function scoreOfferMatch(
 export type OfferPickMode = "preferred" | "cheapest";
 
 /**
- * Among offers that match the query, pick the lowest fair price.
+ * Fair unit for cheapest produce: $/kg when mass is known, else shelf price.
+ * Identity filters belong on the caller; this only ranks remaining offers.
+ */
+export function fairUnitSortKey(offer: {
+  price: number;
+  name: string;
+  packageSize?: string;
+  parsedMassKg?: number;
+}): number | null {
+  if (!(offer.price > 0)) return null;
+  const kg = packMassKg(offer.name, offer.packageSize, offer.parsedMassKg);
+  if (kg != null && kg > 0) return offer.price / kg;
+  return offer.price;
+}
+
+export function pickCheapestByFairUnit<
+  T extends {
+    price: number;
+    name: string;
+    packageSize?: string;
+    parsedMassKg?: number;
+  },
+>(offers: T[]): T | null {
+  let best: T | null = null;
+  let bestKey = Infinity;
+  for (const offer of offers) {
+    const key = fairUnitSortKey(offer);
+    if (key == null) continue;
+    if (key < bestKey) {
+      bestKey = key;
+      best = offer;
+    }
+  }
+  return best;
+}
+
+/**
+ * Among suitable offers, pick the lowest fair price.
  * Uses $/kg when mass/unit price is known (produce), otherwise shelf price.
  * Brand / preferred SKU is ignored — call only when matchMode=cheapest.
+ * Query score is a tie-break, not a second identity gate: callers already
+ * dropped muffins / frozen / wrong fruit.
  */
 export function pickCheapestOffer(
   offers: ProductOffer[],
@@ -146,6 +189,11 @@ export function pickCheapestOffer(
     preferLargerPack?: boolean;
     /** If any hit matches, restrict to those (e.g. spinach cubes). */
     preferNameIncludes?: string[];
+    /**
+     * When true, drop offers that fail scoreOfferMatch (legacy).
+     * Default false: pick cheapest among the filtered pool.
+     */
+    requireQueryMatch?: boolean;
   },
 ): ProductOffer | null {
   if (offers.length === 0) return null;
@@ -161,8 +209,9 @@ export function pickCheapestOffer(
   let ranked: Ranked[] = [];
 
   for (const offer of offers) {
-    const matchScore = scoreOfferMatch(offer, query, opts);
-    if (matchScore === -Infinity) continue;
+    const rawScore = scoreOfferMatch(offer, query, opts);
+    if (rawScore === -Infinity && opts?.requireQueryMatch) continue;
+    const matchScore = rawScore === -Infinity ? 0 : rawScore;
 
     const count = parsePackCount(offer.name, offer.packageSize);
     if (opts?.byEach) {
@@ -256,6 +305,7 @@ export function pickBestOffer(
     byEach?: boolean;
     preferLargerPack?: boolean;
     preferredUpc?: string;
+    requireQueryMatch?: boolean;
   },
 ): ProductOffer | null {
   if (offers.length === 0) return null;

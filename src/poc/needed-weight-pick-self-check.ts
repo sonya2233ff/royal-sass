@@ -574,6 +574,81 @@ assert(
   "in-stock locked grape SKU should not rematch",
 );
 
+const organicBlue = {
+  productId: "6000197209331",
+  name: "Fresh Organic Blueberries, 6 oz",
+  packageSize: "170 g",
+  parsedMassKg: 0.17,
+  price: 5.44,
+};
+const pack312 = {
+  productId: "6000204089919",
+  name: "Blueberries, 312 g",
+  packageSize: "312 g",
+  parsedMassKg: 0.312,
+  price: 3.44,
+};
+const gvFrozenBag = {
+  productId: "6000197072458",
+  name: "Great Value Cultivated Blueberries, 600 g",
+  brand: "Great Value",
+  packageSize: "600 g",
+  parsedMassKg: 0.6,
+  price: 4.66,
+};
+const blueWeight = pickNeededWeightPurchase(500, [organicBlue, pack312]);
+assert(
+  blueWeight?.productId === pack312.productId,
+  `500g blueberries buy 312g packs not 3×organic, got ${blueWeight?.productId}`,
+);
+assert(blueWeight?.packs === 2, `312g packs ${blueWeight?.packs}`);
+assert(blueWeight?.totalPrice === 6.88, `312g total ${blueWeight?.totalPrice}`);
+
+const blueberryItem = {
+  id: "blueberries",
+  category: "produce" as const,
+  matchMode: "cheapest" as const,
+  mustIncludeAny: ["blueberry", "blueberries"],
+  mustNotInclude: ["muffin", "jam", "juice", "dried", "frozen", "cultivated"],
+};
+assert(
+  isActualCategoryBOffer(blueberryItem, pack312) === true,
+  "312g clamshell is fresh blueberries",
+);
+assert(
+  isActualCategoryBOffer(blueberryItem, organicBlue) === true,
+  "organic 6oz is still fruit",
+);
+assert(
+  isActualCategoryBOffer(blueberryItem, gvFrozenBag) === false,
+  "cultivated 600g bag is the frozen SKU, not fresh produce",
+);
+const blueResolved = resolveCatalogOffer({
+  item: blueberryItem,
+  row: {
+    offer: organicBlue,
+    alternates: [pack312, gvFrozenBag],
+  },
+  matchMode: "cheapest",
+  neededGrams: 500,
+});
+assert(
+  blueResolved.offer?.productId === pack312.productId,
+  `resolve blueberries ${blueResolved.offer?.productId}`,
+);
+const blueResolvedNoGrams = resolveCatalogOffer({
+  item: blueberryItem,
+  row: {
+    offer: organicBlue,
+    alternates: [pack312, gvFrozenBag],
+  },
+  matchMode: "cheapest",
+});
+assert(
+  blueResolvedNoGrams.offer?.productId === pack312.productId,
+  `cheapest catalog blueberries ${blueResolvedNoGrams.offer?.productId}`,
+);
+
 console.log("needed-weight-pick-self-check ok", {
   winner500: winner500?.productId,
   twoSmall: { packs: twoSmall?.packs, total: twoSmall?.totalPrice },

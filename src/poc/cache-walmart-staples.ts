@@ -141,8 +141,10 @@ function pickForStaple(
     item.category === "eggs";
 
   const pickQuery =
-    item.category === "frozen" || item.category === "eggs"
-      ? (item.mustIncludeAny?.[0] ?? item.label)
+    cheapest
+      ? (item.mustIncludeAny?.[0] ??
+        item.queries.find((q) => q && !/^\d+$/.test(q)) ??
+        item.label)
       : (item.queries.find((q) => q && !/^\d+$/.test(q)) ?? item.label);
 
   if (cheapest) {
@@ -152,6 +154,7 @@ function pickForStaple(
         preferNameIncludes: item.preferNameIncludes,
         byEach: item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
         preferLargerPack: item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
+        requireQueryMatch: false,
       }) ?? null
     );
   }

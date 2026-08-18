@@ -1,6 +1,7 @@
 /**
- * Category B purchase pick: needed weight, not cheapest $/100g.
- * Do not use for category A.
+ * Category B purchase pick: cover the needed weight at the lowest total,
+ * not cheapest $/100g of a huge bag, and not three tiny expensive packs
+ * just because they sit inside −10% / +15%.
  */
 import { packMassKg, pricePer100gFromKg } from "@/domain/fair-compare";
 import { isEachSoldOffer } from "@/domain/same-packed-item";
@@ -163,8 +164,10 @@ function comparePlans(a: WeightPurchasePlan, b: WeightPurchasePlan): number {
 }
 
 /**
- * Among pack sizes, prefer in-range (−10% / +15%) lowest total price,
- * else cheapest cover of the needed weight.
+ * Among pack sizes, buy the cheapest covering purchase.
+ * In-range (−10% / +15%) is a tie-break, not a hard gate — otherwise three
+ * tiny organic clamshells can beat two cheaper conventional packs that sit
+ * just outside +15%.
  */
 export function pickNeededWeightPurchase(
   neededGrams: number,
@@ -176,11 +179,12 @@ export function pickNeededWeightPurchase(
     if (plan) plans.push(plan);
   }
   if (!plans.length) return null;
-  const inRange = plans.filter((p) => p.inRange);
-  const pool = inRange.length ? inRange : plans.filter((p) => p.coverFallback);
-  if (!pool.length) return null;
-  pool.sort(comparePlans);
-  return pool[0] ?? null;
+  plans.sort((a, b) => {
+    if (a.totalPrice !== b.totalPrice) return a.totalPrice - b.totalPrice;
+    if (a.inRange !== b.inRange) return a.inRange ? -1 : 1;
+    return Math.abs(a.deltaGrams) - Math.abs(b.deltaGrams);
+  });
+  return plans[0] ?? null;
 }
 
 /** Loose produce: price is $/kg, no pack count. */

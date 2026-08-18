@@ -486,7 +486,8 @@
         "jam",
         "juice",
         "dried",
-        "frozen"
+        "frozen",
+        "cultivated"
       ],
       "image": "/products/blueberries.jpg",
       "matchMode": "cheapest",

@@ -39,7 +39,8 @@ async function main() {
   const banana = cfg.items.find((i) => i.id === "bananas_kg");
   const apple = cfg.items.find((i) => i.id === "frozen_apple");
   const egg = cfg.items.find((i) => i.id === "simply_egg_whites");
-  if (!frozen || !fresh || !grape || !banana || !apple || !egg) {
+  const blueberries = cfg.items.find((i) => i.id === "blueberries");
+  if (!frozen || !fresh || !grape || !banana || !apple || !egg || !blueberries) {
     throw new Error("missing staples");
   }
 
@@ -108,6 +109,21 @@ async function main() {
   assert(
     qs.some((q) => /tomatoes grape/i.test(q)),
     "category B search includes warehouse word order",
+  );
+  assert(
+    offerFailsStapleOfferFilters(blueberries, {
+      name: "Great Value Cultivated Blueberries, 600 g",
+      brand: "Great Value",
+      packageSize: "600 g",
+    }) === "mustNotInclude:cultivated",
+    "fresh blueberries reject the frozen cultivated bag",
+  );
+  assert(
+    offerFailsStapleOfferFilters(blueberries, {
+      name: "Blueberries, 312 g",
+      packageSize: "312 g",
+    }) == null,
+    "conventional 312g blueberries pass",
   );
 
   console.log("staple-filter-self-check ok");

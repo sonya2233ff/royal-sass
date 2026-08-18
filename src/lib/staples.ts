@@ -693,18 +693,12 @@ function matchQueryForPick(item: StapleItem): string {
     return "kosher homogenized milk 2l";
   }
   if (resolveMatchMode(item) === "cheapest") {
-    if (item.category === "frozen" || item.category === "eggs") {
-      return (
-        item.mustIncludeAny?.[0] ??
-        item.queries.find((q) => q && !/^\d+$/.test(q)) ??
-        item.label
-      );
-    }
-    // Prefer short produce query so brand/variety tokens in the label
-    // don't disqualify cheaper alternatives (e.g. any pear, not only Bosc).
+    // Identity already filtered the pool. Rank by price with a short fruit
+    // token — not "blueberries fresh", which used to drop cheaper packs
+    // that omit the word "fresh".
     return (
-      item.queries.find((q) => q && !/^\d+$/.test(q)) ??
       item.mustIncludeAny?.[0] ??
+      item.queries.find((q) => q && !/^\d+$/.test(q)) ??
       item.label
     );
   }
@@ -898,6 +892,7 @@ export function pickStapleSearchWinner(
           byEach: isEggPackItem(item),
           preferLargerPack: isEggPackItem(item),
           preferredUpc: itemPreferredUpc(item),
+          requireQueryMatch: false,
         },
       ) ?? pool[0] ?? null;
   }
@@ -1418,7 +1413,9 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
       ? [lockedId]
       : [
           ...(preferred && mode !== "cheapest" ? [preferred] : []),
-          ...item.queries.filter(Boolean).slice(0, 4),
+          ...(mode === "cheapest"
+            ? categoryBSearchQueries(item, 6)
+            : item.queries.filter(Boolean).slice(0, 4)),
         ];
     log.queries = pinId ? [pinId, ...queries.filter((q) => q !== pinId)] : queries;
 
@@ -1534,6 +1531,7 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
           byEach: isEggPackItem(item),
           preferLargerPack: isEggPackItem(item),
           preferredUpc: itemPreferredUpc(item),
+          requireQueryMatch: false,
         },
         ) ?? (mode === "cheapest" ? pool[0] ?? null : null);
       if (best && mode === "cheapest") {
