@@ -21,7 +21,7 @@ import {
   defaultNeededGrams,
   isSoldByWeightItem,
   resolveMatchMode,
-  usesNeededWeightPick,
+  explicitNeededGrams,
   type CatalogOffer,
 } from "@/lib/staples";
 import {
@@ -80,10 +80,7 @@ async function main() {
     const wmRow = wmById.get(item.id);
     const nfRow = nfById.get(item.id);
 
-    const packPickGrams =
-      usesNeededWeightPick(item) && !isSoldByWeightItem(item)
-        ? defaultNeededGrams(item)
-        : undefined;
+    const packPickGrams = explicitNeededGrams(item);
     const wmResolved = resolveCatalogOffer({
       item,
       row: wmRow,
@@ -122,7 +119,7 @@ async function main() {
 
     const wmUsable = Boolean(wmOffer && usableStatus(wmEval.status));
     const nfUsable = Boolean(nfOffer && usableStatus(nfEval.status));
-    const grams = usesNeededWeightPick(item)
+    const grams = isSoldByWeightItem(item)
       ? defaultNeededGrams(item)
       : null;
 
@@ -162,8 +159,8 @@ async function main() {
   const grape = byId.get("tomatoes_grape");
   assert(grape, "grape row");
   assert(
-    grape!.fairBasis === "needed_weight",
-    `grape basis ${grape!.fairBasis}`,
+    grape!.fairBasis === "per_100g" || grape!.fairBasis === "per_pack",
+    `grape packed basis ${grape!.fairBasis}`,
   );
   const gWm = grape!.walmart as { shelfPrice?: number; name?: string };
   assert(!/seed/i.test(gWm.name ?? ""), "grape must not show seeds");

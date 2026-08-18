@@ -105,6 +105,21 @@ export function isCategoryBStaple(item: { category?: string }): boolean {
  * Extra search strings for cheapest produce/frozen: warehouse word order
  * and mustIncludeAny. Category A keeps the staple queries only.
  */
+/** Words that bias retailer search toward organic / marketing titles. */
+const SEARCH_NOISE =
+  /\b(fresh|pint|pints|clamshell|organic|organics|whole)\b/gi;
+
+function cleanSearchQuery(q: string): string {
+  return q.replace(SEARCH_NOISE, " ").replace(/\s+/g, " ").trim();
+}
+
+/** "grape tomatoes" → "tomatoes grape" for MVR warehouse titles. */
+function warehouseWordOrder(q: string): string | undefined {
+  const parts = q.split(/\s+/).filter(Boolean);
+  if (parts.length < 2) return undefined;
+  return `${parts[parts.length - 1]} ${parts.slice(0, -1).join(" ")}`;
+}
+
 export function categoryBSearchQueries(
   item: {
     category?: string;
@@ -122,13 +137,18 @@ export function categoryBSearchQueries(
     if (out.some((x) => x.toLowerCase() === t.toLowerCase())) return;
     out.push(t);
   };
-  for (const q of item.queries) add(q);
-  if (!isCategoryBStaple(item)) return out.slice(0, cap);
+  if (!isCategoryBStaple(item)) {
+    for (const q of item.queries) add(q);
+    return out.slice(0, cap);
+  }
+  // Recall only: fruit token + warehouse order. Filter does precision.
+  for (const q of item.queries) add(cleanSearchQuery(q));
   for (const q of item.queries) {
-    add(q.replace(/\bfresh\b/gi, " "));
+    const cleaned = cleanSearchQuery(q);
+    add(warehouseWordOrder(cleaned));
   }
   for (const p of item.mustIncludeAny ?? []) add(p);
-  if (item.label) add(item.label.replace(/[()]/g, " "));
+  if (item.label) add(cleanSearchQuery(item.label.replace(/[()]/g, " ")));
   return out.slice(0, cap);
 }
 

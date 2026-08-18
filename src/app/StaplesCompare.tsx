@@ -885,10 +885,8 @@ export function StaplesCompare() {
           const neededG =
             Number.isFinite(gramsN) && gramsN > 0
               ? gramsN
-              : on && isCatB
-                ? item.soldByWeight
-                  ? 1000
-                  : 500
+              : on && item.soldByWeight
+                ? 1000
                 : null;
           const estKg =
             item.soldByWeight && neededG != null ? neededG / 1000 : null;
@@ -914,12 +912,11 @@ export function StaplesCompare() {
             10,
           );
           const packN =
-            !isCatB &&
             !item.soldByWeight &&
             Number.isFinite(packParsed) &&
             packParsed > 0
               ? packParsed
-              : on && !isCatB && !item.soldByWeight
+              : on && !item.soldByWeight
                 ? 1
                 : 0;
           const wmPackEst =
@@ -1202,7 +1199,7 @@ export function StaplesCompare() {
               >
                 ×
               </button>
-              {isCatB || item.soldByWeight ? (
+              {item.soldByWeight ? (
                 on && (
                   <label className="grams">
                     <span>грам</span>
@@ -1211,7 +1208,7 @@ export function StaplesCompare() {
                       min={1}
                       step={50}
                       inputMode="numeric"
-                      placeholder={item.soldByWeight ? "1000" : "500"}
+                      placeholder="1000"
                       value={gramsVal}
                       onClick={(e) => e.stopPropagation()}
                       onChange={(e) => setGrams(item.id, e.target.value)}

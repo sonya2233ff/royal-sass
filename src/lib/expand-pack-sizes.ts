@@ -19,6 +19,8 @@ import type { ProductOffer } from "@/connectors/types";
 import {
   catalogOfferFromLive,
   isSoldByWeightItem,
+  isPackedProduceItem,
+  isFrozenBagItem,
   resolveMatchMode,
   upsertNoFrillsCatalogItem,
   upsertWalmartCatalogItem,
@@ -37,10 +39,7 @@ export function shouldExpandPackSizes(input: {
     alternates?: CatalogOffer[] | null;
   } | null;
 }): boolean {
-  if (input.neededGrams == null || !(input.neededGrams > 0)) return false;
-  if (!usesNeededWeightPick(input.item) || isSoldByWeightItem(input.item)) {
-    return false;
-  }
+  if (isSoldByWeightItem(input.item)) return false;
   if (resolveMatchMode(input.item) !== "cheapest") return false;
   if (mappingIsLockedIdentity(input.link)) {
     const sku = input.link?.retailerProductId;
@@ -53,6 +52,15 @@ export function shouldExpandPackSizes(input: {
     offerIsOnShelf(input.row?.offer) ? input.row?.offer : undefined,
   );
   if (passing.length >= 2) return false;
+  if (isPackedProduceItem(input.item) || isFrozenBagItem(input.item)) {
+    if (passing.length === 0) return true;
+    if (input.neededGrams != null && input.neededGrams > 0) {
+      return needsMorePackSizes(input.neededGrams, passing);
+    }
+    return false;
+  }
+  if (input.neededGrams == null || !(input.neededGrams > 0)) return false;
+  if (!usesNeededWeightPick(input.item)) return false;
   return needsMorePackSizes(input.neededGrams, passing);
 }
 

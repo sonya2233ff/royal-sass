@@ -202,15 +202,47 @@ export function resolveMatchMode(
   return "preferred";
 }
 
-/** Category B pack/weight buy — user enters grams. Not eggs, not category A. */
+/** Category B: grams purchase is allowed. Not eggs, not category A. */
 export function usesNeededWeightPick(item: StapleItem): boolean {
   return resolveMatchMode(item) === "cheapest" && !isEggPackItem(item);
+}
+
+export function isFrozenBagItem(item: StapleItem): boolean {
+  return item.category === "frozen" || FROZEN_BAG_IDS.has(item.id);
+}
+
+/** Clamshells / each produce — cheapest pack by $/kg, pack qty on the card. */
+export function isPackedProduceItem(item: StapleItem): boolean {
+  if (isSoldByWeightItem(item) || isEggPackItem(item)) return false;
+  if (isFrozenBagItem(item)) return false;
+  return (
+    item.category === "produce" ||
+    PACK_COMPARE_IDS.has(item.id) ||
+    PRODUCE_IDS.has(item.id)
+  );
 }
 
 export function defaultNeededGrams(item: StapleItem): number {
   if (isSoldByWeightItem(item)) return 1000;
   if (usesNeededWeightPick(item)) return 500;
   return 0;
+}
+
+/**
+ * Grams for packed SKU pick / purchase plan.
+ * Loose produce does not use this (sold by kg). Packed and frozen only
+ * when the user typed grams — never inject 500 g on the homepage.
+ */
+export function explicitNeededGrams(
+  item: StapleItem,
+  rawGrams?: number | null,
+): number | undefined {
+  if (isSoldByWeightItem(item) || isEggPackItem(item)) return undefined;
+  if (!usesNeededWeightPick(item)) return undefined;
+  if (rawGrams != null && Number.isFinite(rawGrams) && rawGrams > 0) {
+    return rawGrams;
+  }
+  return undefined;
 }
 
 export interface CatalogOffer {

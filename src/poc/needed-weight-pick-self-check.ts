@@ -16,6 +16,7 @@ import {
 import { resolveCatalogOffer } from "@/domain/compare-resolve";
 import { shouldExpandPackSizes } from "@/lib/expand-pack-sizes";
 import { buildStapleCompareRow } from "@/lib/staple-compare-row";
+import { explicitNeededGrams } from "@/lib/staples";
 import {
   isActualCategoryBOffer,
   offerMassKg,
@@ -623,6 +624,33 @@ assert(
   isActualCategoryBOffer(blueberryItem, gvFrozenBag) === false,
   "cultivated 600g bag is the frozen SKU, not fresh produce",
 );
+assert(
+  isActualCategoryBOffer(blueberryItem, {
+    productId: "chile-prem",
+    name: "Chilean Premium Blueberries",
+    packageSize: "312 g",
+    parsedMassKg: 0.312,
+    price: 3.2,
+  }) === true,
+  "origin + premium leftover still fresh fruit",
+);
+assert(
+  isActualCategoryBOffer(
+    {
+      id: "pear_bosc_kg",
+      category: "produce",
+      matchMode: "cheapest",
+      mustIncludeAny: ["pear"],
+    },
+    {
+      productId: "20129549001_KG",
+      name: "Rocha Pears",
+      packageSize: "$6.59/1kg $2.99/1lb",
+      price: 0.92,
+    },
+  ) === true,
+  "sold-by-weight variety pear without pack grams is still fruit",
+);
 const blueResolved = resolveCatalogOffer({
   item: blueberryItem,
   row: {
@@ -647,6 +675,74 @@ const blueResolvedNoGrams = resolveCatalogOffer({
 assert(
   blueResolvedNoGrams.offer?.productId === pack312.productId,
   `cheapest catalog blueberries ${blueResolvedNoGrams.offer?.productId}`,
+);
+assert(
+  explicitNeededGrams({
+    ...blueberryItem,
+    queries: ["blueberries"],
+    label: "Blueberries",
+  }) == null,
+  "packed blueberries do not inject 500g",
+);
+const bluePackRow = buildStapleCompareRow({
+  item: {
+    ...blueberryItem,
+    queries: ["blueberries"],
+    label: "Blueberries",
+  },
+  wmOffer: pack312,
+  nfOffer: {
+    productId: "nf-pint",
+    name: "Blueberries 1 pint",
+    packageSize: "312 g",
+    parsedMassKg: 0.312,
+    price: 3.99,
+  },
+  wmEval: { status: "ok", ageLabel: null },
+  nfEval: { status: "ok", ageLabel: null },
+  wmUsable: true,
+  nfUsable: true,
+  grams: null,
+  qty: 1,
+  confirmed: false,
+});
+assert(
+  bluePackRow.fairBasis !== "needed_weight",
+  `packed blueberries basis ${bluePackRow.fairBasis}`,
+);
+assert(bluePackRow.qty === 1, `packed qty ${bluePackRow.qty}`);
+assert(
+  shouldExpandPackSizes({
+    item: {
+      ...blueberryItem,
+      queries: ["blueberries"],
+      label: "Blueberries",
+    },
+    row: { offer: organicBlue, alternates: [] },
+  }) === false,
+  "one blueberry pack is enough for cheapest-unit pick",
+);
+assert(
+  shouldExpandPackSizes({
+    item: {
+      ...blueberryItem,
+      queries: ["blueberries"],
+      label: "Blueberries",
+    },
+    row: { offer: null, alternates: [] },
+  }) === true,
+  "missing blueberry pack should search",
+);
+assert(
+  shouldExpandPackSizes({
+    item: {
+      ...blueberryItem,
+      queries: ["blueberries"],
+      label: "Blueberries",
+    },
+    row: { offer: organicBlue, alternates: [pack312] },
+  }) === false,
+  "two blueberry packs skip expand",
 );
 
 console.log("needed-weight-pick-self-check ok", {

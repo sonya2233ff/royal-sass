@@ -110,6 +110,15 @@ async function main() {
     qs.some((q) => /tomatoes grape/i.test(q)),
     "category B search includes warehouse word order",
   );
+  const blueQs = categoryBSearchQueries(blueberries);
+  assert(
+    blueQs.every((q) => !/\bfresh\b/i.test(q) && !/\bpint\b/i.test(q)),
+    `blueberry search must not send fresh/pint, got ${blueQs.join(" | ")}`,
+  );
+  assert(
+    blueQs.some((q) => /blueberr/i.test(q)),
+    "blueberry search still includes the fruit token",
+  );
   assert(
     offerFailsStapleOfferFilters(blueberries, {
       name: "Great Value Cultivated Blueberries, 600 g",

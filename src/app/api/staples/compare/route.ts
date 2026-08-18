@@ -17,7 +17,7 @@ import {
   defaultNeededGrams,
   isSoldByWeightItem,
   resolveMatchMode,
-  usesNeededWeightPick,
+  explicitNeededGrams,
   type CatalogOffer,
   type MatchLogEntry,
 } from "@/lib/staples";
@@ -136,16 +136,13 @@ export async function POST(request: Request) {
       productMap?.retailers.mvr;
 
     const rawGrams = Number(body.grams?.[id]);
-    const neededPick = usesNeededWeightPick(item);
     const soldByWeight = isSoldByWeightItem(item);
-    const grams =
-      neededPick && Number.isFinite(rawGrams) && rawGrams > 0
+    const packPickGrams = explicitNeededGrams(item, rawGrams);
+    const grams = soldByWeight
+      ? Number.isFinite(rawGrams) && rawGrams > 0
         ? rawGrams
-        : neededPick
-          ? defaultNeededGrams(item)
-          : null;
-    const packPickGrams =
-      neededPick && !soldByWeight && grams != null ? grams : undefined;
+        : defaultNeededGrams(item)
+      : packPickGrams ?? null;
 
     let wmRow = catById.get(id) ?? null;
     let wmResolved = resolveCatalogOffer({

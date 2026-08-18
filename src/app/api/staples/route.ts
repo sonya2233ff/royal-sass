@@ -8,11 +8,10 @@ import {
   loadStaplesConfig,
   loadWalmartCatalog,
   resolveMatchMode,
-  defaultNeededGrams,
   isProduceWeightItem,
   isSoldByWeightItem,
   isEggPackItem,
-  usesNeededWeightPick,
+  explicitNeededGrams,
 } from "@/lib/staples";
 import { typicalEachGramsOf } from "@/domain/same-packed-item";
 import { walmartSourceApiFields } from "@/connectors/walmart-source";
@@ -114,10 +113,7 @@ export async function GET() {
       const sobeysLink = mappings.products[i.id]?.retailers.sobeys;
       const wcLink = mappings.products[i.id]?.retailers.wholesaleclub;
       const mvrLink = mappings.products[i.id]?.retailers.mvr;
-      const packPickGrams =
-        usesNeededWeightPick(i) && !isSoldByWeightItem(i)
-          ? defaultNeededGrams(i)
-          : undefined;
+      const packPickGrams = explicitNeededGrams(i);
       const wmResolved = resolveCatalogOffer({
         item: i,
         row: cat,

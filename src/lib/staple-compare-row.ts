@@ -106,19 +106,20 @@ export function buildStapleCompareRow(input: {
   const item = input.item;
   const soldByWeight = isSoldByWeightItem(item);
   const mode = resolveMatchMode(item);
-  const neededPick = usesNeededWeightPick(item);
-  const neededGrams =
-    neededPick &&
-    input.grams != null &&
-    Number.isFinite(input.grams) &&
-    input.grams > 0
+  const userGrams =
+    input.grams != null && Number.isFinite(input.grams) && input.grams > 0
       ? input.grams
-      : neededPick
-        ? defaultNeededGrams(item)
-        : null;
-  const packQty = soldByWeight || neededPick
-    ? 1
-    : Math.max(1, Math.round(Number(input.qty) || 1));
+      : null;
+  const neededGrams = soldByWeight
+    ? (userGrams ?? defaultNeededGrams(item))
+    : usesNeededWeightPick(item) && userGrams
+      ? userGrams
+      : null;
+  const neededPickActive = Boolean(neededGrams && !soldByWeight);
+  const packQty =
+    soldByWeight || neededPickActive
+      ? 1
+      : Math.max(1, Math.round(Number(input.qty) || 1));
   const qtyKg =
     soldByWeight && neededGrams != null
       ? neededGrams / 1000
@@ -218,7 +219,7 @@ export function buildStapleCompareRow(input: {
     raw: CatalogOffer | null,
     summarized: { pricePerKg?: number } | null,
   ): WeightPurchasePlan | null =>
-    neededPick && neededGrams != null && raw
+    neededGrams != null && raw
       ? soldByWeight && summarized?.pricePerKg
         ? looseWeightPurchase({
             neededGrams,
@@ -302,7 +303,7 @@ export function buildStapleCompareRow(input: {
       mvrFair: null,
     };
   } else if (
-    neededPick &&
+    neededPickActive &&
     !soldByWeight &&
     !egg &&
     (wmPlan || nfPlan || wcPlan || mvrPlan)
@@ -400,7 +401,7 @@ export function buildStapleCompareRow(input: {
     confirmed: input.confirmed,
     soldByWeight,
     grams: neededGrams ?? input.grams,
-    qty: soldByWeight || neededPick ? 1 : packQty,
+    qty: soldByWeight || neededPickActive ? 1 : packQty,
     matchKind,
     fairBasis: fair.fairBasis,
     fairLabel: fair.fairLabel,

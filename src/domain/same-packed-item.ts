@@ -332,8 +332,8 @@ function looksLikeProduceTitle(
     tokens(`${offer.brand ?? ""} ${offer.name}`),
   );
   if (leftover.length === 0) return true;
-  // One leftover token is usually a grower or origin (Driscoll, California).
-  return leftover.length === 1;
+  // Grower / origin / "premium" — processed junk is already rejected.
+  return leftover.length <= 2;
 }
 
 function hasProducePackageShape(
@@ -345,10 +345,8 @@ function hasProducePackageShape(
   if (isEachSoldOffer(offer)) return true;
   const cores = coreProduceTokens(item);
   const nameTok = tokens(offer.name);
-  return (
-    nameTok.length > 0 &&
-    nameTok.every((t) => tokenIn(t, cores) || isSizeToken(t) || tokenIn(t, HOUSE_TOKENS))
-  );
+  if (!nameTok.some((t) => tokenIn(t, cores))) return false;
+  return leftoverTokens(item, nameTok).length <= 2;
 }
 
 function looksLikeProduceSlug(
