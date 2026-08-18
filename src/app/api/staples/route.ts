@@ -32,6 +32,7 @@ import {
   lookupConfirmed,
 } from "@/lib/retailer-mappings";
 import { preferredStapleImage } from "@/lib/product-image";
+import { loadSobeysCatalog } from "@/lib/sobeys-catalog";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -90,10 +91,12 @@ export async function GET() {
   const cfg = await loadStaplesConfig();
   const catalog = await loadWalmartCatalog();
   const nfCatalog = await loadNoFrillsCatalog();
+  const sobeysCatalog = await loadSobeysCatalog();
   const confirmed = await loadConfirmed();
   const mappings = await loadRetailerMappings();
   const byId = new Map(catalog?.items.map((i) => [i.id, i]) ?? []);
   const nfById = new Map(nfCatalog?.items.map((i) => [i.id, i]) ?? []);
+  const sobeysById = new Map(sobeysCatalog?.items.map((i) => [i.id, i]) ?? []);
 
   const items = cfg.items
     .filter(isShownStaple)
@@ -102,6 +105,7 @@ export async function GET() {
       const mode = resolveMatchMode(i);
       const wmLink = mappings.products[i.id]?.retailers.walmart_ca;
       const nfLink = mappings.products[i.id]?.retailers.nofrills;
+      const sobeysLink = mappings.products[i.id]?.retailers.sobeys;
       const packPickGrams =
         usesNeededWeightPick(i) && !isSoldByWeightItem(i)
           ? defaultNeededGrams(i)
@@ -293,6 +297,41 @@ export async function GET() {
               image: nfOffer!.image ?? null,
             }
           : null,
+        sobeysCached: (() => {
+          const sobeysCat = sobeysById.get(i.id);
+          const sobeysResolved = resolveCatalogOffer({
+            item: i,
+            row: sobeysCat,
+            link: sobeysLink,
+            matchMode: mode,
+            neededGrams: packPickGrams,
+          });
+          const sobeysOffer = sobeysResolved.offer ?? null;
+          const sobeysEval = evaluateOfferStatus(i, sobeysOffer, {
+            catalogStatus:
+              sobeysResolved.reason === "rejected_filter"
+                ? "no_match"
+                : sobeysCat?.status,
+          });
+          const sobeysUsable = Boolean(
+            sobeysOffer &&
+              (sobeysEval.status === "ok" || sobeysEval.status === "stale"),
+          );
+          if (!sobeysUsable || !sobeysOffer) return null;
+          return {
+            name: sobeysOffer.name,
+            price: sobeysOffer.price,
+            productId: sobeysOffer.productId,
+            packageSize: sobeysOffer.packageSize,
+            parsedMassKg: sobeysOffer.parsedMassKg ?? null,
+            checkedAt: sobeysOffer.checkedAt ?? sobeysCatalog?.checkedAt,
+            image: sobeysOffer.image ?? null,
+            priceConfidence: "ESTIMATED" as const,
+            source: "sobeys_flyer_659",
+            flyerValidTo: sobeysCatalog?.flyerValidTo ?? null,
+            ageLabel: sobeysEval.ageLabel,
+          };
+        })(),
       };
     });
 
@@ -307,6 +346,9 @@ export async function GET() {
     cacheStaleHours: CACHE_STALE_HOURS,
     catalogCheckedAt: catalog?.checkedAt ?? null,
     noFrillsCatalogCheckedAt: nfCatalog?.checkedAt ?? null,
+    sobeysCatalogCheckedAt: sobeysCatalog?.checkedAt ?? null,
+    sobeysFlyerId: sobeysCatalog?.flyerId ?? null,
+    sobeysFlyerValidTo: sobeysCatalog?.flyerValidTo ?? null,
     unitNote:
       "кг/lb лише для овочів і фруктів (WM $/kg, NF $/lb). Решта — ціна за пачку.",
     items,

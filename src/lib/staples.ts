@@ -373,6 +373,14 @@ export async function deleteStaplesCompletely(ids: string[]): Promise<{
     nf.items = nf.items.filter((row) => !gone.has(row.id));
     await saveNoFrillsCatalog(nf);
   }
+  const { loadSobeysCatalog, saveSobeysCatalog } = await import(
+    "@/lib/sobeys-catalog"
+  );
+  const sobeys = await loadSobeysCatalog();
+  if (sobeys) {
+    sobeys.items = sobeys.items.filter((row) => !gone.has(row.id));
+    await saveSobeysCatalog(sobeys);
+  }
 
   const confirmed = await loadConfirmed();
   let confirmedChanged = false;

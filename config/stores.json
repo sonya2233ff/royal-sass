@@ -27,7 +27,7 @@
       "postalCode": "L4J6W7",
       "address": "441 Clark Ave W, Thornhill, ON L4J 6W7, Canada",
       "active": false,
-      "notes": "Disabled for cafe staples POC — Walmart + No Frills only. Flipp merchant_store_code 659."
+      "notes": "Compare stays WM vs NF (active: false). Thin flyer adapter exists: Ontario weekly flyer_data → ProductOffer → mapping staple_winner → ESTIMATED observation. Location cookies postal L4J6W7 + store 659; prices are regional flyer, not Clark & Hilda shelf."
     }
   ]
 }

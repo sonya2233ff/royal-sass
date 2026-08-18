@@ -485,6 +485,19 @@ Flipp: `postal_code=L4J6W7`. Flyer store code **659**. Voilà: postal / timeslot
 
 ### 6.7 Request
 
+Best reproducible payload (thin adapter in `src/connectors/sobeys.ts`):
+
+```http
+GET https://backflipp.wishabi.com/flipp/flyers?locale=en-ca&postal_code=L4J6W7
+GET https://flyers.sobeys.com/flyer_data/{ontarioWeeklyFlyerId}
+```
+
+Filter `merchant_id=2072`, prefer Ontario weekly (not Urban Fresh / Kosher). `flyer_data` returns ~hundreds of items with `current_price`, pack `description`, brand, photos. Almost no UPC. Prices are **regional flyer**, not store-659 shelf.
+
+Flyer widget location cookies: `postal_code=L4J6W7`, `store_code_2072=659`. Browser Network did not yield a public shelf+price API for store 659 (`/flyer_items/{id}/details` 404 from Node).
+
+Older Flipp item search (subset of the same flyer):
+
 ```http
 GET https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=L4J6W7&q=Sobeys%20eggs
 ```

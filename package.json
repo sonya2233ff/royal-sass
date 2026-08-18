@@ -21,6 +21,7 @@
     "cache:walmart": "tsx --env-file=.env src/poc/cache-walmart-staples.ts",
     "cache:nofrills": "tsx --env-file=.env src/poc/cache-nofrills-staples.ts",
     "poc:discover-sobeys": "tsx -e \"import { discoverSobeysClarkHilda } from './src/connectors/sobeys.ts'; discoverSobeysClarkHilda().then(r=>console.log(JSON.stringify(r,null,2)))\"",
+    "poc:sobeys-adapter": "tsx src/poc/sobeys-adapter-self-check.ts",
     "poc:discover-freshco": "tsx src/poc/discover-freshco.ts",
     "probe:mvr": "tsx src/poc/probe-mvr-shopify.ts",
     "probe:pcx-banner": "tsx --env-file=.env.local src/poc/probe-pcx-banner.ts",

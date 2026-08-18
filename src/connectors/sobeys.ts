@@ -4,76 +4,241 @@ import {
   type ProductOffer,
   type RetailerConnector,
 } from "./types";
+import { parseMassFromText } from "@/domain/units";
 
 /**
- * Sobeys connector (POC) — Clark & Hilda focus.
+ * Thin Sobeys adapter for Clark & Hilda (merchant_store_code 659).
  *
- * Confirmed:
- * - Flyer host lists Clark & Hilda with merchant_store_code "659"
- *   (441 Clark Avenue West, Thornhill / postal L4J6W7)
- * - Flipp item search returns flyer prices for merchant "Sobeys" by postal code
+ * Location context (confirmed in the flyer widget):
+ *   postal_code=L4J6W7, cookie store_code_2072=659
  *
- * NOT confirmed:
- * - A store-scoped full shelf catalog API equivalent to Loblaw PCX BFF
- * - That Flipp prices equal shelf prices at store 659
+ * Reproducible price payload (no HTML scrape, no token):
+ *   GET flyers.sobeys.com/flyer_data/{ontarioWeeklyFlyerId}
  *
- * Therefore all Flipp-backed offers use confidence: "estimated".
+ * That JSON is the **weekly Ontario flyer**, not a Clark & Hilda shelf API.
+ * Offers are always confidence: "estimated".
  */
-const FLIPP_SEARCH = "https://backflipp.wishabi.com/flipp/items/search";
+const FLIPP_FLYERS = "https://backflipp.wishabi.com/flipp/flyers";
+const FLYER_DATA = "https://flyers.sobeys.com/flyer_data";
+const MERCHANT_ID = 2072;
 
 /** Confirmed Flipp/flyer merchant_store_code for Sobeys Clark & Hilda */
 export const SOBEYS_CLARK_HILDA_STORE_CODE = "659";
+export const SOBEYS_CLARK_HILDA_POSTAL = "L4J6W7";
+
+const UA =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
+
+export type SobeysFlyerItem = {
+  id?: number | string;
+  name?: string;
+  brand?: string;
+  current_price?: number | string | null;
+  price?: number | string | null;
+  description?: string;
+  sku?: string | null;
+  valid_from?: string;
+  valid_to?: string;
+  large_image_url?: string;
+  clean_image_url?: string;
+  sale_story?: string;
+  web_url?: string;
+};
+
+export type SobeysFlyerCache = {
+  flyerId: string;
+  validFrom: string | null;
+  validTo: string | null;
+  flyerName: string;
+  items: SobeysFlyerItem[];
+  fetchedAt: string;
+};
+
+type FlippFlyer = {
+  id?: number;
+  merchant_id?: number;
+  name?: string;
+  merchant?: string;
+  valid_from?: string;
+  valid_to?: string;
+};
+
+let flyerCache: SobeysFlyerCache | null = null;
+
+function normalizePostal(postal: string): string {
+  return postal.replace(/\s+/g, "").toUpperCase();
+}
 
 function parsePrice(raw: unknown): number | undefined {
-  if (typeof raw === "number" && Number.isFinite(raw)) return raw;
+  if (typeof raw === "number" && Number.isFinite(raw) && raw > 0) return raw;
   if (typeof raw === "string") {
     const n = Number.parseFloat(raw.replace(/[^0-9.]/g, ""));
-    if (Number.isFinite(n)) return n;
+    if (Number.isFinite(n) && n > 0) return n;
   }
   return undefined;
 }
 
-function mapFlippItem(
-  item: Record<string, unknown>,
-  storeId: string,
+function tokens(q: string): string[] {
+  return q
+    .toLowerCase()
+    .replace(/[^a-z0-9%+\s]/g, " ")
+    .split(/\s+/)
+    .filter((t) => t.length > 1 && !/^\d{8,14}$/.test(t));
+}
+
+export function scoreFlyerItem(item: SobeysFlyerItem, query: string): number {
+  const hay = `${item.name ?? ""} ${item.brand ?? ""} ${item.description ?? ""}`.toLowerCase();
+  const parts = tokens(query);
+  if (!parts.length) return 0;
+  let hits = 0;
+  for (const t of parts) {
+    if (hay.includes(t)) hits += 1;
+  }
+  return hits / parts.length;
+}
+
+export function flyerItemToOffer(
+  item: SobeysFlyerItem,
+  opts: {
+    storeId: string;
+    flyerId?: string | null;
+    validFrom?: string | null;
+    validTo?: string | null;
+    postalCode?: string;
+  },
 ): ProductOffer | null {
-  const name = String(item.name ?? item.display_name ?? "");
+  const name = String(item.name ?? "").trim();
   if (!name) return null;
-  const price =
-    parsePrice(item.current_price) ??
-    parsePrice(item.price) ??
-    parsePrice(item.sale_story);
+  const price = parsePrice(item.current_price) ?? parsePrice(item.price);
   if (price == null) return null;
+  const productId = item.id != null ? String(item.id) : null;
+  if (!productId) return null;
+
+  const pack =
+    typeof item.description === "string" && item.description.trim()
+      ? item.description.trim()
+      : undefined;
+  const mass = parseMassFromText(`${pack ?? ""} ${name}`);
+  const unitPrice = mass && mass.kg > 0 ? Math.round((price / mass.kg) * 100) / 100 : undefined;
+  const postal = normalizePostal(opts.postalCode ?? SOBEYS_CLARK_HILDA_POSTAL);
+  const image = item.clean_image_url || item.large_image_url || undefined;
+  const onSale = Boolean(item.sale_story && String(item.sale_story).trim());
 
   return {
     retailer: "sobeys",
-    storeId,
-    productId: String(item.id ?? item.flyer_item_id ?? `${name}-${price}`),
+    storeId: opts.storeId,
+    productId,
     name,
-    brand: typeof item.brand === "string" ? item.brand : undefined,
-    packageSize:
-      typeof item.description === "string" ? item.description : undefined,
+    brand: typeof item.brand === "string" && item.brand.trim() ? item.brand.trim() : undefined,
+    packageSize: pack,
+    upc: item.sku && String(item.sku).trim() ? String(item.sku).trim() : undefined,
     price,
+    unitPrice,
+    onSale: onSale || undefined,
     availability: "unknown",
     confidence: "estimated",
     checkedAt: new Date().toISOString(),
     sourceUrl:
-      typeof item.web_url === "string"
-        ? item.web_url
-        : "https://www.sobeys.com/en/stores/sobeys-clark-hilda",
+      item.web_url ||
+      `https://flyers.sobeys.com/flyers/sobeys?type=2&locale=en&postal_code=${postal}`,
+    image,
     raw: {
-      ...item,
-      _pocNote:
-        "Flipp/flyer price for Sobeys regional flyer — NOT confirmed shelf price at Clark & Hilda",
-      _merchantStoreCode: storeId,
+      flyerItemId: productId,
+      flyerId: opts.flyerId ?? null,
+      flyerValidFrom: opts.validFrom ?? item.valid_from ?? null,
+      flyerValidTo: opts.validTo ?? item.valid_to ?? null,
+      saleStory: item.sale_story ?? null,
+      merchantStoreCode: opts.storeId,
+      note:
+        "Weekly Ontario flyer JSON — location cookies exist (postal + store 659) but prices are regional, not Clark & Hilda shelf.",
     },
   };
+}
+
+function isOntarioWeeklyFlyer(f: FlippFlyer): boolean {
+  const name = `${f.name ?? ""} ${f.merchant ?? ""}`.toLowerCase();
+  if (name.includes("urban fresh") || name.includes("kosher")) return false;
+  return (
+    name.includes("ontario") ||
+    name.includes("sobeysontario") ||
+    name.includes("weekly flyer")
+  );
+}
+
+async function listFlyers(postal: string): Promise<FlippFlyer[]> {
+  const url = `${FLIPP_FLYERS}?locale=en-ca&postal_code=${encodeURIComponent(postal)}`;
+  const res = await fetch(url, {
+    headers: { Accept: "application/json", "User-Agent": UA },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new ConnectorError(
+      `Sobeys flyer list HTTP ${res.status}`,
+      "sobeys",
+      "http",
+    );
+  }
+  const json = (await res.json()) as { flyers?: FlippFlyer[] };
+  return (json.flyers ?? []).filter((f) => f.merchant_id === MERCHANT_ID);
+}
+
+async function loadFlyerItems(flyerId: string): Promise<SobeysFlyerItem[]> {
+  const res = await fetch(`${FLYER_DATA}/${flyerId}`, {
+    headers: { Accept: "application/json", "User-Agent": UA },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new ConnectorError(
+      `Sobeys flyer_data HTTP ${res.status} for ${flyerId}`,
+      "sobeys",
+      "http",
+    );
+  }
+  const json = (await res.json()) as SobeysFlyerItem[];
+  return Array.isArray(json) ? json : [];
+}
+
+export async function loadSobeysFlyer(
+  postalCode = SOBEYS_CLARK_HILDA_POSTAL,
+): Promise<SobeysFlyerCache> {
+  if (flyerCache) return flyerCache;
+  const postal = normalizePostal(postalCode);
+  const flyers = await listFlyers(postal);
+  const weekly = flyers.find(isOntarioWeeklyFlyer) ?? flyers[0];
+  if (!weekly?.id) {
+    throw new ConnectorError(
+      `No Sobeys flyer for postal ${postal}`,
+      "sobeys",
+      "not_found",
+    );
+  }
+  const flyerId = String(weekly.id);
+  const items = await loadFlyerItems(flyerId);
+  flyerCache = {
+    flyerId,
+    validFrom: weekly.valid_from ?? null,
+    validTo: weekly.valid_to ?? null,
+    flyerName: weekly.name ?? weekly.merchant ?? `flyer ${flyerId}`,
+    items,
+    fetchedAt: new Date().toISOString(),
+  };
+  return flyerCache;
+}
+
+export function resetSobeysFlyerCache(): void {
+  flyerCache = null;
+}
+
+export function flyerMeta(): Omit<SobeysFlyerCache, "items"> | null {
+  if (!flyerCache) return null;
+  const { items: _items, ...meta } = flyerCache;
+  return meta;
 }
 
 export class SobeysConnector implements RetailerConnector {
   readonly id = "sobeys";
 
-  constructor(private readonly postalCode: string = "L4J6W7") {}
+  constructor(private readonly postalCode: string = SOBEYS_CLARK_HILDA_POSTAL) {}
 
   async searchProducts(
     query: string,
@@ -87,36 +252,24 @@ export class SobeysConnector implements RetailerConnector {
       );
     }
 
-    // Refuse silently swapping to another store — caller must pass the intended ID.
-    const postal = this.postalCode.replace(/\s+/g, "");
-    const url = new URL(FLIPP_SEARCH);
-    url.searchParams.set("locale", "en-ca");
-    url.searchParams.set("postal_code", postal);
-    url.searchParams.set("q", `Sobeys ${query}`);
+    const flyer = await loadSobeysFlyer(this.postalCode);
+    const q = query.trim();
+    const scored = flyer.items
+      .map((item) => ({ item, score: scoreFlyerItem(item, q) }))
+      .filter((x) => x.score >= 0.34)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 24);
 
-    const res = await fetch(url.toString(), {
-      headers: {
-        Accept: "application/json",
-        "User-Agent":
-          "Mozilla/5.0 (compatible; RoyalSassPOC/0.1; +local-dev)",
-      },
-    });
-
-    if (!res.ok) {
-      throw new ConnectorError(
-        `Sobeys/Flipp search HTTP ${res.status}`,
-        this.id,
-        "http",
-      );
-    }
-
-    const body = await res.json();
-    const items = Array.isArray((body as { items?: unknown }).items)
-      ? ((body as { items: Record<string, unknown>[] }).items)
-      : [];
-
-    return items
-      .map((item) => mapFlippItem(item, storeId))
+    return scored
+      .map((x) =>
+        flyerItemToOffer(x.item, {
+          storeId,
+          flyerId: flyer.flyerId,
+          validFrom: flyer.validFrom,
+          validTo: flyer.validTo,
+          postalCode: this.postalCode,
+        }),
+      )
       .filter((o): o is ProductOffer => o != null);
   }
 
@@ -124,8 +277,23 @@ export class SobeysConnector implements RetailerConnector {
     productId: string,
     storeId: string,
   ): Promise<ProductOffer | null> {
-    const hits = await this.searchProducts(productId, storeId);
-    return hits.find((h) => h.productId === productId) ?? hits[0] ?? null;
+    if (!storeId) {
+      throw new ConnectorError(
+        "Sobeys requires a storeId (merchant_store_code). Clark & Hilda = 659.",
+        this.id,
+        "no_store_context",
+      );
+    }
+    const flyer = await loadSobeysFlyer(this.postalCode);
+    const item = flyer.items.find((i) => String(i.id) === productId);
+    if (!item) return null;
+    return flyerItemToOffer(item, {
+      storeId,
+      flyerId: flyer.flyerId,
+      validFrom: flyer.validFrom,
+      validTo: flyer.validTo,
+      postalCode: this.postalCode,
+    });
   }
 
   async getPrice(
@@ -149,16 +317,18 @@ export async function discoverSobeysClarkHilda(): Promise<{
   postalCode: string;
   notes: string[];
 }> {
-  const notes: string[] = [
-    "Confirmed from flyers.sobeys.com nearest_stores JSON: Sobeys Clark and Hilda → merchant_store_code 659",
-    "Address match: 441 Clark Avenue West, Thornhill, ON",
-    "No Loblaw-style store-scoped shelf catalog API confirmed for Sobeys",
-    "Voila is Empire online grocery and is NOT assumed equal to Clark & Hilda shelf prices",
-    "Flipp/backflipp search by postal L4J6W7 returns flyer items only (estimated)",
-  ];
   return {
     merchantStoreCode: SOBEYS_CLARK_HILDA_STORE_CODE,
-    postalCode: "L4J6W7",
-    notes,
+    postalCode: SOBEYS_CLARK_HILDA_POSTAL,
+    notes: [
+      "Confirmed from flyers.sobeys.com nearest_stores JSON: Sobeys Clark and Hilda → merchant_store_code 659",
+      "Address match: 441 Clark Avenue West, Thornhill, ON L4J 6W7",
+      "Flyer widget sets cookies postal_code=L4J6W7 and store_code_2072=659 (location context exists)",
+      "Reproducible prices: GET https://flyers.sobeys.com/flyer_data/{id} after listing Ontario weekly flyer for L4J6W7 (merchant_id 2072)",
+      "flyer_data prices are regional weekly ads — NOT a Clark & Hilda shelf catalog",
+      "Browser Network did not yield a public store-659 shelf+price API; item-details URLs 404 from Node",
+      "Voila is Empire online grocery (Vaughan FC mix) and is NOT Clark & Hilda shelf",
+      "Thin adapter: flyer item → ProductOffer (estimated) → MasterProduct mapping (staple_winner) → ESTIMATED observation",
+    ],
   };
 }

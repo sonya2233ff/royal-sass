@@ -72,6 +72,19 @@ type Staple = {
     onSale?: boolean;
     image?: string | null;
   } | null;
+  sobeysCached?: {
+    name: string;
+    price: number;
+    productId: string;
+    packageSize?: string;
+    parsedMassKg?: number | null;
+    checkedAt?: string;
+    image?: string | null;
+    priceConfidence?: "ESTIMATED";
+    source?: string;
+    flyerValidTo?: string | null;
+    ageLabel?: string | null;
+  } | null;
   onSale?: boolean;
 };
 
@@ -285,6 +298,7 @@ export function StaplesCompare() {
   const [busy, setBusy] = useState<string | null>(null);
   const [catalogAt, setCatalogAt] = useState<string | null>(null);
   const [nfCatalogAt, setNfCatalogAt] = useState<string | null>(null);
+  const [sobeysCatalogAt, setSobeysCatalogAt] = useState<string | null>(null);
   const [staleHours, setStaleHours] = useState(24);
   const [gramsById, setGramsById] = useState<Record<string, string>>({});
   const [qtyById, setQtyById] = useState<Record<string, string>>({});
@@ -309,6 +323,7 @@ export function StaplesCompare() {
     setItems(data.items);
     setCatalogAt(data.catalogCheckedAt ?? null);
     setNfCatalogAt(data.noFrillsCatalogCheckedAt ?? null);
+    setSobeysCatalogAt(data.sobeysCatalogCheckedAt ?? null);
     setStaleHours(data.cacheStaleHours ?? 24);
     setWalmartSource(data.walmartSource ?? null);
     setWalmartSourceWarning(data.walmartSourceWarning ?? null);
@@ -330,6 +345,8 @@ export function StaplesCompare() {
         item.noFrillsCached?.name,
         item.walmartCached?.productId,
         item.noFrillsCached?.productId,
+        item.sobeysCached?.name,
+        item.sobeysCached?.productId,
       ]
         .filter(Boolean)
         .join(" ")
@@ -576,6 +593,29 @@ export function StaplesCompare() {
     });
   }
 
+  function refreshSobeysSelected() {
+    setError(null);
+    setBusy("refresh-sobeys");
+    startTransition(async () => {
+      try {
+        const res = await fetch("/api/staples/refresh-sobeys", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: [...selected] }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error ?? "Sobeys flyer refresh failed");
+        setMatchLogId(data.matchLogId ?? null);
+        setLogPreview(data.entries ?? null);
+        await reload();
+      } catch (e) {
+        setError(e instanceof Error ? friendlyError(e.message) : String(e));
+      } finally {
+        setBusy(null);
+      }
+    });
+  }
+
   function refreshAllPrices() {
     const ids = visibleItems.map((item) => item.id);
     if (!ids.length) return;
@@ -667,6 +707,9 @@ export function StaplesCompare() {
           {nfCatalogAt
             ? ` · NF ${new Date(nfCatalogAt).toLocaleString()}`
             : " · NF — після першого Compare"}
+          {sobeysCatalogAt
+            ? ` · Sobeys флаєр ${new Date(sobeysCatalogAt).toLocaleString()}`
+            : ""}
           {cacheIsOld
             ? " · кеш застарів — натисни «Оновити ціни»"
             : ""}
@@ -836,6 +879,20 @@ export function StaplesCompare() {
                   ) : (
                     <span className="price mute">немає NF ціни</span>
                   )}
+                  {item.sobeysCached ? (
+                    <>
+                      <span className="sku">
+                        Sobeys флаєр {tidyOfferName(item.sobeysCached.name)}
+                      </span>
+                      <span className="price mute">
+                        Sobeys ~ ${item.sobeysCached.price.toFixed(2)}
+                        {item.sobeysCached.packageSize
+                          ? ` · ${item.sobeysCached.packageSize}`
+                          : ""}
+                        {" · оцінка, не полиця"}
+                      </span>
+                    </>
+                  ) : null}
                   {item.ageLabel && (
                     <span className="age">
                       {"WM \u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
@@ -1044,6 +1101,16 @@ export function StaplesCompare() {
           {busy === "refresh-nf"
             ? "Refreshing NF…"
             : `Refresh NF (${selected.size})`}
+        </button>
+        <button
+          type="button"
+          className="cta secondary"
+          disabled={pending || selected.size === 0 || busy != null}
+          onClick={refreshSobeysSelected}
+        >
+          {busy === "refresh-sobeys"
+            ? "Refreshing Sobeys flyer…"
+            : `Refresh Sobeys flyer (${selected.size})`}
         </button>
         <button
           type="button"
