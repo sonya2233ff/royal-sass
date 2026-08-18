@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T12:31:18.034Z",
+  "updatedAt": "2026-08-18T19:02:48.566Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -111,7 +111,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T12:31:01.471Z"
+          "updatedAt": "2026-08-18T19:02:34.935Z"
         }
       },
       "prices": [
@@ -149,7 +149,7 @@
           "retailerProductId": "vegetables-tomatoes-grape-1-pint-21",
           "price": 1.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:01.468Z",
+          "checkedAt": "2026-08-18T19:02:34.932Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -525,7 +525,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T12:31:03.123Z"
+          "updatedAt": "2026-08-18T19:02:36.227Z"
         }
       },
       "prices": [
@@ -564,7 +564,7 @@
           "retailerProductId": "fruits-pears-bartlett-case-13-kg",
           "price": 4.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:03.122Z",
+          "checkedAt": "2026-08-18T19:02:36.225Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -799,7 +799,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T12:31:03.767Z"
+          "updatedAt": "2026-08-18T19:02:36.689Z"
         }
       },
       "prices": [
@@ -837,7 +837,7 @@
           "retailerProductId": "vegetables-eggplant-repack-5-lbs",
           "price": 7.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:03.765Z",
+          "checkedAt": "2026-08-18T19:02:36.688Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -1131,7 +1131,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-18T12:31:05.048Z"
+          "updatedAt": "2026-08-18T19:02:37.832Z"
         }
       },
       "prices": [
@@ -1170,7 +1170,7 @@
           "retailerProductId": "earths-own-oat-original-946-ml",
           "price": 2.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:05.046Z",
+          "checkedAt": "2026-08-18T19:02:37.828Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -1724,7 +1724,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T12:31:07.323Z"
+          "updatedAt": "2026-08-18T19:02:39.785Z"
         }
       },
       "prices": [
@@ -1762,7 +1762,7 @@
           "retailerProductId": "fruits-bananas-per-kg",
           "price": 2.19,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:07.321Z",
+          "checkedAt": "2026-08-18T19:02:39.783Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -1877,7 +1877,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T12:31:08.288Z"
+          "updatedAt": "2026-08-18T19:02:40.551Z"
         }
       },
       "prices": [
@@ -1915,7 +1915,7 @@
           "retailerProductId": "fruits-kiwi-600-grams",
           "price": 6.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:08.286Z",
+          "checkedAt": "2026-08-18T19:02:40.548Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -2026,7 +2026,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T12:31:08.814Z"
+          "updatedAt": "2026-08-18T19:02:40.989Z"
         }
       },
       "prices": [
@@ -2065,7 +2065,7 @@
           "retailerProductId": "vegetables-english-cucumbers-case-12-ea",
           "price": 7.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:08.811Z",
+          "checkedAt": "2026-08-18T19:02:40.987Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -2643,7 +2643,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-18T12:31:11.859Z"
+          "updatedAt": "2026-08-18T19:02:43.471Z"
         }
       },
       "prices": [
@@ -2681,7 +2681,7 @@
           "retailerProductId": "gay-lea-butter-unsalted-454gr",
           "price": 5.79,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:11.854Z",
+          "checkedAt": "2026-08-18T19:02:43.468Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -2916,7 +2916,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-18T12:31:12.427Z"
+          "updatedAt": "2026-08-18T19:02:43.946Z"
         }
       },
       "prices": [
@@ -2954,7 +2954,7 @@
           "retailerProductId": "tropicana-orange-juice-no-pulp-1-36lt",
           "price": 5.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:12.423Z",
+          "checkedAt": "2026-08-18T19:02:43.944Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -2989,7 +2989,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-18T12:31:13.156Z"
+          "updatedAt": "2026-08-18T19:02:44.534Z"
         }
       },
       "prices": [
@@ -3008,7 +3008,7 @@
           "retailerProductId": "realemon-lemon-juice-440ml",
           "price": 1.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:13.150Z",
+          "checkedAt": "2026-08-18T19:02:44.529Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3168,7 +3168,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T12:31:15.688Z"
+          "updatedAt": "2026-08-18T19:02:46.662Z"
         }
       },
       "prices": [
@@ -3187,7 +3187,7 @@
           "retailerProductId": "alasko-iqf-sliced-banana-1kg",
           "price": 4.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:15.686Z",
+          "checkedAt": "2026-08-18T19:02:46.660Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3302,7 +3302,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T12:31:16.458Z"
+          "updatedAt": "2026-08-18T19:02:47.297Z"
         }
       },
       "prices": [
@@ -3340,7 +3340,7 @@
           "retailerProductId": "alasko-iqf-cultivated-blueberries-5x1-kg",
           "price": 9.79,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:16.455Z",
+          "checkedAt": "2026-08-18T19:02:47.294Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3587,7 +3587,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T12:31:18.031Z"
+          "updatedAt": "2026-08-18T19:02:48.565Z"
         }
       },
       "prices": [
@@ -3625,7 +3625,7 @@
           "retailerProductId": "alasko-chopped-spinach-2-lb",
           "price": 2.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T12:31:18.030Z",
+          "checkedAt": "2026-08-18T19:02:48.563Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }

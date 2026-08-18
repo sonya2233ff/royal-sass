@@ -359,16 +359,45 @@ function looksLikeProduceSlug(
   return leftoverTokens(item, slug).length <= 1;
 }
 
+/**
+ * MVR Cash & Carry titles look like "VEGETABLES - TOMATOES GRAPE 1 PINT".
+ * Strip warehouse prefix / case / pint so category B identity still sees
+ * the actual produce, without changing Walmart / No Frills / WC SKUs.
+ */
+function warehouseProduceView(offer: CategoryBOffer): CategoryBOffer {
+  const brand = offer.brand ?? "";
+  const rawName = offer.name ?? "";
+  if (
+    !/^(fruits|vegetables)$/i.test(brand) &&
+    !/^(fruits|vegetables)\s*[-–]/i.test(rawName)
+  ) {
+    return offer;
+  }
+  const name = rawName
+    .replace(/^(fruits|vegetables)\s*[-–]\s*/i, "")
+    .replace(/\bcase\b/gi, " ")
+    .replace(/\bper\s*kg\b/gi, "1 kg")
+    .replace(/\bpints?\b/gi, "pack")
+    .replace(/\b\d+\s*x\s*\d+(?:\.\d+)?\b/gi, " ");
+  return {
+    ...offer,
+    name,
+    brand: /^(fruits|vegetables)$/i.test(brand) ? undefined : offer.brand,
+    sourceUrl: undefined,
+  };
+}
+
 export function isActualCategoryBOffer(
   item: StapleFilterItem,
   offer: CategoryBOffer,
 ): boolean {
-  if (offerFailsStapleFilters(item, offer.name, offer.brand)) return false;
-  if (isProcessedImpostor(item, offer)) return false;
+  const viewed = warehouseProduceView(offer);
+  if (offerFailsStapleFilters(item, viewed.name, viewed.brand)) return false;
+  if (isProcessedImpostor(item, viewed)) return false;
   if (item.category === "frozen") return true;
-  if (!hasProducePackageShape(item, offer)) return false;
-  if (!looksLikeProduceSlug(item, offer)) return false;
-  return looksLikeProduceTitle(item, offer);
+  if (!hasProducePackageShape(item, viewed)) return false;
+  if (!looksLikeProduceSlug(item, viewed)) return false;
+  return looksLikeProduceTitle(item, viewed);
 }
 
 export function withTypicalEachMass<T extends CategoryBOffer>(
