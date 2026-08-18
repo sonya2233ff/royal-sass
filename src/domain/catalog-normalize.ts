@@ -109,12 +109,32 @@ export function nameMatchesFilterToken(hay: string, needle: string): boolean {
   return new RegExp(`(^|[^a-z0-9])${esc}(?:es|s)?([^a-z0-9]|$)`).test(h);
 }
 
+/**
+ * When extra retailer fields are present (MVR type/tags), a phrase may be
+ * split across fields: DEPARTMENT_FROZEN + title STRAWBERRIES covers
+ * "frozen strawberries". Title-only matching stays contiguous.
+ */
+export function nameMatchesFilterPhrase(
+  hay: string,
+  needle: string,
+  splitAcrossFields: boolean,
+): boolean {
+  if (nameMatchesFilterToken(hay, needle)) return true;
+  if (!splitAcrossFields) return false;
+  const parts = needle.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  if (parts.length < 2) return false;
+  return parts.every((part) => nameMatchesFilterToken(hay, part));
+}
+
 export function offerFailsStapleFilters(
   item: StapleFilterItem,
   name: string,
   brand?: string,
+  extraHay?: string,
 ): string | null {
-  const n = `${brand ?? ""} ${name}`.toLowerCase();
+  const extra = extraHay?.trim() ?? "";
+  const splitAcrossFields = extra.length > 0;
+  const n = `${brand ?? ""} ${name} ${extra}`.toLowerCase();
   const banned = [
     ...(item.mustNotInclude ?? []),
     ...(item.rejectNameIncludes ?? []),
@@ -124,10 +144,15 @@ export function offerFailsStapleFilters(
   }
   const all = item.mustIncludeAll ?? [];
   for (const need of all) {
-    if (need && !nameMatchesFilterToken(n, need)) return `mustIncludeAll:${need}`;
+    if (need && !nameMatchesFilterPhrase(n, need, splitAcrossFields)) {
+      return `mustIncludeAll:${need}`;
+    }
   }
   const any = item.mustIncludeAny ?? [];
-  if (any.length > 0 && !any.some((s) => s && nameMatchesFilterToken(n, s))) {
+  if (
+    any.length > 0 &&
+    !any.some((s) => s && nameMatchesFilterPhrase(n, s, splitAcrossFields))
+  ) {
     return "mustIncludeAny";
   }
   return null;

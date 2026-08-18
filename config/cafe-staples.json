@@ -964,6 +964,11 @@
       ],
       "mustNotInclude": [
         "jam",
+        "puree",
+        "purée",
+        "coulis",
+        "mixer",
+        "cocktail",
         "syrup",
         "candy",
         "yogurt",

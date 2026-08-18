@@ -2,7 +2,7 @@
   "retailer": "mvr",
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
-  "checkedAt": "2026-08-18T19:14:29.493Z",
+  "checkedAt": "2026-08-18T19:34:09.406Z",
   "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
@@ -520,10 +520,65 @@
     {
       "id": "frozen_apple",
       "label": "Frozen Apple Slices",
-      "status": "no_match",
-      "offer": null,
-      "notes": "no relevant hits after filters",
-      "alternates": []
+      "status": "ok",
+      "offer": {
+        "productId": "alasko-sliced-apples-1kg",
+        "name": "ALASKO - SLICED APPLES 1KG",
+        "brand": "ALASKO",
+        "packageSize": "1KG",
+        "parsedMassKg": 1,
+        "price": 7.29,
+        "unitPrice": 7.29,
+        "availability": "in_stock",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T19:34:05.889Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-sliced-apples-1kg"
+      },
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "alternates": [
+        {
+          "productId": "alasko-sliced-apples-5x1kg",
+          "name": "ALASKO - SLICED APPLES 5x1KG",
+          "brand": "ALASKO",
+          "packageSize": "5x1KG",
+          "parsedMassKg": 5,
+          "price": 33.99,
+          "unitPrice": 6.8,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T19:34:05.276Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-sliced-apples-5x1kg?_pos=1&_psq=frozen+sliced+apples&_psid=0570b6e53&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505890194p_fec4f1a1-2cb6-4de4-b913-c0da612f7891.jpg?v=1778339719"
+        },
+        {
+          "productId": "apple-valley-tart-shel-2-sweet-240x16gr",
+          "name": "APPLE VALLEY - TART SHEL 2\" SWEET 240x16GR",
+          "brand": "APPLE VALLEY",
+          "packageSize": "240x16GR",
+          "parsedMassKg": 3.84,
+          "price": 44.99,
+          "unitPrice": 11.72,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T19:34:05.737Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/apple-valley-tart-shel-2-sweet-240x16gr?_pos=4&_psq=frozen+apples&_psid=cc71c410f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068741580204p_6478f5e2-5b68-499f-99e5-86d0edc08292.jpg?v=1783010733"
+        },
+        {
+          "productId": "apple-valley-tart-shell-2-240x16gr",
+          "name": "APPLE VALLEY - TART SHELL 2IN 240x16GR",
+          "brand": "APPLE VALLEY",
+          "packageSize": "240x16GR",
+          "parsedMassKg": 3.84,
+          "price": 44.99,
+          "unitPrice": 11.72,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T19:34:05.737Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/apple-valley-tart-shell-2-240x16gr?_pos=5&_psq=frozen+apples&_psid=cc71c410f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068741580200p_13f3b165-5990-41b7-bae1-7d2a0336ae6f.jpg?v=1783010724"
+        }
+      ]
     },
     {
       "id": "frozen_banana",
@@ -537,12 +592,13 @@
         "parsedMassKg": 1,
         "price": 4.99,
         "unitPrice": 4.99,
+        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:37.723Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-1kg",
+        "checkedAt": "2026-08-18T19:34:06.144Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-1kg?_pos=1&_psq=frozen+banana+slices&_psid=e2490b8a4&_ss=e",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000194p_6827b841-b7df-42c4-a646-6e5ea55507a4.jpg?v=1785562354"
       },
-      "notes": "Live MVR SKU price refresh",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
         {
           "productId": "alasko-iqf-sliced-banana-5x1-kg",
@@ -554,8 +610,8 @@
           "unitPrice": 4.4,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:02:46.197Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-5x1-kg?_pos=2&_psq=frozen+banana+slices&_psid=ab77c3fda&_ss=e",
+          "checkedAt": "2026-08-18T19:34:06.144Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-5x1-kg?_pos=2&_psq=frozen+banana+slices&_psid=e2490b8a4&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800193p_5c73967d-7262-4363-b7d0-0abf070be2c9.jpg?v=1785562363"
         }
       ]
@@ -572,12 +628,13 @@
         "parsedMassKg": 5,
         "price": 44.99,
         "unitPrice": 9,
+        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:38.006Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg",
+        "checkedAt": "2026-08-18T19:34:06.919Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=7bc5f78cb&_ss=e",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800202c_9263bb93-71f5-412a-82a4-c859c93de8ae.jpg?v=1786638382"
       },
-      "notes": "Live MVR SKU price refresh",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
         {
           "productId": "alasko-wild-blueberries-1kg",
@@ -589,8 +646,8 @@
           "unitPrice": 8.99,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:02:46.830Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-1kg?_pos=4&_psq=frozen+blueberries&_psid=0df330c17&_ss=e",
+          "checkedAt": "2026-08-18T19:34:06.919Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-1kg?_pos=4&_psq=frozen+blueberries&_psid=7bc5f78cb&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088202p.jpg?v=1786638377"
         },
         {
@@ -603,8 +660,8 @@
           "unitPrice": 9.4,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:02:46.830Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-cultivated-blueberries-5x1kg?_pos=1&_psq=frozen+blueberries&_psid=0df330c17&_ss=e",
+          "checkedAt": "2026-08-18T19:34:06.919Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-cultivated-blueberries-5x1kg?_pos=1&_psq=frozen+blueberries&_psid=7bc5f78cb&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800979p.jpg?v=1785562377"
         },
         {
@@ -617,8 +674,8 @@
           "unitPrice": 9,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:02:46.830Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=0df330c17&_ss=e",
+          "checkedAt": "2026-08-18T19:34:06.919Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=7bc5f78cb&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800202c_9263bb93-71f5-412a-82a4-c859c93de8ae.jpg?v=1786638382"
         }
       ]
@@ -626,10 +683,78 @@
     {
       "id": "frozen_strawberry",
       "label": "Frozen Sliced Strawberries",
-      "status": "no_match",
-      "offer": null,
-      "notes": "no relevant hits after filters",
-      "alternates": []
+      "status": "ok",
+      "offer": {
+        "productId": "alasko-strawberries-1kg",
+        "name": "ALASKO - STRAWBERRIES 1KG",
+        "brand": "ALASKO",
+        "packageSize": "1KG",
+        "parsedMassKg": 1,
+        "price": 3.99,
+        "unitPrice": 3.99,
+        "availability": "in_stock",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T19:34:08.499Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-strawberries-1kg"
+      },
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "alternates": [
+        {
+          "productId": "alasko-strawberries-5x1kg",
+          "name": "ALASKO - STRAWBERRIES 5x1KG",
+          "brand": "ALASKO",
+          "packageSize": "5x1KG",
+          "parsedMassKg": 5,
+          "price": 19.99,
+          "unitPrice": 4,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T19:34:07.807Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-strawberries-5x1kg"
+        },
+        {
+          "productId": "la-fruitiere-strawberry-puree-1kg",
+          "name": "LA FRUITIERE - STRAWBERRY PUREE 1KG",
+          "brand": "LA FRUITIERE",
+          "packageSize": "1KG",
+          "parsedMassKg": 1,
+          "price": 16.29,
+          "unitPrice": 16.29,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T19:34:08.017Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/la-fruitiere-strawberry-puree-1kg?_pos=3&_psq=frozen+strawberries&_psid=53ab40049&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/3338702000101p_81d75a5f-822a-4200-9e1d-dbe9a78389e3.jpg?v=1780300551"
+        },
+        {
+          "productId": "mixology-island-originals-strawberry-32oz",
+          "name": "ISLAND ORIGINALS - STRAWBERRY 32OZ",
+          "brand": "ISLAND ORIGINALS",
+          "packageSize": "907 g",
+          "parsedMassKg": 0.90718474,
+          "price": 12.79,
+          "unitPrice": 14.1,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T19:34:08.017Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/mixology-island-originals-strawberry-32oz?_pos=4&_psq=frozen+strawberries&_psid=53ab40049&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003759758200p_27680558-c741-4e7f-bc85-2471e97a2e98.jpg?v=1785848431"
+        },
+        {
+          "productId": "island-originals-strawberry-12x32oz",
+          "name": "ISLAND ORIGINALS - STRAWBERRY 12x32 OZ",
+          "brand": "ISLAND ORIGINALS",
+          "packageSize": "10.89 kg",
+          "parsedMassKg": 10.886216880000001,
+          "price": 146.99,
+          "unitPrice": 13.5,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T19:34:08.017Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/island-originals-strawberry-12x32oz?_pos=5&_psq=frozen+strawberries&_psid=53ab40049&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1003759750200p_4acc7264-055f-416b-b0dc-1284a4909361.jpg?v=1785848441"
+        }
+      ]
     },
     {
       "id": "frozen_spinach",
@@ -643,12 +768,13 @@
         "parsedMassKg": 0.90718474,
         "price": 2.99,
         "unitPrice": 3.3,
+        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:38.310Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-2-lb",
+        "checkedAt": "2026-08-18T19:34:08.724Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-2-lb?_pos=2&_psq=frozen+chopped+spinach&_psid=c42073b96&_ss=e",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000183p.jpg?v=1783983216"
       },
-      "notes": "Live MVR SKU price refresh",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
         {
           "productId": "alasko-chopped-spinach-12x2lb",
@@ -660,12 +786,12 @@
           "unitPrice": 2.94,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:02:47.983Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-12x2lb?_pos=1&_psq=frozen+chopped+spinach&_psid=9252ebfe1&_ss=e",
+          "checkedAt": "2026-08-18T19:34:08.724Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-12x2lb?_pos=1&_psq=frozen+chopped+spinach&_psid=c42073b96&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800183p_8e99abdc-cb91-462d-8773-391a1fe46f3b.jpg?v=1778337706"
         }
       ]
     }
   ],
-  "updatedAt": "2026-08-18T19:14:29.493Z"
+  "updatedAt": "2026-08-18T19:34:09.406Z"
 }

@@ -9,6 +9,7 @@ import {
   isActualCategoryBOffer,
   usesCategoryBIdentity,
 } from "@/domain/same-packed-item";
+import { mvrRetailerFilterText } from "@/lib/mvr-product-meta";
 import { persistObservation } from "@/lib/persistence";
 import {
   loadRetailerMappings,
@@ -48,6 +49,7 @@ function mvrCategoryBOffer(
   item: StapleItem,
   offer: ProductOffer,
 ): boolean {
+  const extra = mvrRetailerFilterText(offer);
   const name = offer.name
     .replace(/^(fruits|vegetables)\s*[-–]\s*/i, "")
     .replace(/\bcase\b/gi, " ")
@@ -57,17 +59,28 @@ function mvrCategoryBOffer(
   const brand = /^(fruits|vegetables)$/i.test(offer.brand ?? "")
     ? undefined
     : offer.brand;
-  return isActualCategoryBOffer(item, {
-    productId: offer.productId,
-    name,
-    brand,
-    packageSize: offer.packageSize,
-    sourceUrl: undefined,
-  });
+  return isActualCategoryBOffer(
+    item,
+    {
+      productId: offer.productId,
+      name,
+      brand,
+      packageSize: offer.packageSize,
+      sourceUrl: undefined,
+    },
+    extra,
+  );
 }
 
 function passesMvrFilters(offer: ProductOffer, item: StapleItem): boolean {
-  if (offerFailsStapleFilters(item, offer.name, offer.brand) != null) {
+  if (
+    offerFailsStapleFilters(
+      item,
+      offer.name,
+      offer.brand,
+      mvrRetailerFilterText(offer),
+    ) != null
+  ) {
     return false;
   }
   if (resolveMatchMode(item) === "preferred") {
@@ -130,7 +143,12 @@ export async function searchMvrPool(
         name: o.name,
         price: o.price,
         reason:
-          offerFailsStapleFilters(item, o.name, o.brand) != null
+          offerFailsStapleFilters(
+            item,
+            o.name,
+            o.brand,
+            mvrRetailerFilterText(o),
+          ) != null
             ? "filter mustInclude/mustNotInclude"
             : "not the actual category B item",
       });

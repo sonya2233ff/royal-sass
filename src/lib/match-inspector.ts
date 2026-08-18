@@ -43,6 +43,7 @@ import {
   type RetailerSkuLink,
 } from "@/lib/retailer-mappings";
 import { loadMvrCatalog } from "@/lib/mvr-catalog";
+import { mvrRetailerCategory, mvrRetailerFilterText } from "@/lib/mvr-product-meta";
 import {
   loadNoFrillsCatalog,
   loadStaplesConfig,
@@ -297,10 +298,14 @@ function buildCandidate(input: {
 }): InspectorCandidate {
   const retailer = asInspectorRetailer(input.offer.retailer);
   const cat = offerAsCatalog(input.offer);
+  const extraHay =
+    retailer === "mvr" ? mvrRetailerFilterText(input.offer) : undefined;
+  const retailerCategory =
+    retailer === "mvr" ? mvrRetailerCategory(input.offer) : undefined;
   const rec = catalogOfferToRecord({
     retailer: mappingRetailer(retailer),
     offer: cat,
-    category: input.item?.category,
+    category: retailerCategory ?? input.item?.category,
     brandHint: input.offer.brand ?? (input.item ? stapleBrandHint(input.item) : undefined),
     upc: upcFromOffer(cat, [input.offer.upc]),
   });
@@ -314,7 +319,12 @@ function buildCandidate(input: {
   );
   const entity = matchProducts(input.queryRec, rec);
   const filter = input.item
-    ? offerFailsStapleFilters(input.item, input.offer.name, input.offer.brand)
+    ? offerFailsStapleFilters(
+        input.item,
+        input.offer.name,
+        input.offer.brand,
+        extraHay,
+      )
     : null;
   const mapStatus = mappingStatusFor(input.link, input.offer.productId);
   const status = candidateStatus(

@@ -390,9 +390,12 @@ function warehouseProduceView(offer: CategoryBOffer): CategoryBOffer {
 export function isActualCategoryBOffer(
   item: StapleFilterItem,
   offer: CategoryBOffer,
+  extraHay?: string,
 ): boolean {
   const viewed = warehouseProduceView(offer);
-  if (offerFailsStapleFilters(item, viewed.name, viewed.brand)) return false;
+  if (offerFailsStapleFilters(item, viewed.name, viewed.brand, extraHay)) {
+    return false;
+  }
   if (isProcessedImpostor(item, viewed)) return false;
   if (item.category === "frozen") return true;
   if (!hasProducePackageShape(item, viewed)) return false;

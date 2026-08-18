@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T19:02:48.566Z",
+  "updatedAt": "2026-08-18T19:34:09.406Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -3168,7 +3168,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:02:46.662Z"
+          "updatedAt": "2026-08-18T19:34:06.728Z"
         }
       },
       "prices": [
@@ -3187,7 +3187,7 @@
           "retailerProductId": "alasko-iqf-sliced-banana-1kg",
           "price": 4.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:02:46.660Z",
+          "checkedAt": "2026-08-18T19:34:06.725Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3302,7 +3302,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:02:47.297Z"
+          "updatedAt": "2026-08-18T19:34:07.686Z"
         }
       },
       "prices": [
@@ -3340,7 +3340,7 @@
           "retailerProductId": "alasko-iqf-cultivated-blueberries-5x1-kg",
           "price": 9.79,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:02:47.294Z",
+          "checkedAt": "2026-08-18T19:34:07.684Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3438,12 +3438,28 @@
           "storeId": "3724",
           "retailerProductId": "21033168_EA",
           "name": "Whole Strawberries",
-          "matchMethod": "seed_catalog",
-          "matchConfidence": 0.85,
-          "verified": false,
+          "matchMethod": "manual_mapping",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-18T19:25:21.855Z",
           "decision": "auto_linked",
-          "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:35:19.621Z"
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-18T19:25:21.855Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-strawberries-5x1kg",
+          "name": "ALASKO - STRAWBERRIES 5x1KG",
+          "matchMethod": "manual_mapping",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-18T19:27:11.426Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-18T19:27:11.426Z"
         }
       },
       "prices": [
@@ -3473,6 +3489,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:35:18.270Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-strawberries-1kg",
+          "price": 3.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T19:34:08.499Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -3587,7 +3613,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:02:48.565Z"
+          "updatedAt": "2026-08-18T19:34:09.406Z"
         }
       },
       "prices": [
@@ -3625,7 +3651,7 @@
           "retailerProductId": "alasko-chopped-spinach-2-lb",
           "price": 2.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:02:48.563Z",
+          "checkedAt": "2026-08-18T19:34:09.404Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3664,6 +3690,38 @@
           "price": 5.47,
           "checkedAt": "2026-08-16T00:49:20.647Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "frozen_apple": {
+      "masterId": "frozen_apple",
+      "label": "Frozen Apple Slices",
+      "category": "frozen",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-sliced-apples-1kg",
+          "name": "ALASKO - SLICED APPLES 1KG",
+          "upc": "0000000088194",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T19:34:05.893Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-sliced-apples-1kg",
+          "price": 7.29,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T19:34:05.889Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
