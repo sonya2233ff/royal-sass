@@ -4,11 +4,14 @@
  */
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { offerMatchesRetailerSku } from "@/domain/compare-resolve";
 
 export type ShelfAvailability = "in_stock" | "out_of_stock";
 
 export type ShelfOverride = {
   availability: ShelfAvailability;
+  /** If set, only this retailer SKU (±1) is marked — not the whole staple. */
+  productId?: string;
   source: string;
   at: string;
   note?: string;
@@ -51,10 +54,23 @@ export function shelfOverrideFor(
   return file.overrides?.[storeKey]?.[stapleId] ?? null;
 }
 
-export function applyShelfOverrideToOffer<T extends { availability?: string }>(
+export function applyShelfOverrideToOffer<
+  T extends { productId?: string; sourceUrl?: string; availability?: string },
+>(
   offer: T | null | undefined,
   override: ShelfOverride | null,
 ): T | null | undefined {
   if (!offer || !override) return offer;
+  if (override.productId) {
+    if (
+      !offer.productId ||
+      !offerMatchesRetailerSku(
+        { productId: offer.productId, sourceUrl: offer.sourceUrl },
+        override.productId,
+      )
+    ) {
+      return offer;
+    }
+  }
   return { ...offer, availability: override.availability };
 }

@@ -12,6 +12,8 @@ import {
   pickStapleSearchWinner,
   searchNoFrillsPool,
   searchWalmartPackPool,
+  searchWalmartQueryPool,
+  catalogOfferFromLive,
   defaultNeededGrams,
   isSoldByWeightItem,
   resolveMatchMode,
@@ -19,7 +21,7 @@ import {
   type CatalogOffer,
   type MatchLogEntry,
 } from "@/lib/staples";
-import { resolveCatalogOffer } from "@/domain/compare-resolve";
+import { offerIsOnShelf, resolveCatalogOffer } from "@/domain/compare-resolve";
 import { buildStapleCompareRow } from "@/lib/staple-compare-row";
 import {
   mergeLivePackSizes,
@@ -168,7 +170,9 @@ export async function POST(request: Request) {
           item,
           row: wmRow,
           live: pool,
-          keepProductId: wmRow?.offer?.productId,
+          keepProductId: offerIsOnShelf(wmRow?.offer)
+            ? wmRow?.offer?.productId
+            : undefined,
         });
         await persistPackSizeRow({
           retailer: "walmart_ca",
@@ -187,6 +191,45 @@ export async function POST(request: Request) {
           status: merged.offer ? "ok" : "no_match",
           offer: merged.offer,
           alternates: merged.alternates,
+        };
+        catById.set(id, wmRow);
+        wmResolved = resolveCatalogOffer({
+          item,
+          row: wmRow,
+          link: wmLink,
+          matchMode: mode,
+          neededGrams: packPickGrams,
+        });
+      }
+    }
+
+    if (
+      !item.unavailableAtWalmart &&
+      mode === "preferred" &&
+      (!wmResolved.offer || !offerIsOnShelf(wmResolved.offer))
+    ) {
+      const pool = await searchWalmartQueryPool(item, wmLog);
+      const best = pickStapleSearchWinner(item, pool, wmLog);
+      if (best) {
+        const offer = catalogOfferFromLive(best);
+        const others = pool
+          .filter((o) => o.productId !== best.productId)
+          .slice(0, 8)
+          .map(catalogOfferFromLive);
+        await persistPackSizeRow({
+          retailer: "walmart_ca",
+          id,
+          label: item.label,
+          offer,
+          alternates: others,
+          notes: `Nearest alternate — locked SKU not on the shelf`,
+          image: item.image,
+        });
+        wmRow = {
+          id,
+          status: "ok",
+          offer,
+          alternates: others,
         };
         catById.set(id, wmRow);
         wmResolved = resolveCatalogOffer({

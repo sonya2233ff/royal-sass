@@ -7,7 +7,7 @@
     "name": "Walmart Supercentre #5831",
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
-  "checkedAt": "2026-08-18T04:40:33.201Z",
+  "checkedAt": "2026-08-18T04:54:29.801Z",
   "itemCount": 30,
   "matched": 22,
   "items": [
@@ -54,17 +54,16 @@
         "6000194960084"
       ],
       "offer": {
-        "productId": "6000194960083",
-        "name": "Your Fresh Market Tomato, Grape, 10 oz",
-        "brand": "Your Fresh Market",
+        "productId": "6000196099049",
+        "name": "Tomatoes, Organic Grape, 10 oz",
         "packageSize": "283 g",
         "parsedMassKg": 0.28349523125000003,
-        "price": 2.97,
-        "availability": "in_stock",
+        "price": 3.97,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T04:40:33.195Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-tomato-grape/6000194960084",
-        "image": "https://i5.walmartimages.ca/images/Enlarge/039/217/6000203039217.jpg"
+        "checkedAt": "2026-08-18T04:54:26.541Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/tomatoes-organic-grape/6000196099050?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/655/925/33383655925.jpg"
       },
       "alternates": [],
       "notes": "Produce: cheapest grape tomato pack (brand irrelevant)",

@@ -530,6 +530,9 @@ export async function loadWalmartCatalog(): Promise<{
       return {
         ...row,
         offer: applyShelfOverrideToOffer(row.offer, override) ?? null,
+        alternates: (row.alternates ?? []).map(
+          (alt) => applyShelfOverrideToOffer(alt, override) ?? alt,
+        ),
       };
     });
     return catalog;
@@ -957,13 +960,12 @@ export async function searchNoFrills(
   return pickStapleSearchWinner(item, pool, log, lockedNfSku);
 }
 
-/** Category B only: other pack sizes at Walmart. Does not follow locked SKUs. */
-export async function searchWalmartPackPool(
+/** Search Walmart #5831 by staple queries. Category A and B both use this for fallbacks. */
+export async function searchWalmartQueryPool(
   item: StapleItem,
   log?: MatchLogEntry,
 ): Promise<ProductOffer[]> {
   if (item.unavailableAtWalmart) return [];
-  if (resolveMatchMode(item) !== "cheapest") return [];
   let wm: ReturnType<typeof createWalmartConnector>;
   try {
     wm = createWalmartConnector("L4J0A7");
@@ -989,6 +991,8 @@ export async function searchWalmartPackPool(
     }
     await new Promise((r) => setTimeout(r, 300));
   }
+  const shelf = await loadShelfOverrides();
+  const ov = shelfOverrideFor(shelf, "walmart_5831", item.id);
   return [...seen.values()].filter((o) => {
     if (!passesFilters(o, item)) {
       log?.rejected.push({
@@ -996,6 +1000,19 @@ export async function searchWalmartPackPool(
         name: o.name,
         price: o.price,
         reason: "name filter",
+      });
+      return false;
+    }
+    if (
+      ov?.availability === "out_of_stock" &&
+      ov.productId &&
+      offerMatchesRetailerSku(o, ov.productId)
+    ) {
+      log?.rejected.push({
+        productId: o.productId,
+        name: o.name,
+        price: o.price,
+        reason: "not on the shelf — skip for nearest alternate",
       });
       return false;
     }
@@ -1007,6 +1024,15 @@ export async function searchWalmartPackPool(
     }
     return true;
   });
+}
+
+/** Category B pack-size expand. Same search as fallback, cheapest staples only. */
+export async function searchWalmartPackPool(
+  item: StapleItem,
+  log?: MatchLogEntry,
+): Promise<ProductOffer[]> {
+  if (resolveMatchMode(item) !== "cheapest") return [];
+  return searchWalmartQueryPool(item, log);
 }
 
 export interface SummarizedOffer {
@@ -1405,8 +1431,21 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
     const pinAlreadySeen =
       pinId != null &&
       [...seen.values()].some((o) => offerMatchesRetailerSku(o, pinId));
-    if (!pinAlreadySeen) {
-      for (const q of queries) {
+    const shelf = await loadShelfOverrides();
+    const ov = shelfOverrideFor(shelf, "walmart_5831", id);
+    const pinHitEarly =
+      pinId != null
+        ? [...seen.values()].find((o) => offerMatchesRetailerSku(o, pinId))
+        : undefined;
+    const pinNotOnShelf = Boolean(
+      pinHitEarly &&
+        ov?.availability === "out_of_stock" &&
+        ov.productId &&
+        offerMatchesRetailerSku(pinHitEarly, ov.productId),
+    );
+    if (!pinAlreadySeen || pinNotOnShelf) {
+      const extra = item.queries.filter(Boolean).slice(0, 4);
+      for (const q of extra) {
         try {
           const hits = await wm.searchProducts(q, "5831");
           for (const h of hits) {
@@ -1426,16 +1465,9 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
       pinId != null
         ? [...seen.values()].find((o) => offerMatchesRetailerSku(o, pinId))
         : undefined;
-    if (lockedId || pinHit) {
+    if ((lockedId || pinHit) && pinHit && !pinNotOnShelf) {
       const pin = lockedId ?? preferred!;
-      best = pinHit ?? null;
-      if (!best) {
-        log.rejected.push({
-          productId: pin,
-          reason: "confirmed SKU not found on refresh",
-        });
-        log.status = "no_match";
-      }
+      best = pinHit;
       for (const o of seen.values()) {
         if (!offerMatchesRetailerSku(o, pin)) {
           log.rejected.push({
@@ -1447,9 +1479,17 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
         }
       }
     } else {
-      const pool = [...seen.values()].filter((o) =>
-        passesFilters(o, item),
-      );
+      const pool = [...seen.values()].filter((o) => {
+        if (!passesFilters(o, item)) return false;
+        if (
+          ov?.availability === "out_of_stock" &&
+          ov.productId &&
+          offerMatchesRetailerSku(o, ov.productId)
+        ) {
+          return false;
+        }
+        return true;
+      });
       for (const o of seen.values()) {
         if (!passesFilters(o, item)) {
           log.rejected.push({
@@ -1458,17 +1498,33 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
             price: o.price,
             reason: "name filter",
           });
+        } else if (
+          ov?.availability === "out_of_stock" &&
+          ov.productId &&
+          offerMatchesRetailerSku(o, ov.productId)
+        ) {
+          log.rejected.push({
+            productId: o.productId,
+            name: o.name,
+            price: o.price,
+            reason: "not on the shelf — nearest alternate",
+          });
         }
       }
       best =
-        pickBestOffer(pool, matchQueryForPick(item), preferred ?? undefined, {
+        pickBestOffer(
+          pool,
+          matchQueryForPick(item),
+          pinNotOnShelf ? undefined : (preferred ?? undefined),
+          {
           targetMassKg: item.targetMassKg ?? expectedPackFor(item),
           mode,
           preferNameIncludes: item.preferNameIncludes,
           byEach: isEggPackItem(item),
           preferLargerPack: isEggPackItem(item),
           preferredUpc: itemPreferredUpc(item),
-        }) ?? (mode === "cheapest" ? pool[0] ?? null : null);
+        },
+        ) ?? (mode === "cheapest" ? pool[0] ?? null : null);
       if (best && mode === "cheapest") {
         log.rejected.push({
           reason: `cheapest produce pick among ${pool.length} filtered hits`,

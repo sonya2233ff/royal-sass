@@ -3,7 +3,12 @@
  * (cover fallback), search that store for other pack sizes and merge them.
  * Same path for Walmart and No Frills. Does not rematch category A.
  */
-import { catalogCandidates, mappingIsLockedIdentity } from "@/domain/compare-resolve";
+import {
+  catalogCandidates,
+  findOfferForSku,
+  mappingIsLockedIdentity,
+  offerIsOnShelf,
+} from "@/domain/compare-resolve";
 import {
   mergeDistinctPackSizes,
   needsMorePackSizes,
@@ -37,11 +42,15 @@ export function shouldExpandPackSizes(input: {
     return false;
   }
   if (resolveMatchMode(input.item) !== "cheapest") return false;
-  if (mappingIsLockedIdentity(input.link)) return false;
+  if (mappingIsLockedIdentity(input.link)) {
+    const sku = input.link?.retailerProductId;
+    const hit = sku ? findOfferForSku(input.row, sku) : null;
+    if (hit && offerIsOnShelf(hit)) return false;
+  }
   const passing = samePackedItemCandidates(
     input.item,
-    catalogCandidates(input.row),
-    input.row?.offer,
+    catalogCandidates(input.row).filter(offerIsOnShelf),
+    offerIsOnShelf(input.row?.offer) ? input.row?.offer : undefined,
   );
   if (passing.length >= 2) return false;
   return needsMorePackSizes(input.neededGrams, passing);
@@ -63,8 +72,8 @@ export function mergeLivePackSizes(input: {
   const incoming = input.live.map(catalogOfferFromLive);
   const siblings = samePackedItemCandidates(
     input.item,
-    [...catalogCandidates(input.row), ...incoming],
-    input.row?.offer,
+    [...catalogCandidates(input.row), ...incoming].filter(offerIsOnShelf),
+    offerIsOnShelf(input.row?.offer) ? input.row.offer : undefined,
   );
   const merged = mergeDistinctPackSizes(siblings);
   return splitOfferAndAlternates(merged, input.keepProductId);

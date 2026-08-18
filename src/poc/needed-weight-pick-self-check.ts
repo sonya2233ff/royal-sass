@@ -500,6 +500,80 @@ assert(
   "grape 283g still the actual pack",
 );
 
+const grapeLock = {
+  retailerProductId: "6000194960084",
+  verified: true,
+  skippedRematch: true,
+};
+const grapeOos10 = {
+  productId: "6000194960083",
+  name: "Your Fresh Market Tomato, Grape, 10 oz",
+  packageSize: "283 g",
+  parsedMassKg: 0.283,
+  price: 2.97,
+  availability: "out_of_stock",
+  sourceUrl:
+    "https://www.walmart.ca/en/ip/your-fresh-market-tomato-grape/6000194960084",
+};
+const grapeAlt15 = {
+  productId: "6000196006539",
+  name: "Your Fresh Market Grape Tomatoes, 1.5lb",
+  packageSize: "1.5lb",
+  parsedMassKg: 0.68,
+  price: 5.94,
+};
+const grapeLockedInStock = resolveCatalogOffer({
+  item: grapeItem,
+  row: { offer: { ...grapeOos10, availability: undefined }, alternates: [grapeAlt15] },
+  link: grapeLock,
+  matchMode: "cheapest",
+  neededGrams: 500,
+});
+assert(
+  grapeLockedInStock.offer?.productId === grapeOos10.productId,
+  `in-stock lock still wins ${grapeLockedInStock.offer?.productId}`,
+);
+const grapeLockedOos = resolveCatalogOffer({
+  item: grapeItem,
+  row: { offer: grapeOos10, alternates: [grapeAlt15] },
+  link: grapeLock,
+  matchMode: "cheapest",
+  neededGrams: 500,
+});
+assert(
+  grapeLockedOos.offer?.productId === grapeAlt15.productId,
+  `OOS lock falls back to nearest pack ${grapeLockedOos.offer?.productId}`,
+);
+assert(
+  shouldExpandPackSizes({
+    item: {
+      ...grapeItem,
+      queries: ["grape tomatoes"],
+      label: "Grape Tomatoes",
+    },
+    neededGrams: 500,
+    link: grapeLock,
+    row: { offer: grapeOos10, alternates: [] },
+  }) === true,
+  "OOS locked 10oz should search for an alternate pack",
+);
+assert(
+  shouldExpandPackSizes({
+    item: {
+      ...grapeItem,
+      queries: ["grape tomatoes"],
+      label: "Grape Tomatoes",
+    },
+    neededGrams: 500,
+    link: grapeLock,
+    row: {
+      offer: { ...grapeOos10, availability: undefined },
+      alternates: [],
+    },
+  }) === false,
+  "in-stock locked grape SKU should not rematch",
+);
+
 console.log("needed-weight-pick-self-check ok", {
   winner500: winner500?.productId,
   twoSmall: { packs: twoSmall?.packs, total: twoSmall?.totalPrice },

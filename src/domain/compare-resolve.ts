@@ -69,6 +69,14 @@ export type ResolveReason =
   | "mapped_sku_missing"
   | "no_offer";
 
+/** Website listing can still be a price. `out_of_stock` is not a buyable offer. */
+export function offerIsOnShelf(
+  offer?: { availability?: string } | null,
+): boolean {
+  if (!offer) return false;
+  return offer.availability !== "out_of_stock";
+}
+
 function numericIdsOffByOne(left: string, right: string): boolean {
   if (!/^\d+$/.test(left) || !/^\d+$/.test(right)) return false;
   if (left.length !== right.length || left.length < 6) return false;
@@ -153,21 +161,17 @@ export function resolveCatalogOffer(input: {
   const mappedSku = input.link?.retailerProductId;
   if (mappingIsLockedIdentity(input.link) && mappedSku) {
     const hit = findOfferForSku(input.row, mappedSku);
-    if (!hit) {
+    if (hit && offerIsOnShelf(hit)) {
+      const alias = hit.productId !== mappedSku;
       return {
-        offer: null,
-        reason: "mapped_sku_missing",
-        detail: `locked SKU ${mappedSku} not in catalog`,
+        offer: hit,
+        reason: alias ? "mapped_sku_rapid_alias" : "mapped_sku",
+        detail: alias
+          ? `Rapid id ${hit.productId} ≈ lock ${mappedSku}`
+          : mappedSku,
       };
     }
-    // Preferred / confirmed locks win over staple filters (Earth's Own
-    // preferred id may be the Zero Sugar SKU even if filters ban that phrase).
-    const alias = hit.productId !== mappedSku;
-    return {
-      offer: hit,
-      reason: alias ? "mapped_sku_rapid_alias" : "mapped_sku",
-      detail: alias ? `Rapid id ${hit.productId} ≈ lock ${mappedSku}` : mappedSku,
-    };
+    // Missing or not on the shelf → nearest filter-passing alternate below.
   }
 
   if (
@@ -177,8 +181,8 @@ export function resolveCatalogOffer(input: {
   ) {
     const passing = samePackedItemCandidates(
       input.item,
-      catalogCandidates(input.row),
-      input.row?.offer,
+      catalogCandidates(input.row).filter(offerIsOnShelf),
+      offerIsOnShelf(input.row?.offer) ? input.row?.offer : undefined,
     );
     const picked = pickNeededWeightPurchase(input.neededGrams, passing);
     if (picked) {
@@ -196,6 +200,7 @@ export function resolveCatalogOffer(input: {
   }
 
   for (const offer of catalogCandidates(input.row)) {
+    if (!offerIsOnShelf(offer)) continue;
     if (usesCategoryBIdentity(input.item)) {
       if (!isActualCategoryBOffer(input.item, offer)) continue;
     } else if (offerFailsStapleFilters(input.item, offer.name, offer.brand)) {
@@ -209,6 +214,13 @@ export function resolveCatalogOffer(input: {
   }
 
   if (input.row?.offer) {
+    if (!offerIsOnShelf(input.row.offer)) {
+      return {
+        offer: null,
+        reason: "no_offer",
+        detail: "listed SKU not on the shelf — need an alternate",
+      };
+    }
     return {
       offer: null,
       reason: "rejected_filter",

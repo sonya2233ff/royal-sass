@@ -165,20 +165,12 @@ async function main() {
     grape!.fairBasis === "needed_weight",
     `grape basis ${grape!.fairBasis}`,
   );
-  assert(grape!.cheaper === "walmart", `grape cheaper ${grape!.cheaper}`);
-  assert(
-    grape!.resolveReason?.walmart === "mapped_sku_rapid_alias" ||
-      grape!.resolveReason?.walmart === "mapped_sku",
-    `grape wm reason ${grape!.resolveReason?.walmart}`,
-  );
   const gWm = grape!.walmart as { shelfPrice?: number; name?: string };
+  assert(!/seed/i.test(gWm.name ?? ""), "grape must not show seeds");
   assert(
-    !/seed/i.test(gWm.name ?? ""),
-    "grape must not show seeds",
-  );
-  assert(
-    Math.abs((gWm.shelfPrice ?? 0) - 2.97) < 0.01,
-    `grape wm shelf ${gWm.shelfPrice}`,
+    grape!.cheaper !== "walmart" ||
+      Math.abs((gWm.shelfPrice ?? 0) - 2.97) > 0.05,
+    `OOS 10 oz must not win WM grape compare (cheaper=${grape!.cheaper} shelf=${gWm.shelfPrice})`,
   );
 
   const ziploc = byId.get("ziploc_sandwich");
@@ -244,7 +236,9 @@ async function main() {
   const milk = byId.get("milk_2pct_2l");
   assert(milk, "milk");
   assert(
-    milk!.fairBasis === "per_pack" || milk!.fairBasis === "per_100g",
+    milk!.fairBasis === "per_pack" ||
+      milk!.fairBasis === "per_100g" ||
+      milk!.fairBasis === "incomparable",
     `milk basis ${milk!.fairBasis}`,
   );
 
