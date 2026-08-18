@@ -159,7 +159,7 @@ export function lbToKg(lb: number): number {
 export function defaultWeightUnit(
   retailer: string | undefined,
 ): WeightPriceUnit {
-  if (retailer === "no_frills") return "lb";
+  if (retailer === "no_frills" || retailer === "wholesale_club") return "lb";
   return "kg";
 }
 

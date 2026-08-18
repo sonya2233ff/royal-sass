@@ -8,6 +8,7 @@ import { normalizeName, type ProductRecord } from "@/domain/entity-match";
 export const NOFRILLS_RETAILER = "nofrills";
 export const WALMART_RETAILER = "walmart_ca";
 export const SOBEYS_RETAILER = "sobeys";
+export const WHOLESALECLUB_RETAILER = "wholesaleclub";
 
 export interface StapleFilterItem {
   id: string;

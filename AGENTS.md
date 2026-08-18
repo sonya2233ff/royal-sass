@@ -4,7 +4,7 @@ Read this before any change. Follow the repo as it exists; do not invent service
 
 ## Project overview
 
-Cafe staples price POC for GTA procurement: **Walmart Supercentre #5831** (Thornhill L4J 0A7) vs **No Frills Anthony’s #3660**. UI is Next.js 15 / React 19 (`src/app/page.tsx` → `StaplesCompare`). Live compare uses **JSON catalogs**, not Prisma.
+Cafe staples price POC for GTA procurement: **Walmart Supercentre #5831** (Thornhill L4J 0A7) vs **No Frills Anthony’s #3660** vs **Wholesale Club Richmond Hill #3724** (10909 Yonge St, L4C 3E3). UI is Next.js 15 / React 19 (`src/app/page.tsx` → `StaplesCompare`). Live compare uses **JSON catalogs**, not Prisma.
 
 Stack: Next.js App Router, TypeScript, Zod, Playwright (Walmart browser path), tsx POCs. Prisma/SQLite schema exists (`prisma/schema.prisma`) but **no `PrismaClient` usage in `src/`** — planned store, not the live path.
 
@@ -15,9 +15,10 @@ Shown staples = `PINNED_IDS` in `src/lib/staples.ts` plus `custom: true` items (
 | Path | Role |
 | --- | --- |
 | `config/cafe-staples.json` | Staple definitions (queries, filters, `matchMode`, preferred ids) |
-| `config/stores.json` | Locked stores; Sobeys `#659` is `active: false` |
+| `config/stores.json` | Locked stores; Sobeys `#659` is `active: false` (flyer only). Wholesale Club `#3724` is the third compare store |
 | `data/catalog/walmart_5831_latest.json` | WM shelf snapshot |
 | `data/catalog/nofrills_3660_latest.json` | NF shelf snapshot |
+| `data/catalog/wholesaleclub_3724_latest.json` | WC shelf snapshot (PCX, skip `*_C##` case packs) |
 | `data/catalog/retailer-mappings.json` | Master id → retailer SKU locks |
 | `data/catalog/confirmed.json` | 👍 preferred WM `productId` |
 | `src/connectors/` | Retailer I/O (`RetailerConnector` in `types.ts`) |
@@ -30,15 +31,16 @@ Shown staples = `PINNED_IDS` in `src/lib/staples.ts` plus `custom: true` items (
 
 1. Offers land in catalog JSON (refresh APIs / `npm run cache:*` / `cache:prices`).
 2. `resolveCatalogOffer` (`src/domain/compare-resolve.ts`) picks the row offer from mapping + filters. **No Rapid/PCX in this step.**
-3. `buildStapleCompareRow` → `summarizeOffer` + `fairCompareSides` + `scaleBasketAmount`.
+3. `buildStapleCompareRow` → `summarizeOffer` + `fairCompareThree` + `scaleBasketAmount`. If Wholesale Club is missing, ranking falls back to the same WM vs NF `fairCompareSides` result.
 4. UI: `GET /api/staples`, `POST /api/staples/compare`.
 
 **Live API (App Router, `nodejs`)**
 
 - `GET /api/staples` — card payload from catalogs + mappings
-- `POST /api/staples/compare` — fair compare; body `{ ids, grams?, qty? }`; NF cache unless `refreshNoFrills` or missing row
+- `POST /api/staples/compare` — fair compare; body `{ ids, grams?, qty? }`; NF/WC cache unless `refreshNoFrills` or missing row
 - `POST /api/staples/refresh` — rematch selected WM SKUs (search)
 - `POST /api/staples/refresh-nf` — live NF search, writes NF catalog
+- `POST /api/staples/refresh-wc` — live WC search, writes WC catalog + `retailers.wholesaleclub` mapping
 - `POST /api/staples/refresh-prices` — price-only `getProduct` on locked/catalog SKUs (no rematch)
 - `POST /api/staples/search` | `adopt` | `confirm` | `delete` — find/add staple; 👍/👎 lock; permanently remove from cafe-staples + catalogs
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
@@ -50,11 +52,12 @@ Refresh routes set `maxDuration = 60`.
 ## Retailer integrations
 
 - **Walmart #5831:** `createWalmartConnector` (`create-walmart-connector.ts`). Source flags live in `walmart-source.ts` (no Playwright import — homepage catalog load stays light). `WALMART_SOURCE=rapid` uses OpenWeb Ninja/RapidAPI when `OPENWEBNINJA_API_KEY` or `RAPIDAPI_KEY` is set. If Rapid is requested and both keys are blank, **do not** scrape walmart.ca (PerimeterX); fail with `missing_key` and keep the last catalog price. Unset `WALMART_SOURCE` still means Rapid when a key is present, else browser. Playwright if `WALMART_USE_BROWSER` is not `0`. Postal `WALMART_POSTAL_CODE` (default L4J0A7). Rapid ids may be **±1** vs PDP; compare treats that as the same SKU (`offerMatchesRetailerSku`). Rapid live calls use `domain=ca`, `store_id=5831`, `zip=L4J0A7`, and `product_id` on `/product-details`.
-- **No Frills #3660:** `NoFrillsConnector` / PCX BFF (`NOFRILLS_SEARCH_URL`, `NOFRILLS_API_KEY`). Blank `NOFRILLS_API_KEY` uses the public web fallback in the connector; sending a blank `X-Apikey` is 401 `invalid_client`. Akamai may still 403 some IPs. Flipp only if `NOFRILLS_ALLOW_FLIPP_FALLBACK=1` (not shelf).
-- **Sobeys / FreshCo / MVR / Wholesale Club:** connectors or `src/poc/probe-*.ts` only. Not in the staples UI. Sobeys store is disabled in `config/stores.json`.
+- **No Frills #3660:** `NoFrillsConnector` / shared PCX BFF in `pcx-bff.ts` (`NOFRILLS_SEARCH_URL`, `NOFRILLS_API_KEY`). Blank `NOFRILLS_API_KEY` uses the public web fallback in the connector; sending a blank `X-Apikey` is 401 `invalid_client`. Akamai may still 403 some IPs. Flipp only if `NOFRILLS_ALLOW_FLIPP_FALLBACK=1` (not shelf).
+- **Wholesale Club #3724:** `WholesaleClubConnector` reuses the same PCX client (`Site-Banner: wholesaleclub`, origin `https://www.wholesaleclub.ca`). Locator `/store-locator/details/3724`. Consumer compare skips case-pack SKUs (`*_C##`). Not Flipp. Do not duplicate NF search logic in a second copy of the BFF client.
+- **Sobeys / FreshCo / MVR:** connectors or `src/poc/probe-*.ts`. Sobeys is flyer-only and `active: false` in `config/stores.json` — not a compare column.
 - **Mappings:** `data/catalog/retailer-mappings.json` via `src/lib/retailer-mappings.ts`. Pairwise `product-matches.json` and Prisma `ProductMatch` are **not** read by live compare.
 
-**Do not** rewrite or casually edit connectors, API hosts, store IDs (`5831` / `3660`), credentials, or matching (`compare-resolve`, `matching.ts`, `entity-match.ts`) unless the task explicitly says to.
+**Do not** rewrite or casually edit connectors, API hosts, store IDs (`5831` / `3660` / `3724`), credentials, or matching (`compare-resolve`, `matching.ts`, `entity-match.ts`) unless the task explicitly says to.
 
 ## Core business rules
 
@@ -76,7 +79,7 @@ Refresh routes set `maxDuration = 60`.
 **Basket / “recommended store”**
 
 - Row `cheaper` + `delta` are unit-fair (per pack / 100 g / egg), not “who has the smaller pack”.
-- Totals: `scaleBasketAmount` then sum `basketWalmart` / `basketNoFrills` for non-incomparable rows. `totals.cheaper` is the lower comparable basket. There is no separate savings engine.
+- Totals: `scaleBasketAmount` then sum `basketWalmart` / `basketNoFrills` for rows both WM and NF can price (unchanged 2-store set). Wholesale Club is included in `totals.cheaper` on the **intersection** of items all three stores can price, so a missing WC SKU is not $0. There is no separate savings engine.
 
 **Planned / not live:** Prisma persistence, `StoreConnector` (`store-connector.ts` says do not wire into `getConnector` yet), Splink/Python, semantic/image entity-match (stub, never auto-links), Uber/Instacart as shelf (explicitly not `LIVE_VERIFIED`).
 

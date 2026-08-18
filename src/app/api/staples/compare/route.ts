@@ -32,6 +32,8 @@ import {
   lookupConfirmed,
   type RetailerSkuLink,
 } from "@/lib/retailer-mappings";
+import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
+import { searchWholesaleClubPool } from "@/lib/wholesaleclub-observe";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -90,16 +92,20 @@ export async function POST(request: Request) {
 
   const catalog = await loadWalmartCatalog();
   const nfCatalog = await loadNoFrillsCatalog();
+  const wcCatalog = await loadWholesaleClubCatalog();
   const confirmed = await loadConfirmed();
   const mappings = await loadRetailerMappings();
   const byId = new Map(cfg.items.map((i) => [i.id, i]));
   const catById = new Map(catalog?.items.map((i) => [i.id, i]) ?? []);
   const nfById = new Map(nfCatalog?.items.map((i) => [i.id, i]) ?? []);
+  const wcById = new Map(wcCatalog?.items.map((i) => [i.id, i]) ?? []);
 
   const entries: MatchLogEntry[] = [];
   const rows = [];
   let nfLiveHits = 0;
   let nfCacheHits = 0;
+  let wcLiveHits = 0;
+  let wcCacheHits = 0;
 
   for (const id of wanted) {
     const item = byId.get(id);
@@ -116,6 +122,8 @@ export async function POST(request: Request) {
       productMap?.retailers.walmart_ca;
     const nfLink: RetailerSkuLink | undefined =
       productMap?.retailers.nofrills;
+    const wcLink: RetailerSkuLink | undefined =
+      productMap?.retailers.wholesaleclub;
 
     const rawGrams = Number(body.grams?.[id]);
     const neededPick = usesNeededWeightPick(item);
@@ -381,15 +389,160 @@ export async function POST(request: Request) {
         (nfEval.status === "ok" || nfEval.status === "stale"),
     );
 
+    let wcRow = wcById.get(id) ?? null;
+    let wcResolved = resolveCatalogOffer({
+      item,
+      row: wcRow,
+      link: wcLink,
+      matchMode: mode,
+      neededGrams: packPickGrams,
+    });
+    const wcCacheEval = evaluateOfferStatus(item, wcResolved.offer, {
+      catalogStatus:
+        wcResolved.reason === "rejected_filter"
+          ? "no_match"
+          : wcRow?.status,
+    });
+    const needWcExpand = shouldExpandPackSizes({
+      item,
+      neededGrams: packPickGrams,
+      link: wcLink,
+      row: wcRow,
+    });
+    const wcCacheUsable =
+      !needWcExpand &&
+      Boolean(wcResolved.offer) &&
+      (wcCacheEval.status === "ok" || wcCacheEval.status === "stale");
+
+    const wcLog: MatchLogEntry = {
+      at: new Date().toISOString(),
+      itemId: id,
+      retailer: "wholesale_club",
+      queries: [],
+      rejected: [],
+      status: "no_match",
+    };
+
+    let wcCatalogOffer: CatalogOffer | null = null;
+    if (wcCacheUsable && wcResolved.offer) {
+      wcCacheHits += 1;
+      wcCatalogOffer = toCatalogOffer(wcResolved.offer);
+      wcLog.queries = ["catalog_cache"];
+      wcLog.status = wcCacheEval.status;
+      wcLog.accepted = {
+        productId: wcResolved.offer.productId,
+        name: wcResolved.offer.name,
+        price: wcResolved.offer.price,
+      };
+    } else if (!wcRow?.offer || needWcExpand) {
+      const pool = await searchWholesaleClubPool(item, wcLog);
+      wcLiveHits += 1;
+      const best = pickStapleSearchWinner(item, pool, wcLog);
+      if (pool.length || best) {
+        const merged = mergeLivePackSizes({
+          item,
+          row: wcRow,
+          live: pool,
+          keepProductId: wcRow?.offer?.productId ?? best?.productId,
+        });
+        const offer = merged.offer ?? (best
+          ? {
+              productId: best.productId,
+              name: best.name,
+              price: best.price,
+              packageSize: best.packageSize,
+              image: best.image,
+            }
+          : null);
+        await persistPackSizeRow({
+          retailer: "wholesale_club",
+          id,
+          label: item.label,
+          offer,
+          alternates: merged.alternates,
+          notes:
+            merged.alternates.length > 0
+              ? packSizeNotes("wholesale_club", 1 + merged.alternates.length)
+              : `Cached from live WC search (TTL ${CACHE_STALE_HOURS}h)`,
+        });
+        wcRow = {
+          id,
+          status: offer ? "ok" : "no_match",
+          offer,
+          alternates: merged.alternates,
+        };
+        wcById.set(id, wcRow);
+        wcResolved = resolveCatalogOffer({
+          item,
+          row: wcRow,
+          link: wcLink,
+          matchMode: mode,
+          neededGrams: packPickGrams,
+        });
+        wcCatalogOffer = toCatalogOffer(wcResolved.offer);
+      } else if (wcRow?.offer) {
+        wcCatalogOffer = toCatalogOffer(wcResolved.offer);
+        wcLog.rejected.push({
+          reason: "pack-size search missed — kept catalog offer",
+        });
+        if (wcResolved.offer) {
+          wcLog.status = wcCacheEval.status;
+          wcLog.accepted = {
+            productId: wcResolved.offer.productId,
+            name: wcResolved.offer.name,
+            price: wcResolved.offer.price,
+          };
+        }
+      } else {
+        await persistPackSizeRow({
+          retailer: "wholesale_club",
+          id,
+          label: item.label,
+          offer: null,
+          alternates: [],
+          notes: wcLog.rejected.at(-1)?.reason ?? "no_match",
+        });
+      }
+    } else {
+      wcLog.queries = ["catalog_cache"];
+      wcLog.status = "rejected";
+      wcLog.rejected.push({
+        productId: wcRow?.offer?.productId,
+        name: wcRow?.offer?.name,
+        price: wcRow?.offer?.price,
+        reason: wcResolved.detail ?? "filter",
+      });
+    }
+    entries.push(wcLog);
+
+    const wcEval = wcCacheUsable
+      ? wcCacheEval
+      : wcCatalogOffer
+        ? evaluateOfferStatus(item, wcCatalogOffer, {
+            catalogStatus: wcRow?.status,
+          })
+        : {
+            status: wcLog.status,
+            reason: wcLog.rejected.at(-1)?.reason,
+            ageLabel: null as string | null,
+          };
+    const wcUsable = Boolean(
+      wcCatalogOffer &&
+        (wcEval.status === "ok" || wcEval.status === "stale"),
+    );
+
     rows.push(
       buildStapleCompareRow({
         item,
         wmOffer: wmUsable ? wmOffer : null,
         nfOffer: nfUsable ? nfCatalogOffer : null,
+        wcOffer: wcUsable ? wcCatalogOffer : null,
         wmEval,
         nfEval,
+        wcEval,
         wmUsable,
         nfUsable,
+        wcUsable,
         grams,
         qty,
         confirmed: Boolean(conf),
@@ -397,15 +550,60 @@ export async function POST(request: Request) {
         resolveReason: {
           walmart: wmResolved.reason,
           noFrills: nfResolved.reason,
+          wholesaleClub: wcResolved.reason,
         },
         nfUpc: nfOfferUpc,
       }),
     );
   }
 
-  const complete = rows.filter((r) => r.cheaper !== "incomplete");
-  const wmSum = complete.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);
-  const nfSum = complete.reduce((s, r) => s + (r.basketNoFrills ?? 0), 0);
+  const roundMoney = (n: number) => Math.round(n * 100) / 100;
+  const basketWinner = (
+    parts: Array<{ id: string; total: number }>,
+  ): string => {
+    if (!parts.length) return "incomplete";
+    const min = Math.min(...parts.map((b) => b.total));
+    const winners = parts.filter((b) => Math.abs(b.total - min) < 0.005);
+    return winners.length === 1 ? winners[0].id : "tie";
+  };
+
+  // WM vs NF totals stay on rows both stores can price (same as the 2-store POC).
+  const wmNfRows = rows.filter(
+    (r) => r.basketWalmart != null && r.basketNoFrills != null,
+  );
+  const wmSum = wmNfRows.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);
+  const nfSum = wmNfRows.reduce((s, r) => s + (r.basketNoFrills ?? 0), 0);
+  const cheaperTwoWay = basketWinner([
+    { id: "walmart", total: wmSum },
+    { id: "nofrills", total: nfSum },
+  ]);
+
+  // 3-store overall uses the intersection so a missing WC SKU is not $0.
+  const tripleRows = rows.filter(
+    (r) =>
+      r.basketWalmart != null &&
+      r.basketNoFrills != null &&
+      r.basketWholesaleClub != null,
+  );
+  const tripleWm = tripleRows.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);
+  const tripleNf = tripleRows.reduce((s, r) => s + (r.basketNoFrills ?? 0), 0);
+  const tripleWc = tripleRows.reduce(
+    (s, r) => s + (r.basketWholesaleClub ?? 0),
+    0,
+  );
+  const wcAllRows = rows.filter((r) => r.basketWholesaleClub != null);
+  const wcAllSum = wcAllRows.reduce(
+    (s, r) => s + (r.basketWholesaleClub ?? 0),
+    0,
+  );
+  const cheaperThree =
+    tripleRows.length > 0
+      ? basketWinner([
+          { id: "walmart", total: tripleWm },
+          { id: "nofrills", total: tripleNf },
+          { id: "wholesaleclub", total: tripleWc },
+        ])
+      : cheaperTwoWay;
 
   const logId = await appendMatchLog(entries);
 
@@ -423,23 +621,37 @@ export async function POST(request: Request) {
             : "catalog_cache",
     nfCacheHits,
     nfLiveHits,
-    stores: ["walmart_5831", "nofrills_3660"],
+    wholesaleClubSource:
+      wcLiveHits === 0 && wcCacheHits > 0
+        ? "catalog_cache"
+        : wcCacheHits > 0
+          ? "cache_and_live"
+          : wcLiveHits > 0
+            ? "live_api"
+            : "catalog_cache",
+    wcCacheHits,
+    wcLiveHits,
+    stores: ["walmart_5831", "nofrills_3660", "wholesaleclub_3724"],
     sobeysEnabled: false,
+    wholesaleClubEnabled: true,
     matchLogId: logId,
     rows,
     totals: {
-      completeCount: complete.length,
-      walmart: Math.round(wmSum * 100) / 100,
-      noFrills: Math.round(nfSum * 100) / 100,
-      cheaper:
-        complete.length === 0
-          ? "incomplete"
-          : wmSum < nfSum
-            ? "walmart"
-            : nfSum < wmSum
-              ? "nofrills"
-              : "tie",
-      note: "Порівнянна сума: різні пачки → $/kg × кг, яйця → 30 шт × пачки, схожі пачки → ціна полиці × кількість. Відхилена identity не входить у кошик.",
+      completeCount: wmNfRows.length,
+      walmart: roundMoney(wmSum),
+      noFrills: roundMoney(nfSum),
+      wholesaleClub: roundMoney(tripleRows.length ? tripleWc : wcAllSum),
+      cheaper: cheaperThree,
+      cheaperTwoWay,
+      tripleCount: tripleRows.length,
+      tripleWalmart: roundMoney(tripleWm),
+      tripleNoFrills: roundMoney(tripleNf),
+      tripleWholesaleClub: roundMoney(tripleWc),
+      wholesaleClubItemCount: wcAllRows.length,
+      note:
+        tripleRows.length > 0
+          ? `Порівнянна сума. 3 магазини: ${tripleRows.length} спільних позицій. WM vs NF окремо: ${wmNfRows.length} позицій. Різні пачки → $/kg × кг, яйця → 30 шт × пачки. Відхилена identity не входить у кошик.`
+          : "Порівнянна сума: різні пачки → $/kg × кг, яйця → 30 шт × пачки, схожі пачки → ціна полиці × кількість. Відхилена identity не входить у кошик.",
     },
   });
 }

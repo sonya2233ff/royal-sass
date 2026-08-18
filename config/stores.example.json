@@ -26,6 +26,15 @@
       "city": "Thornhill",
       "postalCode": "L4J6W7",
       "address": "441 Clark Ave W, Thornhill, ON L4J 6W7, Canada"
+    },
+    {
+      "key": "wholesaleclub_3724",
+      "retailer": "wholesale_club",
+      "externalStoreId": "3724",
+      "name": "Wholesale Club Richmond Hill #3724",
+      "city": "Richmond Hill",
+      "postalCode": "L4C3E3",
+      "address": "10909 Yonge St, Richmond Hill, ON L4C 3E3, Canada"
     }
   ]
 }

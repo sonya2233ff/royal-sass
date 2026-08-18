@@ -3,6 +3,7 @@
  * Does not rematch by search query (avoids grape-tomato seeds, etc.).
  */
 import { NoFrillsConnector } from "@/connectors/nofrills";
+import { WholesaleClubConnector } from "@/connectors/wholesaleclub";
 import type { ProductOffer, RetailerConnector } from "@/connectors/types";
 import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import {
@@ -29,10 +30,15 @@ import {
   type CatalogOffer,
   type StapleItem,
 } from "@/lib/staples";
+import {
+  loadWholesaleClubCatalog,
+  upsertWholesaleClubCatalogItem,
+} from "@/lib/wholesaleclub-catalog";
 import { extractRetailerImage, isHttpImageUrl } from "@/lib/product-image";
 
 const WM_STORE = "5831";
 const NF_STORE = "3660";
+const WC_STORE = "3724";
 
 export type PriceRefreshFailure = { id: string; reason: string };
 export type PriceRefreshHit = {
@@ -51,6 +57,12 @@ export type CatalogPriceRefreshResult = {
     skipped: PriceRefreshFailure[];
   };
   noFrills: {
+    updated: PriceRefreshHit[];
+    failed: PriceRefreshFailure[];
+    skipped: PriceRefreshFailure[];
+    blocked?: string;
+  };
+  wholesaleClub: {
     updated: PriceRefreshHit[];
     failed: PriceRefreshFailure[];
     skipped: PriceRefreshFailure[];
@@ -188,6 +200,19 @@ function nfSkuFor(
   return null;
 }
 
+function wcSkuFor(
+  id: string,
+  mappings: Awaited<ReturnType<typeof loadRetailerMappings>>,
+  row?: { offer?: CatalogOffer | null } | null,
+): string | null {
+  const link = mappings.products[id]?.retailers.wholesaleclub;
+  if (link?.retailerProductId && isLockedIdentityLink(link)) {
+    return link.retailerProductId;
+  }
+  if (row?.offer?.productId) return row.offer.productId;
+  return null;
+}
+
 function looksLikeTomatoSeeds(itemId: string, name: string): boolean {
   return itemId === "tomatoes_grape" && /\bseeds?\b/i.test(name);
 }
@@ -221,6 +246,7 @@ export async function refreshCatalogPrices(
   const result: CatalogPriceRefreshResult = {
     walmart: { source: "ssr_or_rapid", updated: [], failed: [], skipped: [] },
     noFrills: { updated: [], failed: [], skipped: [] },
+    wholesaleClub: { updated: [], failed: [], skipped: [] },
   };
 
   const wmSource = resolveWalmartSource();
@@ -397,6 +423,70 @@ export async function refreshCatalogPrices(
         result.noFrills.failed.push({ id, reason: msg });
       } else {
         result.noFrills.failed.push({ id, reason: msg });
+      }
+    }
+    await sleep(200);
+  }
+
+  const wc = new WholesaleClubConnector();
+  let wcBlocked: string | null = null;
+  const wcCatalog =
+    (await loadWholesaleClubCatalog()) ??
+    ({
+      storeId: WC_STORE,
+      checkedAt: new Date().toISOString(),
+      items: [],
+    } as Awaited<ReturnType<typeof loadWholesaleClubCatalog>>);
+
+  for (const id of ids) {
+    const item = byId.get(id);
+    if (!item) {
+      result.wholesaleClub.skipped.push({ id, reason: "unknown staple" });
+      continue;
+    }
+    const row = wcCatalog?.items.find((r) => r.id === id);
+    const sku = wcSkuFor(id, mappings, row);
+    if (!sku) {
+      result.wholesaleClub.skipped.push({ id, reason: "no locked/catalog SKU" });
+      continue;
+    }
+    if (wcBlocked) {
+      result.wholesaleClub.failed.push({ id, reason: wcBlocked });
+      continue;
+    }
+    try {
+      const prev = row?.offer?.price;
+      const live = await fetchMatchingSku(wc, sku, WC_STORE, prev);
+      if (!live) {
+        result.wholesaleClub.failed.push({
+          id,
+          reason: `SKU ${sku} not found on refresh`,
+        });
+        continue;
+      }
+      const offer = slimOffer(live, row?.offer);
+      await upsertWholesaleClubCatalogItem({
+        id,
+        label: item.label,
+        status: "ok",
+        offer,
+        notes: "Live WC SKU price refresh",
+      });
+      result.wholesaleClub.updated.push({
+        id,
+        productId: offer.productId,
+        name: offer.name,
+        previousPrice: prev,
+        price: offer.price,
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message.slice(0, 180) : String(e);
+      if (/401|403|blocked|unauthorized|invalid_client/i.test(msg)) {
+        wcBlocked = msg;
+        result.wholesaleClub.blocked = msg;
+        result.wholesaleClub.failed.push({ id, reason: msg });
+      } else {
+        result.wholesaleClub.failed.push({ id, reason: msg });
       }
     }
     await sleep(200);

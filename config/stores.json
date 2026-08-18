@@ -28,6 +28,16 @@
       "address": "441 Clark Ave W, Thornhill, ON L4J 6W7, Canada",
       "active": false,
       "notes": "Compare stays WM vs NF (active: false). Thin flyer adapter exists: Ontario weekly flyer_data → ProductOffer → mapping staple_winner → ESTIMATED observation. Location cookies postal L4J6W7 + store 659; prices are regional flyer, not Clark & Hilda shelf."
+    },
+    {
+      "key": "wholesaleclub_3724",
+      "retailer": "wholesale_club",
+      "externalStoreId": "3724",
+      "name": "Wholesale Club Richmond Hill #3724",
+      "city": "Richmond Hill",
+      "postalCode": "L4C3E3",
+      "address": "10909 Yonge St, Richmond Hill, ON L4C 3E3, Canada",
+      "notes": "PCX banner wholesaleclub, same BFF as No Frills. Locator /store-locator/details/3724."
     }
   ]
 }

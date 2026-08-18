@@ -111,13 +111,14 @@ export interface FairSideInput {
 }
 
 export interface FairCompareResult {
-  cheaper: "walmart" | "nofrills" | "tie" | "incomplete";
-  /** Walmart fair − No Frills fair. Negative means Walmart cheaper. */
+  cheaper: "walmart" | "nofrills" | "wholesaleclub" | "tie" | "incomplete";
+  /** Walmart fair − No Frills fair when only two sides; else cheapest − next. Negative means first listed is cheaper. */
   delta: number | null;
   fairBasis: FairBasis;
   fairLabel: string;
   wmFair: number | null;
   nfFair: number | null;
+  wcFair?: number | null;
 }
 
 function usable(side: FairSideInput): boolean {
@@ -147,6 +148,141 @@ function winner(
 ): "walmart" | "nofrills" | "tie" {
   if (Math.abs(wm - nf) < 0.005) return "tie";
   return wm < nf ? "walmart" : "nofrills";
+}
+
+export type FairStoreId = "walmart" | "nofrills" | "wholesaleclub";
+
+function cheapestStore(
+  values: Partial<Record<FairStoreId, number | null | undefined>>,
+): FairStoreId | "tie" | "incomplete" {
+  const entries = (Object.entries(values) as Array<[FairStoreId, number | null | undefined]>)
+    .filter((row): row is [FairStoreId, number] => row[1] != null && Number.isFinite(row[1]));
+  if (entries.length < 2) return "incomplete";
+  const min = Math.min(...entries.map(([, v]) => v));
+  const winners = entries.filter(([, v]) => Math.abs(v - min) < 0.005).map(([k]) => k);
+  return winners.length === 1 ? winners[0] : "tie";
+}
+
+function spreadDelta(
+  values: Partial<Record<FairStoreId, number | null | undefined>>,
+  preferWmNf: boolean,
+): number | null {
+  const wm = values.walmart;
+  const nf = values.nofrills;
+  if (preferWmNf && wm != null && nf != null) return round2(wm - nf);
+  const nums = [values.walmart, values.nofrills, values.wholesaleclub].filter(
+    (v): v is number => v != null && Number.isFinite(v),
+  );
+  if (nums.length < 2) return null;
+  const sorted = [...nums].sort((a, b) => a - b);
+  return round2(sorted[0] - sorted[1]);
+}
+
+/** Same 2-store rules, plus Wholesale Club when that side is usable. WM vs NF ranking is unchanged if WC is missing. */
+export function fairCompareThree(
+  wm: FairSideInput,
+  nf: FairSideInput,
+  wc?: FairSideInput | null,
+): FairCompareResult {
+  const two = fairCompareSides(wm, nf);
+  if (!wc?.ok) {
+    return { ...two, wcFair: null };
+  }
+
+  const candidates: Array<[FairStoreId, FairSideInput]> = [
+    ["walmart", wm],
+    ["nofrills", nf],
+    ["wholesaleclub", wc],
+  ];
+  const sides = candidates.filter((row) => row[1].ok);
+
+  if (sides.length < 2) {
+    return { ...two, wcFair: null };
+  }
+
+  const eggSides = sides.filter(([, s]) => s.isEgg && s.pricePerEach);
+  if (eggSides.length === sides.length && eggSides.length >= 2) {
+    const values = Object.fromEntries(
+      eggSides.map(([id, s]) => [id, s.pricePerEach as number]),
+    ) as Partial<Record<FairStoreId, number>>;
+    return {
+      cheaper: cheapestStore(values),
+      delta: spreadDelta(values, !wc.ok),
+      fairBasis: "per_egg",
+      fairLabel: "за 1 яйце",
+      wmFair: values.walmart ?? null,
+      nfFair: values.nofrills ?? null,
+      wcFair: values.wholesaleclub ?? null,
+    };
+  }
+
+  const withKg = sides.map(([id, s]) => {
+    const kg =
+      s.pricePerKg && s.pricePerKg > 0
+        ? s.pricePerKg
+        : s.shelfPrice && s.packKg
+          ? pricePerKgFromPack(s.shelfPrice, null, null, s.packKg)
+          : null;
+    return { id, s, kg };
+  });
+  const packs = withKg.filter((x) => x.s.packKg && x.s.shelfPrice);
+  const allSimilar =
+    packs.length === sides.length &&
+    packs.length >= 2 &&
+    packs.every((a) =>
+      packs.every((b) => packsSimilar(a.s.packKg as number, b.s.packKg as number)),
+    );
+  if (allSimilar) {
+    const values = Object.fromEntries(
+      packs.map((x) => [x.id, x.s.shelfPrice as number]),
+    ) as Partial<Record<FairStoreId, number>>;
+    return {
+      cheaper: cheapestStore(values),
+      delta: spreadDelta(values, false),
+      fairBasis: "per_pack",
+      fairLabel: "за пачку (схожий розмір)",
+      wmFair: values.walmart ?? null,
+      nfFair: values.nofrills ?? null,
+      wcFair: values.wholesaleclub ?? null,
+    };
+  }
+
+  const kgSides = withKg.filter((x) => x.kg && x.kg > 0);
+  if (kgSides.length === sides.length && kgSides.length >= 2) {
+    const values = Object.fromEntries(
+      kgSides.map((x) => [x.id, pricePer100gFromKg(x.kg as number)]),
+    ) as Partial<Record<FairStoreId, number>>;
+    const mixedPacks = packs.length >= 2 && !allSimilar;
+    return {
+      cheaper: cheapestStore(values),
+      delta: spreadDelta(values, false),
+      fairBasis: "per_100g",
+      fairLabel: mixedPacks ? "за 100 г (різні пачки)" : "за 100 г",
+      wmFair: values.walmart ?? null,
+      nfFair: values.nofrills ?? null,
+      wcFair: values.wholesaleclub ?? null,
+    };
+  }
+
+  const lines = sides.filter(
+    ([, s]) => s.lineTotal != null && s.lineTotal > 0,
+  );
+  if (lines.length === sides.length && lines.length >= 2) {
+    const values = Object.fromEntries(
+      lines.map(([id, s]) => [id, s.lineTotal as number]),
+    ) as Partial<Record<FairStoreId, number>>;
+    return {
+      cheaper: cheapestStore(values),
+      delta: spreadDelta(values, false),
+      fairBasis: "per_pack",
+      fairLabel: "за позицію",
+      wmFair: values.walmart ?? null,
+      nfFair: values.nofrills ?? null,
+      wcFair: values.wholesaleclub ?? null,
+    };
+  }
+
+  return { ...two, wcFair: null };
 }
 
 export function fairCompareSides(
@@ -230,11 +366,16 @@ export function fairCompareSides(
 /** Amount to add to a like-for-like basket total for this row. */
 export function basketAmountForSide(
   fair: FairCompareResult,
-  side: "walmart" | "nofrills",
+  side: FairStoreId,
   fallbackLine: number | null,
 ): number | null {
   if (fair.fairBasis === "incomparable") return null;
-  const v = side === "walmart" ? fair.wmFair : fair.nfFair;
+  const v =
+    side === "walmart"
+      ? fair.wmFair
+      : side === "nofrills"
+        ? fair.nfFair
+        : (fair.wcFair ?? null);
   if (fair.fairBasis === "needed_weight" && v != null) return v;
   // Quote the deal per 100 g; basket line is still 1 kg (10 × 100 g).
   if (fair.fairBasis === "per_100g" && v != null) return round2(v * 10);

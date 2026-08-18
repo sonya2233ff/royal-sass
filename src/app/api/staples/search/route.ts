@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import { NoFrillsConnector } from "@/connectors/nofrills";
+import { WholesaleClubConnector } from "@/connectors/wholesaleclub";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import { offerImageUrl } from "@/lib/product-image";
@@ -11,13 +12,14 @@ import {
   loadStaplesConfig,
   loadWalmartCatalog,
 } from "@/lib/staples";
+import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export type StoreHit = {
-  retailer: "walmart_ca" | "no_frills";
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club";
   productId: string;
   name: string;
   price: number;
@@ -71,14 +73,23 @@ function hay(s: string): string {
 export async function GET(request: Request) {
   const q = new URL(request.url).searchParams.get("q")?.trim() ?? "";
   if (q.length < 2) {
-    return NextResponse.json({ ok: true, q, staples: [], walmart: [], noFrills: [] });
+    return NextResponse.json({
+      ok: true,
+      q,
+      staples: [],
+      walmart: [],
+      noFrills: [],
+      wholesaleClub: [],
+    });
   }
 
   const cfg = await loadStaplesConfig();
   const wmCat = await loadWalmartCatalog();
   const nfCat = await loadNoFrillsCatalog();
+  const wcCat = await loadWholesaleClubCatalog();
   const wmById = new Map(wmCat?.items.map((i) => [i.id, i]) ?? []);
   const nfById = new Map(nfCat?.items.map((i) => [i.id, i]) ?? []);
+  const wcById = new Map(wcCat?.items.map((i) => [i.id, i]) ?? []);
   const needle = hay(q);
 
   const staples = cfg.items
@@ -86,8 +97,9 @@ export async function GET(request: Request) {
     .map((item) => {
       const wm = wmById.get(item.id)?.offer;
       const nf = nfById.get(item.id)?.offer;
+      const wc = wcById.get(item.id)?.offer;
       const blob = hay(
-        `${item.label} ${wm?.name ?? ""} ${nf?.name ?? ""} ${item.preferredProductId ?? ""}`,
+        `${item.label} ${wm?.name ?? ""} ${nf?.name ?? ""} ${wc?.name ?? ""} ${item.preferredProductId ?? ""}`,
       );
       return {
         id: item.id,
@@ -95,8 +107,10 @@ export async function GET(request: Request) {
         image: item.image ?? null,
         wmName: wm?.name ?? null,
         nfName: nf?.name ?? null,
+        wcName: wc?.name ?? null,
         wmPrice: wm?.price ?? null,
         nfPrice: nf?.price ?? null,
+        wcPrice: wc?.price ?? null,
         match: blob.includes(needle),
       };
     })
@@ -105,22 +119,31 @@ export async function GET(request: Request) {
 
   const wmIdByProduct = new Map<string, string>();
   const nfIdByProduct = new Map<string, string>();
+  const wcIdByProduct = new Map<string, string>();
   for (const item of cfg.items.filter(isShownStaple)) {
     const wm = wmById.get(item.id)?.offer?.productId;
     const nf = nfById.get(item.id)?.offer?.productId;
+    const wc = wcById.get(item.id)?.offer?.productId;
     if (wm) wmIdByProduct.set(wm, item.id);
     if (item.preferredProductId) wmIdByProduct.set(item.preferredProductId, item.id);
     if (nf) nfIdByProduct.set(nf, item.id);
+    if (wc) wcIdByProduct.set(wc, item.id);
   }
 
   const wmFields = walmartSourceApiFields();
   let walmartWarning = wmFields.walmartSourceWarning;
   let walmart: StoreHit[] = [];
   let noFrills: StoreHit[] = [];
+  let wholesaleClub: StoreHit[] = [];
   try {
     const nf = new NoFrillsConnector();
+    const wc = new WholesaleClubConnector();
     const productId = parseWalmartProductId(q);
     const nfHitsP = nf.searchProducts(q, "3660").then((hits) => hits.slice(0, 8));
+    const wcHitsP = wc
+      .searchProducts(q, "3724")
+      .then((hits) => hits.filter((h) => !/_C\d+$/i.test(h.productId)).slice(0, 8))
+      .catch(() => [] as ProductOffer[]);
 
     let wmHits: ProductOffer[] = [];
     try {
@@ -144,12 +167,15 @@ export async function GET(request: Request) {
         walmartWarning ?? (e instanceof Error ? e.message : String(e));
     }
 
-    const nfHits = await nfHitsP;
+    const [nfHits, wcHits] = await Promise.all([nfHitsP, wcHitsP]);
     walmart = wmHits.map((o) =>
       toHit("walmart_ca", o, wmIdByProduct.get(o.productId) ?? null),
     );
     noFrills = nfHits.map((o) =>
       toHit("no_frills", o, nfIdByProduct.get(o.productId) ?? null),
+    );
+    wholesaleClub = wcHits.map((o) =>
+      toHit("wholesale_club", o, wcIdByProduct.get(o.productId) ?? null),
     );
   } finally {
     await closeWalmartBrowser().catch(() => undefined);
@@ -161,6 +187,7 @@ export async function GET(request: Request) {
     staples,
     walmart,
     noFrills,
+    wholesaleClub,
     ...wmFields,
     walmartSourceWarning: walmartWarning,
   });

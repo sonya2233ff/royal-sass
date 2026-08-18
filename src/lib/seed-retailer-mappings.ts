@@ -12,6 +12,7 @@ import {
 import {
   NOFRILLS_RETAILER,
   WALMART_RETAILER,
+  WHOLESALECLUB_RETAILER,
   catalogOfferToRecord,
   isNoFrillsRetailerSku,
   offerFailsStapleFilters,
@@ -50,6 +51,7 @@ import {
 
 const NF_STORE = "3660";
 const WM_STORE = "5831";
+const WC_STORE = "3724";
 
 function nowIso(): string {
   return new Date().toISOString();
@@ -102,6 +104,24 @@ function seedNoFrills(
     upc: upcFromOffer(offer),
     matchMethod: "seed_catalog",
     matchConfidence: 1,
+    verified: false,
+    decision: "auto_linked",
+    kind: identityKind(item) === "identity" ? "identity" : "staple_winner",
+  });
+}
+
+function seedWholesaleClub(
+  item: SeedStapleItem,
+  offer: SeedCatalogOffer,
+): RetailerSkuLink {
+  return link({
+    retailer: WHOLESALECLUB_RETAILER,
+    storeId: WC_STORE,
+    retailerProductId: offer.productId,
+    name: offer.name,
+    upc: upcFromOffer(offer),
+    matchMethod: "seed_catalog",
+    matchConfidence: 0.85,
     verified: false,
     decision: "auto_linked",
     kind: identityKind(item) === "identity" ? "identity" : "staple_winner",
@@ -232,12 +252,16 @@ export async function runSeedAndMatch(): Promise<{
   const items = await loadSeedStaples();
   const nfCat = await loadSeedCatalog("data/catalog/nofrills_3660_latest.json");
   const wmCat = await loadSeedCatalog("data/catalog/walmart_5831_latest.json");
+  const wcCat = await loadSeedCatalog(
+    "data/catalog/wholesaleclub_3724_latest.json",
+  );
   const confirmed = await loadSeedConfirmed();
   const receipts = await loadSeedReceipts();
   const prev = await loadRetailerMappings();
 
   const nfById = new Map((nfCat?.items ?? []).map((r) => [r.id, r]));
   const wmById = new Map((wmCat?.items ?? []).map((r) => [r.id, r]));
+  const wcById = new Map((wcCat?.items ?? []).map((r) => [r.id, r]));
 
   const store: RetailerMappingStore = {
     updatedAt: nowIso(),
@@ -253,7 +277,9 @@ export async function runSeedAndMatch(): Promise<{
   let rejected = 0;
   const nfSkuUsedAsMaster: string[] = [];
 
-  const ids = items.map((i) => i.id).filter((id) => nfById.has(id) || wmById.has(id));
+  const ids = items
+    .map((i) => i.id)
+    .filter((id) => nfById.has(id) || wmById.has(id) || wcById.has(id));
 
   for (const masterId of ids) {
     const item = items.find((i) => i.id === masterId);
@@ -262,9 +288,11 @@ export async function runSeedAndMatch(): Promise<{
 
     const nfRow = nfById.get(masterId);
     const wmRow = wmById.get(masterId);
+    const wcRow = wcById.get(masterId);
     const nfOffer = nfRow?.status === "ok" ? nfRow.offer : null;
     const wmOffer = wmRow?.status === "ok" ? wmRow.offer : null;
-    if (!nfOffer && !wmOffer) continue;
+    const wcOffer = wcRow?.status === "ok" ? wcRow.offer : null;
+    if (!nfOffer && !wmOffer && !wcOffer) continue;
 
     const existing = prev.products[masterId];
     const existingWm = existing?.retailers[WALMART_RETAILER];
@@ -274,6 +302,24 @@ export async function runSeedAndMatch(): Promise<{
     if (nfOffer) {
       retailers[NOFRILLS_RETAILER] = seedNoFrills(item, nfOffer);
       seeded += 1;
+    }
+
+    const existingWc = existing?.retailers[WHOLESALECLUB_RETAILER];
+    if (isLockedIdentityLink(existingWc)) {
+      retailers[WHOLESALECLUB_RETAILER] = {
+        ...existingWc,
+        skippedRematch: true,
+        updatedAt: existingWc.updatedAt,
+      };
+    } else if (wcOffer) {
+      retailers[WHOLESALECLUB_RETAILER] = seedWholesaleClub(item, wcOffer);
+    } else if (existingWc) {
+      retailers[WHOLESALECLUB_RETAILER] = existingWc;
+    }
+
+    const existingSobeys = existing?.retailers.sobeys;
+    if (existingSobeys) {
+      retailers.sobeys = existingSobeys;
     }
 
     const conf = lookupConfirmedRow(confirmed, masterId);
@@ -408,6 +454,38 @@ export async function runSeedAndMatch(): Promise<{
           }),
         }),
       );
+    }
+    const wcLink = retailers[WHOLESALECLUB_RETAILER];
+    const wcPriceOffer = wcLink
+      ? findOfferForSku(wcRow ?? undefined, wcLink.retailerProductId) ??
+        (wcLink.kind === "staple_winner" ? wcOffer : null)
+      : wcOffer;
+    if (wcPriceOffer) {
+      prices.push(
+        priceRow({
+          retailer: WHOLESALECLUB_RETAILER,
+          storeId: WC_STORE,
+          offer: wcPriceOffer,
+          source: "catalog_wholesaleclub_3724_latest",
+          priceConfidence: assignPriceConfidence({
+            hasLiveOffer: true,
+            offerConfidence: wcPriceOffer.confidence,
+            ageHours: ageHours(wcPriceOffer.checkedAt),
+            staleAfterHours: SEED_STALE_HOURS,
+            hasReceiptPrice: false,
+            livePrice: wcPriceOffer.price,
+            otherLivePrice: nfOffer?.price ?? wmPriceOffer?.price,
+            identityLinked,
+          }),
+        }),
+      );
+    } else if (existing) {
+      prices.push(
+        ...existing.prices.filter((p) => p.retailer === WHOLESALECLUB_RETAILER),
+      );
+    }
+    if (existing) {
+      prices.push(...existing.prices.filter((p) => p.retailer === "sobeys"));
     }
 
     const row: MasterProductMapping = {

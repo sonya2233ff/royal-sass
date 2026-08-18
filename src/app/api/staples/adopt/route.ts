@@ -13,13 +13,17 @@ import {
   upsertWalmartCatalogItem,
   type StapleItem,
 } from "@/lib/staples";
+import {
+  loadWholesaleClubCatalog,
+  upsertWholesaleClubCatalogItem,
+} from "@/lib/wholesaleclub-catalog";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 type Body = {
-  retailer?: "walmart_ca" | "no_frills";
+  retailer?: "walmart_ca" | "no_frills" | "wholesale_club";
   productId?: string;
   name?: string;
   price?: number;
@@ -54,7 +58,12 @@ export async function POST(request: Request) {
   const productId = String(body.productId ?? "").trim();
   const name = String(body.name ?? "").trim();
   const price = Number(body.price);
-  const retailer = body.retailer === "no_frills" ? "no_frills" : "walmart_ca";
+  const retailer =
+    body.retailer === "no_frills"
+      ? "no_frills"
+      : body.retailer === "wholesale_club"
+        ? "wholesale_club"
+        : "walmart_ca";
   if (!productId || !name || !(price > 0)) {
     return NextResponse.json(
       { ok: false, error: "productId, name, price required" },
@@ -65,11 +74,17 @@ export async function POST(request: Request) {
   const cfg = await loadStaplesConfig();
   const wmCat = await loadWalmartCatalog();
   const nfCat = await loadNoFrillsCatalog();
+  const wcCat = await loadWholesaleClubCatalog();
   const existing = cfg.items.filter(isShownStaple).find((item) => {
     if (item.preferredProductId === productId) return true;
     const wm = wmCat?.items.find((r) => r.id === item.id)?.offer;
     const nf = nfCat?.items.find((r) => r.id === item.id)?.offer;
-    return wm?.productId === productId || nf?.productId === productId;
+    const wc = wcCat?.items.find((r) => r.id === item.id)?.offer;
+    return (
+      wm?.productId === productId ||
+      nf?.productId === productId ||
+      wc?.productId === productId
+    );
   });
   if (existing) {
     return NextResponse.json({ ok: true, id: existing.id, existed: true });
@@ -161,7 +176,7 @@ export async function POST(request: Request) {
     } catch {
       /* NF optional */
     }
-  } else {
+  } else if (retailer === "no_frills") {
     await upsertNoFrillsCatalogItem({
       id,
       label: item.label,
@@ -202,6 +217,52 @@ export async function POST(request: Request) {
       /* WM optional */
     } finally {
       await closeWalmartBrowser().catch(() => undefined);
+    }
+  } else {
+    await upsertWholesaleClubCatalogItem({
+      id,
+      label: item.label,
+      status: "ok",
+      offer,
+      notes: "Adopted from search",
+    });
+    try {
+      const log = {
+        at: new Date().toISOString(),
+        itemId: id,
+        retailer: "no_frills" as const,
+        queries: [],
+        rejected: [] as Array<{ reason: string }>,
+        status: "no_match" as const,
+      };
+      const nfOffer = await searchNoFrills(item, log);
+      if (nfOffer) {
+        const nfMass =
+          parseMassFromText(nfOffer.packageSize ?? "") ??
+          parseMassFromText(nfOffer.name);
+        await upsertNoFrillsCatalogItem({
+          id,
+          label: item.label,
+          status: log.status,
+          offer: {
+            productId: nfOffer.productId,
+            name: nfOffer.name,
+            price: nfOffer.price,
+            packageSize: nfOffer.packageSize,
+            parsedMassKg: nfMass?.kg,
+            unitPrice: nfOffer.unitPrice,
+            wasPrice: nfOffer.wasPrice,
+            onSale: nfOffer.onSale,
+            confidence: nfOffer.confidence,
+            checkedAt: nfOffer.checkedAt,
+            sourceUrl: nfOffer.sourceUrl,
+            image: nfOffer.image,
+          },
+          notes: "Matched from WC search adopt",
+        });
+      }
+    } catch {
+      /* NF optional */
     }
   }
 

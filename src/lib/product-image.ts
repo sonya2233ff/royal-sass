@@ -100,14 +100,20 @@ function isWalmartCdn(url?: string | null): boolean {
   return imageRetailerHost(url) === "walmart_ca";
 }
 
+type PhotoRetailer = "walmart_ca" | "no_frills" | "wholesale_club";
+
 function ownStoreImage(
-  retailer: "walmart_ca" | "no_frills",
+  retailer: PhotoRetailer,
   url?: string | null,
 ): string | null {
   if (!isHttpImageUrl(url)) return null;
   const host = imageRetailerHost(url);
-  if (host === retailer || host === "other") return url.trim();
-  return null;
+  if (retailer === "walmart_ca") {
+    if (host === "walmart_ca" || host === "other") return url.trim();
+    return null;
+  }
+  if (host === "walmart_ca") return null;
+  return url.trim();
 }
 
 /**
@@ -115,13 +121,13 @@ function ownStoreImage(
  * or the shared `/products/` staple fallback.
  */
 export function retailerSideImage(input: {
-  retailer: "walmart_ca" | "no_frills";
+  retailer: PhotoRetailer;
   offer?: { image?: string | null; raw?: unknown; productId?: string | null } | null;
   stapleImage?: string | null;
 }): string | null {
   const fromOffer = offerImageUrl(input.offer);
   const fromSku = catalogedOfferImage(
-    input.retailer,
+    input.retailer === "wholesale_club" ? "no_frills" : input.retailer,
     input.offer?.productId,
   );
   const own = ownStoreImage(input.retailer, fromOffer ?? fromSku);
@@ -141,12 +147,14 @@ export function preferredStapleImage(input: {
   stapleImage?: string | null;
   wmOffer?: { image?: string | null; raw?: unknown } | null;
   nfOffer?: { image?: string | null; raw?: unknown } | null;
+  wcOffer?: { image?: string | null; raw?: unknown } | null;
 }): string | null {
   const fallback = input.stapleImage ?? null;
   if (input.matchMode !== "preferred") return fallback;
   return (
     offerImageUrl(input.wmOffer) ??
     offerImageUrl(input.nfOffer) ??
+    offerImageUrl(input.wcOffer) ??
     (isHttpImageUrl(fallback) ? fallback.trim() : undefined) ??
     fallback
   );

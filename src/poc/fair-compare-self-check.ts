@@ -6,6 +6,7 @@ import {
   basketAmountForSide,
   extractBarcodes,
   fairCompareSides,
+  fairCompareThree,
   normalizeUpc,
   packsSimilar,
   pricePerKgFromPack,
@@ -191,6 +192,55 @@ const juiceFair = fairCompareSides(
 );
 assert(juiceFair.fairBasis === "per_100g", `OJ packs use $/100g, got ${juiceFair.fairBasis}`);
 assert(juiceFair.cheaper === "walmart", `WM cheaper per litre, got ${juiceFair.cheaper}`);
+
+const grapeThreeMissing = fairCompareThree(
+  {
+    ok: true,
+    shelfPrice: 2.97,
+    lineTotal: 2.97,
+    pricePerKg: wmGrape,
+    packKg: 0.283,
+  },
+  {
+    ok: true,
+    shelfPrice: 7.99,
+    lineTotal: 7.99,
+    pricePerKg: nfGrape,
+    packKg: 0.907,
+  },
+  { ok: false },
+);
+assert(grapeThreeMissing.cheaper === grape.cheaper, "WC missing keeps WM vs NF");
+assert(grapeThreeMissing.fairBasis === grape.fairBasis, "WC missing keeps basis");
+assert(grapeThreeMissing.wcFair == null, "WC fair is null when unused");
+
+const grapeThreeWcWins = fairCompareThree(
+  {
+    ok: true,
+    shelfPrice: 2.97,
+    lineTotal: 2.97,
+    pricePerKg: wmGrape,
+    packKg: 0.283,
+  },
+  {
+    ok: true,
+    shelfPrice: 7.99,
+    lineTotal: 7.99,
+    pricePerKg: nfGrape,
+    packKg: 0.907,
+  },
+  {
+    ok: true,
+    shelfPrice: 4.99,
+    lineTotal: 4.99,
+    pricePerKg: 4.99 / 0.907,
+    packKg: 0.907,
+  },
+);
+assert(
+  grapeThreeWcWins.cheaper === "wholesaleclub",
+  `WC cheapest per 100g, got ${grapeThreeWcWins.cheaper}`,
+);
 
 console.log("fair-compare-self-check ok", {
   grape: { cheaper: grape.cheaper, basis: grape.fairBasis, wm: grape.wmFair, nf: grape.nfFair },

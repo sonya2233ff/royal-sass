@@ -33,12 +33,13 @@ import {
 } from "@/lib/retailer-mappings";
 import { preferredStapleImage } from "@/lib/product-image";
 import { loadSobeysCatalog } from "@/lib/sobeys-catalog";
+import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 function unitFields(
-  retailer: "walmart_ca" | "no_frills",
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club",
   storeId: string,
   offer: {
     productId: string;
@@ -92,11 +93,13 @@ export async function GET() {
   const catalog = await loadWalmartCatalog();
   const nfCatalog = await loadNoFrillsCatalog();
   const sobeysCatalog = await loadSobeysCatalog();
+  const wcCatalog = await loadWholesaleClubCatalog();
   const confirmed = await loadConfirmed();
   const mappings = await loadRetailerMappings();
   const byId = new Map(catalog?.items.map((i) => [i.id, i]) ?? []);
   const nfById = new Map(nfCatalog?.items.map((i) => [i.id, i]) ?? []);
   const sobeysById = new Map(sobeysCatalog?.items.map((i) => [i.id, i]) ?? []);
+  const wcById = new Map(wcCatalog?.items.map((i) => [i.id, i]) ?? []);
 
   const items = cfg.items
     .filter(isShownStaple)
@@ -106,6 +109,7 @@ export async function GET() {
       const wmLink = mappings.products[i.id]?.retailers.walmart_ca;
       const nfLink = mappings.products[i.id]?.retailers.nofrills;
       const sobeysLink = mappings.products[i.id]?.retailers.sobeys;
+      const wcLink = mappings.products[i.id]?.retailers.wholesaleclub;
       const packPickGrams =
         usesNeededWeightPick(i) && !isSoldByWeightItem(i)
           ? defaultNeededGrams(i)
@@ -220,6 +224,42 @@ export async function GET() {
         : false;
       const nfOnSale = nfUsable ? offerIsOnSale(nfOffer) : false;
 
+      const wcCat = wcById.get(i.id);
+      const wcResolved = resolveCatalogOffer({
+        item: i,
+        row: wcCat,
+        link: wcLink,
+        matchMode: mode,
+        neededGrams: packPickGrams,
+      });
+      const wcOffer = wcResolved.offer ?? null;
+      const wcEval = evaluateOfferStatus(i, wcOffer, {
+        catalogStatus:
+          wcResolved.reason === "rejected_filter" ? "no_match" : wcCat?.status,
+      });
+      const wcUsable = Boolean(
+        wcOffer && (wcEval.status === "ok" || wcEval.status === "stale"),
+      );
+      const wcUnits =
+        wcUsable && wcOffer && showWeightUnits
+          ? unitFields(
+              "wholesale_club",
+              "3724",
+              {
+                productId: wcOffer.productId,
+                name: wcOffer.name,
+                packageSize: wcOffer.packageSize,
+                price: wcOffer.price,
+                unitPrice: wcOffer.unitPrice,
+                checkedAt: wcOffer.checkedAt,
+              },
+              true,
+            )
+          : null;
+      const eggWc =
+        wcUsable && wcOffer && eggItem ? eggUnitFields(wcOffer) : null;
+      const wcOnSale = wcUsable ? offerIsOnSale(wcOffer) : false;
+
       return {
         id: i.id,
         label: i.label,
@@ -228,6 +268,7 @@ export async function GET() {
           stapleImage: i.image,
           wmOffer: offer,
           nfOffer,
+          wcOffer,
         }),
         notes: i.notes,
         status,
@@ -241,7 +282,7 @@ export async function GET() {
         weightCompare: showWeightUnits || eggItem,
         soldByWeight: isSoldByWeightItem(i),
         typicalEachGrams: typicalEachGramsOf(i) ?? null,
-        onSale: wmOnSale || nfOnSale,
+        onSale: wmOnSale || nfOnSale || wcOnSale,
         walmartCached: usable
           ? {
               name: offer!.name,
@@ -297,6 +338,34 @@ export async function GET() {
               image: nfOffer!.image ?? null,
             }
           : null,
+        wholesaleClubCached: wcUsable
+          ? {
+              name: wcOffer!.name,
+              price: wcOffer!.price,
+              productId: wcOffer!.productId,
+              packageSize: wcOffer!.packageSize,
+              parsedMassKg: wcOffer!.parsedMassKg ?? null,
+              checkedAt: wcOffer!.checkedAt ?? wcCatalog?.checkedAt,
+              wasPrice: wcOffer!.wasPrice ?? null,
+              onSale: wcOnSale,
+              ageLabel: wcEval.ageLabel,
+              pricePerKg: wcUnits?.pricePerKg ?? null,
+              pricePerLb: wcUnits?.pricePerLb ?? null,
+              nativeUnit: wcUnits?.nativeUnit ?? null,
+              nativeUnitPrice: eggWc?.priceEach ?? wcUnits?.nativePrice ?? null,
+              nativeUnitLabel: eggWc
+                ? `за ${eggWc.count} шт`
+                : wcUnits
+                  ? weightUnitLabel(wcUnits.nativeUnit)
+                  : null,
+              nativeUnitPriceLabel: eggWc
+                ? eggWc.label
+                : wcUnits
+                  ? formatMoneyPerWeight(wcUnits.nativePrice, wcUnits.nativeUnit)
+                  : null,
+              image: wcOffer!.image ?? null,
+            }
+          : null,
         sobeysCached: (() => {
           const sobeysCat = sobeysById.get(i.id);
           const sobeysResolved = resolveCatalogOffer({
@@ -340,12 +409,15 @@ export async function GET() {
     stores: [
       { key: "walmart_5831", name: "Walmart #5831" },
       { key: "nofrills_3660", name: "No Frills #3660" },
+      { key: "wholesaleclub_3724", name: "Wholesale Club #3724" },
     ],
     sobeysEnabled: false,
+    wholesaleClubEnabled: true,
     ...walmartSourceApiFields(),
     cacheStaleHours: CACHE_STALE_HOURS,
     catalogCheckedAt: catalog?.checkedAt ?? null,
     noFrillsCatalogCheckedAt: nfCatalog?.checkedAt ?? null,
+    wholesaleClubCatalogCheckedAt: wcCatalog?.checkedAt ?? null,
     sobeysCatalogCheckedAt: sobeysCatalog?.checkedAt ?? null,
     sobeysFlyerId: sobeysCatalog?.flyerId ?? null,
     sobeysFlyerValidTo: sobeysCatalog?.flyerValidTo ?? null,

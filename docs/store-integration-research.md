@@ -387,7 +387,7 @@ No public grocery API. Business PC Express: request a demo on CAPOnline. Loblaw 
 
 ### 5.3 API?
 
-Same unofficial BFF. Banner string **must be verified** on wholesaleclub.ca Network tab (`Site-Banner`). Likely `wholesaleclub`. Isolated probe: `src/poc/probe-pcx-banner.ts` (needs `NOFRILLS_API_KEY` in `.env.local`, not committed).
+Same unofficial BFF. Banner **`wholesaleclub`** confirmed (needs `Accept-Language: en`). Shared client: `src/connectors/pcx-bff.ts`. Adapter: `src/connectors/wholesaleclub.ts`. Isolated probe: `src/poc/probe-pcx-banner.ts` (needs `NOFRILLS_API_KEY` in `.env.local`, not committed).
 
 ### 5.4 Auth
 
@@ -395,11 +395,11 @@ Same `X-Apikey` as other PCX web properties. Membership may be required for **ch
 
 ### 5.5 Location
 
-`storeId` from locator (`3724` candidate), `Site-Banner: wholesaleclub`, `pickupType: STORE`. Confirm against Network after selecting Richmond Hill.
+`storeId` **`3724`** (locator `/store-locator/details/3724`), `Site-Banner: wholesaleclub`, `pickupType: STORE`. Richmond Hill, 10909 Yonge St, L4C 3E3. Third staples compare store (alongside Walmart #5831 and No Frills #3660). Sobeys remains flyer-only.
 
 ### 5.6–5.8 Fields / examples
 
-Expect the same tile shape as No Frills (`pricing.price`, `packageSizing`, productId `*_EA`). Until the probe returns 200 + tiles, treat banner string as **unconfirmed**.
+Expect the same tile shape as No Frills (`pricing.price`, `packageSizing`, productId `*_EA`). Case packs (`*_C##`) are listed on the club site; consumer compare skips them.
 
 Request (candidate):
 
@@ -428,7 +428,7 @@ If banner works: same as NF. If membership-gated JSON: lower.
 
 ### 5.13 Primary
 
-**Clone No Frills connector** with `banner` + `storeId` parameters. Do not duplicate mapping logic.
+**Clone No Frills connector** with `banner` + `storeId` parameters. Done: `WholesaleClubConnector` + `pcx-bff.ts`. Do not duplicate mapping logic. Catalog `data/catalog/wholesaleclub_3724_latest.json`. Refresh `POST /api/staples/refresh-wc` / `npm run cache:wholesaleclub`.
 
 ### 5.14 Backup
 
@@ -879,7 +879,7 @@ Polarity: **cost 5 = cheap**, **complexity/integration 5 = easy**, **block-risk 
 |---|---|---|---|---|---|---|---|---|
 | Walmart #5831 | OpenWeb Ninja / Rapid `domain=ca&store_id=5831` | Playwright profile | **Same-day shelf walk 2026-08-16: 2 misses on the full list** (~90%+ of 22 matched lines). Older receipts 0% on egg whites / grape tomatoes | Yes (node 5831) | Partial (`out_of_stock` mapped) | ~$25/10k | Provider + ToS | **Keep. Do not rewrite. Pin the 2 misses.** |
 | No Frills #3660 | PCX BFF `Site-Banner: nofrills` | Flipp | High (0.2% egg whites; milk gap is dated receipt) | Yes (3660) | Weak/unknown often | $0 | WAF / ToS | **Keep. Do not rewrite.** |
-| Wholesale Club | PCX BFF clone (`wholesaleclub` + store `3724` candidate) | Flyer / foodservice feed | Untested | Likely after probe | Likely same as NF | $0 | Same as NF; banner unconfirmed | **Next PCX banner after Network confirm** |
+| Wholesale Club | PCX BFF (`wholesaleclub` + store `3724`) | Flyer / foodservice feed | Live PCX shelf at #3724; skip case packs | Yes | Same as NF | $0 | Same as NF | **Third compare store. Do not rewrite NF.** |
 | Sobeys Clark & Hilda | Flipp postal L4J6W7 | Receipts/CSV; Voilà as separate regional banner | Flyer only | Weak (flyer region, not shelf) | No | $0 | Low for Flipp | **Estimated only. Do not use Voilà as this store.** |
 | FreshCo | Flipp after locking postal | Receipts/CSV | Flyer only | After store lock | No | $0 | Low for Flipp | **Do not enable until store locked. Not Instacart.** |
 | Olive Branch | Manual CSV + receipts + flyer OCR | WhatsApp sale posts | High only for staff-entered SKUs | Yes (single store) | No | Staff time | Low | **manual_only. Ask for Excel.** |
@@ -893,7 +893,7 @@ Do **not** change production Walmart or No Frills mapping to do this.
 
 1. **Keep WM Rapid + NF PCX** as-is. Fill WM `no_match` staples (flour, sugar, oil) via existing Rapid `getProduct` / better queries — matcher work, not a new source.
 2. **MVR Shopify connector** (new file). Public JSON, INSTOREPRICE vs online. Fixture + `probe:mvr` already added. Highest new-store ROI.
-3. **Wholesale Club PCX** — confirm `Site-Banner` in browser, run `probe:pcx-banner`, then share PCX client with NF via a `banner` argument (extract, don’t rewrite NF behavior).
+3. **Wholesale Club PCX** — **done** for staples compare: banner `wholesaleclub`, store `3724`, shared `pcx-bff.ts`. Keep WM/NF behavior unchanged.
 4. **Gold-label receipts** — same-day photos for WM/NF/MVR to replace dated CSV. This is how shelf accuracy becomes scientific.
 5. **Olive Branch CSV template + flyer OCR** — no API fantasy.
 6. **Sobeys** — leave Flipp estimated; optional later `voila_gta` banner explicitly **not** store 659.

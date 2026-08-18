@@ -71,7 +71,7 @@ export function mergeLivePackSizes(input: {
 }
 
 export async function persistPackSizeRow(input: {
-  retailer: "walmart_ca" | "no_frills";
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club";
   id: string;
   label: string;
   offer: CatalogOffer | null;
@@ -81,6 +81,20 @@ export async function persistPackSizeRow(input: {
 }): Promise<void> {
   if (input.retailer === "no_frills") {
     await upsertNoFrillsCatalogItem({
+      id: input.id,
+      label: input.label,
+      status: input.offer ? "ok" : "no_match",
+      offer: input.offer,
+      alternates: input.offer ? input.alternates : [],
+      notes: input.notes,
+    });
+    return;
+  }
+  if (input.retailer === "wholesale_club") {
+    const { upsertWholesaleClubCatalogItem } = await import(
+      "@/lib/wholesaleclub-catalog"
+    );
+    await upsertWholesaleClubCatalogItem({
       id: input.id,
       label: input.label,
       status: input.offer ? "ok" : "no_match",
@@ -102,9 +116,14 @@ export async function persistPackSizeRow(input: {
 }
 
 export function packSizeNotes(
-  retailer: "walmart_ca" | "no_frills",
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club",
   sizeCount: number,
 ): string {
-  const store = retailer === "walmart_ca" ? "WM" : "NF";
+  const store =
+    retailer === "walmart_ca"
+      ? "WM"
+      : retailer === "wholesale_club"
+        ? "WC"
+        : "NF";
   return `Live ${store} pack sizes (${sizeCount})`;
 }

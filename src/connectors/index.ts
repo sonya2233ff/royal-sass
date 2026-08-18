@@ -1,5 +1,6 @@
 import { NoFrillsConnector } from "./nofrills";
 import { SobeysConnector } from "./sobeys";
+import { WholesaleClubConnector } from "./wholesaleclub";
 import type { RetailerConnector } from "./types";
 import { createWalmartConnector } from "./create-walmart-connector";
 
@@ -14,6 +15,9 @@ export function getConnector(
       return createWalmartConnector(opts?.postalCode ?? "L4J0A7");
     case "sobeys":
       return new SobeysConnector(opts?.postalCode ?? "L4J6W7");
+    case "wholesale_club":
+    case "wholesaleclub":
+      return new WholesaleClubConnector();
     case "freshco":
       throw new Error(
         "FreshCo is not part of the locked 3-store POC. Use retailer 'sobeys'.",
@@ -41,4 +45,10 @@ export {
   SOBEYS_CLARK_HILDA_STORE_CODE,
 } from "./sobeys";
 export { FreshCoConnector, discoverFreshCoEndpoints } from "./freshco";
+export {
+  WholesaleClubConnector,
+  WHOLESALECLUB_STORE_ID,
+  WHOLESALECLUB_STORE_KEY,
+  probeWholesaleClubSearch,
+} from "./wholesaleclub";
 export { buildFixtureOffers } from "./fixtures";

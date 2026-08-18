@@ -72,6 +72,24 @@ type Staple = {
     onSale?: boolean;
     image?: string | null;
   } | null;
+  wholesaleClubCached?: {
+    name: string;
+    price: number;
+    productId: string;
+    packageSize?: string;
+    parsedMassKg?: number | null;
+    checkedAt?: string;
+    ageLabel?: string | null;
+    pricePerKg?: number | null;
+    pricePerLb?: number | null;
+    nativeUnit?: "kg" | "lb" | null;
+    nativeUnitPrice?: number | null;
+    nativeUnitLabel?: string | null;
+    nativeUnitPriceLabel?: string | null;
+    wasPrice?: number | null;
+    onSale?: boolean;
+    image?: string | null;
+  } | null;
   sobeysCached?: {
     name: string;
     price: number;
@@ -129,6 +147,7 @@ type CompareRow = {
   confirmed?: boolean;
   walmart: SideResult;
   noFrills: SideResult;
+  wholesaleClub?: SideResult;
   cheaper: string;
   delta: number | null;
   soldByWeight?: boolean;
@@ -169,6 +188,13 @@ function saleTitle(item: Staple): string {
       item.noFrillsCached.wasPrice
         ? `NF знижка: було $${item.noFrillsCached.wasPrice.toFixed(2)}`
         : "NF зараз на знижці",
+    );
+  }
+  if (item.wholesaleClubCached?.onSale) {
+    bits.push(
+      item.wholesaleClubCached.wasPrice
+        ? `WC знижка: було $${item.wholesaleClubCached.wasPrice.toFixed(2)}`
+        : "WC зараз на знижці",
     );
   }
   return bits.join(" · ") || "Зараз на знижці";
@@ -269,6 +295,14 @@ function formatBBuy(plan: NonNullable<ReturnType<typeof categoryBPreview>>): str
   return `потрібно ${plan.neededGrams} g · ${plan.packs} × ${plan.packGrams} g = ${plan.gotGrams} g · ${gap} · $${plan.totalPrice.toFixed(2)} · $${plan.pricePer100g.toFixed(2)}/100g${extra}`;
 }
 
+function cheaperLabel(cheaper: string): string {
+  if (cheaper === "walmart") return "Walmart cheaper";
+  if (cheaper === "nofrills") return "No Frills cheaper";
+  if (cheaper === "wholesaleclub") return "Wholesale Club cheaper";
+  if (cheaper === "tie") return "Tie";
+  return "Incomplete";
+}
+
 function walmartSourceLabel(
   source: "rapid" | "browser" | "missing_key" | null,
 ): string {
@@ -287,8 +321,11 @@ export function StaplesCompare() {
   const [totals, setTotals] = useState<{
     walmart: number;
     noFrills: number;
+    wholesaleClub?: number;
     cheaper: string;
+    cheaperTwoWay?: string;
     completeCount: number;
+    tripleCount?: number;
     note?: string;
   } | null>(null);
   const [matchLogId, setMatchLogId] = useState<string | null>(null);
@@ -298,6 +335,7 @@ export function StaplesCompare() {
   const [busy, setBusy] = useState<string | null>(null);
   const [catalogAt, setCatalogAt] = useState<string | null>(null);
   const [nfCatalogAt, setNfCatalogAt] = useState<string | null>(null);
+  const [wcCatalogAt, setWcCatalogAt] = useState<string | null>(null);
   const [sobeysCatalogAt, setSobeysCatalogAt] = useState<string | null>(null);
   const [staleHours, setStaleHours] = useState(24);
   const [gramsById, setGramsById] = useState<Record<string, string>>({});
@@ -323,6 +361,7 @@ export function StaplesCompare() {
     setItems(data.items);
     setCatalogAt(data.catalogCheckedAt ?? null);
     setNfCatalogAt(data.noFrillsCatalogCheckedAt ?? null);
+    setWcCatalogAt(data.wholesaleClubCatalogCheckedAt ?? null);
     setSobeysCatalogAt(data.sobeysCatalogCheckedAt ?? null);
     setStaleHours(data.cacheStaleHours ?? 24);
     setWalmartSource(data.walmartSource ?? null);
@@ -343,8 +382,10 @@ export function StaplesCompare() {
         item.label,
         item.walmartCached?.name,
         item.noFrillsCached?.name,
+        item.wholesaleClubCached?.name,
         item.walmartCached?.productId,
         item.noFrillsCached?.productId,
+        item.wholesaleClubCached?.productId,
         item.sobeysCached?.name,
         item.sobeysCached?.productId,
       ]
@@ -362,8 +403,8 @@ export function StaplesCompare() {
       const age = Date.now() - new Date(iso).getTime();
       return Number.isFinite(age) && age > cutoffMs;
     };
-    return isOld(catalogAt) || isOld(nfCatalogAt);
-  }, [catalogAt, nfCatalogAt]);
+    return isOld(catalogAt) || isOld(nfCatalogAt) || isOld(wcCatalogAt);
+  }, [catalogAt, nfCatalogAt, wcCatalogAt]);
 
   function toggle(id: string) {
     setSelected((prev) => {
@@ -593,6 +634,29 @@ export function StaplesCompare() {
     });
   }
 
+  function refreshWholesaleClubSelected() {
+    setError(null);
+    setBusy("refresh-wc");
+    startTransition(async () => {
+      try {
+        const res = await fetch("/api/staples/refresh-wc", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: [...selected] }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error ?? "WC refresh failed");
+        setMatchLogId(data.matchLogId ?? null);
+        setLogPreview(data.entries ?? null);
+        await reload();
+      } catch (e) {
+        setError(e instanceof Error ? friendlyError(e.message) : String(e));
+      } finally {
+        setBusy(null);
+      }
+    });
+  }
+
   function refreshSobeysSelected() {
     setError(null);
     setBusy("refresh-sobeys");
@@ -632,18 +696,26 @@ export function StaplesCompare() {
         if (!data.ok) throw new Error(data.error ?? "price refresh failed");
         const wmN = data.walmart?.updated?.length ?? 0;
         const nfN = data.noFrills?.updated?.length ?? 0;
+        const wcN = data.wholesaleClub?.updated?.length ?? 0;
         const nfBlock = data.noFrills?.blocked as string | undefined;
+        const wcBlock = data.wholesaleClub?.blocked as string | undefined;
         setLogPreview(data);
         await reload();
         if (data.walmartSource === "missing_key") {
           setError(
-            `No Frills ${nfN ? `оновлено ${nfN}` : "без змін"}. RapidAPI ключ порожній — ціни WM не чіпали.`,
+            `No Frills ${nfN ? `оновлено ${nfN}` : "без змін"}${
+              wcN ? ` · WC ${wcN}` : ""
+            }. RapidAPI ключ порожній — ціни WM не чіпали.`,
           );
         } else if (nfBlock) {
           setError(
             `WM оновлено ${wmN}. No Frills зараз недоступний з цього сервера (401) — NF кеш не змінювався.`,
           );
-        } else if (wmN === 0 && nfN === 0) {
+        } else if (wcBlock) {
+          setError(
+            `WM ${wmN}, NF ${nfN}. Wholesale Club недоступний з цього сервера — WC кеш не змінювався.`,
+          );
+        } else if (wmN === 0 && nfN === 0 && wcN === 0) {
           setError("Жодної ціни не вдалося оновити.");
         }
       } catch (e) {
@@ -682,8 +754,10 @@ export function StaplesCompare() {
         <p className="brand">Royal SASS</p>
         <h1>Cafe staples</h1>
         <p className="sub">
-          Walmart #5831 vs No Frills #3660. Для овочів/фруктів і frozen на картці: WM —{" "}
-          <strong>за 1 kg</strong>, No Frills — <strong>за 1 lb</strong>. Угода при
+          Walmart #5831 vs No Frills #3660 vs Wholesale Club #3724 (10909 Yonge
+          St). Для овочів/фруктів і frozen на картці: WM —{" "}
+          <strong>за 1 kg</strong>, No Frills і Wholesale Club —{" "}
+          <strong>за 1 lb</strong>. Угода при
           різних пачках — <strong>за 100 г</strong>. Товари
           на вагу: після вибору вкажи скільки <strong>грам</strong> потрібно.
           Решта — <strong>кількість пачок</strong> (за замовчуванням 1).{" "}
@@ -707,6 +781,9 @@ export function StaplesCompare() {
           {nfCatalogAt
             ? ` · NF ${new Date(nfCatalogAt).toLocaleString()}`
             : " · NF — після першого Compare"}
+          {wcCatalogAt
+            ? ` · WC ${new Date(wcCatalogAt).toLocaleString()}`
+            : " · WC — Refresh WC або Compare"}
           {sobeysCatalogAt
             ? ` · Sobeys флаєр ${new Date(sobeysCatalogAt).toLocaleString()}`
             : ""}
@@ -752,6 +829,10 @@ export function StaplesCompare() {
             estKg != null && item.noFrillsCached?.pricePerKg
               ? item.noFrillsCached.pricePerKg * estKg
               : null;
+          const wcEst =
+            estKg != null && item.wholesaleClubCached?.pricePerKg
+              ? item.wholesaleClubCached.pricePerKg * estKg
+              : null;
           const packRaw = qtyById[item.id];
           const packParsed = Number.parseInt(
             packRaw ?? (on ? "1" : "0"),
@@ -773,6 +854,10 @@ export function StaplesCompare() {
           const nfPackEst =
             packN > 1 && item.noFrillsCached
               ? item.noFrillsCached.price * packN
+              : null;
+          const wcPackEst =
+            packN > 1 && item.wholesaleClubCached
+              ? item.wholesaleClubCached.price * packN
               : null;
           const cat = matchCategory(item.matchMode);
           const thumb =
@@ -879,6 +964,33 @@ export function StaplesCompare() {
                   ) : (
                     <span className="price mute">немає NF ціни</span>
                   )}
+                  {item.wholesaleClubCached ? (
+                    <>
+                      <span className="sku">
+                        WC {tidyOfferName(item.wholesaleClubCached.name)}
+                      </span>
+                      <span className="price">
+                        WC ${item.wholesaleClubCached.price.toFixed(2)}
+                        {item.wholesaleClubCached.onSale &&
+                        item.wholesaleClubCached.wasPrice ? (
+                          <s className="was">
+                            ${item.wholesaleClubCached.wasPrice.toFixed(2)}
+                          </s>
+                        ) : null}
+                        {item.wholesaleClubCached.packageSize
+                          ? ` · ${item.wholesaleClubCached.packageSize}`
+                          : ""}
+                      </span>
+                      {item.weightCompare &&
+                        item.wholesaleClubCached.nativeUnitPriceLabel && (
+                          <span className="unitprice">
+                            {item.wholesaleClubCached.nativeUnitPriceLabel}
+                          </span>
+                        )}
+                    </>
+                  ) : (
+                    <span className="price mute">немає WC ціни</span>
+                  )}
                   {item.sobeysCached ? (
                     <>
                       <span className="sku">
@@ -905,6 +1017,12 @@ export function StaplesCompare() {
                       {item.noFrillsCached.ageLabel}
                     </span>
                   )}
+                  {item.wholesaleClubCached?.ageLabel && (
+                    <span className="age">
+                      {"WC \u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
+                      {item.wholesaleClubCached.ageLabel}
+                    </span>
+                  )}
                   {isCatB &&
                     neededG != null &&
                     (() => {
@@ -920,7 +1038,13 @@ export function StaplesCompare() {
                         Boolean(item.soldByWeight),
                         item.typicalEachGrams,
                       );
-                      if (!wmBuy && !nfBuy) return null;
+                      const wcBuy = categoryBPreview(
+                        item.wholesaleClubCached ?? null,
+                        neededG,
+                        Boolean(item.soldByWeight),
+                        item.typicalEachGrams,
+                      );
+                      if (!wmBuy && !nfBuy && !wcBuy) return null;
                       return (
                         <>
                           {wmBuy && (
@@ -931,6 +1055,11 @@ export function StaplesCompare() {
                           {nfBuy && (
                             <span className="unitprice">
                               NF {formatBBuy(nfBuy)}
+                            </span>
+                          )}
+                          {wcBuy && (
+                            <span className="unitprice">
+                              WC {formatBBuy(wcBuy)}
                             </span>
                           )}
                         </>
@@ -967,11 +1096,15 @@ export function StaplesCompare() {
                       onClick={(e) => e.stopPropagation()}
                       onChange={(e) => setGrams(item.id, e.target.value)}
                     />
-                    {(wmEst != null || nfEst != null) && (
+                    {(wmEst != null || nfEst != null || wcEst != null) && (
                       <span className="grams-est">
                         {wmEst != null ? `WM $${wmEst.toFixed(2)}` : ""}
-                        {wmEst != null && nfEst != null ? " · " : ""}
+                        {wmEst != null && (nfEst != null || wcEst != null)
+                          ? " · "
+                          : ""}
                         {nfEst != null ? `NF $${nfEst.toFixed(2)}` : ""}
+                        {nfEst != null && wcEst != null ? " · " : ""}
+                        {wcEst != null ? `WC $${wcEst.toFixed(2)}` : ""}
                       </span>
                     )}
                   </label>
@@ -1007,11 +1140,18 @@ export function StaplesCompare() {
                     +
                   </button>
                   <span className="qty-unit">пачок</span>
-                  {(wmPackEst != null || nfPackEst != null) && (
+                  {(wmPackEst != null ||
+                    nfPackEst != null ||
+                    wcPackEst != null) && (
                     <span className="grams-est">
                       {wmPackEst != null ? `WM $${wmPackEst.toFixed(2)}` : ""}
-                      {wmPackEst != null && nfPackEst != null ? " · " : ""}
+                      {wmPackEst != null &&
+                      (nfPackEst != null || wcPackEst != null)
+                        ? " · "
+                        : ""}
                       {nfPackEst != null ? `NF $${nfPackEst.toFixed(2)}` : ""}
+                      {nfPackEst != null && wcPackEst != null ? " · " : ""}
+                      {wcPackEst != null ? `WC $${wcPackEst.toFixed(2)}` : ""}
                     </span>
                   )}
                 </div>
@@ -1106,6 +1246,16 @@ export function StaplesCompare() {
           type="button"
           className="cta secondary"
           disabled={pending || selected.size === 0 || busy != null}
+          onClick={refreshWholesaleClubSelected}
+        >
+          {busy === "refresh-wc"
+            ? "Refreshing WC…"
+            : `Refresh WC (${selected.size})`}
+        </button>
+        <button
+          type="button"
+          className="cta secondary"
+          disabled={pending || selected.size === 0 || busy != null}
           onClick={refreshSobeysSelected}
         >
           {busy === "refresh-sobeys"
@@ -1155,15 +1305,9 @@ export function StaplesCompare() {
                         : ""}
                   </strong>
                   <div className="badge">
-                    {r.cheaper === "walmart"
-                      ? "Walmart cheaper"
-                      : r.cheaper === "nofrills"
-                        ? "No Frills cheaper"
-                        : r.cheaper === "tie"
-                          ? "Tie"
-                          : r.fairBasis === "incomparable"
-                            ? "Incomparable"
-                            : "Incomplete"}
+                    {r.cheaper === "incomplete" && r.fairBasis === "incomparable"
+                      ? "Incomparable"
+                      : cheaperLabel(r.cheaper)}
                     {r.delta != null && r.cheaper !== "tie"
                       ? ` · Δ $${Math.abs(r.delta).toFixed(2)}`
                       : ""}
@@ -1184,6 +1328,12 @@ export function StaplesCompare() {
                   grams={r.grams}
                   qty={r.qty}
                 />
+                <Side
+                  title="Wholesale Club"
+                  side={r.wholesaleClub ?? { lineTotal: null, status: "no_match" }}
+                  grams={r.grams}
+                  qty={r.qty}
+                />
               </div>
             </article>
           ))}
@@ -1196,13 +1346,34 @@ export function StaplesCompare() {
               <div>
                 No Frills basket: <strong>${totals.noFrills.toFixed(2)}</strong>
               </div>
+              <div>
+                Wholesale Club basket:{" "}
+                <strong>
+                  $
+                  {(totals.wholesaleClub ?? 0).toFixed(2)}
+                </strong>
+                {totals.tripleCount
+                  ? ` · ${totals.tripleCount} items at all three`
+                  : ""}
+              </div>
               <div className="winner">
                 {totals.cheaper === "walmart"
                   ? "Cheaper overall: Walmart"
                   : totals.cheaper === "nofrills"
                     ? "Cheaper overall: No Frills"
-                    : "Overall: tie"}
+                    : totals.cheaper === "wholesaleclub"
+                      ? "Cheaper overall: Wholesale Club"
+                      : "Overall: tie"}
               </div>
+              {totals.cheaperTwoWay &&
+                totals.tripleCount != null &&
+                totals.tripleCount > 0 &&
+                totals.cheaperTwoWay !== totals.cheaper && (
+                  <div className="tiny mute">
+                    WM vs NF only ({totals.completeCount} items):{" "}
+                    {cheaperLabel(totals.cheaperTwoWay)}
+                  </div>
+                )}
               {totals.note && <div className="tiny mute">{totals.note}</div>}
             </div>
           )}
@@ -1220,7 +1391,7 @@ export function StaplesCompare() {
         .staples {
           font-family: "Segoe UI", "Candara", "Gill Sans", sans-serif;
           color: #1c1914;
-          max-width: 960px;
+          max-width: 1180px;
           margin: 0 auto;
           padding: 1.5rem 1rem 3rem;
         }
@@ -1569,8 +1740,13 @@ export function StaplesCompare() {
         }
         .cols {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr 1fr;
           gap: 0.75rem;
+        }
+        @media (max-width: 800px) {
+          .cols {
+            grid-template-columns: 1fr;
+          }
         }
         .store {
           font-size: 0.72rem;

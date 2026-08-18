@@ -6,7 +6,7 @@ import {
   basketAmountForSide,
   classifyMatchKind,
   extractBarcodes,
-  fairCompareSides,
+  fairCompareThree,
   packMassKg,
   scaleBasketAmount,
 } from "@/domain/fair-compare";
@@ -52,13 +52,19 @@ export interface StapleCompareRow {
   fairBasis: string;
   fairLabel: string;
   mappingDecision?: string;
-  resolveReason?: { walmart?: ResolveReason; noFrills?: ResolveReason };
+  resolveReason?: {
+    walmart?: ResolveReason;
+    noFrills?: ResolveReason;
+    wholesaleClub?: ResolveReason;
+  };
   walmart: Record<string, unknown>;
   noFrills: Record<string, unknown>;
+  wholesaleClub: Record<string, unknown>;
   cheaper: string;
   delta: number | null;
   basketWalmart: number | null;
   basketNoFrills: number | null;
+  basketWholesaleClub: number | null;
 }
 
 function asCatalogOffer(
@@ -71,16 +77,23 @@ export function buildStapleCompareRow(input: {
   item: StapleItem;
   wmOffer: CatalogOffer | null;
   nfOffer: CatalogOffer | null;
+  wcOffer?: CatalogOffer | null;
   wmEval: SideEval;
   nfEval: SideEval;
+  wcEval?: SideEval;
   wmUsable: boolean;
   nfUsable: boolean;
+  wcUsable?: boolean;
   grams: number | null;
   /** Pack / carton count for non-weight staples. Default 1. */
   qty?: number;
   confirmed: boolean;
   mappingDecision?: string;
-  resolveReason?: { walmart?: ResolveReason; noFrills?: ResolveReason };
+  resolveReason?: {
+    walmart?: ResolveReason;
+    noFrills?: ResolveReason;
+    wholesaleClub?: ResolveReason;
+  };
   nfUpc?: string;
 }): StapleCompareRow {
   const item = input.item;
@@ -112,8 +125,10 @@ export function buildStapleCompareRow(input: {
 
   const wmOffer = input.wmUsable ? asCatalogOffer(input.wmOffer) : null;
   const nfOffer = input.nfUsable ? asCatalogOffer(input.nfOffer) : null;
+  const wcOffer = input.wcUsable ? asCatalogOffer(input.wcOffer ?? null) : null;
   const wmRaw = wmOffer ? withTypicalEachMass(item, wmOffer) : null;
   const nfRaw = nfOffer ? withTypicalEachMass(item, nfOffer) : null;
+  const wcRaw = wcOffer ? withTypicalEachMass(item, wcOffer) : null;
   const typicalEachGrams = typicalEachGramsOf(item);
 
   const walmart = summarizeOffer(item, wmRaw, summarizeQty, "walmart_ca");
@@ -135,6 +150,24 @@ export function buildStapleCompareRow(input: {
     summarizeQty,
     "no_frills",
   );
+  const wholesaleClub = summarizeOffer(
+    item,
+    wcRaw
+      ? {
+          name: wcRaw.name,
+          price: wcRaw.price,
+          productId: wcRaw.productId,
+          packageSize: wcRaw.packageSize,
+          parsedMassKg: wcRaw.parsedMassKg,
+          unitPrice: wcRaw.unitPrice,
+          confidence: wcRaw.confidence,
+          checkedAt: wcRaw.checkedAt,
+          retailer: "wholesale_club",
+        }
+      : null,
+    summarizeQty,
+    "wholesale_club",
+  );
 
   const egg = isEggPackItem(item);
   const wmOk =
@@ -145,45 +178,43 @@ export function buildStapleCompareRow(input: {
     noFrills &&
     (noFrills.status === "ok" || noFrills.status === "stale") &&
     noFrills.lineTotal != null;
+  const wcOk =
+    wholesaleClub &&
+    (wholesaleClub.status === "ok" || wholesaleClub.status === "stale") &&
+    wholesaleClub.lineTotal != null;
 
-  const wmPlan: WeightPurchasePlan | null =
-    neededPick && neededGrams != null && wmRaw
-      ? soldByWeight && walmart?.pricePerKg
+  const planFor = (
+    raw: CatalogOffer | null,
+    summarized: { pricePerKg?: number } | null,
+  ): WeightPurchasePlan | null =>
+    neededPick && neededGrams != null && raw
+      ? soldByWeight && summarized?.pricePerKg
         ? looseWeightPurchase({
             neededGrams,
-            pricePerKg: walmart.pricePerKg,
-            productId: wmRaw.productId,
-            name: wmRaw.name,
-            image: wmRaw.image,
-            shelfPrice: wmRaw.price,
+            pricePerKg: summarized.pricePerKg,
+            productId: raw.productId,
+            name: raw.name,
+            image: raw.image,
+            shelfPrice: raw.price,
           })
         : soldByWeight
           ? null
           : purchasePlanForPack(neededGrams, {
-              ...wmRaw,
-              typicalEachGrams,
-            })
-      : null;
-  const nfPlan: WeightPurchasePlan | null =
-    neededPick && neededGrams != null && nfRaw
-      ? soldByWeight && noFrills?.pricePerKg
-        ? looseWeightPurchase({
-            neededGrams,
-            pricePerKg: noFrills.pricePerKg,
-            productId: nfRaw.productId,
-            name: nfRaw.name,
-            image: nfRaw.image,
-            shelfPrice: nfRaw.price,
-          })
-        : soldByWeight
-          ? null
-          : purchasePlanForPack(neededGrams, {
-              ...nfRaw,
+              ...raw,
               typicalEachGrams,
             })
       : null;
 
-  let fair = fairCompareSides(
+  const wmPlan = planFor(wmRaw, walmart);
+  const nfPlan = planFor(nfRaw, noFrills);
+  const wcPlan = planFor(wcRaw, wholesaleClub);
+
+  const wcEval: SideEval = input.wcEval ?? {
+    status: "no_match",
+    ageLabel: null,
+  };
+
+  let fair = fairCompareThree(
     {
       ok: Boolean(wmOk),
       shelfPrice: walmart?.shelfPrice,
@@ -202,6 +233,15 @@ export function buildStapleCompareRow(input: {
       packKg: packMassKg(noFrills?.name, noFrills?.pack),
       isEgg: egg,
     },
+    {
+      ok: Boolean(wcOk),
+      shelfPrice: wholesaleClub?.shelfPrice,
+      lineTotal: wholesaleClub?.lineTotal,
+      pricePerKg: egg ? null : wholesaleClub?.pricePerKg,
+      pricePerEach: wholesaleClub?.pricePerEach,
+      packKg: packMassKg(wholesaleClub?.name, wholesaleClub?.pack),
+      isEgg: egg,
+    },
   );
 
   if (isPreferredIdentityRejected(mode, { decision: input.mappingDecision })) {
@@ -212,24 +252,34 @@ export function buildStapleCompareRow(input: {
       fairLabel: "різні товари — не порівнюємо як угоду",
       wmFair: null,
       nfFair: null,
+      wcFair: null,
     };
-  } else if (neededPick && !soldByWeight && !egg && (wmPlan || nfPlan)) {
+  } else if (
+    neededPick &&
+    !soldByWeight &&
+    !egg &&
+    (wmPlan || nfPlan || wcPlan)
+  ) {
     const wmTotal = wmOk && wmPlan ? wmPlan.totalPrice : null;
     const nfTotal = nfOk && nfPlan ? nfPlan.totalPrice : null;
-    if (wmTotal != null && nfTotal != null) {
-      const delta = Math.round((wmTotal - nfTotal) * 100) / 100;
+    const wcTotal = wcOk && wcPlan ? wcPlan.totalPrice : null;
+    const priced = [
+      ["walmart", wmTotal],
+      ["nofrills", nfTotal],
+      ["wholesaleclub", wcTotal],
+    ].filter((row): row is [string, number] => row[1] != null);
+    if (priced.length >= 2) {
+      const min = Math.min(...priced.map(([, v]) => v));
+      const winners = priced.filter(([, v]) => Math.abs(v - min) < 0.005);
+      const second = [...priced.map(([, v]) => v)].sort((a, b) => a - b)[1];
       fair = {
-        cheaper:
-          Math.abs(delta) < 0.005
-            ? "tie"
-            : wmTotal < nfTotal
-              ? "walmart"
-              : "nofrills",
-        delta,
+        cheaper: winners.length > 1 ? "tie" : (winners[0][0] as typeof fair.cheaper),
+        delta: second != null ? Math.round((min - second) * 100) / 100 : null,
         fairBasis: "needed_weight",
         fairLabel: "за потрібну закупівлю",
         wmFair: wmTotal,
         nfFair: nfTotal,
+        wcFair: wcTotal,
       };
     } else {
       fair = {
@@ -239,6 +289,7 @@ export function buildStapleCompareRow(input: {
         fairLabel: "за потрібну закупівлю",
         wmFair: wmTotal,
         nfFair: nfTotal,
+        wcFair: wcTotal,
       };
     }
   }
@@ -253,13 +304,30 @@ export function buildStapleCompareRow(input: {
     fair,
     { packQty, qtyKg },
   );
+  const wcBasket = scaleBasketAmount(
+    basketAmountForSide(
+      fair,
+      "wholesaleclub",
+      wcOk ? wholesaleClub!.lineTotal : null,
+    ),
+    fair,
+    { packQty, qtyKg },
+  );
 
   const matchKind = classifyMatchKind({
     mode,
     preferredId: item.preferredProductId,
-    productId: walmart?.productId ?? noFrills?.productId ?? "",
+    productId:
+      walmart?.productId ?? noFrills?.productId ?? wholesaleClub?.productId ?? "",
     upc: input.nfUpc,
     targetUpcs: extractBarcodes(...item.queries, item.preferredProductId),
+  });
+
+  const emptySide = (evalRow: SideEval) => ({
+    status: evalRow.status,
+    statusReason: evalRow.reason ?? evalRow.status,
+    lineTotal: null as number | null,
+    compareUnitLabel: null as string | null,
   });
 
   return {
@@ -270,6 +338,7 @@ export function buildStapleCompareRow(input: {
       stapleImage: item.image,
       wmOffer: wmRaw,
       nfOffer: nfRaw,
+      wcOffer: wcRaw,
     }),
     confirmed: input.confirmed,
     soldByWeight,
@@ -296,12 +365,7 @@ export function buildStapleCompareRow(input: {
             stapleImage: item.image,
           }),
         }
-      : {
-          status: input.wmEval.status,
-          statusReason: input.wmEval.reason ?? input.wmEval.status,
-          lineTotal: null,
-          compareUnitLabel: null,
-        },
+      : emptySide(input.wmEval),
     noFrills: noFrills
       ? {
           ...noFrills,
@@ -316,15 +380,26 @@ export function buildStapleCompareRow(input: {
             },
           }),
         }
-      : {
-          status: input.nfEval.status,
-          statusReason: input.nfEval.reason,
-          lineTotal: null,
-          compareUnitLabel: null,
-        },
+      : emptySide(input.nfEval),
+    wholesaleClub: wholesaleClub
+      ? {
+          ...wholesaleClub,
+          lineTotal: wcPlan?.totalPrice ?? wholesaleClub.lineTotal,
+          ageLabel: wcEval.ageLabel,
+          purchase: wcPlan,
+          image: retailerSideImage({
+            retailer: "wholesale_club",
+            offer: {
+              image: wcPlan?.image ?? wcRaw?.image,
+              productId: wcPlan?.productId ?? wcRaw?.productId,
+            },
+          }),
+        }
+      : emptySide(wcEval),
     cheaper: fair.cheaper,
     delta: fair.delta,
     basketWalmart: wmBasket,
     basketNoFrills: nfBasket,
+    basketWholesaleClub: wcBasket,
   };
 }

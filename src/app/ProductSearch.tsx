@@ -8,12 +8,14 @@ type StapleHit = {
   image: string | null;
   wmName?: string | null;
   nfName?: string | null;
+  wcName?: string | null;
   wmPrice?: number | null;
   nfPrice?: number | null;
+  wcPrice?: number | null;
 };
 
 type StoreHit = {
-  retailer: "walmart_ca" | "no_frills";
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club";
   productId: string;
   name: string;
   price: number;
@@ -46,6 +48,7 @@ export function ProductSearch({
   const [staples, setStaples] = useState<StapleHit[]>([]);
   const [walmart, setWalmart] = useState<StoreHit[]>([]);
   const [noFrills, setNoFrills] = useState<StoreHit[]>([]);
+  const [wholesaleClub, setWholesaleClub] = useState<StoreHit[]>([]);
   const [active, setActive] = useState(0);
   const [err, setErr] = useState<string | null>(null);
 
@@ -55,6 +58,7 @@ export function ProductSearch({
       setStaples([]);
       setWalmart([]);
       setNoFrills([]);
+      setWholesaleClub([]);
       setLoading(false);
       return;
     }
@@ -71,6 +75,7 @@ export function ProductSearch({
           setStaples(data.staples ?? []);
           setWalmart(data.walmart ?? []);
           setNoFrills(data.noFrills ?? []);
+          setWholesaleClub(data.wholesaleClub ?? []);
           if (data.walmartSourceWarning && !(data.walmart ?? []).length) {
             setErr(
               "WM пошук через RapidAPI вимкнено — немає ключа. No Frills нижче.",
@@ -106,6 +111,7 @@ export function ProductSearch({
     ...staples.map((hit) => ({ kind: "staple" as const, hit })),
     ...walmart.map((hit) => ({ kind: "store" as const, hit })),
     ...noFrills.map((hit) => ({ kind: "store" as const, hit })),
+    ...wholesaleClub.map((hit) => ({ kind: "store" as const, hit })),
   ];
 
   async function adopt(hit: StoreHit) {
@@ -211,6 +217,11 @@ export function ProductSearch({
                   {hit.wmPrice != null ? `WM $${hit.wmPrice.toFixed(2)}` : ""}
                   {hit.wmPrice != null && hit.nfPrice != null ? " · " : ""}
                   {hit.nfPrice != null ? `NF $${hit.nfPrice.toFixed(2)}` : ""}
+                  {(hit.wmPrice != null || hit.nfPrice != null) &&
+                  hit.wcPrice != null
+                    ? " · "
+                    : ""}
+                  {hit.wcPrice != null ? `WC $${hit.wcPrice.toFixed(2)}` : ""}
                 </em>
               </span>
             </button>
@@ -250,6 +261,38 @@ export function ProductSearch({
             return (
               <button
                 key={`n-${hit.productId}`}
+                type="button"
+                role="option"
+                className={active === idx ? "search-hit on" : "search-hit"}
+                onMouseEnter={() => setActive(idx)}
+                onClick={() => choose(idx)}
+              >
+                {hit.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={hit.image} alt="" referrerPolicy="no-referrer" />
+                ) : (
+                  <span className="ph" />
+                )}
+                <span>
+                  <strong>{hit.name}</strong>
+                  <em>
+                    ${hit.price.toFixed(2)}
+                    {hit.packageSize ? ` · ${hit.packageSize}` : ""}
+                    {hit.stapleId ? " · уже в списку" : " · додати"}
+                  </em>
+                </span>
+              </button>
+            );
+          })}
+          {wholesaleClub.length > 0 && (
+            <div className="search-sec">Wholesale Club</div>
+          )}
+          {wholesaleClub.map((hit, i) => {
+            const idx =
+              staples.length + walmart.length + noFrills.length + i;
+            return (
+              <button
+                key={`wc-${hit.productId}`}
                 type="button"
                 role="option"
                 className={active === idx ? "search-hit on" : "search-hit"}
