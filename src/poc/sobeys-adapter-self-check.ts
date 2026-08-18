@@ -3,6 +3,7 @@
  *   npx tsx src/poc/sobeys-adapter-self-check.ts
  */
 import {
+  extractFlyerItems,
   flyerItemToOffer,
   scoreFlyerItem,
   SOBEYS_CLARK_HILDA_STORE_CODE,
@@ -14,9 +15,16 @@ function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
+assert(
+  extractFlyerItems({ items: [{ flyer_item_id: 1, name: "x" }] }).length === 1,
+  "flyer_data wrapper items[]",
+);
+assert(extractFlyerItems([{ id: 1 }]).length === 1, "legacy array payload");
+
 const fixture = {
-  id: 991122,
-  name: "Omega-3 Eggs 12's",
+  flyer_item_id: 991122,
+  display_name: "Omega-3 Eggs 12's",
+  name: "Eggs",
   brand: "Gray Ridge",
   current_price: 6.99,
   description: "12 eggs",

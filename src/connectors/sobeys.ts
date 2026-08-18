@@ -31,7 +31,9 @@ const UA =
 
 export type SobeysFlyerItem = {
   id?: number | string;
+  flyer_item_id?: number | string;
   name?: string;
+  display_name?: string;
   brand?: string;
   current_price?: number | string | null;
   price?: number | string | null;
@@ -40,9 +42,26 @@ export type SobeysFlyerItem = {
   valid_from?: string;
   valid_to?: string;
   large_image_url?: string;
+  x_large_image_url?: string;
   clean_image_url?: string;
   sale_story?: string;
+  pre_price_text?: string;
   web_url?: string;
+  url?: string;
+  flyer_type_name?: string;
+  flyer_type_name_identifier?: string;
+};
+
+export type SobeysFlyerDocument = {
+  id?: number | string;
+  name_identifier?: string;
+  flyer_type_name?: string;
+  flyer_run_external_name?: string;
+  title?: string;
+  valid_from?: string;
+  valid_to?: string;
+  url?: string;
+  items?: SobeysFlyerItem[];
 };
 
 export type SobeysFlyerCache = {
@@ -87,7 +106,8 @@ function tokens(q: string): string[] {
 }
 
 export function scoreFlyerItem(item: SobeysFlyerItem, query: string): number {
-  const hay = `${item.name ?? ""} ${item.brand ?? ""} ${item.description ?? ""}`.toLowerCase();
+  const hay =
+    `${item.display_name ?? ""} ${item.name ?? ""} ${item.brand ?? ""} ${item.description ?? ""}`.toLowerCase();
   const parts = tokens(query);
   if (!parts.length) return 0;
   let hits = 0;
@@ -107,11 +127,16 @@ export function flyerItemToOffer(
     postalCode?: string;
   },
 ): ProductOffer | null {
-  const name = String(item.name ?? "").trim();
+  const name = String(item.display_name ?? item.name ?? "").trim();
   if (!name) return null;
   const price = parsePrice(item.current_price) ?? parsePrice(item.price);
   if (price == null) return null;
-  const productId = item.id != null ? String(item.id) : null;
+  const productId =
+    item.flyer_item_id != null
+      ? String(item.flyer_item_id)
+      : item.id != null
+        ? String(item.id)
+        : null;
   if (!productId) return null;
 
   const pack =
@@ -121,8 +146,15 @@ export function flyerItemToOffer(
   const mass = parseMassFromText(`${pack ?? ""} ${name}`);
   const unitPrice = mass && mass.kg > 0 ? Math.round((price / mass.kg) * 100) / 100 : undefined;
   const postal = normalizePostal(opts.postalCode ?? SOBEYS_CLARK_HILDA_POSTAL);
-  const image = item.clean_image_url || item.large_image_url || undefined;
-  const onSale = Boolean(item.sale_story && String(item.sale_story).trim());
+  const image =
+    item.clean_image_url ||
+    item.x_large_image_url ||
+    item.large_image_url ||
+    undefined;
+  const onSale = Boolean(
+    (item.sale_story && String(item.sale_story).trim()) ||
+      (item.pre_price_text && String(item.pre_price_text).trim()),
+  );
 
   return {
     retailer: "sobeys",
@@ -140,6 +172,7 @@ export function flyerItemToOffer(
     checkedAt: new Date().toISOString(),
     sourceUrl:
       item.web_url ||
+      item.url ||
       `https://flyers.sobeys.com/flyers/sobeys?type=2&locale=en&postal_code=${postal}`,
     image,
     raw: {
@@ -155,14 +188,35 @@ export function flyerItemToOffer(
   };
 }
 
-function isOntarioWeeklyFlyer(f: FlippFlyer): boolean {
-  const name = `${f.name ?? ""} ${f.merchant ?? ""}`.toLowerCase();
-  if (name.includes("urban fresh") || name.includes("kosher")) return false;
+function flyerIdentity(doc: SobeysFlyerDocument): string {
+  return `${doc.name_identifier ?? ""} ${doc.flyer_type_name ?? ""} ${doc.url ?? ""} ${doc.title ?? ""}`.toLowerCase();
+}
+
+function isSkippedBanner(ident: string): boolean {
   return (
-    name.includes("ontario") ||
-    name.includes("sobeysontario") ||
-    name.includes("weekly flyer")
+    ident.includes("urbanfresh") ||
+    ident.includes("urban fresh") ||
+    ident.includes("kosher")
   );
+}
+
+function isOntarioWeeklyDoc(doc: SobeysFlyerDocument): boolean {
+  const ident = flyerIdentity(doc);
+  if (isSkippedBanner(ident)) return false;
+  return (
+    ident.includes("sobeysontario") ||
+    ident.includes("weekly flyer - ontario") ||
+    ident.includes("ontario")
+  );
+}
+
+export function extractFlyerItems(payload: unknown): SobeysFlyerItem[] {
+  if (Array.isArray(payload)) return payload as SobeysFlyerItem[];
+  if (payload && typeof payload === "object") {
+    const items = (payload as SobeysFlyerDocument).items;
+    if (Array.isArray(items)) return items;
+  }
+  return [];
 }
 
 async function listFlyers(postal: string): Promise<FlippFlyer[]> {
@@ -182,7 +236,7 @@ async function listFlyers(postal: string): Promise<FlippFlyer[]> {
   return (json.flyers ?? []).filter((f) => f.merchant_id === MERCHANT_ID);
 }
 
-async function loadFlyerItems(flyerId: string): Promise<SobeysFlyerItem[]> {
+async function loadFlyerDocument(flyerId: string): Promise<SobeysFlyerDocument> {
   const res = await fetch(`${FLYER_DATA}/${flyerId}`, {
     headers: { Accept: "application/json", "User-Agent": UA },
     cache: "no-store",
@@ -194,8 +248,27 @@ async function loadFlyerItems(flyerId: string): Promise<SobeysFlyerItem[]> {
       "http",
     );
   }
-  const json = (await res.json()) as SobeysFlyerItem[];
-  return Array.isArray(json) ? json : [];
+  const json = (await res.json()) as SobeysFlyerDocument | SobeysFlyerItem[];
+  if (Array.isArray(json)) {
+    return { id: flyerId, items: json };
+  }
+  return json ?? {};
+}
+
+function cacheFromDocument(doc: SobeysFlyerDocument, fallbackId: string): SobeysFlyerCache {
+  const flyerId = doc.id != null ? String(doc.id) : fallbackId;
+  return {
+    flyerId,
+    validFrom: doc.valid_from ?? null,
+    validTo: doc.valid_to ?? null,
+    flyerName:
+      doc.flyer_type_name ??
+      doc.flyer_run_external_name ??
+      doc.name_identifier ??
+      `flyer ${flyerId}`,
+    items: extractFlyerItems(doc),
+    fetchedAt: new Date().toISOString(),
+  };
 }
 
 export async function loadSobeysFlyer(
@@ -204,25 +277,37 @@ export async function loadSobeysFlyer(
   if (flyerCache) return flyerCache;
   const postal = normalizePostal(postalCode);
   const flyers = await listFlyers(postal);
-  const weekly = flyers.find(isOntarioWeeklyFlyer) ?? flyers[0];
-  if (!weekly?.id) {
+  if (!flyers.length) {
     throw new ConnectorError(
       `No Sobeys flyer for postal ${postal}`,
       "sobeys",
       "not_found",
     );
   }
-  const flyerId = String(weekly.id);
-  const items = await loadFlyerItems(flyerId);
-  flyerCache = {
-    flyerId,
-    validFrom: weekly.valid_from ?? null,
-    validTo: weekly.valid_to ?? null,
-    flyerName: weekly.name ?? weekly.merchant ?? `flyer ${flyerId}`,
-    items,
-    fetchedAt: new Date().toISOString(),
-  };
-  return flyerCache;
+
+  let fallback: SobeysFlyerCache | null = null;
+  for (const listed of flyers) {
+    if (listed.id == null) continue;
+    const doc = await loadFlyerDocument(String(listed.id));
+    const ident = flyerIdentity(doc);
+    if (isSkippedBanner(ident)) continue;
+    const cache = cacheFromDocument(doc, String(listed.id));
+    if (isOntarioWeeklyDoc(doc) && cache.items.length) {
+      flyerCache = cache;
+      return flyerCache;
+    }
+    if (!fallback && cache.items.length) fallback = cache;
+  }
+
+  if (fallback) {
+    flyerCache = fallback;
+    return flyerCache;
+  }
+  throw new ConnectorError(
+    `No Sobeys Ontario weekly flyer items for postal ${postal}`,
+    "sobeys",
+    "not_found",
+  );
 }
 
 export function resetSobeysFlyerCache(): void {
@@ -285,7 +370,9 @@ export class SobeysConnector implements RetailerConnector {
       );
     }
     const flyer = await loadSobeysFlyer(this.postalCode);
-    const item = flyer.items.find((i) => String(i.id) === productId);
+    const item = flyer.items.find(
+      (i) => String(i.flyer_item_id ?? i.id) === productId,
+    );
     if (!item) return null;
     return flyerItemToOffer(item, {
       storeId,

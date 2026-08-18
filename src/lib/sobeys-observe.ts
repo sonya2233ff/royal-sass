@@ -46,6 +46,12 @@ function passesSobeysFilters(offer: ProductOffer, item: StapleItem): boolean {
   if (offerFailsStapleFilters(item, offer.name, offer.brand) != null) {
     return false;
   }
+  // Flyer search is bag-of-words over the whole weekly ad. Frozen staples
+  // must say frozen — otherwise a fresh pint wins "frozen blueberries".
+  if (item.category === "frozen") {
+    const hay = `${offer.name} ${offer.packageSize ?? ""}`.toLowerCase();
+    if (!hay.includes("frozen")) return false;
+  }
   if (!usesCategoryBIdentity(item)) return true;
   return isActualCategoryBOffer(item, {
     productId: offer.productId,
@@ -147,6 +153,7 @@ function applySobeysMapping(
   item: StapleItem,
   offer: ProductOffer | null,
 ): void {
+  const existed = Boolean(store.products[item.id]);
   const existing: MasterProductMapping = store.products[item.id] ?? {
     masterId: item.id,
     label: item.label,
@@ -160,6 +167,7 @@ function applySobeysMapping(
   );
 
   if (!offer) {
+    if (!existed) return;
     if (!isLockedIdentityLink(prev)) {
       delete existing.retailers.sobeys;
     }

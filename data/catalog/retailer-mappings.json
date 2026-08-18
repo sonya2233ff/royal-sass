@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-17T12:22:06.418Z",
+  "updatedAt": "2026-08-18T00:09:28.597Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -1837,6 +1837,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.414Z"
+        },
+        "sobeys": {
+          "retailer": "sobeys",
+          "storeId": "659",
+          "retailerProductId": "1032531706",
+          "name": "Blueberries pint",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.7,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:09:28.574Z"
         }
       },
       "prices": [
@@ -1857,6 +1869,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-14T01:32:34.370Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "sobeys",
+          "storeId": "659",
+          "retailerProductId": "1032531706",
+          "price": 3.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:09:28.572Z",
+          "source": "sobeys_flyer_659",
           "priceConfidence": "ESTIMATED"
         }
       ]

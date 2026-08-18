@@ -1,0 +1,226 @@
+{
+  "retailer": "sobeys",
+  "storeId": "659",
+  "source": "sobeys_flyer_659",
+  "checkedAt": "2026-08-18T00:09:28.597Z",
+  "note": "Weekly Ontario flyer — location-aware page, regional prices, not shelf.",
+  "items": [
+    {
+      "id": "simply_egg_whites",
+      "label": "Naturegg Simply Egg Whites 1kg",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "tomatoes_grape",
+      "label": "Grape Tomatoes (pack)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "lemons_2lb",
+      "label": "Lemons (bag ~2lb)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "pear_bosc_kg",
+      "label": "Bosc Pear (by kg)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "eggplant_kg",
+      "label": "Eggplant (by kg)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "tomato_gh_red_kg",
+      "label": "Greenhouse Red Tomato (by kg)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "oat_beverage_original",
+      "label": "Oat Beverage Original 1.75L",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "red_peppers_kg",
+      "label": "Red Bell Pepper (by kg)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "sweet_potatoes_kg",
+      "label": "Sweet Potato (by kg)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "pineapple_whole",
+      "label": "Whole Pineapple",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "almond_original",
+      "label": "Earth's Own Almond Original",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "bananas_kg",
+      "label": "Bananas (cheapest by kg)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "kiwi_kg",
+      "label": "Kiwi (cheapest by kg)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "cucumber_english",
+      "label": "English Cucumber",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "garlic_1kg",
+      "label": "Garlic 1kg",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "blueberries",
+      "label": "Blueberries",
+      "status": "ok",
+      "offer": {
+        "productId": "1032531706",
+        "name": "Blueberries pint",
+        "packageSize": "product of Canada, Canada no 1 grade",
+        "price": 3.99,
+        "confidence": "estimated",
+        "checkedAt": "2026-08-18T00:09:28.572Z",
+        "sourceUrl": "https://flyers.sobeys.com/flyers/sobeys?type=2&locale=en&postal_code=L4J6W7",
+        "image": "https://cdn.flippenterprise.net/page_items/429774812/1785977678/extra_large.jpg"
+      },
+      "notes": "Weekly Ontario flyer 8078854 — ESTIMATED, not shelf"
+    },
+    {
+      "id": "strawberries",
+      "label": "Strawberries",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "milk_2pct_2l",
+      "label": "Mehadrin 2% Milk 2L",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "homo_milk_2l",
+      "label": "Mehadrin Homo 3.25% Milk 2L",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "butter_454g",
+      "label": "Gay Lea Unsalted Butter 454g",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "orange_juice_pulp",
+      "label": "Tropicana OJ No Pulp 2.63L",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "realemon_440ml",
+      "label": "ReaLemon Juice 440ml",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "jello_vanilla_instant",
+      "label": "Jell-O Vanilla Instant Pudding 102g",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "ziploc_sandwich",
+      "label": "Ziploc Sandwich Bags",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "frozen_apple",
+      "label": "Frozen Apple Slices",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "frozen_banana",
+      "label": "Frozen Sliced Banana",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "frozen_blueberry",
+      "label": "Frozen Blueberries",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "frozen_strawberry",
+      "label": "Frozen Sliced Strawberries",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    },
+    {
+      "id": "frozen_spinach",
+      "label": "Frozen Chopped Spinach",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters"
+    }
+  ],
+  "updatedAt": "2026-08-18T00:09:28.597Z",
+  "flyerId": "8078854",
+  "flyerName": "Weekly Flyer - Ontario",
+  "flyerValidFrom": "2026-08-13T00:00:00-04:00",
+  "flyerValidTo": "2026-08-19T23:59:59-04:00"
+}
