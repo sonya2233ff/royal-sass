@@ -2,7 +2,7 @@
   "retailer": "wholesale_club",
   "storeId": "3724",
   "source": "pcx_bff_wholesaleclub_3724",
-  "checkedAt": "2026-08-18T21:26:27.028Z",
+  "checkedAt": "2026-08-18T22:01:18.400Z",
   "note": "Wholesale Club Richmond Hill #3724 — PCX BFF shelf, same client as No Frills.",
   "items": [
     {
@@ -638,7 +638,1442 @@
       },
       "notes": "Live Wholesale Club PCX #3724",
       "alternates": []
+    },
+    {
+      "id": "cups_12oz_black_ripple",
+      "label": "12oz Black Ripple Cups",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cups_12oz_squat_pet",
+      "label": "12oz Squat PET Cups",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "oven_mitts",
+      "label": "15\" Fire Resistance Oven Mitt",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cups_16oz_black_ripple",
+      "label": "16oz Black Ripple Cups",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cups_16oz_pet",
+      "label": "16oz PET Cups",
+      "status": "ok",
+      "offer": {
+        "productId": "21460797_EA",
+        "name": "16oz Pet Cups, 50 Per Pack",
+        "packageSize": "50 ea, $0.10/1ea",
+        "parsedMassKg": 0.45359237,
+        "price": 4.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:42.299Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/16oz-pet-cups-50-per-pack/p/21460797_EA",
+        "image": "https://digital.loblaws.ca/PCX/21460797_EA/en/1/21460797_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "frozen_pineapple",
+      "label": "Alasko Pineapple Chunks 5x1",
+      "status": "ok",
+      "offer": {
+        "productId": "21289951_EA",
+        "name": "No Name Naturally Imperfect Frozen Pineapple Pieces",
+        "brand": "No Name",
+        "packageSize": "2 kg, $0.70/100g",
+        "parsedMassKg": 2,
+        "price": 13.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:43.650Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/naturally-imperfect-frozen-pineapple-pieces/p/21289951_EA",
+        "image": "https://digital.loblaws.ca/PCX/21289951_EA/en/1/21289951_en_front_v1_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "jam_apple_strawberry",
+      "label": "Apple Strawberry Jam",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "lids_bagasse_bowl",
+      "label": "Bagasse Bowl Lids",
+      "status": "ok",
+      "offer": {
+        "productId": "21639487_EA",
+        "name": "iECO Lid for 600ml Bagasse Container 125/Pack",
+        "brand": "iECO",
+        "packageSize": "125 ea, $0.09/1ea",
+        "parsedMassKg": 0.6,
+        "price": 11.49,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:46.828Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/lid-for-600ml-bagasse-container-125-pack/p/21639487_EA",
+        "image": "https://digital.loblaws.ca/PCX/21639487_EA/en/1/21639487_enfr_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "bagels",
+      "label": "Bagels",
+      "status": "ok",
+      "offer": {
+        "productId": "21297831_EA",
+        "name": "No Name Everything Bagels",
+        "brand": "No Name",
+        "packageSize": "510 g, $0.49/100g",
+        "parsedMassKg": 0.51,
+        "price": 2.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:47.423Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/everything-bagels/p/21297831_EA",
+        "image": "https://digital.loblaws.ca/PCX/21297831_EA/en/1/21297831_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "baguette_artisan",
+      "label": "Baguette Artisan",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "bamboo_paddles",
+      "label": "Bamboo Paddles 3in",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "bartlett_pears_kg",
+      "label": "Bartlett Pears",
+      "status": "ok",
+      "offer": {
+        "productId": "21111368001_EA",
+        "name": "Farmer's Market Bartlett Pear, 2 L",
+        "brand": "Farmer's Market",
+        "packageSize": "1 ea, $5.99/1ea",
+        "parsedMassKg": 0,
+        "price": 5.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:48.534Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/bartlett-pear-2-l/p/21111368001_EA",
+        "image": "https://digital.loblaws.ca/PCX/21111368001_EA/en/1/21111368001_enfr_front_v1_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "cake_kits",
+      "label": "Cake Kits",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cantaloupe",
+      "label": "Cantaloupe",
+      "status": "ok",
+      "offer": {
+        "productId": "20167017001_EA",
+        "name": "Cantaloupe",
+        "packageSize": "1 ea, $4.99/1ea",
+        "parsedMassKg": 0,
+        "price": 4.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:50.968Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/cantaloupe/p/20167017001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20167017001_EA/en/1/20167017001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "celery",
+      "label": "Celery",
+      "status": "ok",
+      "offer": {
+        "productId": "20163119001_EA",
+        "name": "Celery Stalks",
+        "packageSize": "1 ea, $3.79/1ea",
+        "parsedMassKg": 0,
+        "price": 3.79,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:51.350Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/celery-stalks/p/20163119001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20163119001_EA/en/1/20163119001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20100770001_EA",
+          "name": "Celery Hearts",
+          "packageSize": "2 ea, $2.50/1ea",
+          "parsedMassKg": 0,
+          "price": 4.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:59:51.350Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/celery-hearts/p/20100770001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20100770001_EA/en/1/20100770001_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "cibona_ranch_dressing_4lt",
+      "label": "Cibona Ranch Dressing 4lt",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cilantro",
+      "label": "Cilantro",
+      "status": "ok",
+      "offer": {
+        "productId": "21184810_EA",
+        "name": "President's Choice Cilantro",
+        "brand": "President's Choice",
+        "packageSize": "28 g",
+        "parsedMassKg": 0.028,
+        "price": 2.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:52.624Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/cilantro/p/21184810_EA",
+        "image": "https://digital.loblaws.ca/PCX/21184810_EA/en/1/21184810_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20091825001_EA",
+          "name": "Cilantro",
+          "packageSize": "1 ea, $1.79/1ea",
+          "parsedMassKg": 0,
+          "price": 1.79,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:59:52.624Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/cilantro/p/20091825001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20091825001_EA/en/1/20091825001_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "party_tray_12x12",
+      "label": "Clear Party Tray 12x12",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "coke_classic_cdn_cans_24x35",
+      "label": "Coke Classic Cdn Cans 24x35",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cottage_cheese",
+      "label": "Cottage Cheese",
+      "status": "ok",
+      "offer": {
+        "productId": "20183991002_EA",
+        "name": "No Name Cottage Cheese",
+        "brand": "No Name",
+        "packageSize": "500 g, $0.90/100g",
+        "parsedMassKg": 0.5,
+        "price": 4.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:54.959Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/cottage-cheese/p/20183991002_EA",
+        "image": "https://digital.loblaws.ca/PCX/20183991002_EA/en/1/20183991002_en_front_v1_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "craize_snack_cracker",
+      "label": "Craize Snack Cracker",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cream_cheese_bars",
+      "label": "Cream Cheese Bars",
+      "status": "ok",
+      "offer": {
+        "productId": "21383785_EA",
+        "name": "Sunspun Pizza Mozzarella Cheese",
+        "brand": "Sunspun",
+        "packageSize": "2.4 kg, $1.33/100g",
+        "parsedMassKg": 2.4,
+        "price": 31.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:56.366Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/pizza-mozzarella-cheese/p/21383785_EA",
+        "image": "https://digital.loblaws.ca/PCX/21383785_EA/en/1/6148300372_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "brown_sugar",
+      "label": "Dark Brown Sugar",
+      "status": "ok",
+      "offer": {
+        "productId": "20169394_EA",
+        "name": "Lantic Natural Dark Brown Sugar",
+        "brand": "Lantic",
+        "packageSize": "1 kg, $0.38/100g",
+        "parsedMassKg": 1,
+        "price": 3.79,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:56.682Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/natural-dark-brown-sugar/p/20169394_EA",
+        "image": "https://digital.loblaws.ca/PCX/20169394_EA/en/1/5889165231_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "lids_dome_12_24oz",
+      "label": "Dome Lids 12-24oz",
+      "status": "ok",
+      "offer": {
+        "productId": "21669507_EA",
+        "name": "Eco Guard 10 oz - 20 oz White PP Dome Lid for CC&PW Paper Cups, Recyclable",
+        "brand": "Eco Guard",
+        "packageSize": "50 ea, $0.06/1ea",
+        "parsedMassKg": 0.5669904625000001,
+        "price": 3.19,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:57.662Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/10-oz-20-oz-white-pp-dome-lid-for-cc-pw-paper-cups/p/21669507_EA",
+        "image": "https://digital.loblaws.ca/PCX/21669507_EA/en/1/21669507_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "double_burner",
+      "label": "Double Burner",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "edible_decor",
+      "label": "Edible Decor",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "fettuccine",
+      "label": "Fettuccine",
+      "status": "ok",
+      "offer": {
+        "productId": "20315613007_EA",
+        "name": "No Name Fettuccine",
+        "brand": "No Name",
+        "packageSize": "900 g, $0.22/100g",
+        "parsedMassKg": 0.9,
+        "price": 1.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:59.218Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/fettuccine/p/20315613007_EA",
+        "image": "https://digital.loblaws.ca/PCX/20315613007_EA/en/1/20315613007_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "floor_cleaner_lavender",
+      "label": "Floor Cleaner Lavender 4lt",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "foil_green",
+      "label": "Foil Green 4.27",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "fresh_mozzarella",
+      "label": "Fresh Mozzarella",
+      "status": "ok",
+      "offer": {
+        "productId": "20812112_EA",
+        "name": "Schomberg Mozzarella Block",
+        "brand": "Schomberg",
+        "packageSize": "2 kg, $1.35/100g",
+        "parsedMassKg": 2,
+        "price": 26.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:02.882Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/mozzarella-block/p/20812112_EA",
+        "image": "https://digital.loblaws.ca/PCX/20812112_EA/en/1/20812112_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "butternut_squash_frozen",
+      "label": "Frozen Butternut Squash",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "frozen_carrots",
+      "label": "Frozen Diced Carrots",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "gatorade_zero_variety_28x59",
+      "label": "Gatorade Zero Variety 28x59",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "golden_berries",
+      "label": "Golden Berries",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "gooseberries",
+      "label": "Gooseberries",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "granny_smith_kg",
+      "label": "Granny Smith Apples",
+      "status": "ok",
+      "offer": {
+        "productId": "20128645001_EA",
+        "name": "Farmer's Market Granny Smith Apples, 4 lb Bag",
+        "brand": "Farmer's Market",
+        "packageSize": "1.81 kg, $0.55/100g",
+        "parsedMassKg": 1.81436948,
+        "price": 9.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:18.267Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/granny-smith-apples-4-lb-bag/p/20128645001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20128645001_EA/en/1/20128645001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "guest_towel_napkins",
+      "label": "Guest Towel Napkins",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "haolam_havarti_and_dill",
+      "label": "Haolam Havarti & Dill",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "haolam_muenster_color",
+      "label": "Haolam Muenster Color",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "haolam_ricotta_cheese",
+      "label": "Haolam Ricotta Cheese",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "haolam_sliced_cheese",
+      "label": "Haolam Sliced Cheese",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "harvest_raw_sunflower_seeds",
+      "label": "Harvest Raw Sunflower Seeds",
+      "status": "ok",
+      "offer": {
+        "productId": "21107679_EA",
+        "name": "Amira Shelled Sunflower Seeds Raw",
+        "brand": "Amira",
+        "packageSize": "800 g, $0.87/100g",
+        "parsedMassKg": 0.8,
+        "price": 6.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:24.149Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/shelled-sunflower-seeds-raw/p/21107679_EA",
+        "image": "https://digital.loblaws.ca/PCX/21107679_EA/en/1/21107679_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "honeydew_melons",
+      "label": "Honeydew Melons",
+      "status": "ok",
+      "offer": {
+        "productId": "20045276001_EA",
+        "name": "Honeydew Melon",
+        "packageSize": "1 ea, $5.99/1ea",
+        "parsedMassKg": 0,
+        "price": 5.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:24.642Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/honeydew-melon/p/20045276001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20045276001_EA/en/1/20045276001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "instant_coffee_kosher",
+      "label": "Instant Coffee (kosher)",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "italia_pomace_oil_3lt",
+      "label": "Italia Pomace Oil 3lt",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "jalapeno_peppers_kg",
+      "label": "Jalapeño Peppers",
+      "status": "ok",
+      "offer": {
+        "productId": "20088387001_KG",
+        "name": "Jalapeno Peppers",
+        "packageSize": "$11.00/1kg $4.99/1lb",
+        "parsedMassKg": 0,
+        "price": 0.55,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:27.743Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/jalapeno-peppers/p/20088387001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20088387001_KG/en/1/20088387001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "limes_lrg",
+      "label": "Limes Lrg",
+      "status": "ok",
+      "offer": {
+        "productId": "21673921001_EA",
+        "name": "No Name Naturally Imperfect Limes",
+        "brand": "No Name",
+        "packageSize": "680 g, $0.73/100g",
+        "parsedMassKg": 0.68,
+        "price": 4.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:31.767Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/naturally-imperfect-limes/p/21673921001_EA",
+        "image": "https://digital.loblaws.ca/PCX/21673921001_EA/en/1/21673921001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20040489001_EA",
+          "name": "Limes",
+          "packageSize": "1 ea, $0.69/1ea",
+          "parsedMassKg": 0,
+          "price": 0.69,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:00:31.767Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/limes/p/20040489001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20040489001_EA/en/1/20040489001_en_front_v2_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "macabee_pizza_bagel_1",
+      "label": "Macabee Pizza Bagel-1",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "magic_bullet",
+      "label": "Magic Bullet",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "marshmallow_white_min",
+      "label": "Marshmallow White Min",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "measuring_cup",
+      "label": "Measuring Cup",
+      "status": "ok",
+      "offer": {
+        "productId": "20797852_EA",
+        "name": "Measuring Cup",
+        "packageSize": "1 ea, $17.99/1ea",
+        "parsedMassKg": 0,
+        "price": 17.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:36.638Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/measuring-cup/p/20797852_EA",
+        "image": "https://digital.loblaws.ca/PCX/20797852_EA/en/1/20797852_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20781312_EA",
+          "name": "2QT Clear Measuring Cup",
+          "packageSize": "1 ea, $22.99/1ea",
+          "parsedMassKg": 0,
+          "price": 22.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:00:36.638Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/2qt-clear-measuring-cup/p/20781312_EA",
+          "image": "https://digital.loblaws.ca/PCX/20781312_EA/en/1/20781312_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "milan_grated_parmesan",
+      "label": "Milan Grated Parmesan",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "gloves_nitrile_large",
+      "label": "Nitrile Gloves Large",
+      "status": "ok",
+      "offer": {
+        "productId": "21544351_EA",
+        "name": "Black Nitrile Gloves L",
+        "packageSize": "200 ea, $0.13/1ea",
+        "parsedMassKg": 0,
+        "price": 25.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:38.380Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/black-nitrile-gloves-l/p/21544351_EA",
+        "image": "https://digital.loblaws.ca/PCX/21544351_EA/en/1/21544351_en_front_v1_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "gloves_nitrile_medium",
+      "label": "Nitrile Gloves Medium",
+      "status": "ok",
+      "offer": {
+        "productId": "21516708_EA",
+        "name": "Black Nitrile Gloves",
+        "packageSize": "200 ea, $0.13/1ea",
+        "parsedMassKg": 0,
+        "price": 25.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:39.239Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/black-nitrile-gloves/p/21516708_EA",
+        "image": "https://digital.loblaws.ca/PCX/21516708_EA/en/1/21516708_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "21544351_EA",
+          "name": "Black Nitrile Gloves L",
+          "packageSize": "200 ea, $0.13/1ea",
+          "parsedMassKg": 0,
+          "price": 25.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:00:39.239Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/black-nitrile-gloves-l/p/21544351_EA",
+          "image": "https://digital.loblaws.ca/PCX/21544351_EA/en/1/21544351_en_front_v1_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "oreo_sandwich_cookies",
+      "label": "Oreo Sandwich Cookies",
+      "status": "ok",
+      "offer": {
+        "productId": "21358406_EA",
+        "name": "Christie OREO Double Stuf Sandwich Cookies",
+        "brand": "Christie",
+        "packageSize": "261 g, $1.34/100g",
+        "parsedMassKg": 0.261,
+        "price": 3.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:41.099Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/oreo-double-stuf-sandwich-cookies/p/21358406_EA",
+        "image": "https://digital.loblaws.ca/PCX/21358406_EA/en/1/21358406_en_front_v1_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "pam_cookware_coating",
+      "label": "Pam Cookware Coating",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "parsley",
+      "label": "Parsley",
+      "status": "ok",
+      "offer": {
+        "productId": "20167477001_EA",
+        "name": "Parsley Root",
+        "packageSize": "1 ea, $4.99/1ea",
+        "parsedMassKg": 0,
+        "price": 4.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:42.543Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/parsley-root/p/20167477001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20167477001_EA/en/1/20167477001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20139141001_EA",
+          "name": "Italian Parsley",
+          "packageSize": "1 ea, $2.49/1ea",
+          "parsedMassKg": 0,
+          "price": 2.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:00:42.543Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/italian-parsley/p/20139141001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20139141001_EA/en/1/20139141001_en_front_1200.png"
+        },
+        {
+          "productId": "20015746001_EA",
+          "name": "Curly Parsley",
+          "packageSize": "1 ea, $2.49/1ea",
+          "parsedMassKg": 0,
+          "price": 2.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:00:42.543Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/curly-parsley/p/20015746001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20015746001_EA/en/1/20015746001_en_front_v1_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "penne_pasta",
+      "label": "Penne Pasta",
+      "status": "ok",
+      "offer": {
+        "productId": "20892100_EA",
+        "name": "No Name Penne Rigate Pasta",
+        "brand": "No Name",
+        "packageSize": "2 kg, $0.20/100g",
+        "parsedMassKg": 2,
+        "price": 3.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:42.838Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/penne-rigate-pasta/p/20892100_EA",
+        "image": "https://digital.loblaws.ca/PCX/20892100_EA/en/1/20892100_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20315613006_EA",
+          "name": "No Name Penne Rigate Pasta",
+          "brand": "No Name",
+          "packageSize": "900 g, $0.22/100g",
+          "parsedMassKg": 0.9,
+          "price": 1.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:00:42.838Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/penne-rigate-pasta/p/20315613006_EA",
+          "image": "https://digital.loblaws.ca/PCX/20315613006_EA/en/1/20315613006_en_front_v3_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "pickled_eggplant",
+      "label": "Pickled Eggplant",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "wraps_plain_10in",
+      "label": "Plain Wraps 10\"",
+      "status": "ok",
+      "offer": {
+        "productId": "20955770_EA",
+        "name": "Sonora Flour Tortilla, 10 in",
+        "brand": "Sonora",
+        "packageSize": "864 g, $0.61/100g",
+        "parsedMassKg": 0.864,
+        "price": 5.29,
+        "wasPrice": 5.69,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:44.976Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/flour-tortilla-10-in/p/20955770_EA",
+        "image": "https://digital.loblaws.ca/PCX/20955770_EA/en/1/20955770_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "wraps_plain_6in",
+      "label": "Plain Wraps 6\"",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "plastic_tablecloth",
+      "label": "Plastic Tablecloth",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "plastic_wrap_18x2000",
+      "label": "Plastic Wrap 18x2000",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "pomegranates_30s",
+      "label": "Pomegranates 30s",
+      "status": "ok",
+      "offer": {
+        "productId": "20134767001_EA",
+        "name": "Pomegranate",
+        "packageSize": "1 ea, $3.79/1ea",
+        "parsedMassKg": 0,
+        "price": 3.79,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:47.375Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/pomegranate/p/20134767001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20134767001_EA/en/1/20134767001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "puff_pastry_sheets",
+      "label": "Puff Pastry Sheets",
+      "status": "ok",
+      "offer": {
+        "productId": "21606988_EA",
+        "name": "ALFA Puff Pastry",
+        "brand": "ALFA",
+        "packageSize": "850 g, $0.76/100g",
+        "parsedMassKg": 0.85,
+        "price": 6.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:50.851Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/puff-pastry/p/21606988_EA",
+        "image": "https://digital.loblaws.ca/PCX/21606988_EA/en/1/520253548300_enfr_front_centre_marketing_1_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20089133_EA",
+          "name": "Pepperidge Farm Puff Pastry Sheets",
+          "brand": "Pepperidge Farm",
+          "packageSize": "20x311.0 g, $1.04/100g",
+          "parsedMassKg": 6.22,
+          "price": 64.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:00:48.971Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/puff-pastry-sheets/p/20089133_EA",
+          "image": "https://digital.loblaws.ca/PCX/20089133_EA/en/1/20089133_en_front_1200.png"
+        },
+        {
+          "productId": "21288850_EA",
+          "name": "President's Choice Butter Puff Pastry",
+          "brand": "President's Choice",
+          "packageSize": "450 g, $1.56/100g",
+          "parsedMassKg": 0.45,
+          "price": 7,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:00:50.851Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/butter-puff-pastry/p/21288850_EA",
+          "image": "https://digital.loblaws.ca/PCX/21288850_EA/en/1/21288850_en_front_v1_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "red_onions",
+      "label": "Red Onions",
+      "status": "ok",
+      "offer": {
+        "productId": "20171965001_EA",
+        "name": "Farmer's Market Red Onions, 10 lb Bag",
+        "brand": "Farmer's Market",
+        "packageSize": "4.54 kg, $0.29/100g",
+        "parsedMassKg": 4.54,
+        "price": 13.19,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:51.289Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/red-onions-10-lb-bag/p/20171965001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20171965001_EA/en/1/20171965001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "red_radish",
+      "label": "Red Radish",
+      "status": "ok",
+      "offer": {
+        "productId": "20175513001_EA",
+        "name": "Radish",
+        "packageSize": "454 g, $0.66/100g",
+        "parsedMassKg": 0.454,
+        "price": 2.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:52.785Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/radish/p/20175513001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20175513001_EA/en/1/20175513001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20032320001_EA",
+          "name": "Radishes",
+          "packageSize": "1 ea, $2.99/1ea",
+          "parsedMassKg": 0,
+          "price": 2.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:00:52.785Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/radishes/p/20032320001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20032320001_EA/en/1/20032320001_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "red_grapes_kg",
+      "label": "Red Seedless Grapes",
+      "status": "ok",
+      "offer": {
+        "productId": "20159199001_KG",
+        "name": "Red Seedless Grapes",
+        "packageSize": "$9.90/1kg $4.49/1lb",
+        "parsedMassKg": 0,
+        "price": 9.8,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:54.041Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/red-seedless-grapes/p/20159199001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20159199001_KG/en/1/20159199001_en_front_v2_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "lids_deli_round",
+      "label": "Round Deli Container Lids",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "san_pellegrino_aranciata_or",
+      "label": "San Pellegrino Aranciata/Or",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "schtark_3_cheese_blend",
+      "label": "Schtark 3 Cheese Blend",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "shredded_cheddar_cheese",
+      "label": "Shredded Cheddar Cheese",
+      "status": "ok",
+      "offer": {
+        "productId": "21764568_EA",
+        "name": "COUNTRY FARMS Shredded Cheddar Flavoured Topping",
+        "brand": "COUNTRY FARMS",
+        "packageSize": "2 kg, $1.30/100g",
+        "parsedMassKg": 2,
+        "price": 25.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:59.018Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/shredded-cheddar-flavoured-topping/p/21764568_EA",
+        "image": "https://digital.loblaws.ca/PCX/21764568_EA/en/1/5975606066_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "shredded_mozzarella",
+      "label": "Shredded Mozzarella",
+      "status": "ok",
+      "offer": {
+        "productId": "20812111_EA",
+        "name": "Schomberg Silani Shredded Mozzarella",
+        "brand": "Schomberg",
+        "packageSize": "2 kg, $1.40/100g",
+        "parsedMassKg": 2,
+        "price": 27.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:00:59.362Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/silani-shredded-mozzarella/p/20812111_EA",
+        "image": "https://digital.loblaws.ca/PCX/20812111_EA/en/1/20812111_en_front_v1_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "sink_strainer",
+      "label": "Sink Strainer",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "mushrooms_sliced",
+      "label": "Sliced White Mushrooms",
+      "status": "ok",
+      "offer": {
+        "productId": "20299211_EA",
+        "name": "No Name Sliced Mushrooms",
+        "brand": "No Name",
+        "packageSize": "284 ml, $0.45/100ml",
+        "parsedMassKg": 0.284,
+        "price": 1.29,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:01:00.713Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/sliced-mushrooms/p/20299211_EA",
+        "image": "https://digital.loblaws.ca/PCX/20299211_EA/en/1/20299211_en_front_v2_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20768283_EA",
+          "name": "President's Choice Sliced White Mushrooms",
+          "brand": "President's Choice",
+          "packageSize": "454 g, $0.88/100g",
+          "parsedMassKg": 0.454,
+          "price": 3.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:01:00.188Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/sliced-white-mushrooms/p/20768283_EA",
+          "image": "https://digital.loblaws.ca/PCX/20768283_EA/en/1/20768283_en_front_1200.png"
+        },
+        {
+          "productId": "20743653_EA",
+          "name": "President's Choice Sliced White Mushrooms",
+          "brand": "President's Choice",
+          "packageSize": "227 g, $1.32/100g",
+          "parsedMassKg": 0.227,
+          "price": 2.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:01:00.188Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/sliced-white-mushrooms/p/20743653_EA",
+          "image": "https://digital.loblaws.ca/PCX/20743653_EA/en/1/20743653_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "sour_cream",
+      "label": "Sour Cream",
+      "status": "ok",
+      "offer": {
+        "productId": "20299657_EA",
+        "name": "No Name Sour Cream",
+        "brand": "No Name",
+        "packageSize": "500 ml, $0.56/100ml",
+        "parsedMassKg": 0.5,
+        "price": 2.79,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:01:02.198Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/sour-cream/p/20299657_EA",
+        "image": "https://digital.loblaws.ca/PCX/20299657_EA/en/1/20299657_en_front_v1_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "20160751_EA",
+          "name": "Sunspun Sour Cream",
+          "brand": "Sunspun",
+          "packageSize": "2 l, $0.60/100ml",
+          "parsedMassKg": 2,
+          "price": 11.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:01:02.198Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/sour-cream/p/20160751_EA",
+          "image": "https://digital.loblaws.ca/PCX/20160751_EA/en/1/20160751_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "sourdough_bread",
+      "label": "Sourdough Bread",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "splenda_sweetener_cal",
+      "label": "Splenda Sweetener Cal",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "jam_strawberry_4kg",
+      "label": "Strawberry Jam 4kg",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "tabasco_sauce_142ml",
+      "label": "Tabasco Sauce 142ml",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "table_cover",
+      "label": "Table Cover",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "tnuva_goat_cheese",
+      "label": "Tnuva Goat Cheese",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "tomato",
+      "label": "Tomato",
+      "status": "ok",
+      "offer": {
+        "productId": "20597200001_EA",
+        "name": "Tomato Beefsteak 5Lb",
+        "packageSize": "1 ea, $999.00/100ea",
+        "parsedMassKg": 2.2679618500000003,
+        "price": 9.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:01:06.958Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/tomato-beefsteak-5lb/p/20597200001_EA",
+        "image": "https://assets.loblaws.ca/pcx_bronx_fe_assets/images/common/coming-soon-en-web.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "tongs",
+      "label": "Tong",
+      "status": "ok",
+      "offer": {
+        "productId": "20806319_EA",
+        "name": "Tong with Red Coated Handle, 12 in",
+        "packageSize": "1 ea, $7.99/1ea",
+        "price": 7.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:01:08.970Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/tong-with-red-coated-handle-12-in/p/20806319_EA",
+        "image": "https://digital.loblaws.ca/PCX/20806319_EA/en/1/20806319_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "tropic_isle_coconut_cream_2",
+      "label": "Tropic Isle Coconut Cream 2",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "tropicana_apple_juice",
+      "label": "Tropicana Apple Juice",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "unico_pizza_style_olives_2l",
+      "label": "Unico Pizza Style Olives 2l",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "vanilla_ice_cream",
+      "label": "Vanilla Ice Cream",
+      "status": "ok",
+      "offer": {
+        "productId": "21610068_EA",
+        "name": "Sunspun Vanilla Ice Cream",
+        "brand": "Sunspun",
+        "packageSize": "11.4 l, $0.22/100ml",
+        "parsedMassKg": 11.4,
+        "price": 25,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:01:11.672Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/vanilla-ice-cream/p/21610068_EA",
+        "image": "https://digital.loblaws.ca/PCX/21610068_EA/en/1/21610068_enfr_front_v1_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": [
+        {
+          "productId": "21513555_EA",
+          "name": "Haagen Dazs Vanilla Ice Cream",
+          "brand": "Haagen Dazs",
+          "packageSize": "450 ml, $1.33/100ml",
+          "parsedMassKg": 0.45,
+          "price": 6,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:01:11.672Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/vanilla-ice-cream/p/21513555_EA",
+          "image": "https://digital.loblaws.ca/PCX/21513555_EA/en/1/21513555_en_1_1200.png"
+        },
+        {
+          "productId": "20321138001_EA",
+          "name": "Chapmans Vanilla Ice Cream Sundae Cup",
+          "brand": "Chapmans",
+          "packageSize": "12 ea, $0.67/1ea",
+          "parsedMassKg": 0,
+          "price": 7.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:01:11.672Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/vanilla-ice-cream-sundae-cup/p/20321138001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20321138001_EA/en/1/6294201087_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
+        },
+        {
+          "productId": "20315236001_EA",
+          "name": "Chapmans Markdale Creamery Vanilla Ice Cream",
+          "brand": "Chapmans",
+          "packageSize": "2 l, $0.27/100ml",
+          "parsedMassKg": 2,
+          "price": 5.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:01:11.672Z",
+          "sourceUrl": "https://www.wholesaleclub.ca/en/markdale-creamery-vanilla-ice-cream/p/20315236001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20315236001_EA/en/1/6294200001_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "white_quinoa_grains_750gr",
+      "label": "White Quinoa Grains 750gr",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "yellow_peppers_case",
+      "label": "Yellow Greenhouse Peppers",
+      "status": "ok",
+      "offer": {
+        "productId": "20141814001_KG",
+        "name": "Greenhouse Peppers, Yellow",
+        "packageSize": "$8.80/1kg $3.99/1lb",
+        "parsedMassKg": 0,
+        "price": 2.02,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:01:13.493Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/greenhouse-peppers-yellow/p/20141814001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20141814001_KG/en/1/20141814001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "yellow_onions",
+      "label": "Yellow Onions",
+      "status": "ok",
+      "offer": {
+        "productId": "21649342001_EA",
+        "name": "Yellow Onion, 25 Lbs",
+        "packageSize": "11.34 kg, $0.04/100g",
+        "parsedMassKg": 11.34,
+        "price": 4.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:01:15.258Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/yellow-onion-25-lbs/p/21649342001_EA",
+        "image": "https://digital.loblaws.ca/PCX/21649342001_EA/en/1/21649342001_en_front_1200.png"
+      },
+      "notes": "Live Wholesale Club PCX #3724",
+      "alternates": []
+    },
+    {
+      "id": "yukon_potatoes_10lb",
+      "label": "Yukon Potatoes 10lb",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
     }
   ],
-  "updatedAt": "2026-08-18T21:26:27.028Z"
+  "updatedAt": "2026-08-18T22:01:18.400Z"
 }

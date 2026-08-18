@@ -7,7 +7,7 @@
     "name": "Walmart Supercentre #5831",
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
-  "checkedAt": "2026-08-18T21:24:43.681Z",
+  "checkedAt": "2026-08-18T22:13:00.747Z",
   "itemCount": 30,
   "matched": 22,
   "items": [
@@ -33,7 +33,7 @@
       "alternates": [
         {
           "productId": "6000195508423",
-          "name": "Naturegg Simply Egg Whites™ Free Run Burnbrae Farms",
+          "name": "Naturegg Simply Egg Whites\u2122 Free Run Burnbrae Farms",
           "brand": "Naturegg Simply Egg Whites",
           "price": 5.47,
           "availability": "unknown",
@@ -42,7 +42,7 @@
           "sourceUrl": "https://www.walmart.ca/en/ip/Naturegg-Simply-Egg-Whites-Free-Run-Burnbrae-Farms/6000195508423?classType=REGULAR&athbdg=L1600"
         }
       ],
-      "notes": "Exact branded carton — Burnbrae Naturegg Simply Egg Whites 1kg (WM 6000196635381). Do not substitute Free Run / cheaper analogue.",
+      "notes": "Exact branded carton \u2014 Burnbrae Naturegg Simply Egg Whites 1kg (WM 6000196635381). Do not substitute Free Run / cheaper analogue.",
       "image": "https://i5.walmartimages.ca/asr/27f45e00-d8ab-4e43-8d58-7f154396ec4c.cf834bc8397cfaf849bd3aeab61f9014.jpeg"
     },
     {
@@ -125,7 +125,7 @@
         "taxonomyText": "Eggs Grocery Dairy & Eggs Eggs & Egg Substitutes Whole Egg Cartons"
       },
       "alternates": [],
-      "notes": "Receipt UPC 064767343050 @ $6.98 — Gray Ridge Premium Large White 18 (WM 6000191268613)",
+      "notes": "Receipt UPC 064767343050 @ $6.98 \u2014 Gray Ridge Premium Large White 18 (WM 6000191268613)",
       "image": "/products/grayridge_eggs.jpg"
     },
     {
@@ -471,7 +471,7 @@
         }
       ],
       "image": "https://i5.walmartimages.ca/asr/46d23fab-9180-4386-9659-8eef83ee72b9.425e4a0efd5ecd16af087f33dcf0f3b4.jpeg",
-      "notes": "Earth's Own oat — pair with Earth's Own almond"
+      "notes": "Earth's Own oat \u2014 pair with Earth's Own almond"
     },
     {
       "id": "red_peppers_kg",
@@ -559,7 +559,7 @@
       ],
       "offer": {
         "productId": "10184853",
-        "name": "Earth's Own Original Almond Milk Alternative, 1.89L",
+        "name": "Earth's Own Original\u00a0Almond Milk Alternative, 1.89L",
         "brand": "Earth's Own",
         "packageSize": "1.89 kg",
         "parsedMassKg": 1.89,
@@ -581,7 +581,7 @@
           "sourceUrl": "https://www.walmart.ca/en/ip/Silk-Almond-Milk-Alternative-Original-Dairy-Free/10207134?classType=REGULAR&athbdg=L1200"
         }
       ],
-      "notes": "Same brand as oat — Earth's Own (not Silk)",
+      "notes": "Same brand as oat \u2014 Earth's Own (not Silk)",
       "image": "https://i5.walmartimages.ca/asr/4c1bbc24-4b05-41d9-bcc3-abfdafe4c9d6.d986995a54f1c716d0c17845a5c0353e.jpeg"
     },
     {
@@ -757,7 +757,7 @@
         "image": "https://i5.walmartimages.ca/asr/becbd672-036b-4516-9c9c-3386c018be93.fbf92132d0d0c426012fe5d97a39d65e.jpeg"
       },
       "alternates": [],
-      "notes": "Mehadrin 2% 2L — WM product_id 6000198384699; NF often titled Kosher 2% Milk",
+      "notes": "Mehadrin 2% 2L \u2014 WM product_id 6000198384699; NF often titled Kosher 2% Milk",
       "image": "https://i5.walmartimages.ca/asr/becbd672-036b-4516-9c9c-3386c018be93.fbf92132d0d0c426012fe5d97a39d65e.jpeg",
       "preferredProductId": "6000198384699"
     },
@@ -824,7 +824,7 @@
         }
       ],
       "image": "https://i5.walmartimages.ca/asr/a2122e4d-e5c7-4902-9a40-8298592b9f73.7e6e87f5c5642533ae1161770e956e98.jpeg",
-      "notes": "Gay Lea Unsalted Butter 454g — WM product_id 6000201029320"
+      "notes": "Gay Lea Unsalted Butter 454g \u2014 WM product_id 6000201029320"
     },
     {
       "id": "large_eggs_dozen",
@@ -848,7 +848,7 @@
       },
       "alternates": [],
       "image": "/products/large_eggs_dozen.jpg",
-      "notes": "Receipt shell eggs — cheapest $/egg dozen (not 18/30, not Grayridge lock)"
+      "notes": "Receipt shell eggs \u2014 cheapest $/egg dozen (not 18/30, not Grayridge lock)"
     },
     {
       "id": "canola_oil_3l",
@@ -930,7 +930,7 @@
       },
       "alternates": [],
       "image": "https://i5.walmartimages.ca/asr/86a56b6a-8d88-4779-bf1f-7362a66d4ed4.ee3d4d02ac6a29e56b4db89f4a377075.png",
-      "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L — WM product_id 205804"
+      "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L \u2014 WM product_id 205804"
     },
     {
       "id": "homo_milk_2l",
@@ -939,7 +939,7 @@
       "queriesTried": [
         "6000198386424"
       ],
-      "notes": "Mehadrin Homogenized 3.25% 2L — WM product_id 6000198386424; NF often titled Kosher Homogenized",
+      "notes": "Mehadrin Homogenized 3.25% 2L \u2014 WM product_id 6000198386424; NF often titled Kosher Homogenized",
       "status": "ok",
       "offer": {
         "productId": "6000198386424",
@@ -993,7 +993,7 @@
       "notes": "Frozen: cheapest sliced banana bag, any brand (not blends)",
       "rejected": {
         "productId": "358UWO1XPQH5",
-        "name": "Evive Protein Smoothie Cubes - Maple Frappé, 450g, Vegan, Non-GMO, Frozen Cubes, Blend (banana, mixed fruits, cashews etc.), Evive Protein Smoothie Cubes - Maple Frappé, 450g",
+        "name": "Evive Protein Smoothie Cubes - Maple Frapp\u00e9, 450g, Vegan, Non-GMO, Frozen Cubes, Blend (banana, mixed fruits, cashews etc.), Evive Protein Smoothie Cubes - Maple Frapp\u00e9, 450g",
         "price": 9.24,
         "reason": "name filter"
       },
@@ -1201,7 +1201,7 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Realemon-Juice-440ml/1BUHM1GPVP5J",
         "image": "https://i5.walmartimages.ca/asr/e44d0d68-9740-4615-bf80-297b6d8a30c1.eddf1524d1e23db79576c7209f4dff8c.jpeg"
       },
-      "notes": "ReaLemon Juice 440ml — WM product_id 1BUHM1GPVP5J"
+      "notes": "ReaLemon Juice 440ml \u2014 WM product_id 1BUHM1GPVP5J"
     },
     {
       "id": "jello_vanilla_instant",
@@ -1222,7 +1222,7 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Jell-O-Vanilla-Instant-Pudding-Mix-Box-Caseine-Free/10306574",
         "image": "https://i5.walmartimages.ca/asr/fc2a01e6-cd25-481d-896f-6c8740c96117.4761d3963e8789353fa80a21755ac19a.jpeg"
       },
-      "notes": "Jell-O Vanilla Instant Pudding Mix 102g casein-free — WM product_id 10306574"
+      "notes": "Jell-O Vanilla Instant Pudding Mix 102g casein-free \u2014 WM product_id 10306574"
     },
     {
       "id": "ziploc_sandwich",
@@ -1234,7 +1234,7 @@
       "status": "ok",
       "offer": {
         "productId": "6000195369895",
-        "name": "Ziploc® Sandwich Bags with Grip 'n Seal Technology",
+        "name": "Ziploc\u00ae Sandwich Bags with Grip 'n Seal Technology",
         "brand": "Ziploc",
         "price": 8,
         "confidence": "exact",
@@ -1242,7 +1242,7 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Ziploc-Sandwich-Bags-with-Grip-n-Seal-Technology/6000195369896",
         "image": "https://i5.walmartimages.ca/asr/c3cfd467-9d97-442b-98f8-f5880a4d1fc9.d7f892c4f82fa126d217f24cbe383c29.jpeg"
       },
-      "notes": "Ziploc Sandwich Bags Grip n Seal — WM product_id 6000195369896"
+      "notes": "Ziploc Sandwich Bags Grip n Seal \u2014 WM product_id 6000195369896"
     },
     {
       "id": "ice_cubes",
@@ -1268,8 +1268,2248 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Arctic-Glacier-Cubed-Premium-Ice-2-3-kg-Bagged-Frozen/6HYOGQRD524M?classType=REGULAR&athbdg=L1200",
         "image": "https://i5.walmartimages.ca/asr/119a8500-b4b6-40a0-9783-b15a82c96948.1496c745e232dd66f884b6a2ad4a208f.png"
       },
-      "notes": "Receipt UPC 763679000230 @ $3.98 — bag of ice, not gum or ice-cube bins",
+      "notes": "Receipt UPC 763679000230 @ $3.98 \u2014 bag of ice, not gum or ice-cube bins",
       "alternates": []
+    },
+    {
+      "id": "cups_12oz_black_ripple",
+      "label": "12oz Black Ripple Cups",
+      "queriesTried": [
+        "12 oz black ripple cups",
+        "black ripple 12oz hot cups"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (supplies) \u00b7 kept last WM price",
+      "alternates": [],
+      "rejected": {
+        "reason": "kept last price \u2014 name filter"
+      }
+    },
+    {
+      "id": "cups_12oz_squat_pet",
+      "label": "12oz Squat PET Cups",
+      "queriesTried": [
+        "12 oz squat pet cups",
+        "squat pet 12oz"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (supplies) \u00b7 kept last WM price",
+      "alternates": [],
+      "rejected": {
+        "reason": "kept last price \u2014 price $259.12 > max plausible $20"
+      }
+    },
+    {
+      "id": "oven_mitts",
+      "label": "15\" Fire Resistance Oven Mitt",
+      "queriesTried": [
+        "fire resistant oven mitt",
+        "15 inch oven mitt"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "78OOOZH5SPWP",
+        "name": "Fridja 1Pcs Oven Mitts, 10.63x6.69in Silver Heat Resistants High Temperature Non-Slip Kitchen Restaurant Mitts for Oven with Loop, Pratical Oven Mitt Set for Cooking & Baking",
+        "brand": "Fridja",
+        "price": 5.21,
+        "wasPrice": 6.21,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:01:36.108Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Fridja-1Pcs-Oven-Mitts-10-63x6-69in-Silver-Heat-Resistants-High-Temperature-Non-Slip-Kitchen-Restaurant-Mitts-Loop-Pratical-Mitt-Set-Cooking-Baking/5SXNUA4Z65DX?classType=VARIANT&athbdg=L1400",
+        "image": "https://i5.walmartimages.ca/asr/7789c688-13ca-47fc-a1c4-9f4a42773e73.47d5e138d307c48065370211504f3e73.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "cups_16oz_black_ripple",
+      "label": "16oz Black Ripple Cups",
+      "queriesTried": [
+        "16 oz black ripple cups",
+        "black ripple 16oz hot cups"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (supplies) \u00b7 kept last WM price",
+      "alternates": [],
+      "rejected": {
+        "reason": "kept last price \u2014 name filter"
+      }
+    },
+    {
+      "id": "cups_16oz_pet",
+      "label": "16oz PET Cups",
+      "queriesTried": [
+        "16 oz pet cups",
+        "pet cold cup 16oz"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "1FCER0LGMJ1C",
+        "name": "Woeilo 2oz Clear PET Cups - 20 Count, Durable Plastic Shot Cups for Parties and Events Clear 2 oz",
+        "brand": "Woeilo",
+        "packageSize": "57 g",
+        "parsedMassKg": 0.05669904625,
+        "price": 20.48,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:01:49.889Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Woeilo-2oz-Clear-PET-Cups-20-Count-Durable-Plastic-Shot-Cups-for-Parties-and-Events-Clear-2-oz/1FCER0LGMJ1C?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/a3a95e8f-6256-4bf9-b2cc-790374241021.6a647bd247f31d0fbe09c36af977725e.jpeg"
+      },
+      "notes": "From receipts catalog (supplies) \u00b7 kept last WM price",
+      "alternates": [],
+      "rejected": {
+        "reason": "kept last price \u2014 price $20.48 > max plausible $20"
+      }
+    },
+    {
+      "id": "frozen_pineapple",
+      "label": "Alasko Pineapple Chunks 5x1",
+      "queriesTried": [
+        "frozen pineapple chunks",
+        "alasko pineapple chunks",
+        "pineapple chunks 5x1",
+        "chunks frozen pineapple",
+        "chunks alasko pineapple",
+        "5x1 pineapple chunks"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "10304033",
+        "name": "Dole Pineapple Chunks in Pineapple Juice",
+        "price": 2.47,
+        "reason": "name filter"
+      },
+      "notes": "Receipt Alasko pineapple chunks 5x1 \u2014 frozen bag, cheapest $/kg"
+    },
+    {
+      "id": "jam_apple_strawberry",
+      "label": "Apple Strawberry Jam",
+      "queriesTried": [
+        "apple strawberry jam",
+        "strawberry apple jam"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "2EB3JXW96CZD",
+        "name": "Del Monte STRAWBERRY JAM",
+        "brand": "Del Monte",
+        "price": 3.97,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:02:04.911Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Del-Monte-STRAWBERRY-JAM/2EB3JXW96CZD?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/bf7ace97-4dc6-495c-88fb-1e7c5af7147b.1b368fa269b55d375a260e973656476c.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "lids_bagasse_bowl",
+      "label": "Bagasse Bowl Lids",
+      "queriesTried": [
+        "bagasse bowl lids",
+        "bagasse lid"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "3U03SCZVNQWY",
+        "name": "Packaging Naturally 4oz Bagasse Portion Cup Lid | 2000/case",
+        "brand": "Packaging Naturally",
+        "packageSize": "113 g",
+        "parsedMassKg": 0.1133980925,
+        "price": 99.73,
+        "availability": "out_of_stock",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:02:15.298Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/4oz-Bagasse-Portion-Cup-Lid-2000-case/3U03SCZVNQWY?classType=REGULAR",
+        "image": "https://i5.walmartimages.com/asr/c7e42eb7-7ba0-44b4-9959-0f0ffa7cc205.59585fc1ed96dc62e00eeb41251ebce0.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "bagels",
+      "label": "Bagels",
+      "queriesTried": [
+        "Bagels"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000206630028",
+        "name": "Great Value Original Bagels, Source of 12 Essential Nutrients, 6 Count, 450 g",
+        "brand": "Great Value",
+        "packageSize": "450 g",
+        "parsedMassKg": 0.45,
+        "price": 2.24,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:02:19.162Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/great-value-original-bagels-source-of-12-essential-nutrients-6-count-450-g/6000206630029?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/964/928/6000209964928.jpg"
+      },
+      "notes": "From receipts catalog (bakery)",
+      "alternates": [
+        {
+          "productId": "6000203178375",
+          "name": "Your Fresh Market Everything Bagels",
+          "brand": "Your Fresh Market",
+          "parsedMassKg": 0,
+          "price": 2.47,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:02:19.162Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-everything-bagels/6000203178376?classType=REGULAR",
+          "image": "https://i5.walmartimages.ca/images/Enlarge/362/235/6000203362235.jpg"
+        }
+      ]
+    },
+    {
+      "id": "baguette_artisan",
+      "label": "Baguette Artisan",
+      "queriesTried": [
+        "Baguette Artisan"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000208203619",
+        "name": "Your Fresh Market French-Style Wheat Baguette",
+        "brand": "Your Fresh Market",
+        "price": 0.97,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:11:56.493Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-french-style-wheat-baguette/6000208203620?classType=REGULAR&athbdg=L1102",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/471/765/6000208471765.jpg"
+      },
+      "notes": "From receipts catalog (bakery)",
+      "alternates": []
+    },
+    {
+      "id": "bamboo_paddles",
+      "label": "Bamboo Paddles 3in",
+      "queriesTried": [
+        "Bamboo Paddles 3in"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "bartlett_pears_kg",
+      "label": "Bartlett Pears",
+      "queriesTried": [
+        "bartlett pear",
+        "bartlett pears",
+        "pear bartlett",
+        "pears bartlett",
+        "pear",
+        "pears"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000197451747",
+        "name": "Pear, Red Bartlett, Sold in singles, 0.18 - 0.20 KG",
+        "packageSize": "200 g",
+        "parsedMassKg": 0.2,
+        "price": 0.41,
+        "availability": "out_of_stock",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:02:28.858Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/pear-red-bartlett/6000197451748?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/537/916/6000198537916.jpg"
+      },
+      "notes": "Produce: cheapest pear by kg (Bartlett preferred, variety flexible)"
+    },
+    {
+      "id": "cake_kits",
+      "label": "Cake Kits",
+      "queriesTried": [
+        "Cake Kits"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "4YD8MJWSDI20",
+        "name": "Yeacher 146 PCS Cake Decorating Supplies Kit Cupcake Decorating Kit Numbered Icing Tips Russian Korean",
+        "price": 56.23,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "cantaloupe",
+      "label": "Cantaloupe",
+      "queriesTried": [
+        "Cantaloupe"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000205287054",
+        "name": "Your Fresh Market Cantaloupe Chunks, 280 g",
+        "brand": "Your Fresh Market",
+        "packageSize": "280 g",
+        "parsedMassKg": 0.28,
+        "price": 3.97,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:02:38.418Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-cantaloupe-chunks/6000205287055?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/025/496/6000206025496.jpg"
+      },
+      "notes": "From receipts catalog (produce)",
+      "alternates": [
+        {
+          "productId": "6000191268946",
+          "name": "Cantaloupe, Sold in singles",
+          "parsedMassKg": 0,
+          "price": 2.84,
+          "availability": "out_of_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:02:38.418Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/cantaloupe/6000191268947?classType=REGULAR&athbdg=L1200",
+          "image": "https://i5.walmartimages.ca/images/Enlarge/894/7_r/6000191268947_R.jpg"
+        }
+      ]
+    },
+    {
+      "id": "celery",
+      "label": "Celery",
+      "queriesTried": [
+        "Celery"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000194185795",
+        "name": "Celery, Sold in bunches",
+        "price": 1.97,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:02:41.382Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/celery/6000191272227?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/094/529/6000200094529.jpg"
+      },
+      "notes": "From receipts catalog (produce)",
+      "alternates": [
+        {
+          "productId": "6000196099070",
+          "name": "Organic Fresh Celery Stalk, 1 bunch",
+          "parsedMassKg": 0,
+          "price": 3.97,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:02:41.382Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/organic-fresh-celery-stalk/6000196099071?classType=REGULAR&athbdg=L1600",
+          "image": "https://i5.walmartimages.ca/images/Enlarge/904/047/33383904047.jpg"
+        }
+      ]
+    },
+    {
+      "id": "cibona_ranch_dressing_4lt",
+      "label": "Cibona Ranch Dressing 4lt",
+      "queriesTried": [
+        "cibona ranch 4l",
+        "cibona ranch dressing"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "5APD2DY5YJ6V",
+        "name": "Ken's Foods 1 Gallon Buttermilk Ranch Dressing and Dip - 4/Case",
+        "price": 164.98,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "cilantro",
+      "label": "Cilantro",
+      "queriesTried": [
+        "Cilantro"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "981707",
+        "name": "Cilantro, Sold in bunches",
+        "price": 1.47,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:11:32.258Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/cilantro/981708?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/094/548/6000200094548.jpg"
+      },
+      "notes": "From receipts catalog (produce)",
+      "alternates": []
+    },
+    {
+      "id": "party_tray_12x12",
+      "label": "Clear Party Tray 12x12",
+      "queriesTried": [
+        "Clear Party Tray 12x12"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "40JH7K7PPKBP",
+        "name": "MIANHT Plastic Fruit Serving Tray for Party Clear Appetizer Platter with Non Slip Bottom 7.7 Inch Round Food Grade PVC Tray for Snacks Desserts Vegetables Fruit Display Tray for Entertaining Home Kitchen",
+        "brand": "MIANHT",
+        "price": 6.64,
+        "wasPrice": 10.64,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:12:10.962Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Plastic-Fruit-Serving-Tray-Party-Clear-Appetizer-Platter-Non-Slip-Bottom-7-7-Inch-Round-Food-Grade-PVC-Snacks-Desserts-Vegetables-Display-Entertainin/5KIH0FBF6MKN?classType=REGULAR&athbdg=L1400",
+        "image": "https://i5.walmartimages.ca/asr/a02e608c-b3ba-4629-b87d-2fd3d0986c74.e1f4f302559251204f6faeb469181a39.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "coke_classic_cdn_cans_24x35",
+      "label": "Coke Classic Cdn Cans 24x35",
+      "queriesTried": [
+        "coca cola classic 24 pack",
+        "coke 24x355",
+        "coke cans 24"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6000203125656",
+        "name": "Coca-Cola Cherry Cans, 355mL, 12 Pack",
+        "price": 8.28,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "cottage_cheese",
+      "label": "Cottage Cheese",
+      "queriesTried": [
+        "Cottage Cheese"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000196306141",
+        "name": "Great Value 2% Cottage Cheese",
+        "brand": "Great Value",
+        "price": 4.48,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:12:06.793Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-2-Cottage-Cheese/6000196306141?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/asr/4c0bb258-d3d4-44ca-8f5d-b7830483082c.8d37ece57ab4c3df2956a908c73c5a38.jpeg"
+      },
+      "notes": "From receipts catalog (dairy)",
+      "alternates": [
+        {
+          "productId": "6000200025051",
+          "name": "Great Value 1% Cottage Cheese",
+          "brand": "Great Value",
+          "parsedMassKg": 0,
+          "price": 6.58,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:12:06.793Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-1-Cottage-Cheese/6000200025051?classType=REGULAR&athbdg=L1200",
+          "image": "https://i5.walmartimages.ca/asr/aa6547e7-d88c-4e1c-8ed2-9c977e48ea2d.d37cd26a2ebd006f48f486ca81dcb96d.jpeg"
+        },
+        {
+          "productId": "6000195508438",
+          "name": "Nordica 2% Cottage Cheese",
+          "brand": "Nordica",
+          "parsedMassKg": 0,
+          "price": 8.18,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:12:06.793Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Nordica-2-Cottage-Cheese/6000195508438?classType=REGULAR",
+          "image": "https://i5.walmartimages.ca/asr/7d6c7f4b-a254-45c6-89f3-5d9c8c9a8a60.5db742472be21fac7bc3ab69c9f951a3.jpeg"
+        },
+        {
+          "productId": "6000196306138",
+          "name": "Great Value 1% Cottage Cheese",
+          "brand": "Great Value",
+          "parsedMassKg": 0,
+          "price": 4.48,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:12:06.793Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-1-Cottage-Cheese/6000196306138?classType=REGULAR",
+          "image": "https://i5.walmartimages.ca/asr/ff22af5d-35c8-4dee-9885-e239ed9e428f.4942e0bbe62f4b1ec69a8fed046f0e6b.jpeg"
+        },
+        {
+          "productId": "6000191276951",
+          "name": "Nordica 2% Cottage Cheese",
+          "brand": "Nordica",
+          "parsedMassKg": 0,
+          "price": 5.24,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:12:06.793Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Nordica-2-Cottage-Cheese/6000191276951?classType=REGULAR&athbdg=L1600",
+          "image": "https://i5.walmartimages.ca/asr/ceb79af3-e4df-45c5-bcd3-f41c8577e561.998f106f016b9fd1cede9cd26b452578.jpeg"
+        },
+        {
+          "productId": "6000195508237",
+          "name": "Nordica 1% Cottage Cheese",
+          "brand": "Nordica",
+          "parsedMassKg": 0,
+          "price": 5.24,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:12:06.793Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Nordica-1-Cottage-Cheese/6000195508237?classType=REGULAR",
+          "image": "https://i5.walmartimages.ca/asr/4861e8cf-ceb0-460d-9333-36ea462ece0a.f426c5845eab96df6faaa99d37ac23bb.jpeg"
+        },
+        {
+          "productId": "6000195508444",
+          "name": "Nordica 1% Cottage Cheese",
+          "brand": "Nordica",
+          "parsedMassKg": 0,
+          "price": 8.18,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:12:06.793Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Nordica-1-Cottage-Cheese/6000195508444?classType=REGULAR",
+          "image": "https://i5.walmartimages.ca/asr/b3dbba66-8e30-44d2-a462-b6e5ea31404a.f931b495f745b3e5bbc806826c05abcd.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "craize_snack_cracker",
+      "label": "Craize Snack Cracker",
+      "queriesTried": [
+        "craize snack cracker",
+        "craize crackers"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6000205828741",
+        "name": "Dare Vinta Roasted Red Pepper Crackers, 200g",
+        "price": 2.68,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "cream_cheese_bars",
+      "label": "Cream Cheese Bars",
+      "queriesTried": [
+        "Cream Cheese Bars"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000001850463",
+        "name": "Great Value Cream Cheese",
+        "brand": "Great Value",
+        "price": 2.98,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:03:26.021Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/great-value-cream-cheese/10054562?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/877/765/605388877765.jpg"
+      },
+      "notes": "From receipts catalog (dairy)",
+      "alternates": [
+        {
+          "productId": "6000196253709",
+          "name": "Great Value Cream Cheese Spread",
+          "brand": "Great Value",
+          "parsedMassKg": 0,
+          "price": 2.98,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:03:26.021Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/great-value-cream-cheese-spread/6000196253710?classType=REGULAR&athbdg=L1600",
+          "image": "https://i5.walmartimages.ca/images/Enlarge/362/336/628915362336.jpg"
+        }
+      ]
+    },
+    {
+      "id": "brown_sugar",
+      "label": "Dark Brown Sugar",
+      "queriesTried": [
+        "Dark Brown Sugar"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "2D051QDL3Z0J",
+        "name": "Rogers Golden Yellow light brown Sugar 2Kg/4.41 LBS",
+        "brand": "Rogers",
+        "packageSize": "2 kg",
+        "parsedMassKg": 2,
+        "price": 18.04,
+        "wasPrice": 18.99,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:03:29.382Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Rogers-Golden-Yellow-light-brown-Sugar-2Kg-4-41-LBS/2D051QDL3Z0J?classType=REGULAR&athbdg=L1700",
+        "image": "https://i5.walmartimages.ca/asr/eef851a5-09d4-42bd-9063-17fb801dbb9a.5b6abfc6f3b5d6d3f6f14dab1f1fde84.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "lids_dome_12_24oz",
+      "label": "Dome Lids 12-24oz",
+      "queriesTried": [
+        "dome lids 12 24 oz",
+        "sip dome lid"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "2I03ZIBPB8JQ",
+        "name": "Pack N' Eat Plastic Dome Lid for 12 oz Bowl -- 400 per case",
+        "brand": "Pack n' Eat",
+        "packageSize": "340 g",
+        "parsedMassKg": 0.34019427750000003,
+        "price": 102.65,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:03:33.313Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Pack-N-Eat-Plastic-Dome-Lid-for-12-oz-Bowl-400-per-case/2I03ZIBPB8JQ?classType=REGULAR",
+        "image": "https://i5.walmartimages.com/asr/a4fabf23-aa0b-4ad2-aa58-297e821c90af.e0ee345805d278bde0ea94c223bb9f50.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "double_burner",
+      "label": "Double Burner",
+      "queriesTried": [
+        "655772019780",
+        "double burner portable"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000201337639",
+        "name": "Toastmaster Electric Double Burner",
+        "brand": "Toastmaster",
+        "price": 32.98,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:03:42.966Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Toastmaster-Electric-Double-Burner/6000201337639?classType=REGULAR&athbdg=L3028",
+        "image": "https://i5.walmartimages.ca/asr/0893d0df-9a6d-495e-b3ba-1c57f2af474a.f70b476eae142c77ef83a803c7022977.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "edible_decor",
+      "label": "Edible Decor",
+      "queriesTried": [
+        "Edible Decor"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000206769912",
+        "name": "Twinkle Baking Decor Barbie Triplet Sprinkles by Twinkle",
+        "brand": "Twinkle Baking Decor",
+        "price": 7.77,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:12:14.110Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Barbie-Triplet-Sprinkles-by-Twinkle/6000206769912?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/24d382e3-4b9b-45a1-8613-67c3c89e6486.b93d8f28cd51826ae157f9ba4450ab8f.png"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "fettuccine",
+      "label": "Fettuccine",
+      "queriesTried": [
+        "Fettuccine"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "2UULWUYW45DF",
+        "name": "Catelli Classic All-Natural Fettuccine, 454g",
+        "brand": "CATELLI",
+        "packageSize": "454 g",
+        "parsedMassKg": 0.454,
+        "price": 2.47,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:11:35.673Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Catelli-Classic-All-Natural-Fettuccine-454g/2UULWUYW45DF?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/asr/eae07a57-8e9a-4fe5-97b2-4d62ecb2f903.b0561c65c6fa201405650b9df6e4ad67.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "floor_cleaner_lavender",
+      "label": "Floor Cleaner Lavender 4lt",
+      "queriesTried": [
+        "Floor Cleaner Lavender 4lt"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "5QLW9AK2EDS5",
+        "name": "Janitori\u2122 Floor Cleaner, 4L",
+        "brand": "Janitori\u2122",
+        "packageSize": "4 kg",
+        "parsedMassKg": 4,
+        "price": 18.66,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:12:03.071Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Janitori-Floor-Cleaner-4L/5QLW9AK2EDS5?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/2d3fd5c2-516b-4a8b-9ef4-38fc196f1f4c.cd51522836d3976badbcb21052142041.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "foil_green",
+      "label": "Foil Green 4.27",
+      "queriesTried": [
+        "082785400724",
+        "folgers coffee 4.27",
+        "folgers classic roast"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6EXAXFD7P2RR",
+        "name": "Mystique Coffee, NICARAGUA, 100% Arabica Specialty Grade coffee Beans, Dark Roast, Organic and Fair Trade, 454 g.",
+        "price": 18.89,
+        "reason": "name filter"
+      },
+      "notes": "Receipt UPC 082785400724 Foil Green 4.27 (Folgers)"
+    },
+    {
+      "id": "fresh_mozzarella",
+      "label": "Fresh Mozzarella",
+      "queriesTried": [
+        "Fresh Mozzarella"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000199427253",
+        "name": "Saputo Mozzarella Fresca Cheese",
+        "brand": "Saputo",
+        "price": 4.58,
+        "wasPrice": 5.78,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:12:00.069Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/saputo-mozzarella-fresca-cheese/6000199427254?classType=REGULAR&athbdg=L1300",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/217/115/6000200217115.jpg"
+      },
+      "notes": "From receipts catalog (deli)",
+      "alternates": []
+    },
+    {
+      "id": "butternut_squash_frozen",
+      "label": "Frozen Butternut Squash",
+      "queriesTried": [
+        "Frozen Butternut Squash",
+        "Squash Frozen Butternut",
+        "butternut"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "reason": "no_match"
+      },
+      "notes": "From receipts catalog (frozen)"
+    },
+    {
+      "id": "frozen_carrots",
+      "label": "Frozen Diced Carrots",
+      "queriesTried": [
+        "Frozen Diced Carrots",
+        "Carrots Frozen Diced",
+        "carrot",
+        "carrots"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000202249059",
+        "name": "Great Value Frozen Peas and Carrots Mix, 750 g",
+        "brand": "Great Value",
+        "packageSize": "750 g",
+        "parsedMassKg": 0.75,
+        "price": 3.37,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:04:10.414Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Peas-and-Carrots-Mix/6000202249059?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/asr/bff5c6b8-ddf1-46ad-9c29-d82d66d3f767.5ff8e783656acbc38fba163d480389e5.jpeg"
+      },
+      "notes": "From receipts catalog (frozen) \u00b7 kept last WM price",
+      "alternates": [],
+      "rejected": {
+        "reason": "kept last price \u2014 name filter"
+      }
+    },
+    {
+      "id": "gatorade_zero_variety_28x59",
+      "label": "Gatorade Zero Variety 28x59",
+      "queriesTried": [
+        "gatorade zero variety 28",
+        "gatorade zero 591"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "156344",
+        "name": "Gatorade Orange Sports Drink 6 x 591 mL, Bottles",
+        "price": 6.27,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "golden_berries",
+      "label": "Golden Berries",
+      "queriesTried": [
+        "Golden Berries",
+        "Berries Golden",
+        "golden berr",
+        "goldenberry",
+        "cape goose"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "3TDCG6JXPVCJ",
+        "name": "5.6ft Artificial Halloween Black Maple Leaf Garland Fake Maple Leaves Hanging Plant Vine with Golden Berry Clusters for Autumn Thanksgiving Mantle Party Holiday Home Decor",
+        "price": 13.8,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "gooseberries",
+      "label": "Gooseberries",
+      "queriesTried": [
+        "gooseberries",
+        "gooseberry"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6000205289889",
+        "name": "Your Fresh Market Pineapple Spears, 590 g",
+        "price": 5.97,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "granny_smith_kg",
+      "label": "Granny Smith Apples",
+      "queriesTried": [
+        "Granny Smith Apples",
+        "Apples Granny Smith",
+        "granny smith"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000194125042",
+        "name": "Granny Smith Apple, 3 lb",
+        "packageSize": "1.36 kg",
+        "parsedMassKg": 1.3607771100000001,
+        "price": 7.97,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:04:28.982Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/granny-smith-apple/6000194125043?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/094/554/6000200094554.jpg"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "guest_towel_napkins",
+      "label": "Guest Towel Napkins",
+      "queriesTried": [
+        "Guest Towel Napkins"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "2BUMJLVT0PL9",
+        "name": "Unbranded Disposable Napkins for Parties,Bow Tie Pattern Paper Guest Towels for Showers and Special Occasions",
+        "brand": "Unbranded",
+        "price": 5.1,
+        "wasPrice": 21.99,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:04:32.387Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Disposable-Napkins-for-Parties-Bow-Tie-Pattern-Paper-Guest-Towels-for-Showers-and-Special-Occasions/3B5CQGZLRWRK?classType=VARIANT&athbdg=L1400",
+        "image": "https://i5.walmartimages.ca/asr/13f26f0d-71a6-4310-9833-52680c65dded.1cab92d6e4a45db1a7698a9f51aee782.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "haolam_havarti_and_dill",
+      "label": "Haolam Havarti & Dill",
+      "queriesTried": [
+        "haolam havarti dill",
+        "havarti and dill haolam"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "0V7VWQN2B9UD",
+        "name": "Fromagerie Bergeron Louis Cyr 2-Year-Old Cheese",
+        "price": 11.24,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (deli)"
+    },
+    {
+      "id": "haolam_muenster_color",
+      "label": "Haolam Muenster Color",
+      "queriesTried": [
+        "haolam muenster",
+        "muenster color haolam"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "2LH1T3H7UFNR",
+        "name": "Shades EQ Color Gloss 06N - Moroccan Sand by Redken for Women - 2 oz Hair Color",
+        "price": 18.64,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (deli)"
+    },
+    {
+      "id": "haolam_ricotta_cheese",
+      "label": "Haolam Ricotta Cheese",
+      "queriesTried": [
+        "haolam ricotta"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "3GLTUF4HP97B",
+        "name": "Magnolia Cheezee Pimiento Cheese Spread",
+        "price": 4.97,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (dairy)"
+    },
+    {
+      "id": "haolam_sliced_cheese",
+      "label": "Haolam Sliced Cheese",
+      "queriesTried": [
+        "haolam sliced cheese",
+        "haolam american"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "76E8RACJG8CN",
+        "name": "100 % MADE IN THE USA SEASONAL DESIGNS American American US Polycotton Flag, 2.5 by 4-Feet",
+        "price": 67.94,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (dairy)"
+    },
+    {
+      "id": "harvest_raw_sunflower_seeds",
+      "label": "Harvest Raw Sunflower Seeds",
+      "queriesTried": [
+        "harvest raw sunflower seeds",
+        "raw sunflower seeds"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "64G597YMHI13",
+        "name": "Yupik Shelled Sunflower Seeds (Raw), 1kg",
+        "brand": "Yupik",
+        "packageSize": "1 kg",
+        "parsedMassKg": 1,
+        "price": 10.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:05:03.905Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Yupik-Shelled-Sunflower-Seeds-Raw-1kg/64G597YMHI13?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/9be3460f-2bd7-4cb5-99d1-85d1797b948f.42513349cf81311e48b40be2d4bdf088.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "honeydew_melons",
+      "label": "Honeydew Melons",
+      "queriesTried": [
+        "Honeydew Melons",
+        "Melons Honeydew",
+        "honeydew"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "reason": "no_match"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "instant_coffee_kosher",
+      "label": "Instant Coffee (kosher)",
+      "queriesTried": [
+        "kosher instant coffee",
+        "maxwell house instant kosher"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "51KCERMTKGZC",
+        "name": "Organic Instant Mushroom Coffee Drink 100g \u2013 4 Mushroom Blend \u2013 30 Servings",
+        "price": 11.89,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "italia_pomace_oil_3lt",
+      "label": "Italia Pomace Oil 3lt",
+      "queriesTried": [
+        "italia pomace oil 3l",
+        "pomace olive oil 3 litre"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "0U2G9TG8Q7XO",
+        "name": "PAM\u00ae Non\u2011GMO Avocado Oil  \u2013 Expeller-Pressed  \u2013 Non\u2011Stick Cooking Spray Coating \u2013 1 x 141 g",
+        "price": 7.42,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "jalapeno_peppers_kg",
+      "label": "Jalape\u00f1o Peppers",
+      "queriesTried": [
+        "jalapeno peppers",
+        "jalapeno",
+        "peppers jalapeno",
+        "jalape\u00f1o",
+        "Jalape\u00f1o Peppers"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "2CLBDV3MJP0K",
+        "name": "GSDWIUEW Hot Pepper Seeds Collection 8 Heirloom Varieties 25+ Seeds Each Hungarian Hot Hungarian Sweet Jalapeno Serrano Cayenne Pimento Shishito California Anaheim. Heirloom Seeds",
+        "price": 24.99,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "limes_lrg",
+      "label": "Limes Lrg",
+      "queriesTried": [
+        "Limes Lrg",
+        "Lrg Limes",
+        "limes"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "1SDG5S3L51WZ",
+        "name": "Limes Bag, 1.5lb",
+        "packageSize": "680 g",
+        "parsedMassKg": 0.6803885550000001,
+        "price": 3.94,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:05:33.772Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/limes-bag/1SDG5S3L51WZ?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/929/960/686201929960.jpg"
+      },
+      "notes": "From receipts catalog (produce)",
+      "alternates": []
+    },
+    {
+      "id": "macabee_pizza_bagel_1",
+      "label": "Macabee Pizza Bagel-1",
+      "queriesTried": [
+        "macabee pizza bagel",
+        "pizza bagel macabee"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "38YWT54CTOXK",
+        "name": "Sch\u00e4r Gluten-Free Pizza Crust",
+        "price": 10.68,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (frozen)"
+    },
+    {
+      "id": "magic_bullet",
+      "label": "Magic Bullet",
+      "queriesTried": [
+        "810097978120",
+        "magic bullet blender"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000207686280",
+        "name": "magic bullet\u00ae 4 Piece Blender",
+        "brand": "magic bullet",
+        "price": 19.98,
+        "wasPrice": 26.98,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:05:46.031Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/magic-bullet-4-Piece-Blender/6000207686280",
+        "image": "https://i5.walmartimages.ca/asr/72df6214-fe08-429e-a734-187090b57c9e.f2e76ca6cc969748e680536becd49670.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "marshmallow_white_min",
+      "label": "Marshmallow White Min",
+      "queriesTried": [
+        "Marshmallow White Min"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000196753306",
+        "name": "Great Value Mini Marshmallows",
+        "brand": "Great Value",
+        "price": 2.77,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:05:49.166Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Mini-Marshmallows/6000196753306?classType=REGULAR&athbdg=L1102",
+        "image": "https://i5.walmartimages.ca/asr/74301438-44f4-4668-afa5-9a7f6c263015.705d9efbfaceec10ff898d36b35b2ad4.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "measuring_cup",
+      "label": "Measuring Cup",
+      "queriesTried": [
+        "Measuring Cup"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "66UV6Q3RT35W",
+        "name": "EGNMCR Kitchen Gadgets, Kitchen Accessories Kitchen Measuring Cup 1000ml Filter Cup Goog Beater Fruit Washing Multifunctional Microwave Household Baking Tool Kitchen measuring cup",
+        "brand": "EGNMCR",
+        "packageSize": "1 kg",
+        "parsedMassKg": 1,
+        "price": 7.1,
+        "wasPrice": 14.1,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:05:52.649Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/EGNMCR-Kitchen-Gadgets-Accessories-Measuring-Cup-1000ml-Filter-Goog-Beater-Fruit-Washing-Multifunctional-Microwave-Household-Baking-Tool-measuring-cu/66UV6Q3RT35W?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/875b7ba2-5b95-40c4-b2c4-a528f8116dfd.49bb96d83397eaf67cdc7c21fe1996ff.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "milan_grated_parmesan",
+      "label": "Milan Grated Parmesan",
+      "queriesTried": [
+        "milan grated parmesan",
+        "milan parmesan"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "10298992",
+        "name": "Dare Boulangerie Grissol Baguettes Bites Garlic Parmesan, 130g",
+        "price": 3.78,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (deli)"
+    },
+    {
+      "id": "gloves_nitrile_large",
+      "label": "Nitrile Gloves Large",
+      "queriesTried": [
+        "nitrile gloves large",
+        "large nitrile gloves"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "20M5RT3POCKK",
+        "name": "Flex powder-free nitrile exam gloves, Large, 2x100/bx",
+        "brand": "Flex",
+        "price": 12.8,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:06:02.494Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Flex-powder-free-nitrile-exam-gloves-Large-2x100-bx/20M5RT3POCKK?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/3c3c437f-1274-4c86-8da3-c766d617468b.ef1b299585bbd35824cd4d15b58db560.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "gloves_nitrile_medium",
+      "label": "Nitrile Gloves Medium",
+      "queriesTried": [
+        "nitrile gloves medium",
+        "medium nitrile gloves"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "5ICAO1BVI5XI",
+        "name": "ZENGJUNHUI Heavy Duty 9-Inch Disposable Nitrile Gloves, Medium, 100-Pack, Powder-Free, Chemical & Puncture Resistant for Cleaning, Cooking, & Multi-Purpose Use",
+        "brand": "ZENGJUNHUI",
+        "price": 10.96,
+        "wasPrice": 43.25,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:06:10.154Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Heavy-Duty-9-Inch-Disposable-Nitrile-Gloves-Medium-100-Pack-Powder-Free-Chemical-Puncture-Resistant-for-Cleaning-Cooking-Multi-Purpose-Use/3V0L9T7ZNEUB?classType=VARIANT",
+        "image": "https://i5.walmartimages.ca/asr/c2c36366-afa1-4575-912b-1b0085de74bb.39b8176367993c0acc0f4197ed1e0a5e.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "queriesTried": [
+        "no hole dome lids",
+        "dome lid no hole"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "5SUK8UH71R3B",
+        "name": "Green Century Enterprises Inc. PET Dome Lid 98mm (Clear) without Hole for 12oz - 24oz PET Cold Cups (Recyclable) 1000 unit/Pack",
+        "brand": "Green Century Enterprises Inc.",
+        "packageSize": "680 g",
+        "parsedMassKg": 0.6803885550000001,
+        "price": 95.03,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:06:18.046Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/PET-Dome-Lid-98mm-Clear-without-Hole-for-12oz-24oz-PET-Cold-Cups-Recyclable-1000-unit-Pack/5SUK8UH71R3B?classType=REGULAR",
+        "image": "https://i5.walmartimages.com/asr/41966705-56cb-4df5-841f-232d4704cfd1.d679208bf880d85b7e76c0607ef08df0.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "oreo_sandwich_cookies",
+      "label": "Oreo Sandwich Cookies",
+      "queriesTried": [
+        "oreo sandwich cookies",
+        "oreo original cookies"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000202891594",
+        "name": "Oreo Mint Cr\u00e8me Sandwich Cookies",
+        "brand": "OREO",
+        "price": 2.98,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:06:24.707Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Oreo-Mint-Cr-me-Sandwich-Cookies/6000202891594?classType=REGULAR&athbdg=L1102",
+        "image": "https://i5.walmartimages.ca/asr/7af20e50-1ff5-4b1f-a834-1653c5a8b6dd.c190e63291023d555f31718995283caf.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "pam_cookware_coating",
+      "label": "Pam Cookware Coating",
+      "queriesTried": [
+        "pam cooking spray",
+        "pam original"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6000205247588",
+        "name": "Great Value Extra Virgin Olive Oil Cooking Spray",
+        "price": 8.42,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "parsley",
+      "label": "Parsley",
+      "queriesTried": [
+        "Parsley"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000191272067",
+        "name": "Parsley, Flat, Fresh, Sold in bunches",
+        "price": 1.97,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:06:38.571Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/parsley-flat-fresh/6000191272078?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/094/551/6000200094551.jpg"
+      },
+      "notes": "From receipts catalog (produce)",
+      "alternates": [
+        {
+          "productId": "6000191272061",
+          "name": "Parsley, Curly, Fresh, Sold in bunches",
+          "parsedMassKg": 0,
+          "price": 1.97,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:06:38.571Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/parsley-curly-fresh/6000191272062?classType=REGULAR&athbdg=L1200",
+          "image": "https://i5.walmartimages.ca/images/Enlarge/094/550/6000200094550.jpg"
+        },
+        {
+          "productId": "10303921",
+          "name": "Great Value Parsley Flakes",
+          "brand": "Great Value",
+          "parsedMassKg": 0,
+          "price": 2.27,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:06:38.571Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Parsley-Flakes/10303921?classType=REGULAR&athbdg=L1102",
+          "image": "https://i5.walmartimages.ca/asr/64b52589-b996-4d00-bdee-8193214c5149.f50e7364a45aaac6992bddb301a132c5.jpeg"
+        },
+        {
+          "productId": "3RAOG0EEVAR6",
+          "name": "Great Value Parsley Flakes",
+          "brand": "Great Value",
+          "parsedMassKg": 0,
+          "price": 3.97,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:06:38.571Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Parsley-Flakes/3RAOG0EEVAR6?classType=REGULAR&athbdg=L1102",
+          "image": "https://i5.walmartimages.ca/asr/df3ebb50-7fe0-40a2-8c91-7e42b7773186.089514293eb2fcced64e9aec9d344715.jpeg"
+        },
+        {
+          "productId": "10299047",
+          "name": "Great Value Parsley Flakes",
+          "brand": "Great Value",
+          "parsedMassKg": 0,
+          "price": 3.97,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:06:38.571Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Parsley-Flakes/10299047?classType=REGULAR&athbdg=L1102",
+          "image": "https://i5.walmartimages.ca/asr/8b99c8ec-6e1e-46c0-b6bb-e9e719652f4f.4592356a8efeb66f2a852cce52da7d68.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "penne_pasta",
+      "label": "Penne Pasta",
+      "queriesTried": [
+        "Penne Pasta"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "64FXMZAER1AE",
+        "name": "Griss Pasta Canada Griss Pasta Giardino Durum Wheat Semolina Penne Pasta, 4 kg \u2013 Bulk Italian-Style Penne for Sauces & Pasta Dishes",
+        "brand": "Griss Pasta Canada",
+        "packageSize": "4 kg",
+        "parsedMassKg": 4,
+        "price": 28.49,
+        "wasPrice": 29.99,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:13:00.421Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Griss-Pasta-Giardino-Durum-Wheat-Semolina-Penne-Pasta-4-kg-Bulk-Italian-Style-Penne-for-Sauces-Pasta-Dishes/64FXMZAER1AE?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/0eb7d33e-6be2-4f64-acc7-c8198c52c23b.af666d64d72807618ba416dfff1bcbda.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": [
+        {
+          "productId": "6000195089811",
+          "name": "Great Value Organic Penne",
+          "brand": "Great Value",
+          "parsedMassKg": 0,
+          "price": 1.97,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:13:00.421Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Organic-Penne/6000195089811?classType=REGULAR",
+          "image": "https://i5.walmartimages.ca/asr/4387044d-48f7-4835-a156-eeb49d768c20.8f1b86a0ad529b4027fa01d7d44cd99f.jpeg"
+        },
+        {
+          "productId": "3BXG5HBBIOBQ",
+          "name": "Veggipasta Penne",
+          "brand": "Veggipasta",
+          "parsedMassKg": 0,
+          "price": 2.27,
+          "availability": "out_of_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:13:00.421Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Veggipasta-Penne/3BXG5HBBIOBQ?classType=REGULAR",
+          "image": "https://i5.walmartimages.ca/asr/3dfba3fa-d5e3-41d9-9ab7-4125a4d263a8.863a408448938633bc2dc3a850b292f4.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "pickled_eggplant",
+      "label": "Pickled Eggplant",
+      "queriesTried": [
+        "Pickled Eggplant"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000188761429",
+        "name": "Aurora Hot Pickled Eggplants in Oil",
+        "brand": "Aurora",
+        "price": 4.97,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:06:44.646Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Aurora-Hot-Pickled-Eggplants-in-Oil/6000188761429?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/asr/2b7d0465-41ed-4386-817c-0e87619ceb3d.d4d6fad7d05af310c45ea4ddcd47b40c.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "wraps_plain_10in",
+      "label": "Plain Wraps 10\"",
+      "queriesTried": [
+        "plain wraps 10 inch",
+        "10 inch flour tortillas",
+        "10in wraps"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000206630173",
+        "name": "Great Value 10\" White Tortillas, Source of 7 Essential Nutrients, 10 Count, 640 g",
+        "brand": "Great Value",
+        "packageSize": "640 g",
+        "parsedMassKg": 0.64,
+        "price": 3.48,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:06:49.107Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/great-value-10-white-tortillas-source-of-7-essential-nutrients-10-count-640-g/6000206630174?classType=REGULAR&athbdg=L1102",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/964/944/6000209964944.jpg"
+      },
+      "notes": "From receipts catalog (bakery)",
+      "alternates": []
+    },
+    {
+      "id": "wraps_plain_6in",
+      "label": "Plain Wraps 6\"",
+      "queriesTried": [
+        "plain wraps 6 inch",
+        "6 inch flour tortillas",
+        "6in wraps"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "926924",
+        "name": "Glad ClingWrap Plastic Wrap",
+        "price": 17.98,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (bakery)"
+    },
+    {
+      "id": "plastic_tablecloth",
+      "label": "Plastic Tablecloth",
+      "queriesTried": [
+        "Plastic Tablecloth"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "122739",
+        "name": "Unique Pretzels Ruby Red Rectangular Plastic Table Cover, 54\" x 108\"",
+        "brand": "Unique Pretzels",
+        "price": 1.35,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:07:12.354Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Ruby-Red-Rectangular-Plastic-Table-Cover-54-x-108/122739?classType=REGULAR&athbdg=L1102",
+        "image": "https://i5.walmartimages.ca/asr/c593e947-a1be-4d95-89aa-65d6eb499484.0bea5e438efd0165ed51a587638fc09a.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "plastic_wrap_18x2000",
+      "label": "Plastic Wrap 18x2000",
+      "queriesTried": [
+        "Plastic Wrap 18x2000"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "reason": "no_match"
+      },
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "pomegranates_30s",
+      "label": "Pomegranates 30s",
+      "queriesTried": [
+        "pomegranates",
+        "pomegranate 30",
+        "30 pomegranate",
+        "pomegranate",
+        "Pomegranates 30s"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6000202677162",
+        "name": "Webber Naturals Collagen30\u00ae Bioactive Collagen Peptides 2500 mg Elderberry <br>Gummies",
+        "price": 27.98,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "puff_pastry_sheets",
+      "label": "Puff Pastry Sheets",
+      "queriesTried": [
+        "puff pastry sheets",
+        "frozen puff pastry",
+        "sheets puff pastry",
+        "pastry frozen puff",
+        "puff pastry"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "3GYSL4IT5V9E",
+        "name": "Ashoka KHANSAMA PUFF PASTRY SHEETS 450G, KHANSAMA PUFF PASTRY SHEETS 450G",
+        "brand": "Ashoka",
+        "packageSize": "450 g",
+        "parsedMassKg": 0.45,
+        "price": 3.47,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:07:24.667Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/KHANSAMA-PUFF-PASTRY-SHEETS-450G/3GYSL4IT5V9E?classType=REGULAR&athbdg=L1102",
+        "image": "https://i5.walmartimages.ca/asr/a9ca4921-1af4-4355-9392-b30486c90420.c791c9eb4c263bfe8256b658f366c210.png"
+      },
+      "notes": "From receipts catalog (frozen)",
+      "alternates": [
+        {
+          "productId": "6000191270250",
+          "name": "Tenderflake Puff Pastry, 397 g",
+          "brand": "Tenderflake",
+          "packageSize": "397 g",
+          "parsedMassKg": 0.397,
+          "price": 3.98,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:07:24.667Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Tenderflake-Puff-Pastry/6000191270250?classType=REGULAR&athbdg=L1102",
+          "image": "https://i5.walmartimages.ca/asr/9d8b158c-f5cc-4337-b94b-dedf60097912.889d28d3a3bdc588999895189ace602f.jpeg"
+        },
+        {
+          "productId": "6000201856947",
+          "name": "Sunbulah Whole Wheat Puff Pastry Sheets, Frozen Sheets <br> <br>",
+          "brand": "Sunbulah",
+          "parsedMassKg": 0,
+          "price": 4.07,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:07:24.667Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Sunbulah-Whole-Wheat-Puff-Pastry-Sheets/6000201856947?classType=REGULAR",
+          "image": "https://i5.walmartimages.ca/asr/559af524-4aca-4ea0-a7a1-3977be8c78ee.dfbb1c4a09f301b0f4e1e98b4aeaffb8.jpeg"
+        },
+        {
+          "productId": "6000201854216",
+          "name": "Sunbulah Puff Pastry Sheets - 18ct, Frozen Sheets <br> <br>400",
+          "brand": "Sunbulah",
+          "parsedMassKg": 0,
+          "price": 3.97,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:07:24.667Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Sunbulah-Puff-Pastry-Sheets-18ct/6000201854216?classType=REGULAR&athbdg=L1102",
+          "image": "https://i5.walmartimages.ca/asr/c3d96008-9193-4fef-b0e2-e41573749b06.3b055bb8cc21e2a4b70df88be07245b8.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "red_onions",
+      "label": "Red Onions",
+      "queriesTried": [
+        "Red Onions",
+        "Onions Red",
+        "red onion",
+        "onion red"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000199879129",
+        "name": "Red Onions, 7 lb bag",
+        "packageSize": "3.18 kg",
+        "parsedMassKg": 3.17514659,
+        "price": 9.94,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:07:32.448Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/red-onions/6000199879130?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/901/2_1/59559699012_1.jpg"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "red_radish",
+      "label": "Red Radish",
+      "queriesTried": [
+        "Red Radish",
+        "Radish Red",
+        "radish",
+        "radishes"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "reason": "no_match"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "red_grapes_kg",
+      "label": "Red Seedless Grapes",
+      "queriesTried": [
+        "red seedless grapes",
+        "red grapes",
+        "grapes red seedless",
+        "grapes red",
+        "grape",
+        "grapes"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "3MSIB2CIHE04",
+        "name": "Jkkant Assorted Artificial Grape Bunches, Frosted Grape Clusters in Black Red Green for Wedding, Wine Bar, and Vintage Home Decor",
+        "price": 10.69,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "lids_deli_round",
+      "label": "Round Deli Container Lids",
+      "queriesTried": [
+        "Round Deli Container Lids"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "598JYQRADQCN",
+        "name": "Estbridge Freshware Food Storage Containers  Plastic Deli Containers with Lids  Slime  Soup  Meal Prep Containers | BPA Free | Stackable | Leakproof | Microwave/Dishwasher/Freezer Safe",
+        "price": 32.78,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "san_pellegrino_aranciata_or",
+      "label": "San Pellegrino Aranciata/Or",
+      "queriesTried": [
+        "san pellegrino aranciata",
+        "pellegrino orange"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "7B0T76K5599G",
+        "name": "San Pellegrino Light Pomegranate & Orange, Sparkling Fruit Beverage, 25 Calories, Made with Real Fruit Juice (from Concentrate), Bold and Flavourful, Crafted in Italy",
+        "price": 6.97,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "schtark_3_cheese_blend",
+      "label": "Schtark 3 Cheese Blend",
+      "queriesTried": [
+        "schtark 3 cheese blend",
+        "shtark cheese blend"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6000208884795",
+        "name": "Great Value Old Cheddar Cheese",
+        "price": 5.48,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (deli)"
+    },
+    {
+      "id": "shredded_cheddar_cheese",
+      "label": "Shredded Cheddar Cheese",
+      "queriesTried": [
+        "Shredded Cheddar Cheese"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000201234195",
+        "name": "Black Diamond Marble Cheddar Shredded Cheese",
+        "brand": "Black Diamond",
+        "price": 4.92,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:08:01.328Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/black-diamond-marble-cheddar-shredded-cheese/6000201234196?classType=REGULAR&athbdg=L3032",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/310/725/6000201310725.jpg"
+      },
+      "notes": "From receipts catalog (deli)",
+      "alternates": []
+    },
+    {
+      "id": "shredded_mozzarella",
+      "label": "Shredded Mozzarella",
+      "queriesTried": [
+        "Shredded Mozzarella"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000071700412",
+        "name": "Saputo Light Mozzarellissima Pizza Mozzarella Shredded Cheese",
+        "brand": "Saputo",
+        "price": 21.98,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:08:04.808Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/saputo-light-mozzarellissima-pizza-mozzarella-shredded-cheese/10178002",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/353/858/6000202353858.jpg"
+      },
+      "notes": "From receipts catalog (deli)",
+      "alternates": []
+    },
+    {
+      "id": "sink_strainer",
+      "label": "Sink Strainer",
+      "queriesTried": [
+        "Sink Strainer"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6K2KNA9EEAEG",
+        "name": "TIMIFIS Kitchen Gadgets Kitchen Sink Strainer Sink Strainer For Kitchen Sink, Sink Strainer Stainless Steel With Large Wide Side",
+        "brand": "TIMIFIS",
+        "price": 2.09,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:08:09.834Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/TIMIFIS-Kitchen-Gadgets-Kitchen-Sink-Strainer-Sink-Strainer-For-Kitchen-Sink-Sink-Strainer-Stainless-Steel-With-Large-Wide-Side/6LRYM69O7Q86?classType=REGULAR&athbdg=L1400",
+        "image": "https://i5.walmartimages.ca/asr/6824d4e7-9f03-41fd-8785-804e0781a81c.f85acd576c5fb0bdd34195d990057711.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "mushrooms_sliced",
+      "label": "Sliced White Mushrooms",
+      "queriesTried": [
+        "Sliced White Mushrooms",
+        "Mushrooms Sliced White",
+        "sliced mushroom",
+        "mushroom sliced",
+        "sliced white mushroom"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000196142668",
+        "name": "Mushrooms, White Sliced, Your Fresh Market, 8 oz",
+        "brand": "Your Fresh Market",
+        "packageSize": "227 g",
+        "parsedMassKg": 0.226796185,
+        "price": 2.44,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:08:13.068Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/mushrooms-white-sliced-your-fresh-market/6000196142669?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/163/460/6000202163460.jpg"
+      },
+      "notes": "From receipts catalog (produce)",
+      "alternates": [
+        {
+          "productId": "6000197760572",
+          "name": "Great Value Sliced Mushrooms",
+          "brand": "Great Value",
+          "parsedMassKg": 0,
+          "price": 1.27,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:08:13.068Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Sliced-Mushrooms/6000197760572?classType=REGULAR&athbdg=L1600",
+          "image": "https://i5.walmartimages.ca/asr/9c611362-86bf-4698-b481-5972aabdb9ce.62568ad53aa8b4345c29eefa8702929b.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "sour_cream",
+      "label": "Sour Cream",
+      "queriesTried": [
+        "Sour Cream"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000196397986",
+        "name": "Great Value Sour Cream",
+        "brand": "Great Value",
+        "price": 2.18,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:11:43.255Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Sour-Cream/6000196397986?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/asr/e32a3a3f-6ebf-42e1-bb81-3a6a6cd368f8.6959cde9f44de8979cdb7a86ed90edbc.jpeg"
+      },
+      "notes": "From receipts catalog (dairy)",
+      "alternates": [
+        {
+          "productId": "6000196397990",
+          "name": "Great Value Sour Cream",
+          "brand": "Great Value",
+          "parsedMassKg": 0,
+          "price": 2.68,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:11:43.255Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Sour-Cream/6000196397990?classType=REGULAR&athbdg=L1200",
+          "image": "https://i5.walmartimages.ca/asr/ef047765-e826-46c8-937e-6cb07ece5cba.5fc42f3bffbf2687468fcb9804ad2095.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "sourdough_bread",
+      "label": "Sourdough Bread",
+      "queriesTried": [
+        "Sourdough Bread"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "1WE3ISQNRQW3",
+        "name": "Farmhouse Sourdough Bread Loaf, No Artificial Preservatives, Flavours or Colours, 675 g",
+        "brand": "Farmhouse",
+        "packageSize": "675 g",
+        "parsedMassKg": 0.675,
+        "price": 3.67,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:08:20.091Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/farmhouse-sourdough-bread-loaf-no-artificial-preservatives-flavours-or-colours-675-g/1WE3ISQNRQW3?classType=REGULAR&athbdg=L1102",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/942/190/6000209942190.jpg"
+      },
+      "notes": "From receipts catalog (bakery)",
+      "alternates": []
+    },
+    {
+      "id": "splenda_sweetener_cal",
+      "label": "Splenda Sweetener Cal",
+      "queriesTried": [
+        "splenda sweetener",
+        "splenda packets"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "2XEB5YY9QNCW",
+        "name": "Bob's Red Mill GF Active Dry Yeast",
+        "price": 7.27,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "jam_strawberry_4kg",
+      "label": "Strawberry Jam 4kg",
+      "queriesTried": [
+        "strawberry jam 4kg",
+        "strawberry jam 4 kg"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "2EB3JXW96CZD",
+        "name": "Del Monte STRAWBERRY JAM",
+        "brand": "Del Monte",
+        "price": 3.97,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:08:32.527Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Del-Monte-STRAWBERRY-JAM/2EB3JXW96CZD?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/bf7ace97-4dc6-495c-88fb-1e7c5af7147b.1b368fa269b55d375a260e973656476c.jpeg"
+      },
+      "notes": "From receipts catalog (grocery) \u00b7 kept last WM price",
+      "alternates": [],
+      "rejected": {
+        "reason": "kept last price \u2014 name filter"
+      }
+    },
+    {
+      "id": "tabasco_sauce_142ml",
+      "label": "Tabasco Sauce 142ml",
+      "queriesTried": [
+        "tabasco sauce 142",
+        "tabasco original 5 oz"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "10190643",
+        "name": "Tabasco\u00ae Original Pepper Sauce, 142ml",
+        "brand": "TABASCO",
+        "packageSize": "142 g",
+        "parsedMassKg": 0.142,
+        "price": 7.27,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:08:39.453Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Tabasco-Original-Pepper-Sauce-142ml/10190643?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/7eabcc6c-2a40-48fa-b616-0741666899b0.24b90d21421e4b6ddc1fc703d2003524.jpeg"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "table_cover",
+      "label": "Table Cover",
+      "queriesTried": [
+        "Table Cover"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "7BHWQWD3XHUV",
+        "name": "Unique Pretzels Black Rectangular Plastic Table Cover, 54\" x 108\"",
+        "brand": "Unique Pretzels",
+        "price": 1.35,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:08:46.236Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Black-Rectangular-Plastic-Table-Cover-54-x-108/7BHWQWD3XHUV?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/asr/b18d934d-2f49-4457-b53a-b47ed0744f6c.2d17446f2ff4a4c532488559d0eef8d4.jpeg"
+      },
+      "notes": "From receipts catalog (supplies)",
+      "alternates": []
+    },
+    {
+      "id": "tnuva_goat_cheese",
+      "label": "Tnuva Goat Cheese",
+      "queriesTried": [
+        "tnuva goat cheese"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6000203069994",
+        "name": "Bothwell Old Cheddar Cheese",
+        "price": 13.98,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (deli)"
+    },
+    {
+      "id": "tomato",
+      "label": "Tomato",
+      "queriesTried": [
+        "tomatoes",
+        "round tomatoes",
+        "tomato on the vine",
+        "tomatoes round",
+        "vine tomato on the",
+        "tomato"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000197466074",
+        "name": "Tomato, 3lt Basket",
+        "packageSize": "3 kg",
+        "parsedMassKg": 3,
+        "price": 4.97,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:08:52.610Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/tomato/6000197466075?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/459/691/33383459691.jpg"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "tongs",
+      "label": "Tong",
+      "queriesTried": [
+        "Tong"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "2W5A0V5VL6BH",
+        "name": "Summer Ladies Flip-Flops Wedge Heel Slippers Sandals Casual Flip Flops Womens Shoes",
+        "price": 16.1,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "tropic_isle_coconut_cream_2",
+      "label": "Tropic Isle Coconut Cream 2",
+      "queriesTried": [
+        "tropic isle coconut cream",
+        "coconut cream tropic isle"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "2SGSCBWUSWR9",
+        "name": "CeraVe Baby Moisturizing Cream, Rich Baby Cream with Ceramides and Hyaluronic Acid, 142g",
+        "price": 16.97,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "tropicana_apple_juice",
+      "label": "Tropicana Apple Juice",
+      "queriesTried": [
+        "tropicana apple juice"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6TZITEIM8XDR",
+        "name": "Terra Beata Apple Juice",
+        "price": 6.97,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "unico_pizza_style_olives_2l",
+      "label": "Unico Pizza Style Olives 2l",
+      "queriesTried": [
+        "unico pizza style olives 2l",
+        "unico sliced olives pizza"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "2QU2FN65F6V7",
+        "name": "Kinder's Original BBQ Sauce 379ml",
+        "price": 5.77,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "vanilla_ice_cream",
+      "label": "Vanilla Ice Cream",
+      "queriesTried": [
+        "vanilla ice cream",
+        "vanilla ice cream tub",
+        "cream vanilla ice",
+        "tub vanilla ice cream"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "10221969",
+        "name": "Chapman's Markdale Creamery French Vanilla Ice Cream, 2L",
+        "brand": "Chapman's",
+        "packageSize": "2 kg",
+        "parsedMassKg": 2,
+        "price": 4.47,
+        "wasPrice": 4.97,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:09:26.568Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Chapman-s-Markdale-Creamery-French-Vanilla-Ice-Cream/10221969?classType=REGULAR&athbdg=L3027",
+        "image": "https://i5.walmartimages.ca/asr/0486df96-798b-46a0-97e1-facd6a9a402c.d8f66651685c49a22de8f274fd1ad5dc.jpeg"
+      },
+      "notes": "From receipts catalog (frozen)",
+      "alternates": [
+        {
+          "productId": "1WN0WKOBD97X",
+          "name": "Chapman's Super Premium Plus Vanilla Trilogy Ice Cream in a Tub, 500ml",
+          "brand": "Chapman's",
+          "packageSize": "500 g",
+          "parsedMassKg": 0.5,
+          "price": 4.97,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:09:23.850Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Chapman-s-Super-Premium-Plus-Vanilla-Trilogy-Ice-Cream-in-a-Tub/1WN0WKOBD97X?classType=REGULAR&athbdg=L1102",
+          "image": "https://i5.walmartimages.ca/asr/320b93f5-26ca-4347-9a82-a2b210490f0a.8863f762f14388ea6061cfaee3a72f52.jpeg"
+        },
+        {
+          "productId": "205886",
+          "name": "REAL DAIRY Natural Vanilla Premium Ice Cream, 1.5 L",
+          "brand": "Real Dairy",
+          "packageSize": "1.5 kg",
+          "parsedMassKg": 1.5,
+          "price": 3.97,
+          "wasPrice": 5.48,
+          "onSale": true,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:09:26.568Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/REAL-DAIRY-Natural-Vanilla-Premium-Ice-Cream/205886?classType=REGULAR&athbdg=L1300",
+          "image": "https://i5.walmartimages.ca/asr/5b7d74b0-dcc9-4ae6-9262-6faa755dbc42.69a34e00e1a0457d94caf53ed663583d.jpeg"
+        },
+        {
+          "productId": "6000197072581",
+          "name": "Chapman's Li'l Sammich Vanilla Ice Cream in a Box, 20 x 60mL",
+          "brand": "Chapman's",
+          "packageSize": "1.2 kg",
+          "parsedMassKg": 1.2,
+          "price": 5.97,
+          "wasPrice": 7.97,
+          "onSale": true,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:09:23.850Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Chapman-s-Li-l-Sammich-Vanilla-Ice-Cream-in-a-Box/6000197072581?classType=REGULAR&athbdg=L1300",
+          "image": "https://i5.walmartimages.ca/asr/b8620651-14fc-4b47-8396-8243afb5f7a4.867edfa0a9d4c85eeac7e7748c177d9e.jpeg"
+        },
+        {
+          "productId": "6000196786383",
+          "name": "Natrel Very Vanilla Lactose Free Ice Cream, 473 mL",
+          "brand": "Natrel",
+          "packageSize": "473 g",
+          "parsedMassKg": 0.473,
+          "price": 5.48,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:09:23.850Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Natrel-Very-Vanilla-Lactose-Free-Ice-Cream/6000196786383?classType=REGULAR&athbdg=L1102",
+          "image": "https://i5.walmartimages.ca/asr/42fbc8b1-3d10-4c0b-b1d3-1847099b91ed.2e65f030b79662d41637c1c33a9be7d4.jpeg"
+        },
+        {
+          "productId": "3ZORFCSNZCTK",
+          "name": "Breyers Creamery Style Ice Cream with Real Vanilla Beans Natural Vanilla 100% Canadian Dairy in a Tub 1.41 L, 1.41 L",
+          "brand": "Breyers",
+          "packageSize": "1.41 kg",
+          "parsedMassKg": 1.41,
+          "price": 3.98,
+          "wasPrice": 4.98,
+          "onSale": true,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T22:09:26.568Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Breyers-Creamery-Style-Ice-Cream-with-Real-Vanilla-Beans-Natural-Vanilla-100-Canadian-Dairy-in-a-Tub-1-41-L/3ZORFCSNZCTK?classType=REGULAR&athbdg=L1200",
+          "image": "https://i5.walmartimages.ca/asr/4444740b-b3cd-4728-9c2b-c9cc843353cb.1d1e4b44875fbbe14babeb2d16d15f73.jpeg"
+        }
+      ]
+    },
+    {
+      "id": "white_quinoa_grains_750gr",
+      "label": "White Quinoa Grains 750gr",
+      "queriesTried": [
+        "White Quinoa Grains 750gr"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "1KF8X65SNXPW",
+        "name": "Aparna White Quinoa 800g",
+        "brand": "Aparna Foods",
+        "packageSize": "800 g",
+        "parsedMassKg": 0.8,
+        "price": 19.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:09:29.307Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/White-Quinoa-800g/1KF8X65SNXPW?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/asr/15765330-e4b1-494d-9d52-29e93357dfea.6b5f638035d332cdfeb13150c2e56838.png"
+      },
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
+    },
+    {
+      "id": "yellow_peppers_case",
+      "label": "Yellow Greenhouse Peppers",
+      "queriesTried": [
+        "yellow greenhouse peppers",
+        "yellow bell peppers",
+        "peppers yellow greenhouse",
+        "peppers yellow bell",
+        "yellow pepper",
+        "yellow peppers"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6000197059667",
+        "name": "SUNSET Yellow Pepper, Single, 0.12 - 0.24 KG",
+        "packageSize": "240 g",
+        "parsedMassKg": 0.24,
+        "price": 1.28,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:09:33.353Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/sunset-yellow-pepper/6000197059668?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/_46/800/46800.jpg"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "yellow_onions",
+      "label": "Yellow Onions",
+      "queriesTried": [
+        "Yellow Onions",
+        "Onions Yellow",
+        "yellow onion",
+        "onion yellow"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6ZKC6P9V33K9",
+        "name": "Yellow Onions, Your Fresh Market, 4.54 kg (10 lbs)",
+        "brand": "Your Fresh Market",
+        "packageSize": "4.54 kg",
+        "parsedMassKg": 4.54,
+        "price": 7.47,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T22:09:39.347Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/yellow-onions-your-fresh-market/6ZKC6P9V33K9?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/530/059/6000209530059.jpg"
+      },
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "yukon_potatoes_10lb",
+      "label": "Yukon Potatoes 10lb",
+      "queriesTried": [
+        "yukon gold potatoes 10 lb",
+        "yukon potatoes 10lb",
+        "lb yukon gold potatoes 10",
+        "10lb yukon potatoes",
+        "yukon"
+      ],
+      "status": "no_match",
+      "offer": null,
+      "rejected": {
+        "productId": "6000197072467",
+        "name": "Cavendish Farms Garlic and Rosemary Potato Wedges Value Pack | Made in Canada | Proud Canadian Company, 1.8 kg",
+        "price": 8.96,
+        "reason": "name filter"
+      },
+      "notes": "From receipts catalog (produce)"
     }
   ],
   "updatedAt": "2026-08-14T21:43:34.573Z"

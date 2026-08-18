@@ -1,6 +1,6 @@
 {
   "storeId": "3660",
-  "checkedAt": "2026-08-18T21:26:21.873Z",
+  "checkedAt": "2026-08-18T21:59:17.929Z",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -1010,7 +1010,1859 @@
       },
       "notes": "Live NF refresh (TTL 72h)",
       "alternates": []
+    },
+    {
+      "id": "cups_12oz_black_ripple",
+      "label": "12oz Black Ripple Cups",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cups_12oz_squat_pet",
+      "label": "12oz Squat PET Cups",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "oven_mitts",
+      "label": "15\" Fire Resistance Oven Mitt",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cups_16oz_black_ripple",
+      "label": "16oz Black Ripple Cups",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cups_16oz_pet",
+      "label": "16oz PET Cups",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "frozen_pineapple",
+      "label": "Alasko Pineapple Chunks 5x1",
+      "status": "ok",
+      "offer": {
+        "productId": "21289951_EA",
+        "name": "No Name Naturally Imperfect Frozen Pineapple Pieces",
+        "brand": "No Name",
+        "packageSize": "2 kg, $0.76/100g",
+        "parsedMassKg": 2,
+        "price": 15.29,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:33.985Z",
+        "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-frozen-pineapple-pieces/p/21289951_EA",
+        "image": "https://digital.loblaws.ca/PCX/21289951_EA/en/1/21289951_en_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21123898_EA",
+          "name": "PC Organics Frozen Pineapple Chunks, Organic",
+          "brand": "PC Organics",
+          "packageSize": "600 g, $1.42/100g",
+          "parsedMassKg": 0.6,
+          "price": 8.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:31.857Z",
+          "sourceUrl": "https://www.nofrills.ca/en/frozen-pineapple-chunks-organic/p/21123898_EA",
+          "image": "https://digital.loblaws.ca/PCX/21123898_EA/en/1/21123898_en_front_v1_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "jam_apple_strawberry",
+      "label": "Apple Strawberry Jam",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "lids_bagasse_bowl",
+      "label": "Bagasse Bowl Lids",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "bagels",
+      "label": "Bagels",
+      "status": "ok",
+      "offer": {
+        "productId": "21297831_EA",
+        "name": "No Name Everything Bagels",
+        "brand": "No Name",
+        "packageSize": "510 g, $0.44/100g",
+        "parsedMassKg": 0.51,
+        "price": 2.25,
+        "wasPrice": 2.49,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:55:35.101Z",
+        "sourceUrl": "https://www.nofrills.ca/en/everything-bagels/p/21297831_EA",
+        "image": "https://digital.loblaws.ca/PCX/21297831_EA/en/1/21297831_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21241226_EA",
+          "name": "Poppy Bagels",
+          "packageSize": "600 g, $1.13/100g",
+          "parsedMassKg": 0.6,
+          "price": 6.79,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:55:35.101Z",
+          "sourceUrl": "https://www.nofrills.ca/en/poppy-bagels/p/21241226_EA",
+          "image": "https://digital.loblaws.ca/PCX/21241226_EA/en/1/21241226_en_front_1200.png"
+        },
+        {
+          "productId": "21666664_EA",
+          "name": "No Name Bagels, 12-Grain",
+          "brand": "No Name",
+          "packageSize": "450 g, $0.50/100g",
+          "parsedMassKg": 0.45,
+          "price": 2.25,
+          "wasPrice": 2.49,
+          "onSale": true,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:55:35.101Z",
+          "sourceUrl": "https://www.nofrills.ca/en/bagels-12-grain/p/21666664_EA",
+          "image": "https://digital.loblaws.ca/PCX/21666664_EA/en/1/21666664_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "baguette_artisan",
+      "label": "Baguette Artisan",
+      "status": "ok",
+      "offer": {
+        "productId": "21638046_EA",
+        "name": "ACE Sourdough Baguette",
+        "brand": "ACE",
+        "packageSize": "370 g, $0.81/100g",
+        "parsedMassKg": 0.37,
+        "price": 3,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:55:35.862Z",
+        "sourceUrl": "https://www.nofrills.ca/en/sourdough-baguette/p/21638046_EA",
+        "image": "https://digital.loblaws.ca/PCX/21638046_EA/en/1/21638046_en_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "bamboo_paddles",
+      "label": "Bamboo Paddles 3in",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "bartlett_pears_kg",
+      "label": "Bartlett Pears",
+      "status": "ok",
+      "offer": {
+        "productId": "21111368001_EA",
+        "name": "Farmer's Market Bartlett Pear, 2 L",
+        "brand": "Farmer's Market",
+        "packageSize": "1 ea, $7.00/1ea",
+        "parsedMassKg": 0,
+        "price": 7,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:55:37.232Z",
+        "sourceUrl": "https://www.nofrills.ca/en/bartlett-pear-2-l/p/21111368001_EA",
+        "image": "https://digital.loblaws.ca/PCX/21111368001_EA/en/1/21111368001_enfr_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "cake_kits",
+      "label": "Cake Kits",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cantaloupe",
+      "label": "Cantaloupe",
+      "status": "ok",
+      "offer": {
+        "productId": "20167017001_EA",
+        "name": "Cantaloupe",
+        "packageSize": "1 ea, $4.99/1ea",
+        "parsedMassKg": 0,
+        "price": 4.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:49.647Z",
+        "sourceUrl": "https://www.nofrills.ca/en/cantaloupe/p/20167017001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20167017001_EA/en/1/20167017001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "celery",
+      "label": "Celery",
+      "status": "ok",
+      "offer": {
+        "productId": "20163119001_EA",
+        "name": "Celery Stalks",
+        "packageSize": "1 ea, $2.49/1ea",
+        "parsedMassKg": 0,
+        "price": 2.49,
+        "wasPrice": 2.99,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:41.383Z",
+        "sourceUrl": "https://www.nofrills.ca/en/celery-stalks/p/20163119001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20163119001_EA/en/1/20163119001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20600792001_EA",
+          "name": "PC Organics Celery Hearts",
+          "brand": "PC Organics",
+          "packageSize": "2 ea, $2.50/1ea",
+          "parsedMassKg": 0,
+          "price": 4.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:41.383Z",
+          "sourceUrl": "https://www.nofrills.ca/en/celery-hearts/p/20600792001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20600792001_EA/en/1/20600792001_en_front_1200.png"
+        },
+        {
+          "productId": "20100770001_EA",
+          "name": "Celery Hearts",
+          "packageSize": "2 ea, $2.50/1ea",
+          "parsedMassKg": 0,
+          "price": 4.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:41.383Z",
+          "sourceUrl": "https://www.nofrills.ca/en/celery-hearts/p/20100770001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20100770001_EA/en/1/20100770001_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "cibona_ranch_dressing_4lt",
+      "label": "Cibona Ranch Dressing 4lt",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cilantro",
+      "label": "Cilantro",
+      "status": "ok",
+      "offer": {
+        "productId": "21184810_EA",
+        "name": "President's Choice Cilantro",
+        "brand": "President's Choice",
+        "packageSize": "28 g",
+        "parsedMassKg": 0.028,
+        "price": 3,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:44.663Z",
+        "sourceUrl": "https://www.nofrills.ca/en/cilantro/p/21184810_EA",
+        "image": "https://digital.loblaws.ca/PCX/21184810_EA/en/1/21184810_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20091825001_EA",
+          "name": "Cilantro",
+          "packageSize": "1 ea, $1.89/1ea",
+          "parsedMassKg": 0,
+          "price": 1.89,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:44.663Z",
+          "sourceUrl": "https://www.nofrills.ca/en/cilantro/p/20091825001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20091825001_EA/en/1/20091825001_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "party_tray_12x12",
+      "label": "Clear Party Tray 12x12",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "coke_classic_cdn_cans_24x35",
+      "label": "Coke Classic Cdn Cans 24x35",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cottage_cheese",
+      "label": "Cottage Cheese",
+      "status": "ok",
+      "offer": {
+        "productId": "21387030_EA",
+        "name": "Mehadrin Cottage Cheese 0.01    ",
+        "brand": "Mehadrin",
+        "packageSize": "12x453.0 g, $0.21/100g",
+        "parsedMassKg": 5.436,
+        "price": 11.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:53.031Z",
+        "sourceUrl": "https://www.nofrills.ca/en/cottage-cheese-0-01/p/21387030_EA",
+        "image": "https://digital.loblaws.ca/PCX/21387030_EA/en/1/1435300051_en_front_centre_marketing_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20183991002_EA",
+          "name": "No Name Cottage Cheese",
+          "brand": "No Name",
+          "packageSize": "500 g, $0.90/100g",
+          "parsedMassKg": 0.5,
+          "price": 4.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:53.031Z",
+          "sourceUrl": "https://www.nofrills.ca/en/cottage-cheese/p/20183991002_EA",
+          "image": "https://digital.loblaws.ca/PCX/20183991002_EA/en/1/20183991002_en_front_v1_1200.png"
+        },
+        {
+          "productId": "20833357_EA",
+          "name": "No Name 1% M.F. Cottage Cheese",
+          "brand": "No Name",
+          "packageSize": "750 g, $0.73/100g",
+          "parsedMassKg": 0.75,
+          "price": 5.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:53.031Z",
+          "sourceUrl": "https://www.nofrills.ca/en/1-m-f-cottage-cheese/p/20833357_EA",
+          "image": "https://digital.loblaws.ca/PCX/20833357_EA/en/1/6038313019_en_front_centre_marketing_1_GS1_Ecommerce_1200.png"
+        },
+        {
+          "productId": "20002410_EA",
+          "name": "Lactaid Cottage Cheese",
+          "brand": "Lactaid",
+          "packageSize": "454 g, $1.98/100g",
+          "parsedMassKg": 0.454,
+          "price": 8.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:53.031Z",
+          "sourceUrl": "https://www.nofrills.ca/en/cottage-cheese/p/20002410_EA",
+          "image": "https://assets.loblaws.ca/pcx_bronx_fe_assets/images/common/coming-soon-en-web.png"
+        }
+      ]
+    },
+    {
+      "id": "craize_snack_cracker",
+      "label": "Craize Snack Cracker",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "cream_cheese_bars",
+      "label": "Cream Cheese Bars",
+      "status": "ok",
+      "offer": {
+        "productId": "20671277_EA",
+        "name": "J and J Cream Cheese Bars",
+        "brand": "J and J",
+        "packageSize": "1.37 kg, $2.85/100g",
+        "parsedMassKg": 1.37,
+        "price": 39,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:17.925Z",
+        "sourceUrl": "https://www.nofrills.ca/en/cream-cheese-bars/p/20671277_EA",
+        "image": "https://digital.loblaws.ca/PCX/20671277_EA/en/1/20671277_en_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "brown_sugar",
+      "label": "Dark Brown Sugar",
+      "status": "ok",
+      "offer": {
+        "productId": "20169394_EA",
+        "name": "Lantic Natural Dark Brown Sugar",
+        "brand": "Lantic",
+        "packageSize": "1 kg, $0.38/100g",
+        "parsedMassKg": 1,
+        "price": 3.79,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:55:50.149Z",
+        "sourceUrl": "https://www.nofrills.ca/en/natural-dark-brown-sugar/p/20169394_EA",
+        "image": "https://digital.loblaws.ca/PCX/20169394_EA/en/1/5889165231_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "lids_dome_12_24oz",
+      "label": "Dome Lids 12-24oz",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "double_burner",
+      "label": "Double Burner",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "edible_decor",
+      "label": "Edible Decor",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "fettuccine",
+      "label": "Fettuccine",
+      "status": "ok",
+      "offer": {
+        "productId": "20315613007_EA",
+        "name": "No Name Fettuccine",
+        "brand": "No Name",
+        "packageSize": "900 g, $0.22/100g",
+        "parsedMassKg": 0.9,
+        "price": 2,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:55:54.090Z",
+        "sourceUrl": "https://www.nofrills.ca/en/fettuccine/p/20315613007_EA",
+        "image": "https://digital.loblaws.ca/PCX/20315613007_EA/en/1/20315613007_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21521171_EA",
+          "name": "Ziggy's Fettuccine",
+          "brand": "Ziggy's",
+          "packageSize": "350 g, $1.29/100g",
+          "parsedMassKg": 0.35,
+          "price": 4.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:55:54.090Z",
+          "sourceUrl": "https://www.nofrills.ca/en/fettuccine/p/21521171_EA",
+          "image": "https://digital.loblaws.ca/PCX/21521171_EA/en/1/21521171_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "floor_cleaner_lavender",
+      "label": "Floor Cleaner Lavender 4lt",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "foil_green",
+      "label": "Foil Green 4.27",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "fresh_mozzarella",
+      "label": "Fresh Mozzarella",
+      "status": "ok",
+      "offer": {
+        "productId": "21632629_EA",
+        "name": "Galbani Fresh Mozzarella",
+        "brand": "Galbani",
+        "packageSize": "227 g, $3.08/100g",
+        "parsedMassKg": 0.227,
+        "price": 6.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:17.218Z",
+        "sourceUrl": "https://www.nofrills.ca/en/fresh-mozzarella/p/21632629_EA",
+        "image": "https://digital.loblaws.ca/PCX/21632629_EA/en/1/6820086398_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20217736_EA",
+          "name": "President's Choice Mozzarella, Sliced",
+          "brand": "President's Choice",
+          "packageSize": "170 g, $2.94/100g",
+          "parsedMassKg": 0.17,
+          "price": 5,
+          "wasPrice": 6.99,
+          "onSale": true,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:59:17.218Z",
+          "sourceUrl": "https://www.nofrills.ca/en/mozzarella-sliced/p/20217736_EA",
+          "image": "https://digital.loblaws.ca/PCX/20217736_EA/en/1/20217736_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "butternut_squash_frozen",
+      "label": "Frozen Butternut Squash",
+      "status": "ok",
+      "offer": {
+        "productId": "21004391_EA",
+        "name": "PC Organics Frozen Butternut Squash Chunks, Organic",
+        "brand": "PC Organics",
+        "packageSize": "400 g, $1.25/100g",
+        "parsedMassKg": 0.4,
+        "price": 5,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:16.022Z",
+        "sourceUrl": "https://www.nofrills.ca/en/frozen-butternut-squash-chunks-organic/p/21004391_EA",
+        "image": "https://digital.loblaws.ca/PCX/21004391_EA/en/1/21004391_enfr_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "frozen_carrots",
+      "label": "Frozen Diced Carrots",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "gatorade_zero_variety_28x59",
+      "label": "Gatorade Zero Variety 28x59",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "golden_berries",
+      "label": "Golden Berries",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "gooseberries",
+      "label": "Gooseberries",
+      "status": "ok",
+      "offer": {
+        "productId": "20845869_EA",
+        "name": "Physalis (Gooseberries)",
+        "packageSize": "200 g, $2.50/100g",
+        "parsedMassKg": 0.2,
+        "price": 4.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:09.359Z",
+        "sourceUrl": "https://www.nofrills.ca/en/physalis-gooseberries/p/20845869_EA",
+        "image": "https://digital.loblaws.ca/PCX/20845869_EA/en/1/20845869_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "granny_smith_kg",
+      "label": "Granny Smith Apples",
+      "status": "ok",
+      "offer": {
+        "productId": "20128645001_EA",
+        "name": "Farmer's Market Granny Smith Apples, 4 lb Bag",
+        "brand": "Farmer's Market",
+        "packageSize": "1.81 kg, $0.55/100g",
+        "parsedMassKg": 1.81436948,
+        "price": 9.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:10.487Z",
+        "sourceUrl": "https://www.nofrills.ca/en/granny-smith-apples-4-lb-bag/p/20128645001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20128645001_EA/en/1/20128645001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "guest_towel_napkins",
+      "label": "Guest Towel Napkins",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "haolam_havarti_and_dill",
+      "label": "Haolam Havarti & Dill",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "haolam_muenster_color",
+      "label": "Haolam Muenster Color",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "haolam_ricotta_cheese",
+      "label": "Haolam Ricotta Cheese",
+      "status": "ok",
+      "offer": {
+        "productId": "20276046_EA",
+        "name": "Haolam Ricotta Cheese",
+        "brand": "Haolam",
+        "packageSize": "1.36 kg, $2.28/100g",
+        "parsedMassKg": 1.36,
+        "price": 30.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:15.510Z",
+        "sourceUrl": "https://www.nofrills.ca/en/ricotta-cheese/p/20276046_EA",
+        "image": "https://digital.loblaws.ca/PCX/20276046_EA/en/1/20276046_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "haolam_sliced_cheese",
+      "label": "Haolam Sliced Cheese",
+      "status": "ok",
+      "offer": {
+        "productId": "20164279_EA",
+        "name": "Haolam Sliced Cheese",
+        "brand": "Haolam",
+        "packageSize": "340 g, $5.15/100g",
+        "parsedMassKg": 0.34,
+        "price": 17.5,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:16.566Z",
+        "sourceUrl": "https://www.nofrills.ca/en/sliced-cheese/p/20164279_EA",
+        "image": "https://digital.loblaws.ca/PCX/20164279_EA/en/1/20164279_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "harvest_raw_sunflower_seeds",
+      "label": "Harvest Raw Sunflower Seeds",
+      "status": "ok",
+      "offer": {
+        "productId": "20559162_EA",
+        "name": "Amira Raw Sunflower Seeds, Shelled",
+        "brand": "Amira",
+        "packageSize": "450 g, $1.00/100g",
+        "parsedMassKg": 0.45,
+        "price": 4.5,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:18.156Z",
+        "sourceUrl": "https://www.nofrills.ca/en/raw-sunflower-seeds-shelled/p/20559162_EA",
+        "image": "https://digital.loblaws.ca/PCX/20559162_EA/en/1/20559162_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "honeydew_melons",
+      "label": "Honeydew Melons",
+      "status": "ok",
+      "offer": {
+        "productId": "20045276001_EA",
+        "name": "Honeydew Melon",
+        "packageSize": "1 ea, $5.99/1ea",
+        "parsedMassKg": 0,
+        "price": 5.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:50.305Z",
+        "sourceUrl": "https://www.nofrills.ca/en/honeydew-melon/p/20045276001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20045276001_EA/en/1/20045276001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "instant_coffee_kosher",
+      "label": "Instant Coffee (kosher)",
+      "status": "ok",
+      "offer": {
+        "productId": "20081513_EA",
+        "name": "Elite Kosher Instant Coffee",
+        "brand": "Elite",
+        "packageSize": "200 g, $4.75/100g",
+        "parsedMassKg": 0.2,
+        "price": 9.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:20.531Z",
+        "sourceUrl": "https://www.nofrills.ca/en/kosher-instant-coffee/p/20081513_EA",
+        "image": "https://digital.loblaws.ca/PCX/20081513_EA/en/1/20081513_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "italia_pomace_oil_3lt",
+      "label": "Italia Pomace Oil 3lt",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "jalapeno_peppers_kg",
+      "label": "Jalapeño Peppers",
+      "status": "ok",
+      "offer": {
+        "productId": "20088387001_KG",
+        "name": "Jalapeno Peppers",
+        "packageSize": "$11.00/1kg $4.99/1lb",
+        "parsedMassKg": 0,
+        "price": 0.55,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:23.272Z",
+        "sourceUrl": "https://www.nofrills.ca/en/jalapeno-peppers/p/20088387001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20088387001_KG/en/1/20088387001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "limes_lrg",
+      "label": "Limes Lrg",
+      "status": "ok",
+      "offer": {
+        "productId": "21673921001_EA",
+        "name": "No Name Naturally Imperfect Limes",
+        "brand": "No Name",
+        "packageSize": "680 g, $0.74/100g",
+        "parsedMassKg": 0.68,
+        "price": 5,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:52.230Z",
+        "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-limes/p/21673921001_EA",
+        "image": "https://digital.loblaws.ca/PCX/21673921001_EA/en/1/21673921001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20040489001_EA",
+          "name": "Limes",
+          "packageSize": "1 ea, $0.69/1ea",
+          "parsedMassKg": 0,
+          "price": 0.69,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:52.230Z",
+          "sourceUrl": "https://www.nofrills.ca/en/limes/p/20040489001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20040489001_EA/en/1/20040489001_en_front_v2_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "macabee_pizza_bagel_1",
+      "label": "Macabee Pizza Bagel-1",
+      "status": "ok",
+      "offer": {
+        "productId": "21055692_EA",
+        "name": "Macabee Kosher Pizza Bagel, 18 pack",
+        "brand": "Macabee",
+        "packageSize": "1304 g, $1.73/100g",
+        "parsedMassKg": 1.304,
+        "price": 22.5,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:27.482Z",
+        "sourceUrl": "https://www.nofrills.ca/en/kosher-pizza-bagel-18-pack/p/21055692_EA",
+        "image": "https://digital.loblaws.ca/PCX/21055692_EA/en/1/21055692_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "magic_bullet",
+      "label": "Magic Bullet",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "marshmallow_white_min",
+      "label": "Marshmallow White Min",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "measuring_cup",
+      "label": "Measuring Cup",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "milan_grated_parmesan",
+      "label": "Milan Grated Parmesan",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "gloves_nitrile_large",
+      "label": "Nitrile Gloves Large",
+      "status": "ok",
+      "offer": {
+        "productId": "21335396_EA",
+        "name": "President's Choice Large Nitrile Cleaning Gloves",
+        "brand": "President's Choice",
+        "packageSize": "1 ea, $3.29/1ea",
+        "parsedMassKg": 0,
+        "price": 3.29,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:35.031Z",
+        "sourceUrl": "https://www.nofrills.ca/en/large-nitrile-cleaning-gloves/p/21335396_EA",
+        "image": "https://digital.loblaws.ca/PCX/21335396_EA/en/8/6038388829_enfr_front_noPlunge_ecomm_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "gloves_nitrile_medium",
+      "label": "Nitrile Gloves Medium",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "oreo_sandwich_cookies",
+      "label": "Oreo Sandwich Cookies",
+      "status": "ok",
+      "offer": {
+        "productId": "21358406_EA",
+        "name": "Christie OREO Double Stuf Sandwich Cookies",
+        "brand": "Christie",
+        "packageSize": "261 g, $1.45/100g",
+        "parsedMassKg": 0.261,
+        "price": 3.79,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:38.863Z",
+        "sourceUrl": "https://www.nofrills.ca/en/oreo-double-stuf-sandwich-cookies/p/21358406_EA",
+        "image": "https://digital.loblaws.ca/PCX/21358406_EA/en/1/21358406_en_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "pam_cookware_coating",
+      "label": "Pam Cookware Coating",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "parsley",
+      "label": "Parsley",
+      "status": "ok",
+      "offer": {
+        "productId": "21056543_EA",
+        "name": "Gefen Chopped Parsley",
+        "brand": "Gefen",
+        "packageSize": "71 g, $7.04/100g",
+        "parsedMassKg": 0.071,
+        "price": 5,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:45.462Z",
+        "sourceUrl": "https://www.nofrills.ca/en/chopped-parsley/p/21056543_EA",
+        "image": "https://digital.loblaws.ca/PCX/21056543_EA/en/1/21056543_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20139141001_EA",
+          "name": "Italian Parsley",
+          "packageSize": "1 ea, $2.49/1ea",
+          "parsedMassKg": 0,
+          "price": 2.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:45.462Z",
+          "sourceUrl": "https://www.nofrills.ca/en/italian-parsley/p/20139141001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20139141001_EA/en/1/20139141001_en_front_1200.png"
+        },
+        {
+          "productId": "20015746001_EA",
+          "name": "Curly Parsley",
+          "packageSize": "1 ea, $2.49/1ea",
+          "parsedMassKg": 0,
+          "price": 2.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:45.462Z",
+          "sourceUrl": "https://www.nofrills.ca/en/curly-parsley/p/20015746001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20015746001_EA/en/1/20015746001_en_front_v1_1200.png"
+        },
+        {
+          "productId": "20618784_EA",
+          "name": "No Name Parsley Flakes",
+          "brand": "No Name",
+          "packageSize": "15 g, $16.67/100g",
+          "parsedMassKg": 0.015,
+          "price": 2.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:45.462Z",
+          "sourceUrl": "https://www.nofrills.ca/en/parsley-flakes/p/20618784_EA",
+          "image": "https://digital.loblaws.ca/PCX/20618784_EA/en/1/20618784_en_front_v1_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "penne_pasta",
+      "label": "Penne Pasta",
+      "status": "ok",
+      "offer": {
+        "productId": "20315613006_EA",
+        "name": "No Name Penne Rigate Pasta",
+        "brand": "No Name",
+        "packageSize": "900 g, $0.22/100g",
+        "parsedMassKg": 0.9,
+        "price": 2,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:41.884Z",
+        "sourceUrl": "https://www.nofrills.ca/en/penne-rigate-pasta/p/20315613006_EA",
+        "image": "https://digital.loblaws.ca/PCX/20315613006_EA/en/1/20315613006_en_front_v3_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21001578_EA",
+          "name": "President's Choice Penne Rigate Pasta",
+          "brand": "President's Choice",
+          "packageSize": "454 g, $0.50/100g",
+          "parsedMassKg": 0.454,
+          "price": 2.29,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:41.884Z",
+          "sourceUrl": "https://www.nofrills.ca/en/penne-rigate-pasta/p/21001578_EA",
+          "image": "https://digital.loblaws.ca/PCX/21001578_EA/en/1/21001578_en_front_1200.png"
+        },
+        {
+          "productId": "21597652_EA",
+          "name": "Chickapea Organic Penne",
+          "brand": "Chickapea",
+          "packageSize": "227 g, $2.64/100g",
+          "parsedMassKg": 0.227,
+          "price": 5.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:41.884Z",
+          "sourceUrl": "https://www.nofrills.ca/en/organic-penne/p/21597652_EA",
+          "image": "https://digital.loblaws.ca/PCX/21597652_EA/en/1/62845186872_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "pickled_eggplant",
+      "label": "Pickled Eggplant",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "wraps_plain_10in",
+      "label": "Plain Wraps 10\"",
+      "status": "ok",
+      "offer": {
+        "productId": "21064397_EA",
+        "name": "No Name 10 Wheat Tortillas",
+        "brand": "No Name",
+        "packageSize": "320 g, $0.84/100g",
+        "parsedMassKg": 0.32,
+        "price": 2.69,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:44.592Z",
+        "sourceUrl": "https://www.nofrills.ca/en/10-wheat-tortillas/p/21064397_EA",
+        "image": "https://digital.loblaws.ca/PCX/21064397_EA/en/1/21064397_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "wraps_plain_6in",
+      "label": "Plain Wraps 6\"",
+      "status": "ok",
+      "offer": {
+        "productId": "21718133_EA",
+        "name": "Foam Pumpkin Decoration 4.75\" x 6\" - Orange",
+        "packageSize": "1 ea, $6.00/1ea",
+        "price": 6,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:09.830Z",
+        "sourceUrl": "https://www.nofrills.ca/en/foam-pumpkin-decoration-4-75-x-6-orange/p/21718133_EA",
+        "image": "https://digital.loblaws.ca/PCX/21718133_EA/en/1/21718133_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "plastic_tablecloth",
+      "label": "Plastic Tablecloth",
+      "status": "ok",
+      "offer": {
+        "productId": "21693324_EA",
+        "name": "Everyday Essentials Water Resistant Tablecloth 60 in x 102 in - Stripe",
+        "brand": "Everyday Essentials",
+        "packageSize": "1 ea, $3.94/1ea",
+        "price": 3.94,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:47.399Z",
+        "sourceUrl": "https://www.nofrills.ca/en/water-resistant-tablecloth-60-in-x-102-in-stripe/p/21693324_EA",
+        "image": "https://digital.loblaws.ca/PCX/21693324_EA/en/1/21693324_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "plastic_wrap_18x2000",
+      "label": "Plastic Wrap 18x2000",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "pomegranates_30s",
+      "label": "Pomegranates 30s",
+      "status": "ok",
+      "offer": {
+        "productId": "20134767001_EA",
+        "name": "Pomegranate",
+        "packageSize": "1 ea, $3.79/1ea",
+        "parsedMassKg": 0,
+        "price": 3.79,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:39.262Z",
+        "sourceUrl": "https://www.nofrills.ca/en/pomegranate/p/20134767001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20134767001_EA/en/1/20134767001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "puff_pastry_sheets",
+      "label": "Puff Pastry Sheets",
+      "status": "ok",
+      "offer": {
+        "productId": "20072329_EA",
+        "name": "Home Style Kosher Maison Puff Pastry Dough",
+        "brand": "Home Style",
+        "packageSize": "500 g, $0.60/100g",
+        "parsedMassKg": 0.5,
+        "price": 2.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:53.006Z",
+        "sourceUrl": "https://www.nofrills.ca/en/kosher-maison-puff-pastry-dough/p/20072329_EA",
+        "image": "https://assets.loblaws.ca/pcx_bronx_fe_assets/images/common/coming-soon-en-web.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21760933_EA",
+          "name": "European Delight Frozen Dough Puff Pastry",
+          "brand": "European Delight",
+          "packageSize": "454 g, $0.77/100g",
+          "parsedMassKg": 0.454,
+          "price": 3.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:52.088Z",
+          "sourceUrl": "https://www.nofrills.ca/en/frozen-dough-puff-pastry/p/21760933_EA",
+          "image": "https://digital.loblaws.ca/PCX/21760933_EA/en/1/83839600215_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
+        },
+        {
+          "productId": "21056550_EA",
+          "name": "Gefen Kosher Puff Pastry Pre-Rolled Sheet",
+          "brand": "Gefen",
+          "packageSize": "595 g, $1.43/100g",
+          "parsedMassKg": 0.595,
+          "price": 8.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:51.304Z",
+          "sourceUrl": "https://www.nofrills.ca/en/kosher-puff-pastry-pre-rolled-sheet/p/21056550_EA",
+          "image": "https://digital.loblaws.ca/PCX/21056550_EA/en/1/21056550_en_front_1200.png"
+        },
+        {
+          "productId": "21288850_EA",
+          "name": "President's Choice Butter Puff Pastry",
+          "brand": "President's Choice",
+          "packageSize": "450 g, $1.11/100g",
+          "parsedMassKg": 0.45,
+          "price": 5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:52.088Z",
+          "sourceUrl": "https://www.nofrills.ca/en/butter-puff-pastry/p/21288850_EA",
+          "image": "https://digital.loblaws.ca/PCX/21288850_EA/en/1/21288850_en_front_v1_1200.png"
+        },
+        {
+          "productId": "21606988_EA",
+          "name": "ALFA Puff Pastry",
+          "brand": "ALFA",
+          "packageSize": "850 g, $0.76/100g",
+          "parsedMassKg": 0.85,
+          "price": 6.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:52.088Z",
+          "sourceUrl": "https://www.nofrills.ca/en/puff-pastry/p/21606988_EA",
+          "image": "https://digital.loblaws.ca/PCX/21606988_EA/en/1/520253548300_enfr_front_centre_marketing_1_GS1_Ecommerce_1200.png"
+        },
+        {
+          "productId": "20303840007_EA",
+          "name": "Tenderflake Puff Pastry",
+          "brand": "Tenderflake",
+          "packageSize": "397 g, $1.26/100g",
+          "parsedMassKg": 0.397,
+          "price": 4.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:52.088Z",
+          "sourceUrl": "https://www.nofrills.ca/en/puff-pastry/p/20303840007_EA",
+          "image": "https://digital.loblaws.ca/PCX/20303840007_EA/en/1/6872100889_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
+        },
+        {
+          "productId": "20168276_EA",
+          "name": "Crown Kosher Bakers Puff Pastry",
+          "brand": "Crown",
+          "packageSize": "1 kg, $0.83/100g",
+          "parsedMassKg": 1,
+          "price": 8.29,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:52.088Z",
+          "sourceUrl": "https://www.nofrills.ca/en/kosher-bakers-puff-pastry/p/20168276_EA",
+          "image": "https://digital.loblaws.ca/PCX/20168276_EA/en/1/20168276_en_front_1200.png"
+        },
+        {
+          "productId": "21702975_EA",
+          "name": "Marini Glazed Puff Pastry",
+          "brand": "Marini",
+          "packageSize": "200 g, $1.85/100g",
+          "parsedMassKg": 0.2,
+          "price": 3.69,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:53.006Z",
+          "sourceUrl": "https://www.nofrills.ca/en/glazed-puff-pastry/p/21702975_EA",
+          "image": "https://digital.loblaws.ca/PCX/21702975_EA/en/1/801599700063_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "red_onions",
+      "label": "Red Onions",
+      "status": "ok",
+      "offer": {
+        "productId": "21614337001_EA",
+        "name": "Red Onion",
+        "packageSize": "3.18 kg, $0.22/100g",
+        "parsedMassKg": 3.18,
+        "price": 6.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:54.458Z",
+        "sourceUrl": "https://www.nofrills.ca/en/red-onion/p/21614337001_EA",
+        "image": "https://digital.loblaws.ca/PCX/21614337001_EA/en/1/21614337001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "red_radish",
+      "label": "Red Radish",
+      "status": "ok",
+      "offer": {
+        "productId": "20175513001_EA",
+        "name": "Radish",
+        "packageSize": "454 g, $0.66/100g",
+        "parsedMassKg": 0.454,
+        "price": 2.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:56.311Z",
+        "sourceUrl": "https://www.nofrills.ca/en/radish/p/20175513001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20175513001_EA/en/1/20175513001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20032320001_EA",
+          "name": "Radishes",
+          "packageSize": "1 ea, $2.99/1ea",
+          "parsedMassKg": 0,
+          "price": 2.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:56:56.311Z",
+          "sourceUrl": "https://www.nofrills.ca/en/radishes/p/20032320001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20032320001_EA/en/1/20032320001_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "red_grapes_kg",
+      "label": "Red Seedless Grapes",
+      "status": "ok",
+      "offer": {
+        "productId": "20159199001_KG",
+        "name": "Red Seedless Grapes",
+        "packageSize": "$4.39/1kg $1.99/1lb",
+        "parsedMassKg": 0,
+        "price": 4.35,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:56:58.154Z",
+        "sourceUrl": "https://www.nofrills.ca/en/red-seedless-grapes/p/20159199001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20159199001_KG/en/1/20159199001_en_front_v2_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "lids_deli_round",
+      "label": "Round Deli Container Lids",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "san_pellegrino_aranciata_or",
+      "label": "San Pellegrino Aranciata/Or",
+      "status": "ok",
+      "offer": {
+        "productId": "21433205_C06",
+        "name": "San Pellegrino Aranciata Italian Sparkling Fruit Beverage",
+        "brand": "San Pellegrino",
+        "packageSize": "6x330.0 ml, $0.35/100ml",
+        "parsedMassKg": 1.98,
+        "price": 7,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:02.114Z",
+        "sourceUrl": "https://www.nofrills.ca/en/aranciata-italian-sparkling-fruit-beverage/p/21433205_C06",
+        "image": "https://digital.loblaws.ca/PCX/21433205_C06/en/1/21433205_en_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "schtark_3_cheese_blend",
+      "label": "Schtark 3 Cheese Blend",
+      "status": "ok",
+      "offer": {
+        "productId": "20671472_EA",
+        "name": "Mehadrin Schtark Sliced Cheese, 3 Cheese Blend",
+        "brand": "Mehadrin",
+        "packageSize": "142 g, $5.99/100g",
+        "parsedMassKg": 0.142,
+        "price": 8.5,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:03.665Z",
+        "sourceUrl": "https://www.nofrills.ca/en/schtark-sliced-cheese-3-cheese-blend/p/20671472_EA",
+        "image": "https://digital.loblaws.ca/PCX/20671472_EA/en/1/20671472_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "shredded_cheddar_cheese",
+      "label": "Shredded Cheddar Cheese",
+      "status": "ok",
+      "offer": {
+        "productId": "20309769_EA",
+        "name": "No Name Shredded Cheddar and Monterey Jack Cheese Blend Club Size",
+        "brand": "No Name",
+        "packageSize": "900 g, $1.50/100g",
+        "parsedMassKg": 0.9,
+        "price": 13.5,
+        "wasPrice": 15.5,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:47.706Z",
+        "sourceUrl": "https://www.nofrills.ca/en/shredded-cheddar-and-monterey-jack-cheese-blend-cl/p/20309769_EA",
+        "image": "https://digital.loblaws.ca/PCX/20309769_EA/en/1/20309769_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "shredded_mozzarella",
+      "label": "Shredded Mozzarella",
+      "status": "ok",
+      "offer": {
+        "productId": "21082491_EA",
+        "name": "No Name Shredded Mozzarella",
+        "brand": "No Name",
+        "packageSize": "320 g, $1.81/100g",
+        "parsedMassKg": 0.32,
+        "price": 5.79,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:48.514Z",
+        "sourceUrl": "https://www.nofrills.ca/en/shredded-mozzarella/p/21082491_EA",
+        "image": "https://digital.loblaws.ca/PCX/21082491_EA/en/1/21082491_en_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21179380_EA",
+          "name": "Mehadrin Shredded Mozzarella",
+          "brand": "Mehadrin",
+          "packageSize": "800 g, $3.75/100g",
+          "parsedMassKg": 0.8,
+          "price": 29.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:48.514Z",
+          "sourceUrl": "https://www.nofrills.ca/en/shredded-mozzarella/p/21179380_EA",
+          "image": "https://digital.loblaws.ca/PCX/21179380_EA/en/1/21179380_enfr_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "sink_strainer",
+      "label": "Sink Strainer",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "mushrooms_sliced",
+      "label": "Sliced White Mushrooms",
+      "status": "ok",
+      "offer": {
+        "productId": "20299211_EA",
+        "name": "No Name Sliced Mushrooms",
+        "brand": "No Name",
+        "packageSize": "284 ml, $0.44/100ml",
+        "parsedMassKg": 0.284,
+        "price": 1.25,
+        "wasPrice": 1.29,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:12.514Z",
+        "sourceUrl": "https://www.nofrills.ca/en/sliced-mushrooms/p/20299211_EA",
+        "image": "https://digital.loblaws.ca/PCX/20299211_EA/en/1/20299211_en_front_v2_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20743653_EA",
+          "name": "President's Choice Sliced White Mushrooms",
+          "brand": "President's Choice",
+          "packageSize": "227 g, $1.10/100g",
+          "parsedMassKg": 0.227,
+          "price": 2.49,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:59:11.371Z",
+          "sourceUrl": "https://www.nofrills.ca/en/sliced-white-mushrooms/p/20743653_EA",
+          "image": "https://digital.loblaws.ca/PCX/20743653_EA/en/1/20743653_en_front_1200.png"
+        },
+        {
+          "productId": "20755816_EA",
+          "name": "President's Choice Sliced Portobello Mushrooms",
+          "brand": "President's Choice",
+          "packageSize": "170 g, $2.94/100g",
+          "parsedMassKg": 0.17,
+          "price": 5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:59:12.514Z",
+          "sourceUrl": "https://www.nofrills.ca/en/sliced-portobello-mushrooms/p/20755816_EA",
+          "image": "https://digital.loblaws.ca/PCX/20755816_EA/en/1/20755816_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "sour_cream",
+      "label": "Sour Cream",
+      "status": "ok",
+      "offer": {
+        "productId": "20299657_EA",
+        "name": "No Name Sour Cream",
+        "brand": "No Name",
+        "packageSize": "500 ml, $0.56/100ml",
+        "parsedMassKg": 0.5,
+        "price": 2.79,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:58:30.162Z",
+        "sourceUrl": "https://www.nofrills.ca/en/sour-cream/p/20299657_EA",
+        "image": "https://digital.loblaws.ca/PCX/20299657_EA/en/1/20299657_en_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21387048_EA",
+          "name": "Givat Sour Cream",
+          "brand": "Givat",
+          "packageSize": "453 g, $2.32/100g",
+          "parsedMassKg": 0.453,
+          "price": 10.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:30.162Z",
+          "sourceUrl": "https://www.nofrills.ca/en/sour-cream/p/21387048_EA",
+          "image": "https://digital.loblaws.ca/PCX/21387048_EA/en/1/21387048_en_front_1200.png"
+        },
+        {
+          "productId": "20000476001_EA",
+          "name": "No Name Sour Cream",
+          "brand": "No Name",
+          "packageSize": "250 ml, $0.88/100ml",
+          "parsedMassKg": 0.25,
+          "price": 2.19,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:30.162Z",
+          "sourceUrl": "https://www.nofrills.ca/en/sour-cream/p/20000476001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20000476001_EA/en/1/20000476001_en_front_1200.png"
+        },
+        {
+          "productId": "21451012_EA",
+          "name": "J and J Sour Cream",
+          "brand": "J and J",
+          "packageSize": "227 g, $3.74/100g",
+          "parsedMassKg": 0.227,
+          "price": 8.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:58:30.162Z",
+          "sourceUrl": "https://www.nofrills.ca/en/sour-cream/p/21451012_EA",
+          "image": "https://digital.loblaws.ca/PCX/21451012_EA/en/1/21451012_en_front_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "sourdough_bread",
+      "label": "Sourdough Bread",
+      "status": "ok",
+      "offer": {
+        "productId": "21740604_EA",
+        "name": "Farmhouse Sourdough Loaf",
+        "brand": "Farmhouse",
+        "packageSize": "675 g, $0.52/100g",
+        "parsedMassKg": 0.675,
+        "price": 3.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:11.347Z",
+        "sourceUrl": "https://www.nofrills.ca/en/sourdough-loaf/p/21740604_EA",
+        "image": "https://digital.loblaws.ca/PCX/21740604_EA/en/1/21740604_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "splenda_sweetener_cal",
+      "label": "Splenda Sweetener Cal",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "jam_strawberry_4kg",
+      "label": "Strawberry Jam 4kg",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "tabasco_sauce_142ml",
+      "label": "Tabasco Sauce 142ml",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "table_cover",
+      "label": "Table Cover",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "tnuva_goat_cheese",
+      "label": "Tnuva Goat Cheese",
+      "status": "ok",
+      "offer": {
+        "productId": "20172542_EA",
+        "name": "Tnuva Goat Cheese",
+        "brand": "Tnuva",
+        "packageSize": "200 g, $7.25/100g",
+        "parsedMassKg": 0.2,
+        "price": 14.5,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:17.140Z",
+        "sourceUrl": "https://www.nofrills.ca/en/goat-cheese/p/20172542_EA",
+        "image": "https://digital.loblaws.ca/PCX/20172542_EA/en/1/20172542_en_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "tomato",
+      "label": "Tomato",
+      "status": "ok",
+      "offer": {
+        "productId": "20314629004_EA",
+        "name": "Unico Tomatoes",
+        "brand": "Unico",
+        "packageSize": "796 ml, $0.19/100ml",
+        "parsedMassKg": 0.796,
+        "price": 1.5,
+        "wasPrice": 2.39,
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:17.911Z",
+        "sourceUrl": "https://www.nofrills.ca/en/tomatoes/p/20314629004_EA",
+        "image": "https://digital.loblaws.ca/PCX/20314629004_EA/en/1/6780000227_en_front_centre_marketing_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "tongs",
+      "label": "Tong",
+      "status": "ok",
+      "offer": {
+        "productId": "21684802_EA",
+        "name": "Everyday Essentials Mini Silicone Tongs - Green",
+        "brand": "Everyday Essentials",
+        "packageSize": "8 ea, $0.22/1ea",
+        "price": 1.74,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:20.648Z",
+        "sourceUrl": "https://www.nofrills.ca/en/mini-silicone-tongs-green/p/21684802_EA",
+        "image": "https://digital.loblaws.ca/PCX/21684802_EA/en/1/21684802_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "tropic_isle_coconut_cream_2",
+      "label": "Tropic Isle Coconut Cream 2",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "tropicana_apple_juice",
+      "label": "Tropicana Apple Juice",
+      "status": "ok",
+      "offer": {
+        "productId": "21677467_EA",
+        "name": "Tropicana 100% Fresh Pressed Juice Apple Juice",
+        "brand": "Tropicana",
+        "packageSize": "1.36 l, $0.37/100ml",
+        "parsedMassKg": 1.36,
+        "price": 5,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:22.895Z",
+        "sourceUrl": "https://www.nofrills.ca/en/100-fresh-pressed-juice-apple-juice/p/21677467_EA",
+        "image": "https://digital.loblaws.ca/PCX/21677467_EA/en/1/21677467_enfr_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "unico_pizza_style_olives_2l",
+      "label": "Unico Pizza Style Olives 2l",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "vanilla_ice_cream",
+      "label": "Vanilla Ice Cream",
+      "status": "ok",
+      "offer": {
+        "productId": "20315236001_EA",
+        "name": "Chapmans Markdale Creamery Vanilla Ice Cream",
+        "brand": "Chapmans",
+        "packageSize": "2 l, $0.27/100ml",
+        "parsedMassKg": 2,
+        "price": 5.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:25.510Z",
+        "sourceUrl": "https://www.nofrills.ca/en/markdale-creamery-vanilla-ice-cream/p/20315236001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20315236001_EA/en/1/6294200001_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21116416_EA",
+          "name": "Sicilian Ice Cream Vanilla    ",
+          "brand": "Sicilian",
+          "packageSize": "1.65 l, $0.50/100ml",
+          "parsedMassKg": 1.65,
+          "price": 8.29,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:57:25.510Z",
+          "sourceUrl": "https://www.nofrills.ca/en/ice-cream-vanilla/p/21116416_EA",
+          "image": "https://digital.loblaws.ca/PCX/21116416_EA/en/1/77114601002_en_front_centre_marketing_GS1_Ecommerce_1200.png"
+        },
+        {
+          "productId": "21651382_EA",
+          "name": "Breyers French Vanilla Ice Cream ",
+          "brand": "Breyers",
+          "packageSize": "1410 ml, $0.32/100ml",
+          "parsedMassKg": 1.41,
+          "price": 4.5,
+          "wasPrice": 4.75,
+          "onSale": true,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:57:25.510Z",
+          "sourceUrl": "https://www.nofrills.ca/en/french-vanilla-ice-cream/p/21651382_EA",
+          "image": "https://digital.loblaws.ca/PCX/21651382_EA/en/1/21651382_en_front_1200.png"
+        },
+        {
+          "productId": "21706473_EA",
+          "name": "President's Choice Scoop Shop Vanilla Ice Cream",
+          "brand": "President's Choice",
+          "packageSize": "946 ml, $0.53/100ml",
+          "parsedMassKg": 0.946,
+          "price": 5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:57:25.510Z",
+          "sourceUrl": "https://www.nofrills.ca/en/scoop-shop-vanilla-ice-cream/p/21706473_EA",
+          "image": "https://digital.loblaws.ca/PCX/21706473_EA/en/1/21706473_en_front_1200.png"
+        },
+        {
+          "productId": "21513555_EA",
+          "name": "Haagen Dazs Vanilla Ice Cream",
+          "brand": "Haagen Dazs",
+          "packageSize": "450 ml, $1.22/100ml",
+          "parsedMassKg": 0.45,
+          "price": 5.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:57:25.510Z",
+          "sourceUrl": "https://www.nofrills.ca/en/vanilla-ice-cream/p/21513555_EA",
+          "image": "https://digital.loblaws.ca/PCX/21513555_EA/en/1/21513555_en_1_1200.png"
+        },
+        {
+          "productId": "20853813_EA",
+          "name": "Chapmans Li'L Ice Cream Sammich Vanilla",
+          "brand": "Chapmans",
+          "packageSize": "20x60.0 ml, $0.67/100ml",
+          "parsedMassKg": 1.2,
+          "price": 8,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:57:25.510Z",
+          "sourceUrl": "https://www.nofrills.ca/en/li-l-ice-cream-sammich-vanilla/p/20853813_EA",
+          "image": "https://digital.loblaws.ca/PCX/20853813_EA/en/1/6294200210_en_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
+        },
+        {
+          "productId": "21511200_EA",
+          "name": "Chapmans Super Premium Plus Ice Cream Vanilla Trilogy",
+          "brand": "Chapmans",
+          "packageSize": "500 ml, $0.80/100ml",
+          "parsedMassKg": 0.5,
+          "price": 3.99,
+          "wasPrice": 5,
+          "onSale": true,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:57:25.510Z",
+          "sourceUrl": "https://www.nofrills.ca/en/super-premium-plus-ice-cream-vanilla-trilogy/p/21511200_EA",
+          "image": "https://digital.loblaws.ca/PCX/21511200_EA/en/1/6294200550_en_front_centre_marketing_GS1_Ecommerce_1200.png"
+        },
+        {
+          "productId": "20757157002_EA",
+          "name": "President's Choice Cream First™ Vanilla Bean Premium Ice Cream",
+          "brand": "President's Choice",
+          "packageSize": "1.5 l, $0.43/100ml",
+          "parsedMassKg": 1.5,
+          "price": 6.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:57:25.510Z",
+          "sourceUrl": "https://www.nofrills.ca/en/cream-first-vanilla-bean-premium-ice-cream/p/20757157002_EA",
+          "image": "https://digital.loblaws.ca/PCX/20757157002_EA/en/1/20757157002_en_front_1200.png"
+        },
+        {
+          "productId": "20315564001_EA",
+          "name": "Chapmans No Sugar Added Lactose Free Ice Cream Vanilla",
+          "brand": "Chapmans",
+          "packageSize": "1 l, $0.80/100ml",
+          "parsedMassKg": 1,
+          "price": 7.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:57:25.510Z",
+          "sourceUrl": "https://www.nofrills.ca/en/no-sugar-added-lactose-free-ice-cream-vanilla/p/20315564001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20315564001_EA/en/1/6294200087_en_front_centre_marketing_A_1_GS1_Ecommerce_v1_1200.png"
+        }
+      ]
+    },
+    {
+      "id": "white_quinoa_grains_750gr",
+      "label": "White Quinoa Grains 750gr",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
+    },
+    {
+      "id": "yellow_peppers_case",
+      "label": "Yellow Greenhouse Peppers",
+      "status": "ok",
+      "offer": {
+        "productId": "20141814001_KG",
+        "name": "Greenhouse Peppers, Yellow",
+        "packageSize": "$8.80/1kg $3.99/1lb",
+        "parsedMassKg": 0,
+        "price": 2.02,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:28.709Z",
+        "sourceUrl": "https://www.nofrills.ca/en/greenhouse-peppers-yellow/p/20141814001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20141814001_KG/en/1/20141814001_en_front_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "yellow_onions",
+      "label": "Yellow Onions",
+      "status": "ok",
+      "offer": {
+        "productId": "20600991001_EA",
+        "name": "Farmer's Market Yellow Onions, 10 lb bag",
+        "brand": "Farmer's Market",
+        "packageSize": "4.54 kg, $0.20/100g",
+        "parsedMassKg": 4.54,
+        "price": 8.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:57:31.482Z",
+        "sourceUrl": "https://www.nofrills.ca/en/yellow-onions-10-lb-bag/p/20600991001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20600991001_EA/en/1/20600991001_en_front_v1_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
+    },
+    {
+      "id": "yukon_potatoes_10lb",
+      "label": "Yukon Potatoes 10lb",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
     }
   ],
-  "updatedAt": "2026-08-18T21:26:21.873Z"
+  "updatedAt": "2026-08-18T21:59:17.929Z"
 }

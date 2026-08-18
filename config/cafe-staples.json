@@ -1129,7 +1129,7 @@
       "matchMode": "cheapest",
       "notes": "Receipt UPC 763679000230 @ $3.98 — bag of ice, not gum or ice-cube bins"
     },
-  {
+    {
       "id": "cups_12oz_black_ripple",
       "label": "12oz Black Ripple Cups",
       "queries": [
@@ -1137,7 +1137,7 @@
         "black ripple 12oz hot cups"
       ],
       "mustIncludeAny": [
-        "ripple"
+        "black"
       ],
       "mustNotInclude": [
         "16oz",
@@ -1146,14 +1146,22 @@
         "lids",
         "8oz",
         "8 oz",
-        "sleeve"
+        "sleeve",
+        "white",
+        "4 ounce",
+        "4oz",
+        "4 oz",
+        "4-ounce"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
       "notes": "From receipts catalog (supplies)",
       "mustIncludeAll": [
-        "cup"
-      ]
+        "cup",
+        "ripple"
+      ],
+      "maxPlausiblePrice": 20,
+      "minPlausiblePrice": 1
     },
     {
       "id": "cups_12oz_squat_pet",
@@ -1171,11 +1179,17 @@
         "16oz",
         "16 oz",
         "lid",
-        "lids"
+        "lids",
+        "smith",
+        "machine",
+        "cage",
+        "cable"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
-      "notes": "From receipts catalog (supplies)"
+      "notes": "From receipts catalog (supplies)",
+      "maxPlausiblePrice": 20,
+      "minPlausiblePrice": 1
     },
     {
       "id": "oven_mitts",
@@ -1204,7 +1218,7 @@
         "black ripple 16oz hot cups"
       ],
       "mustIncludeAny": [
-        "ripple"
+        "black"
       ],
       "mustNotInclude": [
         "12oz",
@@ -1213,14 +1227,22 @@
         "lids",
         "8oz",
         "8 oz",
-        "sleeve"
+        "sleeve",
+        "white",
+        "4 ounce",
+        "4oz",
+        "4 oz",
+        "4-ounce"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
       "notes": "From receipts catalog (supplies)",
       "mustIncludeAll": [
-        "cup"
-      ]
+        "cup",
+        "ripple"
+      ],
+      "maxPlausiblePrice": 20,
+      "minPlausiblePrice": 1
     },
     {
       "id": "cups_16oz_pet",
@@ -1242,7 +1264,9 @@
       ],
       "matchMode": "cheapest",
       "category": "supplies",
-      "notes": "From receipts catalog (supplies)"
+      "notes": "From receipts catalog (supplies)",
+      "maxPlausiblePrice": 20,
+      "minPlausiblePrice": 1
     },
     {
       "id": "frozen_pineapple",
@@ -1260,11 +1284,17 @@
         "fresh",
         "whole",
         "ring",
-        "upside"
+        "upside",
+        "refresher",
+        "drink",
+        "mango"
       ],
       "matchMode": "cheapest",
       "category": "frozen",
-      "notes": "Receipt Alasko pineapple chunks 5x1 — frozen bag, cheapest $/kg"
+      "notes": "Receipt Alasko pineapple chunks 5x1 — frozen bag, cheapest $/kg",
+      "mustIncludeAll": [
+        "frozen"
+      ]
     },
     {
       "id": "jam_apple_strawberry",
@@ -1274,11 +1304,14 @@
         "strawberry apple jam"
       ],
       "mustIncludeAny": [
-        "apple strawberry",
-        "strawberry apple"
+        "jam",
+        "jelly"
       ],
       "mustNotInclude": [
-        "4kg"
+        "4kg",
+        "blend",
+        "drink",
+        "juice"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -1288,21 +1321,22 @@
       "id": "lids_bagasse_bowl",
       "label": "Bagasse Bowl Lids",
       "queries": [
-        "Bagasse Bowl Lids"
+        "bagasse bowl lids",
+        "bagasse lid"
       ],
       "mustIncludeAny": [
-        "bagasse",
-        "bowl",
+        "lid",
         "lids"
       ],
       "mustNotInclude": [
-        "toy",
-        "book",
-        "costume"
+        "bowl only"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
-      "notes": "From receipts catalog (supplies)"
+      "notes": "From receipts catalog (supplies)",
+      "mustIncludeAll": [
+        "bagasse"
+      ]
     },
     {
       "id": "bagels",
@@ -1335,7 +1369,10 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "bite",
+        "grissol",
+        "dare"
       ],
       "matchMode": "cheapest",
       "category": "bakery",
@@ -1348,14 +1385,22 @@
         "Bamboo Paddles 3in"
       ],
       "mustIncludeAny": [
-        "bamboo",
+        "paddle",
         "paddles",
-        "3in"
+        "taster"
       ],
       "mustNotInclude": [
-        "toy",
-        "book",
-        "costume"
+        "skewer",
+        "stick",
+        "9in",
+        "9 in",
+        "kayak",
+        "marine",
+        "oar",
+        "boat",
+        "canoe",
+        "sailing",
+        "wooden"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -1390,13 +1435,13 @@
         "Cake Kits"
       ],
       "mustIncludeAny": [
-        "cake",
-        "kits"
+        "cake kit",
+        "cake kits"
       ],
       "mustNotInclude": [
-        "toy",
-        "book",
-        "costume"
+        "box",
+        "boxes",
+        "board"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -1426,7 +1471,8 @@
         "smoothie",
         "dried",
         "can",
-        "canned"
+        "canned",
+        "bowl"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -1456,7 +1502,10 @@
         "smoothie",
         "dried",
         "can",
-        "canned"
+        "canned",
+        "root",
+        "seed",
+        "salt"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -1508,7 +1557,12 @@
         "smoothie",
         "dried",
         "can",
-        "canned"
+        "canned",
+        "cube",
+        "frozen",
+        "spice",
+        "organic",
+        "flake"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -1521,15 +1575,18 @@
         "Clear Party Tray 12x12"
       ],
       "mustIncludeAny": [
-        "clear",
-        "party",
-        "tray",
-        "12x12"
+        "party tray",
+        "serving tray"
       ],
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "storage",
+        "box",
+        "tote",
+        "candy",
+        "household"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -1575,7 +1632,11 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "whipped",
+        "product",
+        "baker",
+        "wolski"
       ],
       "matchMode": "cheapest",
       "category": "dairy",
@@ -1614,7 +1675,13 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "whipped",
+        "jalapeno",
+        "product",
+        "shredded",
+        "tex",
+        "marble"
       ],
       "matchMode": "cheapest",
       "category": "dairy",
@@ -1627,14 +1694,12 @@
         "Dark Brown Sugar"
       ],
       "mustIncludeAny": [
-        "dark",
-        "brown",
-        "sugar"
+        "brown sugar"
       ],
       "mustNotInclude": [
-        "toy",
-        "book",
-        "costume"
+        "white",
+        "icing",
+        "powdered"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -1668,16 +1733,17 @@
         "double burner portable"
       ],
       "mustIncludeAny": [
-        "double burner",
-        "burner"
+        "double burner"
       ],
       "mustNotInclude": [
-        "incense",
-        "candle"
+        "stock pot",
+        "wok"
       ],
       "matchMode": "preferred",
       "category": "grocery",
-      "notes": "From receipts catalog (grocery)"
+      "notes": "From receipts catalog (grocery)",
+      "maxPlausiblePrice": 80,
+      "minPlausiblePrice": 15
     },
     {
       "id": "edible_decor",
@@ -1692,7 +1758,10 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "topper",
+        "card",
+        "mother"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -1710,7 +1779,11 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "michelina",
+        "alfredo",
+        "dinner",
+        "entree"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -1723,15 +1796,17 @@
         "Floor Cleaner Lavender 4lt"
       ],
       "mustIncludeAny": [
-        "floor",
-        "cleaner",
-        "lavender",
-        "4lt"
+        "floor cleaner"
       ],
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "all-purpose",
+        "all purpose",
+        "disinfectant",
+        "fabuloso",
+        "multi-purpose"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -1766,13 +1841,24 @@
         "Fresh Mozzarella"
       ],
       "mustIncludeAny": [
-        "fresh",
         "mozzarella"
       ],
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "gnocchi",
+        "skillet",
+        "pesto",
+        "pizza",
+        "shredded",
+        "sausage",
+        "chicken",
+        "smokehouse",
+        "perogi",
+        "perogy",
+        "pierogi",
+        "cheemo"
       ],
       "matchMode": "cheapest",
       "category": "deli",
@@ -1785,9 +1871,7 @@
         "Frozen Butternut Squash"
       ],
       "mustIncludeAny": [
-        "frozen",
-        "butternut",
-        "squash"
+        "butternut"
       ],
       "mustNotInclude": [
         "jam",
@@ -1797,11 +1881,16 @@
         "fresh",
         "pint",
         "yogurt",
-        "smoothie"
+        "smoothie",
+        "soup",
+        "split pea"
       ],
       "matchMode": "cheapest",
       "category": "frozen",
-      "notes": "From receipts catalog (frozen)"
+      "notes": "From receipts catalog (frozen)",
+      "mustIncludeAll": [
+        "frozen"
+      ]
     },
     {
       "id": "frozen_carrots",
@@ -1810,8 +1899,7 @@
         "Frozen Diced Carrots"
       ],
       "mustIncludeAny": [
-        "frozen",
-        "diced",
+        "carrot",
         "carrots"
       ],
       "mustNotInclude": [
@@ -1822,11 +1910,21 @@
         "fresh",
         "pint",
         "yogurt",
-        "smoothie"
+        "smoothie",
+        "imperfect",
+        "soup",
+        "red carrot",
+        "pea",
+        "peas",
+        "mix",
+        "mixed"
       ],
       "matchMode": "cheapest",
       "category": "frozen",
-      "notes": "From receipts catalog (frozen)"
+      "notes": "From receipts catalog (frozen)",
+      "mustIncludeAll": [
+        "frozen"
+      ]
     },
     {
       "id": "gatorade_zero_variety_28x59",
@@ -1857,25 +1955,13 @@
         "Golden Berries"
       ],
       "mustIncludeAny": [
-        "golden",
-        "berries"
+        "golden berr",
+        "goldenberry",
+        "cape goose"
       ],
       "mustNotInclude": [
-        "juice",
-        "sauce",
-        "jam",
-        "candy",
-        "dressing",
-        "soap",
-        "tea",
-        "pie",
-        "muffin",
-        "cookie",
-        "yogurt",
-        "smoothie",
-        "dried",
-        "can",
-        "canned"
+        "beet",
+        "beets"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -1908,26 +1994,14 @@
         "Granny Smith Apples"
       ],
       "mustIncludeAny": [
-        "granny",
-        "smith",
-        "apples"
+        "granny smith"
       ],
       "mustNotInclude": [
         "juice",
         "sauce",
-        "jam",
-        "candy",
-        "dressing",
-        "soap",
-        "tea",
-        "pie",
-        "muffin",
-        "cookie",
-        "yogurt",
-        "smoothie",
-        "dried",
-        "can",
-        "canned"
+        "delicious",
+        "gala",
+        "ambrosia"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -1940,14 +2014,11 @@
         "Guest Towel Napkins"
       ],
       "mustIncludeAny": [
-        "guest",
-        "towel",
-        "napkins"
+        "guest towel"
       ],
       "mustNotInclude": [
-        "toy",
-        "book",
-        "costume"
+        "luncheon",
+        "dinner napkin"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2070,25 +2141,12 @@
         "Honeydew Melons"
       ],
       "mustIncludeAny": [
-        "honeydew",
-        "melons"
+        "honeydew"
       ],
       "mustNotInclude": [
-        "juice",
-        "sauce",
-        "jam",
-        "candy",
-        "dressing",
-        "soap",
-        "tea",
-        "pie",
-        "muffin",
-        "cookie",
-        "yogurt",
-        "smoothie",
-        "dried",
-        "can",
-        "canned"
+        "watermelon",
+        "cantaloupe",
+        "bowl"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -2184,7 +2242,8 @@
         "smoothie",
         "dried",
         "can",
-        "canned"
+        "canned",
+        "sweet"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -2245,16 +2304,25 @@
       ],
       "mustIncludeAny": [
         "marshmallow",
-        "white"
+        "mini"
       ],
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "vinegar",
+        "rice",
+        "cooker",
+        "granola",
+        "bar",
+        "chocolate"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
-      "notes": "From receipts catalog (grocery)"
+      "notes": "From receipts catalog (grocery)",
+      "mustIncludeAll": [
+        "marshmallow"
+      ]
     },
     {
       "id": "measuring_cup",
@@ -2263,13 +2331,15 @@
         "Measuring Cup"
       ],
       "mustIncludeAny": [
-        "measuring",
-        "cup"
+        "measuring cup"
       ],
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "cooker",
+        "rice",
+        "machine"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2354,12 +2424,14 @@
         "dome lid no hole"
       ],
       "mustIncludeAny": [
-        "dome"
+        "no hole",
+        "no-hole",
+        "without hole"
       ],
       "mustNotInclude": [
-        "toy",
-        "book",
-        "costume"
+        "with hole",
+        "w/ hole",
+        "sip"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2430,7 +2502,11 @@
         "smoothie",
         "dried",
         "can",
-        "canned"
+        "canned",
+        "cube",
+        "frozen",
+        "flake",
+        "spice"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -2449,7 +2525,12 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "michelina",
+        "pollo",
+        "dinner",
+        "entree",
+        "chicken"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -2462,13 +2543,16 @@
         "Pickled Eggplant"
       ],
       "mustIncludeAny": [
-        "pickled",
-        "eggplant"
+        "pickled eggplant",
+        "eggplant in oil"
       ],
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "dip",
+        "baba",
+        "ghanoush"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -2492,7 +2576,8 @@
         "6\"",
         "spinach",
         "whole wheat",
-        "corn"
+        "corn",
+        "fajita"
       ],
       "matchMode": "cheapest",
       "category": "bakery",
@@ -2510,22 +2595,39 @@
         "6in wraps"
       ],
       "mustIncludeAny": [
-        "wrap",
-        "tortilla"
+        "6 inch",
+        "6in",
+        "6 in",
+        "6\""
       ],
       "mustNotInclude": [
         "10 inch",
         "10in",
         "10\"",
+        "large",
         "spinach",
         "whole wheat",
-        "corn"
+        "whl wheat",
+        "wheat",
+        "corn",
+        "whole",
+        "cake",
+        "carrot",
+        "plate",
+        "plates",
+        "plastic",
+        "foam",
+        "pumpkin",
+        "decoration",
+        "halloween"
       ],
       "matchMode": "cheapest",
       "category": "bakery",
       "notes": "From receipts catalog (bakery)",
       "preferNameIncludes": [
-        "6"
+        "6",
+        "small",
+        "fajita"
       ]
     },
     {
@@ -2582,7 +2684,8 @@
         "juice",
         "seed",
         "molasses",
-        "tea"
+        "tea",
+        "powder"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -2614,25 +2717,14 @@
         "Red Onions"
       ],
       "mustIncludeAny": [
-        "red",
-        "onions"
+        "red onion",
+        "red onions",
+        "onion red"
       ],
       "mustNotInclude": [
-        "juice",
-        "sauce",
-        "jam",
-        "candy",
-        "dressing",
-        "soap",
-        "tea",
-        "pie",
-        "muffin",
-        "cookie",
-        "yogurt",
-        "smoothie",
-        "dried",
-        "can",
-        "canned"
+        "yellow onion",
+        "green onion",
+        "shallot"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -2645,25 +2737,12 @@
         "Red Radish"
       ],
       "mustIncludeAny": [
-        "red",
-        "radish"
+        "radish",
+        "radishes"
       ],
       "mustNotInclude": [
-        "juice",
-        "sauce",
-        "jam",
-        "candy",
-        "dressing",
-        "soap",
-        "tea",
-        "pie",
-        "muffin",
-        "cookie",
-        "yogurt",
-        "smoothie",
-        "dried",
-        "can",
-        "canned"
+        "onion",
+        "horse"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -2702,15 +2781,12 @@
         "Round Deli Container Lids"
       ],
       "mustIncludeAny": [
-        "round",
-        "deli",
-        "container",
+        "lid",
         "lids"
       ],
       "mustNotInclude": [
-        "toy",
-        "book",
-        "costume"
+        "container",
+        "tub"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2765,9 +2841,8 @@
         "Shredded Cheddar Cheese"
       ],
       "mustIncludeAny": [
-        "shredded",
-        "cheddar",
-        "cheese"
+        "shredded cheddar",
+        "cheddar shredded"
       ],
       "mustNotInclude": [
         "toy",
@@ -2785,8 +2860,8 @@
         "Shredded Mozzarella"
       ],
       "mustIncludeAny": [
-        "shredded",
-        "mozzarella"
+        "shredded mozzarella",
+        "mozzarella shredded"
       ],
       "mustNotInclude": [
         "toy",
@@ -2823,9 +2898,9 @@
         "Sliced White Mushrooms"
       ],
       "mustIncludeAny": [
-        "sliced",
-        "white",
-        "mushrooms"
+        "sliced mushroom",
+        "mushroom sliced",
+        "sliced white mushroom"
       ],
       "mustNotInclude": [
         "juice",
@@ -2842,11 +2917,16 @@
         "smoothie",
         "dried",
         "can",
-        "canned"
+        "canned",
+        "potato",
+        "potatoes"
       ],
       "matchMode": "cheapest",
       "category": "produce",
-      "notes": "From receipts catalog (produce)"
+      "notes": "From receipts catalog (produce)",
+      "mustIncludeAll": [
+        "mushroom"
+      ]
     },
     {
       "id": "sour_cream",
@@ -2855,13 +2935,20 @@
         "Sour Cream"
       ],
       "mustIncludeAny": [
-        "sour",
-        "cream"
+        "sour cream"
       ],
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "perogi",
+        "perogy",
+        "pierogi",
+        "chip",
+        "dip",
+        "snap",
+        "onion",
+        "loop"
       ],
       "matchMode": "cheapest",
       "category": "dairy",
@@ -2874,13 +2961,12 @@
         "Sourdough Bread"
       ],
       "mustIncludeAny": [
-        "sourdough",
-        "bread"
+        "sourdough"
       ],
       "mustNotInclude": [
-        "toy",
-        "book",
-        "costume"
+        "wonder",
+        "white bread",
+        "rye"
       ],
       "matchMode": "cheapest",
       "category": "bakery",
@@ -2918,7 +3004,8 @@
       ],
       "mustNotInclude": [
         "apple",
-        "sugar free"
+        "sugar free",
+        "del monte"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -2926,7 +3013,8 @@
       "preferNameIncludes": [
         "4kg",
         "4 kg"
-      ]
+      ],
+      "minPlausiblePrice": 12
     },
     {
       "id": "tabasco_sauce_142ml",
@@ -2939,12 +3027,19 @@
         "tabasco"
       ],
       "mustNotInclude": [
+        "green",
+        "chipotle",
         "sriracha",
-        "chipotle"
+        "habanero",
+        "garlic"
       ],
       "matchMode": "preferred",
       "category": "grocery",
-      "notes": "From receipts catalog (grocery)"
+      "notes": "From receipts catalog (grocery)",
+      "preferNameIncludes": [
+        "original",
+        "red"
+      ]
     },
     {
       "id": "table_cover",
@@ -3067,7 +3162,8 @@
       "mustNotInclude": [
         "orange",
         "grape",
-        "cocktail"
+        "cocktail",
+        "pressed"
       ],
       "matchMode": "preferred",
       "category": "grocery",
@@ -3137,11 +3233,16 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "bread",
+        "flour"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
-      "notes": "From receipts catalog (grocery)"
+      "notes": "From receipts catalog (grocery)",
+      "mustIncludeAll": [
+        "quinoa"
+      ]
     },
     {
       "id": "yellow_peppers_case",
@@ -3174,25 +3275,14 @@
         "Yellow Onions"
       ],
       "mustIncludeAny": [
-        "yellow",
-        "onions"
+        "yellow onion",
+        "yellow onions",
+        "onion yellow"
       ],
       "mustNotInclude": [
-        "juice",
-        "sauce",
-        "jam",
-        "candy",
-        "dressing",
-        "soap",
-        "tea",
-        "pie",
-        "muffin",
-        "cookie",
-        "yogurt",
-        "smoothie",
-        "dried",
-        "can",
-        "canned"
+        "red onion",
+        "green onion",
+        "shallot"
       ],
       "matchMode": "cheapest",
       "category": "produce",

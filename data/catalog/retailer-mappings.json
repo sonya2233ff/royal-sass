@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T21:26:29.958Z",
+  "updatedAt": "2026-08-18T22:01:18.402Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -3937,6 +3937,3130 @@
           "price": 3.99,
           "availability": "unknown",
           "checkedAt": "2026-08-18T21:26:26.010Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cups_12oz_black_ripple": {
+      "masterId": "cups_12oz_black_ripple",
+      "label": "12oz Black Ripple Cups",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-products-12oz-black-ripple-wall-cup-25ea",
+          "name": "MAHER PRODUCTS - 12oz  BLACK RIPPLE WALL CUP 25 PK",
+          "upc": "0062760301070",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:37.640Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-products-12oz-black-ripple-wall-cup-25ea",
+          "price": 3.69,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:37.622Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cups_12oz_squat_pet": {
+      "masterId": "cups_12oz_squat_pet",
+      "label": "12oz Squat PET Cups",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "solo-ultra-clear-squat-pet-cup-12oz-50ea",
+          "name": "SOLO ULTRA CLEAR - SQUAT PET CUP 12OZ 50EA",
+          "upc": "0004159423161",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:17.593Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "solo-ultra-clear-squat-pet-cup-12oz-50ea",
+          "price": 5.19,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:17.589Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "oven_mitts": {
+      "masterId": "oven_mitts",
+      "label": "15\" Fire Resistance Oven Mitt",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "winco-silicone-oven-mitt-15in-1ea",
+          "name": "WINCO - SILICONE OVEN MITT 15in 1EA",
+          "upc": "0084216911771",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:18.254Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "winco-silicone-oven-mitt-15in-1ea",
+          "price": 3.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:18.248Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cups_16oz_black_ripple": {
+      "masterId": "cups_16oz_black_ripple",
+      "label": "16oz Black Ripple Cups",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-products-16oz-black-ripple-wall-cup-25ct",
+          "name": "MAHER PRODUCTS - 16oz BLACK RIPPLE WALL CUP 25 PK",
+          "upc": "0062760301072",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:38.297Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-products-16oz-black-ripple-wall-cup-25ct",
+          "price": 4.29,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:38.288Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "frozen_pineapple": {
+      "masterId": "frozen_pineapple",
+      "label": "Alasko Pineapple Chunks 5x1",
+      "category": "frozen",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-pineapple-chunks-5x1-kg",
+          "name": "ALASKO - PINEAPPLE CHUNKS 5x1 KG",
+          "upc": "1069505800336",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:21.795Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21289951_EA",
+          "name": "Naturally Imperfect Frozen Pineapple Pieces",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:45.184Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-pineapple-chunks-5x1-kg",
+          "price": 33.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:21.792Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21289951_EA",
+          "price": 13.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:43.650Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "jam_apple_strawberry": {
+      "masterId": "jam_apple_strawberry",
+      "label": "Apple Strawberry Jam",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "lynch-apple-strawberry-jam-14kg",
+          "name": "LYNCH - APPLE STRAWBERRY JAM 14KG",
+          "upc": "0006280212592",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:23.390Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "lynch-apple-strawberry-jam-14kg",
+          "price": 71.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:23.386Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "lids_bagasse_bowl": {
+      "masterId": "lids_bagasse_bowl",
+      "label": "Bagasse Bowl Lids",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-products-clear-dome-lid-for-bagasse-bowl-24-32oz-50ea",
+          "name": "MAHER PRODUCTS - CLEAR  LID FOR BAGASSE BOWL 24/32OZ 50 CT",
+          "upc": "0062760300601",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:39.022Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21639487_EA",
+          "name": "Lid for 600ml Bagasse Container 125/Pack",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:46.833Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-products-clear-dome-lid-for-bagasse-bowl-24-32oz-50ea",
+          "price": 12.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:39.013Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21639487_EA",
+          "price": 11.49,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:46.828Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "baguette_artisan": {
+      "masterId": "baguette_artisan",
+      "label": "Baguette Artisan",
+      "category": "bakery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "ace-bakery-demi-baguette-45x140-gr",
+          "name": "ACE BAKERY - DEMI BAGUETTE 45x140 GR",
+          "upc": "2062852301291",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:24.904Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "ace-bakery-demi-baguette-45x140-gr",
+          "price": 32.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:24.898Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "bamboo_paddles": {
+      "masterId": "bamboo_paddles",
+      "label": "Bamboo Paddles 3in",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "touch-bamboo-paddle-3in-100ea",
+          "name": "TOUCH - BAMBOO PADDLE 3IN 100EA",
+          "upc": "0062565982883",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:39.438Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "touch-bamboo-paddle-3in-100ea",
+          "price": 2.09,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:39.429Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "bartlett_pears_kg": {
+      "masterId": "bartlett_pears_kg",
+      "label": "Bartlett Pears",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-pears-bartlet-2-lb",
+          "name": "FRUITS - PEARS BARTLETT LOCAL CLAM 2L",
+          "upc": "0003338346491",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:26.882Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21111368001_EA",
+          "name": "Bartlett Pear, 2 L",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:50.293Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-pears-bartlet-2-lb",
+          "price": 5.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:26.875Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21111368001_EA",
+          "price": 5.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:48.534Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cake_kits": {
+      "masterId": "cake_kits",
+      "label": "Cake Kits",
+      "category": "grocery",
+      "retailers": {},
+      "prices": []
+    },
+    "cantaloupe": {
+      "masterId": "cantaloupe",
+      "label": "Cantaloupe",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-sweet-cantaloupes-1-ea",
+          "name": "FRUITS - CANTALOUPES EACH 1 EA",
+          "upc": "0000013212245",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:27.654Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20167017001_EA",
+          "name": "Cantaloupe",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:50.971Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-sweet-cantaloupes-1-ea",
+          "price": 3.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:27.650Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20167017001_EA",
+          "price": 4.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:50.968Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "celery": {
+      "masterId": "celery",
+      "label": "Celery",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-celery-repack-3-ea",
+          "name": "VEGETABLES - CELERY REPACK 3CT 3 EA",
+          "upc": "0000001114577",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:28.018Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20163119001_EA",
+          "name": "Celery Stalks",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:51.358Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-celery-repack-3-ea",
+          "price": 5.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:28.014Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20163119001_EA",
+          "price": 3.79,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:51.350Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cibona_ranch_dressing_4lt": {
+      "masterId": "cibona_ranch_dressing_4lt",
+      "label": "Cibona Ranch Dressing 4lt",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "cibona-ranch-dressing-4lt",
+          "name": "CIBONA - RANCH DRESSING 4LT",
+          "upc": "0006090344410",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T21:52:29.090Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "cibona-ranch-dressing-4lt",
+          "price": 22.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:29.086Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cilantro": {
+      "masterId": "cilantro",
+      "label": "Cilantro",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-cilantro-repack-3-ea",
+          "name": "VEGETABLES - CILANTRO REPACK 3EA  3 EA",
+          "upc": "0000001114785",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:29.446Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21184810_EA",
+          "name": "Cilantro",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:52.628Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-cilantro-repack-3-ea",
+          "price": 4.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:29.444Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21184810_EA",
+          "price": 2.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:52.624Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "party_tray_12x12": {
+      "masterId": "party_tray_12x12",
+      "label": "Clear Party Tray 12x12",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "elite-12in-clear-round-polystrene-tray-ea",
+          "name": "ELITE - 12IN CLEAR ROUND POLYSTYRENE TRAY EA",
+          "upc": "0005921273749",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:29.870Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "elite-12in-clear-round-polystrene-tray-ea",
+          "price": 1.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:29.860Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cottage_cheese": {
+      "masterId": "cottage_cheese",
+      "label": "Cottage Cheese",
+      "category": "dairy",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gay-lea-2-nordica-cottage-cheese-750gr-1",
+          "name": "GAY LEA - 2% NORDICA COTTAGE CHEESE 750GR",
+          "upc": "0006601315243",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:30.961Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20183991002_EA",
+          "name": "Cottage Cheese",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:54.966Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gay-lea-2-nordica-cottage-cheese-750gr-1",
+          "price": 5.29,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:30.954Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20183991002_EA",
+          "price": 4.49,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:54.959Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cream_cheese_bars": {
+      "masterId": "cream_cheese_bars",
+      "label": "Cream Cheese Bars",
+      "category": "dairy",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "elite-dairy-deli-cream-cheese-reg-2kg",
+          "name": "ELITE DAIRY - DELI CREAM CHEESE REG 2KG",
+          "upc": "0832670005593",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:32.402Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21383785_EA",
+          "name": "Pizza Mozzarella Cheese",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:56.370Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "elite-dairy-deli-cream-cheese-reg-2kg",
+          "price": 23.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:32.393Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21383785_EA",
+          "price": 31.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:56.366Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "brown_sugar": {
+      "masterId": "brown_sugar",
+      "label": "Dark Brown Sugar",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "redpath-dark-brown-sugar-20kg",
+          "name": "REDPATH - DARK BROWN SUGAR 20KG",
+          "upc": "0006284763260",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:40.106Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20169394_EA",
+          "name": "Natural Dark Brown Sugar",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:56.685Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "redpath-dark-brown-sugar-20kg",
+          "price": 31.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:40.097Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20169394_EA",
+          "price": 3.79,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:56.682Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "lids_dome_12_24oz": {
+      "masterId": "lids_dome_12_24oz",
+      "label": "Dome Lids 12-24oz",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-products-dome-lid-for-16-20-24oz-clear-cup-100ea-1",
+          "name": "MAHER PRODUCTS - DOME LID FOR 12-24oz CLEAR CUP 50 PK",
+          "upc": "0062845179392",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:33.482Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21669507_EA",
+          "name": "10 oz - 20 oz White PP Dome Lid for CC&PW Paper Cups, Recyclable",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:57.670Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-products-dome-lid-for-16-20-24oz-clear-cup-100ea-1",
+          "price": 2.29,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:33.471Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21669507_EA",
+          "price": 3.19,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:57.662Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "double_burner": {
+      "masterId": "double_burner",
+      "label": "Double Burner",
+      "category": "grocery",
+      "retailers": {},
+      "prices": []
+    },
+    "fettuccine": {
+      "masterId": "fettuccine",
+      "label": "Fettuccine",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "only-pasta-fettuccine-5kg",
+          "name": "ONLY PASTA - FETTUCCINE 5KG",
+          "upc": "0000000060000",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:34.850Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20315613007_EA",
+          "name": "Fettuccine",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:59.222Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "only-pasta-fettuccine-5kg",
+          "price": 35.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:34.841Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20315613007_EA",
+          "price": 1.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:59.218Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "floor_cleaner_lavender": {
+      "masterId": "floor_cleaner_lavender",
+      "label": "Floor Cleaner Lavender 4lt",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "eco-chemlabs-floor-cleaner-lavender-4lt",
+          "name": "ECO CHEMLABS - FLOOR CLEANER LAVENDER 4LT",
+          "upc": "0079993245526",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:35.284Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "eco-chemlabs-floor-cleaner-lavender-4lt",
+          "price": 6.29,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:35.275Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "fresh_mozzarella": {
+      "masterId": "fresh_mozzarella",
+      "label": "Fresh Mozzarella",
+      "category": "deli",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "santa-lucia-buffalo-mozzarella-125gr",
+          "name": "SANTA LUCIA - BUFFALO MOZZARELLA 125GR",
+          "upc": "0062778300331",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:37.373Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20812112_EA",
+          "name": "Mozzarella Block",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:02.885Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "santa-lucia-buffalo-mozzarella-125gr",
+          "price": 4.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:37.364Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20812112_EA",
+          "price": 26.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:02.882Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "butternut_squash_frozen": {
+      "masterId": "butternut_squash_frozen",
+      "label": "Frozen Butternut Squash",
+      "category": "frozen",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-butternut-squash-diced-2kg",
+          "name": "ALASKO - BUTTERNUT SQUASH DICED 2KG",
+          "upc": "0000000088830",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:40.052Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-butternut-squash-diced-2kg",
+          "price": 8.29,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:40.040Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "frozen_carrots": {
+      "masterId": "frozen_carrots",
+      "label": "Frozen Diced Carrots",
+      "category": "frozen",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-diced-carrots-2kg",
+          "name": "ALASKO - DICED CARROTS 2KG",
+          "upc": "0000000010700",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:41.981Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-diced-carrots-2kg",
+          "price": 4.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:41.965Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "gatorade_zero_variety_28x59": {
+      "masterId": "gatorade_zero_variety_28x59",
+      "label": "Gatorade Zero Variety 28x59",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gatorade-zero-variety-28x591-ml",
+          "name": "GATORADE - ZERO VARIETY 28x591 ML",
+          "upc": "0005727116282",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T21:52:43.060Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gatorade-zero-variety-28x591-ml",
+          "price": 24.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:43.050Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "golden_berries": {
+      "masterId": "golden_berries",
+      "label": "Golden Berries",
+      "category": "produce",
+      "retailers": {},
+      "prices": []
+    },
+    "gooseberries": {
+      "masterId": "gooseberries",
+      "label": "Gooseberries",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-goldenberries-repack-200-g",
+          "name": "FRUITS - GOOSEBERRY (Physalis) 100 G",
+          "upc": "7706899000635",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:45.220Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-goldenberries-repack-200-g",
+          "price": 3.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:45.213Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "granny_smith_kg": {
+      "masterId": "granny_smith_kg",
+      "label": "Granny Smith Apples",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-apples-granny-smith-5-lbs",
+          "name": "FRUITS - APPLES GRANNY SMITH 5  LBS",
+          "upc": "0000000015554",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:42.553Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20128645001_EA",
+          "name": "Granny Smith Apples, 4 lb Bag",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:19.142Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-apples-granny-smith-5-lbs",
+          "price": 9.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:42.545Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20128645001_EA",
+          "price": 9.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:18.267Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "guest_towel_napkins": {
+      "masterId": "guest_towel_napkins",
+      "label": "Guest Towel Napkins",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "lapaco-guest-towel-napkin-1-6-fold-40-ea",
+          "name": "LAPACO - GUEST TOWEL NAPKIN 1/6 FOLD 40 EA",
+          "upc": "0006166655001",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:42.935Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "lapaco-guest-towel-napkin-1-6-fold-40-ea",
+          "price": 6.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:42.926Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "harvest_raw_sunflower_seeds": {
+      "masterId": "harvest_raw_sunflower_seeds",
+      "label": "Harvest Raw Sunflower Seeds",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "harvest-raw-sunflower-seeds-1kg",
+          "name": "HARVEST - RAW SUNFLOWER SEEDS 1KG",
+          "upc": "0043655101413",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:51.374Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21107679_EA",
+          "name": "Shelled Sunflower Seeds Raw",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:24.153Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "harvest-raw-sunflower-seeds-1kg",
+          "price": 6.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:51.369Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21107679_EA",
+          "price": 6.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:24.149Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "honeydew_melons": {
+      "masterId": "honeydew_melons",
+      "label": "Honeydew Melons",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-honeydew-1ea",
+          "name": "FRUITS - HONEYDEW MELON 1EA",
+          "upc": "0009884304329",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:43.750Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20045276001_EA",
+          "name": "Honeydew Melon",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:25.389Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-honeydew-1ea",
+          "price": 7.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:43.743Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20045276001_EA",
+          "price": 5.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:24.642Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "italia_pomace_oil_3lt": {
+      "masterId": "italia_pomace_oil_3lt",
+      "label": "Italia Pomace Oil 3lt",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "italia-pomace-oil-3lt",
+          "name": "ITALIA - POMACE OIL 3LT",
+          "upc": "0085111901165",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T21:52:53.712Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "italia-pomace-oil-3lt",
+          "price": 21.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:53.709Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "jalapeno_peppers_kg": {
+      "masterId": "jalapeno_peppers_kg",
+      "label": "Jalapeño Peppers",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-peppers-jalapeno-repack-2-5-lbs",
+          "name": "VEGETABLES - PEPPERS JALAPENO REPACK 2.5LB 2.5 LBS",
+          "upc": "0022655400000",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:55.093Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20088387001_KG",
+          "name": "Jalapeno Peppers",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:30.138Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-peppers-jalapeno-repack-2-5-lbs",
+          "price": 4.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:55.086Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20088387001_KG",
+          "price": 0.55,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:27.743Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "limes_lrg": {
+      "masterId": "limes_lrg",
+      "label": "Limes Lrg",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-limes-repack-12-ea",
+          "name": "FRUITS - LIMES REPACK 8CT 8  EA",
+          "upc": "0000011132014",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:55.964Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21673921001_EA",
+          "name": "Naturally Imperfect Limes",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:31.774Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-limes-repack-12-ea",
+          "price": 1.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:55.958Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21673921001_EA",
+          "price": 4.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:31.767Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "marshmallow_white_min": {
+      "masterId": "marshmallow_white_min",
+      "label": "Marshmallow White Min",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "kraft-jet-puffed-original-marshmallows-400g",
+          "name": "KRAFT - JET PUFFED MINI ORIGINAL MARSHMALLOWS 400G",
+          "upc": "0060069906091",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:58.184Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "kraft-jet-puffed-original-marshmallows-400g",
+          "price": 2.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:58.173Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "measuring_cup": {
+      "masterId": "measuring_cup",
+      "label": "Measuring Cup",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gourmet-kitchen-measuring-cup-glass-4cup-1-lt",
+          "name": "GOURMET KITCHEN - MEASURING CUP GLASS 4CUP 1 LT",
+          "upc": "0005687177865",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:58.577Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20797852_EA",
+          "name": "Measuring Cup",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:36.645Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gourmet-kitchen-measuring-cup-glass-4cup-1-lt",
+          "price": 4.59,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:58.566Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20797852_EA",
+          "price": 17.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:36.638Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "gloves_nitrile_large": {
+      "masterId": "gloves_nitrile_large",
+      "label": "Nitrile Gloves Large",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "safe-t-wear-black-nitrile-gloves-large-5ml-100ct",
+          "name": "SAFE-T WEAR - BLACK NITRILE GLOVES LARGE 5ML 100CT",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:52:59.651Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21544351_EA",
+          "name": "Black Nitrile Gloves L",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:38.707Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "safe-t-wear-black-nitrile-gloves-large-5ml-100ct",
+          "price": 7.19,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:52:59.390Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21544351_EA",
+          "price": 25.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:38.380Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "gloves_nitrile_medium": {
+      "masterId": "gloves_nitrile_medium",
+      "label": "Nitrile Gloves Medium",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "safe-t-wear-blue-nitrile-gloves-medium-4ml-100-ct",
+          "name": "SAFE-T WEAR - BLUE NITRILE GLOVES MEDIUM 4ML 100 CT",
+          "upc": "0000000016006",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:01.862Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21516708_EA",
+          "name": "Black Nitrile Gloves",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:39.803Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "safe-t-wear-blue-nitrile-gloves-medium-4ml-100-ct",
+          "price": 4.69,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:01.851Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21516708_EA",
+          "price": 25.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:39.239Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "lids_dome_no_hole": {
+      "masterId": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
+          "name": "MAHER - NO-HOLE CLEAR DOME LIDS FOR CUP 98mm 50PK",
+          "upc": "0062760300765",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:44.342Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
+          "price": 2.19,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:44.334Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "parsley": {
+      "masterId": "parsley",
+      "label": "Parsley",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-parsley-curly-repack-3-ea",
+          "name": "VEGETABLES - PARSLEY CURLY REPACK 3 EA",
+          "upc": "0000001114902",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:08.224Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20117426_EA",
+          "name": "Parsley Flakes",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:42.553Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-parsley-curly-repack-3-ea",
+          "price": 3.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:08.214Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20117426_EA",
+          "price": 8.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:42.543Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "penne_pasta": {
+      "masterId": "penne_pasta",
+      "label": "Penne Pasta",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "italpasta-penne-rigate-20lb",
+          "name": "ITALPASTA - PENNE RIGATE 20LB",
+          "upc": "0100068062022",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:09.654Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20892100_EA",
+          "name": "Penne Rigate Pasta",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:42.842Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "italpasta-penne-rigate-20lb",
+          "price": 26.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:09.642Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20892100_EA",
+          "price": 3.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:42.838Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "pickled_eggplant": {
+      "masterId": "pickled_eggplant",
+      "label": "Pickled Eggplant",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "dora-eggplant-strips-950g",
+          "name": "DORA - EGGPLANT STRIPS IN OIL 1062ML",
+          "upc": "8032774044739",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:10.791Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "dora-eggplant-strips-950g",
+          "price": 6.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:10.782Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "wraps_plain_10in": {
+      "masterId": "wraps_plain_10in",
+      "label": "Plain Wraps 10\"",
+      "category": "bakery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "casa-mendosa-tortillas-original-large-640gr",
+          "name": "CASA MENDOSA - TORTILLAS ORIGINAL LARGE 640GR",
+          "upc": "0006340017010",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:46.033Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20955770_EA",
+          "name": "Flour Tortilla, 10 in",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:44.981Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "casa-mendosa-tortillas-original-large-640gr",
+          "price": 3.29,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:46.022Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20955770_EA",
+          "price": 5.29,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:44.976Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "wraps_plain_6in": {
+      "masterId": "wraps_plain_6in",
+      "label": "Plain Wraps 6\"",
+      "category": "bakery",
+      "retailers": {},
+      "prices": []
+    },
+    "plastic_tablecloth": {
+      "masterId": "plastic_tablecloth",
+      "label": "Plastic Tablecloth",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "unique-lime-green-rect-plastic-tablecover-54x108-ea",
+          "name": "UNIQUE - LIME GREEN  RECT PLASTIC TABLECOVER 54X108 EA",
+          "upc": "0001117905098",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:14.234Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "unique-lime-green-rect-plastic-tablecover-54x108-ea",
+          "price": 0.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:14.224Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "plastic_wrap_18x2000": {
+      "masterId": "plastic_wrap_18x2000",
+      "label": "Plastic Wrap 18x2000",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "titan-plastic-food-wrap-17x2500-in",
+          "name": "TITAN - PLASTIC FOOD WRAP 17x2500 IN",
+          "upc": "0005921232313",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:14.796Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "titan-plastic-food-wrap-17x2500-in",
+          "price": 24.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:14.786Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "pomegranates_30s": {
+      "masterId": "pomegranates_30s",
+      "label": "Pomegranates 30s",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-pomegranate-red-1-ea",
+          "name": "FRUITS - POMEGRANATE RED  1 EA",
+          "upc": "0001310000243",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:16.222Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20134767001_EA",
+          "name": "Pomegranate",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:48.717Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-pomegranate-red-1-ea",
+          "price": 3.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:16.216Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20134767001_EA",
+          "price": 3.79,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:47.375Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "puff_pastry_sheets": {
+      "masterId": "puff_pastry_sheets",
+      "label": "Puff Pastry Sheets",
+      "category": "frozen",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "upper-crust-puff-dough-sheets-10x15-15ea",
+          "name": "UPPER CRUST - PUFF DOUGH SHEETS 10x15 15EA",
+          "upc": "0077347940213",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:17.685Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21606988_EA",
+          "name": "Puff Pastry",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:50.861Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "upper-crust-puff-dough-sheets-10x15-15ea",
+          "price": 30.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:17.678Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21606988_EA",
+          "price": 6.49,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:50.851Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "red_onions": {
+      "masterId": "red_onions",
+      "label": "Red Onions",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-onions-red-25-lbs",
+          "name": "VEGETABLES - ONIONS RED 25 LBS",
+          "upc": "0003338345098",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:50.603Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20171965001_EA",
+          "name": "Red Onions, 10 lb Bag",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:52.505Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-onions-red-25-lbs",
+          "price": 19.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:50.593Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20171965001_EA",
+          "price": 13.19,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:51.289Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "red_radish": {
+      "masterId": "red_radish",
+      "label": "Red Radish",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-radishes-red-1-lb",
+          "name": "VEGETABLES - RADISHES RED 1 LB",
+          "upc": "0003338367002",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:47.099Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20175513001_EA",
+          "name": "Radish",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:53.665Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-radishes-red-1-lb",
+          "price": 2.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:47.090Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20175513001_EA",
+          "price": 2.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:52.785Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "red_grapes_kg": {
+      "masterId": "red_grapes_kg",
+      "label": "Red Seedless Grapes",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-grapes-red-bag",
+          "name": "FRUITS - GRAPES RED SEEDLESS BAG 2LB",
+          "upc": "7754790000094",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:21.810Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20159199001_KG",
+          "name": "Red Seedless Grapes",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:56.242Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-grapes-red-bag",
+          "price": 7.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:21.801Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20159199001_KG",
+          "price": 9.8,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:54.041Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "lids_deli_round": {
+      "masterId": "lids_deli_round",
+      "label": "Round Deli Container Lids",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "nuvo-32oz-deli-round-combo-with-lid-240ea",
+          "name": "LR - 32OZ DELI ROUND COMBO WITH LID 240EA",
+          "upc": "0000000010098",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:47.531Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "nuvo-32oz-deli-round-combo-with-lid-240ea",
+          "price": 56.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:47.522Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "san_pellegrino_aranciata_or": {
+      "masterId": "san_pellegrino_aranciata_or",
+      "label": "San Pellegrino Aranciata/Or",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "san-pellegrino-aranciata-rossa-cans-6x330-ml-1",
+          "name": "SAN PELLEGRINO - ROSSA(RED) ARANCIATA ROSSA CANS 6x330 ML",
+          "upc": "0005500020142",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T21:53:23.081Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "san-pellegrino-aranciata-rossa-cans-6x330-ml-1",
+          "price": 6.39,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:23.073Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "shredded_cheddar_cheese": {
+      "masterId": "shredded_cheddar_cheese",
+      "label": "Shredded Cheddar Cheese",
+      "category": "deli",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "chef-nutri-cheddar-shredded-topping-2kg",
+          "name": "CHEF NUTRI - CHEDDAR SHREDDED TOPPING 2KG",
+          "upc": "0062823537614",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:24.349Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21764568_EA",
+          "name": "Shredded Cheddar Flavoured Topping",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:59.022Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "chef-nutri-cheddar-shredded-topping-2kg",
+          "price": 18.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:24.334Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21764568_EA",
+          "price": 25.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:59.018Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "shredded_mozzarella": {
+      "masterId": "shredded_mozzarella",
+      "label": "Shredded Mozzarella",
+      "category": "deli",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "country-farms-shredded-mozza-italian-style-2kg",
+          "name": "COUNTRY FARMS - SHREDDED MOZZA ITALIAN STYLE 2KG",
+          "upc": "0005975606074",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:24.907Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20812111_EA",
+          "name": "Silani Shredded Mozzarella",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:00:59.367Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "country-farms-shredded-mozza-italian-style-2kg",
+          "price": 20.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:24.879Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20812111_EA",
+          "price": 27.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:59.362Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "sink_strainer": {
+      "masterId": "sink_strainer",
+      "label": "Sink Strainer",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "zoran-sink-strainer-stainless-1ea",
+          "name": "ZORAN - SINK STRAINER STAINLESS 1EA",
+          "upc": "0062282219073",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:25.426Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "zoran-sink-strainer-stainless-1ea",
+          "price": 0.69,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:25.415Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "mushrooms_sliced": {
+      "masterId": "mushrooms_sliced",
+      "label": "Sliced White Mushrooms",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-mushrooms-sliced-cremini-680-g-24-oz",
+          "name": "VEGETABLES - MUSHROOMS SLICED CREMINI 680 G / 24 OZ",
+          "upc": "0077494100260",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:27.282Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20299211_EA",
+          "name": "Sliced Mushrooms",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:01:01.601Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-mushrooms-sliced-cremini-680-g-24-oz",
+          "price": 4.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:27.270Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20299211_EA",
+          "price": 1.29,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:01:00.713Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "sour_cream": {
+      "masterId": "sour_cream",
+      "label": "Sour Cream",
+      "category": "dairy",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "elegant-sour-cream-10kg",
+          "name": "ELEGANT - SOUR CREAM 10KG",
+          "upc": "0062784301557",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:27.843Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20299657_EA",
+          "name": "Sour Cream",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:01:02.206Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "elegant-sour-cream-10kg",
+          "price": 40.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:27.831Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20299657_EA",
+          "price": 2.79,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:01:02.198Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "sourdough_bread": {
+      "masterId": "sourdough_bread",
+      "label": "Sourdough Bread",
+      "category": "bakery",
+      "retailers": {},
+      "prices": []
+    },
+    "jam_strawberry_4kg": {
+      "masterId": "jam_strawberry_4kg",
+      "label": "Strawberry Jam 4kg",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "lynch-strawberry-jam-14kg",
+          "name": "LYNCH - STRAWBERRY JAM 14KG",
+          "upc": "0006280212632",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:29.985Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "lynch-strawberry-jam-14kg",
+          "price": 75.89,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:29.970Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "tabasco_sauce_142ml": {
+      "masterId": "tabasco_sauce_142ml",
+      "label": "Tabasco Sauce 142ml",
+      "category": "grocery",
+      "retailers": {},
+      "prices": []
+    },
+    "table_cover": {
+      "masterId": "table_cover",
+      "label": "Table Cover",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "unique-gold-round-tablecover-84in-ea",
+          "name": "UNIQUE - GOLD ROUND TABLE COVER 84in EA",
+          "upc": "0001117950035",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:31.887Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "unique-gold-round-tablecover-84in-ea",
+          "price": 1.09,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:31.880Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "tomato": {
+      "masterId": "tomato",
+      "label": "Tomato",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-grape-tomatoes-case-15-x-1-lb",
+          "name": "VEGETABLES - TOMATOES LOOSE CASE 13 LB",
+          "upc": "0000077291748",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:34.524Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20597200001_EA",
+          "name": "Tomato Beefsteak 5Lb",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:01:08.623Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-grape-tomatoes-case-15-x-1-lb",
+          "price": 13.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:34.511Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20597200001_EA",
+          "price": 9.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:01:06.958Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "tongs": {
+      "masterId": "tongs",
+      "label": "Tong",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "todays-kitchen-7in-mini-tongs-ea",
+          "name": "TODAYS KITCHEN - 7in MINI TONGS 1UN",
+          "upc": "0077935000912",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:35.173Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20806319_EA",
+          "name": "Tong with Red Coated Handle, 12 in",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:01:08.974Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "todays-kitchen-7in-mini-tongs-ea",
+          "price": 0.79,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:35.159Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20806319_EA",
+          "price": 7.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:01:08.970Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "tropic_isle_coconut_cream_2": {
+      "masterId": "tropic_isle_coconut_cream_2",
+      "label": "Tropic Isle Coconut Cream 2",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "tropic-isle-coconut-cream-2-84lt",
+          "name": "TROPIC - ISLE COCONUT CREAM 2.84LT",
+          "upc": "0000000063870",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T21:53:36.129Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "tropic-isle-coconut-cream-2-84lt",
+          "price": 18.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:36.118Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "tropicana_apple_juice": {
+      "masterId": "tropicana_apple_juice",
+      "label": "Tropicana Apple Juice",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "tropicana-apple-juice-325ml",
+          "name": "TROPICANA - APPLE JUICE 325ML",
+          "upc": "0004850000031",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T21:53:36.693Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "tropicana-apple-juice-325ml",
+          "price": 1.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:36.685Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "unico_pizza_style_olives_2l": {
+      "masterId": "unico_pizza_style_olives_2l",
+      "label": "Unico Pizza Style Olives 2l",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "unico-pizza-style-olives-2lt",
+          "name": "UNICO - PIZZA STYLE OLIVES 2LT",
+          "upc": "0006780000573",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T21:53:37.967Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "unico-pizza-style-olives-2lt",
+          "price": 10.69,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:37.958Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "vanilla_ice_cream": {
+      "masterId": "vanilla_ice_cream",
+      "label": "Vanilla Ice Cream",
+      "category": "frozen",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "chapmans-ice-cream-vanilla-11-4lt",
+          "name": "CHAPMANS - CHAPMAN'S ICE CREAM VANILLA 11.4LT",
+          "upc": "0006294201001",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:39.581Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21610068_EA",
+          "name": "Vanilla Ice Cream",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:01:12.625Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "chapmans-ice-cream-vanilla-11-4lt",
+          "price": 29.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:39.570Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21610068_EA",
+          "price": 25,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:01:11.672Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "white_quinoa_grains_750gr": {
+      "masterId": "white_quinoa_grains_750gr",
+      "label": "White Quinoa Grains 750gr",
+      "category": "grocery",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "esma-white-quinoa-5kg",
+          "name": "ESMA - WHITE  QUINOA 5KG",
+          "upc": "0062825105056",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:40.144Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "esma-white-quinoa-5kg",
+          "price": 29.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:40.130Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "yellow_peppers_case": {
+      "masterId": "yellow_peppers_case",
+      "label": "Yellow Greenhouse Peppers",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-peppers-yellow-repack-2-5-lbs",
+          "name": "VEGETABLES - PEPPERS YELLOW REPACK 2.5 LBS",
+          "upc": "0000001365203",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:42.341Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20141814001_KG",
+          "name": "Greenhouse Peppers, Yellow",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:01:14.876Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-peppers-yellow-repack-2-5-lbs",
+          "price": 4.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:42.334Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20141814001_KG",
+          "price": 2.02,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:01:13.493Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "yellow_onions": {
+      "masterId": "yellow_onions",
+      "label": "Yellow Onions",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-onions-cooking-50-lbs-1",
+          "name": "VEGETABLES - ONIONS JUMBO YELLOW 50 LBS",
+          "upc": "0085024700224",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:49.503Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21649342001_EA",
+          "name": "Yellow Onion, 25 Lbs",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T22:01:16.361Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-onions-cooking-50-lbs-1",
+          "price": 39.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:49.495Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21649342001_EA",
+          "price": 4.49,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:01:15.258Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "yukon_potatoes_10lb": {
+      "masterId": "yukon_potatoes_10lb",
+      "label": "Yukon Potatoes 10lb",
+      "category": "produce",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-potatoes-yukon-gold-10-lbs-2",
+          "name": "VEGETABLES - POTATOES YUKON GOLD 10 LBS",
+          "upc": "0003338345853",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:53:44.879Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-potatoes-yukon-gold-10-lbs-2",
+          "price": 6.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:53:44.870Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "cups_16oz_pet": {
+      "masterId": "cups_16oz_pet",
+      "label": "16oz PET Cups",
+      "category": "supplies",
+      "retailers": {
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21460797_EA",
+          "name": "16oz Pet Cups, 50 Per Pack",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:42.751Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21460797_EA",
+          "price": 4.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:42.299Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "bagels": {
+      "masterId": "bagels",
+      "label": "Bagels",
+      "category": "bakery",
+      "retailers": {
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21297831_EA",
+          "name": "Everything Bagels",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:59:47.429Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21297831_EA",
+          "price": 2.49,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:59:47.423Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "oreo_sandwich_cookies": {
+      "masterId": "oreo_sandwich_cookies",
+      "label": "Oreo Sandwich Cookies",
+      "category": "grocery",
+      "retailers": {
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21358406_EA",
+          "name": "OREO Double Stuf Sandwich Cookies",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T22:00:41.450Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21358406_EA",
+          "price": 3.49,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T22:00:41.099Z",
           "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
