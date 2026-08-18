@@ -532,43 +532,6 @@ export function StaplesCompare() {
     return out;
   }
 
-  async function deleteStaples(ids: string[], label?: string) {
-    if (!ids.length) return;
-    const who =
-      ids.length === 1
-        ? `«${label ?? ids[0]}»`
-        : `${ids.length} вибраних товарів`;
-    const ok = window.confirm(
-      `Видалити ${who} з проєкту назавжди (список, ціни, матчі)?`,
-    );
-    if (!ok) return;
-    setError(null);
-    setBusy("delete");
-    try {
-      const res = await fetch("/api/staples/delete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids }),
-      });
-      const data = await res.json();
-      if (!data.ok) throw new Error(data.error ?? "delete failed");
-      const gone = new Set<string>(
-        Array.isArray(data.deleted) ? data.deleted.filter((x: unknown) => typeof x === "string") : ids,
-      );
-      setSelected((prev) => {
-        const next = new Set(prev);
-        for (const id of gone) next.delete(id);
-        return next;
-      });
-      setRows((prev) => (prev ? prev.filter((r) => !gone.has(r.id)) : prev));
-      await reload();
-    } catch (e) {
-      setError(e instanceof Error ? friendlyError(e.message) : String(e));
-    } finally {
-      setBusy(null);
-    }
-  }
-
   const allVisibleSelected =
     visibleItems.length > 0 &&
     visibleItems.every((item) => selected.has(item.id));
@@ -1188,17 +1151,6 @@ export function StaplesCompare() {
                 </div>
                 <span className="check">{on ? "✓" : ""}</span>
               </button>
-              <button
-                type="button"
-                className="hide-card"
-                title="Видалити товар з проєкту"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  void deleteStaples([item.id], item.label);
-                }}
-              >
-                ×
-              </button>
               {item.soldByWeight ? (
                 on && (
                   <label className="grams">
@@ -1407,16 +1359,6 @@ export function StaplesCompare() {
           {busy === "refresh-sobeys"
             ? "Refreshing Sobeys flyer…"
             : `Refresh Sobeys flyer (${selected.size})`}
-        </button>
-        <button
-          type="button"
-          className="cta secondary"
-          disabled={pending || selected.size === 0 || busy != null}
-          onClick={() => void deleteStaples([...selected])}
-        >
-          {busy === "delete"
-            ? "Видаляю…"
-            : `Видалити вибрані (${selected.size})`}
         </button>
       </div>
 
@@ -1760,27 +1702,6 @@ export function StaplesCompare() {
         }
         .card.on .check {
           opacity: 1;
-        }
-        .hide-card {
-          position: absolute;
-          top: 0.35rem;
-          left: 0.35rem;
-          z-index: 2;
-          width: 1.45rem;
-          height: 1.45rem;
-          border: 0;
-          border-radius: 2px;
-          background: rgba(40, 30, 28, 0.72);
-          color: #fff;
-          font-size: 1.15rem;
-          line-height: 1;
-          cursor: pointer;
-          display: grid;
-          place-items: center;
-          padding: 0;
-        }
-        .hide-card:hover {
-          background: #8b2e2e;
         }
         .votes {
           display: flex;
