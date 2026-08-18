@@ -5,6 +5,11 @@
 import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { resolveWalmartSource } from "@/connectors/walmart-source";
 import { NoFrillsConnector } from "@/connectors/nofrills";
+import {
+  WholesaleClubConnector,
+  WHOLESALECLUB_STORE_ID,
+} from "@/connectors/wholesaleclub";
+import { MvrConnector, MVR_STORE_ID } from "@/connectors/mvr";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import {
@@ -20,8 +25,10 @@ import {
   type ProductRecord,
 } from "@/domain/entity-match";
 import {
+  MVR_RETAILER,
   NOFRILLS_RETAILER,
   WALMART_RETAILER,
+  WHOLESALECLUB_RETAILER,
   catalogOfferToRecord,
   offerFailsStapleFilters,
   stapleBrandHint,
@@ -35,24 +42,41 @@ import {
   isLockedIdentityLink,
   type RetailerSkuLink,
 } from "@/lib/retailer-mappings";
+import { loadMvrCatalog } from "@/lib/mvr-catalog";
 import {
   loadNoFrillsCatalog,
   loadStaplesConfig,
   loadWalmartCatalog,
   type CatalogOffer,
   type StapleItem,
+  type StoreCatalog,
 } from "@/lib/staples";
+import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
 
 export const WM_STORE = "5831";
 export const NF_STORE = "3660";
+export const WC_STORE = WHOLESALECLUB_STORE_ID;
+export const MVR_STORE = MVR_STORE_ID;
 
-export type InspectorRetailer = "walmart_ca" | "no_frills";
+export const INSPECTOR_RETAILERS = [
+  "walmart_ca",
+  "no_frills",
+  "wholesale_club",
+  "mvr",
+] as const;
+
+export type InspectorRetailer = (typeof INSPECTOR_RETAILERS)[number];
 export type CandidateStatus = "selected" | "rejected" | "candidate";
 export type PriceSource =
   | "walmart_rapid"
   | "walmart_ssr"
   | "pcx_bff"
+  | "mvr_shopify"
   | "catalog_json";
+
+export function isInspectorRetailer(value: string): value is InspectorRetailer {
+  return (INSPECTOR_RETAILERS as readonly string[]).includes(value);
+}
 
 export type FieldScores = {
   name: number;
@@ -108,17 +132,26 @@ export type MappingAction = "approve" | "reject";
 
 function mappingRetailer(retailer: string): string {
   if (retailer === "no_frills" || retailer === "nofrills") return NOFRILLS_RETAILER;
+  if (retailer === "wholesale_club" || retailer === "wholesaleclub") {
+    return WHOLESALECLUB_RETAILER;
+  }
+  if (retailer === "mvr") return MVR_RETAILER;
   return WALMART_RETAILER;
 }
 
 function asInspectorRetailer(retailer: string): InspectorRetailer {
-  return mappingRetailer(retailer) === NOFRILLS_RETAILER
-    ? "no_frills"
-    : "walmart_ca";
+  const mapped = mappingRetailer(retailer);
+  if (mapped === NOFRILLS_RETAILER) return "no_frills";
+  if (mapped === WHOLESALECLUB_RETAILER) return "wholesale_club";
+  if (mapped === MVR_RETAILER) return "mvr";
+  return "walmart_ca";
 }
 
 function storeFor(retailer: InspectorRetailer): string {
-  return retailer === "no_frills" ? NF_STORE : WM_STORE;
+  if (retailer === "no_frills") return NF_STORE;
+  if (retailer === "wholesale_club") return WC_STORE;
+  if (retailer === "mvr") return MVR_STORE;
+  return WM_STORE;
 }
 
 function priceSourceFor(
@@ -126,7 +159,8 @@ function priceSourceFor(
   live: boolean,
 ): PriceSource {
   if (!live) return "catalog_json";
-  if (retailer === "no_frills") return "pcx_bff";
+  if (retailer === "no_frills" || retailer === "wholesale_club") return "pcx_bff";
+  if (retailer === "mvr") return "mvr_shopify";
   const src = resolveWalmartSource();
   if (src === "rapid") return "walmart_rapid";
   if (src === "missing_key") return "walmart_rapid";
@@ -347,15 +381,37 @@ async function liveOffers(
   query: string,
   item?: StapleItem,
 ): Promise<ProductOffer[]> {
+  const mappings = await loadRetailerMappings();
+  const lockedSku = item
+    ? mappings.products[item.id]?.retailers[mappingRetailer(retailer)]
+        ?.retailerProductId
+    : undefined;
+
   if (retailer === "no_frills") {
     const nf = new NoFrillsConnector();
     const hits = await nf.searchProducts(query, NF_STORE);
-    const sku = item
-      ? (await loadRetailerMappings()).products[item.id]?.retailers[NOFRILLS_RETAILER]
-          ?.retailerProductId
-      : undefined;
-    if (sku && !hits.some((h) => h.productId === sku)) {
-      const direct = await nf.getProduct(sku, NF_STORE);
+    if (lockedSku && !hits.some((h) => h.productId === lockedSku)) {
+      const direct = await nf.getProduct(lockedSku, NF_STORE);
+      if (direct) hits.unshift(direct);
+    }
+    return uniqueOffers(hits).slice(0, 24);
+  }
+
+  if (retailer === "wholesale_club") {
+    const wc = new WholesaleClubConnector();
+    const hits = await wc.searchProducts(query, WC_STORE);
+    if (lockedSku && !hits.some((h) => h.productId === lockedSku)) {
+      const direct = await wc.getProduct(lockedSku, WC_STORE);
+      if (direct) hits.unshift(direct);
+    }
+    return uniqueOffers(hits).slice(0, 24);
+  }
+
+  if (retailer === "mvr") {
+    const mvr = new MvrConnector();
+    const hits = await mvr.searchProducts(query, MVR_STORE);
+    if (lockedSku && !hits.some((h) => h.productId === lockedSku)) {
+      const direct = await mvr.getProduct(lockedSku, MVR_STORE);
       if (direct) hits.unshift(direct);
     }
     return uniqueOffers(hits).slice(0, 24);
@@ -366,9 +422,7 @@ async function liveOffers(
   const sku =
     item?.preferredProductId ??
     looksLikeWalmartId(query) ??
-    (await loadRetailerMappings()).products[item?.id ?? ""]?.retailers[
-      WALMART_RETAILER
-    ]?.retailerProductId;
+    lockedSku;
   if (sku) {
     try {
       const direct = await wm.getProduct(sku, WM_STORE);
@@ -388,18 +442,16 @@ function catalogOffersFor(
   retailer: InspectorRetailer,
   query: string,
   item: StapleItem | undefined,
-  wmCat: Awaited<ReturnType<typeof loadWalmartCatalog>>,
-  nfCat: Awaited<ReturnType<typeof loadNoFrillsCatalog>>,
+  catalogs: Partial<Record<InspectorRetailer, StoreCatalog | null>>,
 ): ProductOffer[] {
   const needle = normalizeName(query);
-  const rows =
-    retailer === "walmart_ca" ? (wmCat?.items ?? []) : (nfCat?.items ?? []);
+  const rows = catalogs[retailer]?.items ?? [];
   const out: ProductOffer[] = [];
   for (const row of rows) {
     if (item && row.id !== item.id) continue;
     const pool = [
       ...(row.offer ? [row.offer] : []),
-      ...((row.alternates ?? []) as CatalogOffer[]),
+      ...(row.alternates ?? []),
     ];
     for (const offer of pool) {
       if (!offer?.productId) continue;
@@ -442,9 +494,9 @@ export async function runMatchInspect(input: {
   const originalQuery = (input.query ?? item?.queries[0] ?? item?.label ?? "").trim();
   const live = input.live !== false;
   const includeRaw = input.includeRaw !== false;
-  const retailers = input.retailers?.length
-    ? input.retailers
-    : (["walmart_ca", "no_frills"] as InspectorRetailer[]);
+  const retailers = input.retailers?.filter(isInspectorRetailer).length
+    ? input.retailers.filter(isInspectorRetailer)
+    : [...INSPECTOR_RETAILERS];
 
   if (!originalQuery) {
     return {
@@ -469,51 +521,59 @@ export async function runMatchInspect(input: {
       : undefined;
 
   const errors: InspectorResult["errors"] = {};
-  const wmCat = await loadWalmartCatalog();
-  const nfCat = await loadNoFrillsCatalog();
+  const catalogs: Parameters<typeof catalogOffersFor>[3] = {
+    walmart_ca: await loadWalmartCatalog(),
+    no_frills: await loadNoFrillsCatalog(),
+    wholesale_club: await loadWholesaleClubCatalog(),
+    mvr: await loadMvrCatalog(),
+  };
   const candidates: InspectorCandidate[] = [];
 
   try {
-    for (const retailer of retailers) {
-      let offers: ProductOffer[] = [];
-      try {
-        if (live) {
-          offers = await liveOffers(retailer, originalQuery, item);
-        } else {
-          offers = catalogOffersFor(retailer, originalQuery, item, wmCat, nfCat);
+    await Promise.all(
+      retailers.map(async (retailer) => {
+        let offers: ProductOffer[] = [];
+        let usedCatalogFallback = false;
+        try {
+          if (live) {
+            offers = await liveOffers(retailer, originalQuery, item);
+          } else {
+            offers = catalogOffersFor(retailer, originalQuery, item, catalogs);
+          }
+        } catch (e) {
+          errors[retailer] = e instanceof Error ? e.message : String(e);
+          offers = catalogOffersFor(retailer, originalQuery, item, catalogs);
+          usedCatalogFallback = offers.length > 0;
+          if (usedCatalogFallback) {
+            errors[retailer] = `${errors[retailer]} (showing catalog fallback)`;
+          }
         }
-      } catch (e) {
-        errors[retailer] = e instanceof Error ? e.message : String(e);
-        offers = catalogOffersFor(retailer, originalQuery, item, wmCat, nfCat);
-        if (offers.length) {
-          errors[retailer] = `${errors[retailer]} (showing catalog fallback)`;
-        }
-      }
 
-      const preferred =
-        retailer === "walmart_ca"
-          ? (item?.preferredProductId ?? linkFor(retailer)?.retailerProductId)
-          : linkFor(retailer)?.retailerProductId;
-      const winner = pickBestOffer(offers, originalQuery, preferred, {
-        targetMassKg: item?.targetMassKg,
-        preferredUpc: item?.queries.find((q) => /\d{8,14}/.test(q)),
-      });
-      const winnerId = winner?.productId;
-      for (const offer of offers) {
-        candidates.push(
-          buildCandidate({
-            offer,
-            queryRec,
-            searchQuery: originalQuery,
-            item,
-            live: live && !errors[retailer]?.includes("catalog fallback"),
-            winner: offer.productId === winnerId,
-            link: linkFor(retailer),
-            includeRaw,
-          }),
-        );
-      }
-    }
+        const preferred =
+          retailer === "walmart_ca"
+            ? (item?.preferredProductId ?? linkFor(retailer)?.retailerProductId)
+            : linkFor(retailer)?.retailerProductId;
+        const winner = pickBestOffer(offers, originalQuery, preferred, {
+          targetMassKg: item?.targetMassKg,
+          preferredUpc: item?.queries.find((q) => /\d{8,14}/.test(q)),
+        });
+        const winnerId = winner?.productId;
+        for (const offer of offers) {
+          candidates.push(
+            buildCandidate({
+              offer,
+              queryRec,
+              searchQuery: originalQuery,
+              item,
+              live: live && !usedCatalogFallback,
+              winner: offer.productId === winnerId,
+              link: linkFor(retailer),
+              includeRaw,
+            }),
+          );
+        }
+      }),
+    );
   } finally {
     await closeWalmartBrowser().catch(() => undefined);
   }
@@ -620,8 +680,12 @@ export async function applyInspectorMapping(input: {
 }
 
 export function inspectorEnabled(): boolean {
-  return (
-    process.env.NODE_ENV !== "production" ||
-    process.env.ALLOW_MATCH_INSPECTOR === "1"
-  );
+  if (process.env.ALLOW_MATCH_INSPECTOR === "0") return false;
+  if (process.env.ALLOW_MATCH_INSPECTOR === "1") return true;
+  // `next start` sets NODE_ENV=production. Keep the tool on local/preview;
+  // Vercel production stays 404 unless ALLOW_MATCH_INSPECTOR=1.
+  if (process.env.VERCEL === "1" && process.env.VERCEL_ENV === "production") {
+    return false;
+  }
+  return true;
 }

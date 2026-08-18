@@ -14,7 +14,7 @@ type FieldScores = {
 type Explain = { stage: string; score: number; reason: string };
 
 type Candidate = {
-  retailer: "walmart_ca" | "no_frills";
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club" | "mvr";
   storeId: string;
   retailerProductId: string;
   name: string;
@@ -45,7 +45,9 @@ type InspectResult = {
   stapleLabel: string | null;
   live: boolean;
   walmartSource: string;
-  errors?: Partial<Record<"walmart_ca" | "no_frills", string>>;
+  errors?: Partial<
+    Record<"walmart_ca" | "no_frills" | "wholesale_club" | "mvr", string>
+  >;
   candidates: Candidate[];
   error?: string;
 };
@@ -68,6 +70,8 @@ export function MatchInspectorClient() {
   const [retailers, setRetailers] = useState({
     walmart_ca: true,
     no_frills: true,
+    wholesale_club: true,
+    mvr: true,
   });
   const [staples, setStaples] = useState<StapleOpt[]>([]);
   const [data, setData] = useState<InspectResult | null>(null);
@@ -86,9 +90,12 @@ export function MatchInspectorClient() {
   }, []);
 
   function selectedRetailers() {
-    const out: Array<"walmart_ca" | "no_frills"> = [];
+    const out: Array<"walmart_ca" | "no_frills" | "wholesale_club" | "mvr"> =
+      [];
     if (retailers.walmart_ca) out.push("walmart_ca");
     if (retailers.no_frills) out.push("no_frills");
+    if (retailers.wholesale_club) out.push("wholesale_club");
+    if (retailers.mvr) out.push("mvr");
     return out;
   }
 
@@ -109,7 +116,14 @@ export function MatchInspectorClient() {
         });
         const json = (await res.json()) as InspectResult;
         setData(json);
-        if (!json.ok) setError(json.error ?? "inspect failed");
+        if (res.status === 404) {
+          setError(
+            json.error ??
+              "Match inspector API is disabled (404). Set ALLOW_MATCH_INSPECTOR=1 or use local next start.",
+          );
+        } else if (!json.ok) {
+          setError(json.error ?? "inspect failed");
+        }
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       }
@@ -155,7 +169,10 @@ export function MatchInspectorClient() {
   const grouped = useMemo(() => {
     const wm = data?.candidates.filter((c) => c.retailer === "walmart_ca") ?? [];
     const nf = data?.candidates.filter((c) => c.retailer === "no_frills") ?? [];
-    return { wm, nf };
+    const wc =
+      data?.candidates.filter((c) => c.retailer === "wholesale_club") ?? [];
+    const mvr = data?.candidates.filter((c) => c.retailer === "mvr") ?? [];
+    return { wm, nf, wc, mvr };
   }, [data]);
 
   return (
@@ -231,6 +248,26 @@ export function MatchInspectorClient() {
         <label className="check">
           <input
             type="checkbox"
+            checked={retailers.wholesale_club}
+            onChange={(e) =>
+              setRetailers((r) => ({ ...r, wholesale_club: e.target.checked }))
+            }
+          />
+          WC #3724
+        </label>
+        <label className="check">
+          <input
+            type="checkbox"
+            checked={retailers.mvr}
+            onChange={(e) =>
+              setRetailers((r) => ({ ...r, mvr: e.target.checked }))
+            }
+          />
+          MVR Weston
+        </label>
+        <label className="check">
+          <input
+            type="checkbox"
             checked={live}
             onChange={(e) => setLive(e.target.checked)}
           />
@@ -284,6 +321,10 @@ export function MatchInspectorClient() {
       {data?.errors?.no_frills && (
         <p className="err">No Frills: {data.errors.no_frills}</p>
       )}
+      {data?.errors?.wholesale_club && (
+        <p className="err">Wholesale Club: {data.errors.wholesale_club}</p>
+      )}
+      {data?.errors?.mvr && <p className="err">MVR: {data.errors.mvr}</p>}
 
       {data && (
         <div className="cols">
@@ -300,6 +341,26 @@ export function MatchInspectorClient() {
           <RetailerColumn
             title="No Frills Anthony’s #3660"
             rows={grouped.nf}
+            openRaw={openRaw}
+            setOpenRaw={setOpenRaw}
+            mappingBusy={mappingBusy}
+            stapleId={stapleId}
+            onApprove={(c) => void mapAction("approve", c)}
+            onReject={(c) => void mapAction("reject", c)}
+          />
+          <RetailerColumn
+            title="Wholesale Club #3724"
+            rows={grouped.wc}
+            openRaw={openRaw}
+            setOpenRaw={setOpenRaw}
+            mappingBusy={mappingBusy}
+            stapleId={stapleId}
+            onApprove={(c) => void mapAction("approve", c)}
+            onReject={(c) => void mapAction("reject", c)}
+          />
+          <RetailerColumn
+            title="MVR Cash & Carry (Weston)"
+            rows={grouped.mvr}
             openRaw={openRaw}
             setOpenRaw={setOpenRaw}
             mappingBusy={mappingBusy}

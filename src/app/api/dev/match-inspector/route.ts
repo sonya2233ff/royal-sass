@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   inspectorEnabled,
+  isInspectorRetailer,
   listInspectorStaples,
   runMatchInspect,
   type InspectorRetailer,
@@ -8,7 +9,7 @@ import {
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 function deny() {
   return NextResponse.json(
@@ -32,6 +33,11 @@ export async function POST(request: Request) {
     live?: boolean;
     includeRaw?: boolean;
   };
-  const result = await runMatchInspect(body);
+  const result = await runMatchInspect({
+    ...body,
+    retailers: Array.isArray(body.retailers)
+      ? body.retailers.filter(isInspectorRetailer)
+      : undefined,
+  });
   return NextResponse.json(result, { status: result.ok ? 200 : 400 });
 }

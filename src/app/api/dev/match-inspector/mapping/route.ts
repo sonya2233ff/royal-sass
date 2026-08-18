@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   applyInspectorMapping,
   inspectorEnabled,
+  isInspectorRetailer,
   type InspectorRetailer,
   type MappingAction,
 } from "@/lib/match-inspector";
@@ -32,12 +33,12 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  if (
-    body.retailer !== "walmart_ca" &&
-    body.retailer !== "no_frills"
-  ) {
+  if (!body.retailer || !isInspectorRetailer(body.retailer)) {
     return NextResponse.json(
-      { ok: false, error: "retailer must be walmart_ca|no_frills" },
+      {
+        ok: false,
+        error: "retailer must be walmart_ca|no_frills|wholesale_club|mvr",
+      },
       { status: 400 },
     );
   }
