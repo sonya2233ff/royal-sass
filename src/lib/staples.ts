@@ -16,6 +16,11 @@ import {
 } from "@/lib/retailer-mappings";
 import { offerMatchesRetailerSku } from "@/domain/compare-resolve";
 import {
+  applyShelfOverrideToOffer,
+  loadShelfOverrides,
+  shelfOverrideFor,
+} from "@/lib/shelf-overrides";
+import {
   mergeDistinctPackSizes,
   splitOfferAndAlternates,
 } from "@/domain/pack-size-candidates";
@@ -506,7 +511,28 @@ export async function loadWalmartCatalog(): Promise<{
       path.join(DATA_CATALOG, "walmart_5831_latest.json"),
       "utf8",
     );
-    return JSON.parse(raw);
+    const catalog = JSON.parse(raw) as {
+      checkedAt?: string;
+      items: Array<{
+        id: string;
+        status: string;
+        offer: CatalogOffer | null;
+        image?: string;
+        rejected?: unknown;
+        notes?: string;
+        alternates?: CatalogOffer[];
+      }>;
+    };
+    const shelf = await loadShelfOverrides();
+    catalog.items = catalog.items.map((row) => {
+      const override = shelfOverrideFor(shelf, "walmart_5831", row.id);
+      if (!override) return row;
+      return {
+        ...row,
+        offer: applyShelfOverrideToOffer(row.offer, override) ?? null,
+      };
+    });
+    return catalog;
   } catch {
     return null;
   }
@@ -728,6 +754,13 @@ export function evaluateOfferStatus(
       return { status: st, reason: "rejected by catalog", ageLabel: null };
     }
     return { status: "no_match", reason: "no offer", ageLabel: null };
+  }
+  if (offer.availability === "out_of_stock") {
+    return {
+      status: "unavailable",
+      reason: "not on the shelf at this store",
+      ageLabel: formatAge(ageHours(offer.checkedAt)),
+    };
   }
 
   const sanity = sanityCheckOffer({

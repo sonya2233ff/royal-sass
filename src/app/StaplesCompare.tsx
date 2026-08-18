@@ -226,7 +226,7 @@ function statusLabel(s?: OfferStatus | string | null): string {
     case "ok":
       return "ok";
     case "unavailable":
-      return "unavailable";
+      return "немає в магазині";
     case "wrong_pack":
       return "wrong pack";
     case "wrong_size":

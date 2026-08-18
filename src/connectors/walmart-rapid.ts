@@ -223,11 +223,9 @@ export function mapRapidProduct(
     unitPrice,
     wasPrice,
     onSale: onSale || undefined,
-    availability: outOfStock
-      ? "out_of_stock"
-      : item.out_of_stock === false
-        ? "in_stock"
-        : mapAvailability(item.availability),
+    // Rapid "In stock" / out_of_stock:false is a website listing flag, not
+    // store #5831 shelf quantity. Only trust an explicit out-of-stock.
+    availability: outOfStock ? "out_of_stock" : "unknown",
     confidence: "exact",
     checkedAt: new Date().toISOString(),
     sourceUrl,

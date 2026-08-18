@@ -1,6 +1,10 @@
 import { buildFixtureOffers } from "@/connectors/fixtures";
 import { resolveWalmartSource } from "@/connectors/walmart-source";
-import { applyRemovedStapleIds, resolveMatchMode } from "@/lib/staples";
+import {
+  applyRemovedStapleIds,
+  evaluateOfferStatus,
+  resolveMatchMode,
+} from "@/lib/staples";
 import { compareBaskets, type BasketLineInput } from "@/domain/basket";
 import { calculateProcurementCost } from "@/domain/procurement-cost";
 import {
@@ -225,4 +229,41 @@ console.log(
     throw new Error(`NF SKU lookup should use PCX photo, got ${fromSku}`);
   }
   console.log("per-store Results photo self-check OK");
+}
+
+{
+  const oos = evaluateOfferStatus(
+    {
+      id: "tomatoes_grape",
+      label: "Grape Tomatoes (pack)",
+      queries: ["grape tomatoes"],
+    },
+    {
+      productId: "6000194960083",
+      name: "Your Fresh Market Tomato, Grape, 10 oz",
+      price: 2.97,
+      availability: "out_of_stock",
+    },
+  );
+  if (oos.status !== "unavailable") {
+    throw new Error(`OOS grape tomatoes must be unavailable, got ${oos.status}`);
+  }
+  const shelf = JSON.parse(
+    readFileSync(
+      path.join(process.cwd(), "data/catalog/shelf-overrides.json"),
+      "utf8",
+    ),
+  ) as {
+    overrides?: Record<
+      string,
+      Record<string, { availability?: string }>
+    >;
+  };
+  if (
+    shelf.overrides?.walmart_5831?.tomatoes_grape?.availability !==
+    "out_of_stock"
+  ) {
+    throw new Error("in-store visit override missing for WM grape tomatoes");
+  }
+  console.log("shelf OOS self-check OK");
 }
