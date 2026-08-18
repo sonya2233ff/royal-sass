@@ -1,0 +1,476 @@
+{
+  "count": 94,
+  "updatedAt": "2026-08-18T21:39:47.537Z",
+  "items": [
+    {
+      "id": "cups_12oz_black_ripple",
+      "label": "12oz Black Ripple Cups",
+      "category": "supplies"
+    },
+    {
+      "id": "cups_12oz_squat_pet",
+      "label": "12oz Squat PET Cups",
+      "category": "supplies"
+    },
+    {
+      "id": "oven_mitts",
+      "label": "15\" Fire Resistance Oven Mitt",
+      "category": "supplies"
+    },
+    {
+      "id": "cups_16oz_black_ripple",
+      "label": "16oz Black Ripple Cups",
+      "category": "supplies"
+    },
+    {
+      "id": "cups_16oz_pet",
+      "label": "16oz PET Cups",
+      "category": "supplies"
+    },
+    {
+      "id": "frozen_pineapple",
+      "label": "Alasko Pineapple Chunks 5x1",
+      "category": "produce"
+    },
+    {
+      "id": "jam_apple_strawberry",
+      "label": "Apple Strawberry Jam",
+      "category": "grocery"
+    },
+    {
+      "id": "lids_bagasse_bowl",
+      "label": "Bagasse Bowl Lids",
+      "category": "supplies"
+    },
+    {
+      "id": "bagels",
+      "label": "Bagels",
+      "category": "bakery"
+    },
+    {
+      "id": "baguette_artisan",
+      "label": "Baguette Artisan",
+      "category": "bakery"
+    },
+    {
+      "id": "bamboo_paddles",
+      "label": "Bamboo Paddles 3in",
+      "category": "supplies"
+    },
+    {
+      "id": "bartlett_pears_kg",
+      "label": "Bartlett Pears",
+      "category": "produce"
+    },
+    {
+      "id": "cake_kits",
+      "label": "Cake Kits",
+      "category": "grocery"
+    },
+    {
+      "id": "cantaloupe",
+      "label": "Cantaloupe",
+      "category": "produce"
+    },
+    {
+      "id": "celery",
+      "label": "Celery",
+      "category": "produce"
+    },
+    {
+      "id": "cibona_ranch_dressing_4lt",
+      "label": "Cibona Ranch Dressing 4lt",
+      "category": "grocery"
+    },
+    {
+      "id": "cilantro",
+      "label": "Cilantro",
+      "category": "produce"
+    },
+    {
+      "id": "party_tray_12x12",
+      "label": "Clear Party Tray 12x12",
+      "category": "supplies"
+    },
+    {
+      "id": "coke_classic_cdn_cans_24x35",
+      "label": "Coke Classic Cdn Cans 24x35",
+      "category": "grocery"
+    },
+    {
+      "id": "cottage_cheese",
+      "label": "Cottage Cheese",
+      "category": "dairy"
+    },
+    {
+      "id": "craize_snack_cracker",
+      "label": "Craize Snack Cracker",
+      "category": "grocery"
+    },
+    {
+      "id": "cream_cheese_bars",
+      "label": "Cream Cheese Bars",
+      "category": "dairy"
+    },
+    {
+      "id": "brown_sugar",
+      "label": "Dark Brown Sugar",
+      "category": "grocery"
+    },
+    {
+      "id": "lids_dome_12_24oz",
+      "label": "Dome Lids 12-24oz",
+      "category": "supplies"
+    },
+    {
+      "id": "double_burner",
+      "label": "Double Burner",
+      "category": "grocery"
+    },
+    {
+      "id": "edible_decor",
+      "label": "Edible Decor",
+      "category": "grocery"
+    },
+    {
+      "id": "fettuccine",
+      "label": "Fettuccine",
+      "category": "grocery"
+    },
+    {
+      "id": "floor_cleaner_lavender",
+      "label": "Floor Cleaner Lavender 4lt",
+      "category": "grocery"
+    },
+    {
+      "id": "foil_green",
+      "label": "Foil Green 4.27",
+      "category": "grocery"
+    },
+    {
+      "id": "fresh_mozzarella",
+      "label": "Fresh Mozzarella",
+      "category": "deli"
+    },
+    {
+      "id": "butternut_squash_frozen",
+      "label": "Frozen Butternut Squash",
+      "category": "frozen"
+    },
+    {
+      "id": "frozen_carrots",
+      "label": "Frozen Diced Carrots",
+      "category": "frozen"
+    },
+    {
+      "id": "gatorade_zero_variety_28x59",
+      "label": "Gatorade Zero Variety 28x59",
+      "category": "grocery"
+    },
+    {
+      "id": "golden_berries",
+      "label": "Golden Berries",
+      "category": "produce"
+    },
+    {
+      "id": "gooseberries",
+      "label": "Gooseberries",
+      "category": "grocery"
+    },
+    {
+      "id": "granny_smith_kg",
+      "label": "Granny Smith Apples",
+      "category": "produce"
+    },
+    {
+      "id": "guest_towel_napkins",
+      "label": "Guest Towel Napkins",
+      "category": "supplies"
+    },
+    {
+      "id": "haolam_havarti_and_dill",
+      "label": "Haolam Havarti & Dill",
+      "category": "deli"
+    },
+    {
+      "id": "haolam_muenster_color",
+      "label": "Haolam Muenster Color",
+      "category": "deli"
+    },
+    {
+      "id": "haolam_ricotta_cheese",
+      "label": "Haolam Ricotta Cheese",
+      "category": "dairy"
+    },
+    {
+      "id": "haolam_sliced_cheese",
+      "label": "Haolam Sliced Cheese",
+      "category": "dairy"
+    },
+    {
+      "id": "harvest_raw_sunflower_seeds",
+      "label": "Harvest Raw Sunflower Seeds",
+      "category": "grocery"
+    },
+    {
+      "id": "honeydew_melons",
+      "label": "Honeydew Melons",
+      "category": "produce"
+    },
+    {
+      "id": "ice_cubes",
+      "label": "Ice Cubes",
+      "category": "grocery"
+    },
+    {
+      "id": "instant_coffee_kosher",
+      "label": "Instant Coffee (kosher)",
+      "category": "grocery"
+    },
+    {
+      "id": "italia_pomace_oil_3lt",
+      "label": "Italia Pomace Oil 3lt",
+      "category": "grocery"
+    },
+    {
+      "id": "jalapeno_peppers_kg",
+      "label": "Jalapeño Peppers",
+      "category": "produce"
+    },
+    {
+      "id": "limes_lrg",
+      "label": "Limes Lrg",
+      "category": "produce"
+    },
+    {
+      "id": "macabee_pizza_bagel_1",
+      "label": "Macabee Pizza Bagel-1",
+      "category": "frozen"
+    },
+    {
+      "id": "magic_bullet",
+      "label": "Magic Bullet",
+      "category": "grocery"
+    },
+    {
+      "id": "marshmallow_white_min",
+      "label": "Marshmallow White Min",
+      "category": "grocery"
+    },
+    {
+      "id": "measuring_cup",
+      "label": "Measuring Cup",
+      "category": "supplies"
+    },
+    {
+      "id": "milan_grated_parmesan",
+      "label": "Milan Grated Parmesan",
+      "category": "deli"
+    },
+    {
+      "id": "gloves_nitrile_large",
+      "label": "Nitrile Gloves Large",
+      "category": "supplies"
+    },
+    {
+      "id": "gloves_nitrile_medium",
+      "label": "Nitrile Gloves Medium",
+      "category": "supplies"
+    },
+    {
+      "id": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "category": "supplies"
+    },
+    {
+      "id": "oreo_sandwich_cookies",
+      "label": "Oreo Sandwich Cookies",
+      "category": "grocery"
+    },
+    {
+      "id": "pam_cookware_coating",
+      "label": "Pam Cookware Coating",
+      "category": "grocery"
+    },
+    {
+      "id": "parsley",
+      "label": "Parsley",
+      "category": "produce"
+    },
+    {
+      "id": "penne_pasta",
+      "label": "Penne Pasta",
+      "category": "grocery"
+    },
+    {
+      "id": "pickled_eggplant",
+      "label": "Pickled Eggplant",
+      "category": "grocery"
+    },
+    {
+      "id": "wraps_plain_10in",
+      "label": "Plain Wraps 10\"",
+      "category": "bakery"
+    },
+    {
+      "id": "wraps_plain_6in",
+      "label": "Plain Wraps 6\"",
+      "category": "bakery"
+    },
+    {
+      "id": "plastic_tablecloth",
+      "label": "Plastic Tablecloth",
+      "category": "supplies"
+    },
+    {
+      "id": "plastic_wrap_18x2000",
+      "label": "Plastic Wrap 18x2000",
+      "category": "supplies"
+    },
+    {
+      "id": "pomegranates_30s",
+      "label": "Pomegranates 30s",
+      "category": "grocery"
+    },
+    {
+      "id": "puff_pastry_sheets",
+      "label": "Puff Pastry Sheets",
+      "category": "frozen"
+    },
+    {
+      "id": "red_onions",
+      "label": "Red Onions",
+      "category": "produce"
+    },
+    {
+      "id": "red_radish",
+      "label": "Red Radish",
+      "category": "produce"
+    },
+    {
+      "id": "red_grapes_kg",
+      "label": "Red Seedless Grapes",
+      "category": "produce"
+    },
+    {
+      "id": "lids_deli_round",
+      "label": "Round Deli Container Lids",
+      "category": "supplies"
+    },
+    {
+      "id": "san_pellegrino_aranciata_or",
+      "label": "San Pellegrino Aranciata/Or",
+      "category": "grocery"
+    },
+    {
+      "id": "schtark_3_cheese_blend",
+      "label": "Schtark 3 Cheese Blend",
+      "category": "deli"
+    },
+    {
+      "id": "shredded_cheddar_cheese",
+      "label": "Shredded Cheddar Cheese",
+      "category": "deli"
+    },
+    {
+      "id": "shredded_mozzarella",
+      "label": "Shredded Mozzarella",
+      "category": "deli"
+    },
+    {
+      "id": "sink_strainer",
+      "label": "Sink Strainer",
+      "category": "grocery"
+    },
+    {
+      "id": "mushrooms_sliced",
+      "label": "Sliced White Mushrooms",
+      "category": "produce"
+    },
+    {
+      "id": "sour_cream",
+      "label": "Sour Cream",
+      "category": "dairy"
+    },
+    {
+      "id": "sourdough_bread",
+      "label": "Sourdough Bread",
+      "category": "bakery"
+    },
+    {
+      "id": "splenda_sweetener_cal",
+      "label": "Splenda Sweetener Cal",
+      "category": "grocery"
+    },
+    {
+      "id": "jam_strawberry_4kg",
+      "label": "Strawberry Jam 4kg",
+      "category": "grocery"
+    },
+    {
+      "id": "tabasco_sauce_142ml",
+      "label": "Tabasco Sauce 142ml",
+      "category": "grocery"
+    },
+    {
+      "id": "table_cover",
+      "label": "Table Cover",
+      "category": "supplies"
+    },
+    {
+      "id": "tnuva_goat_cheese",
+      "label": "Tnuva Goat Cheese",
+      "category": "deli"
+    },
+    {
+      "id": "tomato",
+      "label": "Tomato",
+      "category": "produce"
+    },
+    {
+      "id": "tongs",
+      "label": "Tong",
+      "category": "supplies"
+    },
+    {
+      "id": "tropic_isle_coconut_cream_2",
+      "label": "Tropic Isle Coconut Cream 2",
+      "category": "grocery"
+    },
+    {
+      "id": "tropicana_apple_juice",
+      "label": "Tropicana Apple Juice",
+      "category": "grocery"
+    },
+    {
+      "id": "unico_pizza_style_olives_2l",
+      "label": "Unico Pizza Style Olives 2l",
+      "category": "grocery"
+    },
+    {
+      "id": "vanilla_ice_cream",
+      "label": "Vanilla Ice Cream",
+      "category": "frozen"
+    },
+    {
+      "id": "white_quinoa_grains_750gr",
+      "label": "White Quinoa Grains 750gr",
+      "category": "grocery"
+    },
+    {
+      "id": "yellow_peppers_case",
+      "label": "Yellow Greenhouse Peppers",
+      "category": "produce"
+    },
+    {
+      "id": "yellow_onions",
+      "label": "Yellow Onions",
+      "category": "produce"
+    },
+    {
+      "id": "yukon_potatoes_10lb",
+      "label": "Yukon Potatoes 10lb",
+      "category": "produce"
+    }
+  ]
+}

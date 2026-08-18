@@ -251,7 +251,11 @@ export async function refreshMvrSelected(ids: string[]): Promise<{
         if (perKg) picked = perKg;
       } else {
         const singles = pool.filter((o) => !isWholesaleCaseTitle(o.name));
-        if (singles.length && isWholesaleCaseTitle(picked.name)) {
+        const keepCase =
+          /_(\d+x\d+|30s|case)$/i.test(item.id) ||
+          /\d+\s*x\s*\d+/i.test(item.label) ||
+          /5x1/i.test(item.label);
+        if (!keepCase && singles.length && isWholesaleCaseTitle(picked.name)) {
           picked = pickStapleSearchWinner(item, singles, log) ?? picked;
         }
       }

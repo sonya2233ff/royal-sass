@@ -11,6 +11,7 @@ import {
 import { isActualCategoryBOffer } from "@/domain/same-packed-item";
 import {
   eggCartonCountOk,
+  isShownStaple,
   loadStaplesConfig,
   resolveMatchMode,
 } from "@/lib/staples";
@@ -405,6 +406,23 @@ async function main() {
     eggCartonCountOk(dozen, "GRAY RIDGE - EGGS WHITE LARGE 1DOZ") === true,
     "dozen treats 1DOZ as 12",
   );
+
+  const shown = cfg.items.filter(isShownStaple);
+  assert(shown.length >= 125, `shown staples ${shown.length}`);
+  assert(
+    shown.some((i) => i.id === "cups_12oz_black_ripple"),
+    "receipt cups are shown",
+  );
+  assert(
+    shown.some((i) => i.id === "haolam_ricotta_cheese"),
+    "receipt Haolam is shown",
+  );
+  const cups = cfg.items.find((i) => i.id === "cups_12oz_black_ripple");
+  assert(cups && resolveMatchMode(cups) === "cheapest", "ripple cups cheapest");
+  const haolam = cfg.items.find((i) => i.id === "haolam_ricotta_cheese");
+  assert(haolam && resolveMatchMode(haolam) === "preferred", "Haolam is Category A");
+  const frozenPine = cfg.items.find((i) => i.id === "frozen_pineapple");
+  assert(frozenPine?.category === "frozen", "Alasko pineapple is frozen not produce");
   assert(
     offerFailsStapleFilters(
       dozen,

@@ -8,6 +8,7 @@ import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
 import { offerFailsStapleOfferFilters, categoryBSearchQueries, retailerTaxonomyText } from "@/domain/catalog-normalize";
 import { extractRetailerImage } from "@/lib/product-image";
+import { RECEIPT_STAPLE_IDS } from "@/lib/receipt-staple-ids";
 import {
   isLockedIdentityLink,
   loadRetailerMappings,
@@ -70,6 +71,14 @@ const PRODUCE_WEIGHT_IDS = new Set([
   "kiwi_kg",
   "garlic_1kg",
   "cucumber_english",
+  "bartlett_pears_kg",
+  "granny_smith_kg",
+  "jalapeno_peppers_kg",
+  "red_grapes_kg",
+  "yellow_peppers_case",
+  "yellow_onions",
+  "red_onions",
+  "tomato",
 ]);
 
 /** Frozen bags — pick cheapest $/kg, any brand; show unit price for fair bag-size compare. */
@@ -79,6 +88,9 @@ const FROZEN_BAG_IDS = new Set([
   "frozen_blueberry",
   "frozen_strawberry",
   "frozen_spinach",
+  "frozen_pineapple",
+  "butternut_squash_frozen",
+  "frozen_carrots",
 ]);
 
 /** Packaged produce — compare by shelf pack, no kg/lb conversion UI. */
@@ -88,6 +100,18 @@ const PACK_COMPARE_IDS = new Set([
   "lemons_2lb",
   "blueberries",
   "strawberries",
+  "golden_berries",
+  "gooseberries",
+  "limes_lrg",
+  "mushrooms_sliced",
+  "pomegranates_30s",
+  "yukon_potatoes_10lb",
+  "cantaloupe",
+  "honeydew_melons",
+  "celery",
+  "cilantro",
+  "parsley",
+  "red_radish",
 ]);
 
 export function isProduceItem(item: StapleItem): boolean {
@@ -111,6 +135,14 @@ const SOLD_BY_WEIGHT_IDS = new Set([
   "bananas_kg",
   "kiwi_kg",
   "garlic_1kg",
+  "bartlett_pears_kg",
+  "granny_smith_kg",
+  "jalapeno_peppers_kg",
+  "red_grapes_kg",
+  "yellow_peppers_case",
+  "yellow_onions",
+  "red_onions",
+  "tomato",
 ]);
 
 /** Shell-egg cartons — fair compare is $/egg. */
@@ -335,8 +367,14 @@ export const PINNED_IDS = [
   "ice_cubes",
 ] as const;
 
+export { RECEIPT_STAPLE_IDS };
+
 export function isShownStaple(item: { id: string; custom?: boolean }): boolean {
-  return item.custom === true || (PINNED_IDS as readonly string[]).includes(item.id);
+  return (
+    item.custom === true ||
+    (PINNED_IDS as readonly string[]).includes(item.id) ||
+    (RECEIPT_STAPLE_IDS as readonly string[]).includes(item.id)
+  );
 }
 
 export function applyRemovedStapleIds<T extends { id: string }>(

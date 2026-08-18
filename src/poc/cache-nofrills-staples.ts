@@ -4,13 +4,17 @@
  *   npm run cache:nofrills
  *   npm run cache:nofrills -- oat_beverage_original bananas_kg
  */
-import { PINNED_IDS, refreshNoFrillsSelected } from "@/lib/staples";
+import {
+  isShownStaple,
+  PINNED_IDS,
+  RECEIPT_STAPLE_IDS,
+  refreshNoFrillsSelected,
+} from "@/lib/staples";
 
 async function main() {
   const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
-  const ids = (args.length ? args : [...PINNED_IDS]).filter((id) =>
-    (PINNED_IDS as readonly string[]).includes(id),
-  );
+  const all = [...PINNED_IDS, ...RECEIPT_STAPLE_IDS];
+  const ids = (args.length ? args : all).filter((id) => isShownStaple({ id }));
   if (!ids.length) {
     console.error("No valid staple ids");
     process.exit(1);

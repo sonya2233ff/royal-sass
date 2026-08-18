@@ -1128,6 +1128,2097 @@
       "maxPlausiblePrice": 8,
       "matchMode": "cheapest",
       "notes": "Receipt UPC 763679000230 @ $3.98 — bag of ice, not gum or ice-cube bins"
+    },
+  {
+      "id": "cups_12oz_black_ripple",
+      "label": "12oz Black Ripple Cups",
+      "queries": [
+        "12 oz black ripple cups",
+        "black ripple 12oz hot cups"
+      ],
+      "mustIncludeAny": [
+        "ripple"
+      ],
+      "mustNotInclude": [
+        "16oz",
+        "16 oz",
+        "lid",
+        "lids",
+        "8oz",
+        "8 oz",
+        "sleeve"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)",
+      "mustIncludeAll": [
+        "cup"
+      ]
+    },
+    {
+      "id": "cups_12oz_squat_pet",
+      "label": "12oz Squat PET Cups",
+      "queries": [
+        "12 oz squat pet cups",
+        "squat pet 12oz"
+      ],
+      "mustIncludeAny": [
+        "squat",
+        "pet cup",
+        "pet cups"
+      ],
+      "mustNotInclude": [
+        "16oz",
+        "16 oz",
+        "lid",
+        "lids"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "oven_mitts",
+      "label": "15\" Fire Resistance Oven Mitt",
+      "queries": [
+        "fire resistant oven mitt",
+        "15 inch oven mitt"
+      ],
+      "mustIncludeAny": [
+        "oven mitt",
+        "oven mitts"
+      ],
+      "mustNotInclude": [
+        "holder",
+        "silicone mini"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "cups_16oz_black_ripple",
+      "label": "16oz Black Ripple Cups",
+      "queries": [
+        "16 oz black ripple cups",
+        "black ripple 16oz hot cups"
+      ],
+      "mustIncludeAny": [
+        "ripple"
+      ],
+      "mustNotInclude": [
+        "12oz",
+        "12 oz",
+        "lid",
+        "lids",
+        "8oz",
+        "8 oz",
+        "sleeve"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)",
+      "mustIncludeAll": [
+        "cup"
+      ]
+    },
+    {
+      "id": "cups_16oz_pet",
+      "label": "16oz PET Cups",
+      "queries": [
+        "16 oz pet cups",
+        "pet cold cup 16oz"
+      ],
+      "mustIncludeAny": [
+        "pet cup",
+        "pet cups"
+      ],
+      "mustNotInclude": [
+        "12oz",
+        "12 oz",
+        "lid",
+        "lids",
+        "squat"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "frozen_pineapple",
+      "label": "Alasko Pineapple Chunks 5x1",
+      "queries": [
+        "frozen pineapple chunks",
+        "alasko pineapple chunks",
+        "pineapple chunks 5x1"
+      ],
+      "mustIncludeAny": [
+        "pineapple"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "fresh",
+        "whole",
+        "ring",
+        "upside"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "Receipt Alasko pineapple chunks 5x1 — frozen bag, cheapest $/kg"
+    },
+    {
+      "id": "jam_apple_strawberry",
+      "label": "Apple Strawberry Jam",
+      "queries": [
+        "apple strawberry jam",
+        "strawberry apple jam"
+      ],
+      "mustIncludeAny": [
+        "apple strawberry",
+        "strawberry apple"
+      ],
+      "mustNotInclude": [
+        "4kg"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "lids_bagasse_bowl",
+      "label": "Bagasse Bowl Lids",
+      "queries": [
+        "Bagasse Bowl Lids"
+      ],
+      "mustIncludeAny": [
+        "bagasse",
+        "bowl",
+        "lids"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "bagels",
+      "label": "Bagels",
+      "queries": [
+        "Bagels"
+      ],
+      "mustIncludeAny": [
+        "bagels"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "bakery",
+      "notes": "From receipts catalog (bakery)"
+    },
+    {
+      "id": "baguette_artisan",
+      "label": "Baguette Artisan",
+      "queries": [
+        "Baguette Artisan"
+      ],
+      "mustIncludeAny": [
+        "baguette",
+        "artisan"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "bakery",
+      "notes": "From receipts catalog (bakery)"
+    },
+    {
+      "id": "bamboo_paddles",
+      "label": "Bamboo Paddles 3in",
+      "queries": [
+        "Bamboo Paddles 3in"
+      ],
+      "mustIncludeAny": [
+        "bamboo",
+        "paddles",
+        "3in"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "bartlett_pears_kg",
+      "label": "Bartlett Pears",
+      "queries": [
+        "bartlett pear",
+        "bartlett pears"
+      ],
+      "mustIncludeAny": [
+        "pear",
+        "pears"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "can",
+        "dried",
+        "bosc"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "Produce: cheapest pear by kg (Bartlett preferred, variety flexible)"
+    },
+    {
+      "id": "cake_kits",
+      "label": "Cake Kits",
+      "queries": [
+        "Cake Kits"
+      ],
+      "mustIncludeAny": [
+        "cake",
+        "kits"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "cantaloupe",
+      "label": "Cantaloupe",
+      "queries": [
+        "Cantaloupe"
+      ],
+      "mustIncludeAny": [
+        "cantaloupe"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "celery",
+      "label": "Celery",
+      "queries": [
+        "Celery"
+      ],
+      "mustIncludeAny": [
+        "celery"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "cibona_ranch_dressing_4lt",
+      "label": "Cibona Ranch Dressing 4lt",
+      "queries": [
+        "cibona ranch 4l",
+        "cibona ranch dressing"
+      ],
+      "mustIncludeAny": [
+        "ranch"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "mustIncludeAll": [
+        "cibona"
+      ]
+    },
+    {
+      "id": "cilantro",
+      "label": "Cilantro",
+      "queries": [
+        "Cilantro"
+      ],
+      "mustIncludeAny": [
+        "cilantro"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "party_tray_12x12",
+      "label": "Clear Party Tray 12x12",
+      "queries": [
+        "Clear Party Tray 12x12"
+      ],
+      "mustIncludeAny": [
+        "clear",
+        "party",
+        "tray",
+        "12x12"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "coke_classic_cdn_cans_24x35",
+      "label": "Coke Classic Cdn Cans 24x35",
+      "queries": [
+        "coca cola classic 24 pack",
+        "coke 24x355",
+        "coke cans 24"
+      ],
+      "mustIncludeAny": [
+        "coke",
+        "coca cola",
+        "coca-cola"
+      ],
+      "mustNotInclude": [
+        "diet",
+        "zero",
+        "cherry",
+        "vanilla",
+        "bottle"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "preferNameIncludes": [
+        "24"
+      ]
+    },
+    {
+      "id": "cottage_cheese",
+      "label": "Cottage Cheese",
+      "queries": [
+        "Cottage Cheese"
+      ],
+      "mustIncludeAny": [
+        "cottage",
+        "cheese"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "dairy",
+      "notes": "From receipts catalog (dairy)"
+    },
+    {
+      "id": "craize_snack_cracker",
+      "label": "Craize Snack Cracker",
+      "queries": [
+        "craize snack cracker",
+        "craize crackers"
+      ],
+      "mustIncludeAny": [
+        "craize"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "cream_cheese_bars",
+      "label": "Cream Cheese Bars",
+      "queries": [
+        "Cream Cheese Bars"
+      ],
+      "mustIncludeAny": [
+        "cream",
+        "cheese",
+        "bars"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "dairy",
+      "notes": "From receipts catalog (dairy)"
+    },
+    {
+      "id": "brown_sugar",
+      "label": "Dark Brown Sugar",
+      "queries": [
+        "Dark Brown Sugar"
+      ],
+      "mustIncludeAny": [
+        "dark",
+        "brown",
+        "sugar"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "lids_dome_12_24oz",
+      "label": "Dome Lids 12-24oz",
+      "queries": [
+        "dome lids 12 24 oz",
+        "sip dome lid"
+      ],
+      "mustIncludeAny": [
+        "dome lid",
+        "dome lids"
+      ],
+      "mustNotInclude": [
+        "no hole",
+        "no-hole",
+        "flat"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "double_burner",
+      "label": "Double Burner",
+      "queries": [
+        "655772019780",
+        "double burner portable"
+      ],
+      "mustIncludeAny": [
+        "double burner",
+        "burner"
+      ],
+      "mustNotInclude": [
+        "incense",
+        "candle"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "edible_decor",
+      "label": "Edible Decor",
+      "queries": [
+        "Edible Decor"
+      ],
+      "mustIncludeAny": [
+        "edible",
+        "decor"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "fettuccine",
+      "label": "Fettuccine",
+      "queries": [
+        "Fettuccine"
+      ],
+      "mustIncludeAny": [
+        "fettuccine"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "floor_cleaner_lavender",
+      "label": "Floor Cleaner Lavender 4lt",
+      "queries": [
+        "Floor Cleaner Lavender 4lt"
+      ],
+      "mustIncludeAny": [
+        "floor",
+        "cleaner",
+        "lavender",
+        "4lt"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "foil_green",
+      "label": "Foil Green 4.27",
+      "queries": [
+        "082785400724",
+        "folgers coffee 4.27",
+        "folgers classic roast"
+      ],
+      "mustIncludeAny": [
+        "folgers"
+      ],
+      "mustNotInclude": [
+        "k-cup",
+        "kcup",
+        "machine",
+        "maker",
+        "filter"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "Receipt UPC 082785400724 Foil Green 4.27 (Folgers)"
+    },
+    {
+      "id": "fresh_mozzarella",
+      "label": "Fresh Mozzarella",
+      "queries": [
+        "Fresh Mozzarella"
+      ],
+      "mustIncludeAny": [
+        "fresh",
+        "mozzarella"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "deli",
+      "notes": "From receipts catalog (deli)"
+    },
+    {
+      "id": "butternut_squash_frozen",
+      "label": "Frozen Butternut Squash",
+      "queries": [
+        "Frozen Butternut Squash"
+      ],
+      "mustIncludeAny": [
+        "frozen",
+        "butternut",
+        "squash"
+      ],
+      "mustNotInclude": [
+        "jam",
+        "juice",
+        "pie",
+        "muffin",
+        "fresh",
+        "pint",
+        "yogurt",
+        "smoothie"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "From receipts catalog (frozen)"
+    },
+    {
+      "id": "frozen_carrots",
+      "label": "Frozen Diced Carrots",
+      "queries": [
+        "Frozen Diced Carrots"
+      ],
+      "mustIncludeAny": [
+        "frozen",
+        "diced",
+        "carrots"
+      ],
+      "mustNotInclude": [
+        "jam",
+        "juice",
+        "pie",
+        "muffin",
+        "fresh",
+        "pint",
+        "yogurt",
+        "smoothie"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "From receipts catalog (frozen)"
+    },
+    {
+      "id": "gatorade_zero_variety_28x59",
+      "label": "Gatorade Zero Variety 28x59",
+      "queries": [
+        "gatorade zero variety 28",
+        "gatorade zero 591"
+      ],
+      "mustIncludeAny": [
+        "gatorade"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "mustIncludeAll": [
+        "zero"
+      ]
+    },
+    {
+      "id": "golden_berries",
+      "label": "Golden Berries",
+      "queries": [
+        "Golden Berries"
+      ],
+      "mustIncludeAny": [
+        "golden",
+        "berries"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "gooseberries",
+      "label": "Gooseberries",
+      "queries": [
+        "gooseberries",
+        "fresh gooseberry"
+      ],
+      "mustIncludeAny": [
+        "gooseberry",
+        "gooseberries"
+      ],
+      "mustNotInclude": [
+        "jam",
+        "pie",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "granny_smith_kg",
+      "label": "Granny Smith Apples",
+      "queries": [
+        "Granny Smith Apples"
+      ],
+      "mustIncludeAny": [
+        "granny",
+        "smith",
+        "apples"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "guest_towel_napkins",
+      "label": "Guest Towel Napkins",
+      "queries": [
+        "Guest Towel Napkins"
+      ],
+      "mustIncludeAny": [
+        "guest",
+        "towel",
+        "napkins"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "haolam_havarti_and_dill",
+      "label": "Haolam Havarti & Dill",
+      "queries": [
+        "haolam havarti dill",
+        "havarti and dill haolam"
+      ],
+      "mustIncludeAny": [
+        "havarti"
+      ],
+      "mustNotInclude": [
+        "muenster",
+        "ricotta",
+        "sliced"
+      ],
+      "matchMode": "preferred",
+      "category": "deli",
+      "notes": "From receipts catalog (deli)",
+      "mustIncludeAll": [
+        "haolam"
+      ]
+    },
+    {
+      "id": "haolam_muenster_color",
+      "label": "Haolam Muenster Color",
+      "queries": [
+        "haolam muenster",
+        "muenster color haolam"
+      ],
+      "mustIncludeAny": [
+        "muenster"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "deli",
+      "notes": "From receipts catalog (deli)",
+      "mustIncludeAll": [
+        "haolam"
+      ]
+    },
+    {
+      "id": "haolam_ricotta_cheese",
+      "label": "Haolam Ricotta Cheese",
+      "queries": [
+        "haolam ricotta"
+      ],
+      "mustIncludeAny": [
+        "ricotta"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "dairy",
+      "notes": "From receipts catalog (dairy)",
+      "mustIncludeAll": [
+        "haolam"
+      ]
+    },
+    {
+      "id": "haolam_sliced_cheese",
+      "label": "Haolam Sliced Cheese",
+      "queries": [
+        "haolam sliced cheese",
+        "haolam american"
+      ],
+      "mustIncludeAny": [
+        "sliced"
+      ],
+      "mustNotInclude": [
+        "havarti",
+        "muenster",
+        "ricotta"
+      ],
+      "matchMode": "preferred",
+      "category": "dairy",
+      "notes": "From receipts catalog (dairy)",
+      "mustIncludeAll": [
+        "haolam"
+      ]
+    },
+    {
+      "id": "harvest_raw_sunflower_seeds",
+      "label": "Harvest Raw Sunflower Seeds",
+      "queries": [
+        "harvest raw sunflower seeds",
+        "raw sunflower seeds"
+      ],
+      "mustIncludeAny": [
+        "sunflower"
+      ],
+      "mustNotInclude": [
+        "oil",
+        "butter",
+        "roasted",
+        "salted"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "preferNameIncludes": [
+        "raw"
+      ]
+    },
+    {
+      "id": "honeydew_melons",
+      "label": "Honeydew Melons",
+      "queries": [
+        "Honeydew Melons"
+      ],
+      "mustIncludeAny": [
+        "honeydew",
+        "melons"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "instant_coffee_kosher",
+      "label": "Instant Coffee (kosher)",
+      "queries": [
+        "kosher instant coffee",
+        "maxwell house instant kosher"
+      ],
+      "mustIncludeAny": [
+        "instant coffee"
+      ],
+      "mustNotInclude": [
+        "k-cup",
+        "capsule",
+        "machine",
+        "folgers"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "preferNameIncludes": [
+        "kosher"
+      ]
+    },
+    {
+      "id": "italia_pomace_oil_3lt",
+      "label": "Italia Pomace Oil 3lt",
+      "queries": [
+        "italia pomace oil 3l",
+        "pomace olive oil 3 litre"
+      ],
+      "mustIncludeAny": [
+        "pomace"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "preferNameIncludes": [
+        "italia"
+      ]
+    },
+    {
+      "id": "jalapeno_peppers_kg",
+      "label": "Jalapeño Peppers",
+      "queries": [
+        "jalapeno peppers",
+        "fresh jalapeno"
+      ],
+      "mustIncludeAny": [
+        "jalapeno",
+        "jalapeño"
+      ],
+      "mustNotInclude": [
+        "jar",
+        "pickle",
+        "sauce",
+        "chip"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "limes_lrg",
+      "label": "Limes Lrg",
+      "queries": [
+        "Limes Lrg"
+      ],
+      "mustIncludeAny": [
+        "limes"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "macabee_pizza_bagel_1",
+      "label": "Macabee Pizza Bagel-1",
+      "queries": [
+        "macabee pizza bagel",
+        "pizza bagel macabee"
+      ],
+      "mustIncludeAny": [
+        "pizza bagel",
+        "pizza bagels"
+      ],
+      "mustNotInclude": [
+        "jam",
+        "juice",
+        "pie",
+        "muffin",
+        "fresh",
+        "pint",
+        "yogurt",
+        "smoothie"
+      ],
+      "matchMode": "preferred",
+      "category": "frozen",
+      "notes": "From receipts catalog (frozen)",
+      "mustIncludeAll": [
+        "macabee"
+      ]
+    },
+    {
+      "id": "magic_bullet",
+      "label": "Magic Bullet",
+      "queries": [
+        "810097978120",
+        "magic bullet blender"
+      ],
+      "mustIncludeAny": [
+        "magic bullet"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "marshmallow_white_min",
+      "label": "Marshmallow White Min",
+      "queries": [
+        "Marshmallow White Min"
+      ],
+      "mustIncludeAny": [
+        "marshmallow",
+        "white"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "measuring_cup",
+      "label": "Measuring Cup",
+      "queries": [
+        "Measuring Cup"
+      ],
+      "mustIncludeAny": [
+        "measuring",
+        "cup"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "milan_grated_parmesan",
+      "label": "Milan Grated Parmesan",
+      "queries": [
+        "milan grated parmesan",
+        "milan parmesan"
+      ],
+      "mustIncludeAny": [
+        "parmesan"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "deli",
+      "notes": "From receipts catalog (deli)",
+      "mustIncludeAll": [
+        "milan"
+      ]
+    },
+    {
+      "id": "gloves_nitrile_large",
+      "label": "Nitrile Gloves Large",
+      "queries": [
+        "nitrile gloves large",
+        "large nitrile gloves"
+      ],
+      "mustIncludeAny": [
+        "nitrile"
+      ],
+      "mustNotInclude": [
+        "medium",
+        "small",
+        "xl",
+        "x-large",
+        "vinyl",
+        "latex"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)",
+      "mustIncludeAll": [
+        "glove"
+      ]
+    },
+    {
+      "id": "gloves_nitrile_medium",
+      "label": "Nitrile Gloves Medium",
+      "queries": [
+        "nitrile gloves medium",
+        "medium nitrile gloves"
+      ],
+      "mustIncludeAny": [
+        "nitrile"
+      ],
+      "mustNotInclude": [
+        "large",
+        "small",
+        "xl",
+        "vinyl",
+        "latex"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)",
+      "mustIncludeAll": [
+        "glove"
+      ]
+    },
+    {
+      "id": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "queries": [
+        "no hole dome lids",
+        "dome lid no hole"
+      ],
+      "mustIncludeAny": [
+        "dome"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)",
+      "preferNameIncludes": [
+        "no hole",
+        "no-hole"
+      ]
+    },
+    {
+      "id": "oreo_sandwich_cookies",
+      "label": "Oreo Sandwich Cookies",
+      "queries": [
+        "oreo sandwich cookies",
+        "oreo original cookies"
+      ],
+      "mustIncludeAny": [
+        "oreo"
+      ],
+      "mustNotInclude": [
+        "thins",
+        "ice cream",
+        "pie"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "pam_cookware_coating",
+      "label": "Pam Cookware Coating",
+      "queries": [
+        "pam cooking spray",
+        "pam original"
+      ],
+      "mustIncludeAny": [
+        "pam"
+      ],
+      "mustNotInclude": [
+        "pamper",
+        "diaper"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "parsley",
+      "label": "Parsley",
+      "queries": [
+        "Parsley"
+      ],
+      "mustIncludeAny": [
+        "parsley"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "penne_pasta",
+      "label": "Penne Pasta",
+      "queries": [
+        "Penne Pasta"
+      ],
+      "mustIncludeAny": [
+        "penne",
+        "pasta"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "pickled_eggplant",
+      "label": "Pickled Eggplant",
+      "queries": [
+        "Pickled Eggplant"
+      ],
+      "mustIncludeAny": [
+        "pickled",
+        "eggplant"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "wraps_plain_10in",
+      "label": "Plain Wraps 10\"",
+      "queries": [
+        "plain wraps 10 inch",
+        "10 inch flour tortillas",
+        "10in wraps"
+      ],
+      "mustIncludeAny": [
+        "wrap",
+        "tortilla"
+      ],
+      "mustNotInclude": [
+        "6 inch",
+        "6in",
+        "6\"",
+        "spinach",
+        "whole wheat",
+        "corn"
+      ],
+      "matchMode": "cheapest",
+      "category": "bakery",
+      "notes": "From receipts catalog (bakery)",
+      "preferNameIncludes": [
+        "10"
+      ]
+    },
+    {
+      "id": "wraps_plain_6in",
+      "label": "Plain Wraps 6\"",
+      "queries": [
+        "plain wraps 6 inch",
+        "6 inch flour tortillas",
+        "6in wraps"
+      ],
+      "mustIncludeAny": [
+        "wrap",
+        "tortilla"
+      ],
+      "mustNotInclude": [
+        "10 inch",
+        "10in",
+        "10\"",
+        "spinach",
+        "whole wheat",
+        "corn"
+      ],
+      "matchMode": "cheapest",
+      "category": "bakery",
+      "notes": "From receipts catalog (bakery)",
+      "preferNameIncludes": [
+        "6"
+      ]
+    },
+    {
+      "id": "plastic_tablecloth",
+      "label": "Plastic Tablecloth",
+      "queries": [
+        "Plastic Tablecloth"
+      ],
+      "mustIncludeAny": [
+        "plastic",
+        "tablecloth"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "plastic_wrap_18x2000",
+      "label": "Plastic Wrap 18x2000",
+      "queries": [
+        "Plastic Wrap 18x2000"
+      ],
+      "mustIncludeAny": [
+        "plastic",
+        "wrap",
+        "18x2000"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "pomegranates_30s",
+      "label": "Pomegranates 30s",
+      "queries": [
+        "pomegranates",
+        "pomegranate 30"
+      ],
+      "mustIncludeAny": [
+        "pomegranate",
+        "pomegranates"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "seed",
+        "molasses",
+        "tea"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "puff_pastry_sheets",
+      "label": "Puff Pastry Sheets",
+      "queries": [
+        "puff pastry sheets",
+        "frozen puff pastry"
+      ],
+      "mustIncludeAny": [
+        "puff pastry"
+      ],
+      "mustNotInclude": [
+        "shell",
+        "bite",
+        "pie"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "From receipts catalog (frozen)"
+    },
+    {
+      "id": "red_onions",
+      "label": "Red Onions",
+      "queries": [
+        "Red Onions"
+      ],
+      "mustIncludeAny": [
+        "red",
+        "onions"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "red_radish",
+      "label": "Red Radish",
+      "queries": [
+        "Red Radish"
+      ],
+      "mustIncludeAny": [
+        "red",
+        "radish"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "red_grapes_kg",
+      "label": "Red Seedless Grapes",
+      "queries": [
+        "red seedless grapes",
+        "red grapes"
+      ],
+      "mustIncludeAny": [
+        "grape",
+        "grapes"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "jelly",
+        "green grape",
+        "cotton",
+        "tomato"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)",
+      "preferNameIncludes": [
+        "red",
+        "seedless"
+      ]
+    },
+    {
+      "id": "lids_deli_round",
+      "label": "Round Deli Container Lids",
+      "queries": [
+        "Round Deli Container Lids"
+      ],
+      "mustIncludeAny": [
+        "round",
+        "deli",
+        "container",
+        "lids"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "san_pellegrino_aranciata_or",
+      "label": "San Pellegrino Aranciata/Or",
+      "queries": [
+        "san pellegrino aranciata",
+        "pellegrino orange"
+      ],
+      "mustIncludeAny": [
+        "aranciata"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "mustIncludeAll": [
+        "pellegrino"
+      ]
+    },
+    {
+      "id": "schtark_3_cheese_blend",
+      "label": "Schtark 3 Cheese Blend",
+      "queries": [
+        "schtark 3 cheese blend",
+        "shtark cheese blend"
+      ],
+      "mustIncludeAny": [
+        "schtark",
+        "shtark"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "deli",
+      "notes": "From receipts catalog (deli)"
+    },
+    {
+      "id": "shredded_cheddar_cheese",
+      "label": "Shredded Cheddar Cheese",
+      "queries": [
+        "Shredded Cheddar Cheese"
+      ],
+      "mustIncludeAny": [
+        "shredded",
+        "cheddar",
+        "cheese"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "deli",
+      "notes": "From receipts catalog (deli)"
+    },
+    {
+      "id": "shredded_mozzarella",
+      "label": "Shredded Mozzarella",
+      "queries": [
+        "Shredded Mozzarella"
+      ],
+      "mustIncludeAny": [
+        "shredded",
+        "mozzarella"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "deli",
+      "notes": "From receipts catalog (deli)"
+    },
+    {
+      "id": "sink_strainer",
+      "label": "Sink Strainer",
+      "queries": [
+        "Sink Strainer"
+      ],
+      "mustIncludeAny": [
+        "sink",
+        "strainer"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "mushrooms_sliced",
+      "label": "Sliced White Mushrooms",
+      "queries": [
+        "Sliced White Mushrooms"
+      ],
+      "mustIncludeAny": [
+        "sliced",
+        "white",
+        "mushrooms"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "sour_cream",
+      "label": "Sour Cream",
+      "queries": [
+        "Sour Cream"
+      ],
+      "mustIncludeAny": [
+        "sour",
+        "cream"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "dairy",
+      "notes": "From receipts catalog (dairy)"
+    },
+    {
+      "id": "sourdough_bread",
+      "label": "Sourdough Bread",
+      "queries": [
+        "Sourdough Bread"
+      ],
+      "mustIncludeAny": [
+        "sourdough",
+        "bread"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "bakery",
+      "notes": "From receipts catalog (bakery)"
+    },
+    {
+      "id": "splenda_sweetener_cal",
+      "label": "Splenda Sweetener Cal",
+      "queries": [
+        "splenda sweetener",
+        "splenda packets"
+      ],
+      "mustIncludeAny": [
+        "splenda"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "jam_strawberry_4kg",
+      "label": "Strawberry Jam 4kg",
+      "queries": [
+        "strawberry jam 4kg",
+        "strawberry jam 4 kg"
+      ],
+      "mustIncludeAny": [
+        "strawberry jam",
+        "strawberry jelly"
+      ],
+      "mustNotInclude": [
+        "apple",
+        "sugar free"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "preferNameIncludes": [
+        "4kg",
+        "4 kg"
+      ]
+    },
+    {
+      "id": "tabasco_sauce_142ml",
+      "label": "Tabasco Sauce 142ml",
+      "queries": [
+        "tabasco sauce 142",
+        "tabasco original 5 oz"
+      ],
+      "mustIncludeAny": [
+        "tabasco"
+      ],
+      "mustNotInclude": [
+        "sriracha",
+        "chipotle"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "table_cover",
+      "label": "Table Cover",
+      "queries": [
+        "Table Cover"
+      ],
+      "mustIncludeAny": [
+        "table",
+        "cover"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "tnuva_goat_cheese",
+      "label": "Tnuva Goat Cheese",
+      "queries": [
+        "tnuva goat cheese"
+      ],
+      "mustIncludeAny": [
+        "goat"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "deli",
+      "notes": "From receipts catalog (deli)",
+      "mustIncludeAll": [
+        "tnuva"
+      ]
+    },
+    {
+      "id": "tomato",
+      "label": "Tomato",
+      "queries": [
+        "tomatoes",
+        "round tomatoes",
+        "tomato on the vine"
+      ],
+      "mustIncludeAny": [
+        "tomato",
+        "tomatoes"
+      ],
+      "mustNotInclude": [
+        "grape",
+        "cherry",
+        "roma",
+        "sauce",
+        "paste",
+        "canned",
+        "sun dried",
+        "sundried",
+        "juice",
+        "soup",
+        "greenhouse"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)",
+      "typicalEachGrams": 180
+    },
+    {
+      "id": "tongs",
+      "label": "Tong",
+      "queries": [
+        "Tong"
+      ],
+      "mustIncludeAny": [
+        "tong"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "supplies",
+      "notes": "From receipts catalog (supplies)"
+    },
+    {
+      "id": "tropic_isle_coconut_cream_2",
+      "label": "Tropic Isle Coconut Cream 2",
+      "queries": [
+        "tropic isle coconut cream",
+        "coconut cream tropic isle"
+      ],
+      "mustIncludeAny": [
+        "coconut cream"
+      ],
+      "mustNotInclude": [
+        "water",
+        "milk"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "preferNameIncludes": [
+        "tropic"
+      ]
+    },
+    {
+      "id": "tropicana_apple_juice",
+      "label": "Tropicana Apple Juice",
+      "queries": [
+        "tropicana apple juice"
+      ],
+      "mustIncludeAny": [
+        "apple"
+      ],
+      "mustNotInclude": [
+        "orange",
+        "grape",
+        "cocktail"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "mustIncludeAll": [
+        "tropicana"
+      ]
+    },
+    {
+      "id": "unico_pizza_style_olives_2l",
+      "label": "Unico Pizza Style Olives 2l",
+      "queries": [
+        "unico pizza style olives 2l",
+        "unico sliced olives pizza"
+      ],
+      "mustIncludeAny": [
+        "olive"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "preferred",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)",
+      "mustIncludeAll": [
+        "unico"
+      ],
+      "preferNameIncludes": [
+        "pizza"
+      ]
+    },
+    {
+      "id": "vanilla_ice_cream",
+      "label": "Vanilla Ice Cream",
+      "queries": [
+        "vanilla ice cream",
+        "vanilla ice cream tub"
+      ],
+      "mustIncludeAny": [
+        "vanilla ice cream"
+      ],
+      "mustNotInclude": [
+        "sandwich",
+        "bar",
+        "cone",
+        "novelty",
+        "cake"
+      ],
+      "matchMode": "cheapest",
+      "category": "frozen",
+      "notes": "From receipts catalog (frozen)"
+    },
+    {
+      "id": "white_quinoa_grains_750gr",
+      "label": "White Quinoa Grains 750gr",
+      "queries": [
+        "White Quinoa Grains 750gr"
+      ],
+      "mustIncludeAny": [
+        "white",
+        "quinoa",
+        "grains",
+        "750gr"
+      ],
+      "mustNotInclude": [
+        "toy",
+        "book",
+        "costume"
+      ],
+      "matchMode": "cheapest",
+      "category": "grocery",
+      "notes": "From receipts catalog (grocery)"
+    },
+    {
+      "id": "yellow_peppers_case",
+      "label": "Yellow Greenhouse Peppers",
+      "queries": [
+        "yellow greenhouse peppers",
+        "yellow bell peppers"
+      ],
+      "mustIncludeAny": [
+        "yellow pepper",
+        "yellow peppers",
+        "pepper yellow"
+      ],
+      "mustNotInclude": [
+        "red pepper",
+        "green pepper",
+        "hot",
+        "jalapeno",
+        "jar",
+        "roasted"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "yellow_onions",
+      "label": "Yellow Onions",
+      "queries": [
+        "Yellow Onions"
+      ],
+      "mustIncludeAny": [
+        "yellow",
+        "onions"
+      ],
+      "mustNotInclude": [
+        "juice",
+        "sauce",
+        "jam",
+        "candy",
+        "dressing",
+        "soap",
+        "tea",
+        "pie",
+        "muffin",
+        "cookie",
+        "yogurt",
+        "smoothie",
+        "dried",
+        "can",
+        "canned"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)"
+    },
+    {
+      "id": "yukon_potatoes_10lb",
+      "label": "Yukon Potatoes 10lb",
+      "queries": [
+        "yukon gold potatoes 10 lb",
+        "yukon potatoes 10lb"
+      ],
+      "mustIncludeAny": [
+        "yukon"
+      ],
+      "mustNotInclude": [
+        "sweet",
+        "chip",
+        "frozen"
+      ],
+      "matchMode": "cheapest",
+      "category": "produce",
+      "notes": "From receipts catalog (produce)",
+      "preferNameIncludes": [
+        "10"
+      ]
     }
   ]
 }

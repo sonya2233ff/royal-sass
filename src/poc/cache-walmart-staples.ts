@@ -174,10 +174,8 @@ function pickForStaple(
 async function main() {
   const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
   if (args.length) {
-    const { refreshWalmartSelected, PINNED_IDS } = await import("@/lib/staples");
-    const ids = args.filter((id) =>
-      (PINNED_IDS as readonly string[]).includes(id),
-    );
+    const { refreshWalmartSelected, isShownStaple } = await import("@/lib/staples");
+    const ids = args.filter((id) => isShownStaple({ id }));
     if (!ids.length) {
       console.error("No valid staple ids");
       process.exit(1);

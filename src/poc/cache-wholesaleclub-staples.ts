@@ -4,14 +4,13 @@
  *   npm run cache:wholesaleclub
  *   npm run cache:wholesaleclub -- oat_beverage_original bananas_kg
  */
-import { PINNED_IDS } from "@/lib/staples";
+import { isShownStaple, PINNED_IDS, RECEIPT_STAPLE_IDS } from "@/lib/staples";
 import { refreshWholesaleClubSelected } from "@/lib/wholesaleclub-observe";
 
 async function main() {
   const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
-  const ids = (args.length ? args : [...PINNED_IDS]).filter((id) =>
-    (PINNED_IDS as readonly string[]).includes(id),
-  );
+  const all = [...PINNED_IDS, ...RECEIPT_STAPLE_IDS];
+  const ids = (args.length ? args : all).filter((id) => isShownStaple({ id }));
   if (!ids.length) {
     console.error("No valid staple ids");
     process.exit(1);
