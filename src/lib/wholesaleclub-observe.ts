@@ -3,7 +3,7 @@ import {
   WHOLESALECLUB_STORE_ID,
 } from "@/connectors/wholesaleclub";
 import type { ProductOffer } from "@/connectors/types";
-import { offerFailsStapleFilters, nameMatchesFilterToken } from "@/domain/catalog-normalize";
+import { offerFailsStapleOfferFilters, nameMatchesFilterToken, categoryBSearchQueries } from "@/domain/catalog-normalize";
 import {
   isActualCategoryBOffer,
   usesCategoryBIdentity,
@@ -47,7 +47,7 @@ function isCasePackSku(productId: string): boolean {
 
 function passesWcFilters(offer: ProductOffer, item: StapleItem): boolean {
   if (isCasePackSku(offer.productId)) return false;
-  if (offerFailsStapleFilters(item, offer.name, offer.brand) != null) {
+  if (offerFailsStapleOfferFilters(item, offer) != null) {
     return false;
   }
   if (isProduceWeightItem(item) || isSoldByWeightItem(item)) {
@@ -72,6 +72,7 @@ function passesWcFilters(offer: ProductOffer, item: StapleItem): boolean {
     brand: offer.brand,
     packageSize: offer.packageSize,
     sourceUrl: offer.sourceUrl,
+    raw: offer.raw,
   });
 }
 
@@ -84,7 +85,7 @@ export async function searchWholesaleClubPool(
   const mappings = await loadRetailerMappings();
   const wcLink = mappings.products[item.id]?.retailers.wholesaleclub;
   const lockedSku = wcLink?.verified ? wcLink.retailerProductId : null;
-  const queries = item.queries.filter(Boolean).slice(0, 3);
+  const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = lockedSku ? [lockedSku, ...queries] : [...queries];
 
   if (lockedSku) {
@@ -133,7 +134,7 @@ export async function searchWholesaleClubPool(
         name: o.name,
         price: o.price,
         reason:
-          offerFailsStapleFilters(item, o.name, o.brand) != null
+          offerFailsStapleOfferFilters(item, o) != null
             ? "filter mustInclude/mustNotInclude"
             : "not the actual category B item",
       });

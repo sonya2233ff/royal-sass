@@ -8,8 +8,11 @@
  */
 import { packMassKg } from "@/domain/fair-compare";
 import {
+  isCategoryBStaple,
   nameMatchesFilterToken,
   offerFailsStapleFilters,
+  offerFailsStapleOfferFilters,
+  warehouseTitleView,
   type StapleFilterItem,
 } from "@/domain/catalog-normalize";
 
@@ -168,10 +171,11 @@ export type CategoryBOffer = {
   parsedMassKg?: number;
   sourceUrl?: string;
   price?: number;
+  raw?: unknown;
 };
 
 export function usesCategoryBIdentity(item: StapleFilterItem): boolean {
-  return item.category === "produce" || item.category === "frozen";
+  return isCategoryBStaple(item);
 }
 
 function stapleBlob(item: StapleFilterItem): string {
@@ -367,23 +371,14 @@ function looksLikeProduceSlug(
 function warehouseProduceView(offer: CategoryBOffer): CategoryBOffer {
   const brand = offer.brand ?? "";
   const rawName = offer.name ?? "";
-  if (
-    !/^(fruits|vegetables)$/i.test(brand) &&
-    !/^(fruits|vegetables)\s*[-–]/i.test(rawName)
-  ) {
-    return offer;
-  }
-  const name = rawName
-    .replace(/^(fruits|vegetables)\s*[-–]\s*/i, "")
-    .replace(/\bcase\b/gi, " ")
-    .replace(/\bper\s*kg\b/gi, "1 kg")
-    .replace(/\bpints?\b/gi, "pack")
-    .replace(/\b\d+\s*x\s*\d+(?:\.\d+)?\b/gi, " ");
+  const warehouse =
+    /^(fruits|vegetables)$/i.test(brand) ||
+    /^(fruits|vegetables)\s*[-–]/i.test(rawName);
   return {
     ...offer,
-    name,
+    name: warehouseTitleView(rawName),
     brand: /^(fruits|vegetables)$/i.test(brand) ? undefined : offer.brand,
-    sourceUrl: undefined,
+    sourceUrl: warehouse ? undefined : offer.sourceUrl,
   };
 }
 
@@ -393,9 +388,10 @@ export function isActualCategoryBOffer(
   extraHay?: string,
 ): boolean {
   const viewed = warehouseProduceView(offer);
-  if (offerFailsStapleFilters(item, viewed.name, viewed.brand, extraHay)) {
-    return false;
-  }
+  const filterFail = extraHay
+    ? offerFailsStapleFilters(item, viewed.name, viewed.brand, extraHay)
+    : offerFailsStapleOfferFilters(item, viewed);
+  if (filterFail) return false;
   if (isProcessedImpostor(item, viewed)) return false;
   if (item.category === "frozen") return true;
   if (!hasProducePackageShape(item, viewed)) return false;

@@ -5,7 +5,7 @@ import {
   SOBEYS_CLARK_HILDA_STORE_CODE,
 } from "@/connectors/sobeys";
 import type { ProductOffer } from "@/connectors/types";
-import { SOBEYS_RETAILER, offerFailsStapleFilters } from "@/domain/catalog-normalize";
+import { SOBEYS_RETAILER, offerFailsStapleOfferFilters } from "@/domain/catalog-normalize";
 import {
   isActualCategoryBOffer,
   usesCategoryBIdentity,
@@ -43,7 +43,7 @@ function textQueries(item: StapleItem): string[] {
 }
 
 function passesSobeysFilters(offer: ProductOffer, item: StapleItem): boolean {
-  if (offerFailsStapleFilters(item, offer.name, offer.brand) != null) {
+  if (offerFailsStapleOfferFilters(item, offer) != null) {
     return false;
   }
   // Flyer search is bag-of-words over the whole weekly ad. Frozen staples
@@ -91,7 +91,7 @@ async function searchSobeysPool(
         name: o.name,
         price: o.price,
         reason:
-          offerFailsStapleFilters(item, o.name, o.brand) != null
+          offerFailsStapleOfferFilters(item, o) != null
             ? "filter mustInclude/mustNotInclude"
             : "not the actual category B item",
       });

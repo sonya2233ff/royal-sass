@@ -30,7 +30,10 @@ import {
   WALMART_RETAILER,
   WHOLESALECLUB_RETAILER,
   catalogOfferToRecord,
-  offerFailsStapleFilters,
+  categoryBSearchQueries,
+  isCategoryBStaple,
+  offerFailsStapleOfferFilters,
+  retailerCategoryFromTaxonomy,
   stapleBrandHint,
   upcFromOffer,
 } from "@/domain/catalog-normalize";
@@ -43,7 +46,6 @@ import {
   type RetailerSkuLink,
 } from "@/lib/retailer-mappings";
 import { loadMvrCatalog } from "@/lib/mvr-catalog";
-import { mvrRetailerCategory, mvrRetailerFilterText } from "@/lib/mvr-product-meta";
 import {
   loadNoFrillsCatalog,
   loadStaplesConfig,
@@ -298,10 +300,7 @@ function buildCandidate(input: {
 }): InspectorCandidate {
   const retailer = asInspectorRetailer(input.offer.retailer);
   const cat = offerAsCatalog(input.offer);
-  const extraHay =
-    retailer === "mvr" ? mvrRetailerFilterText(input.offer) : undefined;
-  const retailerCategory =
-    retailer === "mvr" ? mvrRetailerCategory(input.offer) : undefined;
+  const retailerCategory = retailerCategoryFromTaxonomy(input.offer.raw);
   const rec = catalogOfferToRecord({
     retailer: mappingRetailer(retailer),
     offer: cat,
@@ -319,12 +318,12 @@ function buildCandidate(input: {
   );
   const entity = matchProducts(input.queryRec, rec);
   const filter = input.item
-    ? offerFailsStapleFilters(
-        input.item,
-        input.offer.name,
-        input.offer.brand,
-        extraHay,
-      )
+    ? offerFailsStapleOfferFilters(input.item, {
+        name: input.offer.name,
+        brand: input.offer.brand,
+        packageSize: input.offer.packageSize,
+        raw: input.offer.raw,
+      })
     : null;
   const mapStatus = mappingStatusFor(input.link, input.offer.productId);
   const status = candidateStatus(
@@ -396,35 +395,53 @@ async function liveOffers(
     ? mappings.products[item.id]?.retailers[mappingRetailer(retailer)]
         ?.retailerProductId
     : undefined;
+  const queries =
+    item && isCategoryBStaple(item)
+      ? categoryBSearchQueries({ ...item, queries: [query, ...item.queries] }, 6)
+      : [query];
+
+  async function searchMany(
+    search: (q: string) => Promise<ProductOffer[]>,
+    getDirect?: (sku: string) => Promise<ProductOffer | null>,
+  ): Promise<ProductOffer[]> {
+    const hits: ProductOffer[] = [];
+    if (lockedSku && getDirect) {
+      const direct = await getDirect(lockedSku);
+      if (direct) hits.push(direct);
+    }
+    for (const q of queries) {
+      try {
+        const found = await search(q);
+        for (const h of found) hits.push(h);
+      } catch {
+        /* other queries still run */
+      }
+    }
+    return uniqueOffers(hits).slice(0, 24);
+  }
 
   if (retailer === "no_frills") {
     const nf = new NoFrillsConnector();
-    const hits = await nf.searchProducts(query, NF_STORE);
-    if (lockedSku && !hits.some((h) => h.productId === lockedSku)) {
-      const direct = await nf.getProduct(lockedSku, NF_STORE);
-      if (direct) hits.unshift(direct);
-    }
-    return uniqueOffers(hits).slice(0, 24);
+    return searchMany(
+      (q) => nf.searchProducts(q, NF_STORE),
+      (sku) => nf.getProduct(sku, NF_STORE),
+    );
   }
 
   if (retailer === "wholesale_club") {
     const wc = new WholesaleClubConnector();
-    const hits = await wc.searchProducts(query, WC_STORE);
-    if (lockedSku && !hits.some((h) => h.productId === lockedSku)) {
-      const direct = await wc.getProduct(lockedSku, WC_STORE);
-      if (direct) hits.unshift(direct);
-    }
-    return uniqueOffers(hits).slice(0, 24);
+    return searchMany(
+      (q) => wc.searchProducts(q, WC_STORE),
+      (sku) => wc.getProduct(sku, WC_STORE),
+    );
   }
 
   if (retailer === "mvr") {
     const mvr = new MvrConnector();
-    const hits = await mvr.searchProducts(query, MVR_STORE);
-    if (lockedSku && !hits.some((h) => h.productId === lockedSku)) {
-      const direct = await mvr.getProduct(lockedSku, MVR_STORE);
-      if (direct) hits.unshift(direct);
-    }
-    return uniqueOffers(hits).slice(0, 24);
+    return searchMany(
+      (q) => mvr.searchProducts(q, MVR_STORE),
+      (sku) => mvr.getProduct(sku, MVR_STORE),
+    );
   }
 
   const wm = createWalmartConnector("L4J0A7");
@@ -441,9 +458,11 @@ async function liveOffers(
       /* search still runs */
     }
   }
-  const hits = await wm.searchProducts(looksLikeWalmartId(query) ?? query, WM_STORE);
-  for (const h of hits) {
-    if (!out.some((x) => x.productId === h.productId)) out.push(h);
+  for (const q of queries) {
+    const hits = await wm.searchProducts(looksLikeWalmartId(q) ?? q, WM_STORE);
+    for (const h of hits) {
+      if (!out.some((x) => x.productId === h.productId)) out.push(h);
+    }
   }
   return uniqueOffers(out).slice(0, 24);
 }

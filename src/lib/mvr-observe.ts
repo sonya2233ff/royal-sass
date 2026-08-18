@@ -4,12 +4,11 @@
  */
 import { MvrConnector, MVR_STORE_ID, hydrateMvrOffer } from "@/connectors/mvr";
 import type { ProductOffer } from "@/connectors/types";
-import { offerFailsStapleFilters, nameMatchesFilterToken } from "@/domain/catalog-normalize";
+import { offerFailsStapleOfferFilters, nameMatchesFilterToken, categoryBSearchQueries } from "@/domain/catalog-normalize";
 import {
   isActualCategoryBOffer,
   usesCategoryBIdentity,
 } from "@/domain/same-packed-item";
-import { mvrRetailerFilterText } from "@/lib/mvr-product-meta";
 import { persistObservation } from "@/lib/persistence";
 import {
   loadRetailerMappings,
@@ -45,42 +44,8 @@ function isWholesaleCaseTitle(name: string): boolean {
   return /\bcase\b/i.test(name) || /\b\d+\s*x\s*\d+/i.test(name);
 }
 
-function mvrCategoryBOffer(
-  item: StapleItem,
-  offer: ProductOffer,
-): boolean {
-  const extra = mvrRetailerFilterText(offer);
-  const name = offer.name
-    .replace(/^(fruits|vegetables)\s*[-–]\s*/i, "")
-    .replace(/\bcase\b/gi, " ")
-    .replace(/\bper\s*kg\b/gi, "1 kg")
-    .replace(/\bpints?\b/gi, "pack")
-    .replace(/\b\d+\s*x\s*\d+(?:\.\d+)?\b/gi, " ");
-  const brand = /^(fruits|vegetables)$/i.test(offer.brand ?? "")
-    ? undefined
-    : offer.brand;
-  return isActualCategoryBOffer(
-    item,
-    {
-      productId: offer.productId,
-      name,
-      brand,
-      packageSize: offer.packageSize,
-      sourceUrl: undefined,
-    },
-    extra,
-  );
-}
-
 function passesMvrFilters(offer: ProductOffer, item: StapleItem): boolean {
-  if (
-    offerFailsStapleFilters(
-      item,
-      offer.name,
-      offer.brand,
-      mvrRetailerFilterText(offer),
-    ) != null
-  ) {
+  if (offerFailsStapleOfferFilters(item, offer) != null) {
     return false;
   }
   if (resolveMatchMode(item) === "preferred") {
@@ -91,7 +56,7 @@ function passesMvrFilters(offer: ProductOffer, item: StapleItem): boolean {
     }
   }
   if (!usesCategoryBIdentity(item)) return true;
-  return mvrCategoryBOffer(item, offer);
+  return isActualCategoryBOffer(item, offer);
 }
 
 export async function searchMvrPool(
@@ -103,7 +68,7 @@ export async function searchMvrPool(
   const mappings = await loadRetailerMappings();
   const link = mappings.products[item.id]?.retailers.mvr;
   const lockedSku = link?.verified ? link.retailerProductId : null;
-  const queries = item.queries.filter(Boolean).slice(0, 4);
+  const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = lockedSku ? [lockedSku, ...queries] : [...queries];
 
   if (lockedSku) {
@@ -143,12 +108,7 @@ export async function searchMvrPool(
         name: o.name,
         price: o.price,
         reason:
-          offerFailsStapleFilters(
-            item,
-            o.name,
-            o.brand,
-            mvrRetailerFilterText(o),
-          ) != null
+          offerFailsStapleOfferFilters(item, o) != null
             ? "filter mustInclude/mustNotInclude"
             : "not the actual category B item",
       });

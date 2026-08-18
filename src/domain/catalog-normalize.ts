@@ -97,6 +97,131 @@ export function stapleBrandHint(item: StapleFilterItem): string | undefined {
   return brandish;
 }
 
+export function isCategoryBStaple(item: { category?: string }): boolean {
+  return item.category === "produce" || item.category === "frozen";
+}
+
+/**
+ * Extra search strings for cheapest produce/frozen: warehouse word order
+ * and mustIncludeAny. Category A keeps the staple queries only.
+ */
+export function categoryBSearchQueries(
+  item: {
+    category?: string;
+    queries: string[];
+    mustIncludeAny?: string[];
+    label?: string;
+  },
+  limit?: number,
+): string[] {
+  const cap = limit ?? (isCategoryBStaple(item) ? 6 : 4);
+  const out: string[] = [];
+  const add = (q: string | undefined) => {
+    const t = (q ?? "").replace(/\s+/g, " ").trim();
+    if (t.length < 2) return;
+    if (out.some((x) => x.toLowerCase() === t.toLowerCase())) return;
+    out.push(t);
+  };
+  for (const q of item.queries) add(q);
+  if (!isCategoryBStaple(item)) return out.slice(0, cap);
+  for (const q of item.queries) {
+    add(q.replace(/\bfresh\b/gi, " "));
+  }
+  for (const p of item.mustIncludeAny ?? []) add(p);
+  if (item.label) add(item.label.replace(/[()]/g, " "));
+  return out.slice(0, cap);
+}
+
+/**
+ * Warehouse titles: "VEGETABLES - TOMATOES GRAPE 1 PINT" → grape pack.
+ * Used for Category B cheapest only — not branded Category A SKUs.
+ */
+export function warehouseTitleView(name: string): string {
+  return name
+    .replace(/^(fruits|vegetables)\s*[-–]\s*/i, "")
+    .replace(/\bcase\b/gi, " ")
+    .replace(/\bper\s*kg\b/gi, "1 kg")
+    .replace(/\bpints?\b/gi, "pack")
+    .replace(/\b\d+\s*x\s*\d+(?:\.\d+)?\b/gi, " ");
+}
+
+export type StapleOfferFilterInput = {
+  name: string;
+  brand?: string;
+  packageSize?: string;
+  raw?: unknown;
+};
+
+/** Shopify type/tags, PCX/Walmart category blobs already on offer.raw — no connector change. */
+export function retailerTaxonomyText(raw?: unknown): string {
+  if (!raw || typeof raw !== "object") return "";
+  const r = raw as Record<string, unknown>;
+  const parts: string[] = [];
+  const type =
+    (typeof r.type === "string" && r.type) ||
+    (typeof r.product_type === "string" && r.product_type) ||
+    (typeof r.productType === "string" && r.productType) ||
+    "";
+  if (type) parts.push(type);
+
+  const tags = r.tags;
+  const tagList = Array.isArray(tags)
+    ? tags.map(String)
+    : typeof tags === "string"
+      ? tags.split(",").map((t) => t.trim())
+      : [];
+  for (const tag of tagList) {
+    if (
+      /^(INSTOREPRICE|MARKUP|MARGIN|LASTUPDATED|SHELFLOCATION|TAXLEVEL):/i.test(
+        tag,
+      )
+    ) {
+      continue;
+    }
+    parts.push(
+      tag
+        .replace(/^(DEPARTMENT|CATEGORY|SUBDEPARTMENT)_/i, " ")
+        .replace(/[_]/g, " "),
+    );
+  }
+
+  for (const key of [
+    "department",
+    "category",
+    "primaryCategory",
+    "taxonomyName",
+    "aisle",
+    "product_category",
+  ] as const) {
+    const v = r[key];
+    if (typeof v === "string" && v.trim()) parts.push(v);
+  }
+  for (const key of ["categories", "aisles"] as const) {
+    const v = r[key];
+    if (Array.isArray(v)) {
+      for (const row of v) {
+        if (typeof row === "string") parts.push(row);
+        else if (row && typeof row === "object") {
+          const name = (row as { name?: unknown }).name;
+          if (typeof name === "string") parts.push(name);
+        }
+      }
+    }
+  }
+  return parts.filter(Boolean).join(" ");
+}
+
+export function retailerCategoryFromTaxonomy(
+  raw?: unknown,
+): "frozen" | "produce" | undefined {
+  const hay = retailerTaxonomyText(raw).toLowerCase();
+  if (/\bfrozen\b|\biqf\b/.test(hay)) return "frozen";
+  if (/\b(fruit|fruits|vegetable|vegetables|produce)\b/.test(hay)) {
+    return "produce";
+  }
+  return undefined;
+}
+
 /**
  * Phrase = substring; single token = word boundary (seed ≠ seedless, waffle = waffles).
  */
@@ -110,9 +235,10 @@ export function nameMatchesFilterToken(hay: string, needle: string): boolean {
 }
 
 /**
- * When extra retailer fields are present (MVR type/tags), a phrase may be
- * split across fields: DEPARTMENT_FROZEN + title STRAWBERRIES covers
- * "frozen strawberries". Title-only matching stays contiguous.
+ * Category B (cheapest produce/frozen): phrases may be split across title,
+ * pack, and retailer department — "tomatoes grape" = "grape tomatoes",
+ * DEPARTMENT_FROZEN + STRAWBERRIES = "frozen strawberries".
+ * Category A stays contiguous title match.
  */
 export function nameMatchesFilterPhrase(
   hay: string,
@@ -133,7 +259,7 @@ export function offerFailsStapleFilters(
   extraHay?: string,
 ): string | null {
   const extra = extraHay?.trim() ?? "";
-  const splitAcrossFields = extra.length > 0;
+  const splitAcrossFields = isCategoryBStaple(item);
   const n = `${brand ?? ""} ${name} ${extra}`.toLowerCase();
   const banned = [
     ...(item.mustNotInclude ?? []),
@@ -154,6 +280,38 @@ export function offerFailsStapleFilters(
     !any.some((s) => s && nameMatchesFilterPhrase(n, s, splitAcrossFields))
   ) {
     return "mustIncludeAny";
+  }
+  return null;
+}
+
+/** Category B uses warehouse title + pack + retailer taxonomy; Category A is title/brand only. */
+export function offerFailsStapleOfferFilters(
+  item: StapleFilterItem,
+  offer: StapleOfferFilterInput,
+): string | null {
+  if (!isCategoryBStaple(item)) {
+    return offerFailsStapleFilters(item, offer.name, offer.brand);
+  }
+  const name = warehouseTitleView(offer.name);
+  const brand = /^(fruits|vegetables)$/i.test(offer.brand ?? "")
+    ? undefined
+    : offer.brand;
+  const extra = [
+    offer.packageSize ?? "",
+    retailerTaxonomyText(offer.raw),
+  ]
+    .filter((s) => s.trim())
+    .join(" ");
+  const fail = offerFailsStapleFilters(item, name, brand, extra);
+  if (fail) return fail;
+  const taxonomy = retailerTaxonomyText(offer.raw);
+  const hay = `${name} ${brand ?? ""} ${taxonomy}`;
+  const taxFrozen =
+    nameMatchesFilterToken(hay, "frozen") ||
+    nameMatchesFilterToken(hay, "iqf");
+  if (item.category === "produce" && taxFrozen) return "mustNotInclude:frozen";
+  if (item.category === "frozen" && taxonomy.trim() && !taxFrozen) {
+    return "needFrozenDepartment";
   }
   return null;
 }

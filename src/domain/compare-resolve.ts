@@ -8,7 +8,7 @@
  * Does not call Rapid or PCX.
  */
 import {
-  offerFailsStapleFilters,
+  offerFailsStapleOfferFilters,
   type StapleFilterItem,
 } from "@/domain/catalog-normalize";
 import { pickNeededWeightPurchase } from "@/domain/needed-weight-pick";
@@ -141,9 +141,9 @@ export function findOfferForSku(
 
 export function offerPassesStapleFilters(
   item: StapleFilterItem,
-  offer: { name: string; brand?: string },
+  offer: { name: string; brand?: string; packageSize?: string; raw?: unknown },
 ): boolean {
-  return offerFailsStapleFilters(item, offer.name, offer.brand) == null;
+  return offerFailsStapleOfferFilters(item, offer) == null;
 }
 
 export function resolveCatalogOffer(input: {
@@ -203,7 +203,7 @@ export function resolveCatalogOffer(input: {
     if (!offerIsOnShelf(offer)) continue;
     if (usesCategoryBIdentity(input.item)) {
       if (!isActualCategoryBOffer(input.item, offer)) continue;
-    } else if (offerFailsStapleFilters(input.item, offer.name, offer.brand)) {
+    } else if (offerFailsStapleOfferFilters(input.item, offer)) {
       continue;
     }
     const fromWinner = offer.productId === input.row?.offer?.productId;
@@ -225,11 +225,7 @@ export function resolveCatalogOffer(input: {
       offer: null,
       reason: "rejected_filter",
       detail:
-        offerFailsStapleFilters(
-          input.item,
-          input.row.offer.name,
-          input.row.offer.brand,
-        ) ?? "filter",
+        offerFailsStapleOfferFilters(input.item, input.row.offer) ?? "filter",
     };
   }
 

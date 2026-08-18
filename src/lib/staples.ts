@@ -6,7 +6,7 @@ import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
-import { offerFailsStapleFilters } from "@/domain/catalog-normalize";
+import { offerFailsStapleOfferFilters, categoryBSearchQueries } from "@/domain/catalog-normalize";
 import { extractRetailerImage } from "@/lib/product-image";
 import {
   isLockedIdentityLink,
@@ -717,10 +717,11 @@ function passesFilters(
     packageSize?: string;
     sourceUrl?: string;
     parsedMassKg?: number;
+    raw?: unknown;
   },
   item: StapleItem,
 ): boolean {
-  if (offerFailsStapleFilters(item, offer.name, offer.brand) != null) {
+  if (offerFailsStapleOfferFilters(item, offer) != null) {
     return false;
   }
   if (!usesCategoryBIdentity(item)) return true;
@@ -731,6 +732,7 @@ function passesFilters(
     packageSize: offer.packageSize,
     parsedMassKg: offer.parsedMassKg,
     sourceUrl: offer.sourceUrl,
+    raw: offer.raw,
   });
 }
 
@@ -805,7 +807,7 @@ export async function searchNoFrillsPool(
   const nfLink = mappings.products[item.id]?.retailers.nofrills;
   const lockedNfSku =
     nfLink && isLockedIdentityLink(nfLink) ? nfLink.retailerProductId : null;
-  const queries = item.queries.filter(Boolean).slice(0, 3);
+  const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = lockedNfSku ? [lockedNfSku, ...queries] : [...queries];
 
   if (lockedNfSku) {
@@ -841,7 +843,7 @@ export async function searchNoFrillsPool(
         name: o.name,
         price: o.price,
         reason:
-          offerFailsStapleFilters(item, o.name, o.brand) != null
+          offerFailsStapleOfferFilters(item, o) != null
             ? "filter mustInclude/mustNotInclude"
             : "not the actual category B item",
       });
@@ -982,7 +984,7 @@ export async function searchWalmartQueryPool(
     return [];
   }
   const seen = new Map<string, ProductOffer>();
-  const queries = item.queries.filter(Boolean).slice(0, 4);
+  const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = [...queries];
   for (const q of queries) {
     try {
