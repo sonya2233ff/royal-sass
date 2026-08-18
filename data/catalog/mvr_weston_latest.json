@@ -2,7 +2,7 @@
   "retailer": "mvr",
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
-  "checkedAt": "2026-08-18T05:10:57.182Z",
+  "checkedAt": "2026-08-18T12:31:18.031Z",
   "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
@@ -25,7 +25,7 @@
         "price": 1.99,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:10:57.180Z",
+        "checkedAt": "2026-08-18T12:31:01.468Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-grape-1-pint-21"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
@@ -38,8 +38,8 @@
           "price": 37.99,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:10:56.932Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-grape-case-12-x-1-pint?_pos=2&_psq=grape+tomatoes&_psid=eefe65f32&_ss=e",
+          "checkedAt": "2026-08-18T12:31:01.102Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-grape-case-12-x-1-pint?_pos=2&_psq=grape+tomatoes&_psid=b3e805c57&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/8004028000280p.jpg?v=1786639091"
         }
       ]
@@ -66,7 +66,7 @@
         "unitPrice": 4.4,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:09:39.648Z",
+        "checkedAt": "2026-08-18T12:31:03.122Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlett-case-13-kg"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
@@ -86,7 +86,7 @@
         "unitPrice": 3.52,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:08:46.850Z",
+        "checkedAt": "2026-08-18T12:31:03.765Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-repack-5-lbs"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
@@ -114,24 +114,24 @@
         "unitPrice": 3.16,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:09:37.799Z",
+        "checkedAt": "2026-08-18T12:31:05.046Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-946-ml"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
         {
-          "productId": "earths-own-oat-original-single-serve-250ml",
-          "name": "EARTH'S OWN - OAT ORIGINAL SINGLE SERVE 3x250 ML",
+          "productId": "earths-own-oat-original-single-serve-24x250-ml",
+          "name": "EARTH'S OWN - OAT ORIGINAL SINGLE SERVE 8x3x250 ML",
           "brand": "EARTH'S OWN",
           "packageSize": "3x250 ML",
           "parsedMassKg": 0.75,
-          "price": 4.19,
-          "unitPrice": 5.59,
+          "price": 32.99,
+          "unitPrice": 43.99,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:09:37.672Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-single-serve-250ml?_pos=4&_psq=oat+milk+original&_psid=2d48dd066&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062602781502p.jpg?v=1759258060"
+          "checkedAt": "2026-08-18T12:31:04.876Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-single-serve-24x250-ml?_pos=1&_psq=oat+milk+original&_psid=7ce5ae077&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1062602781502p_77d51892-1c4a-49e9-95c5-df3cba91a6ab.jpg?v=1759258157"
         },
         {
           "productId": "earths-own-oat-original-12x946-ml",
@@ -143,9 +143,23 @@
           "unitPrice": 2.99,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:09:37.672Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-12x946-ml?_pos=3&_psq=oat+milk+original&_psid=2d48dd066&_ss=e",
+          "checkedAt": "2026-08-18T12:31:04.876Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-12x946-ml?_pos=3&_psq=oat+milk+original&_psid=7ce5ae077&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1062602781402p.jpg?v=1782240033"
+        },
+        {
+          "productId": "earths-own-oat-original-single-serve-250ml",
+          "name": "EARTH'S OWN - OAT ORIGINAL SINGLE SERVE 3x250 ML",
+          "brand": "EARTH'S OWN",
+          "packageSize": "3x250 ML",
+          "parsedMassKg": 0.75,
+          "price": 4.19,
+          "unitPrice": 5.59,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T12:31:04.876Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-single-serve-250ml?_pos=4&_psq=oat+milk+original&_psid=7ce5ae077&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062602781502p.jpg?v=1759258060"
         }
       ]
     },
@@ -194,7 +208,7 @@
         "unitPrice": 2.19,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:09:55.395Z",
+        "checkedAt": "2026-08-18T12:31:07.321Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-per-kg"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
@@ -209,8 +223,8 @@
           "unitPrice": 2.15,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:09:55.145Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-1-case-40-lbs?_pos=1&_psq=bananas&_psid=034472284&_ss=e",
+          "checkedAt": "2026-08-18T12:31:07.016Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-1-case-40-lbs?_pos=1&_psq=bananas&_psid=406925c91&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114954p_006097bd-3fe4-4751-afcc-af808d5dc014.jpg?v=1783696058"
         }
       ]
@@ -229,7 +243,7 @@
         "unitPrice": 11.65,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:08:50.918Z",
+        "checkedAt": "2026-08-18T12:31:08.286Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-kiwi-600-grams"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
@@ -247,7 +261,7 @@
         "price": 7.99,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:08:51.381Z",
+        "checkedAt": "2026-08-18T12:31:08.811Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-english-cucumbers-case-12-ea"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
@@ -307,11 +321,25 @@
         "unitPrice": 12.75,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:09:40.102Z",
+        "checkedAt": "2026-08-18T12:31:11.854Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-unsalted-454gr"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
+        {
+          "productId": "gay-lea-butter-bakers-gold-unsalted-250gr",
+          "name": "GAY LEA - BUTTER BAKERS GOLD UNSALTED 250GR",
+          "brand": "GAY LEA",
+          "packageSize": "250GR",
+          "parsedMassKg": 0.25,
+          "price": 5.49,
+          "unitPrice": 21.96,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T12:31:11.412Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-bakers-gold-unsalted-250gr?_pos=2&_psq=gay+lea+unsalted+butter&_psid=80d2867bc&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006601359234p_50d09c33-aefa-4377-9fea-cbad91ff9115.jpg?v=1772818823"
+        },
         {
           "productId": "gay-lea-butter-unsalted-250gr",
           "name": "GAY LEA - BUTTER UNSALTED 250GR",
@@ -322,8 +350,8 @@
           "unitPrice": 16.76,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:09:39.827Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-unsalted-250gr?_pos=3&_psq=gay+lea+unsalted+butter&_psid=8101ae206&_ss=e",
+          "checkedAt": "2026-08-18T12:31:11.412Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-unsalted-250gr?_pos=3&_psq=gay+lea+unsalted+butter&_psid=80d2867bc&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006601390551p.jpg?v=1772818282"
         },
         {
@@ -336,8 +364,8 @@
           "unitPrice": 12.53,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:09:39.827Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-unsalted-40x454-gr?_pos=4&_psq=gay+lea+unsalted+butter&_psid=8101ae206&_ss=e",
+          "checkedAt": "2026-08-18T12:31:11.412Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-unsalted-40x454-gr?_pos=4&_psq=gay+lea+unsalted+butter&_psid=80d2867bc&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006601390561p_e107ee25-15c6-4771-821d-79fdfd6a9a57.jpg?v=1778333442"
         },
         {
@@ -350,8 +378,8 @@
           "unitPrice": 21.8,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:09:39.827Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-84-bakers-gold-unsalted-20x250-gr?_pos=5&_psq=gay+lea+unsalted+butter&_psid=8101ae206&_ss=e",
+          "checkedAt": "2026-08-18T12:31:11.412Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-84-bakers-gold-unsalted-20x250-gr?_pos=5&_psq=gay+lea+unsalted+butter&_psid=80d2867bc&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/3006601359234p_7babbdb0-7fa2-42b7-8cdf-28b956ad130a.jpg?v=1770018786"
         }
       ]
@@ -370,7 +398,7 @@
         "unitPrice": 4.4,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:08:54.422Z",
+        "checkedAt": "2026-08-18T12:31:12.423Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-orange-juice-no-pulp-1-36lt"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
@@ -385,8 +413,8 @@
           "unitPrice": 4.16,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:08:54.128Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-orange-juice-no-pulp-3x1-36-lt?_pos=4&_psq=tropicana+orange+juice+no+pulp&_psid=3a3e2713f&_ss=e",
+          "checkedAt": "2026-08-18T12:31:12.079Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-orange-juice-no-pulp-3x1-36-lt?_pos=4&_psq=tropicana+orange+juice+no+pulp&_psid=a15881d3a&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004850020757p_b59568f5-6233-41c4-9014-e610f98b7e1c.jpg?v=1779290783"
         },
         {
@@ -399,8 +427,8 @@
           "unitPrice": 5.38,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:08:54.128Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-orange-juice-no-pulp-12x355ml-1?_pos=5&_psq=tropicana+orange+juice+no+pulp&_psid=3a3e2713f&_ss=e",
+          "checkedAt": "2026-08-18T12:31:12.079Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-orange-juice-no-pulp-12x355ml-1?_pos=5&_psq=tropicana+orange+juice+no+pulp&_psid=a15881d3a&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1004850020665p_4db353f5-fa9a-4fe4-8256-79442fa97eda.jpg?v=1785857530"
         }
       ]
@@ -419,8 +447,8 @@
         "unitPrice": 4.52,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:08:54.652Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/realemon-lemon-juice-440ml?_pos=6&_psq=realemon&_psid=4f8f9028e&_ss=e",
+        "checkedAt": "2026-08-18T12:31:12.640Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/realemon-lemon-juice-440ml?_pos=6&_psq=realemon&_psid=e13a99050&_ss=e",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006591258103p.jpg?v=1780318398"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
@@ -435,9 +463,37 @@
           "unitPrice": 2.74,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:08:54.652Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/realemon-lemon-juice-945ml?_pos=2&_psq=realemon&_psid=4f8f9028e&_ss=e",
+          "checkedAt": "2026-08-18T12:31:12.640Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/realemon-lemon-juice-945ml?_pos=1&_psq=realemon&_psid=e13a99050&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006591258121p.jpg?v=1786969628"
+        },
+        {
+          "productId": "realemon-lemon-juice-12x440ml",
+          "name": "REALEMON - LEMON JUICE 12x440ML",
+          "brand": "REALEMON",
+          "packageSize": "12x440ML",
+          "parsedMassKg": 5.28,
+          "price": 22.59,
+          "unitPrice": 4.28,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T12:31:12.640Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/realemon-lemon-juice-12x440ml?_pos=3&_psq=realemon&_psid=e13a99050&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006591258103c_958d0814-1d62-45a6-bd45-56631a76a3b4.jpg?v=1786728092"
+        },
+        {
+          "productId": "realemon-lemon-juice-12x945ml",
+          "name": "REALEMON - JUICE 12x945ML",
+          "brand": "REALEMON",
+          "packageSize": "12x945ML",
+          "parsedMassKg": 11.34,
+          "price": 30.99,
+          "unitPrice": 2.73,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T12:31:12.640Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/realemon-lemon-juice-12x945ml?_pos=4&_psq=realemon&_psid=e13a99050&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006591258121c.jpg?v=1786969613"
         }
       ]
     },
@@ -470,34 +526,34 @@
       "label": "Frozen Sliced Banana",
       "status": "ok",
       "offer": {
-        "productId": "alasko-iqf-sliced-banana-5x1-kg",
-        "name": "ALASKO - IQF SLICED BANANA 5x1 KG",
+        "productId": "alasko-iqf-sliced-banana-1kg",
+        "name": "ALASKO - IQF SLICED BANANA 1KG",
         "brand": "ALASKO",
-        "packageSize": "5x1 KG",
-        "parsedMassKg": 5,
-        "price": 21.99,
-        "unitPrice": 4.4,
+        "packageSize": "1KG",
+        "parsedMassKg": 1,
+        "price": 4.99,
+        "unitPrice": 4.99,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:08:56.837Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-5x1-kg?_pos=1&_psq=frozen+banana+slices&_psid=5cee83a1c&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800193p_5c73967d-7262-4363-b7d0-0abf070be2c9.jpg?v=1785562363"
+        "checkedAt": "2026-08-18T12:31:15.201Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-1kg?_pos=2&_psq=frozen+banana+slices&_psid=3adbf57e1&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000194p_6827b841-b7df-42c4-a646-6e5ea55507a4.jpg?v=1785562354"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
         {
-          "productId": "alasko-iqf-sliced-banana-1kg",
-          "name": "ALASKO - IQF SLICED BANANA 1KG",
+          "productId": "alasko-iqf-sliced-banana-5x1-kg",
+          "name": "ALASKO - IQF SLICED BANANA 5x1 KG",
           "brand": "ALASKO",
-          "packageSize": "1KG",
-          "parsedMassKg": 1,
-          "price": 4.99,
-          "unitPrice": 4.99,
+          "packageSize": "5x1 KG",
+          "parsedMassKg": 5,
+          "price": 21.99,
+          "unitPrice": 4.4,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:08:56.837Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-1kg?_pos=2&_psq=frozen+banana+slices&_psid=5cee83a1c&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000194p_6827b841-b7df-42c4-a646-6e5ea55507a4.jpg?v=1785562354"
+          "checkedAt": "2026-08-18T12:31:15.201Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-5x1-kg?_pos=1&_psq=frozen+banana+slices&_psid=3adbf57e1&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800193p_5c73967d-7262-4363-b7d0-0abf070be2c9.jpg?v=1785562363"
         }
       ]
     },
@@ -515,8 +571,8 @@
         "unitPrice": 9,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:08:57.563Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=21871cf17&_ss=e",
+        "checkedAt": "2026-08-18T12:31:15.885Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=5b624f457&_ss=e",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800202c_9263bb93-71f5-412a-82a4-c859c93de8ae.jpg?v=1786638382"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
@@ -531,9 +587,37 @@
           "unitPrice": 8.99,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:08:57.563Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-1kg?_pos=4&_psq=frozen+blueberries&_psid=21871cf17&_ss=e",
+          "checkedAt": "2026-08-18T12:31:15.885Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-1kg?_pos=4&_psq=frozen+blueberries&_psid=5b624f457&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088202p.jpg?v=1786638377"
+        },
+        {
+          "productId": "alasko-iqf-cultivated-blueberries-5x1kg",
+          "name": "ALASKO - IQF CULTIVATED BLUEBERRIES 5x1 KG",
+          "brand": "ALASKO",
+          "packageSize": "5x1 KG",
+          "parsedMassKg": 5,
+          "price": 46.99,
+          "unitPrice": 9.4,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T12:31:15.885Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-cultivated-blueberries-5x1kg?_pos=1&_psq=frozen+blueberries&_psid=5b624f457&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800979p.jpg?v=1785562377"
+        },
+        {
+          "productId": "alasko-wild-blueberries-5x1kg",
+          "name": "ALASKO - WILD BLUEBERRIES 5x1KG",
+          "brand": "ALASKO",
+          "packageSize": "5x1KG",
+          "parsedMassKg": 5,
+          "price": 44.99,
+          "unitPrice": 9,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T12:31:15.885Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=5b624f457&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800202c_9263bb93-71f5-412a-82a4-c859c93de8ae.jpg?v=1786638382"
         }
       ]
     },
@@ -550,37 +634,37 @@
       "label": "Frozen Chopped Spinach",
       "status": "ok",
       "offer": {
-        "productId": "alasko-chopped-spinach-12x2lb",
-        "name": "ALASKO - CHOPPED SPINACH 12x2LB",
+        "productId": "alasko-chopped-spinach-2-lb",
+        "name": "ALASKO - CHOPPED SPINACH 2 LB",
         "brand": "ALASKO",
-        "packageSize": "12x2LB",
-        "parsedMassKg": 10.886216880000001,
-        "price": 31.99,
-        "unitPrice": 2.94,
+        "packageSize": "2 LB",
+        "parsedMassKg": 0.90718474,
+        "price": 2.99,
+        "unitPrice": 3.3,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T05:08:58.846Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-12x2lb?_pos=1&_psq=frozen+chopped+spinach&_psid=ab6fbab86&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800183p_8e99abdc-cb91-462d-8773-391a1fe46f3b.jpg?v=1778337706"
+        "checkedAt": "2026-08-18T12:31:17.301Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-2-lb?_pos=2&_psq=frozen+chopped+spinach&_psid=ba2dc82af&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000183p.jpg?v=1783983216"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
         {
-          "productId": "alasko-chopped-spinach-2-lb",
-          "name": "ALASKO - CHOPPED SPINACH 2 LB",
+          "productId": "alasko-chopped-spinach-12x2lb",
+          "name": "ALASKO - CHOPPED SPINACH 12x2LB",
           "brand": "ALASKO",
-          "packageSize": "2 LB",
-          "parsedMassKg": 0.90718474,
-          "price": 2.99,
-          "unitPrice": 3.3,
+          "packageSize": "12x2LB",
+          "parsedMassKg": 10.886216880000001,
+          "price": 31.99,
+          "unitPrice": 2.94,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T05:08:58.846Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-2-lb?_pos=2&_psq=frozen+chopped+spinach&_psid=ab6fbab86&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000183p.jpg?v=1783983216"
+          "checkedAt": "2026-08-18T12:31:17.301Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-12x2lb?_pos=1&_psq=frozen+chopped+spinach&_psid=ba2dc82af&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800183p_8e99abdc-cb91-462d-8773-391a1fe46f3b.jpg?v=1778337706"
         }
       ]
     }
   ],
-  "updatedAt": "2026-08-18T05:10:57.182Z"
+  "updatedAt": "2026-08-18T12:31:18.031Z"
 }
