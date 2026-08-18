@@ -37,8 +37,9 @@ async function main() {
   const fresh = cfg.items.find((i) => i.id === "strawberries");
   const grape = cfg.items.find((i) => i.id === "tomatoes_grape");
   const banana = cfg.items.find((i) => i.id === "bananas_kg");
+  const apple = cfg.items.find((i) => i.id === "frozen_apple");
   const egg = cfg.items.find((i) => i.id === "simply_egg_whites");
-  if (!frozen || !fresh || !grape || !banana || !egg) {
+  if (!frozen || !fresh || !grape || !banana || !apple || !egg) {
     throw new Error("missing staples");
   }
 
@@ -89,6 +90,14 @@ async function main() {
       brand: "FRUITS",
     }) == null,
     "produce: warehouse bananas case",
+  );
+  assert(
+    offerFailsStapleOfferFilters(apple, {
+      name: "ALASKO - APPLE SLICES 5x1KG",
+      brand: "ALASKO",
+      taxonomyText: "FROZEN FRUITS DEPARTMENT_FROZEN",
+    }) == null,
+    "catalog taxonomyText covers frozen apple without live raw",
   );
   assert(
     offerFailsStapleFilters(egg, "Naturegg Egg Whites 1kg", "Naturegg") ===

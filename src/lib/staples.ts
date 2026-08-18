@@ -6,7 +6,7 @@ import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
-import { offerFailsStapleOfferFilters, categoryBSearchQueries } from "@/domain/catalog-normalize";
+import { offerFailsStapleOfferFilters, categoryBSearchQueries, retailerTaxonomyText } from "@/domain/catalog-normalize";
 import { extractRetailerImage } from "@/lib/product-image";
 import {
   isLockedIdentityLink,
@@ -229,6 +229,8 @@ export interface CatalogOffer {
   sourceUrl?: string;
   /** Retailer product photo (Rapid CDN for category A). */
   image?: string;
+  /** Category B: Shopify/PCX type + department tags from the live hit. */
+  taxonomyText?: string;
 }
 
 export interface MatchLogEntry {
@@ -1344,6 +1346,7 @@ export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
     checkedAt: o.checkedAt,
     sourceUrl: o.sourceUrl,
     image: o.image ?? extractRetailerImage(o.raw),
+    taxonomyText: retailerTaxonomyText(o.raw) || undefined,
   };
 }
 

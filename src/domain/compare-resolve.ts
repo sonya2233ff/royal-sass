@@ -51,6 +51,7 @@ export interface CatalogOfferRef {
   sourceUrl?: string;
   availability?: string;
   image?: string;
+  taxonomyText?: string;
 }
 
 export interface CatalogRowRef {

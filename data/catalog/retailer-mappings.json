@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T19:45:15.450Z",
+  "updatedAt": "2026-08-18T19:50:51.282Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -111,7 +111,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:44:57.544Z"
+          "updatedAt": "2026-08-18T19:50:33.628Z"
         }
       },
       "prices": [
@@ -149,7 +149,7 @@
           "retailerProductId": "vegetables-tomatoes-grape-1-pint-21",
           "price": 1.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:44:57.540Z",
+          "checkedAt": "2026-08-18T19:50:33.624Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -393,7 +393,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:44:58.782Z"
+          "updatedAt": "2026-08-18T19:50:34.952Z"
         }
       },
       "prices": [
@@ -432,7 +432,7 @@
           "retailerProductId": "fruits-lemons-case-100-ea",
           "price": 44.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:44:58.779Z",
+          "checkedAt": "2026-08-18T19:50:34.949Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -548,7 +548,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:44:59.764Z"
+          "updatedAt": "2026-08-18T19:50:35.959Z"
         }
       },
       "prices": [
@@ -587,7 +587,7 @@
           "retailerProductId": "fruits-pears-bartlett-case-13-kg",
           "price": 4.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:44:59.761Z",
+          "checkedAt": "2026-08-18T19:50:35.957Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -822,7 +822,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:00.594Z"
+          "updatedAt": "2026-08-18T19:50:36.742Z"
         }
       },
       "prices": [
@@ -860,7 +860,7 @@
           "retailerProductId": "vegetables-eggplant-repack-5-lbs",
           "price": 7.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:00.590Z",
+          "checkedAt": "2026-08-18T19:50:36.735Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -1301,15 +1301,15 @@
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "vegetables-peppers-red-case-11-lbs",
-          "name": "VEGETABLES - PEPPERS RED CASE 11 LBS",
-          "upc": "0000001254120",
+          "retailerProductId": "vegetables-peppers-red-repack-5-lbs-1",
+          "name": "VEGETABLES - PEPPERS RED 2.5LB REPACK 2.5 LBS",
+          "upc": "0000073160665",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:02.617Z"
+          "updatedAt": "2026-08-18T19:50:38.655Z"
         }
       },
       "prices": [
@@ -1345,10 +1345,10 @@
         {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "vegetables-peppers-red-case-11-lbs",
-          "price": 27.99,
+          "retailerProductId": "vegetables-peppers-red-repack-5-lbs-1",
+          "price": 4.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:02.613Z",
+          "checkedAt": "2026-08-18T19:50:38.653Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -1464,7 +1464,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:03.558Z"
+          "updatedAt": "2026-08-18T19:50:39.563Z"
         }
       },
       "prices": [
@@ -1503,7 +1503,7 @@
           "retailerProductId": "vegetables-potatoes-sweet-jumbo-case-40-lbs",
           "price": 49.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:03.555Z",
+          "checkedAt": "2026-08-18T19:50:39.561Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -1793,7 +1793,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:05.036Z"
+          "updatedAt": "2026-08-18T19:50:40.879Z"
         }
       },
       "prices": [
@@ -1831,7 +1831,7 @@
           "retailerProductId": "fruits-bananas-per-kg",
           "price": 2.19,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:05.032Z",
+          "checkedAt": "2026-08-18T19:50:40.877Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -1946,7 +1946,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:06.154Z"
+          "updatedAt": "2026-08-18T19:50:41.985Z"
         }
       },
       "prices": [
@@ -1984,7 +1984,7 @@
           "retailerProductId": "fruits-kiwi-600-grams",
           "price": 6.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:06.153Z",
+          "checkedAt": "2026-08-18T19:50:41.984Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -2095,7 +2095,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:06.871Z"
+          "updatedAt": "2026-08-18T19:50:42.675Z"
         }
       },
       "prices": [
@@ -2134,7 +2134,7 @@
           "retailerProductId": "vegetables-english-cucumbers-case-12-ea",
           "price": 7.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:06.868Z",
+          "checkedAt": "2026-08-18T19:50:42.674Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -2245,7 +2245,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:07.957Z"
+          "updatedAt": "2026-08-18T19:50:43.708Z"
         }
       },
       "prices": [
@@ -2284,7 +2284,7 @@
           "retailerProductId": "vegetables-garlic-peeled-case-6-x-3-lbs",
           "price": 79.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:07.954Z",
+          "checkedAt": "2026-08-18T19:50:43.707Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -2412,7 +2412,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:08.835Z"
+          "updatedAt": "2026-08-18T19:50:44.588Z"
         }
       },
       "prices": [
@@ -2461,7 +2461,7 @@
           "retailerProductId": "fruits-blueberries-case-12-x-170-g",
           "price": 29.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:08.832Z",
+          "checkedAt": "2026-08-18T19:50:44.586Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -2577,7 +2577,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:09.747Z"
+          "updatedAt": "2026-08-18T19:50:45.510Z"
         }
       },
       "prices": [
@@ -2616,7 +2616,7 @@
           "retailerProductId": "fruits-strawberries-1-lb-2",
           "price": 5.49,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:09.744Z",
+          "checkedAt": "2026-08-18T19:50:45.507Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3306,7 +3306,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:12.033Z"
+          "updatedAt": "2026-08-18T19:50:47.846Z"
         }
       },
       "prices": [
@@ -3325,7 +3325,7 @@
           "retailerProductId": "alasko-iqf-sliced-banana-1kg",
           "price": 4.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:12.030Z",
+          "checkedAt": "2026-08-18T19:50:47.842Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3440,7 +3440,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:13.010Z"
+          "updatedAt": "2026-08-18T19:50:48.962Z"
         }
       },
       "prices": [
@@ -3478,7 +3478,7 @@
           "retailerProductId": "alasko-iqf-cultivated-blueberries-5x1-kg",
           "price": 9.79,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:13.006Z",
+          "checkedAt": "2026-08-18T19:50:48.958Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3635,7 +3635,7 @@
           "retailerProductId": "alasko-strawberries-1kg",
           "price": 3.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:14.399Z",
+          "checkedAt": "2026-08-18T19:50:50.281Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3751,7 +3751,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:15.450Z"
+          "updatedAt": "2026-08-18T19:50:51.282Z"
         }
       },
       "prices": [
@@ -3789,7 +3789,7 @@
           "retailerProductId": "alasko-chopped-spinach-2-lb",
           "price": 2.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:15.446Z",
+          "checkedAt": "2026-08-18T19:50:51.279Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3848,7 +3848,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:45:10.817Z"
+          "updatedAt": "2026-08-18T19:50:46.614Z"
         }
       },
       "prices": [
@@ -3858,7 +3858,7 @@
           "retailerProductId": "alasko-sliced-apples-1kg",
           "price": 7.29,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:45:10.815Z",
+          "checkedAt": "2026-08-18T19:50:46.610Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }

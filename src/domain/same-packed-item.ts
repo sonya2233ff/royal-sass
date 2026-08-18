@@ -172,6 +172,7 @@ export type CategoryBOffer = {
   sourceUrl?: string;
   price?: number;
   raw?: unknown;
+  taxonomyText?: string;
 };
 
 export function usesCategoryBIdentity(item: StapleFilterItem): boolean {

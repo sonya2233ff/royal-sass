@@ -15,6 +15,12 @@ import {
 } from "@/lib/staples";
 import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
 import { loadMvrCatalog } from "@/lib/mvr-catalog";
+import {
+  categoryBSearchQueries,
+  isCategoryBStaple,
+  nameMatchesFilterPhrase,
+  warehouseTitleView,
+} from "@/domain/catalog-normalize";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -69,7 +75,71 @@ function toHit(
 }
 
 function hay(s: string): string {
-  return s.toLowerCase();
+  return warehouseTitleView(s).toLowerCase();
+}
+
+function textMatchesQuery(query: string, ...parts: Array<string | undefined>): boolean {
+  const haystack = hay(parts.filter(Boolean).join(" "));
+  const needle = query.trim().toLowerCase();
+  if (!needle || !haystack) return false;
+  if (haystack.includes(needle)) return true;
+  return nameMatchesFilterPhrase(haystack, needle, true);
+}
+
+function uniqueQueries(queries: string[], limit: number): string[] {
+  const out: string[] = [];
+  for (const q of queries) {
+    const t = q.replace(/\s+/g, " ").trim();
+    if (t.length < 2) continue;
+    if (out.some((x) => x.toLowerCase() === t.toLowerCase())) continue;
+    out.push(t);
+  }
+  return out.slice(0, limit);
+}
+
+function liveSearchQueries(
+  q: string,
+  staples: Array<{
+    category?: string;
+    queries: string[];
+    mustIncludeAny?: string[];
+    label?: string;
+  }>,
+): string[] {
+  const parts = q.split(/\s+/).filter(Boolean);
+  const extra: string[] = [q];
+  if (parts.length === 2) extra.push(`${parts[1]} ${parts[0]}`);
+  extra.push(q.replace(/\bfresh\b/gi, " "));
+  for (const item of staples) {
+    if (!isCategoryBStaple(item)) continue;
+    if (!textMatchesQuery(q, item.label, ...(item.queries ?? []), ...(item.mustIncludeAny ?? []))) {
+      continue;
+    }
+    extra.push(...categoryBSearchQueries(item, 4));
+  }
+  return uniqueQueries(extra, 5);
+}
+
+async function mergeSearch(
+  search: (q: string) => Promise<ProductOffer[]>,
+  queries: string[],
+  limit: number,
+  keep?: (o: ProductOffer) => boolean,
+): Promise<ProductOffer[]> {
+  const seen = new Map<string, ProductOffer>();
+  for (const q of queries) {
+    try {
+      const hits = await search(q);
+      for (const h of hits) {
+        if (!h?.productId || seen.has(h.productId)) continue;
+        if (keep && !keep(h)) continue;
+        seen.set(h.productId, h);
+      }
+    } catch {
+      /* next query */
+    }
+  }
+  return [...seen.values()].slice(0, limit);
 }
 
 export async function GET(request: Request) {
@@ -95,7 +165,7 @@ export async function GET(request: Request) {
   const nfById = new Map(nfCat?.items.map((i) => [i.id, i]) ?? []);
   const wcById = new Map(wcCat?.items.map((i) => [i.id, i]) ?? []);
   const mvrById = new Map(mvrCat?.items.map((i) => [i.id, i]) ?? []);
-  const needle = hay(q);
+  const liveQueries = liveSearchQueries(q, cfg.items.filter(isShownStaple));
 
   const staples = cfg.items
     .filter(isShownStaple)
@@ -104,8 +174,21 @@ export async function GET(request: Request) {
       const nf = nfById.get(item.id)?.offer;
       const wc = wcById.get(item.id)?.offer;
       const mvr = mvrById.get(item.id)?.offer;
-      const blob = hay(
-        `${item.label} ${wm?.name ?? ""} ${nf?.name ?? ""} ${wc?.name ?? ""} ${mvr?.name ?? ""} ${item.preferredProductId ?? ""}`,
+      const match = textMatchesQuery(
+        q,
+        item.label,
+        item.id.replace(/_/g, " "),
+        ...(item.queries ?? []),
+        ...(item.mustIncludeAny ?? []),
+        wm?.name,
+        nf?.name,
+        wc?.name,
+        mvr?.name,
+        wm?.taxonomyText,
+        nf?.taxonomyText,
+        wc?.taxonomyText,
+        mvr?.taxonomyText,
+        item.preferredProductId,
       );
       return {
         id: item.id,
@@ -119,7 +202,7 @@ export async function GET(request: Request) {
         nfPrice: nf?.price ?? null,
         wcPrice: wc?.price ?? null,
         mvrPrice: mvr?.price ?? null,
-        match: blob.includes(needle),
+        match,
       };
     })
     .filter((s) => s.match)
@@ -150,16 +233,24 @@ export async function GET(request: Request) {
   try {
     const nf = new NoFrillsConnector();
     const wc = new WholesaleClubConnector();
+    const mvrConn = new MvrConnector();
     const productId = parseWalmartProductId(q);
-    const nfHitsP = nf.searchProducts(q, "3660").then((hits) => hits.slice(0, 8));
-    const wcHitsP = wc
-      .searchProducts(q, "3724")
-      .then((hits) => hits.filter((h) => !/_C\d+$/i.test(h.productId)).slice(0, 8))
-      .catch(() => [] as ProductOffer[]);
-    const mvrHitsP = new MvrConnector()
-      .searchProducts(q, "weston")
-      .then((hits) => hits.slice(0, 8))
-      .catch(() => [] as ProductOffer[]);
+    const nfHitsP = mergeSearch(
+      (query) => nf.searchProducts(query, "3660"),
+      liveQueries,
+      8,
+    );
+    const wcHitsP = mergeSearch(
+      (query) => wc.searchProducts(query, "3724"),
+      liveQueries,
+      8,
+      (h) => !/_C\d+$/i.test(h.productId),
+    );
+    const mvrHitsP = mergeSearch(
+      (query) => mvrConn.searchProducts(query, "weston"),
+      liveQueries,
+      8,
+    );
 
     let wmHits: ProductOffer[] = [];
     try {

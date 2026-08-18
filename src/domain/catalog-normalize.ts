@@ -150,6 +150,8 @@ export type StapleOfferFilterInput = {
   brand?: string;
   packageSize?: string;
   raw?: unknown;
+  /** Persisted Shopify/PCX type+tags so catalog resolve still sees frozen vs produce. */
+  taxonomyText?: string;
 };
 
 /** Shopify type/tags, PCX/Walmart category blobs already on offer.raw — no connector change. */
@@ -298,13 +300,14 @@ export function offerFailsStapleOfferFilters(
     : offer.brand;
   const extra = [
     offer.packageSize ?? "",
+    offer.taxonomyText ?? "",
     retailerTaxonomyText(offer.raw),
   ]
     .filter((s) => s.trim())
     .join(" ");
   const fail = offerFailsStapleFilters(item, name, brand, extra);
   if (fail) return fail;
-  const taxonomy = retailerTaxonomyText(offer.raw);
+  const taxonomy = `${offer.taxonomyText ?? ""} ${retailerTaxonomyText(offer.raw)}`;
   const hay = `${name} ${brand ?? ""} ${taxonomy}`;
   const taxFrozen =
     nameMatchesFilterToken(hay, "frozen") ||

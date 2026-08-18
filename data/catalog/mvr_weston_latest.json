@@ -2,7 +2,7 @@
   "retailer": "mvr",
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
-  "checkedAt": "2026-08-18T19:45:15.448Z",
+  "checkedAt": "2026-08-18T19:50:51.281Z",
   "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
@@ -25,8 +25,9 @@
         "price": 1.99,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:44:56.461Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-grape-1-pint-21?_pos=1&_psq=grape+tomatoes&_psid=dcedba7cf&_ss=e"
+        "checkedAt": "2026-08-18T19:50:32.558Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-grape-1-pint-21?_pos=1&_psq=grape+tomatoes&_psid=09256eeca&_ss=e",
+        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -38,9 +39,10 @@
           "price": 37.99,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:44:56.461Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-grape-case-12-x-1-pint?_pos=2&_psq=grape+tomatoes&_psid=dcedba7cf&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/8004028000280p.jpg?v=1786639091"
+          "checkedAt": "2026-08-18T19:50:32.558Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-grape-case-12-x-1-pint?_pos=2&_psq=grape+tomatoes&_psid=09256eeca&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/8004028000280p.jpg?v=1786639091",
+          "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
         }
       ]
     },
@@ -56,9 +58,10 @@
         "price": 44.99,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:44:58.329Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-lemons-case-100-ea?_pos=2&_psq=lemons&_psid=8be9c5906&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000011136457p_a2509b29-8ec9-4aae-9547-bbc9a27a7f5f.jpg?v=1786360597"
+        "checkedAt": "2026-08-18T19:50:34.452Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-lemons-case-100-ea?_pos=2&_psq=lemons&_psid=90b84b877&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000011136457p_a2509b29-8ec9-4aae-9547-bbc9a27a7f5f.jpg?v=1786360597",
+        "taxonomyText": "CITRUS FRUITS  CITRUS FRUITS  PRODUCE  FRUITS"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": []
@@ -77,8 +80,9 @@
         "unitPrice": 4.4,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:44:58.976Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlett-case-13-kg?_pos=8&_psq=pear&_psid=f120a2d03&_ss=e"
+        "checkedAt": "2026-08-18T19:50:35.123Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlett-case-13-kg?_pos=8&_psq=pear&_psid=e18b880e7&_ss=e",
+        "taxonomyText": "APPLES, PEARS  APPLES  PRODUCE PEARS  FRUITS"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -92,8 +96,9 @@
           "unitPrice": 5.28,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:44:58.976Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlett-repack-2-5-lb?_pos=10&_psq=pear&_psid=f120a2d03&_ss=e"
+          "checkedAt": "2026-08-18T19:50:35.123Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlett-repack-2-5-lb?_pos=10&_psq=pear&_psid=e18b880e7&_ss=e",
+          "taxonomyText": "APPLES, PEARS  APPLES  PRODUCE PEARS  FRUITS"
         }
       ]
     },
@@ -111,9 +116,10 @@
         "unitPrice": 3.52,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:44:59.959Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-repack-5-lbs?_pos=1&_psq=eggplant&_psid=70a492478&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001117894p.jpg?v=1782993516"
+        "checkedAt": "2026-08-18T19:50:36.144Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-repack-5-lbs?_pos=1&_psq=eggplant&_psid=714382df5&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001117894p.jpg?v=1782993516",
+        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": []
@@ -193,34 +199,36 @@
       "label": "Red Bell Pepper (by kg)",
       "status": "ok",
       "offer": {
-        "productId": "vegetables-peppers-red-case-11-lbs",
-        "name": "VEGETABLES - PEPPERS RED CASE 11 LBS",
+        "productId": "vegetables-peppers-red-repack-5-lbs-1",
+        "name": "VEGETABLES - PEPPERS RED 2.5LB REPACK 2.5 LBS",
         "brand": "VEGETABLES",
-        "packageSize": "11 LBS",
-        "parsedMassKg": 4.9895160700000005,
-        "price": 27.99,
-        "unitPrice": 5.61,
+        "packageSize": "2.5LB REPACK 2.5 LBS",
+        "parsedMassKg": 1.1339809250000001,
+        "price": 4.99,
+        "unitPrice": 4.4,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:02.027Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-red-case-11-lbs?_pos=6&_psq=red+pepper&_psid=215df5d8b&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001254120p.jpg?v=1786962874"
+        "checkedAt": "2026-08-18T19:50:38.139Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-red-repack-5-lbs-1?_pos=6&_psq=red+pepper&_psid=7e36c0132&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000073160665p_5a36b3d9-5ad1-4354-a748-4665adbc8c5a.jpg?v=1782304072",
+        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
         {
-          "productId": "vegetables-peppers-red-repack-5-lbs-1",
-          "name": "VEGETABLES - PEPPERS RED 2.5LB REPACK 2.5 LBS",
+          "productId": "vegetables-peppers-red-case-11-lbs",
+          "name": "VEGETABLES - PEPPERS RED CASE 11 LBS",
           "brand": "VEGETABLES",
-          "packageSize": "2.5LB REPACK 2.5 LBS",
-          "parsedMassKg": 1.1339809250000001,
-          "price": 4.99,
-          "unitPrice": 4.4,
+          "packageSize": "11 LBS",
+          "parsedMassKg": 4.9895160700000005,
+          "price": 27.99,
+          "unitPrice": 5.61,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:02.027Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-red-repack-5-lbs-1?_pos=7&_psq=red+pepper&_psid=215df5d8b&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000073160665p_5a36b3d9-5ad1-4354-a748-4665adbc8c5a.jpg?v=1782304072"
+          "checkedAt": "2026-08-18T19:50:38.139Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-red-case-11-lbs?_pos=7&_psq=red+pepper&_psid=7e36c0132&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001254120p.jpg?v=1786962874",
+          "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
         }
       ]
     },
@@ -238,9 +246,10 @@
         "unitPrice": 2.76,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:02.861Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-sweet-jumbo-case-40-lbs?_pos=10&_psq=sweet+potato&_psid=5a630d112&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001100000101p.jpg?v=1786635862"
+        "checkedAt": "2026-08-18T19:50:38.872Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-sweet-jumbo-case-40-lbs?_pos=10&_psq=sweet+potato&_psid=4d8637181&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001100000101p.jpg?v=1786635862",
+        "taxonomyText": "ROOT VEGETABLES  ROOT VEGETABLES  PRODUCE  FRESH VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -254,9 +263,10 @@
           "unitPrice": 3.52,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:02.861Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-sweet-repack-5-lbs?_pos=4&_psq=sweet+potato&_psid=5a630d112&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001116584p.jpg?v=1786636156"
+          "checkedAt": "2026-08-18T19:50:38.872Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-sweet-repack-5-lbs?_pos=4&_psq=sweet+potato&_psid=4d8637181&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001116584p.jpg?v=1786636156",
+          "taxonomyText": "ROOT VEGETABLES  ROOT VEGETABLES  PRODUCE  FRESH VEGETABLES"
         }
       ]
     },
@@ -289,9 +299,10 @@
         "unitPrice": 2.19,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:04.305Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-per-kg?_pos=3&_psq=bananas&_psid=b6257e62f&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0026588300000p_595a7abe-c199-4f8c-b1c0-3db6b15ec7cb.jpg?v=1776104493"
+        "checkedAt": "2026-08-18T19:50:40.264Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-per-kg?_pos=3&_psq=bananas&_psid=12e2c7155&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0026588300000p_595a7abe-c199-4f8c-b1c0-3db6b15ec7cb.jpg?v=1776104493",
+        "taxonomyText": "TROPICAL FRUITS AVERAGEWEIGHT:1.10  TROPICAL FRUITS  PRODUCE PERKILO:2.43  FRUITS"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -305,9 +316,10 @@
           "unitPrice": 2.15,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:04.305Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-1-case-40-lbs?_pos=1&_psq=bananas&_psid=b6257e62f&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114954p_006097bd-3fe4-4751-afcc-af808d5dc014.jpg?v=1783696058"
+          "checkedAt": "2026-08-18T19:50:40.264Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-1-case-40-lbs?_pos=1&_psq=bananas&_psid=12e2c7155&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114954p_006097bd-3fe4-4751-afcc-af808d5dc014.jpg?v=1783696058",
+          "taxonomyText": "TROPICAL FRUITS  TROPICAL FRUITS  PRODUCE  FRUITS"
         }
       ]
     },
@@ -325,9 +337,10 @@
         "unitPrice": 11.65,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:05.222Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-kiwi-600-grams?_pos=6&_psq=kiwi&_psid=5cd960413&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006623677303p.jpg?v=1783334836"
+        "checkedAt": "2026-08-18T19:50:41.042Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-kiwi-600-grams?_pos=6&_psq=kiwi&_psid=ecab638f2&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006623677303p.jpg?v=1783334836",
+        "taxonomyText": "TROPICAL FRUITS  TROPICAL FRUITS  PRODUCE  FRUITS"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": []
@@ -344,9 +357,10 @@
         "price": 7.99,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:06.349Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-english-cucumbers-case-12-ea?_pos=2&_psq=english+cucumber&_psid=0bb93c546&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001111245p.jpg?v=1786715796"
+        "checkedAt": "2026-08-18T19:50:42.173Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-english-cucumbers-case-12-ea?_pos=2&_psq=english+cucumber&_psid=78dc2f273&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001111245p.jpg?v=1786715796",
+        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -360,9 +374,10 @@
           "unitPrice": 2.42,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:06.713Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-cucumbers-baby-case-20-lbs?_pos=7&_psq=cucumber&_psid=1ac2d9d21&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001420000487p_56d1d019-8967-4244-a61c-cd82fe502f51.jpg?v=1786975757"
+          "checkedAt": "2026-08-18T19:50:42.536Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-cucumbers-baby-case-20-lbs?_pos=7&_psq=cucumber&_psid=82b5aefaf&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001420000487p_56d1d019-8967-4244-a61c-cd82fe502f51.jpg?v=1786975757",
+          "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
         }
       ]
     },
@@ -380,9 +395,10 @@
         "unitPrice": 9.8,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:07.834Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-garlic-peeled-case-6-x-3-lbs?_pos=8&_psq=garlic&_psid=c6c9b63f6&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114610p_e6de3d10-ef47-4b18-955b-c2564df0fe68.jpg?v=1786107764"
+        "checkedAt": "2026-08-18T19:50:43.560Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-garlic-peeled-case-6-x-3-lbs?_pos=9&_psq=garlic&_psid=f14bbd2d0&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114610p_e6de3d10-ef47-4b18-955b-c2564df0fe68.jpg?v=1786107764",
+        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -396,8 +412,9 @@
           "unitPrice": 11.02,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:07.834Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-garlic-fresh-peeled-3-lbs-5?_pos=5&_psq=garlic&_psid=c6c9b63f6&_ss=e"
+          "checkedAt": "2026-08-18T19:50:43.560Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-garlic-fresh-peeled-3-lbs-5?_pos=5&_psq=garlic&_psid=f14bbd2d0&_ss=e",
+          "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
         }
       ]
     },
@@ -415,9 +432,10 @@
         "unitPrice": 14.7,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:08.474Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-blueberries-case-12-x-170-g?_pos=10&_psq=blueberries&_psid=23f8220e0&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006000000215p_b674579a-b735-43f3-a7b9-d89e4b28f576.jpg?v=1787060896"
+        "checkedAt": "2026-08-18T19:50:44.242Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-blueberries-case-12-x-170-g?_pos=10&_psq=blueberries&_psid=5eb14c35d&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006000000215p_b674579a-b735-43f3-a7b9-d89e4b28f576.jpg?v=1787060896",
+        "taxonomyText": "BERRIES  BERRIES  PRODUCE  FRUITS"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": []
@@ -436,9 +454,10 @@
         "unitPrice": 12.1,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:09.394Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-strawberries-1-lb-2?_pos=3&_psq=strawberries&_psid=912b1a210&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0081133402015p_92dde1be-9434-4e0c-8f55-a601d3271800.jpg?v=1786116922"
+        "checkedAt": "2026-08-18T19:50:45.138Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-strawberries-1-lb-2?_pos=3&_psq=strawberries&_psid=6a0bd0385&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0081133402015p_92dde1be-9434-4e0c-8f55-a601d3271800.jpg?v=1786116922",
+        "taxonomyText": "BERRIES  BERRIES  PRODUCE  FRUITS"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -452,9 +471,10 @@
           "unitPrice": 12.1,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:09.394Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-strawberries-1-lb-3?_pos=4&_psq=strawberries&_psid=912b1a210&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0071575620002p.jpg?v=1786546277"
+          "checkedAt": "2026-08-18T19:50:45.138Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-strawberries-1-lb-3?_pos=4&_psq=strawberries&_psid=6a0bd0385&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0071575620002p.jpg?v=1786546277",
+          "taxonomyText": "BERRIES  BERRIES  PRODUCE  FRUITS"
         }
       ]
     },
@@ -691,8 +711,10 @@
         "unitPrice": 7.29,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:10.815Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-sliced-apples-1kg"
+        "checkedAt": "2026-08-18T19:50:45.698Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-sliced-apples-1kg?_pos=2&_psq=frozen+sliced+apples&_psid=08fa79efe&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088194p.jpg?v=1770363489",
+        "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -706,9 +728,10 @@
           "unitPrice": 6.8,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:09.936Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-sliced-apples-5x1kg?_pos=1&_psq=frozen+sliced+apples&_psid=3dcefb2ca&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505890194p_fec4f1a1-2cb6-4de4-b913-c0da612f7891.jpg?v=1778339719"
+          "checkedAt": "2026-08-18T19:50:45.698Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-sliced-apples-5x1kg?_pos=1&_psq=frozen+sliced+apples&_psid=08fa79efe&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505890194p_fec4f1a1-2cb6-4de4-b913-c0da612f7891.jpg?v=1778339719",
+          "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
         },
         {
           "productId": "apple-valley-tart-shel-2-sweet-240x16gr",
@@ -720,23 +743,10 @@
           "unitPrice": 11.72,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:10.325Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/apple-valley-tart-shel-2-sweet-240x16gr?_pos=4&_psq=frozen+apples&_psid=9e5253453&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068741580204p_6478f5e2-5b68-499f-99e5-86d0edc08292.jpg?v=1783010733"
-        },
-        {
-          "productId": "apple-valley-tart-shell-2-240x16gr",
-          "name": "APPLE VALLEY - TART SHELL 2IN 240x16GR",
-          "brand": "APPLE VALLEY",
-          "packageSize": "240x16GR",
-          "parsedMassKg": 3.84,
-          "price": 44.99,
-          "unitPrice": 11.72,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:10.325Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/apple-valley-tart-shell-2-240x16gr?_pos=5&_psq=frozen+apples&_psid=9e5253453&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068741580200p_13f3b165-5990-41b7-bae1-7d2a0336ae6f.jpg?v=1783010724"
+          "checkedAt": "2026-08-18T19:50:46.126Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/apple-valley-tart-shel-2-sweet-240x16gr?_pos=4&_psq=frozen+apples&_psid=3ab8102a5&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068741580204p_6478f5e2-5b68-499f-99e5-86d0edc08292.jpg?v=1783010733",
+          "taxonomyText": "FROZEN BAKING INGREDIENTS  FROZEN BAKING INGREDIENTS  FROZEN  FROZEN BAKED GOODS & DESSERTS"
         },
         {
           "productId": "legacy-apple-fritter-donut-15x145-gr",
@@ -748,9 +758,25 @@
           "unitPrice": 9.1,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:10.508Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/legacy-apple-fritter-donut-15x145-gr?_pos=10&_psq=apple&_psid=51aa10a2c&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1067046500205p_d344adc3-2667-4415-bccc-a708f3259161.jpg?v=1781015903"
+          "checkedAt": "2026-08-18T19:50:46.313Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/legacy-apple-fritter-donut-15x145-gr?_pos=9&_psq=apple&_psid=d3ee85bb7&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1067046500205p_d344adc3-2667-4415-bccc-a708f3259161.jpg?v=1781015903",
+          "taxonomyText": "THAW & SERVE DESSERTS  THAW & SERVE DESSERTS  FROZEN  FROZEN BAKED GOODS & DESSERTS"
+        },
+        {
+          "productId": "apple-valley-tart-shell-2-240x16gr",
+          "name": "APPLE VALLEY - TART SHELL 2IN 240x16GR",
+          "brand": "APPLE VALLEY",
+          "packageSize": "240x16GR",
+          "parsedMassKg": 3.84,
+          "price": 44.99,
+          "unitPrice": 11.72,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T19:50:46.126Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/apple-valley-tart-shell-2-240x16gr?_pos=5&_psq=frozen+apples&_psid=3ab8102a5&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068741580200p_13f3b165-5990-41b7-bae1-7d2a0336ae6f.jpg?v=1783010724",
+          "taxonomyText": "FROZEN BAKING INGREDIENTS  FROZEN BAKING INGREDIENTS  FROZEN  FROZEN BAKED GOODS & DESSERTS"
         }
       ]
     },
@@ -768,9 +794,10 @@
         "unitPrice": 4.99,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:11.002Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-1kg?_pos=1&_psq=frozen+banana+slices&_psid=c94beb452&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000194p_6827b841-b7df-42c4-a646-6e5ea55507a4.jpg?v=1785562354"
+        "checkedAt": "2026-08-18T19:50:46.846Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-1kg?_pos=1&_psq=frozen+banana+slices&_psid=c6ca0fa7a&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000194p_6827b841-b7df-42c4-a646-6e5ea55507a4.jpg?v=1785562354",
+        "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -784,9 +811,10 @@
           "unitPrice": 4.4,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:11.002Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-5x1-kg?_pos=2&_psq=frozen+banana+slices&_psid=c94beb452&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800193p_5c73967d-7262-4363-b7d0-0abf070be2c9.jpg?v=1785562363"
+          "checkedAt": "2026-08-18T19:50:46.846Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-5x1-kg?_pos=2&_psq=frozen+banana+slices&_psid=c6ca0fa7a&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800193p_5c73967d-7262-4363-b7d0-0abf070be2c9.jpg?v=1785562363",
+          "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
         }
       ]
     },
@@ -804,9 +832,10 @@
         "unitPrice": 9,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:12.210Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=22cd343ee&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800202c_9263bb93-71f5-412a-82a4-c859c93de8ae.jpg?v=1786638382"
+        "checkedAt": "2026-08-18T19:50:48.061Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=4eaf2e61f&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800202c_9263bb93-71f5-412a-82a4-c859c93de8ae.jpg?v=1786638382",
+        "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -820,9 +849,10 @@
           "unitPrice": 8.99,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:12.210Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-1kg?_pos=4&_psq=frozen+blueberries&_psid=22cd343ee&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088202p.jpg?v=1786638377"
+          "checkedAt": "2026-08-18T19:50:48.061Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-1kg?_pos=4&_psq=frozen+blueberries&_psid=4eaf2e61f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088202p.jpg?v=1786638377",
+          "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
         },
         {
           "productId": "alasko-iqf-cultivated-blueberries-5x1kg",
@@ -834,9 +864,10 @@
           "unitPrice": 9.4,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:12.210Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-cultivated-blueberries-5x1kg?_pos=1&_psq=frozen+blueberries&_psid=22cd343ee&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800979p.jpg?v=1785562377"
+          "checkedAt": "2026-08-18T19:50:48.061Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-cultivated-blueberries-5x1kg?_pos=1&_psq=frozen+blueberries&_psid=4eaf2e61f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800979p.jpg?v=1785562377",
+          "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
         },
         {
           "productId": "alasko-wild-blueberries-5x1kg",
@@ -848,9 +879,10 @@
           "unitPrice": 9,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:12.210Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=22cd343ee&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800202c_9263bb93-71f5-412a-82a4-c859c93de8ae.jpg?v=1786638382"
+          "checkedAt": "2026-08-18T19:50:48.061Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-wild-blueberries-5x1kg?_pos=3&_psq=frozen+blueberries&_psid=4eaf2e61f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800202c_9263bb93-71f5-412a-82a4-c859c93de8ae.jpg?v=1786638382",
+          "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
         }
       ]
     },
@@ -868,8 +900,10 @@
         "unitPrice": 3.99,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:14.399Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-strawberries-1kg"
+        "checkedAt": "2026-08-18T19:50:49.289Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-strawberries-1kg?_pos=2&_psq=frozen+strawberries&_psid=22d3f2700&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088219p.jpg?v=1785562350",
+        "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -883,8 +917,9 @@
           "unitPrice": 4,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:13.166Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-strawberries-5x1kg"
+          "checkedAt": "2026-08-18T19:50:49.095Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-strawberries-5x1kg",
+          "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
         }
       ]
     },
@@ -902,9 +937,10 @@
         "unitPrice": 3.3,
         "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:45:14.605Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-2-lb?_pos=2&_psq=frozen+chopped+spinach&_psid=c323ca711&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000183p.jpg?v=1783983216"
+        "checkedAt": "2026-08-18T19:50:50.469Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-2-lb?_pos=2&_psq=frozen+chopped+spinach&_psid=95db93171&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000183p.jpg?v=1783983216",
+        "taxonomyText": "FROZEN VEGETABLES  FROZEN VEGETABLES  FROZEN  FROZEN FRUITS & VEGETABLES"
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
@@ -918,9 +954,10 @@
           "unitPrice": 2.94,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:14.605Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-12x2lb?_pos=1&_psq=frozen+chopped+spinach&_psid=c323ca711&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800183p_8e99abdc-cb91-462d-8773-391a1fe46f3b.jpg?v=1778337706"
+          "checkedAt": "2026-08-18T19:50:50.469Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-12x2lb?_pos=1&_psq=frozen+chopped+spinach&_psid=95db93171&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800183p_8e99abdc-cb91-462d-8773-391a1fe46f3b.jpg?v=1778337706",
+          "taxonomyText": "FROZEN VEGETABLES  FROZEN VEGETABLES  FROZEN  FROZEN FRUITS & VEGETABLES"
         },
         {
           "productId": "bridor-rtb-butter-spinach-feta-bistro-36",
@@ -932,9 +969,10 @@
           "unitPrice": 17.67,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:15.275Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/bridor-rtb-butter-spinach-feta-bistro-36?_pos=3&_psq=spinach&_psid=41c44e3d0&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000052400p.jpg?v=1776256817"
+          "checkedAt": "2026-08-18T19:50:51.156Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/bridor-rtb-butter-spinach-feta-bistro-36?_pos=3&_psq=spinach&_psid=79a1b10b1&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000052400p.jpg?v=1776256817",
+          "taxonomyText": "OVEN-READY APPETIZERS  OVEN-READY APPETIZERS  FROZEN  FROZEN APPETIZERS"
         },
         {
           "productId": "sonora-12in-tortilla-spinach-96ea",
@@ -944,12 +982,13 @@
           "price": 67.99,
           "availability": "in_stock",
           "confidence": "exact",
-          "checkedAt": "2026-08-18T19:45:15.275Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/sonora-12in-tortilla-spinach-96ea?_pos=8&_psq=spinach&_psid=41c44e3d0&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1066742922047c.jpg?v=1774551737"
+          "checkedAt": "2026-08-18T19:50:51.156Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/sonora-12in-tortilla-spinach-96ea?_pos=8&_psq=spinach&_psid=79a1b10b1&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1066742922047c.jpg?v=1774551737",
+          "taxonomyText": "BREADS/WRAPS  BREADS/WRAPS  FROZEN  FROZEN BAKED GOODS & DESSERTS"
         }
       ]
     }
   ],
-  "updatedAt": "2026-08-18T19:45:15.448Z"
+  "updatedAt": "2026-08-18T19:50:51.281Z"
 }
