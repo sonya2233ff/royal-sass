@@ -40,7 +40,27 @@ async function main() {
   const apple = cfg.items.find((i) => i.id === "frozen_apple");
   const egg = cfg.items.find((i) => i.id === "simply_egg_whites");
   const blueberries = cfg.items.find((i) => i.id === "blueberries");
-  if (!frozen || !fresh || !grape || !banana || !apple || !egg || !blueberries) {
+  const frozenBlue = cfg.items.find((i) => i.id === "frozen_blueberry");
+  const cuke = cfg.items.find((i) => i.id === "cucumber_english");
+  const frozenBan = cfg.items.find((i) => i.id === "frozen_banana");
+  const pineapple = cfg.items.find((i) => i.id === "pineapple_whole");
+  const peppers = cfg.items.find((i) => i.id === "red_peppers_kg");
+  const spinach = cfg.items.find((i) => i.id === "frozen_spinach");
+  if (
+    !frozen ||
+    !fresh ||
+    !grape ||
+    !banana ||
+    !apple ||
+    !egg ||
+    !blueberries ||
+    !frozenBlue ||
+    !cuke ||
+    !frozenBan ||
+    !pineapple ||
+    !peppers ||
+    !spinach
+  ) {
     throw new Error("missing staples");
   }
 
@@ -133,6 +153,175 @@ async function main() {
       packageSize: "312 g",
     }) == null,
     "conventional 312g blueberries pass",
+  );
+  assert(
+    isActualCategoryBOffer(frozenBlue, {
+      productId: "kefir",
+      name: "Mc Dairy Blueberry Kefir 2.4 % M.F.",
+      brand: "Mc Dairy",
+      packageSize: "1 l",
+      price: 6,
+    }) === false,
+    "kefir is not frozen blueberries",
+  );
+  assert(
+    isActualCategoryBOffer(frozenBlue, {
+      productId: "pint",
+      name: "Blueberries 1 pint",
+      packageSize: "1 ea",
+      price: 4.99,
+    }) === false,
+    "fresh pint is not frozen blueberries",
+  );
+  assert(
+    isActualCategoryBOffer(cuke, {
+      productId: "baby",
+      name: "VEGETABLES - CUCUMBERS BABY CASE 20LB 20 LBS",
+      brand: "VEGETABLES",
+      packageSize: "20 LBS",
+      price: 21.99,
+    }) === false,
+    "baby cucumbers are not english cucumbers",
+  );
+  assert(
+    isActualCategoryBOffer(cuke, {
+      productId: "eng",
+      name: "VEGETABLES - CUCUMBERS ENGLISH CASE 12 EA",
+      brand: "VEGETABLES",
+      packageSize: "12 EA",
+      price: 7.99,
+    }) === true,
+    "warehouse english cucumber case is the staple",
+  );
+  assert(
+    isActualCategoryBOffer(blueberries, {
+      productId: "bagel",
+      name: "No Name Blueberry Bagel",
+      brand: "No Name",
+      packageSize: "450 g",
+      parsedMassKg: 0.45,
+      price: 2.25,
+    }) === false,
+    "bagel is not fresh blueberries",
+  );
+  assert(
+    isActualCategoryBOffer(blueberries, {
+      productId: "loaf",
+      name: "Farmer's Market Blueberry Loaf",
+      price: 5,
+    }) === false,
+    "blueberry loaf is not fresh blueberries",
+  );
+  assert(
+    isActualCategoryBOffer(blueberries, {
+      productId: "2kg",
+      name: "No Name Blueberries",
+      brand: "No Name",
+      packageSize: "2 kg",
+      parsedMassKg: 2,
+      price: 13.99,
+    }) === false,
+    "2 kg frozen bag is not a fresh blueberry clamshell",
+  );
+  assert(
+    isActualCategoryBOffer(blueberries, {
+      productId: "pint",
+      name: "Blueberries 1 pint",
+      packageSize: "1 ea",
+      price: 4.99,
+    }) === true,
+    "fresh pint is blueberries",
+  );
+  assert(
+    isActualCategoryBOffer(fresh, {
+      productId: "shortcake",
+      name: "Your Fresh Market Strawberry Shortcake",
+      price: 5.98,
+    }) === false,
+    "shortcake is not strawberries",
+  );
+  assert(
+    isActualCategoryBOffer(frozen, {
+      productId: "breyers",
+      name: "Breyers Strawberry Frozen Dessert",
+      brand: "Breyers",
+      packageSize: "1410 ml",
+      taxonomyText: "DEPARTMENT_FROZEN",
+      price: 4,
+    }) === false,
+    "frozen dessert is not frozen strawberries",
+  );
+  assert(
+    isActualCategoryBOffer(frozenBan, {
+      productId: "peppers",
+      name: "Putter's Banana Peppers Sliced Old Fashioned",
+      brand: "Putter's",
+      packageSize: "750 ml",
+      price: 5.29,
+    }) === false,
+    "banana peppers are not frozen banana",
+  );
+  assert(
+    isActualCategoryBOffer(pineapple, {
+      productId: "sliced",
+      name: "Liebers Pineapple, Sliced",
+      brand: "Liebers",
+      packageSize: "567 g",
+      parsedMassKg: 0.567,
+      price: 3.49,
+    }) === false,
+    "canned sliced pineapple is not whole pineapple",
+  );
+  assert(
+    isActualCategoryBOffer(pineapple, {
+      productId: "whole",
+      name: "Pineapple",
+      packageSize: "1 ea",
+      parsedMassKg: 1,
+      price: 4.99,
+    }) === true,
+    "whole pineapple each is the staple",
+  );
+  assert(
+    isActualCategoryBOffer(peppers, {
+      productId: "jar",
+      name: "S&F Red Peppers, Roasted",
+      packageSize: "1.5 l",
+      price: 9.99,
+    }) === false,
+    "roasted jarred peppers are not fresh red peppers",
+  );
+  const pear = cfg.items.find((i) => i.id === "pear_bosc_kg");
+  assert(pear, "missing pear staple");
+  assert(
+    isActualCategoryBOffer(pear, {
+      productId: "bosc",
+      name: "Pear, Bosc, Sold in singles, 0.18 - 0.30 KG",
+      packageSize: "300 g",
+      parsedMassKg: 0.3,
+      price: 1.57,
+    }) === true,
+    "bosc pear singles are the staple",
+  );
+  assert(
+    isActualCategoryBOffer(pear, {
+      productId: "bartlett",
+      name: "Pear, Red Bartlett, Sold in singles, 0.18 - 0.20 KG",
+      packageSize: "200 g",
+      parsedMassKg: 0.2,
+      price: 0.41,
+    }) === true,
+    "bartlett is still a pear when variety is flexible",
+  );
+  assert(
+    isActualCategoryBOffer(spinach, {
+      productId: "fillo",
+      name: "Krinos Mini Rolls Spinach and Cheese, Cook from Frozen",
+      packageSize: "454 g",
+      taxonomyText: "DEPARTMENT_FROZEN",
+      price: 4.78,
+    }) === false,
+    "spinach fillo rolls are not chopped spinach",
   );
 
   console.log("staple-filter-self-check ok");

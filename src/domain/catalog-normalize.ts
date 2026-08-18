@@ -333,7 +333,7 @@ export function offerFailsStapleOfferFilters(
     nameMatchesFilterToken(hay, "frozen") ||
     nameMatchesFilterToken(hay, "iqf");
   if (item.category === "produce" && taxFrozen) return "mustNotInclude:frozen";
-  if (item.category === "frozen" && taxonomy.trim() && !taxFrozen) {
+  if (item.category === "frozen" && !taxFrozen && taxonomy.trim()) {
     return "needFrozenDepartment";
   }
   return null;

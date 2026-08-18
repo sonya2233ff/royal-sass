@@ -15,8 +15,10 @@ import { pickCheapestByFairUnit } from "@/domain/matching";
 import { pickNeededWeightPurchase } from "@/domain/needed-weight-pick";
 import {
   isActualCategoryBOffer,
+  preferNonCasePacks,
   samePackedItemCandidates,
   usesCategoryBIdentity,
+  withTypicalEachMass,
 } from "@/domain/same-packed-item";
 
 /** Minimal mapping fields — avoid importing lib from domain. */
@@ -123,12 +125,14 @@ function passingCatalogOffers(
     if (!offerIsOnShelf(offer)) continue;
     if (usesCategoryBIdentity(item)) {
       if (!isActualCategoryBOffer(item, offer)) continue;
+      out.push(withTypicalEachMass(item, offer));
+      continue;
     } else if (offerFailsStapleOfferFilters(item, offer)) {
       continue;
     }
     out.push(offer);
   }
-  return out;
+  return preferNonCasePacks(out);
 }
 
 function resolveFromOffer(

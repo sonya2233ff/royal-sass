@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T19:50:51.282Z",
+  "updatedAt": "2026-08-18T20:24:18.210Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -98,7 +98,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:42.180Z"
+          "updatedAt": "2026-08-18T20:23:45.376Z"
         },
         "mvr": {
           "retailer": "mvr",
@@ -111,7 +111,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:33.628Z"
+          "updatedAt": "2026-08-18T20:20:57.701Z"
         }
       },
       "prices": [
@@ -134,23 +134,23 @@
           "priceConfidence": "RECEIPT_VERIFIED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20840038001_EA",
-          "price": 7.99,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:41.625Z",
-          "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "vegetables-tomatoes-grape-1-pint-21",
           "price": 1.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:33.624Z",
+          "checkedAt": "2026-08-18T20:20:57.696Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20840038001_EA",
+          "price": 7.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:23:43.783Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -373,27 +373,27 @@
         "wholesaleclub": {
           "retailer": "wholesaleclub",
           "storeId": "3724",
-          "retailerProductId": "20795315001_EA",
-          "name": "Lemons, 2 lb Bag",
+          "retailerProductId": "21124487001_EA",
+          "name": "Naturally Imperfect Lemons 3lb Bag",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:43.873Z"
+          "updatedAt": "2026-08-18T20:23:48.545Z"
         },
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "fruits-lemons-case-100-ea",
-          "name": "FRUITS - LEMONS  CASE 100 EA",
-          "upc": "0000011136457",
+          "retailerProductId": "fruits-lemons-repack-6-ea",
+          "name": "FRUITS - LEMONS REPACK 6 EA",
+          "upc": "0000000001354",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:34.952Z"
+          "updatedAt": "2026-08-18T20:20:59.046Z"
         }
       },
       "prices": [
@@ -417,23 +417,23 @@
           "priceConfidence": "ESTIMATED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20795315001_EA",
-          "price": 4.99,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:42.702Z",
-          "source": "catalog_wholesaleclub_3724_latest",
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-lemons-repack-6-ea",
+          "price": 3.79,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T20:20:59.043Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         },
         {
-          "retailer": "mvr",
-          "storeId": "weston",
-          "retailerProductId": "fruits-lemons-case-100-ea",
-          "price": 44.99,
-          "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:34.949Z",
-          "source": "catalog_mvr_weston_latest",
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21124487001_EA",
+          "price": 6.49,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:23:46.511Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -535,20 +535,20 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:45.675Z"
+          "updatedAt": "2026-08-18T20:23:49.986Z"
         },
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "fruits-pears-bartlett-case-13-kg",
-          "name": "FRUITS - PEARS BOSC REPACK 2.5lb 2.5LB",
-          "upc": "0000001113131",
+          "retailerProductId": "fruits-pears-bartlet-2-lb",
+          "name": "FRUITS - PEARS BARTLETT LOCAL CLAM 2L",
+          "upc": "0003338346491",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:35.959Z"
+          "updatedAt": "2026-08-18T20:21:00.241Z"
         }
       },
       "prices": [
@@ -572,23 +572,23 @@
           "priceConfidence": "ESTIMATED"
         },
         {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-pears-bartlet-2-lb",
+          "price": 5.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T20:21:00.238Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
           "retailer": "wholesaleclub",
           "storeId": "3724",
           "retailerProductId": "21111368001_EA",
           "price": 5.99,
           "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:44.477Z",
+          "checkedAt": "2026-08-18T20:23:48.885Z",
           "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
-          "retailer": "mvr",
-          "storeId": "weston",
-          "retailerProductId": "fruits-pears-bartlett-case-13-kg",
-          "price": 4.99,
-          "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:35.957Z",
-          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -809,7 +809,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:46.625Z"
+          "updatedAt": "2026-08-18T20:23:50.932Z"
         },
         "mvr": {
           "retailer": "mvr",
@@ -822,7 +822,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:36.742Z"
+          "updatedAt": "2026-08-18T20:21:00.930Z"
         }
       },
       "prices": [
@@ -845,23 +845,23 @@
           "priceConfidence": "LIVE_VERIFIED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20159013001_KG",
-          "price": 1.37,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:46.129Z",
-          "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "vegetables-eggplant-repack-5-lbs",
           "price": 7.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:36.735Z",
+          "checkedAt": "2026-08-18T20:21:00.928Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20159013001_KG",
+          "price": 1.37,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:23:50.362Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -956,14 +956,14 @@
         "wholesaleclub": {
           "retailer": "wholesaleclub",
           "storeId": "3724",
-          "retailerProductId": "21714328001_EA",
-          "name": "Roma Tomatoes on the Vine",
+          "retailerProductId": "20026703001_KG",
+          "name": "Tomato On The Vine Red (1 Bunch)",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:37:58.518Z"
+          "updatedAt": "2026-08-18T20:23:53.082Z"
         }
       },
       "prices": [
@@ -989,10 +989,10 @@
         {
           "retailer": "wholesaleclub",
           "storeId": "3724",
-          "retailerProductId": "21714328001_EA",
-          "price": 5.99,
+          "retailerProductId": "20026703001_KG",
+          "price": 3.9,
           "availability": "unknown",
-          "checkedAt": "2026-08-18T00:37:57.574Z",
+          "checkedAt": "2026-08-18T20:23:51.690Z",
           "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -1289,14 +1289,14 @@
         "wholesaleclub": {
           "retailer": "wholesaleclub",
           "storeId": "3724",
-          "retailerProductId": "20007535001_KG",
-          "name": "Red Peppers    ",
+          "retailerProductId": "20055557001_KG",
+          "name": "Red Field Peppers",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:50.984Z"
+          "updatedAt": "2026-08-18T20:23:55.016Z"
         },
         "mvr": {
           "retailer": "mvr",
@@ -1309,7 +1309,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:38.655Z"
+          "updatedAt": "2026-08-18T20:21:03.534Z"
         }
       },
       "prices": [
@@ -1333,23 +1333,23 @@
           "priceConfidence": "ESTIMATED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20007535001_KG",
-          "price": 2.11,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:50.394Z",
-          "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "vegetables-peppers-red-repack-5-lbs-1",
           "price": 4.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:38.653Z",
+          "checkedAt": "2026-08-18T20:21:03.531Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20055557001_KG",
+          "price": 1,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:23:53.426Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -1451,7 +1451,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:52.100Z"
+          "updatedAt": "2026-08-18T20:23:57.034Z"
         },
         "mvr": {
           "retailer": "mvr",
@@ -1464,7 +1464,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:39.563Z"
+          "updatedAt": "2026-08-18T20:21:04.683Z"
         }
       },
       "prices": [
@@ -1488,23 +1488,23 @@
           "priceConfidence": "ESTIMATED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20127708001_KG",
-          "price": 2.77,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:51.574Z",
-          "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "vegetables-potatoes-sweet-jumbo-case-40-lbs",
           "price": 49.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:39.561Z",
+          "checkedAt": "2026-08-18T20:21:04.680Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20127708001_KG",
+          "price": 2.77,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:23:55.535Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -1601,7 +1601,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:52.972Z"
+          "updatedAt": "2026-08-18T20:23:57.446Z"
         }
       },
       "prices": [
@@ -1630,7 +1630,7 @@
           "retailerProductId": "20160992001_EA",
           "price": 4.99,
           "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:52.488Z",
+          "checkedAt": "2026-08-18T20:23:57.442Z",
           "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -1780,7 +1780,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:55.481Z"
+          "updatedAt": "2026-08-18T20:23:58.626Z"
         },
         "mvr": {
           "retailer": "mvr",
@@ -1793,7 +1793,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:40.879Z"
+          "updatedAt": "2026-08-18T20:21:05.612Z"
         }
       },
       "prices": [
@@ -1816,23 +1816,23 @@
           "priceConfidence": "LIVE_VERIFIED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20175355001_KG",
-          "price": 1.75,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:55.052Z",
-          "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "fruits-bananas-per-kg",
           "price": 2.19,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:40.877Z",
+          "checkedAt": "2026-08-18T20:21:05.607Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20175355001_KG",
+          "price": 1.75,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:23:57.930Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -1933,7 +1933,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:57.061Z"
+          "updatedAt": "2026-08-18T20:24:01.225Z"
         },
         "mvr": {
           "retailer": "mvr",
@@ -1946,7 +1946,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:41.985Z"
+          "updatedAt": "2026-08-18T20:21:06.829Z"
         }
       },
       "prices": [
@@ -1969,23 +1969,23 @@
           "priceConfidence": "LIVE_VERIFIED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20130242001_EA",
-          "price": 1.09,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:56.065Z",
-          "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "fruits-kiwi-600-grams",
           "price": 6.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:41.984Z",
+          "checkedAt": "2026-08-18T20:21:06.826Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20130242001_EA",
+          "price": 1.09,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:23:59.235Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2082,20 +2082,20 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:58.011Z"
+          "updatedAt": "2026-08-18T20:24:03.126Z"
         },
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "vegetables-english-cucumbers-case-12-ea",
-          "name": "VEGETABLES - CUCUMBERS ENGLISH CASE 12 EA",
-          "upc": "0000001111245",
+          "retailerProductId": "vegetables-cucumbers-english-repack-3-ea",
+          "name": "VEGETABLES - CUCUMBERS ENGLISH REPACK 3CT 3 EA",
+          "upc": "0000001114597",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:42.675Z"
+          "updatedAt": "2026-08-18T20:21:08.042Z"
         }
       },
       "prices": [
@@ -2119,23 +2119,23 @@
           "priceConfidence": "ESTIMATED"
         },
         {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-cucumbers-english-repack-3-ea",
+          "price": 2.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T20:21:08.038Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
           "retailer": "wholesaleclub",
           "storeId": "3724",
           "retailerProductId": "21046471001_EA",
           "price": 5.99,
           "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:57.478Z",
+          "checkedAt": "2026-08-18T20:24:01.746Z",
           "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
-          "retailer": "mvr",
-          "storeId": "weston",
-          "retailerProductId": "vegetables-english-cucumbers-case-12-ea",
-          "price": 7.99,
-          "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:42.674Z",
-          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2232,20 +2232,20 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:34:59.560Z"
+          "updatedAt": "2026-08-18T20:24:05.206Z"
         },
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "vegetables-garlic-peeled-case-6-x-3-lbs",
-          "name": "VEGETABLES - GARLIC FRESH PEELED CASE 6x3 LB",
-          "upc": "0000001114610",
+          "retailerProductId": "vegetables-garlic-fresh-special-1-lbs",
+          "name": "VEGETABLES - GARLIC FRESH BAGGED Ontario 2 LBS",
+          "upc": "0081937700991",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:43.708Z"
+          "updatedAt": "2026-08-18T20:21:09.216Z"
         }
       },
       "prices": [
@@ -2269,23 +2269,23 @@
           "priceConfidence": "ESTIMATED"
         },
         {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-garlic-fresh-special-1-lbs",
+          "price": 13.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T20:21:09.213Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
           "retailer": "wholesaleclub",
           "storeId": "3724",
           "retailerProductId": "21238843001_EA",
           "price": 5.99,
           "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:58.596Z",
+          "checkedAt": "2026-08-18T20:24:03.529Z",
           "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
-          "retailer": "mvr",
-          "storeId": "weston",
-          "retailerProductId": "vegetables-garlic-peeled-case-6-x-3-lbs",
-          "price": 79.99,
-          "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:43.707Z",
-          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2392,27 +2392,27 @@
         "wholesaleclub": {
           "retailer": "wholesaleclub",
           "storeId": "3724",
-          "retailerProductId": "20080137001_EA",
-          "name": "Blueberries 1 pint",
+          "retailerProductId": "21033164_EA",
+          "name": "Blueberries",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:35:01.362Z"
+          "updatedAt": "2026-08-18T20:24:06.121Z"
         },
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "fruits-blueberries-case-12-x-170-g",
-          "name": "FRUITS - BLUEBERRIES  CASE 12x170 GR",
-          "upc": "0006000000215",
+          "retailerProductId": "fruits-blueberries-11oz",
+          "name": "FRUITS - BLUEBERRIES SWEETEST BATCH 11OZ",
+          "upc": "0071575650017",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:44.588Z"
+          "updatedAt": "2026-08-18T20:21:09.793Z"
         }
       },
       "prices": [
@@ -2446,23 +2446,23 @@
           "priceConfidence": "ESTIMATED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20080137001_EA",
-          "price": 4.99,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:35:00.114Z",
-          "source": "catalog_wholesaleclub_3724_latest",
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-blueberries-11oz",
+          "price": 7.49,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T20:21:09.790Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         },
         {
-          "retailer": "mvr",
-          "storeId": "weston",
-          "retailerProductId": "fruits-blueberries-case-12-x-170-g",
-          "price": 29.99,
-          "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:44.586Z",
-          "source": "catalog_mvr_weston_latest",
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21033164_EA",
+          "price": 13.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:24:05.589Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2557,14 +2557,14 @@
         "wholesaleclub": {
           "retailer": "wholesaleclub",
           "storeId": "3724",
-          "retailerProductId": "20069661001_EA",
-          "name": "Strawberries 2LB",
+          "retailerProductId": "20303155_EA",
+          "name": "Slush, Strawberry",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:35:02.396Z"
+          "updatedAt": "2026-08-18T20:24:06.954Z"
         },
         "mvr": {
           "retailer": "mvr",
@@ -2577,7 +2577,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:45.510Z"
+          "updatedAt": "2026-08-18T20:21:10.365Z"
         }
       },
       "prices": [
@@ -2601,23 +2601,23 @@
           "priceConfidence": "ESTIMATED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20069661001_EA",
-          "price": 8.99,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:35:01.841Z",
-          "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "fruits-strawberries-1-lb-2",
           "price": 5.49,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:45.507Z",
+          "checkedAt": "2026-08-18T20:21:10.361Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20303155_EA",
+          "price": 21.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:24:06.575Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -3306,7 +3306,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:47.846Z"
+          "updatedAt": "2026-08-18T20:21:12.865Z"
         }
       },
       "prices": [
@@ -3325,7 +3325,7 @@
           "retailerProductId": "alasko-iqf-sliced-banana-1kg",
           "price": 4.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:47.842Z",
+          "checkedAt": "2026-08-18T20:21:12.861Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -3427,20 +3427,20 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:35:17.915Z"
+          "updatedAt": "2026-08-18T20:24:13.388Z"
         },
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "alasko-iqf-cultivated-blueberries-5x1-kg",
-          "name": "ALASKO - IQF CULTIVATED BLUEBERRIES 1KG",
-          "upc": "0069505800978",
+          "retailerProductId": "alasko-wild-blueberries-1kg",
+          "name": "ALASKO - WILD BLUEBERRIES 1KG",
+          "upc": "0000000088202",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:48.962Z"
+          "updatedAt": "2026-08-18T20:21:14.198Z"
         }
       },
       "prices": [
@@ -3463,23 +3463,23 @@
           "priceConfidence": "LIVE_VERIFIED"
         },
         {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-wild-blueberries-1kg",
+          "price": 8.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T20:21:14.193Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
           "retailer": "wholesaleclub",
           "storeId": "3724",
           "retailerProductId": "21033164_EA",
           "price": 13.99,
           "availability": "unknown",
-          "checkedAt": "2026-08-18T00:35:16.923Z",
+          "checkedAt": "2026-08-18T20:24:11.927Z",
           "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
-          "retailer": "mvr",
-          "storeId": "weston",
-          "retailerProductId": "alasko-iqf-cultivated-blueberries-5x1-kg",
-          "price": 9.79,
-          "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:48.958Z",
-          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -3620,23 +3620,23 @@
           "priceConfidence": "LIVE_VERIFIED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "21033168_EA",
-          "price": 13.99,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:35:18.270Z",
-          "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "alasko-strawberries-1kg",
           "price": 3.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:50.281Z",
+          "checkedAt": "2026-08-18T20:21:15.632Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21033168_EA",
+          "price": 13.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:24:13.864Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -3738,7 +3738,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T00:35:21.268Z"
+          "updatedAt": "2026-08-18T20:24:18.210Z"
         },
         "mvr": {
           "retailer": "mvr",
@@ -3751,7 +3751,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:51.282Z"
+          "updatedAt": "2026-08-18T20:21:16.879Z"
         }
       },
       "prices": [
@@ -3774,23 +3774,23 @@
           "priceConfidence": "LIVE_VERIFIED"
         },
         {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20611796_EA",
-          "price": 1.99,
-          "availability": "unknown",
-          "checkedAt": "2026-08-18T00:35:20.001Z",
-          "source": "catalog_wholesaleclub_3724_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "alasko-chopped-spinach-2-lb",
           "price": 2.99,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:51.279Z",
+          "checkedAt": "2026-08-18T20:21:16.877Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20611796_EA",
+          "price": 1.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T20:24:16.170Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -3848,7 +3848,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T19:50:46.614Z"
+          "updatedAt": "2026-08-18T20:21:11.681Z"
         }
       },
       "prices": [
@@ -3858,7 +3858,7 @@
           "retailerProductId": "alasko-sliced-apples-1kg",
           "price": 7.29,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:50:46.610Z",
+          "checkedAt": "2026-08-18T20:21:11.678Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }

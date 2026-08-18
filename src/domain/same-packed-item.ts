@@ -69,7 +69,52 @@ export const DEFAULT_PRODUCE_JUNK = [
   "candle",
   "lotion",
   "shampoo",
+  "kefir",
+  "bagel",
+  "slush",
+  "dessert",
+  "milk",
+  "roasted",
+  "shortcake",
+  "meringue",
+  "waffle",
+  "fillo",
+  "phyllo",
+  "tart",
+  "bites",
+  "artichoke",
+  "cheese",
+  "pepper",
+  "spear",
+  "spears",
+  "cored",
+  "oil",
+  "loaf",
+  "mochi",
+  "turnover",
 ] as const;
+
+/** Fresh produce shapes that must not win a frozen-bag staple. */
+const FROZEN_FRESH_SHAPES = [
+  "pint",
+  "clamshell",
+  "bunch",
+  "bunched",
+  "kefir",
+] as const;
+
+/** Fresh berry clamshells are pints / 1–2 lb, not 1.5–2 kg frozen bags. */
+const FRESH_PACK_MAX_KG: Record<string, number> = {
+  blueberries: 1.2,
+  strawberries: 1.2,
+};
+
+/** PCX pints are often "1 ea" with no grams. */
+const PINT_KG: Record<string, number> = {
+  blueberries: 0.312,
+  strawberries: 0.34,
+  tomatoes_grape: 0.283,
+};
 
 const HOUSE_TOKENS = new Set([
   "no",
@@ -135,6 +180,8 @@ const SIZE_OR_FORM = new Set([
   "cultivated",
   "wild",
   "large",
+  "jumbo",
+  "golden",
   "medium",
   "small",
   "extra",
@@ -174,6 +221,18 @@ export type CategoryBOffer = {
   raw?: unknown;
   taxonomyText?: string;
 };
+
+export function isWarehouseCasePack(name: string): boolean {
+  return /\bcase\b/i.test(name) || /\b\d+\s*x\s*\d+/i.test(name);
+}
+
+/** Prefer a single bag / each over a 5x1kg warehouse case when both exist. */
+export function preferNonCasePacks<T extends { name: string }>(
+  offers: T[],
+): T[] {
+  const singles = offers.filter((o) => !isWarehouseCasePack(o.name));
+  return singles.length ? singles : offers;
+}
 
 export function usesCategoryBIdentity(item: StapleFilterItem): boolean {
   return isCategoryBStaple(item);
@@ -248,6 +307,11 @@ export function isProcessedImpostor(
     if (stapleAllowsToken(item, token)) continue;
     if (nameMatchesFilterToken(hay, token)) return token;
   }
+  if (item.category === "frozen") {
+    for (const token of FROZEN_FRESH_SHAPES) {
+      if (nameMatchesFilterToken(hay, token)) return token;
+    }
+  }
   return null;
 }
 
@@ -273,9 +337,16 @@ export function offerMassKg(
   offer: CategoryBOffer,
 ): number | null {
   const each = typicalEachGramsOf(item);
-  // Printed g/lb wins. Inferred parsedMassKg on a 1-ea SKU is not a real pack.
-  const printedKg = packMassKg(offer.name, offer.packageSize, null);
+  const blob = `${offer.packageSize ?? ""} ${offer.name ?? ""}`;
+  // Produce "2 L" clamshells are volume, not 2 kg of fruit.
+  const produceBlob =
+    item.category === "produce"
+      ? blob.replace(/\b\d+(?:\.\d+)?\s*l\b/gi, " ")
+      : blob;
+  const printedKg = packMassKg(produceBlob, null, null);
   if (printedKg != null && printedKg > 0) return printedKg;
+  const pintKg = PINT_KG[item.id];
+  if (pintKg && /\bpints?\b/i.test(blob)) return pintKg;
   if (each && isEachSoldOffer(offer)) return each / 1000;
   const cores = coreProduceTokens(item);
   const nameTok = tokens(offer.name);
@@ -286,7 +357,30 @@ export function offerMassKg(
   ) {
     return each / 1000;
   }
+  if (item.category === "produce") {
+    return packMassKg(produceBlob, null, null);
+  }
   return packMassKg(offer.name, offer.packageSize, offer.parsedMassKg);
+}
+
+function freshPackTooLarge(
+  item: StapleFilterItem,
+  offer: CategoryBOffer,
+): boolean {
+  const cap = FRESH_PACK_MAX_KG[item.id];
+  if (cap == null) return false;
+  const kg = offerMassKg(item, offer);
+  return kg != null && kg > cap;
+}
+
+function leftoverHasJunk(
+  item: StapleFilterItem,
+  leftover: string[],
+): boolean {
+  return leftover.some((w) => {
+    if (stapleAllowsToken(item, w)) return false;
+    return DEFAULT_PRODUCE_JUNK.some((j) => nameMatchesFilterToken(w, j));
+  });
 }
 
 function slugTokens(sourceUrl?: string): string[] {
@@ -331,6 +425,7 @@ function looksLikeProduceTitle(
     item,
     tokens(`${offer.brand ?? ""} ${offer.name}`),
   );
+  if (leftoverHasJunk(item, leftover)) return false;
   if (leftover.length === 0) return true;
   // Grower / origin / "premium" — processed junk is already rejected.
   return leftover.length <= 2;
@@ -346,7 +441,9 @@ function hasProducePackageShape(
   const cores = coreProduceTokens(item);
   const nameTok = tokens(offer.name);
   if (!nameTok.some((t) => tokenIn(t, cores))) return false;
-  return leftoverTokens(item, nameTok).length <= 2;
+  const leftover = leftoverTokens(item, nameTok);
+  if (leftoverHasJunk(item, leftover)) return false;
+  return leftover.length <= 2;
 }
 
 function looksLikeProduceSlug(
@@ -359,7 +456,9 @@ function looksLikeProduceSlug(
     return false;
   }
   if (item.category === "frozen") return true;
-  return leftoverTokens(item, slug).length <= 1;
+  const leftover = leftoverTokens(item, slug);
+  if (leftoverHasJunk(item, leftover)) return false;
+  return leftover.length <= 1;
 }
 
 /**
@@ -386,12 +485,15 @@ export function isActualCategoryBOffer(
   offer: CategoryBOffer,
   extraHay?: string,
 ): boolean {
+  if (isProcessedImpostor(item, offer)) return false;
+  if (freshPackTooLarge(item, offer)) return false;
   const viewed = warehouseProduceView(offer);
   const filterFail = extraHay
     ? offerFailsStapleFilters(item, viewed.name, viewed.brand, extraHay)
     : offerFailsStapleOfferFilters(item, viewed);
   if (filterFail) return false;
   if (isProcessedImpostor(item, viewed)) return false;
+  if (freshPackTooLarge(item, viewed)) return false;
   if (item.category === "frozen") return true;
   if (!hasProducePackageShape(item, viewed)) return false;
   if (!looksLikeProduceSlug(item, viewed)) return false;
@@ -403,12 +505,13 @@ export function withTypicalEachMass<T extends CategoryBOffer>(
   offer: T,
 ): T {
   const kg = offerMassKg(item, offer);
-  if (kg == null) return offer;
-  if (
-    offer.parsedMassKg != null &&
-    offer.parsedMassKg > 0 &&
-    !isEachSoldOffer(offer)
-  ) {
+  if (kg == null) {
+    if (offer.parsedMassKg !== 0) {
+      return { ...offer, parsedMassKg: 0 };
+    }
+    return offer;
+  }
+  if (offer.parsedMassKg != null && Math.abs(offer.parsedMassKg - kg) < 1e-6) {
     return offer;
   }
   return { ...offer, parsedMassKg: kg };

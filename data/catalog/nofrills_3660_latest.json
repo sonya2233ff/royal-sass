@@ -1,22 +1,24 @@
 {
   "storeId": "3660",
-  "checkedAt": "2026-08-17T19:38:46.584Z",
+  "checkedAt": "2026-08-18T20:35:22.796Z",
   "items": [
     {
       "id": "simply_egg_whites",
-      "label": "Egg Whites (cheapest carton)",
+      "label": "Naturegg Simply Egg Whites 1kg",
       "status": "ok",
       "offer": {
         "productId": "20820130001_EA",
         "name": "Burnbrae Farms Naturegg Free Run Egg Whites",
-        "price": 5.5,
+        "brand": "Burnbrae Farms",
         "packageSize": "500 g, $1.10/100g $0.50/1lb",
         "parsedMassKg": 0.5,
+        "price": 5.5,
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:30.338Z",
-        "sourceUrl": "https://www.nofrills.ca/en/naturegg-free-run-egg-whites/p/20820130001_EA"
+        "checkedAt": "2026-08-18T19:11:07.097Z",
+        "sourceUrl": "https://www.nofrills.ca/en/naturegg-free-run-egg-whites/p/20820130001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20820130001_EA/en/1/6565100526_en_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF SKU price refresh"
     },
     {
       "id": "oat_beverage_original",
@@ -24,17 +26,19 @@
       "status": "ok",
       "offer": {
         "productId": "21037796_EA",
-        "name": "Gluten-Free Original Oat Milk Alternative",
-        "price": 4,
+        "name": "Earth's Own Gluten-Free Original Oat Milk Alternative",
+        "brand": "Earth's Own",
         "packageSize": "1.75 l, $0.23/100ml",
         "parsedMassKg": 1.75,
-        "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:30.879Z",
-        "sourceUrl": "https://www.nofrills.ca/en/gluten-free-original-oat-milk-alternative/p/21037796_EA",
+        "price": 4,
         "wasPrice": 4.29,
-        "onSale": true
+        "onSale": true,
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T19:11:10.767Z",
+        "sourceUrl": "https://www.nofrills.ca/en/gluten-free-original-oat-milk-alternative/p/21037796_EA",
+        "image": "https://digital.loblaws.ca/PCX/21037796_EA/en/1/21037796_en_1_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF SKU price refresh"
     },
     {
       "id": "pineapple_whole",
@@ -43,13 +47,17 @@
       "offer": {
         "productId": "20160992001_EA",
         "name": "Pineapple",
-        "price": 4.99,
         "packageSize": "1 ea, $4.99/1ea",
+        "parsedMassKg": 1,
+        "price": 4.99,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:31.365Z",
-        "sourceUrl": "https://www.nofrills.ca/en/pineapple/p/20160992001_EA"
+        "checkedAt": "2026-08-18T20:24:04.446Z",
+        "sourceUrl": "https://www.nofrills.ca/en/pineapple/p/20160992001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20160992001_EA/en/1/20160992001_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "bananas_kg",
@@ -58,13 +66,17 @@
       "offer": {
         "productId": "20175355001_KG",
         "name": "Bananas, Bunch",
-        "price": 1.75,
         "packageSize": "$1.52/1kg $0.69/1lb",
+        "price": 1.75,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:31.867Z",
-        "sourceUrl": "https://www.nofrills.ca/en/bananas-bunch/p/20175355001_KG"
+        "checkedAt": "2026-08-18T20:24:05.394Z",
+        "sourceUrl": "https://www.nofrills.ca/en/bananas-bunch/p/20175355001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20175355001_KG/en/1/20175355001_enfr_front_v1_1200.png",
+        "parsedMassKg": 0
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "cucumber_english",
@@ -73,15 +85,33 @@
       "offer": {
         "productId": "20070132001_EA",
         "name": "English Cucumber",
-        "price": 0.99,
         "packageSize": "1 ea, $0.99/1ea",
-        "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:32.323Z",
-        "sourceUrl": "https://www.nofrills.ca/en/english-cucumber/p/20070132001_EA",
+        "parsedMassKg": 0.35,
+        "price": 0.99,
         "wasPrice": 1.29,
-        "onSale": true
+        "onSale": true,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T20:24:09.990Z",
+        "sourceUrl": "https://www.nofrills.ca/en/english-cucumber/p/20070132001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20070132001_EA/en/1/20070132001_en_front_v1_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21046471001_EA",
+          "name": "No Name Naturally Imperfect English Cucumber 3lb Bag",
+          "brand": "No Name",
+          "packageSize": "1.36 kg, $0.37/100g",
+          "parsedMassKg": 1.3607771100000001,
+          "price": 5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:09.990Z",
+          "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-english-cucumber-3lb-bag/p/21046471001_EA",
+          "image": "https://digital.loblaws.ca/PCX/21046471001_EA/en/1/21046471001_en_front_v1_1200.png"
+        }
+      ]
     },
     {
       "id": "homo_milk_2l",
@@ -89,15 +119,17 @@
       "status": "ok",
       "offer": {
         "productId": "20094120002_EA",
-        "name": "Kosher Homogenized Milk",
-        "price": 5.67,
+        "name": "Mehadrin Kosher Homogenized Milk",
+        "brand": "Mehadrin",
         "packageSize": "2 l, $0.28/100ml",
         "parsedMassKg": 2,
+        "price": 5.67,
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:32.846Z",
-        "sourceUrl": "https://www.nofrills.ca/en/kosher-homogenized-milk/p/20094120002_EA"
+        "checkedAt": "2026-08-18T19:11:17.454Z",
+        "sourceUrl": "https://www.nofrills.ca/en/kosher-homogenized-milk/p/20094120002_EA",
+        "image": "https://digital.loblaws.ca/PCX/20094120002_EA/en/1/20094120002_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF SKU price refresh"
     },
     {
       "id": "blueberries",
@@ -106,14 +138,55 @@
       "offer": {
         "productId": "20141763001_EA",
         "name": "2 LB Blueberries",
-        "price": 7.99,
         "packageSize": "907 g, $0.88/100g",
-        "parsedMassKg": 0.907,
+        "parsedMassKg": 0.90718474,
+        "price": 7.99,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:33.287Z",
-        "sourceUrl": "https://www.nofrills.ca/en/2-lb-blueberries/p/20141763001_EA"
+        "checkedAt": "2026-08-18T20:24:16.547Z",
+        "sourceUrl": "https://www.nofrills.ca/en/2-lb-blueberries/p/20141763001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20141763001_EA/en/1/20141763001_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21179969001_EA",
+          "name": "PC Organics Blueberries",
+          "brand": "PC Organics",
+          "packageSize": "277 g, $2.71/100g",
+          "parsedMassKg": 0.277,
+          "price": 7.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:16.547Z",
+          "sourceUrl": "https://www.nofrills.ca/en/blueberries/p/21179969001_EA",
+          "image": "https://digital.loblaws.ca/PCX/21179969001_EA/en/1/21179969001_en_front_1200.png"
+        },
+        {
+          "productId": "20080137001_EA",
+          "name": "Blueberries 1 pint",
+          "packageSize": "1 ea, $1.17/100g",
+          "parsedMassKg": 0.312,
+          "price": 3.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:16.547Z",
+          "sourceUrl": "https://www.nofrills.ca/en/blueberries-1-pint/p/20080137001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20080137001_EA/en/1/20080137001_enfr_front_1200.png"
+        },
+        {
+          "productId": "20505821_EA",
+          "name": "Blueberries Wild 12oz",
+          "packageSize": "340 g, $1.47/100g",
+          "parsedMassKg": 0.34019427750000003,
+          "price": 4.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:16.547Z",
+          "sourceUrl": "https://www.nofrills.ca/en/blueberries-wild-12oz/p/20505821_EA",
+          "image": "https://digital.loblaws.ca/PCX/20505821_EA/en/1/20505821_en_front_1200.png"
+        }
+      ]
     },
     {
       "id": "almond_original",
@@ -121,17 +194,19 @@
       "status": "ok",
       "offer": {
         "productId": "20299698001_EA",
-        "name": "Original Almond Milk Alternative",
-        "price": 4,
+        "name": "Earth's Own Original Almond Milk Alternative",
+        "brand": "Earth's Own",
         "packageSize": "1.89 l, $0.21/100ml",
         "parsedMassKg": 1.89,
-        "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:33.931Z",
-        "sourceUrl": "https://www.nofrills.ca/en/original-almond-milk-alternative/p/20299698001_EA",
+        "price": 4,
         "wasPrice": 4.49,
-        "onSale": true
+        "onSale": true,
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T19:11:12.766Z",
+        "sourceUrl": "https://www.nofrills.ca/en/original-almond-milk-alternative/p/20299698001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20299698001_EA/en/1/20299698001_en_1_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF SKU price refresh"
     },
     {
       "id": "milk_2pct_2l",
@@ -139,15 +214,17 @@
       "status": "ok",
       "offer": {
         "productId": "20094120003_EA",
-        "name": "Kosher 2% Milk",
-        "price": 5.67,
+        "name": "Mehadrin Kosher 2% Milk",
+        "brand": "Mehadrin",
         "packageSize": "2 l, $0.28/100ml",
         "parsedMassKg": 2,
+        "price": 5.67,
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:34.389Z",
-        "sourceUrl": "https://www.nofrills.ca/en/kosher-2-milk/p/20094120003_EA"
+        "checkedAt": "2026-08-18T19:11:16.819Z",
+        "sourceUrl": "https://www.nofrills.ca/en/kosher-2-milk/p/20094120003_EA",
+        "image": "https://digital.loblaws.ca/PCX/20094120003_EA/en/1/20094120003_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF SKU price refresh"
     },
     {
       "id": "tomatoes_grape",
@@ -155,15 +232,46 @@
       "status": "ok",
       "offer": {
         "productId": "20840038001_EA",
-        "name": "Grape Tomato",
-        "price": 7.99,
+        "name": "Farmer's Market Grape Tomato",
+        "brand": "Farmer's Market",
         "packageSize": "907 g, $0.88/100g",
         "parsedMassKg": 0.907,
+        "price": 7.99,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:34.848Z",
-        "sourceUrl": "https://www.nofrills.ca/en/grape-tomato/p/20840038001_EA"
+        "checkedAt": "2026-08-18T20:23:44.008Z",
+        "sourceUrl": "https://www.nofrills.ca/en/grape-tomato/p/20840038001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20840038001_EA/en/1/20840038001_en_front_v1_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21367888001_EA",
+          "name": "Farmer's Market Grape Tomatoes",
+          "brand": "Farmer's Market",
+          "packageSize": "283 g, $1.06/100g",
+          "parsedMassKg": 0.283,
+          "price": 2.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:23:44.008Z",
+          "sourceUrl": "https://www.nofrills.ca/en/grape-tomatoes/p/21367888001_EA",
+          "image": "https://digital.loblaws.ca/PCX/21367888001_EA/en/1/21367888001_en_front_1200.png"
+        },
+        {
+          "productId": "20799491001_EA",
+          "name": "PC Organics Grape Tomatoes",
+          "brand": "PC Organics",
+          "packageSize": "255 g, $1.96/100g",
+          "parsedMassKg": 0.255,
+          "price": 4.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:23:44.008Z",
+          "sourceUrl": "https://www.nofrills.ca/en/grape-tomatoes/p/20799491001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20799491001_EA/en/1/20799491001_en_front_1200.png"
+        }
+      ]
     },
     {
       "id": "eggs_30ct",
@@ -202,16 +310,46 @@
       "label": "Lemons (bag ~2lb)",
       "status": "ok",
       "offer": {
-        "productId": "20795315001_EA",
-        "name": "Lemons, 2 lb Bag",
-        "price": 4.99,
-        "packageSize": "907 g, $0.55/100g",
-        "parsedMassKg": 0.907,
+        "productId": "21124487001_EA",
+        "name": "No Name Naturally Imperfect Lemons 3lb Bag",
+        "brand": "No Name",
+        "packageSize": "1.36 kg, $0.44/100g",
+        "parsedMassKg": 1.3607771100000001,
+        "price": 6,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:36.329Z",
-        "sourceUrl": "https://www.nofrills.ca/en/lemons-2-lb-bag/p/20795315001_EA"
+        "checkedAt": "2026-08-18T20:23:47.241Z",
+        "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-lemons-3lb-bag/p/21124487001_EA",
+        "image": "https://digital.loblaws.ca/PCX/21124487001_EA/en/1/21124487001_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20795315001_EA",
+          "name": "Farmer's Market Lemons, 2 lb Bag",
+          "brand": "Farmer's Market",
+          "packageSize": "907 g, $0.55/100g",
+          "parsedMassKg": 0.90718474,
+          "price": 4.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:23:46.601Z",
+          "sourceUrl": "https://www.nofrills.ca/en/lemons-2-lb-bag/p/20795315001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20795315001_EA/en/1/20795315001_en_front_v1_1200.png"
+        },
+        {
+          "productId": "20028593001_EA",
+          "name": "Lemon",
+          "packageSize": "1 ea, $0.99/1ea",
+          "parsedMassKg": 0.12,
+          "price": 0.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:23:46.601Z",
+          "sourceUrl": "https://www.nofrills.ca/en/lemon/p/20028593001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20028593001_EA/en/1/20028593001_en_front_1200.png"
+        }
+      ]
     },
     {
       "id": "pear_bosc_kg",
@@ -222,12 +360,27 @@
         "name": "Rocha Pears",
         "price": 0.92,
         "packageSize": "$6.59/1kg $2.99/1lb",
-        "parsedMassKg": 1,
+        "parsedMassKg": 0,
         "confidence": "exact",
         "checkedAt": "2026-08-16T00:49:36.823Z",
         "sourceUrl": "https://www.nofrills.ca/en/rocha-pears/p/20129549001_KG"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21111368001_EA",
+          "name": "Farmer's Market Bartlett Pear, 2 L",
+          "brand": "Farmer's Market",
+          "packageSize": "1 ea, $7.00/1ea",
+          "parsedMassKg": 0,
+          "price": 7,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:23:50.652Z",
+          "sourceUrl": "https://www.nofrills.ca/en/bartlett-pear-2-l/p/21111368001_EA",
+          "image": "https://digital.loblaws.ca/PCX/21111368001_EA/en/1/21111368001_enfr_front_v1_1200.png"
+        }
+      ]
     },
     {
       "id": "folgers_coffee",
@@ -253,33 +406,38 @@
       "status": "ok",
       "offer": {
         "productId": "21681207001_EA",
-        "name": "Naturally Imperfect Long Eggplants",
-        "price": 3.5,
+        "name": "No Name Naturally Imperfect Long Eggplants",
+        "brand": "No Name",
         "packageSize": "907 g, $0.39/100g",
         "parsedMassKg": 0.907,
+        "price": 3.5,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:37.859Z",
-        "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-long-eggplants/p/21681207001_EA"
+        "checkedAt": "2026-08-18T20:23:52.999Z",
+        "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-long-eggplants/p/21681207001_EA",
+        "image": "https://digital.loblaws.ca/PCX/21681207001_EA/en/1/21681207001_en_front_v1_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "tomato_gh_red_kg",
       "label": "Greenhouse Red Tomato (by kg)",
       "status": "ok",
       "offer": {
-        "productId": "21219102_EA",
-        "name": "Accents Diced Tomatoes with Green Pepper",
-        "price": 2.5,
-        "packageSize": "540 ml, $0.46/100ml",
-        "parsedMassKg": 0.54,
+        "productId": "20026703001_KG",
+        "name": "Tomato On The Vine Red (1 Bunch)",
+        "packageSize": "$5.49/1kg $2.49/1lb",
+        "price": 3.9,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:38.421Z",
-        "sourceUrl": "https://www.nofrills.ca/en/accents-diced-tomatoes-with-green-pepper/p/21219102_EA",
-        "wasPrice": 2.99,
-        "onSale": true
+        "checkedAt": "2026-08-18T20:23:54.931Z",
+        "sourceUrl": "https://www.nofrills.ca/en/tomato-on-the-vine-red-1-bunch/p/20026703001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20026703001_KG/en/1/20026703001_en_front_1200.png",
+        "parsedMassKg": 0
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "rogers_wheat_bran",
@@ -300,66 +458,105 @@
     {
       "id": "red_peppers_kg",
       "label": "Red Bell Pepper (by kg)",
-      "status": "ok",
-      "offer": {
-        "productId": "20007535001_KG",
-        "name": "Red Peppers    ",
-        "price": 2.11,
-        "packageSize": "$8.80/1kg $3.99/1lb",
-        "parsedMassKg": 1,
-        "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:39.474Z",
-        "sourceUrl": "https://www.nofrills.ca/en/red-peppers/p/20007535001_KG"
-      },
-      "notes": "Live NF refresh (TTL 72h)"
+      "status": "no_match",
+      "offer": null,
+      "notes": "Rematched: no suitable SKU after Category B filters",
+      "alternates": []
     },
     {
       "id": "sweet_potatoes_kg",
       "label": "Sweet Potato (by kg)",
       "status": "ok",
       "offer": {
-        "productId": "20169868001_KG",
-        "name": "Caribbean Sweet Potatoes",
-        "price": 1.36,
+        "productId": "20127708001_KG",
+        "name": "Sweet Potato",
         "packageSize": "$4.39/1kg $1.99/1lb",
-        "parsedMassKg": 1,
+        "price": 2.77,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:39.916Z",
-        "sourceUrl": "https://www.nofrills.ca/en/caribbean-sweet-potatoes/p/20169868001_KG"
+        "checkedAt": "2026-08-18T20:24:01.218Z",
+        "sourceUrl": "https://www.nofrills.ca/en/sweet-potato/p/20127708001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20127708001_KG/en/1/20127708001_en_front_1200.png",
+        "parsedMassKg": 0
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "garlic_1kg",
       "label": "Garlic 1kg",
       "status": "ok",
       "offer": {
-        "productId": "20135581001_KG",
-        "name": "Colossal Fresh Garlic",
-        "price": 1.32,
-        "packageSize": "$13.21/1kg $5.99/1lb",
+        "productId": "21238843001_EA",
+        "name": "Garlic Bulbs",
+        "packageSize": "1 kg, $0.60/100g",
         "parsedMassKg": 1,
+        "price": 5.99,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:40.388Z",
-        "sourceUrl": "https://www.nofrills.ca/en/colossal-fresh-garlic/p/20135581001_KG"
+        "checkedAt": "2026-08-18T20:24:13.457Z",
+        "sourceUrl": "https://www.nofrills.ca/en/garlic-bulbs/p/21238843001_EA",
+        "image": "https://digital.loblaws.ca/PCX/21238843001_EA/en/1/21238843001_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "strawberries",
       "label": "Strawberries",
       "status": "ok",
       "offer": {
-        "productId": "20069661001_EA",
-        "name": "Strawberries 2LB",
-        "price": 8.99,
-        "packageSize": "907 g, $0.99/100g",
-        "parsedMassKg": 0.907,
+        "productId": "20503017001_EA",
+        "name": "Strawberry Quart",
+        "packageSize": "517 g, $0.97/100g",
+        "parsedMassKg": 0.517,
+        "price": 4.99,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:40.882Z",
-        "sourceUrl": "https://www.nofrills.ca/en/strawberries-2lb/p/20069661001_EA"
+        "checkedAt": "2026-08-18T20:24:18.409Z",
+        "sourceUrl": "https://www.nofrills.ca/en/strawberry-quart/p/20503017001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20503017001_EA/en/1/20503017001_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20069661001_EA",
+          "name": "Strawberries 2LB",
+          "packageSize": "907 g, $0.99/100g",
+          "parsedMassKg": 0.90718474,
+          "price": 8.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:18.409Z",
+          "sourceUrl": "https://www.nofrills.ca/en/strawberries-2lb/p/20069661001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20069661001_EA/en/1/20069661001_enfr_front_1200.png"
+        },
+        {
+          "productId": "20049778001_EA",
+          "name": "Strawberries 1LB",
+          "packageSize": "454 g, $1.10/100g",
+          "parsedMassKg": 0.454,
+          "price": 4.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:18.409Z",
+          "sourceUrl": "https://www.nofrills.ca/en/strawberries-1lb/p/20049778001_EA",
+          "image": "https://digital.loblaws.ca/PCX/20049778001_EA/en/1/20049778001_enfr_front_v1_1200.png"
+        },
+        {
+          "productId": "21591906001_EA",
+          "name": "No Name Naturally Imperfect Strawberries",
+          "brand": "No Name",
+          "packageSize": "340 g, $1.18/100g",
+          "parsedMassKg": 0.34,
+          "price": 4,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:18.409Z",
+          "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-strawberries/p/21591906001_EA",
+          "image": "https://digital.loblaws.ca/PCX/21591906001_EA/en/1/21591906001_en_front_v1_1200.png"
+        }
+      ]
     },
     {
       "id": "butter_454g",
@@ -368,14 +565,16 @@
       "offer": {
         "productId": "20559466_EA",
         "name": "Gay Lea Unsalted Butter",
-        "price": 8.29,
+        "brand": "Gay Lea",
         "packageSize": "454 g, $1.83/100g",
         "parsedMassKg": 0.454,
+        "price": 8.29,
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:41.345Z",
-        "sourceUrl": "https://www.nofrills.ca/en/unsalted-butter/p/20559466_EA"
+        "checkedAt": "2026-08-18T19:11:17.974Z",
+        "sourceUrl": "https://www.nofrills.ca/en/unsalted-butter/p/20559466_EA",
+        "image": "https://digital.loblaws.ca/PCX/20559466_EA/en/1/6601390561_en_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF SKU price refresh"
     },
     {
       "id": "large_eggs_dozen",
@@ -488,81 +687,232 @@
         "parsedMassKg": 2.63,
         "price": 8.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-17T19:38:46.583Z",
-        "sourceUrl": "https://www.nofrills.ca/en/pure-premium-orange-juice-pulp-free/p/20119756001_EA"
+        "checkedAt": "2026-08-18T19:11:18.558Z",
+        "sourceUrl": "https://www.nofrills.ca/en/pure-premium-orange-juice-pulp-free/p/20119756001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20119756001_EA/en/1/20119756001_enfr_front_v1_1200.png"
       },
-      "notes": "Live NF SKU 20119756001_EA (Tropicana brand on PCX field)"
+      "notes": "Live NF SKU price refresh"
     },
     {
       "id": "frozen_apple",
-      "label": "Frozen Apple",
+      "label": "Frozen Apple Slices",
       "status": "no_match",
       "offer": null,
-      "notes": "no relevant hits after filters"
+      "notes": "no relevant hits after filters",
+      "alternates": []
     },
     {
       "id": "frozen_banana",
-      "label": "Frozen Banana",
+      "label": "Frozen Sliced Banana",
       "status": "ok",
       "offer": {
         "productId": "21289947_EA",
-        "name": "Banana - Sliced",
-        "price": 5.5,
+        "name": "President's Choice Banana - Sliced",
+        "brand": "President's Choice",
         "packageSize": "600 g, $0.92/100g",
         "parsedMassKg": 0.6,
+        "price": 5.5,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:44.559Z",
-        "sourceUrl": "https://www.nofrills.ca/en/banana-sliced/p/21289947_EA"
+        "checkedAt": "2026-08-18T20:24:24.114Z",
+        "sourceUrl": "https://www.nofrills.ca/en/banana-sliced/p/21289947_EA",
+        "image": "https://digital.loblaws.ca/PCX/21289947_EA/en/1/21289947_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "frozen_blueberry",
-      "label": "Frozen Blueberry",
+      "label": "Frozen Blueberries",
       "status": "ok",
       "offer": {
-        "productId": "21377841_EA",
-        "name": "Blueberries Cultivated",
-        "price": 5.5,
-        "packageSize": "600 g, $0.92/100g",
-        "parsedMassKg": 0.6,
+        "productId": "21033164_EA",
+        "name": "No Name Blueberries",
+        "brand": "No Name",
+        "packageSize": "2 kg, $0.76/100g",
+        "parsedMassKg": 2,
+        "price": 15.29,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:45.191Z",
-        "sourceUrl": "https://www.nofrills.ca/en/blueberries-cultivated/p/21377841_EA"
+        "checkedAt": "2026-08-18T20:24:27.640Z",
+        "sourceUrl": "https://www.nofrills.ca/en/blueberries/p/21033164_EA",
+        "image": "https://digital.loblaws.ca/PCX/21033164_EA/en/1/21033164_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21377841_EA",
+          "name": "President's Choice Blueberries Cultivated",
+          "brand": "President's Choice",
+          "packageSize": "600 g, $0.92/100g",
+          "parsedMassKg": 0.6,
+          "price": 5.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:27.640Z",
+          "sourceUrl": "https://www.nofrills.ca/en/blueberries-cultivated/p/21377841_EA",
+          "image": "https://digital.loblaws.ca/PCX/21377841_EA/en/1/21377841_en_front_1200.png"
+        },
+        {
+          "productId": "21545097_EA",
+          "name": "No Name Naturally Imperfect Frozen Cultivated Blueberries",
+          "brand": "No Name",
+          "packageSize": "300 g, $1.00/100g",
+          "parsedMassKg": 0.3,
+          "price": 3,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:27.640Z",
+          "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-frozen-cultivated-blueberries/p/21545097_EA",
+          "image": "https://digital.loblaws.ca/PCX/21545097_EA/en/1/21545097_en_front_v1_1200.png"
+        },
+        {
+          "productId": "21397049_EA",
+          "name": "PC Organics Cultivated Highbush Blueberries Club Size",
+          "brand": "PC Organics",
+          "packageSize": "1.5 kg, $1.23/100g",
+          "parsedMassKg": 1.5,
+          "price": 18.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:27.640Z",
+          "sourceUrl": "https://www.nofrills.ca/en/cultivated-highbush-blueberries-club-size/p/21397049_EA",
+          "image": "https://digital.loblaws.ca/PCX/21397049_EA/en/1/21397049_en_front_1200.png"
+        },
+        {
+          "productId": "21381753_EA",
+          "name": "President's Choice Canadian Wild Blueberries",
+          "brand": "President's Choice",
+          "packageSize": "400 g, $1.38/100g",
+          "parsedMassKg": 0.4,
+          "price": 5.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:27.640Z",
+          "sourceUrl": "https://www.nofrills.ca/en/canadian-wild-blueberries/p/21381753_EA",
+          "image": "https://digital.loblaws.ca/PCX/21381753_EA/en/1/21381753_en_front_1200.png"
+        },
+        {
+          "productId": "21530573_EA",
+          "name": "Pelmen Blueberry Perogies",
+          "brand": "Pelmen",
+          "packageSize": "500 g, $1.00/100g",
+          "parsedMassKg": 0.5,
+          "price": 4.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:27.640Z",
+          "sourceUrl": "https://www.nofrills.ca/en/blueberry-perogies/p/21530573_EA",
+          "image": "https://digital.loblaws.ca/PCX/21530573_EA/en/1/21530573_en_front_1200.png"
+        }
+      ]
     },
     {
       "id": "frozen_strawberry",
-      "label": "Frozen Strawberry",
+      "label": "Frozen Sliced Strawberries",
       "status": "ok",
       "offer": {
-        "productId": "20312227_EA",
-        "name": "Sliced Strawberries",
-        "price": 5.5,
-        "packageSize": "600 g, $0.92/100g",
-        "parsedMassKg": 0.6,
+        "productId": "21545106_EA",
+        "name": "No Name Frozen Sliced Strawberries",
+        "brand": "No Name",
+        "packageSize": "400 g, $0.75/100g",
+        "parsedMassKg": 0.4,
+        "price": 3,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:45.678Z",
-        "sourceUrl": "https://www.nofrills.ca/en/sliced-strawberries/p/20312227_EA"
+        "checkedAt": "2026-08-18T20:24:31.079Z",
+        "sourceUrl": "https://www.nofrills.ca/en/frozen-sliced-strawberries/p/21545106_EA",
+        "image": "https://digital.loblaws.ca/PCX/21545106_EA/en/1/21545106_en_front_v1_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "20321043_EA",
+          "name": "President's Choice Frozen Strawberries, Whole",
+          "brand": "President's Choice",
+          "packageSize": "600 g, $0.92/100g",
+          "parsedMassKg": 0.6,
+          "price": 5.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:31.079Z",
+          "sourceUrl": "https://www.nofrills.ca/en/frozen-strawberries-whole/p/20321043_EA",
+          "image": "https://digital.loblaws.ca/PCX/20321043_EA/en/1/6038399385_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
+        },
+        {
+          "productId": "21074972_EA",
+          "name": "PC Organics Organics Frozen Whole Strawberries Club Size",
+          "brand": "PC Organics",
+          "packageSize": "1.5 kg, $1.23/100g",
+          "parsedMassKg": 1.5,
+          "price": 18.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:31.079Z",
+          "sourceUrl": "https://www.nofrills.ca/en/organics-frozen-whole-strawberries-club-size/p/21074972_EA",
+          "image": "https://digital.loblaws.ca/PCX/21074972_EA/en/1/21074972_en_front_v1_1200.png"
+        },
+        {
+          "productId": "21033168_EA",
+          "name": "No Name Whole Strawberries",
+          "brand": "No Name",
+          "packageSize": "2 kg, $0.76/100g",
+          "parsedMassKg": 2,
+          "price": 15.29,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:31.079Z",
+          "sourceUrl": "https://www.nofrills.ca/en/whole-strawberries/p/21033168_EA",
+          "image": "https://digital.loblaws.ca/PCX/21033168_EA/en/1/21033168_en_front_1200.png"
+        }
+      ]
     },
     {
       "id": "frozen_spinach",
-      "label": "Frozen Spinach",
+      "label": "Frozen Chopped Spinach",
       "status": "ok",
       "offer": {
         "productId": "20611796_EA",
-        "name": "Chopped Spinach",
-        "price": 2,
+        "name": "No Name Chopped Spinach",
+        "brand": "No Name",
         "packageSize": "300 g, $0.67/100g",
         "parsedMassKg": 0.3,
+        "price": 2,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:46.150Z",
-        "sourceUrl": "https://www.nofrills.ca/en/chopped-spinach/p/20611796_EA"
+        "checkedAt": "2026-08-18T20:24:34.286Z",
+        "sourceUrl": "https://www.nofrills.ca/en/chopped-spinach/p/20611796_EA",
+        "image": "https://digital.loblaws.ca/PCX/20611796_EA/en/1/20611796_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21096445_EA",
+          "name": "President's Choice Chopped Spinach",
+          "brand": "President's Choice",
+          "packageSize": "500 g, $0.90/100g",
+          "parsedMassKg": 0.5,
+          "price": 4.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:34.286Z",
+          "sourceUrl": "https://www.nofrills.ca/en/chopped-spinach/p/21096445_EA",
+          "image": "https://digital.loblaws.ca/PCX/21096445_EA/en/1/21096445_en_front_1200.png"
+        },
+        {
+          "productId": "21029561_EA",
+          "name": "Pardes Farms Kosher Chopped Spinach",
+          "brand": "Pardes Farms",
+          "packageSize": "680 g, $1.69/100g",
+          "parsedMassKg": 0.68,
+          "price": 11.5,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:24:34.286Z",
+          "sourceUrl": "https://www.nofrills.ca/en/kosher-chopped-spinach/p/21029561_EA",
+          "image": "https://digital.loblaws.ca/PCX/21029561_EA/en/1/21029561_en_front_v1_1200.png"
+        }
+      ]
     },
     {
       "id": "acai",
@@ -578,23 +928,25 @@
       "offer": {
         "productId": "21099138001_EA",
         "name": "Fresh Kiwi Fruit",
-        "price": 4.99,
         "packageSize": "600 g, $0.83/100g",
         "parsedMassKg": 0.6,
+        "price": 4.99,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:46.778Z",
+        "checkedAt": "2026-08-18T20:24:07.161Z",
         "sourceUrl": "https://www.nofrills.ca/en/fresh-kiwi-fruit/p/21099138001_EA",
-        "wasPrice": 5.99,
-        "onSale": true
+        "image": "https://digital.loblaws.ca/PCX/21099138001_EA/en/1/21099138001_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "realemon_440ml",
       "label": "ReaLemon Juice 440ml",
       "status": "no_match",
       "offer": null,
-      "notes": "no relevant hits after filters"
+      "notes": "no relevant hits after filters",
+      "alternates": []
     },
     {
       "id": "jello_vanilla_instant",
@@ -603,14 +955,16 @@
       "offer": {
         "productId": "20307001001_EA",
         "name": "Jell-O Vanilla Instant Pudding Mix",
-        "price": 1.99,
+        "brand": "Jell-O",
         "packageSize": "102 g, $1.95/100g",
         "parsedMassKg": 0.102,
+        "price": 1.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:47.194Z",
-        "sourceUrl": "https://www.nofrills.ca/en/vanilla-instant-pudding-mix/p/20307001001_EA"
+        "checkedAt": "2026-08-18T19:11:19.141Z",
+        "sourceUrl": "https://www.nofrills.ca/en/vanilla-instant-pudding-mix/p/20307001001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20307001001_EA/en/1/20307001001_en_front_v2_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF SKU price refresh"
     },
     {
       "id": "ziploc_sandwich",
@@ -619,14 +973,16 @@
       "offer": {
         "productId": "21196100_EA",
         "name": "Ziploc Sandwich Bags, with Grip 'n Seal Technology",
-        "price": 12.99,
+        "brand": "Ziploc",
         "packageSize": "270 ea, $0.05/1ea",
+        "price": 12.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:54:21.307Z",
-        "sourceUrl": "https://www.nofrills.ca/en/sandwich-bags-with-grip-n-seal-technology/p/21196100_EA"
+        "checkedAt": "2026-08-18T19:11:19.705Z",
+        "sourceUrl": "https://www.nofrills.ca/en/sandwich-bags-with-grip-n-seal-technology/p/21196100_EA",
+        "image": "https://digital.loblaws.ca/PCX/21196100_EA/en/1/21196100_en_1_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF SKU price refresh"
     }
   ],
-  "updatedAt": "2026-08-17T19:38:46.584Z"
+  "updatedAt": "2026-08-18T20:24:37.423Z"
 }

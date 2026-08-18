@@ -57,7 +57,9 @@ export function packMassKg(
   packageSize?: string | null,
   parsed?: number | null,
 ): number | null {
-  if (parsed != null && Number.isFinite(parsed) && parsed > 0) return parsed;
+  if (parsed != null && Number.isFinite(parsed)) {
+    return parsed > 0 ? parsed : null;
+  }
   const mass = parseMassFromText(`${packageSize ?? ""} ${name ?? ""}`);
   return mass && mass.kg > 0 ? mass.kg : null;
 }

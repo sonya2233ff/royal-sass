@@ -112,7 +112,9 @@
         "juice",
         "concentrate",
         "cleaner",
-        "dish"
+        "dish",
+        "meringue",
+        "oil"
       ],
       "typicalEachGrams": 120,
       "notes": "Produce: bag or single lemon (avg 120 g). Per-each price uses that weight to compare.",
@@ -190,7 +192,12 @@
         "tomato red greenhouse"
       ],
       "mustIncludeAny": [
-        "tomato"
+        "greenhouse",
+        "beefsteak",
+        "hothouse",
+        "hot house",
+        "on the vine",
+        "on-the-vine"
       ],
       "mustNotInclude": [
         "grape",
@@ -255,7 +262,9 @@
         "flake",
         "spice",
         "hummus",
-        "chip"
+        "chip",
+        "roasted",
+        "jar"
       ],
       "image": "/products/red_peppers_kg.jpg",
       "matchMode": "cheapest",
@@ -303,7 +312,11 @@
         "chunk",
         "can",
         "cup",
-        "soda"
+        "soda",
+        "sliced",
+        "spear",
+        "spears",
+        "cored"
       ],
       "typicalEachGrams": 1000,
       "image": "/products/pineapple_whole.jpg",
@@ -434,12 +447,16 @@
         "seedless cucumber"
       ],
       "mustIncludeAny": [
-        "cucumber"
+        "english cucumber",
+        "english cucumbers",
+        "cucumbers english",
+        "seedless cucumber"
       ],
       "mustNotInclude": [
         "pickle",
         "relish",
-        "salad kit"
+        "salad kit",
+        "baby"
       ],
       "typicalEachGrams": 350,
       "image": "/products/cucumber_english.jpg",
@@ -509,7 +526,9 @@
         "jam",
         "syrup",
         "candy",
-        "frozen"
+        "frozen",
+        "sliced",
+        "shortcake"
       ],
       "image": "/products/strawberries.jpg",
       "matchMode": "cheapest",
@@ -897,7 +916,9 @@
         "waffle",
         "kiwi",
         "loaf",
-        "cake"
+        "cake",
+        "pepper",
+        "peppers"
       ],
       "matchMode": "cheapest",
       "category": "frozen",
@@ -1029,6 +1050,8 @@
         "onion",
         "chicken",
         "paneer",
+        "puree",
+        "purée",
         "your fresh market",
         "sold in"
       ],

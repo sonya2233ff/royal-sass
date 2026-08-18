@@ -7,18 +7,16 @@
     "name": "Walmart Supercentre #5831",
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
-  "checkedAt": "2026-08-18T04:54:29.801Z",
+  "checkedAt": "2026-08-18T20:35:22.780Z",
   "itemCount": 30,
   "matched": 22,
   "items": [
     {
       "id": "simply_egg_whites",
-      "label": "Egg Whites (cheapest carton)",
+      "label": "Naturegg Simply Egg Whites 1kg",
       "status": "ok",
       "queriesTried": [
-        "liquid egg whites",
-        "egg whites carton",
-        "simply egg whites 1kg"
+        "6000196635381"
       ],
       "offer": {
         "productId": "6000196635381",
@@ -28,8 +26,9 @@
         "parsedMassKg": 1,
         "price": 9.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-17T19:01:23.138Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000196635381"
+        "checkedAt": "2026-08-18T19:07:08.240Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Burnbrae-Farms-Naturegg-Simply-Egg-Whites-1KG/6000196635381",
+        "image": "https://i5.walmartimages.ca/asr/27f45e00-d8ab-4e43-8d58-7f154396ec4c.cf834bc8397cfaf849bd3aeab61f9014.jpeg"
       },
       "alternates": [
         {
@@ -43,8 +42,8 @@
           "sourceUrl": "https://www.walmart.ca/en/ip/Naturegg-Simply-Egg-Whites-Free-Run-Burnbrae-Farms/6000195508423?classType=REGULAR&athbdg=L1600"
         }
       ],
-      "notes": "Cheapest liquid egg whites $/kg, prefer 1kg carton",
-      "image": "/products/simply_egg_whites.png"
+      "notes": "Exact branded carton — Burnbrae Naturegg Simply Egg Whites 1kg (WM 6000196635381). Do not substitute Free Run / cheaper analogue.",
+      "image": "https://i5.walmartimages.ca/asr/27f45e00-d8ab-4e43-8d58-7f154396ec4c.cf834bc8397cfaf849bd3aeab61f9014.jpeg"
     },
     {
       "id": "tomatoes_grape",
@@ -61,7 +60,7 @@
         "price": 3.97,
         "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T04:54:26.541Z",
+        "checkedAt": "2026-08-18T20:21:04.294Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/tomatoes-organic-grape/6000196099050?classType=REGULAR&athbdg=L1200",
         "image": "https://i5.walmartimages.ca/images/Enlarge/655/925/33383655925.jpg"
       },
@@ -121,45 +120,40 @@
       "label": "Lemons (bag ~2lb)",
       "status": "ok",
       "queriesTried": [
-        "033383119060",
         "lemons 2 lb",
-        "your fresh market lemons"
+        "lemons bag",
+        "lemons",
+        "lb lemons 2",
+        "bag lemons",
+        "lemon"
       ],
       "offer": {
-        "productId": "6000199360630",
+        "productId": "6000199360629",
         "name": "Lemons, Your Fresh Market, 2 lb",
         "brand": "Your Fresh Market",
         "packageSize": "907 g",
         "parsedMassKg": 0.90718474,
         "price": 4.97,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:52:53.066Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000199360630"
+        "checkedAt": "2026-08-18T20:21:10.289Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/lemons-your-fresh-market/6000199360630?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/208/926/6000202208926.jpg"
       },
       "alternates": [
         {
-          "productId": "6000195516573",
-          "name": "Your Fresh Market Organic Lemons, 2 lb Bag",
-          "brand": "Your Fresh Market",
-          "packageSize": "907 g",
-          "parsedMassKg": 0.90718474,
-          "price": 6.44,
-          "availability": "out_of_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:07.668Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-organic-lemons/6000195516574?classType=REGULAR"
-        },
-        {
           "productId": "6000191268545",
           "name": "Lemon, Sold in singles",
+          "parsedMassKg": 0.12,
           "price": 0.87,
           "availability": "unknown",
           "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:10.945Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/lemon/6000191268551?classType=REGULAR&athbdg=L1200"
+          "checkedAt": "2026-08-18T20:21:15.892Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/lemon/6000191268551?classType=REGULAR&athbdg=L1200",
+          "image": "https://i5.walmartimages.ca/images/Enlarge/094/504/6000200094504.jpg"
         }
       ],
-      "notes": "Receipt UPC 033383119060 @ $4.97",
+      "notes": "Produce: bag or single lemon (avg 120 g). Per-each price uses that weight to compare.",
       "image": "/products/lemons_2lb.jpg"
     },
     {
@@ -167,9 +161,11 @@
       "label": "Bosc Pear (by kg)",
       "status": "ok",
       "queriesTried": [
+        "pear",
         "bosc pear",
+        "pears",
         "pear bosc",
-        "fresh bosc pears"
+        "Bosc Pear by kg"
       ],
       "offer": {
         "productId": "6000195494142",
@@ -183,7 +179,7 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/6000195494142"
       },
       "alternates": [],
-      "notes": "Receipt weighed @ $6.55/kg",
+      "notes": "Restored HEAD + live candidates for rematch",
       "image": "/products/pear_bosc_kg.jpg"
     },
     {
@@ -266,31 +262,22 @@
       "status": "ok",
       "queriesTried": [
         "eggplant",
-        "aubergine fresh"
+        "aubergine",
+        "Eggplant by kg"
       ],
       "offer": {
-        "productId": "6000191270103",
+        "productId": "6000191270102",
         "name": "Eggplant, Sold in singles, 0.39 - 0.51 KG",
-        "brand": "",
         "packageSize": "510 g",
         "parsedMassKg": 0.51,
         "price": 2.17,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:52:55.538Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000191270103"
+        "checkedAt": "2026-08-18T20:21:30.694Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/eggplant/6000191270103?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/094/510/6000200094510.jpg"
       },
       "alternates": [
-        {
-          "productId": "6000191270102",
-          "name": "Eggplant, Sold in singles, 0.39 - 0.51 KG",
-          "packageSize": "510 g",
-          "parsedMassKg": 0.51,
-          "price": 2.17,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:26.466Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/eggplant/6000191270103?classType=REGULAR&athbdg=L1200"
-        },
         {
           "productId": "6000196795052",
           "name": "Chinese Eggplant, Sold in singles, 0.32 - 0.35 KG",
@@ -312,18 +299,6 @@
           "confidence": "exact",
           "checkedAt": "2026-08-14T01:31:26.466Z",
           "sourceUrl": "https://www.walmart.ca/en/ip/eggplant-indian/6000197106999?classType=REGULAR&athbdg=L1600"
-        },
-        {
-          "productId": "4TCRMUP3847B",
-          "name": "Mechaalany Pickeled Stuffed Eggplants1L",
-          "brand": "MECHAALANY",
-          "packageSize": "1 kg",
-          "parsedMassKg": 1,
-          "price": 13.99,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:26.466Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Mechaalany-Pickeled-Stuffed-Eggplants1L/4TCRMUP3847B?classType=REGULAR"
         }
       ],
       "image": "/products/eggplant_kg.jpg",
@@ -336,63 +311,39 @@
       "queriesTried": [
         "greenhouse tomato",
         "red tomatoes on vine",
-        "tomato red greenhouse"
+        "tomato red greenhouse",
+        "tomato greenhouse",
+        "vine red tomatoes on",
+        "greenhouse tomato red"
       ],
       "offer": {
-        "productId": "6000190008475",
-        "name": "Tomato, Beefsteak, Sold in singles, 0.23 - 0.39 KG",
-        "brand": "",
-        "packageSize": "390 g",
-        "parsedMassKg": 0.39,
-        "price": 1.63,
+        "productId": "6000198459493",
+        "name": "Your Fresh Market Tomatoes on the Vine, Sold in packs, 0.57 - 0.80 KG",
+        "brand": "Your Fresh Market",
+        "packageSize": "800 g",
+        "parsedMassKg": 0.8,
+        "price": 2.9,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:52:56.451Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000190008475"
+        "checkedAt": "2026-08-18T20:21:37.974Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-tomatoes-on-the-vine/6000198459494?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/752/052/628915752052.jpg"
       },
       "alternates": [
         {
-          "productId": "6000198459493",
-          "name": "Your Fresh Market Tomatoes on the Vine, Sold in packs, 0.57 - 0.80 KG",
-          "brand": "Your Fresh Market",
-          "packageSize": "800 g",
-          "parsedMassKg": 0.8,
-          "price": 2.9,
-          "availability": "unknown",
+          "productId": "6000190008474",
+          "name": "Tomato, Beefsteak, Sold in singles, 0.23 - 0.39 KG",
+          "packageSize": "390 g",
+          "parsedMassKg": 0.39,
+          "price": 1.63,
           "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:31.364Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-tomatoes-on-the-vine/6000198459494?classType=REGULAR&athbdg=L1600"
-        },
-        {
-          "productId": "6000200355386",
-          "name": "SUNSET Sprinkles Teeny Tiny Tomatoes, Sprinkles Teeny Tiny Tomatoes",
-          "price": 1.97,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:31.364Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/sunset-sprinkles-teeny-tiny-tomatoes/6000200355387?classType=REGULAR"
-        },
-        {
-          "productId": "6000197466074",
-          "name": "Tomato, 3lt Basket",
-          "price": 4.97,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:31.364Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/tomato/6000197466075?classType=REGULAR"
-        },
-        {
-          "productId": "6000197741866",
-          "name": "SUNSET Wild Wonders Tomatoes, SUNSET Wild Wonders Tomatoes, 1.5lb",
-          "packageSize": "680 g",
-          "parsedMassKg": 0.6803885550000001,
-          "price": 7.44,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:31.364Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/sunset-wild-wonders-tomatoes/6000197741867?classType=REGULAR"
+          "checkedAt": "2026-08-18T19:08:11.546Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/tomato-beefsteak/6000190008475",
+          "image": "https://i5.walmartimages.ca/images/Enlarge/_47/999/47999.jpg"
         }
       ],
-      "image": "/products/tomato_gh_red_kg.jpg"
+      "image": "/products/tomato_gh_red_kg.jpg",
+      "notes": "Produce: cheapest matching offer (brand irrelevant)"
     },
     {
       "id": "rogers_wheat_bran",
@@ -444,9 +395,7 @@
       "label": "Oat Beverage Original 1.75L",
       "status": "ok",
       "queriesTried": [
-        "earth's own oat original 1.75L",
-        "oat beverage original",
-        "oat milk original"
+        "2ADJVX8MAQ1Q"
       ],
       "offer": {
         "productId": "2ADJVX8MAQ1Q",
@@ -456,8 +405,9 @@
         "parsedMassKg": 1.75,
         "price": 4.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:52:58.918Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/2ADJVX8MAQ1Q"
+        "checkedAt": "2026-08-18T19:08:19.289Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Earth-s-Own-Gluten-Free-Zero-Sugar-Original-Oat-Milk-Alternative-1-75L/2ADJVX8MAQ1Q",
+        "image": "https://i5.walmartimages.ca/asr/46d23fab-9180-4386-9659-8eef83ee72b9.425e4a0efd5ecd16af087f33dcf0f3b4.jpeg"
       },
       "alternates": [
         {
@@ -507,7 +457,8 @@
           "sourceUrl": "https://www.walmart.ca/en/ip/Silk-Oat-Milk-Alternative-Original-Dairy-Free-Shelf-Stable/6000203562996?classType=REGULAR"
         }
       ],
-      "image": "/products/oat_beverage_original.png"
+      "image": "https://i5.walmartimages.ca/asr/46d23fab-9180-4386-9659-8eef83ee72b9.425e4a0efd5ecd16af087f33dcf0f3b4.jpeg",
+      "notes": "Earth's Own oat — pair with Earth's Own almond"
     },
     {
       "id": "red_peppers_kg",
@@ -515,7 +466,11 @@
       "status": "ok",
       "queriesTried": [
         "red bell pepper",
-        "sunset red bell pepper"
+        "red pepper",
+        "pepper red bell",
+        "pepper red",
+        "bell pepper",
+        "Red Bell Pepper by kg"
       ],
       "offer": {
         "productId": "6000195506337",
@@ -525,84 +480,47 @@
         "price": 1.28,
         "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-14T01:31:49.526Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/sunset-red-bell-pepper/6000191286439?classType=REGULAR&athbdg=L1600"
+        "checkedAt": "2026-08-18T20:21:49.335Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/sunset-red-bell-pepper/6000191286439?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/_46/886/46886.jpg"
       },
-      "alternates": [
-        {
-          "productId": "205PY5WMRNFT",
-          "name": "Xiao Hua 3Pcs artificial bell peppers, fake vegetables, colored bell peppers for decoration, decorated vegetables, red, green, yellow bell peppers",
-          "brand": "Xiao Hua",
-          "price": 12.99,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:53.387Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Xiao-Hua-3Pcs-artificial-bell-peppers-fake-vegetables-colored-bell-peppers-for-decoration-decorated-vegetables-red-green-yellow-bell-peppers/205PY5WMRNFT?classType=REGULAR"
-        },
-        {
-          "productId": "2W05T9G0OT49",
-          "name": "Mictong artificial bell pepper, simulated bell pepper, fake vegetable bell pepper, simulated pepper model, suitable for window decoration shooting props, red, 2 pieces",
-          "brand": "Mictong",
-          "price": 14.99,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:53.387Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Mictong-artificial-bell-pepper-simulated-fake-vegetable-pepper-model-suitable-window-decoration-shooting-props-red-2-pieces/2W05T9G0OT49?classType=REGULAR"
-        },
-        {
-          "productId": "3KUYA9KNTFNA",
-          "name": "HJADGG Flavours of Italy by 4 Herbs, 4 Vegetables Genovese Basil, Thyme, Rosemary, Oregano, Italian Eggplant, Roma Tomato, Bell Pepper, Red Onion",
-          "brand": "HJADGG",
-          "price": 25.99,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:53.387Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/HJADGG-Flavours-of-Italy-by-4-Herbs-4-Vegetables-Genovese-Basil-Thyme-Rosemary-Oregano-Italian-Eggplant-Roma-Tomato-Bell-Pepper-Red-Onion/3KUYA9KNTFNA?classType=REGULAR"
-        },
-        {
-          "productId": "106BU965BNSP",
-          "name": "Lawry's Professional Chef's Choice Seasoned Pepper – Bold Black Pepper Bite & Sweet Red Bell Pepper Flecks, 10.3 oz. Bottle – Bulk 6/Case",
-          "brand": "Lawry's",
-          "packageSize": "292 g",
-          "parsedMassKg": 0.29200008818750006,
-          "price": 276.09,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:53.387Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Lawry-s-Professional-Chef-s-Choice-Seasoned-Pepper-Bold-Black-Pepper-Bite-Sweet-Red-Bell-Pepper-Flecks-10-3-oz-Bottle-Bulk-6-Case/106BU965BNSP?classType=REGULAR"
-        }
-      ],
-      "image": "/products/red_peppers_kg.jpg"
+      "alternates": [],
+      "image": "/products/red_peppers_kg.jpg",
+      "notes": "Produce: cheapest matching unit (any brand)"
     },
     {
       "id": "sweet_potatoes_kg",
       "label": "Sweet Potato (by kg)",
       "status": "ok",
       "queriesTried": [
-        "sweet potato sold in singles",
-        "sweet potato fresh"
+        "sweet potato",
+        "sweet potatoes",
+        "potato sweet",
+        "potatoes sweet",
+        "Sweet Potato by kg"
       ],
       "offer": {
-        "productId": "6000190025746",
+        "productId": "6000190025745",
         "name": "Sweet Potato, Sold in singles, 0.28 - 0.57 KG",
-        "brand": "",
         "packageSize": "570 g",
         "parsedMassKg": 0.57,
         "price": 1.8,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:53:04.154Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000190025746"
+        "checkedAt": "2026-08-18T20:21:56.754Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/sweet-potato/6000190025746?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/898/559/6000206898559.jpg"
       },
       "alternates": [],
-      "image": "/products/sweet_potatoes_kg.jpg"
+      "image": "/products/sweet_potatoes_kg.jpg",
+      "notes": "Produce: cheapest by unit price"
     },
     {
       "id": "pineapple_whole",
       "label": "Whole Pineapple",
       "status": "ok",
       "queriesTried": [
-        "fresh pineapple whole",
-        "golden pineapple"
+        "pineapple"
       ],
       "offer": {
         "productId": "6000191289580",
@@ -615,42 +533,16 @@
         "checkedAt": "2026-08-17T18:53:05.043Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/6000191289580"
       },
-      "alternates": [
-        {
-          "productId": "6000205289889",
-          "name": "Your Fresh Market Pineapple Spears, 590 g",
-          "brand": "Your Fresh Market",
-          "packageSize": "590 g",
-          "parsedMassKg": 0.59,
-          "price": 5.97,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:06.689Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-pineapple-spears/6000205289890?classType=REGULAR"
-        },
-        {
-          "productId": "6000205287201",
-          "name": "Your Fresh Market Cored Pineapple, 500 g",
-          "brand": "Your Fresh Market",
-          "packageSize": "500 g",
-          "parsedMassKg": 0.5,
-          "price": 5.47,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:06.689Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-cored-pineapple/6000205287202?classType=REGULAR"
-        }
-      ],
-      "image": "/products/pineapple_whole.jpg"
+      "alternates": [],
+      "image": "/products/pineapple_whole.jpg",
+      "notes": "Restored HEAD + live candidates for rematch"
     },
     {
       "id": "almond_original",
       "label": "Earth's Own Almond Original",
       "status": "ok",
       "queriesTried": [
-        "earth's own almond original",
-        "earth's own almond milk 1.89L",
-        "earths own original almond"
+        "10184853"
       ],
       "offer": {
         "productId": "10184853",
@@ -660,8 +552,9 @@
         "parsedMassKg": 1.89,
         "price": 4.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:53:06.498Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/10184853"
+        "checkedAt": "2026-08-18T19:09:15.308Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Earth-s-Own-Original-Almond-Milk-Alternative-1-89L/10184853",
+        "image": "https://i5.walmartimages.ca/asr/4c1bbc24-4b05-41d9-bcc3-abfdafe4c9d6.d986995a54f1c716d0c17845a5c0353e.jpeg"
       },
       "alternates": [
         {
@@ -675,8 +568,8 @@
           "sourceUrl": "https://www.walmart.ca/en/ip/Silk-Almond-Milk-Alternative-Original-Dairy-Free/10207134?classType=REGULAR&athbdg=L1200"
         }
       ],
-      "notes": "Locked to Earths Own — same brand as oat",
-      "image": "/products/almond_earths_own.jpg"
+      "notes": "Same brand as oat — Earth's Own (not Silk)",
+      "image": "https://i5.walmartimages.ca/asr/4c1bbc24-4b05-41d9-bcc3-abfdafe4c9d6.d986995a54f1c716d0c17845a5c0353e.jpeg"
     },
     {
       "id": "bananas_kg",
@@ -684,7 +577,8 @@
       "status": "ok",
       "queriesTried": [
         "bananas",
-        "fresh bananas"
+        "banana",
+        "Bananas cheapest by kg"
       ],
       "offer": {
         "productId": "875805",
@@ -692,9 +586,11 @@
         "packageSize": "230 g",
         "parsedMassKg": 0.23,
         "price": 0.35,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:22:07.731Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/banana/875806?classType=REGULAR&athbdg=L1200"
+        "checkedAt": "2026-08-18T20:22:08.210Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/banana/875806?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/580/6_r/875806_R.jpg"
       },
       "alternates": [
         {
@@ -707,18 +603,6 @@
           "confidence": "exact",
           "checkedAt": "2026-08-14T01:32:17.825Z",
           "sourceUrl": "https://www.walmart.ca/en/ip/fairtrade-organic-banana/6000191272016?classType=REGULAR&athbdg=L1600"
-        },
-        {
-          "productId": "2TRKGC1MKMHC",
-          "name": "Can Banana Leaves, Can Banana Leaves 1Lb",
-          "brand": "Brars",
-          "packageSize": "454 g",
-          "parsedMassKg": 0.45359237,
-          "price": 3.42,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:17.825Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Can-Banana-Leaves/2TRKGC1MKMHC?classType=REGULAR"
         }
       ],
       "image": "/products/bananas_kg.jpg",
@@ -730,7 +614,11 @@
       "status": "ok",
       "queriesTried": [
         "english cucumber",
-        "seedless cucumber"
+        "seedless cucumber",
+        "cucumber english",
+        "cucumber seedless",
+        "english cucumbers",
+        "cucumbers english"
       ],
       "offer": {
         "productId": "6000188920591",
@@ -738,54 +626,14 @@
         "price": 0.94,
         "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-14T01:32:25.130Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/cucumber-english/6000188920596?classType=REGULAR&athbdg=L1200"
+        "checkedAt": "2026-08-18T20:22:27.699Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/cucumber-english/6000188920596?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/331/999/6000209331999.jpg",
+        "parsedMassKg": 0
       },
-      "alternates": [
-        {
-          "productId": "6000191284671",
-          "name": "Mini Cucumbers, 1 lb",
-          "packageSize": "454 g",
-          "parsedMassKg": 0.45359237,
-          "price": 1.94,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:25.130Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/mini-cucumbers/6000191284672?classType=REGULAR&athbdg=L1600"
-        },
-        {
-          "productId": "6000196429804",
-          "name": "Sunset Grown Organic Mini Cucumbers, 1 lb",
-          "packageSize": "454 g",
-          "parsedMassKg": 0.45359237,
-          "price": 4.47,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:25.130Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/sunset-grown-organic-mini-cucumbers/6000196429805?classType=REGULAR&athbdg=L1600"
-        },
-        {
-          "productId": "0UWQUPEHA54G",
-          "name": "150 BOSTON PICKLING CUCUMBER Heirloom Cucumis Sativus Fruit Vegetable Seeds",
-          "brand": "Seedville USA",
-          "price": 15.75,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:25.130Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/150-BOSTON-PICKLING-CUCUMBER-Heirloom-Cucumis-Sativus-Fruit-Vegetable-Seeds/0UWQUPEHA54G?classType=REGULAR"
-        },
-        {
-          "productId": "6Y842D84S1L0",
-          "name": "Sweet Success Hybrid Burpless Cucumber Seeds - Non-GMO - 10 Seeds",
-          "brand": "Hometown Seeds",
-          "price": 25.23,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:25.130Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Sweet-Success-Hybrid-Burpless-Cucumber-Seeds-Non-GMO-10-Seeds/6Y842D84S1L0?classType=REGULAR"
-        }
-      ],
-      "image": "/products/cucumber_english.jpg"
+      "alternates": [],
+      "image": "/products/cucumber_english.jpg",
+      "notes": "Produce: cheapest matching offer (brand irrelevant)"
     },
     {
       "id": "garlic_1kg",
@@ -793,8 +641,11 @@
       "status": "ok",
       "queriesTried": [
         "garlic 1kg",
-        "fresh garlic bag",
-        "garlic bulb"
+        "garlic bag",
+        "garlic bulb",
+        "1kg garlic",
+        "bag garlic",
+        "bulb garlic"
       ],
       "offer": {
         "productId": "6000196795580",
@@ -804,41 +655,21 @@
         "price": 5.97,
         "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-14T01:32:29.585Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/garlic/6000196795581?classType=REGULAR&athbdg=L1600"
+        "checkedAt": "2026-08-18T20:22:35.932Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/garlic/6000196795581?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/094/587/6000200094587.jpg"
       },
-      "alternates": [
-        {
-          "productId": "6000196795131",
-          "name": "Garlic, Peeled, 1 lb Bag",
-          "packageSize": "454 g",
-          "parsedMassKg": 0.45359237,
-          "price": 3.97,
-          "availability": "out_of_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:29.585Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/garlic-peeled/6000196795132?classType=REGULAR&athbdg=L1600"
-        },
-        {
-          "productId": "2V06XVZA87GM",
-          "name": "Yoshi Black Garlic Bulb | Aged, Adds Unique Richness, Sweet & Subtle Garlic Flavour",
-          "brand": "Yoshi",
-          "price": 14.99,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:31.847Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Yoshi-Black-Garlic-Bulb-Aged-Adds-Unique-Richness-Sweet-Subtle-Garlic-Flavour/2V06XVZA87GM?classType=REGULAR"
-        }
-      ],
-      "image": "/products/garlic_1kg.jpg"
+      "alternates": [],
+      "image": "/products/garlic_1kg.jpg",
+      "notes": "Produce: cheapest matching offer (brand irrelevant)"
     },
     {
       "id": "blueberries",
       "label": "Blueberries",
       "status": "ok",
       "queriesTried": [
-        "blueberries fresh",
-        "blueberry pint"
+        "blueberries",
+        "blueberry"
       ],
       "offer": {
         "productId": "6000204089919",
@@ -848,8 +679,9 @@
         "price": 3.44,
         "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-14T01:32:34.370Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/blueberries/6000204089920?classType=REGULAR&athbdg=L1200"
+        "checkedAt": "2026-08-18T20:22:40.669Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/blueberries/6000204089920?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/653/137/6000204653137.jpg"
       },
       "alternates": [
         {
@@ -860,138 +692,60 @@
           "price": 5.44,
           "availability": "unknown",
           "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:34.370Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/fresh-organic-blueberries/6000197209332?classType=REGULAR"
-        },
-        {
-          "productId": "10316477",
-          "name": "EGGO Blueberry Flavour Waffles, 560g (16 waffles), 560g, 16 waffles",
-          "brand": "Eggo",
-          "packageSize": "560 g",
-          "parsedMassKg": 0.56,
-          "price": 6.97,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:39.745Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/EGGO-Blueberry-Flavour-Waffles-560g-16-waffles/10316477?classType=REGULAR&athbdg=L1600"
-        },
-        {
-          "productId": "6000201391241",
-          "name": "Your Fresh Market Blueberry Pie, 1 kg",
-          "brand": "Your Fresh Market",
-          "packageSize": "1 kg",
-          "parsedMassKg": 1,
-          "price": 7.96,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:39.745Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-blueberry-pie-1-kg/6000201391242?classType=REGULAR&athbdg=L1102"
-        },
-        {
-          "productId": "10294053",
-          "name": "Mott’s Fruitsations Unsweetened Blueberry Delight Apple Sauce",
-          "brand": "Mott's Fruitsations",
-          "price": 2.47,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:39.745Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Mott-s-Fruitsations-Unsweetened-Blueberry-Delight-Apple-Sauce/10294053?classType=REGULAR&athbdg=L1300"
+          "checkedAt": "2026-08-18T20:22:40.669Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/fresh-organic-blueberries/6000197209332?classType=REGULAR",
+          "image": "https://i5.walmartimages.ca/images/Enlarge/658/970/828904658970.jpg"
         }
       ],
-      "image": "/products/blueberries.jpg"
+      "image": "/products/blueberries.jpg",
+      "notes": "Produce: cheapest matching offer (brand irrelevant)"
     },
     {
       "id": "strawberries",
       "label": "Strawberries",
       "status": "ok",
       "queriesTried": [
-        "strawberries fresh",
-        "strawberry clamshell"
+        "strawberries",
+        "strawberry"
       ],
       "offer": {
-        "productId": "6000196024969",
-        "name": "Fresh Organic Strawberries, 1 lb",
+        "productId": "871283",
+        "name": "Strawberries, 1 lb.",
         "packageSize": "454 g",
-        "parsedMassKg": 0.45359237,
-        "price": 5.97,
+        "parsedMassKg": 0.454,
+        "price": 3.84,
         "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-14T01:32:42.205Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/fresh-organic-strawberries/6000196024970?classType=REGULAR"
+        "checkedAt": "2026-08-18T20:22:46.490Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/strawberries/871284?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/005/102/812049005102.jpg"
       },
-      "alternates": [
-        {
-          "productId": "871283",
-          "name": "Strawberries, 1 lb.",
-          "packageSize": "454 g",
-          "parsedMassKg": 0.45359237,
-          "price": 3.84,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:42.205Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/strawberries/871284?classType=REGULAR&athbdg=L1600"
-        },
-        {
-          "productId": "6000205460098",
-          "name": "Green House Local Strawberries, 340g",
-          "packageSize": "340 g",
-          "parsedMassKg": 0.34,
-          "price": 3.84,
-          "availability": "out_of_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:42.205Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/green-house-local-strawberries/6000205460099?classType=REGULAR"
-        },
-        {
-          "productId": "6000200934914",
-          "name": "Chapman's Premium Strawberry Shortcake Ice Cream, 2L",
-          "brand": "Chapman's",
-          "packageSize": "2 kg",
-          "parsedMassKg": 2,
-          "price": 5.97,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:46.416Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Chapman-s-Premium-Strawberry-Shortcake-Ice-Cream/6000200934914?classType=REGULAR&athbdg=L1300"
-        },
-        {
-          "productId": "10066683",
-          "name": "E.D. Smith Strawberry Pie Filling",
-          "brand": "E.D.Smith",
-          "price": 5.97,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:32:46.416Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/E-D-Smith-Strawberry-Pie-Filling/10066683?classType=REGULAR&athbdg=L1600"
-        }
-      ],
-      "image": "/products/strawberries.jpg"
+      "alternates": [],
+      "image": "/products/strawberries.jpg",
+      "notes": "Produce: cheapest matching offer (brand irrelevant)"
     },
     {
       "id": "milk_2pct_2l",
       "label": "Mehadrin 2% Milk 2L",
       "status": "ok",
       "queriesTried": [
-        "mehadrin 2% milk",
-        "mehadrin 2% 2L",
         "6000198384699"
       ],
       "offer": {
         "productId": "6000198384699",
         "name": "Mehadrin 2% 2LT milk",
         "brand": "Mehadrin",
-        "packageSize": "2L",
+        "packageSize": "2 kg",
         "parsedMassKg": 2,
-        "upc": "066181001557",
         "price": 6.47,
-        "availability": "out_of_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:48:59.607Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Mehadrin-2-2LT-milk/6000198384699"
+        "checkedAt": "2026-08-18T19:10:11.899Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Mehadrin-2-2LT-milk/6000198384699",
+        "image": "https://i5.walmartimages.ca/asr/becbd672-036b-4516-9c9c-3386c018be93.fbf92132d0d0c426012fe5d97a39d65e.jpeg"
       },
       "alternates": [],
-      "notes": "Mehadrin via Real-Time Walmart Data (RapidAPI)",
-      "image": "/products/milk_2pct_2l.jpg",
+      "notes": "Mehadrin 2% 2L — WM product_id 6000198384699; NF often titled Kosher 2% Milk",
+      "image": "https://i5.walmartimages.ca/asr/becbd672-036b-4516-9c9c-3386c018be93.fbf92132d0d0c426012fe5d97a39d65e.jpeg",
       "preferredProductId": "6000198384699"
     },
     {
@@ -999,9 +753,7 @@
       "label": "Gay Lea Unsalted Butter 454g",
       "status": "ok",
       "queriesTried": [
-        "6000201029320",
-        "gay lea unsalted butter",
-        "gay lea unsalted butter 454g"
+        "6000201029320"
       ],
       "offer": {
         "productId": "6000201029320",
@@ -1010,8 +762,9 @@
         "price": 7.96,
         "unitPrice": 1.751,
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:55:39.701Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000201029320"
+        "checkedAt": "2026-08-18T19:10:27.858Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Gay-Lea-Unsalted-Butter/6000201029320",
+        "image": "https://i5.walmartimages.ca/asr/a2122e4d-e5c7-4902-9a40-8298592b9f73.7e6e87f5c5642533ae1161770e956e98.jpeg"
       },
       "alternates": [
         {
@@ -1057,7 +810,7 @@
           "sourceUrl": "https://www.walmart.ca/en/ip/Neilson-Unsalted-Butter/10180924?classType=REGULAR&athbdg=L1200"
         }
       ],
-      "image": "/products/butter_454g.jpg",
+      "image": "https://i5.walmartimages.ca/asr/a2122e4d-e5c7-4902-9a40-8298592b9f73.7e6e87f5c5642533ae1161770e956e98.jpeg",
       "notes": "Gay Lea Unsalted Butter 454g — WM product_id 6000201029320"
     },
     {
@@ -1139,10 +892,7 @@
       "label": "Tropicana OJ No Pulp 2.63L",
       "status": "ok",
       "queriesTried": [
-        "205804",
-        "205804",
-        "tropicana orange juice no pulp",
-        "tropicana 100% pure orange juice no pulp 2.63"
+        "205804"
       ],
       "offer": {
         "productId": "205804",
@@ -1150,66 +900,69 @@
         "brand": "Tropicana",
         "price": 10.24,
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:55:40.917Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/205804"
+        "checkedAt": "2026-08-18T19:10:31.561Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Tropicana-100-Pure-Orange-Juice-No-Pulp/205804",
+        "image": "https://i5.walmartimages.ca/asr/86a56b6a-8d88-4779-bf1f-7362a66d4ed4.ee3d4d02ac6a29e56b4db89f4a377075.png"
       },
       "alternates": [],
-      "image": "/products/orange_juice_pulp.jpg",
+      "image": "https://i5.walmartimages.ca/asr/86a56b6a-8d88-4779-bf1f-7362a66d4ed4.ee3d4d02ac6a29e56b4db89f4a377075.png",
       "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L — WM product_id 205804"
     },
     {
       "id": "homo_milk_2l",
       "label": "Mehadrin Homo 3.25% Milk 2L",
-      "image": "/products/mehadrin_homo_3pct.png",
+      "image": "https://i5.walmartimages.ca/asr/13b0d6bd-d72f-436a-9e5f-6cc34925da30.e91d032ac0f8f3d0948fbec0917eefc8.jpeg",
       "queriesTried": [
-        "mehadrin homogenized",
-        "mehadrin 3.25%",
-        "mehadrin homo milk",
         "6000198386424"
       ],
-      "notes": "Mehadrin via Real-Time Walmart Data (RapidAPI)",
+      "notes": "Mehadrin Homogenized 3.25% 2L — WM product_id 6000198386424; NF often titled Kosher Homogenized",
       "status": "ok",
       "offer": {
         "productId": "6000198386424",
         "name": "Mehadrin Homogenized 3,25% 2LT Milk",
         "brand": "Mehadrin",
-        "packageSize": "2L",
+        "packageSize": "2 kg",
         "parsedMassKg": 2,
-        "upc": "066181001540",
         "price": 6.47,
-        "availability": "out_of_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:08.126Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Mehadrin-Homogenized-3-25-2LT-Milk/6000198386424"
+        "checkedAt": "2026-08-18T19:10:20.676Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Mehadrin-Homogenized-3-25-2LT-Milk/6000198386424",
+        "image": "https://i5.walmartimages.ca/asr/13b0d6bd-d72f-436a-9e5f-6cc34925da30.e91d032ac0f8f3d0948fbec0917eefc8.jpeg"
       },
       "alternates": [],
       "preferredProductId": "6000198386424"
     },
     {
       "id": "frozen_apple",
-      "label": "Frozen Apple",
+      "label": "Frozen Apple Slices",
       "queriesTried": [
         "frozen sliced apples",
         "frozen apple slices",
-        "frozen apples"
+        "frozen apples",
+        "apples frozen sliced",
+        "slices frozen apple",
+        "apples frozen"
       ],
       "status": "no_match",
       "offer": null,
       "notes": "Frozen fruit bag, cheapest $/kg any brand. Often not stocked at WM/NF.",
       "rejected": {
-        "productId": "6000197214091",
-        "name": "Apple, Pink Lady, Sold in singles, 0.13 - 0.18 KG",
-        "price": 1,
+        "productId": "7GDAM5BYSGUF",
+        "name": "Krinos Fillo Twisters Apple and Cinnamon, Cook from Frozen, Canadian Made",
+        "price": 8.99,
         "reason": "name filter"
       }
     },
     {
       "id": "frozen_banana",
-      "label": "Frozen Banana",
+      "label": "Frozen Sliced Banana",
       "queriesTried": [
         "frozen banana slices",
         "banana sliced",
-        "frozen bananas"
+        "frozen bananas",
+        "slices frozen banana",
+        "sliced banana",
+        "bananas frozen"
       ],
       "status": "no_match",
       "offer": null,
@@ -1228,23 +981,55 @@
       "queriesTried": [
         "frozen blueberries",
         "frozen cultivated blueberries",
-        "frozen wild blueberries"
+        "frozen wild blueberries",
+        "blueberries frozen",
+        "blueberries frozen cultivated",
+        "blueberries frozen wild"
       ],
       "status": "ok",
       "offer": {
-        "productId": "4NK2M15KFE8I",
-        "name": "Great Value Frozen Wild Blueberries, 400 g",
+        "productId": "6000197072458",
+        "name": "Great Value Cultivated Blueberries, 600 g",
         "brand": "Great Value",
-        "packageSize": "400 g",
-        "parsedMassKg": 0.4,
-        "price": 5.98,
-        "unitPrice": 1.501,
+        "packageSize": "600 g",
+        "parsedMassKg": 0.6,
+        "price": 4.66,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:55:44.293Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/4NK2M15KFE8I"
+        "checkedAt": "2026-08-18T20:23:10.312Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Cultivated-Blueberries/6000197072458?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/asr/37f9ca0c-2ff9-472f-a271-ca21b8ec0d67.0f66655ae55bc486bfd65abd49ddaa9e.jpeg"
       },
       "notes": "Frozen: cheapest blueberry bag, any brand",
-      "image": "/products/frozen_blueberry.jpg"
+      "image": "/products/frozen_blueberry.jpg",
+      "alternates": [
+        {
+          "productId": "6000191272217",
+          "name": "Great Value Frozen Cultivated Blueberries, IQF, Canada A, Value Size, 1.75 kg",
+          "brand": "Great Value",
+          "packageSize": "1.75 kg",
+          "parsedMassKg": 1.75,
+          "price": 14.98,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:23:10.312Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Cultivated-Blueberries-IQF-Canada-A-Value-Size/6000191272217?classType=REGULAR&athbdg=L1200",
+          "image": "https://i5.walmartimages.ca/asr/2a12b9b7-514b-4d06-b51a-f532038ce6c8.a22aaec62342a7c4e4eee005e9180106.jpeg"
+        },
+        {
+          "productId": "4NK2M15KFE8I",
+          "name": "Great Value Frozen Wild Blueberries, 400 g",
+          "brand": "Great Value",
+          "packageSize": "400 g",
+          "parsedMassKg": 0.4,
+          "price": 5.98,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:23:10.312Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Wild-Blueberries/4NK2M15KFE8I?classType=REGULAR&athbdg=L1102",
+          "image": "https://i5.walmartimages.ca/asr/6525d4be-64b9-41e5-bdb7-d74b7a15b31c.5e84bc9820fe74b9d87dada48acb125a.jpeg"
+        }
+      ]
     },
     {
       "id": "frozen_strawberry",
@@ -1252,7 +1037,10 @@
       "queriesTried": [
         "frozen strawberries",
         "frozen sliced strawberries",
-        "frozen whole strawberries"
+        "strawberries frozen",
+        "strawberries frozen sliced",
+        "frozen strawberry",
+        "sliced strawberry"
       ],
       "status": "ok",
       "offer": {
@@ -1262,12 +1050,29 @@
         "packageSize": "600 g",
         "parsedMassKg": 0.6,
         "price": 4.66,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:55:45.093Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000191288178"
+        "checkedAt": "2026-08-18T20:23:18.971Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Sliced-Frozen-Strawberries/6000191288178?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/asr/c1412b59-0857-47af-bb98-c3dbdfd9054b.369855c125b1f6729134f6cfa409fe8e.jpeg"
       },
       "notes": "Frozen: cheapest strawberry bag, any brand",
-      "image": "/products/frozen_strawberry.jpg"
+      "image": "/products/frozen_strawberry.jpg",
+      "alternates": [
+        {
+          "productId": "6000203292012",
+          "name": "Great Value Differently Delicious Sliced Frozen Strawberries, Imperfect Fruits, 1.75 Kg",
+          "brand": "Great Value",
+          "packageSize": "1.75 kg",
+          "parsedMassKg": 1.75,
+          "price": 13.93,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T20:23:18.971Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Differently-Delicious-Sliced-Frozen-Strawberries-Imperfect-Fruits/6000203292012?classType=REGULAR&athbdg=L1102",
+          "image": "https://i5.walmartimages.ca/asr/bab6f63c-be60-4499-93d0-86fc07534550.1cfe948acda21d0aeb18d48cc4531695.jpeg"
+        }
+      ]
     },
     {
       "id": "frozen_spinach",
@@ -1276,7 +1081,9 @@
         "frozen chopped spinach",
         "frozen spinach nuggets",
         "frozen spinach cubes",
-        "chopped spinach"
+        "chopped spinach",
+        "spinach frozen chopped",
+        "nuggets frozen spinach"
       ],
       "status": "ok",
       "offer": {
@@ -1286,12 +1093,15 @@
         "packageSize": "500 g",
         "parsedMassKg": 0.5,
         "price": 3.37,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:55:45.883Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000198574809"
+        "checkedAt": "2026-08-18T20:23:26.852Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Chopped-Spinach-Nuggets/6000198574809?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/asr/0fdcb1ca-91c8-47f8-af4d-5cb71aa134f5.bfe50d880011920d932f1fa8002aa511.jpeg"
       },
       "notes": "Prefer cube/nugget bags; else cheapest chopped spinach, any brand",
-      "image": "/products/frozen_spinach.jpg"
+      "image": "/products/frozen_spinach.jpg",
+      "alternates": []
     },
     {
       "id": "acai",
@@ -1323,57 +1133,58 @@
       "queriesTried": [
         "kiwi",
         "kiwis",
-        "fresh kiwi",
-        "kiwi sold in singles"
+        "kiwi sold in singles",
+        "singles kiwi sold in",
+        "kiwifruit",
+        "Kiwi cheapest by kg"
       ],
       "status": "ok",
       "offer": {
         "productId": "6GYYS29T8E05",
-        "name": "Green Kiwi, 2 lb",
+        "name": "Zespri Green Kiwi, 2 lb",
         "brand": "Zespri",
         "packageSize": "907 g",
         "parsedMassKg": 0.90718474,
         "price": 9.97,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:55:28.837Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6GYYS29T8E05"
+        "checkedAt": "2026-08-18T20:22:15.462Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/green-kiwi/6GYYS29T8E05?classType=REGULAR&athbdg=L1600",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/192/0_1/686201741920_1.jpg"
       },
-      "notes": "Produce: cheapest kiwi by kg (brand irrelevant)"
+      "notes": "Produce: cheapest kiwi by kg (brand irrelevant)",
+      "alternates": []
     },
     {
       "id": "realemon_440ml",
       "label": "ReaLemon Juice 440ml",
-      "image": "/products/realemon_440ml.jpg",
+      "image": "https://i5.walmartimages.ca/asr/e44d0d68-9740-4615-bf80-297b6d8a30c1.eddf1524d1e23db79576c7209f4dff8c.jpeg",
       "queriesTried": [
-        "1BUHM1GPVP5J",
-        "realemon",
-        "realemon juice 440ml",
-        "rea lemon juice 440"
+        "1BUHM1GPVP5J"
       ],
       "status": "ok",
       "offer": {
         "productId": "1BUHM1GPVP5J",
         "name": "Realemon Juice 440ml",
+        "brand": "ReaLemon",
         "packageSize": "440 g",
         "parsedMassKg": 0.44,
         "price": 2.47,
-        "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:26.448Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Realemon-Juice-440ml/1BUHM1GPVP5J",
         "wasPrice": 2.97,
-        "onSale": true
+        "onSale": true,
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T19:10:45.117Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Realemon-Juice-440ml/1BUHM1GPVP5J",
+        "image": "https://i5.walmartimages.ca/asr/e44d0d68-9740-4615-bf80-297b6d8a30c1.eddf1524d1e23db79576c7209f4dff8c.jpeg"
       },
       "notes": "ReaLemon Juice 440ml — WM product_id 1BUHM1GPVP5J"
     },
     {
       "id": "jello_vanilla_instant",
       "label": "Jell-O Vanilla Instant Pudding 102g",
-      "image": "/products/jello_vanilla_instant.jpg",
+      "image": "https://i5.walmartimages.ca/asr/fc2a01e6-cd25-481d-896f-6c8740c96117.4761d3963e8789353fa80a21755ac19a.jpeg",
       "queriesTried": [
-        "10306574",
-        "jell-o vanilla instant pudding",
-        "jello vanilla pudding 102g",
-        "jell-o instant pudding vanilla"
+        "10306574"
       ],
       "status": "ok",
       "offer": {
@@ -1383,30 +1194,29 @@
         "price": 2.07,
         "unitPrice": 2.031,
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:55:42.705Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/10306574"
+        "checkedAt": "2026-08-18T19:10:49.077Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Jell-O-Vanilla-Instant-Pudding-Mix-Box-Caseine-Free/10306574",
+        "image": "https://i5.walmartimages.ca/asr/fc2a01e6-cd25-481d-896f-6c8740c96117.4761d3963e8789353fa80a21755ac19a.jpeg"
       },
       "notes": "Jell-O Vanilla Instant Pudding Mix 102g casein-free — WM product_id 10306574"
     },
     {
       "id": "ziploc_sandwich",
       "label": "Ziploc Sandwich Bags",
-      "image": "/products/ziploc_sandwich.jpg",
+      "image": "https://i5.walmartimages.ca/asr/c3cfd467-9d97-442b-98f8-f5880a4d1fc9.d7f892c4f82fa126d217f24cbe383c29.jpeg",
       "queriesTried": [
-        "6000195369896",
-        "ziploc sandwich bags",
-        "ziploc sandwich bags grip n seal",
-        "ziploc sandwich 180"
+        "6000195369896"
       ],
       "status": "ok",
       "offer": {
-        "productId": "6000195369896",
+        "productId": "6000195369895",
         "name": "Ziploc® Sandwich Bags with Grip 'n Seal Technology",
         "brand": "Ziploc",
         "price": 8,
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:55:43.573Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000195369896"
+        "checkedAt": "2026-08-18T19:10:54.778Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Ziploc-Sandwich-Bags-with-Grip-n-Seal-Technology/6000195369896",
+        "image": "https://i5.walmartimages.ca/asr/c3cfd467-9d97-442b-98f8-f5880a4d1fc9.d7f892c4f82fa126d217f24cbe383c29.jpeg"
       },
       "notes": "Ziploc Sandwich Bags Grip n Seal — WM product_id 6000195369896"
     }
