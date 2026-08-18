@@ -60,8 +60,6 @@ export default function NoFrillsProbePage() {
     <main className="wrap">
       <header>
         <p className="eyebrow">
-          <a href="/">← staples</a>
-          {" · "}
           <a href="/dev/match-inspector">match inspector</a>
         </p>
         <h1>No Frills API probe</h1>

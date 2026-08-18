@@ -162,11 +162,9 @@ export function MatchInspectorClient() {
     <main className="wrap">
       <header>
         <p className="eyebrow">
-          <a href="/">← staples</a>
+          <span className="badge">DEV ONLY</span>
           {" · "}
           <a href="/nf-probe">NF probe</a>
-          {" · "}
-          <span className="badge">DEV ONLY</span>
         </p>
         <h1>Match inspector</h1>
         <p className="sub">
