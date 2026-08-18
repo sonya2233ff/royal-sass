@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T20:24:18.210Z",
+  "updatedAt": "2026-08-18T21:26:29.958Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -263,27 +263,29 @@
       "masterId": "grayridge_eggs",
       "label": "Grayridge Eggs",
       "retailers": {
-        "nofrills": {
-          "retailer": "nofrills",
-          "storeId": "3660",
-          "retailerProductId": "21685186001_EA",
-          "name": "Eggs, Medium",
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gray-ridge-white-eggs-extra-large-18ea",
+          "name": "GRAY RIDGE - WHITE EGGS EXTRA LARGE 18EA",
+          "upc": "0006476734205",
           "matchMethod": "seed_catalog",
-          "matchConfidence": 1,
+          "matchConfidence": 0.9,
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-17T12:22:06.406Z"
+          "updatedAt": "2026-08-18T21:26:28.114Z"
         }
       },
       "prices": [
         {
-          "retailer": "nofrills",
-          "storeId": "3660",
-          "retailerProductId": "21685186001_EA",
-          "price": 7.99,
-          "checkedAt": "2026-08-16T00:49:35.877Z",
-          "source": "catalog_nofrills_3660_latest",
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gray-ridge-white-eggs-extra-large-18ea",
+          "price": 6.69,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:26:28.106Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2840,6 +2842,31 @@
           "decision": "auto_linked",
           "kind": "identity",
           "updatedAt": "2026-08-17T12:22:06.414Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20812144001_EA",
+          "name": "Large Size Eggs 12 Pack",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:26:25.082Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gray-ridge-eggs-white-large-1doz",
+          "name": "GRAY RIDGE - EGGS WHITE LARGE 1DOZ",
+          "upc": "0006476734300",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:26:28.855Z"
         }
       },
       "prices": [
@@ -2851,8 +2878,29 @@
           "checkedAt": "2026-08-16T00:49:41.753Z",
           "source": "catalog_nofrills_3660_latest",
           "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20812144001_EA",
+          "price": 3.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:26:24.755Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gray-ridge-eggs-white-large-1doz",
+          "price": 4.19,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:26:28.849Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
-      ]
+      ],
+      "category": "eggs"
     },
     "canola_oil_3l": {
       "masterId": "canola_oil_3l",
@@ -3860,6 +3908,36 @@
           "availability": "in_stock",
           "checkedAt": "2026-08-18T20:21:11.678Z",
           "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "ice_cubes": {
+      "masterId": "ice_cubes",
+      "label": "Ice Cubes",
+      "retailers": {
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21467229_EA",
+          "name": "Cubed Ice",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:26:27.028Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21467229_EA",
+          "price": 3.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T21:26:26.010Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]

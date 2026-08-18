@@ -20,6 +20,7 @@ import {
 import {
   appendMatchLog,
   catalogOfferFromLive,
+  eggCartonCountOk,
   isShownStaple,
   isSoldByWeightItem,
   isProduceWeightItem,
@@ -48,6 +49,9 @@ function isCasePackSku(productId: string): boolean {
 function passesWcFilters(offer: ProductOffer, item: StapleItem): boolean {
   if (isCasePackSku(offer.productId)) return false;
   if (offerFailsStapleOfferFilters(item, offer) != null) {
+    return false;
+  }
+  if (!eggCartonCountOk(item, offer.name, offer.packageSize)) {
     return false;
   }
   if (isProduceWeightItem(item) || isSoldByWeightItem(item)) {

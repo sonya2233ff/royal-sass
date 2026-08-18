@@ -7,7 +7,7 @@
     "name": "Walmart Supercentre #5831",
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
-  "checkedAt": "2026-08-18T20:35:22.780Z",
+  "checkedAt": "2026-08-18T21:24:43.681Z",
   "itemCount": 30,
   "matched": 22,
   "items": [
@@ -104,15 +104,28 @@
     {
       "id": "grayridge_eggs",
       "label": "Grayridge Eggs",
-      "status": "no_match",
+      "status": "ok",
       "queriesTried": [
+        "6000191268613",
         "064767343050",
-        "grayridge eggs",
-        "gray ridge eggs"
+        "gray ridge 18 eggs",
+        "gray ridge large white 18",
+        "grayridge eggs"
       ],
-      "offer": null,
+      "offer": {
+        "productId": "6000191268613",
+        "name": "Gray Ridge Premium Large White 18 Eggs",
+        "brand": "Gray Ridge",
+        "price": 6.98,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:24:24.011Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Gray-Ridge-Premium-Large-White-18-Eggs/6000191268613",
+        "image": "https://i5.walmartimages.ca/asr/27c70176-0bab-4bb4-93c6-6255fc80802e.5a94fcea2b568880f674ff0a285c4413.jpeg",
+        "taxonomyText": "Eggs Grocery Dairy & Eggs Eggs & Egg Substitutes Whole Egg Cartons"
+      },
       "alternates": [],
-      "notes": "Receipt UPC 064767343050 @ $6.98",
+      "notes": "Receipt UPC 064767343050 @ $6.98 — Gray Ridge Premium Large White 18 (WM 6000191268613)",
       "image": "/products/grayridge_eggs.jpg"
     },
     {
@@ -816,15 +829,26 @@
     {
       "id": "large_eggs_dozen",
       "label": "Large Eggs Dozen",
-      "status": "no_match",
+      "status": "ok",
       "queriesTried": [
         "large eggs dozen",
         "eggs large 12",
         "grade a large eggs"
       ],
-      "offer": null,
+      "offer": {
+        "productId": "10052944",
+        "name": "Great Value Large 12 Eggs",
+        "brand": "Great Value",
+        "price": 3.93,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:24:26.167Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Large-12-Eggs/10052944?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/asr/bf0abe13-d833-4ceb-be74-8c2444c35a06.217e4c69ecde8c8bba4e8ab7de15a76b.jpeg"
+      },
       "alternates": [],
-      "image": "/products/large_eggs_dozen.jpg"
+      "image": "/products/large_eggs_dozen.jpg",
+      "notes": "Receipt shell eggs — cheapest $/egg dozen (not 18/30, not Grayridge lock)"
     },
     {
       "id": "canola_oil_3l",
@@ -1219,6 +1243,33 @@
         "image": "https://i5.walmartimages.ca/asr/c3cfd467-9d97-442b-98f8-f5880a4d1fc9.d7f892c4f82fa126d217f24cbe383c29.jpeg"
       },
       "notes": "Ziploc Sandwich Bags Grip n Seal — WM product_id 6000195369896"
+    },
+    {
+      "id": "ice_cubes",
+      "label": "Ice Cubes",
+      "queriesTried": [
+        "763679000230",
+        "bag of ice",
+        "party ice",
+        "ice bag 7 lb",
+        "ice cubes"
+      ],
+      "status": "ok",
+      "offer": {
+        "productId": "6HYOGQRD524M",
+        "name": "Arctic Glacier Cubed Premium Ice 2.3 kg Bagged Frozen, 2.3kg",
+        "brand": "Arctic Glacier",
+        "packageSize": "2.3 kg",
+        "parsedMassKg": 2.3,
+        "price": 3.98,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:24:36.895Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Arctic-Glacier-Cubed-Premium-Ice-2-3-kg-Bagged-Frozen/6HYOGQRD524M?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/asr/119a8500-b4b6-40a0-9783-b15a82c96948.1496c745e232dd66f884b6a2ad4a208f.png"
+      },
+      "notes": "Receipt UPC 763679000230 @ $3.98 — bag of ice, not gum or ice-cube bins",
+      "alternates": []
     }
   ],
   "updatedAt": "2026-08-14T21:43:34.573Z"

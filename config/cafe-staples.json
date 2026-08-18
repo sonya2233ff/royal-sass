@@ -78,6 +78,8 @@
       "label": "Grayridge Eggs",
       "queries": [
         "064767343050",
+        "gray ridge 18 eggs",
+        "gray ridge large white 18",
         "grayridge eggs",
         "gray ridge eggs"
       ],
@@ -86,15 +88,22 @@
         "gray ridge"
       ],
       "mustNotInclude": [
-        "white",
-        "egg whites"
+        "egg whites",
+        "egg white",
+        "jumbo",
+        "747",
+        "omega"
       ],
       "preferNameIncludes": [
+        "gray ridge",
         "grayridge",
-        "gray ridge"
+        "18"
       ],
       "matchMode": "preferred",
-      "notes": "Receipt UPC 064767343050 @ $6.98",
+      "preferredProductId": "6000191268613",
+      "minPlausiblePrice": 4,
+      "maxPlausiblePrice": 12,
+      "notes": "Receipt UPC 064767343050 @ $6.98 — Gray Ridge Premium Large White 18 (WM 6000191268613)",
       "image": "/products/grayridge_eggs.jpg"
     },
     {
@@ -674,20 +683,27 @@
         "grade a large eggs"
       ],
       "mustIncludeAny": [
+        "large"
+      ],
+      "mustIncludeAll": [
         "egg"
       ],
       "mustNotInclude": [
-        "white",
         "egg whites",
-        "30",
-        "18",
-        "chocolate"
+        "egg white",
+        "chocolate",
+        "jumbo"
       ],
       "preferNameIncludes": [
         "large",
         "12",
         "dozen"
       ],
+      "matchMode": "cheapest",
+      "category": "eggs",
+      "minPlausiblePrice": 2,
+      "maxPlausiblePrice": 8,
+      "notes": "Receipt shell eggs — cheapest large dozen (not 18/30, not Grayridge lock)",
       "targetMassKg": 0.7,
       "image": "/products/large_eggs_dozen.jpg"
     },
@@ -1067,6 +1083,51 @@
       "category": "frozen",
       "notes": "Prefer cube/nugget bags; else cheapest chopped spinach, any brand",
       "image": "/products/frozen_spinach.jpg"
+    },
+    {
+      "id": "ice_cubes",
+      "label": "Ice Cubes",
+      "queries": [
+        "763679000230",
+        "bag of ice",
+        "party ice",
+        "ice bag 7 lb",
+        "ice cubes"
+      ],
+      "mustIncludeAny": [
+        "ice"
+      ],
+      "mustNotInclude": [
+        "cream",
+        "tea",
+        "coffee",
+        "maker",
+        "tray",
+        "machine",
+        "scoop",
+        "gel",
+        "breaker",
+        "icebreaker",
+        "icebreakers",
+        "gum",
+        "mint",
+        "bubble",
+        "breeze",
+        "candy",
+        "sterilite",
+        "bin",
+        "storage",
+        "disposable",
+        "mold",
+        "mould",
+        "cooler",
+        "ice pack",
+        "cryopak"
+      ],
+      "minPlausiblePrice": 1.5,
+      "maxPlausiblePrice": 8,
+      "matchMode": "cheapest",
+      "notes": "Receipt UPC 763679000230 @ $3.98 — bag of ice, not gum or ice-cube bins"
     }
   ]
 }

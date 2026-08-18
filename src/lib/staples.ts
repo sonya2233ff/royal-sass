@@ -113,7 +113,7 @@ const SOLD_BY_WEIGHT_IDS = new Set([
   "garlic_1kg",
 ]);
 
-/** Shell-egg cartons — cheapest $/egg, prefer bigger packs (18/30). */
+/** Shell-egg cartons — fair compare is $/egg. */
 const EGG_PACK_IDS = new Set([
   "grayridge_eggs",
   "large_eggs_dozen",
@@ -121,6 +121,26 @@ const EGG_PACK_IDS = new Set([
 
 export function isEggPackItem(item: StapleItem): boolean {
   return EGG_PACK_IDS.has(item.id);
+}
+
+/**
+ * Dozen staple is 12-count only (18EA / 30ct are different SKUs).
+ * Grayridge receipt is the 18-count brand lock; titles without a count stay.
+ */
+export function eggCartonCountOk(
+  item: { id: string },
+  name: string,
+  packageSize?: string,
+): boolean {
+  const n = parsePackCount(name, packageSize);
+  if (item.id === "large_eggs_dozen") return n === 12;
+  if (item.id === "grayridge_eggs") return n === 18;
+  return true;
+}
+
+/** Grayridge: among 18-count cartons, keep the bigger pack when $/egg is close. */
+export function preferLargerEggPack(item: { id: string }): boolean {
+  return item.id === "grayridge_eggs";
 }
 
 export function isSoldByWeightItem(item: StapleItem): boolean {
@@ -282,6 +302,8 @@ export type ConfirmedMap = Record<
 
 export const PINNED_IDS = [
   "simply_egg_whites",
+  "grayridge_eggs",
+  "large_eggs_dozen",
   "tomatoes_grape",
   "lemons_2lb",
   "pear_bosc_kg",
@@ -310,6 +332,7 @@ export const PINNED_IDS = [
   "frozen_blueberry",
   "frozen_strawberry",
   "frozen_spinach",
+  "ice_cubes",
 ] as const;
 
 export function isShownStaple(item: { id: string; custom?: boolean }): boolean {
@@ -752,6 +775,9 @@ function passesFilters(
   if (offerFailsStapleOfferFilters(item, offer) != null) {
     return false;
   }
+  if (!eggCartonCountOk(item, offer.name, offer.packageSize)) {
+    return false;
+  }
   if (!usesCategoryBIdentity(item)) return true;
   return isActualCategoryBOffer(item, {
     productId: offer.productId ?? offer.name,
@@ -909,12 +935,15 @@ export function pickStapleSearchWinner(
   log?: MatchLogEntry,
   preferredId?: string | null,
 ): ProductOffer | null {
+  const usable = pool.filter((o) =>
+    eggCartonCountOk(item, o.name, o.packageSize),
+  );
   let best: ProductOffer | null = null;
-  if (pool.length) {
+  if (usable.length) {
     const mode = resolveMatchMode(item);
     best =
       pickBestOffer(
-        pool,
+        usable,
         matchQueryForPick(item),
         mode === "cheapest" ? undefined : (preferredId ?? item.preferredProductId),
         {
@@ -922,11 +951,11 @@ export function pickStapleSearchWinner(
           mode,
           preferNameIncludes: item.preferNameIncludes,
           byEach: isEggPackItem(item),
-          preferLargerPack: isEggPackItem(item),
+          preferLargerPack: preferLargerEggPack(item),
           preferredUpc: itemPreferredUpc(item),
           requireQueryMatch: false,
         },
-      ) ?? pool[0] ?? null;
+      ) ?? (mode === "cheapest" ? usable[0] ?? null : null);
   }
 
   if (best) {
@@ -1561,7 +1590,7 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
           mode,
           preferNameIncludes: item.preferNameIncludes,
           byEach: isEggPackItem(item),
-          preferLargerPack: isEggPackItem(item),
+          preferLargerPack: preferLargerEggPack(item),
           preferredUpc: itemPreferredUpc(item),
           requireQueryMatch: false,
         },

@@ -21,6 +21,7 @@ import {
 import {
   appendMatchLog,
   catalogOfferFromLive,
+  eggCartonCountOk,
   isShownStaple,
   isSoldByWeightItem,
   loadStaplesConfig,
@@ -46,6 +47,9 @@ function isWholesaleCaseTitle(name: string): boolean {
 
 function passesMvrFilters(offer: ProductOffer, item: StapleItem): boolean {
   if (offerFailsStapleOfferFilters(item, offer) != null) {
+    return false;
+  }
+  if (!eggCartonCountOk(item, offer.name, offer.packageSize)) {
     return false;
   }
   if (resolveMatchMode(item) === "preferred") {

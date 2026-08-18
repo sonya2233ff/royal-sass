@@ -375,11 +375,14 @@ export function parsePackCount(
   let best: number | null = null;
   for (const m of t.matchAll(/(\d+)\s*(?:ea|count|ct|eggs?)\b/g)) {
     const n = Number(m[1]);
-    if (n >= 6 && n <= 60 && (best == null || n > best)) best = n;
+    if (n >= 6 && n <= 360 && (best == null || n > best)) best = n;
   }
   if (best != null) return best;
-  if (/\bdozen\b/.test(t)) return 12;
-  const bare = t.match(/\b(6|12|18|24|30|36|60)\b/);
+  // "1DOZ" / "15x1 doz" — digit+doz is one word, so \bdozen\b misses it.
+  if (/\bdozen\b/.test(t) || /\d\s*doz(?:en)?\b/.test(t) || /\bdoz\b/.test(t)) {
+    return 12;
+  }
+  const bare = t.match(/\b(6|12|18|24|30|36|60|180)\b/);
   if (bare) return Number(bare[1]);
   return null;
 }

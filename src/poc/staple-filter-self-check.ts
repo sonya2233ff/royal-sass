@@ -9,7 +9,11 @@ import {
   offerFailsStapleOfferFilters,
 } from "@/domain/catalog-normalize";
 import { isActualCategoryBOffer } from "@/domain/same-packed-item";
-import { loadStaplesConfig } from "@/lib/staples";
+import {
+  eggCartonCountOk,
+  loadStaplesConfig,
+  resolveMatchMode,
+} from "@/lib/staples";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -46,6 +50,9 @@ async function main() {
   const pineapple = cfg.items.find((i) => i.id === "pineapple_whole");
   const peppers = cfg.items.find((i) => i.id === "red_peppers_kg");
   const spinach = cfg.items.find((i) => i.id === "frozen_spinach");
+  const ice = cfg.items.find((i) => i.id === "ice_cubes");
+  const grayridge = cfg.items.find((i) => i.id === "grayridge_eggs");
+  const dozen = cfg.items.find((i) => i.id === "large_eggs_dozen");
   if (
     !frozen ||
     !fresh ||
@@ -59,7 +66,10 @@ async function main() {
     !frozenBan ||
     !pineapple ||
     !peppers ||
-    !spinach
+    !spinach ||
+    !ice ||
+    !grayridge ||
+    !dozen
   ) {
     throw new Error("missing staples");
   }
@@ -322,6 +332,86 @@ async function main() {
       price: 4.78,
     }) === false,
     "spinach fillo rolls are not chopped spinach",
+  );
+
+  assert(resolveMatchMode(grayridge) === "preferred", "grayridge is Category A");
+  assert(resolveMatchMode(dozen) === "cheapest", "dozen eggs are cheapest carton");
+  assert(resolveMatchMode(ice) === "cheapest", "bag of ice is cheapest");
+  assert(
+    offerFailsStapleFilters(
+      ice,
+      "Hershey's ICE BREAKERS ICE CUBES BUBBLE BREEZE",
+      "Hershey's",
+    ) === "mustNotInclude:breaker",
+    "ice rejects Ice Breakers gum",
+  );
+  assert(
+    offerFailsStapleFilters(
+      ice,
+      "STERILITE - ICE CUBE BIN WHITE EA",
+      "STERILITE",
+    ) === "mustNotInclude:sterilite",
+    "ice rejects ice-cube storage bins",
+  );
+  assert(
+    offerFailsStapleFilters(ice, "Bag of Ice 7 lb", undefined) == null,
+    "ice accepts a bag of ice",
+  );
+  assert(
+    offerFailsStapleFilters(
+      ice,
+      "CRYOPAK - SMALL ICE PACK 480GR",
+      "CRYOPAK",
+    ) === "mustNotInclude:ice pack",
+    "ice rejects gel ice packs",
+  );
+  assert(
+    eggCartonCountOk(dozen, "GRAY RIDGE - WHITE EGGS EXTRA LARGE 18EA") === false,
+    "dozen rejects 18EA",
+  );
+  assert(
+    eggCartonCountOk(dozen, "No Name Large Size Eggs 12 Pack") === true,
+    "dozen keeps 12 pack",
+  );
+  assert(
+    eggCartonCountOk(dozen, "No Name Large Size Eggs") === false,
+    "dozen rejects unknown pack count",
+  );
+  assert(
+    eggCartonCountOk(grayridge, "Gray Ridge Large Brown 18 Eggs") === true,
+    "grayridge keeps 18-count",
+  );
+  assert(
+    eggCartonCountOk(grayridge, "Gray Ridge Large White 12 Eggs") === false,
+    "grayridge drops 12-count",
+  );
+  assert(
+    eggCartonCountOk(
+      grayridge,
+      "Gray Ridge Extra Large Eggs",
+      "18 ea, $0.41/1ea",
+    ) === true,
+    "grayridge keeps extra large 18 ea pack",
+  );
+  assert(
+    eggCartonCountOk(
+      grayridge,
+      "Gray Ridge White Eggs, Large",
+      "180 ea, $0.29/1ea",
+    ) === false,
+    "grayridge drops 180-count warehouse case",
+  );
+  assert(
+    eggCartonCountOk(dozen, "GRAY RIDGE - EGGS WHITE LARGE 1DOZ") === true,
+    "dozen treats 1DOZ as 12",
+  );
+  assert(
+    offerFailsStapleFilters(
+      dozen,
+      "No Name Medium Size Eggs 12 Pack",
+      "No Name",
+    ) === "mustIncludeAny",
+    "dozen rejects medium eggs",
   );
 
   console.log("staple-filter-self-check ok");

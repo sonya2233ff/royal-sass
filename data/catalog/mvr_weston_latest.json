@@ -2,7 +2,7 @@
   "retailer": "mvr",
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
-  "checkedAt": "2026-08-18T20:34:50.666Z",
+  "checkedAt": "2026-08-18T21:26:29.956Z",
   "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
@@ -699,7 +699,146 @@
       },
       "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": []
+    },
+    {
+      "id": "grayridge_eggs",
+      "label": "Grayridge Eggs",
+      "status": "ok",
+      "offer": {
+        "productId": "gray-ridge-white-eggs-extra-large-18ea",
+        "name": "GRAY RIDGE - WHITE EGGS EXTRA LARGE 18EA",
+        "brand": "GRAY RIDGE",
+        "packageSize": "18EA",
+        "parsedMassKg": 0,
+        "price": 6.69,
+        "availability": "in_stock",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:26:27.378Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/gray-ridge-white-eggs-extra-large-18ea?_pos=1&_psq=gray+ridge+18+eggs&_psid=5f1e6a62e&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734205p.jpg?v=1777575335",
+        "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+      },
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "alternates": [
+        {
+          "productId": "gray-ridge-eggs-large-brown-18ea",
+          "name": "GRAY RIDGE - EGGS LARGE BROWN 18EA",
+          "brand": "GRAY RIDGE",
+          "packageSize": "18EA",
+          "parsedMassKg": 0,
+          "price": 6.69,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:26:27.379Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/gray-ridge-eggs-large-brown-18ea?_pos=2&_psq=gray+ridge+18+eggs&_psid=5f1e6a62e&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734311p.jpg?v=1784916322",
+          "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+        },
+        {
+          "productId": "gray-ridge-white-eggs-extra-large-loose-10x18ea",
+          "name": "GRAY RIDGE - WHITE EGGS EXTRA LARGE 10x18EA",
+          "brand": "GRAY RIDGE",
+          "packageSize": "10x18EA",
+          "price": 60.89,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:26:27.379Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/gray-ridge-white-eggs-extra-large-loose-10x18ea?_pos=9&_psq=gray+ridge+18+eggs&_psid=5f1e6a62e&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006565100041c_1fe12172-1571-4daf-8657-e598bdefec20.jpg?v=1778341517",
+          "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+        }
+      ]
+    },
+    {
+      "id": "large_eggs_dozen",
+      "label": "Large Eggs Dozen",
+      "status": "ok",
+      "offer": {
+        "productId": "gray-ridge-eggs-white-large-1doz",
+        "name": "GRAY RIDGE - EGGS WHITE LARGE 1DOZ",
+        "brand": "GRAY RIDGE",
+        "price": 4.19,
+        "availability": "in_stock",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:26:28.849Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/gray-ridge-eggs-white-large-1doz",
+        "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+      },
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "alternates": [
+        {
+          "productId": "gray-ridge-eggs-white-large-15x1-doz",
+          "name": "GRAY RIDGE - EGGS WHITE LARGE 15x1 DOZ",
+          "brand": "GRAY RIDGE",
+          "price": 57.99,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:26:28.322Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/gray-ridge-eggs-white-large-15x1-doz?_pos=1&_psq=large+eggs+dozen&_psid=2f8574e69&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006476734300c_7650c9bd-a128-41ea-968b-9292356fe63a.jpg?v=1778343748",
+          "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+        },
+        {
+          "productId": "conestoga-free-run-large-brown-eggs-12ea",
+          "name": "CONESTOGA - FREE RUN OMEGA LARGE  BROWN EGGS 12EA",
+          "brand": "CONESTOGA",
+          "packageSize": "12EA",
+          "price": 5.89,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:26:28.322Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/conestoga-free-run-large-brown-eggs-12ea?_pos=4&_psq=large+eggs+dozen&_psid=2f8574e69&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734390p.jpg?v=1784224336",
+          "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+        },
+        {
+          "productId": "goldegg-gold-egg-organic-large-12ea",
+          "name": "GOLDEGG - GOLD EGG ORGANIC LARGE 12EA",
+          "brand": "GOLDEGG",
+          "packageSize": "12EA",
+          "price": 7.79,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:26:28.322Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/goldegg-gold-egg-organic-large-12ea?_pos=6&_psq=large+eggs+dozen&_psid=2f8574e69&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0674959000079p.jpg?v=1775740348",
+          "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+        },
+        {
+          "productId": "gray-ridge-eggs-brown-large-1doz",
+          "name": "GRAY RIDGE - EGGS BROWN LARGE 1DOZ",
+          "brand": "GRAY RIDGE",
+          "price": 4.69,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:26:28.322Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/gray-ridge-eggs-brown-large-1doz?_pos=9&_psq=large+eggs+dozen&_psid=2f8574e69&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734301p_1c8adf4f-07ee-44a5-88a7-08c0909c7630.jpg?v=1775740289",
+          "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+        },
+        {
+          "productId": "conestoga-free-run-large-white-eggs-12ea",
+          "name": "CONESTOGA - FREE RUN LARGE WHITE EGGS 12EA",
+          "brand": "CONESTOGA",
+          "packageSize": "12EA",
+          "price": 5.79,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:26:28.322Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/conestoga-free-run-large-white-eggs-12ea?_pos=10&_psq=large+eggs+dozen&_psid=2f8574e69&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734385p.jpg?v=1784219239",
+          "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+        }
+      ]
+    },
+    {
+      "id": "ice_cubes",
+      "label": "Ice Cubes",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
     }
   ],
-  "updatedAt": "2026-08-18T20:21:16.878Z"
+  "updatedAt": "2026-08-18T21:26:29.956Z"
 }

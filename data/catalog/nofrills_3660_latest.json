@@ -1,6 +1,6 @@
 {
   "storeId": "3660",
-  "checkedAt": "2026-08-18T20:35:22.796Z",
+  "checkedAt": "2026-08-18T21:26:21.873Z",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -293,17 +293,20 @@
       "label": "Grayridge Eggs",
       "status": "ok",
       "offer": {
-        "productId": "21685186001_EA",
-        "name": "Eggs, Medium",
-        "price": 7.99,
-        "packageSize": "30 ea, $0.27/1ea",
+        "productId": "20823663001_EA",
+        "name": "Gray Ridge Extra Large Eggs",
+        "brand": "Gray Ridge",
+        "packageSize": "18 ea, $0.41/1ea",
+        "parsedMassKg": 0,
+        "price": 7.29,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:35.877Z",
-        "sourceUrl": "https://www.nofrills.ca/en/eggs-medium/p/21685186001_EA",
-        "wasPrice": 9.54,
-        "onSale": true
+        "checkedAt": "2026-08-18T21:26:15.619Z",
+        "sourceUrl": "https://www.nofrills.ca/en/extra-large-eggs/p/20823663001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20823663001_EA/en/1/20823663001_en_front_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "lemons_2lb",
@@ -582,14 +585,19 @@
       "status": "ok",
       "offer": {
         "productId": "20812144001_EA",
-        "name": "Large Size Eggs 12 Pack",
-        "price": 3.93,
+        "name": "No Name Large Size Eggs 12 Pack",
+        "brand": "No Name",
         "packageSize": "12 ea, $0.33/1ea",
+        "parsedMassKg": 0,
+        "price": 3.93,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-16T00:49:41.753Z",
-        "sourceUrl": "https://www.nofrills.ca/en/large-size-eggs-12-pack/p/20812144001_EA"
+        "checkedAt": "2026-08-18T21:26:17.688Z",
+        "sourceUrl": "https://www.nofrills.ca/en/large-size-eggs-12-pack/p/20812144001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20812144001_EA/en/1/20812144001_en_front_v1_1200.png"
       },
-      "notes": "Live NF refresh (TTL 72h)"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "canola_oil_3l",
@@ -982,7 +990,27 @@
         "image": "https://digital.loblaws.ca/PCX/21196100_EA/en/1/21196100_en_1_1200.png"
       },
       "notes": "Live NF SKU price refresh"
+    },
+    {
+      "id": "ice_cubes",
+      "label": "Ice Cubes",
+      "status": "ok",
+      "offer": {
+        "productId": "21467229_EA",
+        "name": "Arctic Glacier Cubed Ice",
+        "brand": "Arctic Glacier",
+        "packageSize": "2.3 kg, $0.17/100g",
+        "parsedMassKg": 2.3,
+        "price": 3.99,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:26:20.425Z",
+        "sourceUrl": "https://www.nofrills.ca/en/cubed-ice/p/21467229_EA",
+        "image": "https://digital.loblaws.ca/PCX/21467229_EA/en/1/76367900023_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
+      },
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     }
   ],
-  "updatedAt": "2026-08-18T20:24:37.423Z"
+  "updatedAt": "2026-08-18T21:26:21.873Z"
 }
