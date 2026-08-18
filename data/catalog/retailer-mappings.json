@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T00:37:58.519Z",
+  "updatedAt": "2026-08-18T05:10:57.184Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -99,6 +99,19 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-18T00:34:42.180Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-tomatoes-grape-1-pint-21",
+          "name": "VEGETABLES - TOMATOES GRAPE 1 PINT",
+          "upc": "0082692000061",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T05:10:57.183Z"
         }
       },
       "prices": [
@@ -128,6 +141,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:34:41.625Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-tomatoes-grape-1-pint-21",
+          "price": 1.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:10:57.180Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -490,6 +513,19 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-18T00:34:45.675Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-pears-bartlett-case-13-kg",
+          "name": "FRUITS - PEARS BOSC REPACK 2.5lb 2.5LB",
+          "upc": "0000001113131",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T05:09:39.650Z"
         }
       },
       "prices": [
@@ -520,6 +556,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:34:44.477Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-pears-bartlett-case-13-kg",
+          "price": 4.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:09:39.648Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -741,6 +787,19 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-18T00:34:46.625Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-eggplant-repack-5-lbs",
+          "name": "VEGETABLES - EGGPLANT REPACK 5LB 5 LBS",
+          "upc": "0000001117894",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T05:08:46.850Z"
         }
       },
       "prices": [
@@ -770,6 +829,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:34:46.129Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-eggplant-repack-5-lbs",
+          "price": 7.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:08:46.850Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -1050,6 +1119,19 @@
           "decision": "auto_linked",
           "kind": "identity",
           "updatedAt": "2026-08-18T00:34:49.839Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "earths-own-oat-original-946-ml",
+          "name": "EARTH'S OWN - OAT ORIGINAL 946ML",
+          "upc": "0062602781402",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T05:09:37.805Z"
         }
       },
       "prices": [
@@ -1080,6 +1162,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:34:48.781Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "earths-own-oat-original-946-ml",
+          "price": 2.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:09:37.799Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -1620,6 +1712,19 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-18T00:34:55.481Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-bananas-per-kg",
+          "name": "FRUITS - BANANAS PER KG",
+          "upc": "0026588300000",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T05:09:55.398Z"
         }
       },
       "prices": [
@@ -1649,6 +1754,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:34:55.052Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-bananas-per-kg",
+          "price": 2.19,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:09:55.395Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -1750,6 +1865,19 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-18T00:34:57.061Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-kiwi-600-grams",
+          "name": "FRUITS - KIWI GREEN 600 GR",
+          "upc": "0006623677303",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T05:08:50.921Z"
         }
       },
       "prices": [
@@ -1779,6 +1907,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:34:56.065Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "fruits-kiwi-600-grams",
+          "price": 6.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:08:50.918Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -1876,6 +2014,19 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-18T00:34:58.011Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-english-cucumbers-case-12-ea",
+          "name": "VEGETABLES - CUCUMBERS ENGLISH CASE 12 EA",
+          "upc": "0000001111245",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T05:08:51.382Z"
         }
       },
       "prices": [
@@ -1906,6 +2057,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:34:57.478Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "vegetables-english-cucumbers-case-12-ea",
+          "price": 7.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:08:51.381Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2470,6 +2631,19 @@
           "decision": "auto_linked",
           "kind": "identity",
           "updatedAt": "2026-08-18T00:35:06.823Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gay-lea-butter-unsalted-454gr",
+          "name": "GAY LEA - BUTTER UNSALTED 454GR",
+          "upc": "0006601390561",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T05:09:40.105Z"
         }
       },
       "prices": [
@@ -2499,6 +2673,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:35:06.361Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "gay-lea-butter-unsalted-454gr",
+          "price": 5.79,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:09:40.102Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2720,6 +2904,19 @@
           "decision": "auto_linked",
           "kind": "identity",
           "updatedAt": "2026-08-18T00:35:08.117Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "tropicana-orange-juice-no-pulp-1-36lt",
+          "name": "TROPICANA - ORANGE JUICE NO PULP 1.36LT",
+          "upc": "0004850020554",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T05:08:54.425Z"
         }
       },
       "prices": [
@@ -2750,6 +2947,16 @@
           "checkedAt": "2026-08-18T00:35:07.555Z",
           "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "tropicana-orange-juice-no-pulp-1-36lt",
+          "price": 5.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:08:54.422Z",
+          "source": "catalog_mvr_weston_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -2770,6 +2977,19 @@
           "kind": "identity",
           "skippedRematch": true,
           "updatedAt": "2026-08-17T04:11:20.999Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "realemon-lemon-juice-440ml",
+          "name": "REALEMON - LEMON JUICE 440ML",
+          "upc": "0006591258103",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.9,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T05:08:55.106Z"
         }
       },
       "prices": [
@@ -2780,6 +3000,16 @@
           "price": 2.47,
           "checkedAt": "2026-08-16T00:49:26.448Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "realemon-lemon-juice-440ml",
+          "price": 1.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:08:55.103Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2926,6 +3156,19 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-17T12:22:06.414Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-iqf-sliced-banana-5x1-kg",
+          "name": "ALASKO - IQF SLICED BANANA 5x1 KG",
+          "upc": "1069505800193",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T05:08:57.342Z"
         }
       },
       "prices": [
@@ -2936,6 +3179,16 @@
           "price": 5.5,
           "checkedAt": "2026-08-16T00:49:44.559Z",
           "source": "catalog_nofrills_3660_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-iqf-sliced-banana-5x1-kg",
+          "price": 21.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:08:57.340Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -3037,6 +3290,19 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-18T00:35:17.915Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-iqf-cultivated-blueberries-5x1kg",
+          "name": "ALASKO - IQF CULTIVATED BLUEBERRIES 5x1 KG",
+          "upc": "1069505800979",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T05:08:58.169Z"
         }
       },
       "prices": [
@@ -3066,6 +3332,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:35:16.923Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-iqf-cultivated-blueberries-5x1kg",
+          "price": 46.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:08:58.165Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -3299,6 +3575,19 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-18T00:35:21.268Z"
+        },
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-chopped-spinach-12x2lb",
+          "name": "ALASKO - CHOPPED SPINACH 12x2LB",
+          "upc": "1069505800183",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T05:08:59.475Z"
         }
       },
       "prices": [
@@ -3328,6 +3617,16 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T00:35:20.001Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "alasko-chopped-spinach-12x2lb",
+          "price": 31.99,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T05:08:59.473Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]

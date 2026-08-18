@@ -37,7 +37,18 @@
       "city": "Richmond Hill",
       "postalCode": "L4C3E3",
       "address": "10909 Yonge St, Richmond Hill, ON L4C 3E3, Canada",
+      "address": "10909 Yonge St, Richmond Hill, ON L4C 3E3, Canada",
       "notes": "PCX banner wholesaleclub, same BFF as No Frills. Locator /store-locator/details/3724."
+    },
+    {
+      "key": "mvr_weston",
+      "retailer": "mvr",
+      "externalStoreId": "weston",
+      "name": "MVR Cash & Carry",
+      "city": "North York",
+      "postalCode": "M9L1V8",
+      "address": "3655 Weston Rd, North York, ON M9L 1V8, Canada",
+      "notes": "Single warehouse via plus.mvrwholesale.com Shopify. Compare uses INSTOREPRICE tag (shelf), not online markup. Case packs kept."
     }
   ]
 }

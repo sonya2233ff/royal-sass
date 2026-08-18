@@ -17,13 +17,14 @@ import {
   loadWholesaleClubCatalog,
   upsertWholesaleClubCatalogItem,
 } from "@/lib/wholesaleclub-catalog";
+import { loadMvrCatalog, upsertMvrCatalogItem } from "@/lib/mvr-catalog";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 type Body = {
-  retailer?: "walmart_ca" | "no_frills" | "wholesale_club";
+  retailer?: "walmart_ca" | "no_frills" | "wholesale_club" | "mvr";
   productId?: string;
   name?: string;
   price?: number;
@@ -63,7 +64,9 @@ export async function POST(request: Request) {
       ? "no_frills"
       : body.retailer === "wholesale_club"
         ? "wholesale_club"
-        : "walmart_ca";
+        : body.retailer === "mvr"
+          ? "mvr"
+          : "walmart_ca";
   if (!productId || !name || !(price > 0)) {
     return NextResponse.json(
       { ok: false, error: "productId, name, price required" },
@@ -75,15 +78,18 @@ export async function POST(request: Request) {
   const wmCat = await loadWalmartCatalog();
   const nfCat = await loadNoFrillsCatalog();
   const wcCat = await loadWholesaleClubCatalog();
+  const mvrCat = await loadMvrCatalog();
   const existing = cfg.items.filter(isShownStaple).find((item) => {
     if (item.preferredProductId === productId) return true;
     const wm = wmCat?.items.find((r) => r.id === item.id)?.offer;
     const nf = nfCat?.items.find((r) => r.id === item.id)?.offer;
     const wc = wcCat?.items.find((r) => r.id === item.id)?.offer;
+    const mvr = mvrCat?.items.find((r) => r.id === item.id)?.offer;
     return (
       wm?.productId === productId ||
       nf?.productId === productId ||
-      wc?.productId === productId
+      wc?.productId === productId ||
+      mvr?.productId === productId
     );
   });
   if (existing) {
@@ -218,6 +224,14 @@ export async function POST(request: Request) {
     } finally {
       await closeWalmartBrowser().catch(() => undefined);
     }
+  } else if (retailer === "mvr") {
+    await upsertMvrCatalogItem({
+      id,
+      label: item.label,
+      status: "ok",
+      offer,
+      notes: "Adopted from search",
+    });
   } else {
     await upsertWholesaleClubCatalogItem({
       id,

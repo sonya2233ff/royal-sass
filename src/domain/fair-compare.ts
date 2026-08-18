@@ -111,7 +111,7 @@ export interface FairSideInput {
 }
 
 export interface FairCompareResult {
-  cheaper: "walmart" | "nofrills" | "wholesaleclub" | "tie" | "incomplete";
+  cheaper: "walmart" | "nofrills" | "wholesaleclub" | "mvr" | "tie" | "incomplete";
   /** Walmart fair − No Frills fair when only two sides; else cheapest − next. Negative means first listed is cheaper. */
   delta: number | null;
   fairBasis: FairBasis;
@@ -119,6 +119,7 @@ export interface FairCompareResult {
   wmFair: number | null;
   nfFair: number | null;
   wcFair?: number | null;
+  mvrFair?: number | null;
 }
 
 function usable(side: FairSideInput): boolean {
@@ -150,7 +151,7 @@ function winner(
   return wm < nf ? "walmart" : "nofrills";
 }
 
-export type FairStoreId = "walmart" | "nofrills" | "wholesaleclub";
+export type FairStoreId = "walmart" | "nofrills" | "wholesaleclub" | "mvr";
 
 function cheapestStore(
   values: Partial<Record<FairStoreId, number | null | undefined>>,
@@ -170,7 +171,12 @@ function spreadDelta(
   const wm = values.walmart;
   const nf = values.nofrills;
   if (preferWmNf && wm != null && nf != null) return round2(wm - nf);
-  const nums = [values.walmart, values.nofrills, values.wholesaleclub].filter(
+  const nums = [
+    values.walmart,
+    values.nofrills,
+    values.wholesaleclub,
+    values.mvr,
+  ].filter(
     (v): v is number => v != null && Number.isFinite(v),
   );
   if (nums.length < 2) return null;
@@ -178,26 +184,43 @@ function spreadDelta(
   return round2(sorted[0] - sorted[1]);
 }
 
-/** Same 2-store rules, plus Wholesale Club when that side is usable. WM vs NF ranking is unchanged if WC is missing. */
+/** Same 2-store rules, plus WC and MVR when those sides are usable. WM vs NF ranking is unchanged if extras are missing. */
 export function fairCompareThree(
   wm: FairSideInput,
   nf: FairSideInput,
   wc?: FairSideInput | null,
+  mvr?: FairSideInput | null,
 ): FairCompareResult {
   const two = fairCompareSides(wm, nf);
-  if (!wc?.ok) {
-    return { ...two, wcFair: null };
+  const extrasOk = Boolean(wc?.ok || mvr?.ok);
+  if (!extrasOk) {
+    return { ...two, wcFair: null, mvrFair: null };
   }
 
   const candidates: Array<[FairStoreId, FairSideInput]> = [
     ["walmart", wm],
     ["nofrills", nf],
-    ["wholesaleclub", wc],
+    ...(wc?.ok ? ([["wholesaleclub", wc]] as Array<[FairStoreId, FairSideInput]>) : []),
+    ...(mvr?.ok ? ([["mvr", mvr]] as Array<[FairStoreId, FairSideInput]>) : []),
   ];
   const sides = candidates.filter((row) => row[1].ok);
 
+  const withFairs = (
+    values: Partial<Record<FairStoreId, number | null | undefined>>,
+    rest: Omit<FairCompareResult, "wmFair" | "nfFair" | "wcFair" | "mvrFair" | "cheaper" | "delta"> & {
+      cheaper: FairCompareResult["cheaper"];
+      delta: number | null;
+    },
+  ): FairCompareResult => ({
+    ...rest,
+    wmFair: values.walmart ?? null,
+    nfFair: values.nofrills ?? null,
+    wcFair: values.wholesaleclub ?? null,
+    mvrFair: values.mvr ?? null,
+  });
+
   if (sides.length < 2) {
-    return { ...two, wcFair: null };
+    return { ...two, wcFair: null, mvrFair: null };
   }
 
   const eggSides = sides.filter(([, s]) => s.isEgg && s.pricePerEach);
@@ -205,15 +228,12 @@ export function fairCompareThree(
     const values = Object.fromEntries(
       eggSides.map(([id, s]) => [id, s.pricePerEach as number]),
     ) as Partial<Record<FairStoreId, number>>;
-    return {
+    return withFairs(values, {
       cheaper: cheapestStore(values),
-      delta: spreadDelta(values, !wc.ok),
+      delta: spreadDelta(values, !wc?.ok && !mvr?.ok),
       fairBasis: "per_egg",
       fairLabel: "за 1 яйце",
-      wmFair: values.walmart ?? null,
-      nfFair: values.nofrills ?? null,
-      wcFair: values.wholesaleclub ?? null,
-    };
+    });
   }
 
   const withKg = sides.map(([id, s]) => {
@@ -236,15 +256,12 @@ export function fairCompareThree(
     const values = Object.fromEntries(
       packs.map((x) => [x.id, x.s.shelfPrice as number]),
     ) as Partial<Record<FairStoreId, number>>;
-    return {
+    return withFairs(values, {
       cheaper: cheapestStore(values),
       delta: spreadDelta(values, false),
       fairBasis: "per_pack",
       fairLabel: "за пачку (схожий розмір)",
-      wmFair: values.walmart ?? null,
-      nfFair: values.nofrills ?? null,
-      wcFair: values.wholesaleclub ?? null,
-    };
+    });
   }
 
   const kgSides = withKg.filter((x) => x.kg && x.kg > 0);
@@ -253,15 +270,12 @@ export function fairCompareThree(
       kgSides.map((x) => [x.id, pricePer100gFromKg(x.kg as number)]),
     ) as Partial<Record<FairStoreId, number>>;
     const mixedPacks = packs.length >= 2 && !allSimilar;
-    return {
+    return withFairs(values, {
       cheaper: cheapestStore(values),
       delta: spreadDelta(values, false),
       fairBasis: "per_100g",
       fairLabel: mixedPacks ? "за 100 г (різні пачки)" : "за 100 г",
-      wmFair: values.walmart ?? null,
-      nfFair: values.nofrills ?? null,
-      wcFair: values.wholesaleclub ?? null,
-    };
+    });
   }
 
   const lines = sides.filter(
@@ -271,18 +285,15 @@ export function fairCompareThree(
     const values = Object.fromEntries(
       lines.map(([id, s]) => [id, s.lineTotal as number]),
     ) as Partial<Record<FairStoreId, number>>;
-    return {
+    return withFairs(values, {
       cheaper: cheapestStore(values),
       delta: spreadDelta(values, false),
       fairBasis: "per_pack",
       fairLabel: "за позицію",
-      wmFair: values.walmart ?? null,
-      nfFair: values.nofrills ?? null,
-      wcFair: values.wholesaleclub ?? null,
-    };
+    });
   }
 
-  return { ...two, wcFair: null };
+  return { ...two, wcFair: wc?.ok ? two.wcFair ?? null : null, mvrFair: null };
 }
 
 export function fairCompareSides(
@@ -375,6 +386,8 @@ export function basketAmountForSide(
       ? fair.wmFair
       : side === "nofrills"
         ? fair.nfFair
+        : side === "mvr"
+          ? (fair.mvrFair ?? null)
         : (fair.wcFair ?? null);
   if (fair.fairBasis === "needed_weight" && v != null) return v;
   // Quote the deal per 100 g; basket line is still 1 kg (10 × 100 g).

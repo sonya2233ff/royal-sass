@@ -9,13 +9,15 @@ type StapleHit = {
   wmName?: string | null;
   nfName?: string | null;
   wcName?: string | null;
+  mvrName?: string | null;
   wmPrice?: number | null;
   nfPrice?: number | null;
   wcPrice?: number | null;
+  mvrPrice?: number | null;
 };
 
 type StoreHit = {
-  retailer: "walmart_ca" | "no_frills" | "wholesale_club";
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club" | "mvr";
   productId: string;
   name: string;
   price: number;
@@ -49,6 +51,7 @@ export function ProductSearch({
   const [walmart, setWalmart] = useState<StoreHit[]>([]);
   const [noFrills, setNoFrills] = useState<StoreHit[]>([]);
   const [wholesaleClub, setWholesaleClub] = useState<StoreHit[]>([]);
+  const [mvr, setMvr] = useState<StoreHit[]>([]);
   const [active, setActive] = useState(0);
   const [err, setErr] = useState<string | null>(null);
 
@@ -59,6 +62,7 @@ export function ProductSearch({
       setWalmart([]);
       setNoFrills([]);
       setWholesaleClub([]);
+      setMvr([]);
       setLoading(false);
       return;
     }
@@ -76,6 +80,7 @@ export function ProductSearch({
           setWalmart(data.walmart ?? []);
           setNoFrills(data.noFrills ?? []);
           setWholesaleClub(data.wholesaleClub ?? []);
+          setMvr(data.mvr ?? []);
           if (data.walmartSourceWarning && !(data.walmart ?? []).length) {
             setErr(
               "WM пошук через RapidAPI вимкнено — немає ключа. No Frills нижче.",
@@ -112,6 +117,7 @@ export function ProductSearch({
     ...walmart.map((hit) => ({ kind: "store" as const, hit })),
     ...noFrills.map((hit) => ({ kind: "store" as const, hit })),
     ...wholesaleClub.map((hit) => ({ kind: "store" as const, hit })),
+    ...mvr.map((hit) => ({ kind: "store" as const, hit })),
   ];
 
   async function adopt(hit: StoreHit) {
@@ -293,6 +299,40 @@ export function ProductSearch({
             return (
               <button
                 key={`wc-${hit.productId}`}
+                type="button"
+                role="option"
+                className={active === idx ? "search-hit on" : "search-hit"}
+                onMouseEnter={() => setActive(idx)}
+                onClick={() => choose(idx)}
+              >
+                {hit.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={hit.image} alt="" referrerPolicy="no-referrer" />
+                ) : (
+                  <span className="ph" />
+                )}
+                <span>
+                  <strong>{hit.name}</strong>
+                  <em>
+                    ${hit.price.toFixed(2)}
+                    {hit.packageSize ? ` · ${hit.packageSize}` : ""}
+                    {hit.stapleId ? " · уже в списку" : " · додати"}
+                  </em>
+                </span>
+              </button>
+            );
+          })}
+          {mvr.length > 0 && <div className="search-sec">MVR Cash & Carry</div>}
+          {mvr.map((hit, i) => {
+            const idx =
+              staples.length +
+              walmart.length +
+              noFrills.length +
+              wholesaleClub.length +
+              i;
+            return (
+              <button
+                key={`mvr-${hit.productId}`}
                 type="button"
                 role="option"
                 className={active === idx ? "search-hit on" : "search-hit"}

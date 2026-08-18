@@ -1,6 +1,7 @@
 import { NoFrillsConnector } from "./nofrills";
 import { SobeysConnector } from "./sobeys";
 import { WholesaleClubConnector } from "./wholesaleclub";
+import { MvrConnector } from "./mvr";
 import type { RetailerConnector } from "./types";
 import { createWalmartConnector } from "./create-walmart-connector";
 
@@ -18,6 +19,8 @@ export function getConnector(
     case "wholesale_club":
     case "wholesaleclub":
       return new WholesaleClubConnector();
+    case "mvr":
+      return new MvrConnector();
     case "freshco":
       throw new Error(
         "FreshCo is not part of the locked 3-store POC. Use retailer 'sobeys'.",
@@ -51,4 +54,11 @@ export {
   WHOLESALECLUB_STORE_KEY,
   probeWholesaleClubSearch,
 } from "./wholesaleclub";
+export {
+  MvrConnector,
+  MVR_STORE_ID,
+  MVR_STORE_KEY,
+  MVR_ORIGIN,
+  packageSizeFromMvrTitle,
+} from "./mvr";
 export { buildFixtureOffers } from "./fixtures";

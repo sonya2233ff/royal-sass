@@ -48,6 +48,7 @@
       "mustIncludeAny": [
         "grape tomato",
         "grape tomatoes",
+        "tomatoes grape",
         "tomato, grape",
         "tomato grape",
         "organic grape"

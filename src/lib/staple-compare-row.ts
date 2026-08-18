@@ -56,15 +56,18 @@ export interface StapleCompareRow {
     walmart?: ResolveReason;
     noFrills?: ResolveReason;
     wholesaleClub?: ResolveReason;
+    mvr?: ResolveReason;
   };
   walmart: Record<string, unknown>;
   noFrills: Record<string, unknown>;
   wholesaleClub: Record<string, unknown>;
+  mvr: Record<string, unknown>;
   cheaper: string;
   delta: number | null;
   basketWalmart: number | null;
   basketNoFrills: number | null;
   basketWholesaleClub: number | null;
+  basketMvr: number | null;
 }
 
 function asCatalogOffer(
@@ -78,12 +81,15 @@ export function buildStapleCompareRow(input: {
   wmOffer: CatalogOffer | null;
   nfOffer: CatalogOffer | null;
   wcOffer?: CatalogOffer | null;
+  mvrOffer?: CatalogOffer | null;
   wmEval: SideEval;
   nfEval: SideEval;
   wcEval?: SideEval;
+  mvrEval?: SideEval;
   wmUsable: boolean;
   nfUsable: boolean;
   wcUsable?: boolean;
+  mvrUsable?: boolean;
   grams: number | null;
   /** Pack / carton count for non-weight staples. Default 1. */
   qty?: number;
@@ -93,6 +99,7 @@ export function buildStapleCompareRow(input: {
     walmart?: ResolveReason;
     noFrills?: ResolveReason;
     wholesaleClub?: ResolveReason;
+    mvr?: ResolveReason;
   };
   nfUpc?: string;
 }): StapleCompareRow {
@@ -126,9 +133,11 @@ export function buildStapleCompareRow(input: {
   const wmOffer = input.wmUsable ? asCatalogOffer(input.wmOffer) : null;
   const nfOffer = input.nfUsable ? asCatalogOffer(input.nfOffer) : null;
   const wcOffer = input.wcUsable ? asCatalogOffer(input.wcOffer ?? null) : null;
+  const mvrOffer = input.mvrUsable ? asCatalogOffer(input.mvrOffer ?? null) : null;
   const wmRaw = wmOffer ? withTypicalEachMass(item, wmOffer) : null;
   const nfRaw = nfOffer ? withTypicalEachMass(item, nfOffer) : null;
   const wcRaw = wcOffer ? withTypicalEachMass(item, wcOffer) : null;
+  const mvrRaw = mvrOffer ? withTypicalEachMass(item, mvrOffer) : null;
   const typicalEachGrams = typicalEachGramsOf(item);
 
   const walmart = summarizeOffer(item, wmRaw, summarizeQty, "walmart_ca");
@@ -168,6 +177,24 @@ export function buildStapleCompareRow(input: {
     summarizeQty,
     "wholesale_club",
   );
+  const mvr = summarizeOffer(
+    item,
+    mvrRaw
+      ? {
+          name: mvrRaw.name,
+          price: mvrRaw.price,
+          productId: mvrRaw.productId,
+          packageSize: mvrRaw.packageSize,
+          parsedMassKg: mvrRaw.parsedMassKg,
+          unitPrice: mvrRaw.unitPrice,
+          confidence: mvrRaw.confidence,
+          checkedAt: mvrRaw.checkedAt,
+          retailer: "mvr",
+        }
+      : null,
+    summarizeQty,
+    "mvr",
+  );
 
   const egg = isEggPackItem(item);
   const wmOk =
@@ -182,6 +209,10 @@ export function buildStapleCompareRow(input: {
     wholesaleClub &&
     (wholesaleClub.status === "ok" || wholesaleClub.status === "stale") &&
     wholesaleClub.lineTotal != null;
+  const mvrOk =
+    mvr &&
+    (mvr.status === "ok" || mvr.status === "stale") &&
+    mvr.lineTotal != null;
 
   const planFor = (
     raw: CatalogOffer | null,
@@ -208,8 +239,14 @@ export function buildStapleCompareRow(input: {
   const wmPlan = planFor(wmRaw, walmart);
   const nfPlan = planFor(nfRaw, noFrills);
   const wcPlan = planFor(wcRaw, wholesaleClub);
+  const mvrPlan = planFor(mvrRaw, mvr);
 
   const wcEval: SideEval = input.wcEval ?? {
+    status: "no_match",
+    ageLabel: null,
+  };
+
+  const mvrEval: SideEval = input.mvrEval ?? {
     status: "no_match",
     ageLabel: null,
   };
@@ -242,6 +279,15 @@ export function buildStapleCompareRow(input: {
       packKg: packMassKg(wholesaleClub?.name, wholesaleClub?.pack),
       isEgg: egg,
     },
+    {
+      ok: Boolean(mvrOk),
+      shelfPrice: mvr?.shelfPrice,
+      lineTotal: mvr?.lineTotal,
+      pricePerKg: egg ? null : mvr?.pricePerKg,
+      pricePerEach: mvr?.pricePerEach,
+      packKg: packMassKg(mvr?.name, mvr?.pack),
+      isEgg: egg,
+    },
   );
 
   if (isPreferredIdentityRejected(mode, { decision: input.mappingDecision })) {
@@ -253,20 +299,23 @@ export function buildStapleCompareRow(input: {
       wmFair: null,
       nfFair: null,
       wcFair: null,
+      mvrFair: null,
     };
   } else if (
     neededPick &&
     !soldByWeight &&
     !egg &&
-    (wmPlan || nfPlan || wcPlan)
+    (wmPlan || nfPlan || wcPlan || mvrPlan)
   ) {
     const wmTotal = wmOk && wmPlan ? wmPlan.totalPrice : null;
     const nfTotal = nfOk && nfPlan ? nfPlan.totalPrice : null;
     const wcTotal = wcOk && wcPlan ? wcPlan.totalPrice : null;
+    const mvrTotal = mvrOk && mvrPlan ? mvrPlan.totalPrice : null;
     const priced = [
       ["walmart", wmTotal],
       ["nofrills", nfTotal],
       ["wholesaleclub", wcTotal],
+      ["mvr", mvrTotal],
     ].filter((row): row is [string, number] => row[1] != null);
     if (priced.length >= 2) {
       const min = Math.min(...priced.map(([, v]) => v));
@@ -280,6 +329,7 @@ export function buildStapleCompareRow(input: {
         wmFair: wmTotal,
         nfFair: nfTotal,
         wcFair: wcTotal,
+        mvrFair: mvrTotal,
       };
     } else {
       fair = {
@@ -290,6 +340,7 @@ export function buildStapleCompareRow(input: {
         wmFair: wmTotal,
         nfFair: nfTotal,
         wcFair: wcTotal,
+        mvrFair: mvrTotal,
       };
     }
   }
@@ -310,6 +361,11 @@ export function buildStapleCompareRow(input: {
       "wholesaleclub",
       wcOk ? wholesaleClub!.lineTotal : null,
     ),
+    fair,
+    { packQty, qtyKg },
+  );
+  const mvrBasket = scaleBasketAmount(
+    basketAmountForSide(fair, "mvr", mvrOk ? mvr!.lineTotal : null),
     fair,
     { packQty, qtyKg },
   );
@@ -339,6 +395,7 @@ export function buildStapleCompareRow(input: {
       wmOffer: wmRaw,
       nfOffer: nfRaw,
       wcOffer: wcRaw,
+      mvrOffer: mvrRaw,
     }),
     confirmed: input.confirmed,
     soldByWeight,
@@ -396,10 +453,26 @@ export function buildStapleCompareRow(input: {
           }),
         }
       : emptySide(wcEval),
+    mvr: mvr
+      ? {
+          ...mvr,
+          lineTotal: mvrPlan?.totalPrice ?? mvr.lineTotal,
+          ageLabel: mvrEval.ageLabel,
+          purchase: mvrPlan,
+          image: retailerSideImage({
+            retailer: "mvr",
+            offer: {
+              image: mvrPlan?.image ?? mvrRaw?.image,
+              productId: mvrPlan?.productId ?? mvrRaw?.productId,
+            },
+          }),
+        }
+      : emptySide(mvrEval),
     cheaper: fair.cheaper,
     delta: fair.delta,
     basketWalmart: wmBasket,
     basketNoFrills: nfBasket,
     basketWholesaleClub: wcBasket,
+    basketMvr: mvrBasket,
   };
 }

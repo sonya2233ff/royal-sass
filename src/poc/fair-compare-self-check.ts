@@ -214,6 +214,56 @@ assert(grapeThreeMissing.cheaper === grape.cheaper, "WC missing keeps WM vs NF")
 assert(grapeThreeMissing.fairBasis === grape.fairBasis, "WC missing keeps basis");
 assert(grapeThreeMissing.wcFair == null, "WC fair is null when unused");
 
+const grapeFourMissing = fairCompareThree(
+  {
+    ok: true,
+    shelfPrice: 2.97,
+    lineTotal: 2.97,
+    pricePerKg: wmGrape,
+    packKg: 0.283,
+  },
+  {
+    ok: true,
+    shelfPrice: 7.99,
+    lineTotal: 7.99,
+    pricePerKg: nfGrape,
+    packKg: 0.907,
+  },
+  { ok: false },
+  { ok: false },
+);
+assert(grapeFourMissing.cheaper === grape.cheaper, "MVR missing keeps WM vs NF");
+assert(grapeFourMissing.mvrFair == null, "MVR fair is null when unused");
+
+const grapeMvrWins = fairCompareThree(
+  {
+    ok: true,
+    shelfPrice: 2.97,
+    lineTotal: 2.97,
+    pricePerKg: wmGrape,
+    packKg: 0.283,
+  },
+  {
+    ok: true,
+    shelfPrice: 7.99,
+    lineTotal: 7.99,
+    pricePerKg: nfGrape,
+    packKg: 0.907,
+  },
+  { ok: false },
+  {
+    ok: true,
+    shelfPrice: 1.99,
+    lineTotal: 1.99,
+    pricePerKg: 1.99 / 0.473,
+    packKg: 0.473,
+  },
+);
+assert(
+  grapeMvrWins.cheaper === "mvr",
+  `MVR cheapest per 100g, got ${grapeMvrWins.cheaper}`,
+);
+
 const grapeThreeWcWins = fairCompareThree(
   {
     ok: true,

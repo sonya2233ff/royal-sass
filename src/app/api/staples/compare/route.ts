@@ -36,6 +36,8 @@ import {
 } from "@/lib/retailer-mappings";
 import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
 import { searchWholesaleClubPool } from "@/lib/wholesaleclub-observe";
+import { loadMvrCatalog } from "@/lib/mvr-catalog";
+import { searchMvrPool } from "@/lib/mvr-observe";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -95,12 +97,14 @@ export async function POST(request: Request) {
   const catalog = await loadWalmartCatalog();
   const nfCatalog = await loadNoFrillsCatalog();
   const wcCatalog = await loadWholesaleClubCatalog();
+  const mvrCatalog = await loadMvrCatalog();
   const confirmed = await loadConfirmed();
   const mappings = await loadRetailerMappings();
   const byId = new Map(cfg.items.map((i) => [i.id, i]));
   const catById = new Map(catalog?.items.map((i) => [i.id, i]) ?? []);
   const nfById = new Map(nfCatalog?.items.map((i) => [i.id, i]) ?? []);
   const wcById = new Map(wcCatalog?.items.map((i) => [i.id, i]) ?? []);
+  const mvrById = new Map(mvrCatalog?.items.map((i) => [i.id, i]) ?? []);
 
   const entries: MatchLogEntry[] = [];
   const rows = [];
@@ -108,6 +112,8 @@ export async function POST(request: Request) {
   let nfCacheHits = 0;
   let wcLiveHits = 0;
   let wcCacheHits = 0;
+  let mvrLiveHits = 0;
+  let mvrCacheHits = 0;
 
   for (const id of wanted) {
     const item = byId.get(id);
@@ -126,6 +132,8 @@ export async function POST(request: Request) {
       productMap?.retailers.nofrills;
     const wcLink: RetailerSkuLink | undefined =
       productMap?.retailers.wholesaleclub;
+    const mvrLink: RetailerSkuLink | undefined =
+      productMap?.retailers.mvr;
 
     const rawGrams = Number(body.grams?.[id]);
     const neededPick = usesNeededWeightPick(item);
@@ -574,18 +582,163 @@ export async function POST(request: Request) {
         (wcEval.status === "ok" || wcEval.status === "stale"),
     );
 
+    let mvrRow = mvrById.get(id) ?? null;
+    let mvrResolved = resolveCatalogOffer({
+      item,
+      row: mvrRow,
+      link: mvrLink,
+      matchMode: mode,
+      neededGrams: packPickGrams,
+    });
+    const mvrCacheEval = evaluateOfferStatus(item, mvrResolved.offer, {
+      catalogStatus:
+        mvrResolved.reason === "rejected_filter"
+          ? "no_match"
+          : mvrRow?.status,
+    });
+    const needMvrExpand = shouldExpandPackSizes({
+      item,
+      neededGrams: packPickGrams,
+      link: mvrLink,
+      row: mvrRow,
+    });
+    const mvrCacheUsable =
+      !needMvrExpand &&
+      Boolean(mvrResolved.offer) &&
+      (mvrCacheEval.status === "ok" || mvrCacheEval.status === "stale");
+
+    const mvrLog: MatchLogEntry = {
+      at: new Date().toISOString(),
+      itemId: id,
+      retailer: "mvr",
+      queries: [],
+      rejected: [],
+      status: "no_match",
+    };
+
+    let mvrCatalogOffer: CatalogOffer | null = null;
+    if (mvrCacheUsable && mvrResolved.offer) {
+      mvrCacheHits += 1;
+      mvrCatalogOffer = toCatalogOffer(mvrResolved.offer);
+      mvrLog.queries = ["catalog_cache"];
+      mvrLog.status = mvrCacheEval.status;
+      mvrLog.accepted = {
+        productId: mvrResolved.offer.productId,
+        name: mvrResolved.offer.name,
+        price: mvrResolved.offer.price,
+      };
+    } else if (!mvrRow?.offer || needMvrExpand) {
+      const pool = await searchMvrPool(item, mvrLog);
+      mvrLiveHits += 1;
+      const best = pickStapleSearchWinner(item, pool, mvrLog);
+      if (pool.length || best) {
+        const merged = mergeLivePackSizes({
+          item,
+          row: mvrRow,
+          live: pool,
+          keepProductId: mvrRow?.offer?.productId ?? best?.productId,
+        });
+        const offer = merged.offer ?? (best
+          ? {
+              productId: best.productId,
+              name: best.name,
+              price: best.price,
+              packageSize: best.packageSize,
+              image: best.image,
+            }
+          : null);
+        await persistPackSizeRow({
+          retailer: "mvr",
+          id,
+          label: item.label,
+          offer,
+          alternates: merged.alternates,
+          notes:
+            merged.alternates.length > 0
+              ? packSizeNotes("mvr", 1 + merged.alternates.length)
+              : `Cached from live MVR search (TTL ${CACHE_STALE_HOURS}h)`,
+        });
+        mvrRow = {
+          id,
+          status: offer ? "ok" : "no_match",
+          offer,
+          alternates: merged.alternates,
+        };
+        mvrById.set(id, mvrRow);
+        mvrResolved = resolveCatalogOffer({
+          item,
+          row: mvrRow,
+          link: mvrLink,
+          matchMode: mode,
+          neededGrams: packPickGrams,
+        });
+        mvrCatalogOffer = toCatalogOffer(mvrResolved.offer);
+      } else if (mvrRow?.offer) {
+        mvrCatalogOffer = toCatalogOffer(mvrResolved.offer);
+        mvrLog.rejected.push({
+          reason: "pack-size search missed — kept catalog offer",
+        });
+        if (mvrResolved.offer) {
+          mvrLog.status = mvrCacheEval.status;
+          mvrLog.accepted = {
+            productId: mvrResolved.offer.productId,
+            name: mvrResolved.offer.name,
+            price: mvrResolved.offer.price,
+          };
+        }
+      } else {
+        await persistPackSizeRow({
+          retailer: "mvr",
+          id,
+          label: item.label,
+          offer: null,
+          alternates: [],
+          notes: mvrLog.rejected.at(-1)?.reason ?? "no_match",
+        });
+      }
+    } else {
+      mvrLog.queries = ["catalog_cache"];
+      mvrLog.status = "rejected";
+      mvrLog.rejected.push({
+        productId: mvrRow?.offer?.productId,
+        name: mvrRow?.offer?.name,
+        price: mvrRow?.offer?.price,
+        reason: mvrResolved.detail ?? "filter",
+      });
+    }
+    entries.push(mvrLog);
+
+    const mvrEval = mvrCacheUsable
+      ? mvrCacheEval
+      : mvrCatalogOffer
+        ? evaluateOfferStatus(item, mvrCatalogOffer, {
+            catalogStatus: mvrRow?.status,
+          })
+        : {
+            status: mvrLog.status,
+            reason: mvrLog.rejected.at(-1)?.reason,
+            ageLabel: null as string | null,
+          };
+    const mvrUsable = Boolean(
+      mvrCatalogOffer &&
+        (mvrEval.status === "ok" || mvrEval.status === "stale"),
+    );
+
     rows.push(
       buildStapleCompareRow({
         item,
         wmOffer: wmUsable ? wmOffer : null,
         nfOffer: nfUsable ? nfCatalogOffer : null,
         wcOffer: wcUsable ? wcCatalogOffer : null,
+        mvrOffer: mvrUsable ? mvrCatalogOffer : null,
         wmEval,
         nfEval,
         wcEval,
+        mvrEval,
         wmUsable,
         nfUsable,
         wcUsable,
+        mvrUsable,
         grams,
         qty,
         confirmed: Boolean(conf),
@@ -594,6 +747,7 @@ export async function POST(request: Request) {
           walmart: wmResolved.reason,
           noFrills: nfResolved.reason,
           wholesaleClub: wcResolved.reason,
+          mvr: mvrResolved.reason,
         },
         nfUpc: nfOfferUpc,
       }),
@@ -648,6 +802,32 @@ export async function POST(request: Request) {
         ])
       : cheaperTwoWay;
 
+  const quadRows = rows.filter(
+    (r) =>
+      r.basketWalmart != null &&
+      r.basketNoFrills != null &&
+      r.basketWholesaleClub != null &&
+      r.basketMvr != null,
+  );
+  const quadWm = quadRows.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);
+  const quadNf = quadRows.reduce((s, r) => s + (r.basketNoFrills ?? 0), 0);
+  const quadWc = quadRows.reduce(
+    (s, r) => s + (r.basketWholesaleClub ?? 0),
+    0,
+  );
+  const quadMvr = quadRows.reduce((s, r) => s + (r.basketMvr ?? 0), 0);
+  const mvrAllRows = rows.filter((r) => r.basketMvr != null);
+  const mvrAllSum = mvrAllRows.reduce((s, r) => s + (r.basketMvr ?? 0), 0);
+  const cheaperFour =
+    quadRows.length > 0
+      ? basketWinner([
+          { id: "walmart", total: quadWm },
+          { id: "nofrills", total: quadNf },
+          { id: "wholesaleclub", total: quadWc },
+          { id: "mvr", total: quadMvr },
+        ])
+      : cheaperThree;
+
   const logId = await appendMatchLog(entries);
 
   return NextResponse.json({
@@ -674,9 +854,25 @@ export async function POST(request: Request) {
             : "catalog_cache",
     wcCacheHits,
     wcLiveHits,
-    stores: ["walmart_5831", "nofrills_3660", "wholesaleclub_3724"],
+    mvrSource:
+      mvrLiveHits === 0 && mvrCacheHits > 0
+        ? "catalog_cache"
+        : mvrCacheHits > 0
+          ? "cache_and_live"
+          : mvrLiveHits > 0
+            ? "live_api"
+            : "catalog_cache",
+    mvrCacheHits,
+    mvrLiveHits,
+    stores: [
+      "walmart_5831",
+      "nofrills_3660",
+      "wholesaleclub_3724",
+      "mvr_weston",
+    ],
     sobeysEnabled: false,
     wholesaleClubEnabled: true,
+    mvrEnabled: true,
     matchLogId: logId,
     rows,
     totals: {
@@ -684,15 +880,25 @@ export async function POST(request: Request) {
       walmart: roundMoney(wmSum),
       noFrills: roundMoney(nfSum),
       wholesaleClub: roundMoney(tripleRows.length ? tripleWc : wcAllSum),
-      cheaper: cheaperThree,
+      mvr: roundMoney(quadRows.length ? quadMvr : mvrAllSum),
+      cheaper: cheaperFour,
       cheaperTwoWay,
+      cheaperThree,
       tripleCount: tripleRows.length,
       tripleWalmart: roundMoney(tripleWm),
       tripleNoFrills: roundMoney(tripleNf),
       tripleWholesaleClub: roundMoney(tripleWc),
       wholesaleClubItemCount: wcAllRows.length,
+      quadCount: quadRows.length,
+      quadWalmart: roundMoney(quadWm),
+      quadNoFrills: roundMoney(quadNf),
+      quadWholesaleClub: roundMoney(quadWc),
+      quadMvr: roundMoney(quadMvr),
+      mvrItemCount: mvrAllRows.length,
       note:
-        tripleRows.length > 0
+        quadRows.length > 0
+          ? `Порівнянна сума. 4 магазини: ${quadRows.length} спільних позицій. 3 магазини: ${tripleRows.length}. WM vs NF окремо: ${wmNfRows.length} позицій. Різні пачки → $/kg × кг, яйця → 30 шт × пачки. Відхилена identity не входить у кошик.`
+          : tripleRows.length > 0
           ? `Порівнянна сума. 3 магазини: ${tripleRows.length} спільних позицій. WM vs NF окремо: ${wmNfRows.length} позицій. Різні пачки → $/kg × кг, яйця → 30 шт × пачки. Відхилена identity не входить у кошик.`
           : "Порівнянна сума: різні пачки → $/kg × кг, яйця → 30 шт × пачки, схожі пачки → ціна полиці × кількість. Відхилена identity не входить у кошик.",
     },

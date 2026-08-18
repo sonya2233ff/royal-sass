@@ -24,10 +24,22 @@ export interface UnitPriceBreakdown {
 }
 
 /** Parse first mass token from product name / packageSize (handles kg, g, lb, oz, ml≈g). */
+const MASS_UNIT_RE = "kg|gr|g|lb|lbs|oz|ounce|ounces|ml|lt|l";
+
 export function parseMassFromText(text: string): ParsedMass | null {
   const s = text.toLowerCase().replace(/,/g, "");
+  const nx = s.match(
+    new RegExp(`(\\d+)\\s*x\\s*(\\d+(?:\\.\\d+)?)\\s*(${MASS_UNIT_RE})\\b`),
+  );
+  if (nx) {
+    const count = Number(nx[1]);
+    const each = toMass(Number(nx[2]), normalizeUnit(nx[3]));
+    if (count > 1 && each.kg > 0) {
+      return { value: each.value * count, unit: each.unit, kg: each.kg * count };
+    }
+  }
   const all = [
-    ...s.matchAll(/(\d+(?:\.\d+)?)\s*(kg|g|lb|lbs|oz|ounce|ounces|ml|l)\b/g),
+    ...s.matchAll(new RegExp(`(\\d+(?:\\.\\d+)?)\\s*(${MASS_UNIT_RE})\\b`, "g")),
   ].filter((m) => {
     // Skip unit-price crumbs: "$7.69/1kg" or "/ lb"
     const i = m.index ?? 0;
@@ -38,7 +50,9 @@ export function parseMassFromText(text: string): ParsedMass | null {
     return true;
   });
   if (all.length === 0) {
-    const m2 = s.match(/(^|[^$/])(\d+(?:\.\d+)?)(kg|g|lb|lbs|oz|ml)\b/);
+    const m2 = s.match(
+      new RegExp(`(^|[^$/])(\\d+(?:\\.\\d+)?)(${MASS_UNIT_RE})\\b`),
+    );
     if (!m2) return null;
     return toMass(Number(m2[2]), normalizeUnit(m2[3]));
   }
@@ -70,10 +84,10 @@ export function parseEmbeddedWeightRates(text: string): {
 
 function normalizeUnit(u: string): MassUnit {
   if (u === "kg") return "kg";
-  if (u === "g") return "g";
+  if (u === "g" || u === "gr") return "g";
   if (u === "lb" || u === "lbs") return "lb";
   if (u === "ml") return "ml";
-  if (u === "l") return "l";
+  if (u === "l" || u === "lt") return "l";
   return "oz";
 }
 

@@ -13,6 +13,7 @@ import {
   NOFRILLS_RETAILER,
   WALMART_RETAILER,
   WHOLESALECLUB_RETAILER,
+  MVR_RETAILER,
   catalogOfferToRecord,
   isNoFrillsRetailerSku,
   offerFailsStapleFilters,
@@ -52,6 +53,7 @@ import {
 const NF_STORE = "3660";
 const WM_STORE = "5831";
 const WC_STORE = "3724";
+const MVR_STORE = "weston";
 
 function nowIso(): string {
   return new Date().toISOString();
@@ -122,6 +124,24 @@ function seedWholesaleClub(
     upc: upcFromOffer(offer),
     matchMethod: "seed_catalog",
     matchConfidence: 0.85,
+    verified: false,
+    decision: "auto_linked",
+    kind: identityKind(item) === "identity" ? "identity" : "staple_winner",
+  });
+}
+
+function seedMvr(
+  item: SeedStapleItem,
+  offer: SeedCatalogOffer,
+): RetailerSkuLink {
+  return link({
+    retailer: MVR_RETAILER,
+    storeId: MVR_STORE,
+    retailerProductId: offer.productId,
+    name: offer.name,
+    upc: upcFromOffer(offer),
+    matchMethod: "seed_catalog",
+    matchConfidence: identityKind(item) === "identity" ? 0.9 : 0.85,
     verified: false,
     decision: "auto_linked",
     kind: identityKind(item) === "identity" ? "identity" : "staple_winner",
@@ -255,6 +275,7 @@ export async function runSeedAndMatch(): Promise<{
   const wcCat = await loadSeedCatalog(
     "data/catalog/wholesaleclub_3724_latest.json",
   );
+  const mvrCat = await loadSeedCatalog("data/catalog/mvr_weston_latest.json");
   const confirmed = await loadSeedConfirmed();
   const receipts = await loadSeedReceipts();
   const prev = await loadRetailerMappings();
@@ -262,6 +283,7 @@ export async function runSeedAndMatch(): Promise<{
   const nfById = new Map((nfCat?.items ?? []).map((r) => [r.id, r]));
   const wmById = new Map((wmCat?.items ?? []).map((r) => [r.id, r]));
   const wcById = new Map((wcCat?.items ?? []).map((r) => [r.id, r]));
+  const mvrById = new Map((mvrCat?.items ?? []).map((r) => [r.id, r]));
 
   const store: RetailerMappingStore = {
     updatedAt: nowIso(),
@@ -279,7 +301,10 @@ export async function runSeedAndMatch(): Promise<{
 
   const ids = items
     .map((i) => i.id)
-    .filter((id) => nfById.has(id) || wmById.has(id) || wcById.has(id));
+    .filter(
+      (id) =>
+        nfById.has(id) || wmById.has(id) || wcById.has(id) || mvrById.has(id),
+    );
 
   for (const masterId of ids) {
     const item = items.find((i) => i.id === masterId);
@@ -289,10 +314,12 @@ export async function runSeedAndMatch(): Promise<{
     const nfRow = nfById.get(masterId);
     const wmRow = wmById.get(masterId);
     const wcRow = wcById.get(masterId);
+    const mvrRow = mvrById.get(masterId);
     const nfOffer = nfRow?.status === "ok" ? nfRow.offer : null;
     const wmOffer = wmRow?.status === "ok" ? wmRow.offer : null;
     const wcOffer = wcRow?.status === "ok" ? wcRow.offer : null;
-    if (!nfOffer && !wmOffer && !wcOffer) continue;
+    const mvrOffer = mvrRow?.status === "ok" ? mvrRow.offer : null;
+    if (!nfOffer && !wmOffer && !wcOffer && !mvrOffer) continue;
 
     const existing = prev.products[masterId];
     const existingWm = existing?.retailers[WALMART_RETAILER];
@@ -315,6 +342,19 @@ export async function runSeedAndMatch(): Promise<{
       retailers[WHOLESALECLUB_RETAILER] = seedWholesaleClub(item, wcOffer);
     } else if (existingWc) {
       retailers[WHOLESALECLUB_RETAILER] = existingWc;
+    }
+
+    const existingMvr = existing?.retailers[MVR_RETAILER];
+    if (isLockedIdentityLink(existingMvr)) {
+      retailers[MVR_RETAILER] = {
+        ...existingMvr,
+        skippedRematch: true,
+        updatedAt: existingMvr.updatedAt,
+      };
+    } else if (mvrOffer) {
+      retailers[MVR_RETAILER] = seedMvr(item, mvrOffer);
+    } else if (existingMvr) {
+      retailers[MVR_RETAILER] = existingMvr;
     }
 
     const existingSobeys = existing?.retailers.sobeys;
@@ -482,6 +522,35 @@ export async function runSeedAndMatch(): Promise<{
     } else if (existing) {
       prices.push(
         ...existing.prices.filter((p) => p.retailer === WHOLESALECLUB_RETAILER),
+      );
+    }
+    const mvrLink = retailers[MVR_RETAILER];
+    const mvrPriceOffer = mvrLink
+      ? findOfferForSku(mvrRow ?? undefined, mvrLink.retailerProductId) ??
+        (mvrLink.kind === "staple_winner" ? mvrOffer : null)
+      : mvrOffer;
+    if (mvrPriceOffer) {
+      prices.push(
+        priceRow({
+          retailer: MVR_RETAILER,
+          storeId: MVR_STORE,
+          offer: mvrPriceOffer,
+          source: "catalog_mvr_weston_latest",
+          priceConfidence: assignPriceConfidence({
+            hasLiveOffer: true,
+            offerConfidence: mvrPriceOffer.confidence,
+            ageHours: ageHours(mvrPriceOffer.checkedAt),
+            staleAfterHours: SEED_STALE_HOURS,
+            hasReceiptPrice: false,
+            livePrice: mvrPriceOffer.price,
+            otherLivePrice: nfOffer?.price ?? wmPriceOffer?.price,
+            identityLinked,
+          }),
+        }),
+      );
+    } else if (existing) {
+      prices.push(
+        ...existing.prices.filter((p) => p.retailer === MVR_RETAILER),
       );
     }
     if (existing) {

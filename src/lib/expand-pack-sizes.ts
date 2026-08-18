@@ -73,14 +73,14 @@ export function mergeLivePackSizes(input: {
   const siblings = samePackedItemCandidates(
     input.item,
     [...catalogCandidates(input.row), ...incoming].filter(offerIsOnShelf),
-    offerIsOnShelf(input.row?.offer) ? input.row.offer : undefined,
+    offerIsOnShelf(input.row?.offer) ? input.row?.offer : undefined,
   );
   const merged = mergeDistinctPackSizes(siblings);
   return splitOfferAndAlternates(merged, input.keepProductId);
 }
 
 export async function persistPackSizeRow(input: {
-  retailer: "walmart_ca" | "no_frills" | "wholesale_club";
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club" | "mvr";
   id: string;
   label: string;
   offer: CatalogOffer | null;
@@ -113,6 +113,18 @@ export async function persistPackSizeRow(input: {
     });
     return;
   }
+  if (input.retailer === "mvr") {
+    const { upsertMvrCatalogItem } = await import("@/lib/mvr-catalog");
+    await upsertMvrCatalogItem({
+      id: input.id,
+      label: input.label,
+      status: input.offer ? "ok" : "no_match",
+      offer: input.offer,
+      alternates: input.offer ? input.alternates : [],
+      notes: input.notes,
+    });
+    return;
+  }
   await upsertWalmartCatalogItem({
     id: input.id,
     label: input.label,
@@ -125,7 +137,7 @@ export async function persistPackSizeRow(input: {
 }
 
 export function packSizeNotes(
-  retailer: "walmart_ca" | "no_frills" | "wholesale_club",
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club" | "mvr",
   sizeCount: number,
 ): string {
   const store =
@@ -133,6 +145,8 @@ export function packSizeNotes(
       ? "WM"
       : retailer === "wholesale_club"
         ? "WC"
-        : "NF";
+        : retailer === "mvr"
+          ? "MVR"
+          : "NF";
   return `Live ${store} pack sizes (${sizeCount})`;
 }

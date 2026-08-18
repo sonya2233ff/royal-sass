@@ -395,6 +395,12 @@ export async function deleteStaplesCompletely(ids: string[]): Promise<{
     wc.items = wc.items.filter((row) => !gone.has(row.id));
     await saveWholesaleClubCatalog(wc);
   }
+  const { loadMvrCatalog, saveMvrCatalog } = await import("@/lib/mvr-catalog");
+  const mvr = await loadMvrCatalog();
+  if (mvr) {
+    mvr.items = mvr.items.filter((row) => !gone.has(row.id));
+    await saveMvrCatalog(mvr);
+  }
 
   const confirmed = await loadConfirmed();
   let confirmedChanged = false;
@@ -1074,7 +1080,7 @@ export function summarizeOffer(
     retailer?: string;
   } | null,
   qty = 1,
-  retailer: "walmart_ca" | "no_frills" | "wholesale_club" = "walmart_ca",
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club" | "mvr" = "walmart_ca",
 ): SummarizedOffer | null {
   if (!offer) return null;
 

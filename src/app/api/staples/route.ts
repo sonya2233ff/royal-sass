@@ -34,12 +34,13 @@ import {
 import { preferredStapleImage } from "@/lib/product-image";
 import { loadSobeysCatalog } from "@/lib/sobeys-catalog";
 import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
+import { loadMvrCatalog } from "@/lib/mvr-catalog";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 function unitFields(
-  retailer: "walmart_ca" | "no_frills" | "wholesale_club",
+  retailer: "walmart_ca" | "no_frills" | "wholesale_club" | "mvr",
   storeId: string,
   offer: {
     productId: string;
@@ -94,12 +95,14 @@ export async function GET() {
   const nfCatalog = await loadNoFrillsCatalog();
   const sobeysCatalog = await loadSobeysCatalog();
   const wcCatalog = await loadWholesaleClubCatalog();
+  const mvrCatalog = await loadMvrCatalog();
   const confirmed = await loadConfirmed();
   const mappings = await loadRetailerMappings();
   const byId = new Map(catalog?.items.map((i) => [i.id, i]) ?? []);
   const nfById = new Map(nfCatalog?.items.map((i) => [i.id, i]) ?? []);
   const sobeysById = new Map(sobeysCatalog?.items.map((i) => [i.id, i]) ?? []);
   const wcById = new Map(wcCatalog?.items.map((i) => [i.id, i]) ?? []);
+  const mvrById = new Map(mvrCatalog?.items.map((i) => [i.id, i]) ?? []);
 
   const items = cfg.items
     .filter(isShownStaple)
@@ -110,6 +113,7 @@ export async function GET() {
       const nfLink = mappings.products[i.id]?.retailers.nofrills;
       const sobeysLink = mappings.products[i.id]?.retailers.sobeys;
       const wcLink = mappings.products[i.id]?.retailers.wholesaleclub;
+      const mvrLink = mappings.products[i.id]?.retailers.mvr;
       const packPickGrams =
         usesNeededWeightPick(i) && !isSoldByWeightItem(i)
           ? defaultNeededGrams(i)
@@ -260,6 +264,42 @@ export async function GET() {
         wcUsable && wcOffer && eggItem ? eggUnitFields(wcOffer) : null;
       const wcOnSale = wcUsable ? offerIsOnSale(wcOffer) : false;
 
+      const mvrCat = mvrById.get(i.id);
+      const mvrResolved = resolveCatalogOffer({
+        item: i,
+        row: mvrCat,
+        link: mvrLink,
+        matchMode: mode,
+        neededGrams: packPickGrams,
+      });
+      const mvrOffer = mvrResolved.offer ?? null;
+      const mvrEval = evaluateOfferStatus(i, mvrOffer, {
+        catalogStatus:
+          mvrResolved.reason === "rejected_filter" ? "no_match" : mvrCat?.status,
+      });
+      const mvrUsable = Boolean(
+        mvrOffer && (mvrEval.status === "ok" || mvrEval.status === "stale"),
+      );
+      const mvrUnits =
+        mvrUsable && mvrOffer && showWeightUnits
+          ? unitFields(
+              "mvr",
+              "weston",
+              {
+                productId: mvrOffer.productId,
+                name: mvrOffer.name,
+                packageSize: mvrOffer.packageSize,
+                price: mvrOffer.price,
+                unitPrice: mvrOffer.unitPrice,
+                checkedAt: mvrOffer.checkedAt,
+              },
+              true,
+            )
+          : null;
+      const eggMvr =
+        mvrUsable && mvrOffer && eggItem ? eggUnitFields(mvrOffer) : null;
+      const mvrOnSale = mvrUsable ? offerIsOnSale(mvrOffer) : false;
+
       return {
         id: i.id,
         label: i.label,
@@ -269,6 +309,7 @@ export async function GET() {
           wmOffer: offer,
           nfOffer,
           wcOffer,
+          mvrOffer,
         }),
         notes: i.notes,
         status,
@@ -282,7 +323,7 @@ export async function GET() {
         weightCompare: showWeightUnits || eggItem,
         soldByWeight: isSoldByWeightItem(i),
         typicalEachGrams: typicalEachGramsOf(i) ?? null,
-        onSale: wmOnSale || nfOnSale || wcOnSale,
+        onSale: wmOnSale || nfOnSale || wcOnSale || mvrOnSale,
         walmartCached: usable
           ? {
               name: offer!.name,
@@ -366,6 +407,34 @@ export async function GET() {
               image: wcOffer!.image ?? null,
             }
           : null,
+        mvrCached: mvrUsable
+          ? {
+              name: mvrOffer!.name,
+              price: mvrOffer!.price,
+              productId: mvrOffer!.productId,
+              packageSize: mvrOffer!.packageSize,
+              parsedMassKg: mvrOffer!.parsedMassKg ?? null,
+              checkedAt: mvrOffer!.checkedAt ?? mvrCatalog?.checkedAt,
+              wasPrice: mvrOffer!.wasPrice ?? null,
+              onSale: mvrOnSale,
+              ageLabel: mvrEval.ageLabel,
+              pricePerKg: mvrUnits?.pricePerKg ?? null,
+              pricePerLb: mvrUnits?.pricePerLb ?? null,
+              nativeUnit: mvrUnits?.nativeUnit ?? null,
+              nativeUnitPrice: eggMvr?.priceEach ?? mvrUnits?.nativePrice ?? null,
+              nativeUnitLabel: eggMvr
+                ? `за ${eggMvr.count} шт`
+                : mvrUnits
+                  ? weightUnitLabel(mvrUnits.nativeUnit)
+                  : null,
+              nativeUnitPriceLabel: eggMvr
+                ? eggMvr.label
+                : mvrUnits
+                  ? formatMoneyPerWeight(mvrUnits.nativePrice, mvrUnits.nativeUnit)
+                  : null,
+              image: mvrOffer!.image ?? null,
+            }
+          : null,
         sobeysCached: (() => {
           const sobeysCat = sobeysById.get(i.id);
           const sobeysResolved = resolveCatalogOffer({
@@ -410,14 +479,17 @@ export async function GET() {
       { key: "walmart_5831", name: "Walmart #5831" },
       { key: "nofrills_3660", name: "No Frills #3660" },
       { key: "wholesaleclub_3724", name: "Wholesale Club #3724" },
+      { key: "mvr_weston", name: "MVR Cash & Carry" },
     ],
     sobeysEnabled: false,
     wholesaleClubEnabled: true,
+    mvrEnabled: true,
     ...walmartSourceApiFields(),
     cacheStaleHours: CACHE_STALE_HOURS,
     catalogCheckedAt: catalog?.checkedAt ?? null,
     noFrillsCatalogCheckedAt: nfCatalog?.checkedAt ?? null,
     wholesaleClubCatalogCheckedAt: wcCatalog?.checkedAt ?? null,
+    mvrCatalogCheckedAt: mvrCatalog?.checkedAt ?? null,
     sobeysCatalogCheckedAt: sobeysCatalog?.checkedAt ?? null,
     sobeysFlyerId: sobeysCatalog?.flyerId ?? null,
     sobeysFlyerValidTo: sobeysCatalog?.flyerValidTo ?? null,

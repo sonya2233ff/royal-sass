@@ -9,6 +9,7 @@ export const NOFRILLS_RETAILER = "nofrills";
 export const WALMART_RETAILER = "walmart_ca";
 export const SOBEYS_RETAILER = "sobeys";
 export const WHOLESALECLUB_RETAILER = "wholesaleclub";
+export const MVR_RETAILER = "mvr";
 
 export interface StapleFilterItem {
   id: string;
