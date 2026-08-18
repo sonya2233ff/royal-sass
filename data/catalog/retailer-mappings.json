@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T00:09:28.597Z",
+  "updatedAt": "2026-08-18T00:37:58.519Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -87,6 +87,18 @@
           "kind": "identity",
           "skippedRematch": true,
           "updatedAt": "2026-08-17T04:11:20.993Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20840038001_EA",
+          "name": "Grape Tomato",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:42.180Z"
         }
       },
       "prices": [
@@ -107,6 +119,16 @@
           "checkedAt": "2026-08-14T01:30:32.147Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "RECEIPT_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20840038001_EA",
+          "price": 7.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:41.625Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -324,6 +346,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.406Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20795315001_EA",
+          "name": "Lemons, 2 lb Bag",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:43.873Z"
         }
       },
       "prices": [
@@ -345,6 +379,16 @@
           "checkedAt": "2026-08-14T01:31:07.668Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20795315001_EA",
+          "price": 4.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:42.702Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -434,6 +478,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.407Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21111368001_EA",
+          "name": "Bartlett Pear, 2 L",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:45.675Z"
         }
       },
       "prices": [
@@ -455,6 +511,16 @@
           "checkedAt": "2026-08-14T01:31:13.161Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21111368001_EA",
+          "price": 5.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:44.477Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -663,6 +729,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.409Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20159013001_KG",
+          "name": "Long Eggplants",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:46.625Z"
         }
       },
       "prices": [
@@ -682,6 +760,16 @@
           "price": 2.17,
           "checkedAt": "2026-08-15T23:45:40.516Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20159013001_KG",
+          "price": 1.37,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:46.129Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -772,6 +860,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.410Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21714328001_EA",
+          "name": "Roma Tomatoes on the Vine",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:37:58.518Z"
         }
       },
       "prices": [
@@ -793,6 +893,16 @@
           "checkedAt": "2026-08-14T01:31:31.364Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21714328001_EA",
+          "price": 5.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:37:57.574Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -928,6 +1038,18 @@
           "kind": "identity",
           "skippedRematch": true,
           "updatedAt": "2026-08-17T04:11:20.997Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21037796_EA",
+          "name": "Gluten-Free Original Oat Milk Alternative",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T00:34:49.839Z"
         }
       },
       "prices": [
@@ -949,6 +1071,16 @@
           "checkedAt": "2026-08-16T00:48:34.870Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21037796_EA",
+          "price": 4.49,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:48.781Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -1038,6 +1170,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.411Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20007535001_KG",
+          "name": "Red Peppers    ",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:50.984Z"
         }
       },
       "prices": [
@@ -1059,6 +1203,16 @@
           "checkedAt": "2026-08-14T01:31:49.526Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20007535001_KG",
+          "price": 2.11,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:50.394Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -1148,6 +1302,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.411Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20127708001_KG",
+          "name": "Sweet Potato",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:52.100Z"
         }
       },
       "prices": [
@@ -1169,6 +1335,16 @@
           "checkedAt": "2026-08-14T01:31:55.543Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20127708001_KG",
+          "price": 2.77,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:51.574Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -1253,6 +1429,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.412Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20160992001_EA",
+          "name": "Pineapple",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:52.972Z"
         }
       },
       "prices": [
@@ -1274,6 +1462,16 @@
           "checkedAt": "2026-08-14T01:32:02.603Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20160992001_EA",
+          "price": 4.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:52.488Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -1410,6 +1608,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.412Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20175355001_KG",
+          "name": "Bananas, Bunch",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:55.481Z"
         }
       },
       "prices": [
@@ -1429,6 +1639,16 @@
           "price": 0.35,
           "checkedAt": "2026-08-16T00:22:07.731Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20175355001_KG",
+          "price": 1.75,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:55.052Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -1518,6 +1738,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.413Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20130242001_EA",
+          "name": "Kiwis",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:57.061Z"
         }
       },
       "prices": [
@@ -1537,6 +1769,16 @@
           "price": 9.97,
           "checkedAt": "2026-08-16T00:49:23.446Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20130242001_EA",
+          "price": 1.09,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:56.065Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -1622,6 +1864,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.414Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21046471001_EA",
+          "name": "Naturally Imperfect English Cucumber 3lb Bag",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:58.011Z"
         }
       },
       "prices": [
@@ -1643,6 +1897,16 @@
           "checkedAt": "2026-08-14T01:32:25.130Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21046471001_EA",
+          "price": 5.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:57.478Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -1727,6 +1991,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.414Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21238843001_EA",
+          "name": "Garlic Bulbs",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:34:59.560Z"
         }
       },
       "prices": [
@@ -1748,6 +2024,16 @@
           "checkedAt": "2026-08-14T01:32:29.585Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21238843001_EA",
+          "price": 5.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:34:58.596Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -1849,6 +2135,18 @@
           "decision": "auto_linked",
           "kind": "staple_winner",
           "updatedAt": "2026-08-18T00:09:28.574Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20080137001_EA",
+          "name": "Blueberries 1 pint",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:35:01.362Z"
         }
       },
       "prices": [
@@ -1880,6 +2178,16 @@
           "checkedAt": "2026-08-18T00:09:28.572Z",
           "source": "sobeys_flyer_659",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20080137001_EA",
+          "price": 4.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:35:00.114Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -1969,6 +2277,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.414Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20069661001_EA",
+          "name": "Strawberries 2LB",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:35:02.396Z"
         }
       },
       "prices": [
@@ -1990,6 +2310,16 @@
           "checkedAt": "2026-08-14T01:32:42.205Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "ESTIMATED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20069661001_EA",
+          "price": 8.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:35:01.841Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -2128,6 +2458,18 @@
           "kind": "identity",
           "skippedRematch": true,
           "updatedAt": "2026-08-17T04:11:20.999Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20559466_EA",
+          "name": "Unsalted Butter",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T00:35:06.823Z"
         }
       },
       "prices": [
@@ -2148,6 +2490,16 @@
           "checkedAt": "2026-08-16T00:49:02.626Z",
           "source": "catalog_walmart_5831_latest",
           "priceConfidence": "MULTI_SOURCE_CONFIRMED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20559466_EA",
+          "price": 8.29,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:35:06.361Z",
+          "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
         }
       ]
     },
@@ -2356,6 +2708,18 @@
           "kind": "identity",
           "skippedRematch": true,
           "updatedAt": "2026-08-17T19:38:46.588Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21622130_EA",
+          "name": "Orange Juice, No Pulp",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T00:35:08.117Z"
         }
       },
       "prices": [
@@ -2375,6 +2739,16 @@
           "price": 8.99,
           "checkedAt": "2026-08-17T19:38:46.583Z",
           "source": "pcx_bff",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21622130_EA",
+          "price": 5.49,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:35:07.555Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2491,6 +2865,18 @@
           "kind": "identity",
           "skippedRematch": true,
           "updatedAt": "2026-08-17T04:11:20.999Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20871415_EA",
+          "name": "Sandwich Bags, with Grip 'n Seal Technology",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "identity",
+          "updatedAt": "2026-08-18T00:35:12.848Z"
         }
       },
       "prices": [
@@ -2510,6 +2896,16 @@
           "price": 9.97,
           "checkedAt": "2026-08-16T00:51:57.188Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20871415_EA",
+          "price": 5.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:35:11.639Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2629,6 +3025,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.415Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21033164_EA",
+          "name": "Blueberries",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:35:17.915Z"
         }
       },
       "prices": [
@@ -2648,6 +3056,16 @@
           "price": 5.98,
           "checkedAt": "2026-08-16T00:49:10.852Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21033164_EA",
+          "price": 13.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:35:16.923Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2738,6 +3156,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.416Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21033168_EA",
+          "name": "Whole Strawberries",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:35:19.621Z"
         }
       },
       "prices": [
@@ -2757,6 +3187,16 @@
           "price": 4.66,
           "checkedAt": "2026-08-16T00:49:13.209Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "21033168_EA",
+          "price": 13.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:35:18.270Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
@@ -2847,6 +3287,18 @@
             }
           ],
           "updatedAt": "2026-08-17T12:22:06.417Z"
+        },
+        "wholesaleclub": {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20611796_EA",
+          "name": "Chopped Spinach",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T00:35:21.268Z"
         }
       },
       "prices": [
@@ -2866,6 +3318,16 @@
           "price": 3.37,
           "checkedAt": "2026-08-16T00:49:15.757Z",
           "source": "catalog_walmart_5831_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        },
+        {
+          "retailer": "wholesaleclub",
+          "storeId": "3724",
+          "retailerProductId": "20611796_EA",
+          "price": 1.99,
+          "availability": "unknown",
+          "checkedAt": "2026-08-18T00:35:20.001Z",
+          "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]

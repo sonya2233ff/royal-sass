@@ -3,14 +3,13 @@ import {
   WHOLESALECLUB_STORE_ID,
 } from "@/connectors/wholesaleclub";
 import type { ProductOffer } from "@/connectors/types";
-import { offerFailsStapleFilters } from "@/domain/catalog-normalize";
+import { offerFailsStapleFilters, nameMatchesFilterToken } from "@/domain/catalog-normalize";
 import {
   isActualCategoryBOffer,
   usesCategoryBIdentity,
 } from "@/domain/same-packed-item";
 import { persistObservation } from "@/lib/persistence";
 import {
-  isLockedIdentityLink,
   loadRetailerMappings,
   saveRetailerMappings,
   type MappedPrice,
@@ -23,6 +22,7 @@ import {
   catalogOfferFromLive,
   isShownStaple,
   isSoldByWeightItem,
+  isProduceWeightItem,
   loadStaplesConfig,
   pickStapleSearchWinner,
   resolveMatchMode,
@@ -50,6 +50,21 @@ function passesWcFilters(offer: ProductOffer, item: StapleItem): boolean {
   if (offerFailsStapleFilters(item, offer.name, offer.brand) != null) {
     return false;
   }
+  if (isProduceWeightItem(item) || isSoldByWeightItem(item)) {
+    const blob = `${offer.name} ${offer.packageSize ?? ""}`;
+    if (/\b\d+(\.\d+)?\s*ml\b/i.test(blob) || /\bcanned\b/i.test(blob)) {
+      return false;
+    }
+  }
+  // Preferred staples: do not auto-link a different Earth's Own / brand SKU
+  // (WC search for almond can return barista oat that still passes mustInclude).
+  if (resolveMatchMode(item) === "preferred") {
+    const token = item.preferNameIncludes?.find((t) => t.trim().length > 0);
+    if (token) {
+      const hay = `${offer.brand ?? ""} ${offer.name} ${offer.packageSize ?? ""}`;
+      if (!nameMatchesFilterToken(hay, token)) return false;
+    }
+  }
   if (!usesCategoryBIdentity(item)) return true;
   return isActualCategoryBOffer(item, {
     productId: offer.productId,
@@ -68,8 +83,7 @@ export async function searchWholesaleClubPool(
   const seen = new Map<string, ProductOffer>();
   const mappings = await loadRetailerMappings();
   const wcLink = mappings.products[item.id]?.retailers.wholesaleclub;
-  const lockedSku =
-    wcLink && isLockedIdentityLink(wcLink) ? wcLink.retailerProductId : null;
+  const lockedSku = wcLink?.verified ? wcLink.retailerProductId : null;
   const queries = item.queries.filter(Boolean).slice(0, 3);
   if (log) log.queries = lockedSku ? [lockedSku, ...queries] : [...queries];
 
@@ -99,7 +113,11 @@ export async function searchWholesaleClubPool(
   }
 
   return [...seen.values()].filter((o) => {
-    if (lockedSku && o.productId === lockedSku) return true;
+    const verifiedLock =
+      Boolean(lockedSku) &&
+      o.productId === lockedSku &&
+      Boolean(wcLink?.verified);
+    if (verifiedLock) return true;
     if (isCasePackSku(o.productId)) {
       log?.rejected.push({
         productId: o.productId,
@@ -198,13 +216,13 @@ function applyWcMapping(
 
   if (!offer) {
     if (!existed) return;
-    if (!isLockedIdentityLink(prev)) delete existing.retailers.wholesaleclub;
+    if (!prev?.verified) delete existing.retailers.wholesaleclub;
     existing.prices = prices;
     store.products[item.id] = existing;
     return;
   }
 
-  if (!isLockedIdentityLink(prev)) {
+  if (!prev?.verified) {
     existing.retailers.wholesaleclub = wcLinkFor(item, offer);
   }
   prices.push(wcPrice(offer));
