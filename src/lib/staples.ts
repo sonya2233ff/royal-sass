@@ -218,6 +218,7 @@ export interface CatalogOffer {
   unitPrice?: number;
   wasPrice?: number;
   onSale?: boolean;
+  availability?: string;
   confidence?: string;
   checkedAt?: string;
   sourceUrl?: string;
@@ -1271,6 +1272,7 @@ export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
     unitPrice,
     wasPrice: o.wasPrice,
     onSale: o.onSale || (o.wasPrice != null && o.wasPrice > o.price + 0.005) || undefined,
+    availability: o.availability,
     confidence: o.confidence,
     checkedAt: o.checkedAt,
     sourceUrl: o.sourceUrl,

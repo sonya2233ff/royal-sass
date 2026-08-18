@@ -71,12 +71,22 @@ function mapAvailability(raw: unknown): Availability {
   if (raw === true || raw === false) {
     return raw ? "out_of_stock" : "in_stock";
   }
-  const s = String(raw ?? "").toLowerCase();
+  const s = String(raw ?? "").toLowerCase().trim();
   if (!s) return "unknown";
-  if (s.includes("out") || s.includes("unavailable") || s === "false") {
+  const compact = s.replace(/[\s-]+/g, "_");
+  if (
+    compact.includes("out_of_stock") ||
+    s.includes("unavailable") ||
+    s === "false"
+  ) {
     return "out_of_stock";
   }
-  if (s.includes("in_stock") || s.includes("available") || s === "true") {
+  if (
+    compact.includes("in_stock") ||
+    s.includes("in stock") ||
+    s.includes("available") ||
+    s === "true"
+  ) {
     return "in_stock";
   }
   return "unknown";
@@ -181,7 +191,7 @@ export function mapRapidProduct(
 
   const outOfStock =
     item.out_of_stock === true ||
-    String(item.availability ?? "").toLowerCase().includes("out");
+    mapAvailability(item.availability) === "out_of_stock";
 
   const savings = parseMoney(item.savings_amount);
   const wasPrice = pickWasPrice(
@@ -213,7 +223,11 @@ export function mapRapidProduct(
     unitPrice,
     wasPrice,
     onSale: onSale || undefined,
-    availability: outOfStock ? "out_of_stock" : mapAvailability(item.availability),
+    availability: outOfStock
+      ? "out_of_stock"
+      : item.out_of_stock === false
+        ? "in_stock"
+        : mapAvailability(item.availability),
     confidence: "exact",
     checkedAt: new Date().toISOString(),
     sourceUrl,

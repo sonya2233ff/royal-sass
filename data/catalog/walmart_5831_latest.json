@@ -7,7 +7,7 @@
     "name": "Walmart Supercentre #5831",
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
-  "checkedAt": "2026-08-17T19:01:23.883Z",
+  "checkedAt": "2026-08-18T04:40:33.201Z",
   "itemCount": 30,
   "matched": 22,
   "items": [
@@ -34,7 +34,7 @@
       "alternates": [
         {
           "productId": "6000195508423",
-          "name": "Naturegg Simply Egg Whites\u2122 Free Run Burnbrae Farms",
+          "name": "Naturegg Simply Egg Whites™ Free Run Burnbrae Farms",
           "brand": "Naturegg Simply Egg Whites",
           "price": 5.47,
           "availability": "unknown",
@@ -51,22 +51,23 @@
       "label": "Grape Tomatoes (pack)",
       "status": "ok",
       "queriesTried": [
-        "grape tomatoes",
-        "cherry grape tomatoes"
+        "6000194960084"
       ],
       "offer": {
-        "productId": "6000194960084",
+        "productId": "6000194960083",
         "name": "Your Fresh Market Tomato, Grape, 10 oz",
         "brand": "Your Fresh Market",
         "packageSize": "283 g",
         "parsedMassKg": 0.28349523125000003,
         "price": 2.97,
+        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:52:48.939Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000194960084"
+        "checkedAt": "2026-08-18T04:40:33.195Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-tomato-grape/6000194960084",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/039/217/6000203039217.jpg"
       },
       "alternates": [],
-      "notes": "Pinned YFM 10 oz from live Rapid (id \u00b11 vs confirmed 6000194960084)",
+      "notes": "Produce: cheapest grape tomato pack (brand irrelevant)",
       "image": "/products/tomatoes_grape.jpg"
     },
     {
@@ -561,7 +562,7 @@
         },
         {
           "productId": "106BU965BNSP",
-          "name": "Lawry's Professional Chef's Choice Seasoned Pepper \u2013 Bold Black Pepper Bite & Sweet Red Bell Pepper Flecks, 10.3 oz. Bottle \u2013 Bulk 6/Case",
+          "name": "Lawry's Professional Chef's Choice Seasoned Pepper – Bold Black Pepper Bite & Sweet Red Bell Pepper Flecks, 10.3 oz. Bottle – Bulk 6/Case",
           "brand": "Lawry's",
           "packageSize": "292 g",
           "parsedMassKg": 0.29200008818750006,
@@ -654,7 +655,7 @@
       ],
       "offer": {
         "productId": "10184853",
-        "name": "Earth's Own Original\u00a0Almond Milk Alternative, 1.89L",
+        "name": "Earth's Own Original Almond Milk Alternative, 1.89L",
         "brand": "Earth's Own",
         "packageSize": "1.89 kg",
         "parsedMassKg": 1.89,
@@ -675,7 +676,7 @@
           "sourceUrl": "https://www.walmart.ca/en/ip/Silk-Almond-Milk-Alternative-Original-Dairy-Free/10207134?classType=REGULAR&athbdg=L1200"
         }
       ],
-      "notes": "Locked to Earths Own \u2014 same brand as oat",
+      "notes": "Locked to Earths Own — same brand as oat",
       "image": "/products/almond_earths_own.jpg"
     },
     {
@@ -889,7 +890,7 @@
         },
         {
           "productId": "10294053",
-          "name": "Mott\u2019s Fruitsations Unsweetened Blueberry Delight Apple Sauce",
+          "name": "Mott’s Fruitsations Unsweetened Blueberry Delight Apple Sauce",
           "brand": "Mott's Fruitsations",
           "price": 2.47,
           "availability": "unknown",
@@ -1058,7 +1059,7 @@
         }
       ],
       "image": "/products/butter_454g.jpg",
-      "notes": "Gay Lea Unsalted Butter 454g \u2014 WM product_id 6000201029320"
+      "notes": "Gay Lea Unsalted Butter 454g — WM product_id 6000201029320"
     },
     {
       "id": "large_eggs_dozen",
@@ -1155,7 +1156,7 @@
       },
       "alternates": [],
       "image": "/products/orange_juice_pulp.jpg",
-      "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L \u2014 WM product_id 205804"
+      "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L — WM product_id 205804"
     },
     {
       "id": "homo_milk_2l",
@@ -1216,7 +1217,7 @@
       "notes": "Frozen: cheapest sliced banana bag, any brand (not blends)",
       "rejected": {
         "productId": "358UWO1XPQH5",
-        "name": "Evive Protein Smoothie Cubes - Maple Frapp\u00e9, 450g, Vegan, Non-GMO, Frozen Cubes, Blend (banana, mixed fruits, cashews etc.), Evive Protein Smoothie Cubes - Maple Frapp\u00e9, 450g",
+        "name": "Evive Protein Smoothie Cubes - Maple Frappé, 450g, Vegan, Non-GMO, Frozen Cubes, Blend (banana, mixed fruits, cashews etc.), Evive Protein Smoothie Cubes - Maple Frappé, 450g",
         "price": 9.24,
         "reason": "name filter"
       },
@@ -1363,7 +1364,7 @@
         "wasPrice": 2.97,
         "onSale": true
       },
-      "notes": "ReaLemon Juice 440ml \u2014 WM product_id 1BUHM1GPVP5J"
+      "notes": "ReaLemon Juice 440ml — WM product_id 1BUHM1GPVP5J"
     },
     {
       "id": "jello_vanilla_instant",
@@ -1386,7 +1387,7 @@
         "checkedAt": "2026-08-17T18:55:42.705Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/10306574"
       },
-      "notes": "Jell-O Vanilla Instant Pudding Mix 102g casein-free \u2014 WM product_id 10306574"
+      "notes": "Jell-O Vanilla Instant Pudding Mix 102g casein-free — WM product_id 10306574"
     },
     {
       "id": "ziploc_sandwich",
@@ -1401,14 +1402,14 @@
       "status": "ok",
       "offer": {
         "productId": "6000195369896",
-        "name": "Ziploc\u00ae Sandwich Bags with Grip 'n Seal Technology",
+        "name": "Ziploc® Sandwich Bags with Grip 'n Seal Technology",
         "brand": "Ziploc",
         "price": 8,
         "confidence": "exact",
         "checkedAt": "2026-08-17T18:55:43.573Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/6000195369896"
       },
-      "notes": "Ziploc Sandwich Bags Grip n Seal \u2014 WM product_id 6000195369896"
+      "notes": "Ziploc Sandwich Bags Grip n Seal — WM product_id 6000195369896"
     }
   ],
   "updatedAt": "2026-08-14T21:43:34.573Z"
