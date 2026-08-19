@@ -9,7 +9,7 @@ import type { ProductOffer } from "@/connectors/types";
 import { offerImageUrl } from "@/lib/product-image";
 import {
   isShownStaple,
-  isEggPackItem,
+  eggCartonCountOk,
   loadNoFrillsCatalog,
   loadStaplesConfig,
   loadWalmartCatalog,
@@ -20,10 +20,12 @@ import {
   categoryBSearchQueries,
   isCategoryBStaple,
   nameMatchesFilterPhrase,
+  offerFailsStapleOfferFilters,
   warehouseTitleView,
 } from "@/domain/catalog-normalize";
 import {
   englishEggSearchQueries,
+  eggCatalogSourceIds,
   isEggPackStaple,
   queryLooksLikeShellEggs,
 } from "@/domain/egg-pack";
@@ -170,13 +172,15 @@ function hitsFromCatalogRow(
   retailer: StoreHit["retailer"],
   row: CatalogRow | undefined,
   needles: string[],
-  stapleId: string,
+  item: { id: string; mustIncludeAny?: string[]; mustIncludeAll?: string[]; mustNotInclude?: string[]; category?: string },
 ): StoreHit[] {
   if (!row) return [];
   const out: StoreHit[] = [];
   for (const offer of [row.offer, ...(row.alternates ?? [])]) {
     if (!offer?.productId || !offer.name || !(offer.price! > 0)) continue;
     if (!catalogOfferMatchesNeedles(offer, needles)) continue;
+    if (offerFailsStapleOfferFilters(item, { name: offer.name, packageSize: offer.packageSize }) != null) continue;
+    if (!eggCartonCountOk(item, offer.name, offer.packageSize)) continue;
     out.push({
       retailer,
       productId: offer.productId,
@@ -187,7 +191,7 @@ function hitsFromCatalogRow(
       image: offer.image ?? null,
       onSale: offer.onSale,
       wasPrice: offer.wasPrice,
-      stapleId,
+      stapleId: item.id,
     });
   }
   return out;
@@ -308,14 +312,16 @@ export async function GET(request: Request) {
 
   const catalogHits: StoreHit[] = [];
   if (eggQuery) {
-    for (const item of cfg.items.filter(isShownStaple)) {
-      if (!isEggPackItem(item)) continue;
-      catalogHits.push(
-        ...hitsFromCatalogRow("walmart_ca", wmById.get(item.id), catalogNeedles, item.id),
-        ...hitsFromCatalogRow("no_frills", nfById.get(item.id), catalogNeedles, item.id),
-        ...hitsFromCatalogRow("wholesale_club", wcById.get(item.id), catalogNeedles, item.id),
-        ...hitsFromCatalogRow("mvr", mvrById.get(item.id), catalogNeedles, item.id),
-      );
+    const eggStaple = cfg.items.find((item) => item.id === "large_eggs_dozen");
+    if (eggStaple) {
+      for (const sourceId of eggCatalogSourceIds(eggStaple)) {
+        catalogHits.push(
+          ...hitsFromCatalogRow("walmart_ca", wmById.get(sourceId), catalogNeedles, eggStaple),
+          ...hitsFromCatalogRow("no_frills", nfById.get(sourceId), catalogNeedles, eggStaple),
+          ...hitsFromCatalogRow("wholesale_club", wcById.get(sourceId), catalogNeedles, eggStaple),
+          ...hitsFromCatalogRow("mvr", mvrById.get(sourceId), catalogNeedles, eggStaple),
+        );
+      }
     }
   }
 

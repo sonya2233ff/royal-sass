@@ -44,13 +44,36 @@ export interface SanityResult {
 const DEFAULT_STALE_HOURS = 24;
 
 /** Egg warehouse cases: compare $/carton, not the $58 case sticker. */
-function comparableShelfPrice(input: SanityInput): number {
+export function comparableShelfPrice(input: SanityInput): number {
   if (!isEggPackStaple({ id: input.itemId }) || !(input.price > 0)) {
     return input.price;
   }
   const pack = parseCountPack(input.name, input.packageSize);
   const outer = pack && pack.outerCount > 1 ? pack.outerCount : 1;
   return input.price / outer;
+}
+
+export function offerFailsPlausibleShelfPrice(
+  item: {
+    id: string;
+    minPlausiblePrice?: number;
+    maxPlausiblePrice?: number;
+  },
+  offer: { name: string; price: number; packageSize?: string },
+): string | null {
+  const comparable = comparableShelfPrice({
+    itemId: item.id,
+    name: offer.name,
+    price: offer.price,
+    packageSize: offer.packageSize,
+  });
+  if (item.minPlausiblePrice != null && comparable < item.minPlausiblePrice) {
+    return `price $${offer.price} < min plausible $${item.minPlausiblePrice}`;
+  }
+  if (item.maxPlausiblePrice != null && comparable > item.maxPlausiblePrice) {
+    return `price $${offer.price} > max plausible $${item.maxPlausiblePrice}`;
+  }
+  return null;
 }
 
 /** Reject only mini packs. Same branded 1.36L vs expected 2.63L is still cafe-size. */

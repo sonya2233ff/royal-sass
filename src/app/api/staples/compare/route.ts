@@ -23,7 +23,7 @@ import {
   type CatalogOffer,
   type MatchLogEntry,
 } from "@/lib/staples";
-import { offerIsOnShelf, resolveCatalogOffer, catalogCandidates } from "@/domain/compare-resolve";
+import { offerIsOnShelf, resolveCatalogOffer, catalogCandidates, catalogRowForStaple } from "@/domain/compare-resolve";
 import { pickCheapestCoveringOffer } from "@/domain/checkout";
 import { buildStapleCompareRow } from "@/lib/staple-compare-row";
 import {
@@ -43,6 +43,7 @@ import { loadMvrCatalog } from "@/lib/mvr-catalog";
 import { searchMvrPool } from "@/lib/mvr-observe";
 import { recordCompareResult } from "@/lib/compare-stats";
 import { parseOverrideMap, effectiveProduct } from "@/lib/product-config";
+import { offerFailsStapleOfferFilters } from "@/domain/catalog-normalize";
 import type { Cart } from "@/domain/restaurant-product";
 import {
   completeBasketWinner,
@@ -54,7 +55,13 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 function coveringEggOffer(
-  item: { id: string; category?: string },
+  item: {
+    id: string;
+    category?: string;
+    mustIncludeAny?: string[];
+    mustIncludeAll?: string[];
+    mustNotInclude?: string[];
+  },
   product: Parameters<typeof pickCheapestCoveringOffer>[0],
   requested: number,
   row: Parameters<typeof catalogCandidates>[0],
@@ -63,6 +70,7 @@ function coveringEggOffer(
   if (!isEggPackItem(item) || !row) return fallback;
   const pool = catalogCandidates(row)
     .filter(offerIsOnShelf)
+    .filter((o) => offerFailsStapleOfferFilters(item, o) == null)
     .filter((o) => eggCartonCountOk(item, o.name, o.packageSize));
   const picked = pickCheapestCoveringOffer(product, requested, pool);
   return picked ? toCatalogOffer(picked) : fallback;
@@ -217,7 +225,7 @@ export async function POST(request: Request) {
       : packPickGrams ??
         (product.unit === "g" ? requestedAmount : null);
 
-    let wmRow = catById.get(id) ?? null;
+    let wmRow = catalogRowForStaple(item, catById);
     let wmResolved = resolveCatalogOffer({
       item,
       row: wmRow,
@@ -358,7 +366,7 @@ export async function POST(request: Request) {
     }
     entries.push(wmLog);
 
-    let nfRow = nfById.get(id) ?? null;
+    let nfRow = catalogRowForStaple(item, nfById);
     let nfResolved = resolveCatalogOffer({
       item,
       row: nfRow,
@@ -515,7 +523,7 @@ export async function POST(request: Request) {
         (nfEval.status === "ok" || nfEval.status === "stale"),
     );
 
-    let wcRow = wcById.get(id) ?? null;
+    let wcRow = catalogRowForStaple(item, wcById);
     let wcResolved = resolveCatalogOffer({
       item,
       row: wcRow,
@@ -657,7 +665,7 @@ export async function POST(request: Request) {
         (wcEval.status === "ok" || wcEval.status === "stale"),
     );
 
-    let mvrRow = mvrById.get(id) ?? null;
+    let mvrRow = catalogRowForStaple(item, mvrById);
     let mvrResolved = resolveCatalogOffer({
       item,
       row: mvrRow,

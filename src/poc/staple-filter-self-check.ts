@@ -15,7 +15,15 @@ import {
   loadStaplesConfig,
   resolveMatchMode,
 } from "@/lib/staples";
-import { queryLooksLikeShellEggs } from "@/domain/egg-pack";
+import { eggCatalogSourceIds, queryLooksLikeShellEggs } from "@/domain/egg-pack";
+import {
+  catalogRowForStaple,
+  mergeCatalogRows,
+  resolveCatalogOffer,
+} from "@/domain/compare-resolve";
+import { pickCheapestCoveringOffer } from "@/domain/checkout";
+import { toRestaurantProduct } from "@/domain/restaurant-product";
+import { sanityCheckOffer } from "@/domain/sanity";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -368,8 +376,20 @@ async function main() {
     "ice rejects gel ice packs",
   );
   assert(
-    eggCartonCountOk(dozen, "GRAY RIDGE - WHITE EGGS EXTRA LARGE 18EA") === false,
-    "dozen rejects 18EA",
+    eggCartonCountOk(dozen, "GRAY RIDGE - WHITE EGGS EXTRA LARGE 18EA") === true,
+    "Large Eggs count allows 18; Extra Large is a name filter",
+  );
+  assert(
+    offerFailsStapleFilters(
+      dozen,
+      "GRAY RIDGE - WHITE EGGS EXTRA LARGE 18EA",
+      "GRAY RIDGE",
+    ) === "mustNotInclude:extra large",
+    "Large Eggs rejects Extra Large",
+  );
+  assert(
+    eggCartonCountOk(dozen, "No Name Large Size Eggs 18 Pack") === true,
+    "Large Eggs keeps 18 pack",
   );
   assert(
     eggCartonCountOk(dozen, "No Name Large Size Eggs 12 Pack") === true,
@@ -419,18 +439,125 @@ async function main() {
     ) === true,
     "grayridge keeps 10×18 case of 18-count cartons",
   );
+  assert(
+    offerFailsStapleFilters(
+      dozen,
+      "GRAY RIDGE - EGGS LARGE BROWN 18EA",
+      "GRAY RIDGE",
+    ) == null,
+    "Large Eggs keeps Gray Ridge Large 18",
+  );
+  assert(
+    eggCatalogSourceIds(dozen).includes("grayridge_eggs"),
+    "Large Eggs reads the hidden Grayridge catalog row",
+  );
+
+  const mergedEggs = mergeCatalogRows([
+    {
+      offer: {
+        productId: "doz",
+        name: "GRAY RIDGE - EGGS WHITE LARGE 1DOZ",
+        price: 4.19,
+      },
+      alternates: [
+        {
+          productId: "case",
+          name: "GRAY RIDGE - EGGS WHITE LARGE 15x1 DOZ",
+          price: 57.99,
+        },
+      ],
+    },
+    {
+      offer: {
+        productId: "xl",
+        name: "GRAY RIDGE - WHITE EGGS EXTRA LARGE 18EA",
+        price: 6.69,
+      },
+      alternates: [
+        {
+          productId: "l18",
+          name: "GRAY RIDGE - EGGS LARGE BROWN 18EA",
+          price: 6.69,
+        },
+      ],
+    },
+  ]);
+  assert(mergedEggs?.alternates?.some((o) => o.productId === "l18"), "merge keeps Large 18");
+  const byId = new Map([
+    ["large_eggs_dozen", { offer: mergedEggs!.offer, alternates: mergedEggs!.alternates }],
+  ]);
+  const fromSources = catalogRowForStaple(dozen, byId);
+  assert(fromSources?.offer?.productId === "doz", "staple row still starts from dozen");
+
+  const resolvedEggs = resolveCatalogOffer({
+    item: dozen,
+    row: mergedEggs,
+    matchMode: "cheapest",
+    link: {
+      retailerProductId: "doz",
+      verified: false,
+      decision: "auto_linked",
+      kind: "identity",
+    },
+  });
+  assert(
+    resolvedEggs.offer?.productId !== "xl",
+    "cheapest Large Eggs does not lock Extra Large",
+  );
+  assert(
+    offerFailsStapleOfferFilters(dozen, {
+      name: "GRAY RIDGE - WHITE EGGS EXTRA LARGE 18EA",
+    }) === "mustNotInclude:extra large",
+    "merged Extra Large is name-filtered",
+  );
+
+  const eggProduct = toRestaurantProduct({
+    id: "large_eggs_dozen",
+    label: "Large Eggs",
+    category: "eggs",
+    matchMode: "cheapest_equivalent",
+    defaultAmount: 12,
+    unit: "ea",
+  });
+  const covering18 = pickCheapestCoveringOffer(eggProduct, 18, [
+    { price: 4.19, name: "GRAY RIDGE - EGGS WHITE LARGE 1DOZ" },
+    { price: 6.69, name: "GRAY RIDGE - EGGS LARGE BROWN 18EA" },
+  ]);
+  assert(
+    covering18?.name === "GRAY RIDGE - EGGS LARGE BROWN 18EA",
+    "18 eggs prefers one Large 18 over two dozens",
+  );
+  const covering180 = pickCheapestCoveringOffer(eggProduct, 180, [
+    { price: 4.19, name: "GRAY RIDGE - EGGS WHITE LARGE 1DOZ" },
+    { price: 57.99, name: "GRAY RIDGE - EGGS WHITE LARGE 15x1 DOZ" },
+    { price: 60.89, name: "GRAY RIDGE - WHITE EGGS EXTRA LARGE 10x18EA", packageSize: "10x18EA" },
+  ]);
+  assert(
+    covering180?.name === "GRAY RIDGE - EGGS WHITE LARGE 15x1 DOZ",
+    "180 eggs prefers the Large 15×1 case",
+  );
+
+  const caseSanity = sanityCheckOffer({
+    itemId: "large_eggs_dozen",
+    name: "GRAY RIDGE - EGGS WHITE LARGE 15x1 DOZ",
+    price: 57.99,
+    minPlausiblePrice: 2,
+    maxPlausiblePrice: 16,
+  });
+  assert(caseSanity.ok, `MVR Large case is plausible per carton (${caseSanity.reason})`);
 
   assert(queryLooksLikeShellEggs("яйця") === true, "UA яйця is shell eggs");
   assert(queryLooksLikeShellEggs("яєць") === true, "UA яєць is shell eggs");
   assert(queryLooksLikeShellEggs("eggs") === true, "eggs is shell eggs");
   assert(queryLooksLikeShellEggs("eggplant") === false, "eggplant is not eggs");
   assert(queryLooksLikeShellEggs("egg whites") === false, "whites are not shell eggs");
-  const eggIds = cfg.items
-    .filter((i) => queryLooksLikeShellEggs("яйця") && (i.id === "grayridge_eggs" || i.id === "large_eggs_dozen"));
-  assert(eggIds.length === 2, "two shell-egg staples for яйця");
+  assert(isShownStaple(dozen) === true, "one eggs staple is shown");
+  assert(isShownStaple(grayridge) === false, "Grayridge lock is not a second catalog egg");
+  const shownEggs = cfg.items.filter((i) => isShownStaple(i) && queryLooksLikeShellEggs("яйця") && (i.id === "grayridge_eggs" || i.id === "large_eggs_dozen" || i.category === "eggs"));
+  assert(shownEggs.length === 1 && shownEggs[0]!.id === "large_eggs_dozen", "catalog has one shell-egg staple");
 
   const shown = cfg.items.filter(isShownStaple);
-  assert(shown.length >= 125, `shown staples ${shown.length}`);
+  assert(shown.length >= 124, `shown staples ${shown.length}`);
   assert(
     shown.some((i) => i.id === "cups_12oz_black_ripple"),
     "receipt cups are shown",
@@ -450,7 +577,7 @@ async function main() {
       dozen,
       "No Name Medium Size Eggs 12 Pack",
       "No Name",
-    ) === "mustIncludeAny",
+    ) === "mustNotInclude:medium",
     "dozen rejects medium eggs",
   );
 

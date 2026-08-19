@@ -11,6 +11,7 @@ import {
   offerFailsStapleOfferFilters,
   type StapleFilterItem,
 } from "@/domain/catalog-normalize";
+import { eggCatalogSourceIds } from "@/domain/egg-pack";
 import { pickCheapestByFairUnit } from "@/domain/matching";
 import { pickNeededWeightPurchase } from "@/domain/needed-weight-pick";
 import {
@@ -167,6 +168,38 @@ export function catalogCandidates(
   return out;
 }
 
+/** Union offer + alternates from several catalog rows (Large Eggs ← Grayridge / 30ct). */
+export function mergeCatalogRows<T extends CatalogRowRef>(
+  rows: Array<T | null | undefined>,
+): T | null {
+  const present = rows.filter((row): row is T => row != null);
+  if (!present.length) return null;
+  const seen = new Set<string>();
+  const offers: CatalogOfferRef[] = [];
+  for (const row of present) {
+    for (const offer of catalogCandidates(row)) {
+      if (seen.has(offer.productId)) continue;
+      seen.add(offer.productId);
+      offers.push(offer);
+    }
+  }
+  if (!offers.length) return present[0]!;
+  return {
+    ...present[0]!,
+    offer: offers[0] as T["offer"],
+    alternates: offers.slice(1) as NonNullable<T["alternates"]>,
+  };
+}
+
+export function catalogRowForStaple<T extends CatalogRowRef>(
+  item: { id: string },
+  byId: { get(id: string): T | undefined },
+): T | null {
+  return mergeCatalogRows(
+    eggCatalogSourceIds(item).map((id) => byId.get(id)),
+  );
+}
+
 export function findOfferForSku(
   row: CatalogRowRef | null | undefined,
   sku: string,
@@ -187,6 +220,10 @@ export function offerPassesStapleFilters(
   return offerFailsStapleOfferFilters(item, offer) == null;
 }
 
+function cheapestEggsSkipIdentityLock(item: StapleFilterItem): boolean {
+  return item.category === "eggs" || item.id === "large_eggs_dozen";
+}
+
 export function resolveCatalogOffer(input: {
   item: StapleFilterItem;
   row?: CatalogRowRef | null;
@@ -200,7 +237,10 @@ export function resolveCatalogOffer(input: {
   detail?: string;
 } {
   const mappedSku = input.link?.retailerProductId;
-  if (mappingIsLockedIdentity(input.link) && mappedSku) {
+  const lockIdentity =
+    mappingIsLockedIdentity(input.link) &&
+    !(input.matchMode === "cheapest" && cheapestEggsSkipIdentityLock(input.item));
+  if (lockIdentity && mappedSku) {
     const hit = findOfferForSku(input.row, mappedSku);
     if (hit && offerIsOnShelf(hit)) {
       const alias = hit.productId !== mappedSku;

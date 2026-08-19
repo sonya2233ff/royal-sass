@@ -107,7 +107,7 @@
       "preferredProductId": "6000191268613",
       "minPlausiblePrice": 4,
       "maxPlausiblePrice": 12,
-      "notes": "Receipt UPC 064767343050 @ $6.98 — Gray Ridge Premium Large White 18 (WM 6000191268613). Quantity is eggs, not packs: 18 / 30 / 10×18 case.",
+      "notes": "Hidden from the cafe catalog — Large Eggs covers all large cartons. Receipt UPC 064767343050 was Gray Ridge Premium Large White 18.",
       "image": "/products/grayridge_eggs.jpg",
       "purchaseStrategy": "exact_need",
       "defaultAmount": 18,
@@ -684,11 +684,14 @@
     },
     {
       "id": "large_eggs_dozen",
-      "label": "Large Eggs Dozen",
+      "label": "Large Eggs",
       "queries": [
-        "large eggs dozen",
-        "eggs large 12",
-        "grade a large eggs"
+        "large eggs",
+        "large egg",
+        "eggs large",
+        "grade a large eggs",
+        "яйця",
+        "яйце"
       ],
       "mustIncludeAny": [
         "large"
@@ -699,20 +702,23 @@
       "mustNotInclude": [
         "egg whites",
         "egg white",
+        "extra large",
+        "extra-large",
+        "xlarge",
+        "x-large",
         "chocolate",
-        "jumbo"
+        "jumbo",
+        "medium",
+        "small"
       ],
       "preferNameIncludes": [
-        "large",
-        "12",
-        "dozen"
+        "large"
       ],
-      "matchMode": "cheapest",
+      "matchMode": "cheapest_equivalent",
       "category": "eggs",
       "minPlausiblePrice": 2,
-      "maxPlausiblePrice": 8,
-      "notes": "Receipt shell eggs — cheapest large dozen (not 18/30, not Grayridge lock). Quantity is eggs: 12 / 18 / 30 / 15×1 dozen case.",
-      "targetMassKg": 0.7,
+      "maxPlausiblePrice": 16,
+      "notes": "Single cafe eggs line — all Large eggs, cheapest carton (12 / 18 / 30 and MVR cases). Not Extra Large / Jumbo / Medium.",
       "image": "/products/large_eggs_dozen.jpg",
       "purchaseStrategy": "exact_need",
       "defaultAmount": 12,

@@ -15,6 +15,7 @@ import {
   eggCartonCountOk,
   explicitNeededGrams,
 } from "@/lib/staples";
+import { offerFailsStapleOfferFilters } from "@/domain/catalog-normalize";
 import { typicalEachGramsOf } from "@/domain/same-packed-item";
 import {
   eggCountsFromOffer,
@@ -32,7 +33,7 @@ import {
 } from "@/domain/units";
 import type { ProductOffer } from "@/connectors/types";
 import { offerIsOnSale } from "@/connectors/types";
-import { resolveCatalogOffer } from "@/domain/compare-resolve";
+import { resolveCatalogOffer, catalogRowForStaple } from "@/domain/compare-resolve";
 import {
   loadRetailerMappings,
   lookupConfirmed,
@@ -43,7 +44,13 @@ import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
 import { loadMvrCatalog } from "@/lib/mvr-catalog";
 
 function eggChoicesFromCatalogs(
-  item: { id: string },
+  item: {
+    id: string;
+    mustIncludeAny?: string[];
+    mustIncludeAll?: string[];
+    mustNotInclude?: string[];
+    category?: string;
+  },
   rows: Array<
     | {
         offer?: { name?: string; packageSize?: string } | null;
@@ -59,6 +66,7 @@ function eggChoicesFromCatalogs(
     const offers = [row.offer, ...(row.alternates ?? [])];
     for (const offer of offers) {
       if (!offer?.name) continue;
+      if (offerFailsStapleOfferFilters(item, { name: offer.name, packageSize: offer.packageSize }) != null) continue;
       if (!eggCartonCountOk(item, offer.name, offer.packageSize)) continue;
       discovered.push(...eggCountsFromOffer(offer.name, offer.packageSize));
     }
@@ -138,7 +146,7 @@ export async function GET() {
   const items = cfg.items
     .filter(isShownStaple)
     .map((i) => {
-      const cat = byId.get(i.id);
+      const cat = catalogRowForStaple(i, byId);
       const mode = resolveMatchMode(i);
       const wmLink = mappings.products[i.id]?.retailers.walmart_ca;
       const nfLink = mappings.products[i.id]?.retailers.nofrills;
@@ -215,7 +223,7 @@ export async function GET() {
       const eggWm =
         usable && offer && eggItem ? eggUnitFields(offer) : null;
 
-      const nfCat = nfById.get(i.id);
+      const nfCat = catalogRowForStaple(i, nfById);
       const nfResolved = resolveCatalogOffer({
         item: i,
         row: nfCat,
@@ -256,7 +264,7 @@ export async function GET() {
         : false;
       const nfOnSale = nfUsable ? offerIsOnSale(nfOffer) : false;
 
-      const wcCat = wcById.get(i.id);
+      const wcCat = catalogRowForStaple(i, wcById);
       const wcResolved = resolveCatalogOffer({
         item: i,
         row: wcCat,
@@ -292,7 +300,7 @@ export async function GET() {
         wcUsable && wcOffer && eggItem ? eggUnitFields(wcOffer) : null;
       const wcOnSale = wcUsable ? offerIsOnSale(wcOffer) : false;
 
-      const mvrCat = mvrById.get(i.id);
+      const mvrCat = catalogRowForStaple(i, mvrById);
       const mvrResolved = resolveCatalogOffer({
         item: i,
         row: mvrCat,

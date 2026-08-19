@@ -5,6 +5,18 @@ import { parseCountPack } from "@/domain/units";
 
 export const EGG_PACK_IDS = new Set(["grayridge_eggs", "large_eggs_dozen"]);
 
+/** Catalog rows that still hold Large cartons after Grayridge was hidden. */
+export const EGG_CATALOG_SOURCE_IDS = [
+  "large_eggs_dozen",
+  "grayridge_eggs",
+  "eggs_30ct",
+] as const;
+
+export function eggCatalogSourceIds(item: { id: string }): readonly string[] {
+  if (item.id === "large_eggs_dozen") return EGG_CATALOG_SOURCE_IDS;
+  return [item.id];
+}
+
 /** Common cafe cartons, plus the usual MVR 15-dozen / 10×18 case. */
 export const EGG_COUNT_PRESETS = [12, 18, 30, 180];
 
@@ -63,8 +75,8 @@ export function mergeEggCountChoices(discovered: number[]): {
 }
 
 /**
- * Cafe search: Ukrainian "яйця" must find the two shell-egg staples
- * (Grayridge + large dozen), not eggplant / egg whites.
+ * Cafe search: Ukrainian "яйця" finds the single Large Eggs staple,
+ * not eggplant / egg whites.
  */
 export function queryLooksLikeShellEggs(q: string): boolean {
   const t = q.trim().toLowerCase();
@@ -75,10 +87,11 @@ export function queryLooksLikeShellEggs(q: string): boolean {
     return false;
   }
   if (/яйц|яєц/.test(t)) return true;
+  if (/\blarge\s+eggs?\b/.test(t)) return true;
   return /\beggs?\b/.test(t);
 }
 
 export function englishEggSearchQueries(q: string): string[] {
   if (!queryLooksLikeShellEggs(q)) return [];
-  return ["eggs", "large eggs", "gray ridge eggs", "large eggs dozen"];
+  return ["large eggs", "large egg", "eggs large", "eggs"];
 }

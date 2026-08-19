@@ -153,7 +153,8 @@ function pickForStaple(
         targetMassKg: item.targetMassKg,
         preferNameIncludes: item.preferNameIncludes,
         byEach: item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
-        preferLargerPack: item.id === "grayridge_eggs",
+        preferLargerPack:
+          item.id === "grayridge_eggs" || item.id === "large_eggs_dozen",
         requireQueryMatch: false,
       }) ?? null
     );

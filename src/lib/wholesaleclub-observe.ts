@@ -4,6 +4,7 @@ import {
 } from "@/connectors/wholesaleclub";
 import type { ProductOffer } from "@/connectors/types";
 import { offerFailsStapleOfferFilters, nameMatchesFilterToken, categoryBSearchQueries } from "@/domain/catalog-normalize";
+import { offerFailsPlausibleShelfPrice } from "@/domain/sanity";
 import {
   isActualCategoryBOffer,
   usesCategoryBIdentity,
@@ -144,21 +145,13 @@ export async function searchWholesaleClubPool(
       });
       return false;
     }
-    if (item.minPlausiblePrice != null && o.price < item.minPlausiblePrice) {
+    const priceFail = offerFailsPlausibleShelfPrice(item, o);
+    if (priceFail) {
       log?.rejected.push({
         productId: o.productId,
         name: o.name,
         price: o.price,
-        reason: `price $${o.price} < min plausible $${item.minPlausiblePrice}`,
-      });
-      return false;
-    }
-    if (item.maxPlausiblePrice != null && o.price > item.maxPlausiblePrice) {
-      log?.rejected.push({
-        productId: o.productId,
-        name: o.name,
-        price: o.price,
-        reason: `price $${o.price} > max plausible $${item.maxPlausiblePrice}`,
+        reason: priceFail,
       });
       return false;
     }

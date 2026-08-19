@@ -5,6 +5,7 @@
 import { MvrConnector, MVR_STORE_ID, hydrateMvrOffer } from "@/connectors/mvr";
 import type { ProductOffer } from "@/connectors/types";
 import { offerFailsStapleOfferFilters, nameMatchesFilterToken, categoryBSearchQueries } from "@/domain/catalog-normalize";
+import { offerFailsPlausibleShelfPrice } from "@/domain/sanity";
 import {
   isActualCategoryBOffer,
   usesCategoryBIdentity,
@@ -119,29 +120,13 @@ export async function searchMvrPool(
       return false;
     }
     const casePack = isWholesaleCaseTitle(o.name);
-    if (
-      !casePack &&
-      item.minPlausiblePrice != null &&
-      o.price < item.minPlausiblePrice
-    ) {
+    const priceFail = offerFailsPlausibleShelfPrice(item, o);
+    if (!casePack && priceFail) {
       log?.rejected.push({
         productId: o.productId,
         name: o.name,
         price: o.price,
-        reason: `price $${o.price} < min plausible $${item.minPlausiblePrice}`,
-      });
-      return false;
-    }
-    if (
-      !casePack &&
-      item.maxPlausiblePrice != null &&
-      o.price > item.maxPlausiblePrice
-    ) {
-      log?.rejected.push({
-        productId: o.productId,
-        name: o.name,
-        price: o.price,
-        reason: `price $${o.price} > max plausible $${item.maxPlausiblePrice}`,
+        reason: priceFail,
       });
       return false;
     }

@@ -45,6 +45,7 @@ import {
   compareUnitLabel,
   formatAge,
   isComparablePackKg,
+  offerFailsPlausibleShelfPrice,
   sanityCheckOffer,
 } from "@/domain/sanity";
 import {
@@ -157,9 +158,9 @@ export function isEggPackItem(item: { id: string; category?: string }): boolean 
 }
 
 /**
- * Dozen staple is 12-count cartons (including 15×1 dozen cases).
- * Grayridge receipt is the 18-count brand lock (including 10×18 cases).
- * A bulk "180 ea" with no inner carton is not the same SKU.
+ * Dozen/Large Eggs staple: 12, 18, or 30-count cartons (and Nx those cases).
+ * Extra Large / Medium are excluded by name filters, not by count.
+ * Grayridge receipt lock stays 18-count only.
  */
 export function eggCartonCountOk(
   item: { id: string },
@@ -168,14 +169,14 @@ export function eggCartonCountOk(
 ): boolean {
   const parsed = parseCountPack(name, packageSize);
   const n = parsed?.innerCount ?? parsePackCount(name, packageSize);
-  if (item.id === "large_eggs_dozen") return n === 12;
+  if (item.id === "large_eggs_dozen") return n === 12 || n === 18 || n === 30;
   if (item.id === "grayridge_eggs") return n === 18;
   return true;
 }
 
-/** Grayridge: among 18-count cartons, keep the bigger pack when $/egg is close. */
+/** When $/egg is close, keep the bigger Large carton / case. */
 export function preferLargerEggPack(item: { id: string }): boolean {
-  return item.id === "grayridge_eggs";
+  return item.id === "grayridge_eggs" || item.id === "large_eggs_dozen";
 }
 
 export function isSoldByWeightItem(item: StapleItem): boolean {
@@ -351,7 +352,6 @@ export type ConfirmedMap = Record<
 
 export const PINNED_IDS = [
   "simply_egg_whites",
-  "grayridge_eggs",
   "large_eggs_dozen",
   "tomatoes_grape",
   "lemons_2lb",
@@ -962,21 +962,13 @@ export async function searchNoFrillsPool(
   return all.filter((o) => {
     if (lockedNfSku && o.productId === lockedNfSku) return true;
     if (!passesFilters(o, item)) return false;
-    if (item.minPlausiblePrice != null && o.price < item.minPlausiblePrice) {
+    const priceFail = offerFailsPlausibleShelfPrice(item, o);
+    if (priceFail) {
       log?.rejected.push({
         productId: o.productId,
         name: o.name,
         price: o.price,
-        reason: `price $${o.price} < min plausible $${item.minPlausiblePrice}`,
-      });
-      return false;
-    }
-    if (item.maxPlausiblePrice != null && o.price > item.maxPlausiblePrice) {
-      log?.rejected.push({
-        productId: o.productId,
-        name: o.name,
-        price: o.price,
-        reason: `price $${o.price} > max plausible $${item.maxPlausiblePrice}`,
+        reason: priceFail,
       });
       return false;
     }
@@ -1137,12 +1129,7 @@ export async function searchWalmartQueryPool(
       });
       return false;
     }
-    if (item.minPlausiblePrice != null && o.price < item.minPlausiblePrice) {
-      return false;
-    }
-    if (item.maxPlausiblePrice != null && o.price > item.maxPlausiblePrice) {
-      return false;
-    }
+    if (offerFailsPlausibleShelfPrice(item, o)) return false;
     return true;
   });
 }
