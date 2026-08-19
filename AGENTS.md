@@ -1,8 +1,8 @@
 # Royal SASS — agent instructions
 
-Read this before any change. Follow the repo as it exists; do not invent services, stores, or tests. The operator writes in **Ukrainian**; code, identifiers, commits, and this file stay **English**.
+Read this before any change. Follow the repo as it exists; do not invent services, stores, or tests. The operator writes in **Ukrainian**; code, identifiers, commits, and this file stay **English**. Speak to the operator in Ukrainian when they wrote in Ukrainian.
 
-This file is the live product context (stores, staple set, Category A/B, compare math, persistence, Vercel). Keep it accurate when those rules change.
+This file is the live product context (stores, staple set, Category A/B, matching, compare math, rematch vs prices, persistence, Vercel). Keep it accurate when those rules change.
 
 ## Project overview
 
@@ -23,7 +23,7 @@ Cafe staples price compare for GTA procurement. Homepage is Next.js 15 / React 1
 
 Stack: Next.js App Router, TypeScript, Zod, Playwright (Walmart browser path, unused when Rapid is configured), tsx POCs. Prisma/SQLite schema exists (`prisma/schema.prisma`) but **no `PrismaClient` in `src/`** — planned store, not the live path.
 
-Master product id = cafe staple id (`simply_egg_whites`, `grayridge_eggs`), **never** a PCX/Walmart/MVR SKU.
+Master product id = cafe staple id (`simply_egg_whites`, `large_eggs_dozen`), **never** a PCX/Walmart/MVR SKU.
 
 ## Hard rules (do not drift)
 
@@ -31,16 +31,72 @@ Master product id = cafe staple id (`simply_egg_whites`, `grayridge_eggs`), **ne
 - **Do not guess missing prices.** No match → `no_match` / empty cell. Never pick an impostor SKU to fill a hole (Ice Breakers for ice, Sterilite bin for ice, vinegar for marshmallow, watermelon for honeydew, 4 oz cups for 12 oz, gym “Smith machine” for PET cups, etc.).
 - **Do not restore deleted staples** unless they appear in `data/catalog/new-from-receipts.json` (or the operator names them).
 - **Do not delete staples from the product.** UI delete and `POST /api/staples/delete` are disabled (405). `deleteStaplesCompletely` may still exist in `src/lib/staples.ts` for scripts; do not wire it back to the app.
-- **Do not commit** `.env`, secrets, `config/custom-staples.json`, `tsconfig.tsbuildinfo`, `data/runs/`, `data/stats/`, receipt photos, `docs/royal-sass-overview.pdf`, or probe dumps. Do not commit leftover catalog edits unless the task is a rematch/price refresh.
+- **Do not commit** `.env`, secrets, `config/custom-staples.json`, `tsconfig.tsbuildinfo`, `data/runs/`, `data/stats/`, receipt photos, `docs/royal-sass-overview.pdf`, leftover catalog dumps, or probe dumps. Do not commit leftover catalog edits unless the task is a rematch/price refresh.
+- **Do not re-enable Sobeys** as a compare column.
+- **Do not show two shell-egg cards.** Homepage eggs = one `large_eggs_dozen` line. `grayridge_eggs` stays in JSON as a catalog source row only.
+- **Do not invent `maximumAmount` for eggs.** Quantity is eggs (`ea`) via chips; checkout buys whole cartons to cover the count.
+- **Do not treat «Оновити ціни» as rematch.** That path is price-only on locked/catalog SKUs.
+- **Do not rematch all visible staples by default** (Rapid/PCX cost). Rematch only the card, the selected cart ids, or settings **Зберегти і оновити**.
+- **Do not rank hits with the cafe card label.** Size and abbreviations on the card (`OJ`, `2.63L`, `12oz`, `3.25%`) are not identity.
+- **Do not require pack size as an Include keyword.** WM Rapid titles often omit litres. Compare different cafe bottles as `$/L` or `$/kg`. Reject **mini** packs only (`MIN_COMPARABLE_PACK_RATIO` 0.35 in `src/domain/sanity.ts`).
+- **Do not let settings Include replace catalog brand/type filters.** Merge (union). Pack-size Include tokens are ignored (`src/domain/pack-tokens.ts`).
+- **Do not stem `sliced`/`slices`** unless a later task asks.
 - Code comments and docs: English. UI: mixed Ukrainian + English (operator-facing copy is often Ukrainian).
+
+## Current product truth (operator decisions — do not regress)
+
+These are live on **production** `master` (`7d405de` and descendants). Phone demo = https://royal-sass.vercel.app
+
+**Eggs**
+
+- One homepage card: `large_eggs_dozen` (Large eggs only — not Extra Large / Jumbo / Medium / egg whites / eggplant).
+- Quantity chips: **12 / 18 / 30 / 180** (`EGG_COUNT_PRESETS`). 180 = typical MVR case (15×12 or 10×18). Unit is **eggs (`ea`)**, not “1 pack”.
+- Search «яйця» / `eggs` → that one staple (`queryLooksLikeShellEggs`). Do not also surface `grayridge_eggs`.
+- `grayridge_eggs` / `eggs_30ct` catalog rows still feed `large_eggs_dozen` via `eggCatalogSourceIds`. Fair unit **$/egg**. Checkout buys whole cartons to cover the requested egg count.
+- Do not bring back a second Grayridge card.
+
+**Rematch vs prices**
+
+- After changing Include / match mode in **Налаштування**, the operator must rematch. **Оновити ціни** does not re-search.
+- UI: per-card **Оновити**, toolbar **Оновити вибрані** (cart ids), settings **Зберегти і оновити**.
+- `POST /api/staples/rematch` → WM then NF then WC then MVR; `productOverrides` from localStorage; `maxDuration = 60`; `skipIdentityLock` so settings apply.
+- WM Rapid key missing → skip WM, still rematch the other three.
+- Exact rematch still prefers confirmed / preferred SKUs when the hit is that product. Cheapest may skip identity lock to pick a new equivalent.
+
+**Tropicana (`orange_juice_pulp`) — worked example of a class of bugs**
+
+- Card label: `Tropicana OJ No Pulp 2.63L`. WM locked SKU **205804** is the 2.63 L jug; Rapid often **omits size in the title**. NF/MVR usually stock Tropicana **1.36 L**, not 2.63. Compare as `$/L`, not “out of stock”.
+- `matchMode: "exact"`; `purchaseStrategy: "stock_up"` 1–2 L. Catalog `mustIncludeAny` includes tropicana + no-pulp / pulp free. Do **not** put `concentrate` in include (matches “not from concentrate”). Do **not** require `2.63` as a must-include token.
+- Operator UX: **Точний продукт**; Include `tropicana, no pulp, pulp free`; **Зберегти і оновити**. WM can show 2.63 L; other stores show the Tropicana no-pulp they actually sell.
+
+**Matching for every staple (generalized after Tropicana)**
+
+- Rank with `staplePickQuery` (`src/domain/matching.ts`): first non-barcode search query, never the card label. Cheapest produce uses a non-numeric `mustIncludeAny` fruit token (not `blueberries fresh`).
+- `isSoftQueryToken`: units, leading digits, 1–2 letter abbreviations (`OJ` is also a stop word).
+- `stripPackNoise` / `isPackSizeKeyword` / `identityKeywords` in `src/domain/pack-tokens.ts`. Category B label-derived search queries strip `2lb` / `5x1` / `12oz`.
+- `stapleWithClientOverride` / `applyProductOverride` **union** include/exclude with catalog filters (case-insensitive). Old localStorage `orange juice` must not wipe tropicana/no-pulp.
+- Product settings: pack size is not a required keyword; Include **adds** to catalog filters.
+- Exact identity (`src/domain/product-identity.ts`): mini packs fail; a smaller cafe bottle of the same branded product (1.36 L vs 2.63 L) stays valid.
+- Locked WM SKU with empty Rapid `packageSize` may copy `expectedPackKg` onto that SKU only (`withExpectedPackSize`) — do not stamp typical pack onto a different product.
+- Adopt-from-search include tokens skip pack sizes.
+- Match inspector ranks with `staplePickQuery`, not the card label.
+
+**Photos / inspector**
+
+- MVR cup photos: protocol-relative Shopify URLs (`//cdn.shopify.com/…`) must become `https://` (`src/lib/product-image.ts`).
+- Match inspector is on in site nav (`/dev/match-inspector`). Linked NF probe at `/nf-probe`. Off only if `ALLOW_MATCH_INSPECTOR=0`.
+
+**Deploy**
+
+- “Put this on Vercel / run prod” = **fast-forward `master`**, not only a PR preview. Production project `royal-sass`, team `noir-detailing`, alias https://royal-sass.vercel.app
 
 ## What is on the homepage
 
 Shown cards = `PINNED_IDS` **or** `RECEIPT_STAPLE_IDS` **or** `custom: true` (`isShownStaple` in `src/lib/staples.ts`).
 
-- `PINNED_IDS`: 32 original cafe staples (dairy, produce, frozen bags, ice, Ziploc, Jello, ReaLemon, …) including `grayridge_eggs`, `large_eggs_dozen`, `ice_cubes`.
-- `RECEIPT_STAPLE_IDS`: 94 ids from `data/catalog/new-from-receipts.json` (supplies, kosher dairy, branded grocery, more produce/frozen). `ice_cubes` overlaps pinned.
-- **Committed catalog on `master`:** 125 items in `config/cafe-staples.json` (32 + 94 − 1 overlap). If a working tree drops ids, restore from git unless the operator asked to remove them.
+- `PINNED_IDS`: **31** original cafe staples (dairy, produce, frozen bags, ice, Ziploc, Jello, ReaLemon, `large_eggs_dozen`, `ice_cubes`). **Not** `grayridge_eggs`.
+- `RECEIPT_STAPLE_IDS`: **94** ids from `data/catalog/new-from-receipts.json` (supplies, kosher dairy, branded grocery, more produce/frozen). `ice_cubes` overlaps pinned.
+- **Shown unique ids:** 124 (31 + 94 − 1 overlap). `config/cafe-staples.json` still contains hidden rows such as `grayridge_eggs` for catalog merge.
 
 Search/adopt can still add `custom: true` rows (`config/custom-staples.json`, usually untracked). Those show up locally; do not commit that file unless asked.
 
@@ -58,11 +114,11 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 | Intent | Exact branded / preferred SKU | Cheapest suitable equivalent (brand optional) |
 | `matchMode` | `"exact"` (legacy `"preferred"`) | `"cheapest_equivalent"` (legacy `"cheapest"`) |
 | Typical fields | `preferredProductId`, `preferNameIncludes` | `matchRules` / `mustInclude*` / `mustNotInclude` |
-| Identity gate | Confirmed store product ID, then UPC/SKU, brand, type/form/variant, allowed size. No analog if exact is missing. | Type/form/variant + include/exclude. Fresh ≠ canned/sauce; white quinoa ≠ red; pack purpose must match. |
-| Quantity | Usually `exact_need` (Tropicana OJ 2.63L is exact brand + `stock_up` 1–2 L) | Either strategy (tomato = exact_need 2 kg) |
+| Identity gate | Confirmed store product ID, then UPC/SKU, brand, type/form/variant. Pack size on the **card** is not a hard 8% match — mini packs only. No analog if exact is missing. | Type/form/variant + include/exclude. Fresh ≠ canned/sauce; white quinoa ≠ red; pack purpose must match. |
+| Quantity | Usually `exact_need` (Tropicana OJ is exact brand + `stock_up` 1–2 L) | Either strategy (tomato = exact_need 2 kg) |
 | UI badge | **А** — точний продукт | **Б** — найдешевший відповідний |
 
-`resolveMatchMode`: explicit `item.matchMode` (canonicalized), else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred. **Never rank hits with the cafe card label** — size and abbreviations (OJ, 2.63L, 12oz) are not identity. Settings Include/Exclude merge with catalog filters; they do not replace them. Pack-size Include tokens are ignored. Exact identity rejects mini packs only, not a smaller cafe bottle of the same product.
+`resolveMatchMode`: explicit `item.matchMode` (canonicalized), else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred.
 
 **Category B identity** (`usesCategoryBIdentity` / `isCategoryBStaple`) is **only** `category === "produce" | "frozen"`. Eggs can be cheapest via `EGG_PACK_IDS` without produce-identity filters.
 
@@ -72,9 +128,9 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 
 ## Eggs, ice, weight, packs
 
-- `large_eggs_dozen` — **12 only** (`eggCartonCountOk`). `parsePackCount` understands `1DOZ` / dozen.
-- `grayridge_eggs` — **18-count lock** (`preferredProductId` `6000191268613` when set). Not the dozen.
-- Egg fair unit is **$/egg**; basket line is **30 eggs × pack qty**.
+- `large_eggs_dozen` — **the** shell-egg card. Accepts Large cartons of **12 / 18 / 30** (`eggCartonCountOk`). `parsePackCount` understands `1DOZ` / dozen. MVR cases OK when they are N× those counts.
+- `grayridge_eggs` — **not shown**. 18-count catalog source only (`preferredProductId` `6000191268613` when set on that hidden row).
+- Egg fair unit is **$/egg**; basket line is **requested eggs × carton math**, not “1 pack”.
 - `ice_cubes` — bag of ice (Arctic Glacier ~2.3 kg class). Not gum, not storage bins.
 - Cart is one map `id → { requestedAmount, unit, isCustom }`. Selected = key exists. Search filter never mutates cart. Clear cart removes hidden-by-search items too.
 - Adding to cart uses `defaultAmount`. Custom amount is cart-only unless the operator saves it as the new default (`localStorage` key `royal-sass-product-overrides-v1`).
@@ -103,11 +159,17 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `data/stats/compare-history.json` | Server compare history (gitignored; local/writable FS only) |
 | `src/connectors/` | Retailer I/O |
 | `src/domain/` | Units, identity, sale mode, checkout, fair compare, Category B identity |
+| `src/domain/pack-tokens.ts` | Pack size is not identity (`stripPackNoise`, `identityKeywords`) |
+| `src/domain/egg-pack.ts` | Egg chips, Ukrainian search, catalog source merge |
+| `src/domain/matching.ts` | `staplePickQuery`, `scoreOfferMatch` (soft size tokens) |
+| `src/domain/restaurant-product.ts` | Settings merge (`stapleWithClientOverride`) |
 | `src/lib/staples.ts` | Catalog I/O, `summarizeOffer`, egg/weight sets |
 | `src/lib/staple-compare-row.ts` | One compare row: identity → pack fit → checkout |
+| `src/lib/rematch-staples.ts` | Live rematch WM+NF+WC+MVR from client overrides |
 | `src/lib/product-config.ts` | Effective `RestaurantProduct` + localStorage override keys (temporary adapter; not Vercel FS) |
+| `src/lib/product-image.ts` | Protocol-relative Shopify → `https:` |
 | `src/lib/compare-stats.ts` | Compact compare-run persist + summaries |
-| `src/app/StaplesCompare.tsx` | Main UI (cart, settings, compare, stats) |
+| `src/app/StaplesCompare.tsx` | Main UI (cart, settings, compare, rematch, stats) |
 | `src/app/ProductSettings.tsx` | Per-card match/quantity settings modal |
 
 **Live data flow**
@@ -115,7 +177,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 1. Offers land in catalog JSON (refresh APIs / `npm run cache:*` / `cache:prices`).
 2. `resolveCatalogOffer` picks the catalog row from mapping + filters. Mapping `decision: needs_review` is **not** a lock. **No Rapid/PCX in this step.**
 3. `buildStapleCompareRow` → identity, then `evaluatePurchase` checkout (not proportional case split).
-4. UI: `GET /api/staples` (base config), `POST /api/staples/compare` with `{ cart, productOverrides }`. Client localStorage is the live override store on Vercel.
+4. UI: `GET /api/staples` (base config), `POST /api/staples/compare` with `{ cart, productOverrides }`. Client applies `stapleWithClientOverride` on the server from that body. Client localStorage is the live override store on Vercel.
 
 ## Live API (`nodejs`)
 
@@ -123,9 +185,9 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/compare` — `{ cart, productOverrides, ids?, grams?, qty? }`; checkout coverage (`N із M`); missing ≠ `$0`; writes match log when FS allows; **always returns a stats snapshot**
 - `GET/POST /api/staples/product-config` — best-effort JSON on disk; `persisted: false` on Vercel. Client localStorage is source of truth for the single-cafe test. Changing `matchMode` marks mappings `needs_review` without deleting them.
 - `GET /api/staples/compare-stats` — last runs + win-rate summary from disk (empty on Vercel)
-- `POST /api/staples/refresh` — rematch selected WM SKUs
+- `POST /api/staples/refresh` — rematch selected WM SKUs (older WM-only path)
 - `POST /api/staples/refresh-nf` | `refresh-wc` | `refresh-mvr` | `refresh-sobeys` — live search for that retailer
-- `POST /api/staples/rematch` — live rematch selected ids across WM+NF+WC+MVR using client `productOverrides` (skips identity lock so settings like orange juice apply). UI: per-card **Оновити**, toolbar **Оновити вибрані**, settings **Зберегти і оновити**
+- `POST /api/staples/rematch` — live rematch **selected ids** across WM+NF+WC+MVR using client `productOverrides`. Not price-only. Not “all visible cards”.
 - `POST /api/staples/refresh-prices` — price-only `getProduct` on locked/catalog SKUs (no rematch)
 - `POST /api/staples/search` | `adopt` | `confirm` — find/add staple; 👍/👎 lock
 - `GET|POST /api/staples/delete` — **405**, deletion disabled
@@ -133,14 +195,14 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
 - `GET /api/compare` — **legacy** basket POC, not the staples UI
 
-Refresh/compare routes use `maxDuration = 60`.
+Refresh/compare/rematch routes use `maxDuration = 60`.
 
 ## Retailer integrations
 
-- **Walmart #5831:** `createWalmartConnector`. Flags in `walmart-source.ts` (no Playwright import on homepage load). `WALMART_SOURCE=rapid` needs `OPENWEBNINJA_API_KEY` or `RAPIDAPI_KEY`. Blank keys → `missing_key`, **do not** scrape walmart.ca (PerimeterX). Rapid `domain=ca`, `store_id=5831`, `zip=L4J0A7`. Rapid ids may be **±1** vs PDP (`offerMatchesRetailerSku`). Rapid “In stock” is a listing flag, not proof of #5831 shelf.
+- **Walmart #5831:** `createWalmartConnector`. Flags in `walmart-source.ts` (no Playwright import on homepage load). `WALMART_SOURCE=rapid` needs `OPENWEBNINJA_API_KEY` or `RAPIDAPI_KEY`. Blank keys → `missing_key`, **do not** scrape walmart.ca (PerimeterX). Rapid `domain=ca`, `store_id=5831`, `zip=L4J0A7`. Rapid ids may be **±1** vs PDP (`offerMatchesRetailerSku`). Rapid “In stock” is a listing flag, not proof of #5831 shelf. Rapid titles often omit pack size.
 - **No Frills #3660:** `NoFrillsConnector` / `pcx-bff.ts`. Blank `NOFRILLS_API_KEY` uses public web fallback; do not send empty `X-Apikey`. Akamai may 403 some IPs. Flipp only if `NOFRILLS_ALLOW_FLIPP_FALLBACK=1` (not shelf).
 - **Wholesale Club #3724:** reuse the same PCX client. Skip `*_C##` case packs for consumer compare. Not Flipp. Do not copy the BFF client.
-- **MVR Weston:** `src/connectors/mvr.ts`. Offer is dropped if INSTOREPRICE is missing. Case packs kept when the staple wants a case. Warehouse produce titles (`Fruits - …`) are valid Category B names.
+- **MVR Weston:** `src/connectors/mvr.ts`. Offer is dropped if INSTOREPRICE is missing. Case packs kept when the staple wants a case. Warehouse produce titles (`Fruits - …`) are valid Category B names. Image URLs may be protocol-relative.
 - **Mappings:** `src/lib/retailer-mappings.ts`. Pairwise `product-matches.json` and Prisma `ProductMatch` are **not** read by live compare.
 
 ## Core business rules
@@ -153,8 +215,8 @@ Refresh/compare routes use `maxDuration = 60`.
 
 **Price / size / qty**
 
-- Pack items: shelf × qty. Weight items: grams. Eggs: $/egg; basket 30 eggs × qty.
-- Different pack masses → fair **$/100 g**. Similar packs → per pack.
+- Pack items: shelf × qty. Weight items: grams. Eggs: $/egg; line is requested egg count.
+- Different pack masses → fair **$/100 g**. Similar packs → per pack. Different OJ litres → `$/L` via that fair path (not `no_match`).
 - `wasPrice` / `onSale` are display-only. Staples totals use `offer.price`, not `promoPrice`.
 - Staples compare does **not** filter `availability === in_stock`.
 - Ignore absurd WM `unitPrice` in `resolveUnitPrices`.
@@ -177,16 +239,18 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 
 ## UI (current)
 
-- Cards: select for compare; grams on weight items; pack qty otherwise; 👍/👎 confirm on WM when present.
-- **No per-card × and no «Видалити вибрані».** Selection is only for compare / refresh / copy.
-- Actions: select all, refresh all prices, Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
+- Cards: select for compare; grams on weight items; egg chips / pack qty otherwise; 👍/👎 confirm on WM when present.
+- **No per-card × and no «Видалити вибрані».** Selection is only for compare / refresh / rematch / copy.
+- Actions: select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
+- Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**.
 - Results: four columns, then baskets, then stats.
 - Nav: Cafe staples + Match inspector (`src/app/SiteNav.tsx`).
+- Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand.
 
 ## Deploy
 
 - **Production** = `master` → Vercel project `royal-sass` (team `noir-detailing`), alias https://royal-sass.vercel.app
-- PR branches get **Preview** deployments. Putting “these changes on Vercel” for the live phone demo means **fast-forward `master`**, not only a preview URL.
+- PR branches get **Preview** deployments. Putting “these changes on Vercel” / “run prod” for the live phone demo means **fast-forward `master`**, not only a preview URL.
 - Serverless catalog/stats writes may no-op. Refresh on Vercel does not persist JSON into git. Local `npm start` on a VM can write catalogs.
 
 ## Development workflow
@@ -206,11 +270,12 @@ npm run poc:compare-stats
 npm run poc:compare-audit
 npm run poc:self-check
 npm run poc:staple-filter
+npm run poc:pilot-logic
 npm run poc:entity-match
 npm run poc:store-connector
 ```
 
-Price/matching diffs: `npm run cache:prices` (and `cache:walmart` / `cache:nofrills` / `cache:wholesaleclub` / `cache:mvr`) only when live keys work and the task is a refresh. Spot-check: grape tomatoes ≠ seeds, ice ≠ gum, dozen ≠ 18-pack, `qty > 1`, missing offer stays empty. UI: select + grams/qty → Compare → `fairLabel` + baskets + stats row.
+Price/matching diffs: `npm run cache:prices` (and `cache:walmart` / `cache:nofrills` / `cache:wholesaleclub` / `cache:mvr`) only when live keys work and the task is a refresh. Spot-check: grape tomatoes ≠ seeds, ice ≠ gum, dozen card still compares 12 vs 18 vs 30 as $/egg, `qty > 1`, missing offer stays empty, Tropicana label/`2.63` does not `no_match` a Pulp Free title, settings Include does not wipe catalog tropicana. UI: select + grams/qty → Compare → `fairLabel` + baskets + stats row.
 
 If a script is not run, say so.
 
@@ -221,6 +286,23 @@ See `.env.example`: `DATABASE_URL`, `WALMART_SOURCE`, `WALMART_USE_BROWSER`, `WA
 ## Planned / not live
 
 Prisma persistence, `StoreConnector` (do not wire into `getConnector` yet), Splink/Python, semantic/image entity-match (stub, never auto-link), Uber/Instacart as shelf (not `LIVE_VERIFIED`).
+
+## Shipped on this line (context for the next agent)
+
+Merged to `master` / production via PR https://github.com/sonya2233ff/royal-sass/pull/7 (fast-forward). Commits:
+
+| Commit | What |
+| --- | --- |
+| `762de88` | Egg quantity in eggs, not packs (chips 12 / 18 / 30 / largest case) |
+| `0cd4e44` | Search «яйця» finds shell eggs (not eggplant / whites) |
+| `0408408` | One Large Eggs staple; Grayridge hidden; merge 12/18/30 catalog rows |
+| `042b9be` | Match inspector back in site nav |
+| `32baca5` | MVR photos for cafe cup staples; `https:` on protocol-relative URLs |
+| `61b92db` | Rematch button so product settings actually re-search |
+| `048a0b8` | Pin Tropicana 2.63; do not score the card label (`OJ` / `2.63L`) |
+| `7d405de` | Pack size + settings Include are not identity for **every** staple |
+
+Operator follow-ups that produced those commits: egg chips; one egg card; inspector on; MVR cup photos; “after I change orange juice in settings, add a button”; “why doesn’t it pull Tropicana 2.63?”; “make sure this class of error cannot happen to other products”; “run prod / put all changes on Vercel”.
 
 ## Agent response format
 
