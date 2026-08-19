@@ -129,7 +129,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/search` | `adopt` | `confirm` — find/add staple; 👍/👎 lock
 - `GET|POST /api/staples/delete` — **405**, deletion disabled
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
-- `/dev/match-inspector` — developer tool (404 in Vercel production unless `ALLOW_MATCH_INSPECTOR=1`)
+- `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
 - `GET /api/compare` — **legacy** basket POC, not the staples UI
 
 Refresh/compare routes use `maxDuration = 60`.

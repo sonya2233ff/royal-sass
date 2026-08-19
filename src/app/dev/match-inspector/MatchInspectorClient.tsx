@@ -119,7 +119,7 @@ export function MatchInspectorClient() {
         if (res.status === 404) {
           setError(
             json.error ??
-              "Match inspector API is disabled (404). Set ALLOW_MATCH_INSPECTOR=1 or use local next start.",
+              "Match inspector API is disabled (404). Unset ALLOW_MATCH_INSPECTOR=0.",
           );
         } else if (!json.ok) {
           setError(json.error ?? "inspect failed");

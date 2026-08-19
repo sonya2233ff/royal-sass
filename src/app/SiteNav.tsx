@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const LINKS = [{ href: "/", label: "Cafe staples" }] as const;
+const LINKS = [
+  { href: "/", label: "Cafe staples" },
+  { href: "/dev/match-inspector", label: "Match inspector" },
+] as const;
 
 function isActive(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";

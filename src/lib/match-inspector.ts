@@ -710,11 +710,5 @@ export async function applyInspectorMapping(input: {
 
 export function inspectorEnabled(): boolean {
   if (process.env.ALLOW_MATCH_INSPECTOR === "0") return false;
-  if (process.env.ALLOW_MATCH_INSPECTOR === "1") return true;
-  // `next start` sets NODE_ENV=production. Keep the tool on local/preview;
-  // Vercel production stays 404 unless ALLOW_MATCH_INSPECTOR=1.
-  if (process.env.VERCEL === "1" && process.env.VERCEL_ENV === "production") {
-    return false;
-  }
   return true;
 }
