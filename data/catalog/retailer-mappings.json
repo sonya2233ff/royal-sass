@@ -3058,12 +3058,12 @@
           "name": "Tropicana 100% Pure Orange Juice No Pulp",
           "matchMethod": "locked_sku",
           "matchConfidence": 1,
-          "verified": true,
+          "verified": false,
           "verifiedAt": "2026-08-17T04:11:20.999Z",
-          "decision": "auto_linked",
+          "decision": "needs_review",
           "kind": "identity",
           "skippedRematch": true,
-          "updatedAt": "2026-08-17T04:11:20.999Z"
+          "updatedAt": "2026-08-19T19:22:45.610Z"
         },
         "nofrills": {
           "retailer": "nofrills",
@@ -3072,12 +3072,12 @@
           "name": "Tropicana Pure Premium Orange Juice (Pulp Free)",
           "matchMethod": "seed_catalog",
           "matchConfidence": 1,
-          "verified": true,
+          "verified": false,
           "verifiedAt": "2026-08-17T19:38:46.588Z",
-          "decision": "auto_linked",
+          "decision": "needs_review",
           "kind": "identity",
           "skippedRematch": true,
-          "updatedAt": "2026-08-17T19:38:46.588Z"
+          "updatedAt": "2026-08-19T19:22:45.610Z"
         },
         "wholesaleclub": {
           "retailer": "wholesaleclub",
@@ -3087,9 +3087,9 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "needs_review",
           "kind": "identity",
-          "updatedAt": "2026-08-18T00:35:08.117Z"
+          "updatedAt": "2026-08-19T19:22:45.610Z"
         },
         "mvr": {
           "retailer": "mvr",
@@ -3100,9 +3100,9 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.9,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "needs_review",
           "kind": "identity",
-          "updatedAt": "2026-08-18T19:02:43.946Z"
+          "updatedAt": "2026-08-19T19:22:45.610Z"
         }
       },
       "prices": [
