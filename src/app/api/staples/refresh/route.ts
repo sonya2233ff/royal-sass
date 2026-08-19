@@ -4,6 +4,7 @@ import {
   WALMART_RAPID_MISSING_KEY,
   walmartSourceApiFields,
 } from "@/connectors/walmart-source";
+import { parseOverrideMap } from "@/lib/product-config";
 import {
   isShownStaple,
   loadStaplesConfig,
@@ -16,7 +17,10 @@ export const maxDuration = 60;
 
 /** Refresh Walmart prices for selected staple ids only. */
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => ({}))) as { ids?: string[] };
+  const body = (await request.json().catch(() => ({}))) as {
+    ids?: string[];
+    productOverrides?: unknown;
+  };
   const cfg = await loadStaplesConfig();
   const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
   const ids = (body.ids ?? []).filter((id) => allowed.has(id));
@@ -39,7 +43,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await refreshWalmartSelected(ids);
+    const result = await refreshWalmartSelected(
+      ids,
+      parseOverrideMap(body.productOverrides),
+    );
     return NextResponse.json({
       ok: true,
       ...walmartSourceApiFields(),

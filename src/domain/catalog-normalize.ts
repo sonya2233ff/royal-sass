@@ -126,6 +126,7 @@ export function categoryBSearchQueries(
     queries: string[];
     mustIncludeAny?: string[];
     label?: string;
+    matchRules?: { productType?: string };
   },
   limit?: number,
 ): string[] {
@@ -138,6 +139,7 @@ export function categoryBSearchQueries(
     out.push(t);
   };
   if (!isCategoryBStaple(item)) {
+    add(item.matchRules?.productType);
     for (const q of item.queries) add(q);
     return out.slice(0, cap);
   }

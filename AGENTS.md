@@ -125,6 +125,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `GET /api/staples/compare-stats` — last runs + win-rate summary from disk (empty on Vercel)
 - `POST /api/staples/refresh` — rematch selected WM SKUs
 - `POST /api/staples/refresh-nf` | `refresh-wc` | `refresh-mvr` | `refresh-sobeys` — live search for that retailer
+- `POST /api/staples/rematch` — live rematch selected ids across WM+NF+WC+MVR using client `productOverrides` (skips identity lock so settings like orange juice apply). UI: per-card **Оновити**, toolbar **Оновити вибрані**, settings **Зберегти і оновити**
 - `POST /api/staples/refresh-prices` — price-only `getProduct` on locked/catalog SKUs (no rematch)
 - `POST /api/staples/search` | `adopt` | `confirm` — find/add staple; 👍/👎 lock
 - `GET|POST /api/staples/delete` — **405**, deletion disabled

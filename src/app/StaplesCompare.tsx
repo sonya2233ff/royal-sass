@@ -854,6 +854,7 @@ export function StaplesCompare() {
     item: Staple,
     override: ProductOverride,
     matchModeChanged: boolean,
+    rematch: boolean,
   ) {
     const prev = productOf(item);
     const nextOverride: ProductOverride = {
@@ -862,7 +863,8 @@ export function StaplesCompare() {
       needsReview: matchModeChanged ? true : overrides[item.id]?.needsReview,
     };
     if (matchModeChanged) nextOverride.needsReview = true;
-    persistOverrides({ ...overrides, [item.id]: nextOverride });
+    const nextOverrides = { ...overrides, [item.id]: nextOverride };
+    persistOverrides(nextOverrides);
     setCart((c) => {
       const e = c[item.id];
       if (!e || e.isCustom) return c;
@@ -888,9 +890,79 @@ export function StaplesCompare() {
     } catch {
       /* Vercel FS may be read-only; localStorage is the live store. */
     }
+    if (rematch) {
+      rematchItems([item.id], nextOverrides);
+      return;
+    }
     if (matchModeChanged) {
       await reload();
     }
+  }
+
+  function rematchItems(
+    ids: string[],
+    overrideMap: Record<string, ProductOverride> = overrides,
+  ) {
+    if (!ids.length) return;
+    setError(null);
+    setBusy("rematch");
+    const withReview: Record<string, ProductOverride> = { ...overrideMap };
+    for (const id of ids) {
+      withReview[id] = { ...withReview[id], needsReview: true };
+    }
+    persistOverrides(withReview);
+    startTransition(async () => {
+      try {
+        const res = await fetch("/api/staples/rematch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ids,
+            productOverrides: withReview,
+          }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error ?? "rematch failed");
+        setMatchLogId(data.matchLogId ?? null);
+        setLogPreview(data);
+        await reload();
+        const wmN = data.walmart?.updated?.length ?? 0;
+        const nfN = data.noFrills?.updated?.length ?? 0;
+        const wcN = data.wholesaleClub?.updated?.length ?? 0;
+        const mvrN = data.mvr?.updated?.length ?? 0;
+        if (data.walmartSkipped) {
+          setError(
+            `Товар оновлено без Walmart (немає RapidAPI ключа). NF ${nfN}${
+              wcN ? ` · WC ${wcN}` : ""
+            }${mvrN ? ` · MVR ${mvrN}` : ""}.`,
+          );
+        } else if (data.walmart?.error) {
+          setError(
+            `Walmart: ${String(data.walmart.error).slice(0, 140)}. Інші магазини: NF ${nfN}, WC ${wcN}, MVR ${mvrN}.`,
+          );
+        } else if (data.noFrills?.error || data.wholesaleClub?.error || data.mvr?.error) {
+          setError(
+            `Оновлено WM ${wmN}. ${
+              data.noFrills?.error
+                ? `NF: ${String(data.noFrills.error).slice(0, 80)}. `
+                : ""
+            }${
+              data.wholesaleClub?.error
+                ? `WC: ${String(data.wholesaleClub.error).slice(0, 80)}. `
+                : ""
+            }${
+              data.mvr?.error
+                ? `MVR: ${String(data.mvr.error).slice(0, 80)}.`
+                : ""
+            }`.trim(),
+          );
+        }
+      } catch (e) {
+        setError(e instanceof Error ? friendlyError(e.message) : String(e));
+      } finally {
+        setBusy(null);
+      }
+    });
   }
 
   function saveDefaultFromCart(item: Staple) {
@@ -1217,7 +1289,7 @@ export function StaplesCompare() {
             ? ` · Sobeys флаєр ${new Date(sobeysCatalogAt).toLocaleString()}`
             : ""}
           {cacheIsOld
-            ? " · кеш застарів — натисни «Оновити ціни»"
+            ? " · кеш застарів — натисни «Оновити ціни» або «Оновити» на картці"
             : ""}
           {walmartSource === "missing_key" && walmartSourceWarning
             ? " · додай RapidAPI ключ у .env / Vercel"
@@ -1528,6 +1600,18 @@ export function StaplesCompare() {
                 >
                   Налаштування
                 </button>
+                <button
+                  type="button"
+                  className="settings-btn"
+                  disabled={pending || busy != null}
+                  title="Знайти товар знову за правилами з Налаштувань (не лише ціну)"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    rematchItems([item.id]);
+                  }}
+                >
+                  {busy === "rematch" ? "Оновлюю…" : "Оновити"}
+                </button>
                 <div className="qty-row">
                   <span>
                     Зазвичай: {amountLabel(item, product.defaultAmount, product.unit)}
@@ -1643,8 +1727,8 @@ export function StaplesCompare() {
               product={product}
               open
               onClose={() => setSettingsId(null)}
-              onSave={(ov, changed) => {
-                void saveProductSettings(item, ov, changed);
+              onSave={(ov, changed, rematch) => {
+                void saveProductSettings(item, ov, changed, rematch);
               }}
               confirmedStoreProducts={
                 overrides[item.id]?.confirmedStoreProducts
@@ -1749,6 +1833,15 @@ export function StaplesCompare() {
           {busy === "refresh-prices"
             ? "Оновлюю ціни…"
             : "Оновити ціни"}
+        </button>
+        <button
+          type="button"
+          className="cta secondary"
+          disabled={pending || cartSize(cart) === 0 || busy != null}
+          title="Знайти вибрані товари знову за правилами з Налаштувань"
+          onClick={() => rematchItems([...selected])}
+        >
+          {busy === "rematch" ? "Шукаю товари…" : "Оновити вибрані"}
         </button>
       </div>
 
@@ -2279,13 +2372,23 @@ export function StaplesCompare() {
           border-color: #1e4030;
         }
         .settings-btn {
-          margin: 0 0.55rem 0.25rem;
+          margin: 0 0.55rem 0.25rem 0;
           font: inherit;
           font-size: 0.75rem;
           padding: 0.25rem 0.5rem;
           cursor: pointer;
           background: #fff;
           border: 1px solid rgba(30, 40, 30, 0.25);
+        }
+        .card-tools {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          padding: 0 0.55rem;
+        }
+        .settings-btn:disabled {
+          opacity: 0.55;
+          cursor: not-allowed;
         }
         .card.skeleton {
           min-height: 12rem;

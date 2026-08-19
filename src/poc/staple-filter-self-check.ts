@@ -22,7 +22,7 @@ import {
   resolveCatalogOffer,
 } from "@/domain/compare-resolve";
 import { pickCheapestCoveringOffer } from "@/domain/checkout";
-import { toRestaurantProduct } from "@/domain/restaurant-product";
+import { toRestaurantProduct, stapleWithClientOverride } from "@/domain/restaurant-product";
 import { sanityCheckOffer } from "@/domain/sanity";
 
 function assert(cond: unknown, msg: string) {
@@ -579,6 +579,37 @@ async function main() {
       "No Name",
     ) === "mustNotInclude:medium",
     "dozen rejects medium eggs",
+  );
+
+  const oj = cfg.items.find((i) => i.id === "orange_juice_pulp");
+  assert(oj, "orange juice staple");
+  const ojQs = categoryBSearchQueries(oj!);
+  assert(
+    ojQs[0]?.toLowerCase() === "orange juice",
+    `OJ search starts with productType, got ${ojQs[0]}`,
+  );
+  const rematchOj = stapleWithClientOverride(oj!, {
+    matchMode: "cheapest_equivalent",
+    matchRules: {
+      productType: "orange juice",
+      mustNotInclude: ["tropicana", "lots of pulp"],
+    },
+  });
+  assert(
+    rematchOj.queries[0]?.toLowerCase() === "orange juice",
+    "override prepends productType to queries",
+  );
+  assert(
+    rematchOj.mustNotInclude?.includes("tropicana"),
+    "override exclude keywords apply",
+  );
+  assert(
+    rematchOj.matchMode === "cheapest_equivalent",
+    "override keeps cheapest_equivalent",
+  );
+  assert(
+    stapleWithClientOverride(oj!) === oj,
+    "no override returns the same staple",
   );
 
   console.log("staple-filter-self-check ok");

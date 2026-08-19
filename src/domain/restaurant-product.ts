@@ -55,6 +55,7 @@ export interface StapleLike {
   mustIncludeAny?: string[];
   mustNotInclude?: string[];
   rejectNameIncludes?: string[];
+  queries?: string[];
 }
 
 export function canonicalizeMatchMode(raw?: string | null): MatchMode | null {
@@ -216,6 +217,40 @@ export function applyProductOverride(
     delete next.maximumAmount;
   } else if (overrideMax != null && overrideMax > 0) {
     next.maximumAmount = overrideMax;
+  }
+  return next;
+}
+
+/** Apply in-app settings onto a catalog staple before a live rematch. */
+export function stapleWithClientOverride<T extends StapleLike>(
+  item: T,
+  override?: ProductOverride | null,
+): T {
+  if (!override) return item;
+  const next: T = { ...item };
+  const mode = canonicalizeMatchMode(override.matchMode);
+  if (mode) next.matchMode = mode;
+  if (override.purchaseStrategy) next.purchaseStrategy = override.purchaseStrategy;
+  const rules = override.matchRules;
+  if (rules) {
+    next.matchRules = { ...(item.matchRules ?? {}), ...rules };
+    if (rules.mustIncludeAny) next.mustIncludeAny = rules.mustIncludeAny;
+    if (rules.mustIncludeAll) next.mustIncludeAll = rules.mustIncludeAll;
+    if (rules.mustNotInclude) next.mustNotInclude = rules.mustNotInclude;
+    const typeQ = rules.productType?.trim();
+    if (typeQ) {
+      const queries = Array.isArray((next as { queries?: string[] }).queries)
+        ? [...((next as { queries?: string[] }).queries ?? [])]
+        : [];
+      if (!queries.some((q) => q.toLowerCase() === typeQ.toLowerCase())) {
+        (next as { queries?: string[] }).queries = [typeQ, ...queries];
+      }
+    }
+  }
+  const wm = override.confirmedStoreProducts?.walmart_ca;
+  if (wm) next.preferredProductId = wm;
+  else if (override.preferredProductId) {
+    next.preferredProductId = override.preferredProductId;
   }
   return next;
 }

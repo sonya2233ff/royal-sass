@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { parseOverrideMap } from "@/lib/product-config";
 import { isShownStaple, loadStaplesConfig } from "@/lib/staples";
 import { refreshWholesaleClubSelected } from "@/lib/wholesaleclub-observe";
 import { WHOLESALECLUB_STORE_ID } from "@/connectors/wholesaleclub";
@@ -9,7 +10,10 @@ export const maxDuration = 60;
 
 /** Force live Wholesale Club refresh for selected staple ids (writes WC catalog cache). */
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => ({}))) as { ids?: string[] };
+  const body = (await request.json().catch(() => ({}))) as {
+    ids?: string[];
+    productOverrides?: unknown;
+  };
   const cfg = await loadStaplesConfig();
   const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
   const ids = (body.ids?.length ? body.ids : [...allowed]).filter((id) =>
@@ -23,7 +27,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await refreshWholesaleClubSelected(ids);
+    const result = await refreshWholesaleClubSelected(
+      ids,
+      parseOverrideMap(body.productOverrides),
+    );
     return NextResponse.json({
       ok: true,
       retailer: "wholesale_club",

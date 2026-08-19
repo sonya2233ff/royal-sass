@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { parseOverrideMap } from "@/lib/product-config";
 import {
   isShownStaple,
   loadStaplesConfig,
@@ -11,7 +12,10 @@ export const maxDuration = 60;
 
 /** Force live No Frills refresh for selected staple ids (writes NF catalog cache). */
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => ({}))) as { ids?: string[] };
+  const body = (await request.json().catch(() => ({}))) as {
+    ids?: string[];
+    productOverrides?: unknown;
+  };
   const cfg = await loadStaplesConfig();
   const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
   const ids = (body.ids?.length ? body.ids : [...allowed]).filter((id) =>
@@ -25,7 +29,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await refreshNoFrillsSelected(ids);
+    const result = await refreshNoFrillsSelected(
+      ids,
+      parseOverrideMap(body.productOverrides),
+    );
     return NextResponse.json({
       ok: true,
       retailer: "no_frills",

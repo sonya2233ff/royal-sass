@@ -30,6 +30,7 @@ import {
   resolveMatchMode,
   type MatchLogEntry,
   type StapleItem,
+  type StapleRefreshOpts,
 } from "@/lib/staples";
 import {
   mergeDistinctPackSizes,
@@ -37,6 +38,10 @@ import {
 } from "@/domain/pack-size-candidates";
 import { samePackedItemCandidates } from "@/domain/same-packed-item";
 import { upsertMvrCatalogItem } from "@/lib/mvr-catalog";
+import {
+  stapleWithClientOverride,
+  type ProductOverride,
+} from "@/domain/restaurant-product";
 
 export const MVR_RETAILER = "mvr";
 export const MVR_PRICE_SOURCE = "catalog_mvr_weston_latest";
@@ -67,12 +72,17 @@ function passesMvrFilters(offer: ProductOffer, item: StapleItem): boolean {
 export async function searchMvrPool(
   item: StapleItem,
   log?: MatchLogEntry,
+  opts?: StapleRefreshOpts,
 ): Promise<ProductOffer[]> {
   const mvr = new MvrConnector();
   const seen = new Map<string, ProductOffer>();
   const mappings = await loadRetailerMappings();
   const link = mappings.products[item.id]?.retailers.mvr;
-  const lockedSku = link?.verified ? link.retailerProductId : null;
+  const lockedSku = opts?.skipIdentityLock
+    ? null
+    : link?.verified
+      ? link.retailerProductId
+      : null;
   const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = lockedSku ? [lockedSku, ...queries] : [...queries];
 
@@ -201,7 +211,11 @@ function applyMvrMapping(
   store.products[item.id] = existing;
 }
 
-export async function refreshMvrSelected(ids: string[]): Promise<{
+export async function refreshMvrSelected(
+  ids: string[],
+  overrides?: Record<string, ProductOverride>,
+  opts?: StapleRefreshOpts,
+): Promise<{
   updated: string[];
   unmatched: string[];
   logId: string;
@@ -216,8 +230,9 @@ export async function refreshMvrSelected(ids: string[]): Promise<{
   const mappings = await loadRetailerMappings();
 
   for (const id of ids) {
-    const item = byId.get(id);
-    if (!item) continue;
+    const raw = byId.get(id);
+    if (!raw) continue;
+    const item = stapleWithClientOverride(raw, overrides?.[id]);
 
     const log: MatchLogEntry = {
       at: new Date().toISOString(),
@@ -228,7 +243,7 @@ export async function refreshMvrSelected(ids: string[]): Promise<{
       status: "no_match",
     };
 
-    const pool = await searchMvrPool(item, log);
+    const pool = await searchMvrPool(item, log, opts);
     let picked = pickStapleSearchWinner(item, pool, log);
     if (picked) {
       if (isSoldByWeightItem(item)) {

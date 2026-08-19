@@ -17,7 +17,11 @@ type Props = {
   product: RestaurantProduct;
   open: boolean;
   onClose: () => void;
-  onSave: (override: ProductOverride, matchModeChanged: boolean) => void;
+  onSave: (
+    override: ProductOverride,
+    matchModeChanged: boolean,
+    rematch: boolean,
+  ) => void;
   storeOffers: Array<{
     retailer: string;
     label: string;
@@ -82,7 +86,7 @@ export function ProductSettings({
 
   if (!open) return null;
 
-  function save() {
+  function save(rematch: boolean) {
     const maxN = Number.parseFloat(maximumAmount);
     const override: ProductOverride = {
       matchMode,
@@ -108,7 +112,7 @@ export function ProductSettings({
     if (purchaseStrategy === "stock_up" && Number.isFinite(maxN) && maxN > 0) {
       override.maximumAmount = maxN;
     }
-    onSave(override, matchMode !== product.matchMode);
+    onSave(override, matchMode !== product.matchMode, rematch);
     onClose();
   }
 
@@ -241,9 +245,18 @@ export function ProductSettings({
             </label>
           ))}
         </div>
-        <button type="button" className="ps-save" onClick={save}>
-          Зберегти
-        </button>
+        <div className="ps-actions">
+          <button type="button" className="ps-save" onClick={() => save(false)}>
+            Зберегти
+          </button>
+          <button
+            type="button"
+            className="ps-save ps-save-rematch"
+            onClick={() => save(true)}
+          >
+            Зберегти і оновити
+          </button>
+        </div>
       </div>
       <style jsx>{`
         .ps-back {
@@ -286,12 +299,21 @@ export function ProductSettings({
           font-size: 0.78rem;
           opacity: 0.75;
         }
-        .ps-save {
+        .ps-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
           margin-top: 0.4rem;
+        }
+        .ps-save {
           background: #2f4a3a;
           color: #fff;
           border: 0;
           padding: 0.55rem 0.8rem;
+          cursor: pointer;
+        }
+        .ps-save-rematch {
+          background: #1e4030;
         }
         .ps-eggs {
           display: flex;

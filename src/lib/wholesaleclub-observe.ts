@@ -31,6 +31,7 @@ import {
   usesNeededWeightPick,
   type MatchLogEntry,
   type StapleItem,
+  type StapleRefreshOpts,
 } from "@/lib/staples";
 import {
   mergeDistinctPackSizes,
@@ -38,6 +39,10 @@ import {
 } from "@/domain/pack-size-candidates";
 import { samePackedItemCandidates } from "@/domain/same-packed-item";
 import { upsertWholesaleClubCatalogItem } from "@/lib/wholesaleclub-catalog";
+import {
+  stapleWithClientOverride,
+  type ProductOverride,
+} from "@/domain/restaurant-product";
 
 export const WHOLESALECLUB_RETAILER = "wholesaleclub";
 export const WHOLESALECLUB_PRICE_SOURCE = "catalog_wholesaleclub_3724_latest";
@@ -84,12 +89,17 @@ function passesWcFilters(offer: ProductOffer, item: StapleItem): boolean {
 export async function searchWholesaleClubPool(
   item: StapleItem,
   log?: MatchLogEntry,
+  opts?: StapleRefreshOpts,
 ): Promise<ProductOffer[]> {
   const wc = new WholesaleClubConnector();
   const seen = new Map<string, ProductOffer>();
   const mappings = await loadRetailerMappings();
   const wcLink = mappings.products[item.id]?.retailers.wholesaleclub;
-  const lockedSku = wcLink?.verified ? wcLink.retailerProductId : null;
+  const lockedSku = opts?.skipIdentityLock
+    ? null
+    : wcLink?.verified
+      ? wcLink.retailerProductId
+      : null;
   const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = lockedSku ? [lockedSku, ...queries] : [...queries];
 
@@ -230,7 +240,11 @@ function applyWcMapping(
   store.products[item.id] = existing;
 }
 
-export async function refreshWholesaleClubSelected(ids: string[]): Promise<{
+export async function refreshWholesaleClubSelected(
+  ids: string[],
+  overrides?: Record<string, ProductOverride>,
+  opts?: StapleRefreshOpts,
+): Promise<{
   updated: string[];
   unmatched: string[];
   logId: string;
@@ -245,8 +259,9 @@ export async function refreshWholesaleClubSelected(ids: string[]): Promise<{
   const mappings = await loadRetailerMappings();
 
   for (const id of ids) {
-    const item = byId.get(id);
-    if (!item) continue;
+    const raw = byId.get(id);
+    if (!raw) continue;
+    const item = stapleWithClientOverride(raw, overrides?.[id]);
 
     const log: MatchLogEntry = {
       at: new Date().toISOString(),
@@ -257,7 +272,7 @@ export async function refreshWholesaleClubSelected(ids: string[]): Promise<{
       status: "no_match",
     };
 
-    const pool = await searchWholesaleClubPool(item, log);
+    const pool = await searchWholesaleClubPool(item, log, opts);
     const offer = pickStapleSearchWinner(item, pool, log);
     entries.push(log);
     updated.push(id);

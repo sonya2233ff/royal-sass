@@ -9,7 +9,9 @@ import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
 import {
   canonicalizeMatchMode,
+  stapleWithClientOverride,
   toLegacyMatchMode,
+  type ProductOverride,
 } from "@/domain/restaurant-product";
 import { offerFailsStapleOfferFilters, categoryBSearchQueries, retailerTaxonomyText } from "@/domain/catalog-normalize";
 import { extractRetailerImage } from "@/lib/product-image";
@@ -19,6 +21,8 @@ import {
   loadRetailerMappings,
   lookupConfirmed,
   saveRetailerMappings,
+  type RetailerMappingStore,
+  type RetailerSkuLink,
 } from "@/lib/retailer-mappings";
 import { offerMatchesRetailerSku } from "@/domain/compare-resolve";
 import {
@@ -905,17 +909,27 @@ export function evaluateOfferStatus(
   };
 }
 
+export type StapleRefreshOpts = {
+  /** Re-search from queries/filters; do not pin the previous mapped SKU. */
+  skipIdentityLock?: boolean;
+};
+
 /** Live PCX hits that pass staple filters. Category B uses the full pool as pack sizes. */
 export async function searchNoFrillsPool(
   item: StapleItem,
   log?: MatchLogEntry,
+  opts?: StapleRefreshOpts,
 ): Promise<ProductOffer[]> {
   const nf = new NoFrillsConnector();
   const seen = new Map<string, ProductOffer>();
   const mappings = await loadRetailerMappings();
   const nfLink = mappings.products[item.id]?.retailers.nofrills;
   const lockedNfSku =
-    nfLink && isLockedIdentityLink(nfLink) ? nfLink.retailerProductId : null;
+    opts?.skipIdentityLock
+      ? null
+      : nfLink && isLockedIdentityLink(nfLink)
+        ? nfLink.retailerProductId
+        : null;
   const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = lockedNfSku ? [lockedNfSku, ...queries] : [...queries];
 
@@ -1451,8 +1465,53 @@ export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
   };
 }
 
+function walmartRematchLink(item: StapleItem, offer: ProductOffer): RetailerSkuLink {
+  const cheapest = resolveMatchMode(item) === "cheapest";
+  return {
+    retailer: "walmart_ca",
+    storeId: "5831",
+    retailerProductId: offer.productId,
+    name: offer.name,
+    upc: offer.upc,
+    matchMethod: "seed_catalog",
+    matchConfidence: cheapest ? 0.85 : 0.9,
+    verified: false,
+    decision: "auto_linked",
+    kind: cheapest ? "staple_winner" : "identity",
+    skippedRematch: false,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+function applyWalmartRematchMapping(
+  store: RetailerMappingStore,
+  item: StapleItem,
+  offer: ProductOffer | null,
+): void {
+  const existing = store.products[item.id];
+  if (!existing) return;
+  const prev = existing.retailers.walmart_ca;
+  if (prev?.verified) return;
+  if (!offer) {
+    if (prev) {
+      existing.retailers.walmart_ca = {
+        ...prev,
+        decision: "needs_review",
+        skippedRematch: false,
+        updatedAt: new Date().toISOString(),
+      };
+    }
+    return;
+  }
+  existing.retailers.walmart_ca = walmartRematchLink(item, offer);
+}
+
 /** Live-refresh Walmart catalog rows for selected staple ids only. */
-export async function refreshWalmartSelected(ids: string[]): Promise<{
+export async function refreshWalmartSelected(
+  ids: string[],
+  overrides?: Record<string, ProductOverride>,
+  opts?: StapleRefreshOpts,
+): Promise<{
   updated: string[];
   logId: string;
   entries: MatchLogEntry[];
@@ -1477,8 +1536,9 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
   const updated: string[] = [];
 
   for (const id of ids) {
-    const item = byId.get(id);
-    if (!item) continue;
+    const raw = byId.get(id);
+    if (!raw) continue;
+    const item = stapleWithClientOverride(raw, overrides?.[id]);
 
     const log: MatchLogEntry = {
       at: new Date().toISOString(),
@@ -1505,10 +1565,11 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
     }
 
     const mappedWm = mappings.products[id]?.retailers.walmart_ca;
-    const lockedId =
-      (isLockedIdentityLink(mappedWm) ? mappedWm.retailerProductId : null) ??
-      lookupConfirmed(confirmed, id)?.productId ??
-      null;
+    const lockedId = opts?.skipIdentityLock
+      ? null
+      : ((isLockedIdentityLink(mappedWm) ? mappedWm.retailerProductId : null) ??
+        lookupConfirmed(confirmed, id)?.productId ??
+        null);
     const mode = resolveMatchMode(item);
     // Produce (cheapest): never pin preferred brand SKU — only 👍 confirmed locks
     const preferred =
@@ -1558,7 +1619,9 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
         offerMatchesRetailerSku(pinHitEarly, ov.productId),
     );
     if (!pinAlreadySeen || pinNotOnShelf) {
-      const extra = item.queries.filter(Boolean).slice(0, 4);
+      const extra = opts?.skipIdentityLock
+        ? queries.filter((q) => q && !/^\d+$/.test(q)).slice(0, 6)
+        : item.queries.filter(Boolean).slice(0, 4);
       for (const q of extra) {
         try {
           const hits = await wm.searchProducts(q, "5831");
@@ -1731,19 +1794,37 @@ export async function refreshWalmartSelected(ids: string[]): Promise<{
         row.notes = item.notes;
       }
     }
+    if (opts?.skipIdentityLock) {
+      applyWalmartRematchMapping(
+        mappings,
+        item,
+        best && row.offer ? best : null,
+      );
+    }
     updated.push(id);
     entries.push(log);
   }
 
   (catalog as { checkedAt: string }).checkedAt = new Date().toISOString();
   await saveWalmartCatalog(catalog);
+  if (opts?.skipIdentityLock) {
+    try {
+      await saveRetailerMappings(mappings);
+    } catch {
+      /* Serverless read-only FS */
+    }
+  }
   const logId = await appendMatchLog(entries);
   await closeWalmartBrowser().catch(() => undefined);
   return { updated, logId, entries };
 }
 
 /** Live-refresh No Frills offers into nofrills_3660_latest.json (skips TTL cache). */
-export async function refreshNoFrillsSelected(ids: string[]): Promise<{
+export async function refreshNoFrillsSelected(
+  ids: string[],
+  overrides?: Record<string, ProductOverride>,
+  opts?: StapleRefreshOpts,
+): Promise<{
   updated: string[];
   logId: string;
   entries: MatchLogEntry[];
@@ -1754,8 +1835,9 @@ export async function refreshNoFrillsSelected(ids: string[]): Promise<{
   const updated: string[] = [];
 
   for (const id of ids) {
-    const item = byId.get(id);
-    if (!item) continue;
+    const raw = byId.get(id);
+    if (!raw) continue;
+    const item = stapleWithClientOverride(raw, overrides?.[id]);
 
     const log: MatchLogEntry = {
       at: new Date().toISOString(),
@@ -1766,7 +1848,7 @@ export async function refreshNoFrillsSelected(ids: string[]): Promise<{
       status: "no_match",
     };
 
-    const pool = await searchNoFrillsPool(item, log);
+    const pool = await searchNoFrillsPool(item, log, opts);
     const offer = pickStapleSearchWinner(item, pool, log);
     entries.push(log);
     updated.push(id);
