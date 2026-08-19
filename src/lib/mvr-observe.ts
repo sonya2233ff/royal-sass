@@ -27,6 +27,7 @@ import {
   isSoldByWeightItem,
   loadStaplesConfig,
   pickStapleSearchWinner,
+  refreshSkipIdentityLock,
   resolveMatchMode,
   type MatchLogEntry,
   type StapleItem,
@@ -40,6 +41,7 @@ import { samePackedItemCandidates } from "@/domain/same-packed-item";
 import { upsertMvrCatalogItem } from "@/lib/mvr-catalog";
 import {
   stapleWithClientOverride,
+  confirmedStoreSku,
   type ProductOverride,
 } from "@/domain/restaurant-product";
 
@@ -78,11 +80,13 @@ export async function searchMvrPool(
   const seen = new Map<string, ProductOffer>();
   const mappings = await loadRetailerMappings();
   const link = mappings.products[item.id]?.retailers.mvr;
-  const lockedSku = opts?.skipIdentityLock
-    ? null
-    : link?.verified
-      ? link.retailerProductId
-      : null;
+  const lockedSku =
+    opts?.pinSku ||
+    (refreshSkipIdentityLock(item, opts, opts?.pinSku)
+      ? null
+      : link?.verified
+        ? link.retailerProductId
+        : null);
   const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = lockedSku ? [lockedSku, ...queries] : [...queries];
 
@@ -243,8 +247,13 @@ export async function refreshMvrSelected(
       status: "no_match",
     };
 
-    const pool = await searchMvrPool(item, log, opts);
-    let picked = pickStapleSearchWinner(item, pool, log);
+    const pinMvr = confirmedStoreSku(overrides?.[id], "mvr");
+    const pool = await searchMvrPool(item, log, {
+      ...opts,
+      skipIdentityLock: refreshSkipIdentityLock(item, opts, pinMvr),
+      pinSku: pinMvr,
+    });
+    let picked = pickStapleSearchWinner(item, pool, log, pinMvr);
     if (picked) {
       if (isSoldByWeightItem(item)) {
         const perKg = pool.find((o) => /per\s*kg/i.test(`${o.name} ${o.packageSize ?? ""}`));

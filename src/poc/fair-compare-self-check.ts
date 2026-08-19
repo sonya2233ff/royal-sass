@@ -161,6 +161,46 @@ assert(
   `Tropicana brand+title must score, got ${tropicanaFit}`,
 );
 
+const tropicanaVsCardLabel = scoreOfferMatch(
+  offer({
+    productId: "20119756001_EA",
+    name: "Pure Premium Orange Juice (Pulp Free)",
+    brand: "Tropicana",
+    price: 8.99,
+    packageSize: "1.36 l",
+  }),
+  "Tropicana OJ No Pulp 2.63L",
+);
+assert(
+  tropicanaVsCardLabel > 0 && tropicanaVsCardLabel !== -Infinity,
+  `card label 2.63L must not hard-reject Tropicana Pulp Free, got ${tropicanaVsCardLabel}`,
+);
+
+const tropicana263 = pickBestOffer(
+  [
+    offer({
+      productId: "20119756001_EA",
+      name: "Pure Premium Orange Juice (Pulp Free)",
+      brand: "Tropicana",
+      price: 8.99,
+      packageSize: "1.36 l",
+    }),
+    offer({
+      productId: "205804",
+      name: "Tropicana 100% Pure Orange Juice No Pulp",
+      brand: "Tropicana",
+      price: 10.24,
+    }),
+  ],
+  "tropicana orange juice no pulp",
+  "205804",
+  { mode: "preferred", targetMassKg: 2.63, preferNameIncludes: ["2.63"] },
+);
+assert(
+  tropicana263?.productId === "205804",
+  `exact OJ pins WM 2.63 SKU, got ${tropicana263?.productId}`,
+);
+
 const pulpFreeOk = sanityCheckOffer({
   itemId: "orange_juice_pulp",
   name: "Tropicana Pure Premium Orange Juice (Pulp Free)",

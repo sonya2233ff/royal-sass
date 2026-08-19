@@ -27,6 +27,7 @@ import {
   isProduceWeightItem,
   loadStaplesConfig,
   pickStapleSearchWinner,
+  refreshSkipIdentityLock,
   resolveMatchMode,
   usesNeededWeightPick,
   type MatchLogEntry,
@@ -41,6 +42,7 @@ import { samePackedItemCandidates } from "@/domain/same-packed-item";
 import { upsertWholesaleClubCatalogItem } from "@/lib/wholesaleclub-catalog";
 import {
   stapleWithClientOverride,
+  confirmedStoreSku,
   type ProductOverride,
 } from "@/domain/restaurant-product";
 
@@ -95,11 +97,13 @@ export async function searchWholesaleClubPool(
   const seen = new Map<string, ProductOffer>();
   const mappings = await loadRetailerMappings();
   const wcLink = mappings.products[item.id]?.retailers.wholesaleclub;
-  const lockedSku = opts?.skipIdentityLock
-    ? null
-    : wcLink?.verified
-      ? wcLink.retailerProductId
-      : null;
+  const lockedSku =
+    opts?.pinSku ||
+    (refreshSkipIdentityLock(item, opts, opts?.pinSku)
+      ? null
+      : wcLink?.verified
+        ? wcLink.retailerProductId
+        : null);
   const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = lockedSku ? [lockedSku, ...queries] : [...queries];
 
@@ -272,8 +276,13 @@ export async function refreshWholesaleClubSelected(
       status: "no_match",
     };
 
-    const pool = await searchWholesaleClubPool(item, log, opts);
-    const offer = pickStapleSearchWinner(item, pool, log);
+    const pinWc = confirmedStoreSku(overrides?.[id], "wholesale_club");
+    const pool = await searchWholesaleClubPool(item, log, {
+      ...opts,
+      skipIdentityLock: refreshSkipIdentityLock(item, opts, pinWc),
+      pinSku: pinWc,
+    });
+    const offer = pickStapleSearchWinner(item, pool, log, pinWc);
     entries.push(log);
     updated.push(id);
 

@@ -748,8 +748,9 @@
         "cocktail",
         "sparkling",
         "zero",
-        "concentrate",
-        "calcium"
+        "calcium",
+        "apple",
+        "mango"
       ],
       "preferNameIncludes": [
         "no pulp",
@@ -761,19 +762,22 @@
       "maxPlausiblePrice": 16,
       "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L — WM product_id 205804",
       "image": "https://i5.walmartimages.ca/asr/86a56b6a-8d88-4779-bf1f-7362a66d4ed4.ee3d4d02ac6a29e56b4db89f4a377075.png",
-      "matchMode": "cheapest_equivalent",
+      "matchMode": "exact",
       "purchaseStrategy": "stock_up",
       "defaultAmount": 1,
       "maximumAmount": 2,
       "unit": "l",
       "tolerancePercent": 15,
       "matchRules": {
-        "productType": "orange juice",
+        "productType": "tropicana orange juice no pulp",
         "form": "juice",
+        "variant": "no pulp 2.63L",
         "mustIncludeAny": [
-          "orange juice",
-          "orange",
-          "jus d'orange"
+          "tropicana",
+          "no pulp",
+          "sans pulpe",
+          "pulp-free",
+          "pulp free"
         ],
         "mustNotInclude": [
           "lots of pulp",
@@ -785,8 +789,9 @@
           "cocktail",
           "sparkling",
           "zero",
-          "concentrate",
-          "calcium"
+          "calcium",
+          "apple",
+          "mango"
         ]
       }
     },

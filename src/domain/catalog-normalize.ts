@@ -139,8 +139,8 @@ export function categoryBSearchQueries(
     out.push(t);
   };
   if (!isCategoryBStaple(item)) {
-    add(item.matchRules?.productType);
     for (const q of item.queries) add(q);
+    add(item.matchRules?.productType);
     return out.slice(0, cap);
   }
   // Recall only: fruit token + warehouse order. Filter does precision.

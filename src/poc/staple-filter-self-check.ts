@@ -583,11 +583,6 @@ async function main() {
 
   const oj = cfg.items.find((i) => i.id === "orange_juice_pulp");
   assert(oj, "orange juice staple");
-  const ojQs = categoryBSearchQueries(oj!);
-  assert(
-    ojQs[0]?.toLowerCase() === "orange juice",
-    `OJ search starts with productType, got ${ojQs[0]}`,
-  );
   const rematchOj = stapleWithClientOverride(oj!, {
     matchMode: "cheapest_equivalent",
     matchRules: {
@@ -597,7 +592,7 @@ async function main() {
   });
   assert(
     rematchOj.queries[0]?.toLowerCase() === "orange juice",
-    "override prepends productType to queries",
+    "cheapest override prepends productType to queries",
   );
   assert(
     rematchOj.mustNotInclude?.includes("tropicana"),
@@ -607,9 +602,23 @@ async function main() {
     rematchOj.matchMode === "cheapest_equivalent",
     "override keeps cheapest_equivalent",
   );
+  const exactOj = stapleWithClientOverride(oj!, {
+    matchMode: "exact",
+    matchRules: { productType: "orange juice" },
+  });
+  assert(
+    exactOj.queries[0]?.toLowerCase().includes("tropicana"),
+    "exact rematch keeps tropicana query first",
+  );
   assert(
     stapleWithClientOverride(oj!) === oj,
     "no override returns the same staple",
+  );
+
+  const ojQs = categoryBSearchQueries(oj!);
+  assert(
+    ojQs[0]?.toLowerCase().includes("tropicana"),
+    `OJ search starts with tropicana query, got ${ojQs[0]}`,
   );
 
   console.log("staple-filter-self-check ok");

@@ -922,6 +922,8 @@
         "productId": "205804",
         "name": "Tropicana 100% Pure Orange Juice No Pulp",
         "brand": "Tropicana",
+        "packageSize": "2.63 L",
+        "parsedMassKg": 2.63,
         "price": 10.24,
         "confidence": "exact",
         "checkedAt": "2026-08-18T19:10:31.561Z",

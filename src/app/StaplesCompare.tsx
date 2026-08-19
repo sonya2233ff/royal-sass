@@ -906,11 +906,6 @@ export function StaplesCompare() {
     if (!ids.length) return;
     setError(null);
     setBusy("rematch");
-    const withReview: Record<string, ProductOverride> = { ...overrideMap };
-    for (const id of ids) {
-      withReview[id] = { ...withReview[id], needsReview: true };
-    }
-    persistOverrides(withReview);
     startTransition(async () => {
       try {
         const res = await fetch("/api/staples/rematch", {
@@ -918,7 +913,7 @@ export function StaplesCompare() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ids,
-            productOverrides: withReview,
+            productOverrides: overrideMap,
           }),
         });
         const data = await res.json();

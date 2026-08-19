@@ -9,6 +9,7 @@ import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
 import {
   canonicalizeMatchMode,
+  confirmedStoreSku,
   stapleWithClientOverride,
   toLegacyMatchMode,
   type ProductOverride,
@@ -816,7 +817,12 @@ function matchQueryForPick(item: StapleItem): string {
       item.label
     );
   }
-  return item.label;
+  // Never score against the card label: "Tropicana OJ No Pulp 2.63L" requires
+  // the token "oj" and splits 2.63L into "63l", so retailer titles miss.
+  return (
+    item.queries.find((q) => q && !/^\d+$/.test(q)) ??
+    item.label
+  );
 }
 
 function passesFilters(
@@ -912,7 +918,19 @@ export function evaluateOfferStatus(
 export type StapleRefreshOpts = {
   /** Re-search from queries/filters; do not pin the previous mapped SKU. */
   skipIdentityLock?: boolean;
+  /** Confirmed in-app SKU — fetch even when the mapping is needs_review. */
+  pinSku?: string | null;
 };
+
+export function refreshSkipIdentityLock(
+  item: StapleItem,
+  opts?: StapleRefreshOpts,
+  pinSku?: string | null,
+): boolean {
+  if (pinSku) return false;
+  if (!opts?.skipIdentityLock) return false;
+  return resolveMatchMode(item) === "cheapest";
+}
 
 /** Live PCX hits that pass staple filters. Category B uses the full pool as pack sizes. */
 export async function searchNoFrillsPool(
@@ -925,11 +943,12 @@ export async function searchNoFrillsPool(
   const mappings = await loadRetailerMappings();
   const nfLink = mappings.products[item.id]?.retailers.nofrills;
   const lockedNfSku =
-    opts?.skipIdentityLock
+    opts?.pinSku ||
+    (refreshSkipIdentityLock(item, opts, opts?.pinSku)
       ? null
       : nfLink && isLockedIdentityLink(nfLink)
         ? nfLink.retailerProductId
-        : null;
+        : null);
   const queries = categoryBSearchQueries(item, 6);
   if (log) log.queries = lockedNfSku ? [lockedNfSku, ...queries] : [...queries];
 
@@ -1465,6 +1484,20 @@ export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
   };
 }
 
+/** Rapid/PCX often omit "2.63L" on the Tropicana jug title — keep expected size on the locked SKU. */
+function withExpectedPackSize(item: StapleItem, offer: CatalogOffer): CatalogOffer {
+  if (offer.parsedMassKg != null && offer.parsedMassKg > 0) return offer;
+  if (item.expectedPackKg == null || !(item.expectedPackKg > 0)) return offer;
+  const locked =
+    Boolean(item.preferredProductId) && offer.productId === item.preferredProductId;
+  if (!locked) return offer;
+  return {
+    ...offer,
+    packageSize: offer.packageSize ?? `${item.expectedPackKg} L`,
+    parsedMassKg: item.expectedPackKg,
+  };
+}
+
 function walmartRematchLink(item: StapleItem, offer: ProductOffer): RetailerSkuLink {
   const cheapest = resolveMatchMode(item) === "cheapest";
   return {
@@ -1565,10 +1598,14 @@ export async function refreshWalmartSelected(
     }
 
     const mappedWm = mappings.products[id]?.retailers.walmart_ca;
-    const lockedId = opts?.skipIdentityLock
+    const pinWm =
+      confirmedStoreSku(overrides?.[id], "walmart_ca") ?? item.preferredProductId;
+    const skipLock = refreshSkipIdentityLock(item, opts, pinWm);
+    const lockedId = skipLock
       ? null
       : ((isLockedIdentityLink(mappedWm) ? mappedWm.retailerProductId : null) ??
         lookupConfirmed(confirmed, id)?.productId ??
+        pinWm ??
         null);
     const mode = resolveMatchMode(item);
     // Produce (cheapest): never pin preferred brand SKU — only 👍 confirmed locks
@@ -1754,7 +1791,7 @@ export async function refreshWalmartSelected(
     row.queriesTried = queries;
     if (best) {
       row.status = log.status === "stale" ? "ok" : log.status;
-      row.offer = catalogOfferFromLive(best);
+      row.offer = withExpectedPackSize(item, catalogOfferFromLive(best));
       row.notes = item.notes;
       delete row.rejected;
       if (
@@ -1848,8 +1885,13 @@ export async function refreshNoFrillsSelected(
       status: "no_match",
     };
 
-    const pool = await searchNoFrillsPool(item, log, opts);
-    const offer = pickStapleSearchWinner(item, pool, log);
+    const pinNf = confirmedStoreSku(overrides?.[id], "no_frills");
+    const pool = await searchNoFrillsPool(item, log, {
+      ...opts,
+      skipIdentityLock: refreshSkipIdentityLock(item, opts, pinNf),
+      pinSku: pinNf,
+    });
+    const offer = pickStapleSearchWinner(item, pool, log, pinNf);
     entries.push(log);
     updated.push(id);
 

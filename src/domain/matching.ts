@@ -22,6 +22,8 @@ const STOP = new Set([
   "bunch",
   // "no pulp" vs "pulp free" — "no" is not a product token
   "no",
+  // Retailer titles say "orange juice", never "OJ"
+  "oj",
 ]);
 
 /** Size / unit tokens are soft preferences, not hard requirements. */
@@ -81,6 +83,11 @@ function tokens(text: string): string[] {
     .filter((t) => t.length > 0 && !STOP.has(t));
 }
 
+/** "2.63L" → tokens 2 + 63l. Size fragments are preferences, not identity. */
+function isSoftQueryToken(t: string): boolean {
+  return SOFT.has(t) || /^\d/.test(t);
+}
+
 function tokenHit(needle: string, hay: string[]): boolean {
   return hay.some(
     (n) =>
@@ -96,8 +103,8 @@ export function scoreOfferMatch(
   opts?: { targetMassKg?: number },
 ): number {
   const qAll = tokens(query);
-  const qCore = qAll.filter((t) => !SOFT.has(t));
-  const qSoft = qAll.filter((t) => SOFT.has(t));
+  const qCore = qAll.filter((t) => !isSoftQueryToken(t));
+  const qSoft = qAll.filter((t) => isSoftQueryToken(t));
   // PCX often puts Tropicana (etc.) on `brand`, not in `title`.
   const name = tokens(`${offer.brand ?? ""} ${offer.name}`);
   if (qCore.length === 0 || name.length === 0) return -Infinity;

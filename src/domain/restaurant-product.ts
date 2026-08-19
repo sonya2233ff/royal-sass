@@ -238,7 +238,11 @@ export function stapleWithClientOverride<T extends StapleLike>(
     if (rules.mustIncludeAll) next.mustIncludeAll = rules.mustIncludeAll;
     if (rules.mustNotInclude) next.mustNotInclude = rules.mustNotInclude;
     const typeQ = rules.productType?.trim();
-    if (typeQ) {
+    const liveMode =
+      mode ?? canonicalizeMatchMode(item.matchMode) ?? inferMatchMode(item);
+    // Exact branded search must keep "tropicana … 2.63" first, not generic
+    // "orange juice" from productType (that pool never contains the jug).
+    if (typeQ && liveMode === "cheapest_equivalent") {
       const queries = Array.isArray((next as { queries?: string[] }).queries)
         ? [...((next as { queries?: string[] }).queries ?? [])]
         : [];
@@ -253,6 +257,28 @@ export function stapleWithClientOverride<T extends StapleLike>(
     next.preferredProductId = override.preferredProductId;
   }
   return next;
+}
+
+const CONFIRMED_SKU_ALIASES: Record<string, string[]> = {
+  walmart_ca: ["walmart_ca"],
+  no_frills: ["no_frills", "nofrills"],
+  wholesale_club: ["wholesale_club", "wholesaleclub"],
+  mvr: ["mvr"],
+};
+
+/** In-app «Підтвердити» SKU for a compare column. */
+export function confirmedStoreSku(
+  override: ProductOverride | null | undefined,
+  retailer: keyof typeof CONFIRMED_SKU_ALIASES | string,
+): string | undefined {
+  const map = override?.confirmedStoreProducts;
+  if (!map) return undefined;
+  const keys = CONFIRMED_SKU_ALIASES[retailer] ?? [retailer];
+  for (const key of keys) {
+    const v = map[key]?.trim();
+    if (v) return v;
+  }
+  return undefined;
 }
 
 export function clearCart(): Cart {

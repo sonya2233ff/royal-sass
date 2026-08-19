@@ -134,6 +134,11 @@ export function ProductSettings({
             <option value="exact">Точний продукт</option>
             <option value="cheapest_equivalent">Найдешевший відповідний</option>
           </select>
+          <span className="ps-hint">
+            Точний продукт = бренд/SKU (для Tropicana 2.63 пиши tropicana у Include).
+            Розмір 2.63L часто немає в назві Walmart — його тримає locked SKU, не ключове слово.
+            Найдешевший відповідний ігнорує бренд і візьме будь-який сік.
+          </span>
         </label>
         <label>
           Стандартна кількість
@@ -314,6 +319,11 @@ export function ProductSettings({
         }
         .ps-save-rematch {
           background: #1e4030;
+        }
+        .ps-hint {
+          font-size: 0.75rem;
+          opacity: 0.75;
+          line-height: 1.35;
         }
         .ps-eggs {
           display: flex;

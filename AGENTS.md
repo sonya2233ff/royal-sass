@@ -59,7 +59,7 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 | `matchMode` | `"exact"` (legacy `"preferred"`) | `"cheapest_equivalent"` (legacy `"cheapest"`) |
 | Typical fields | `preferredProductId`, `preferNameIncludes` | `matchRules` / `mustInclude*` / `mustNotInclude` |
 | Identity gate | Confirmed store product ID, then UPC/SKU, brand, type/form/variant, allowed size. No analog if exact is missing. | Type/form/variant + include/exclude. Fresh ≠ canned/sauce; white quinoa ≠ red; pack purpose must match. |
-| Quantity | Usually `exact_need` | Either strategy (tomato = exact_need 2 kg; OJ pulp = stock_up 1–2 L) |
+| Quantity | Usually `exact_need` (Tropicana OJ 2.63L is exact brand + `stock_up` 1–2 L) | Either strategy (tomato = exact_need 2 kg) |
 | UI badge | **А** — точний продукт | **Б** — найдешевший відповідний |
 
 `resolveMatchMode`: explicit `item.matchMode` (canonicalized), else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred.
