@@ -32,6 +32,7 @@ export interface MappingLinkRef {
 
 export function mappingIsLockedIdentity(link?: MappingLinkRef): boolean {
   if (!link?.retailerProductId) return false;
+  if (link.decision === "needs_review") return false;
   if (link.verified) return true;
   return (
     link.decision === "auto_linked" &&

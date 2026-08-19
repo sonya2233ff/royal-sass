@@ -6,9 +6,27 @@ import {
   useMemo,
   useState,
   useTransition,
-  type MouseEvent,
 } from "react";
 import { ProductSearch } from "./ProductSearch";
+import { ProductSettings } from "./ProductSettings";
+import {
+  addCartItem,
+  applyProductOverride,
+  cartSize,
+  clearCart,
+  removeCartItem,
+  setCartCustomAmount,
+  toRestaurantProduct,
+  type AmountUnit,
+  type Cart,
+  type ProductOverride,
+  type RestaurantProduct,
+} from "@/domain/restaurant-product";
+import {
+  CART_STORAGE_KEY,
+  PRODUCT_OVERRIDE_STORAGE_KEY,
+} from "@/lib/product-config";
+import { toBase } from "@/domain/purchase-units";
 import {
   looseWeightPurchase,
   purchasePlanForPack,
@@ -33,7 +51,8 @@ type Staple = {
   ageLabel?: string | null;
   confirmed?: boolean;
   preferredProductId?: string | null;
-  matchMode?: "preferred" | "cheapest";
+  matchMode?: "preferred" | "cheapest" | "exact" | "cheapest_equivalent";
+  restaurantProduct?: RestaurantProduct;
   weightCompare?: boolean;
   soldByWeight?: boolean;
   typicalEachGrams?: number | null;
@@ -141,6 +160,27 @@ type SideResult = {
   nativeUnitLabel?: string;
   nativeUnitPriceLabel?: string;
   image?: string | null;
+  leftoverAmount?: number;
+  leftoverUnit?: string;
+  packsNeeded?: number;
+  saleMode?: string;
+  requestedAmount?: number;
+  requestedUnit?: string;
+  checkout?: {
+    valid?: boolean;
+    reason?: string;
+    warning?: string;
+    saleMode?: string;
+    packs?: number;
+    packAmount?: number | null;
+    purchasedAmount?: number;
+    leftoverAmount?: number;
+    leftoverUnit?: string;
+    shelfPrice?: number;
+    checkoutCost?: number | null;
+    unitPrice?: number | null;
+  } | null;
+  matchStatus?: string;
   purchase?: {
     neededGrams: number;
     packGrams: number;
@@ -175,6 +215,38 @@ type CompareRow = {
   fairLabel?: string | null;
   fairBasis?: string | null;
   matchKind?: string | null;
+  requestedAmount?: number;
+  requestedUnit?: string;
+  purchaseStrategy?: string;
+  matchModeCanonical?: string;
+};
+
+type StoreCoverage = {
+  requestedItems: number;
+  availableComparableItems: number;
+  checkoutTotal: number | null;
+  complete: boolean;
+  coverage?: string;
+};
+
+type CompareTotals = {
+  walmart: number;
+  noFrills: number;
+  wholesaleClub?: number;
+  mvr?: number;
+  cheaper: string;
+  cheaperTwoWay?: string;
+  cheaperThree?: string;
+  completeCount: number;
+  tripleCount?: number;
+  quadCount?: number;
+  note?: string;
+  requestedItems?: number;
+  walmartComplete?: StoreCoverage;
+  noFrillsComplete?: StoreCoverage;
+  wholesaleClubComplete?: StoreCoverage;
+  mvrComplete?: StoreCoverage;
+  incompleteItems?: Array<{ id: string; label: string; missing: string[] }>;
 };
 
 function tidyOfferName(name: string): string {
@@ -226,24 +298,23 @@ function saleTitle(item: Staple): string {
   return bits.join(" · ") || "Зараз на знижці";
 }
 
-function matchCategory(mode?: "preferred" | "cheapest"): {
+function matchCategory(mode?: string): {
   key: "a" | "b";
   short: string;
   title: string;
 } {
-  if (mode === "cheapest") {
+  if (mode === "cheapest" || mode === "cheapest_equivalent") {
     return {
       key: "b",
-      short: "Б · найдешевший",
+      short: "Б · найдешевший відповідний",
       title:
-        "Категорія Б: овочі, фрукти, яйця в шкаралупі, frozen — будь-який бренд, беремо найдешевший за одиницю",
+        "Найдешевший відповідний: бренд неважливий, тип/форма/призначення мають збігатися",
     };
   }
   return {
     key: "a",
-    short: "А · саме цей",
-    title:
-      "Категорія А: саме цей продукт (бренд і SKU). Не підміняємо дешевшим аналогом",
+    short: "А · точний продукт",
+    title: "Точний продукт: бренд, вид, варіант і розмір",
   };
 }
 
@@ -340,7 +411,7 @@ function storeShort(cheaper: string): string {
 }
 
 function money(n: number | null | undefined): string {
-  if (n == null || !Number.isFinite(n)) return "—";
+  if (n == null || !Number.isFinite(n)) return "N/A";
   return `$${n.toFixed(2)}`;
 }
 
@@ -514,21 +585,15 @@ function walmartSourceLabel(
 
 export function StaplesCompare() {
   const [items, setItems] = useState<Staple[]>([]);
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [catalogReady, setCatalogReady] = useState(false);
+  const [cart, setCart] = useState<Cart>({});
+  const [overrides, setOverrides] = useState<Record<string, ProductOverride>>({});
+  const [settingsId, setSettingsId] = useState<string | null>(null);
+  const [qtyOpenId, setQtyOpenId] = useState<string | null>(null);
+  const [showCart, setShowCart] = useState(false);
+  const selected = useMemo(() => new Set(Object.keys(cart)), [cart]);
   const [rows, setRows] = useState<CompareRow[] | null>(null);
-  const [totals, setTotals] = useState<{
-    walmart: number;
-    noFrills: number;
-    wholesaleClub?: number;
-    mvr?: number;
-    cheaper: string;
-    cheaperTwoWay?: string;
-    cheaperThree?: string;
-    completeCount: number;
-    tripleCount?: number;
-    quadCount?: number;
-    note?: string;
-  } | null>(null);
+  const [totals, setTotals] = useState<CompareTotals | null>(null);
   const [matchLogId, setMatchLogId] = useState<string | null>(null);
   const [logPreview, setLogPreview] = useState<unknown[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -540,8 +605,6 @@ export function StaplesCompare() {
   const [mvrCatalogAt, setMvrCatalogAt] = useState<string | null>(null);
   const [sobeysCatalogAt, setSobeysCatalogAt] = useState<string | null>(null);
   const [staleHours, setStaleHours] = useState(24);
-  const [gramsById, setGramsById] = useState<Record<string, string>>({});
-  const [qtyById, setQtyById] = useState<Record<string, string>>({});
   const [query, setQuery] = useState("");
   const [walmartSource, setWalmartSource] = useState<
     "rapid" | "browser" | "missing_key" | null
@@ -567,24 +630,28 @@ export function StaplesCompare() {
   );
 
   const reload = useCallback(async () => {
-    const res = await fetch("/api/staples");
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      throw new Error(
-        `GET /api/staples ${res.status}${text ? `: ${text.slice(0, 160)}` : ""}`,
-      );
+    try {
+      const res = await fetch("/api/staples");
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(
+          `GET /api/staples ${res.status}${text ? `: ${text.slice(0, 160)}` : ""}`,
+        );
+      }
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error ?? "load failed");
+      setItems(data.items);
+      setCatalogAt(data.catalogCheckedAt ?? null);
+      setNfCatalogAt(data.noFrillsCatalogCheckedAt ?? null);
+      setWcCatalogAt(data.wholesaleClubCatalogCheckedAt ?? null);
+      setMvrCatalogAt(data.mvrCatalogCheckedAt ?? null);
+      setSobeysCatalogAt(data.sobeysCatalogCheckedAt ?? null);
+      setStaleHours(data.cacheStaleHours ?? 24);
+      setWalmartSource(data.walmartSource ?? null);
+      setWalmartSourceWarning(data.walmartSourceWarning ?? null);
+    } finally {
+      setCatalogReady(true);
     }
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error ?? "load failed");
-    setItems(data.items);
-    setCatalogAt(data.catalogCheckedAt ?? null);
-    setNfCatalogAt(data.noFrillsCatalogCheckedAt ?? null);
-    setWcCatalogAt(data.wholesaleClubCatalogCheckedAt ?? null);
-    setMvrCatalogAt(data.mvrCatalogCheckedAt ?? null);
-    setSobeysCatalogAt(data.sobeysCatalogCheckedAt ?? null);
-    setStaleHours(data.cacheStaleHours ?? 24);
-    setWalmartSource(data.walmartSource ?? null);
-    setWalmartSourceWarning(data.walmartSourceWarning ?? null);
   }, []);
 
   const reloadStats = useCallback(async () => {
@@ -602,7 +669,54 @@ export function StaplesCompare() {
       setError(friendlyError(e instanceof Error ? e.message : String(e))),
     );
     reloadStats().catch(() => undefined);
+    try {
+      const rawCart = window.localStorage.getItem(CART_STORAGE_KEY);
+      if (rawCart) {
+        const parsed = JSON.parse(rawCart) as Cart;
+        if (parsed && typeof parsed === "object") setCart(parsed);
+      }
+      const rawOv = window.localStorage.getItem(PRODUCT_OVERRIDE_STORAGE_KEY);
+      if (rawOv) {
+        const parsed = JSON.parse(rawOv) as Record<string, ProductOverride>;
+        if (parsed && typeof parsed === "object") setOverrides(parsed);
+      }
+    } catch {
+      /* ignore */
+    }
   }, [reload, reloadStats]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch {
+      /* ignore */
+    }
+  }, [cart]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        PRODUCT_OVERRIDE_STORAGE_KEY,
+        JSON.stringify(overrides),
+      );
+    } catch {
+      /* ignore */
+    }
+  }, [overrides]);
+
+  function productOf(item: Staple): RestaurantProduct {
+    return applyProductOverride(
+      item.restaurantProduct ??
+        toRestaurantProduct({
+          id: item.id,
+          label: item.label,
+          matchMode: item.matchMode,
+          soldByWeight: item.soldByWeight,
+          typicalEachGrams: item.typicalEachGrams ?? undefined,
+        }),
+      overrides[item.id],
+    );
+  }
 
   const visibleItems = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -644,20 +758,18 @@ export function StaplesCompare() {
   }, [catalogAt, nfCatalogAt, wcCatalogAt, mvrCatalogAt]);
 
   function toggle(id: string) {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else {
-        next.add(id);
-        setQtyById((q) => (q[id] ? q : { ...q, [id]: "1" }));
-      }
-      return next;
-    });
+    const item = items.find((x) => x.id === id);
+    if (!item) return;
+    setCart((prev) =>
+      prev[id] ? removeCartItem(prev, id) : addCartItem(prev, id, productOf(item)),
+    );
   }
 
   function pickStaple(id: string) {
-    setSelected((prev) => new Set(prev).add(id));
-    setQtyById((q) => (q[id] ? q : { ...q, [id]: "1" }));
+    const item = items.find((x) => x.id === id);
+    if (item) {
+      setCart((prev) => addCartItem(prev, id, productOf(item)));
+    }
     setQuery("");
     window.setTimeout(() => {
       document
@@ -671,63 +783,98 @@ export function StaplesCompare() {
     pickStaple(id);
   }
 
-  function setGrams(id: string, value: string) {
-    setGramsById((prev) => ({ ...prev, [id]: value }));
+  function setCustomAmount(id: string, value: string) {
+    const item = items.find((x) => x.id === id);
+    if (!item) return;
     const n = Number.parseFloat(value);
+    const product = productOf(item);
     if (Number.isFinite(n) && n > 0) {
-      setSelected((prev) => new Set(prev).add(id));
+      setCart((prev) =>
+        setCartCustomAmount(addCartItem(prev, id, product), id, n, product.unit),
+      );
     }
   }
 
-  function setPackQty(id: string, value: string) {
-    const cleaned = value.replace(/[^\d]/g, "");
-    setQtyById((prev) => ({ ...prev, [id]: cleaned }));
-    const n = Number.parseInt(cleaned, 10);
-    if (Number.isFinite(n) && n > 0) {
-      setSelected((prev) => new Set(prev).add(id));
-    } else {
-      setSelected((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
+  function persistOverrides(next: Record<string, ProductOverride>) {
+    setOverrides(next);
+    try {
+      window.localStorage.setItem(
+        PRODUCT_OVERRIDE_STORAGE_KEY,
+        JSON.stringify(next),
+      );
+    } catch {
+      /* ignore */
+    }
+  }
+
+  async function saveProductSettings(
+    item: Staple,
+    override: ProductOverride,
+    matchModeChanged: boolean,
+  ) {
+    const prev = productOf(item);
+    const nextOverride: ProductOverride = {
+      ...overrides[item.id],
+      ...override,
+      needsReview: matchModeChanged ? true : overrides[item.id]?.needsReview,
+    };
+    if (matchModeChanged) nextOverride.needsReview = true;
+    persistOverrides({ ...overrides, [item.id]: nextOverride });
+    setCart((c) => {
+      const e = c[item.id];
+      if (!e || e.isCustom) return c;
+      return {
+        ...c,
+        [item.id]: {
+          requestedAmount: nextOverride.defaultAmount ?? prev.defaultAmount,
+          unit: (nextOverride.unit as AmountUnit) ?? prev.unit,
+          isCustom: false,
+        },
+      };
+    });
+    try {
+      await fetch("/api/staples/product-config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: item.id,
+          override: nextOverride,
+          previousMatchMode: prev.matchMode,
+        }),
       });
+    } catch {
+      /* Vercel FS may be read-only; localStorage is the live store. */
+    }
+    if (matchModeChanged) {
+      await reload();
     }
   }
 
-  function bumpPackQty(id: string, delta: number, e?: MouseEvent) {
-    e?.stopPropagation();
-    e?.preventDefault();
-    const current = Number.parseInt(qtyById[id] ?? (selected.has(id) ? "1" : "0"), 10);
-    const next = Math.max(0, (Number.isFinite(current) ? current : 0) + delta);
-    if (next < 1) {
-      setQtyById((prev) => ({ ...prev, [id]: "" }));
-      setSelected((prev) => {
-        const copy = new Set(prev);
-        copy.delete(id);
-        return copy;
-      });
-      return;
-    }
-    setQtyById((prev) => ({ ...prev, [id]: String(next) }));
-    setSelected((prev) => new Set(prev).add(id));
-  }
-
-  function gramsPayload(): Record<string, number> {
-    const out: Record<string, number> = {};
-    for (const id of selected) {
-      const n = Number.parseFloat(gramsById[id] ?? "");
-      if (Number.isFinite(n) && n > 0) out[id] = n;
-    }
-    return out;
-  }
-
-  function qtyPayload(): Record<string, number> {
-    const out: Record<string, number> = {};
-    for (const id of selected) {
-      const n = Number.parseInt(qtyById[id] ?? "1", 10);
-      if (Number.isFinite(n) && n > 0) out[id] = n;
-    }
-    return out;
+  function saveDefaultFromCart(item: Staple) {
+    const entry = cart[item.id];
+    if (!entry) return;
+    const next = {
+      ...overrides,
+      [item.id]: {
+        ...overrides[item.id],
+        defaultAmount: entry.requestedAmount,
+        unit: entry.unit as AmountUnit,
+      },
+    };
+    persistOverrides(next);
+    void fetch("/api/staples/product-config", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: item.id, override: next[item.id] }),
+    }).catch(() => {});
+    setCart((c) => ({
+      ...c,
+      [item.id]: {
+        requestedAmount: entry.requestedAmount,
+        unit: entry.unit,
+        isCustom: false,
+      },
+    }));
   }
 
   const allVisibleSelected =
@@ -735,16 +882,10 @@ export function StaplesCompare() {
     visibleItems.every((item) => selected.has(item.id));
 
   function selectAllVisible() {
-    const ids = visibleItems.map((item) => item.id);
-    setSelected((prev) => {
-      const next = new Set(prev);
-      for (const id of ids) next.add(id);
-      return next;
-    });
-    setQtyById((prev) => {
-      const next = { ...prev };
-      for (const id of ids) {
-        if (!next[id]) next[id] = "1";
+    setCart((prev) => {
+      let next = { ...prev };
+      for (const item of visibleItems) {
+        if (!next[item.id]) next = addCartItem(next, item.id, productOf(item));
       }
       return next;
     });
@@ -752,11 +893,15 @@ export function StaplesCompare() {
 
   function clearVisibleSelection() {
     const ids = new Set(visibleItems.map((item) => item.id));
-    setSelected((prev) => {
-      const next = new Set(prev);
-      for (const id of ids) next.delete(id);
+    setCart((prev) => {
+      const next = { ...prev };
+      for (const id of ids) delete next[id];
       return next;
     });
+  }
+
+  function clearEntireCart() {
+    setCart(clearCart());
   }
 
   function runCompare() {
@@ -769,8 +914,19 @@ export function StaplesCompare() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ids: [...selected],
-            grams: gramsPayload(),
-            qty: qtyPayload(),
+            cart,
+            productOverrides: overrides,
+            grams: Object.fromEntries(
+              Object.entries(cart).map(([id, e]) => {
+                const base = toBase(e.requestedAmount, e.unit as AmountUnit);
+                return [id, base.unit === "g" ? base.amount : 0];
+              }),
+            ),
+            qty: Object.fromEntries(
+              Object.entries(cart)
+                .filter(([, e]) => e.unit === "pack" || e.unit === "ea")
+                .map(([id, e]) => [id, Math.max(1, Math.round(e.requestedAmount))]),
+            ),
           }),
         });
         const data = await res.json();
@@ -961,7 +1117,7 @@ export function StaplesCompare() {
     id: string,
     vote: "up" | "down",
     productId?: string,
-    e?: MouseEvent,
+    e?: { stopPropagation(): void },
   ) {
     e?.stopPropagation();
     setError(null);
@@ -986,14 +1142,10 @@ export function StaplesCompare() {
         <h1>Cafe staples</h1>
         <p className="sub">
           Walmart #5831 vs No Frills #3660 vs Wholesale Club #3724 vs MVR Cash
-          & Carry (3655 Weston Rd). Для овочів/фруктів і frozen на картці: WM —{" "}
-          <strong>за 1 kg</strong>, No Frills і Wholesale Club —{" "}
-          <strong>за 1 lb</strong>. Угода при
-          різних пачках — <strong>за 100 г</strong>. Товари
-          на вагу: після вибору вкажи скільки <strong>грам</strong> потрібно.
-          Решта — <strong>кількість пачок</strong> (за замовчуванням 1).{" "}
-          <strong>А</strong> — саме цей продукт. <strong>Б</strong> — овочі й
-          фрукти (найдешевший, бренд не важливий).
+          & Carry (3655 Weston Rd). <strong>А</strong> — точний продукт.{" "}
+          <strong>Б</strong> — найдешевший відповідний (бренд не важливий).
+          Кількість за замовчуванням береться з картки; зміна в кошику не
+          змінює дефолт, поки не натиснеш «Зберегти як новий дефолт».
         </p>
         <p
           className={
@@ -1042,63 +1194,29 @@ export function StaplesCompare() {
       </header>
 
       <section className="grid">
-        {visibleItems.map((item) => {
+        {!catalogReady &&
+          Array.from({ length: 8 }).map((_, i) => (
+            <div key={`sk-${i}`} className="card skeleton" aria-hidden>
+              <div className="card-main">
+                <div className="thumb">
+                  <div className="ph" />
+                </div>
+                <div className="body">
+                  <strong>…</strong>
+                  <span className="pill">завантаження</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        {catalogReady && visibleItems.map((item) => {
           const on = selected.has(item.id);
-          const isCatB = item.matchMode === "cheapest";
-          const gramsVal = gramsById[item.id] ?? "";
-          const gramsN = Number.parseFloat(gramsVal);
-          const neededG =
-            Number.isFinite(gramsN) && gramsN > 0
-              ? gramsN
-              : on && item.soldByWeight
-                ? 1000
-                : null;
-          const estKg =
-            item.soldByWeight && neededG != null ? neededG / 1000 : null;
-          const wmEst =
-            estKg != null && item.walmartCached?.pricePerKg
-              ? item.walmartCached.pricePerKg * estKg
-              : null;
-          const nfEst =
-            estKg != null && item.noFrillsCached?.pricePerKg
-              ? item.noFrillsCached.pricePerKg * estKg
-              : null;
-          const wcEst =
-            estKg != null && item.wholesaleClubCached?.pricePerKg
-              ? item.wholesaleClubCached.pricePerKg * estKg
-              : null;
-          const mvrEst =
-            estKg != null && item.mvrCached?.pricePerKg
-              ? item.mvrCached.pricePerKg * estKg
-              : null;
-          const packRaw = qtyById[item.id];
-          const packParsed = Number.parseInt(
-            packRaw ?? (on ? "1" : "0"),
-            10,
-          );
-          const packN =
-            !item.soldByWeight &&
-            Number.isFinite(packParsed) &&
-            packParsed > 0
-              ? packParsed
-              : on && !item.soldByWeight
-                ? 1
-                : 0;
-          const wmPackEst =
-            packN > 1 && item.walmartCached
-              ? item.walmartCached.price * packN
-              : null;
-          const nfPackEst =
-            packN > 1 && item.noFrillsCached
-              ? item.noFrillsCached.price * packN
-              : null;
-          const wcPackEst =
-            packN > 1 && item.wholesaleClubCached
-              ? item.wholesaleClubCached.price * packN
-              : null;
-          const mvrPackEst =
-            packN > 1 && item.mvrCached ? item.mvrCached.price * packN : null;
-          const cat = matchCategory(item.matchMode);
+          const product = productOf(item);
+          const isCatB = product.matchMode === "cheapest_equivalent";
+          const entry = cart[item.id];
+          const requested = entry?.requestedAmount ?? product.defaultAmount;
+          const neededBase = toBase(requested, product.unit);
+          const neededG = neededBase.unit === "g" ? neededBase.amount : null;
+          const cat = matchCategory(product.matchMode);
           const thumb =
             isCatB && item.walmartCached?.image
               ? item.walmartCached.image
@@ -1139,8 +1257,11 @@ export function StaplesCompare() {
                         !
                       </span>
                     ) : null}
-                    {packN > 1 ? (
-                      <span className="qty-mark"> ×{packN}</span>
+                    {on && entry?.isCustom ? (
+                      <span className="qty-mark">
+                        {" "}
+                        {requested} {product.unit}
+                      </span>
                     ) : null}
                   </strong>
                   <span className={`pill ${item.status}`}>
@@ -1353,99 +1474,66 @@ export function StaplesCompare() {
                 </div>
                 <span className="check">{on ? "✓" : ""}</span>
               </button>
-              {item.soldByWeight ? (
-                on && (
-                  <label className="grams">
-                    <span>грам</span>
-                    <input
-                      type="number"
-                      min={1}
-                      step={50}
-                      inputMode="numeric"
-                      placeholder="1000"
-                      value={gramsVal}
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) => setGrams(item.id, e.target.value)}
-                    />
-                    {(wmEst != null ||
-                      nfEst != null ||
-                      wcEst != null ||
-                      mvrEst != null) && (
-                      <span className="grams-est">
-                        {wmEst != null ? `WM $${wmEst.toFixed(2)}` : ""}
-                        {wmEst != null &&
-                        (nfEst != null || wcEst != null || mvrEst != null)
-                          ? " · "
-                          : ""}
-                        {nfEst != null ? `NF $${nfEst.toFixed(2)}` : ""}
-                        {nfEst != null &&
-                        (wcEst != null || mvrEst != null)
-                          ? " · "
-                          : ""}
-                        {wcEst != null ? `WC $${wcEst.toFixed(2)}` : ""}
-                        {wcEst != null && mvrEst != null ? " · " : ""}
-                        {mvrEst != null ? `MVR $${mvrEst.toFixed(2)}` : ""}
-                      </span>
-                    )}
-                  </label>
-                )
-              ) : (
+              <div className="card-tools">
+                <button
+                  type="button"
+                  className="settings-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSettingsId(item.id);
+                  }}
+                >
+                  Налаштування
+                </button>
                 <div className="qty-row">
-                  <span>кількість</span>
-                  <button
-                    type="button"
-                    className="qty-btn"
-                    aria-label="менше"
-                    onClick={(e) => bumpPackQty(item.id, -1, e)}
-                  >
-                    −
-                  </button>
-                  <input
-                    type="number"
-                    min={0}
-                    step={1}
-                    inputMode="numeric"
-                    className="qty-input"
-                    value={packRaw ?? (on ? "1" : "")}
-                    placeholder="0"
-                    onClick={(e) => e.stopPropagation()}
-                    onChange={(e) => setPackQty(item.id, e.target.value)}
-                  />
-                  <button
-                    type="button"
-                    className="qty-btn"
-                    aria-label="більше"
-                    onClick={(e) => bumpPackQty(item.id, 1, e)}
-                  >
-                    +
-                  </button>
-                  <span className="qty-unit">пачок</span>
-                  {(wmPackEst != null ||
-                    nfPackEst != null ||
-                    wcPackEst != null ||
-                    mvrPackEst != null) && (
-                    <span className="grams-est">
-                      {wmPackEst != null ? `WM $${wmPackEst.toFixed(2)}` : ""}
-                      {wmPackEst != null &&
-                      (nfPackEst != null ||
-                        wcPackEst != null ||
-                        mvrPackEst != null)
-                        ? " · "
-                        : ""}
-                      {nfPackEst != null ? `NF $${nfPackEst.toFixed(2)}` : ""}
-                      {nfPackEst != null &&
-                      (wcPackEst != null || mvrPackEst != null)
-                        ? " · "
-                        : ""}
-                      {wcPackEst != null ? `WC $${wcPackEst.toFixed(2)}` : ""}
-                      {wcPackEst != null && mvrPackEst != null ? " · " : ""}
-                      {mvrPackEst != null
-                        ? `MVR $${mvrPackEst.toFixed(2)}`
-                        : ""}
-                    </span>
+                  <span>
+                    Зазвичай: {product.defaultAmount} {product.unit}
+                  </span>
+                  {on && (
+                    <>
+                      <button
+                        type="button"
+                        className="qty-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setQtyOpenId((id) => (id === item.id ? null : item.id));
+                        }}
+                      >
+                        Змінити кількість
+                      </button>
+                      {qtyOpenId === item.id && (
+                        <label className="grams">
+                          <span>для цього кошика</span>
+                          <input
+                            type="number"
+                            min={0.01}
+                            step="any"
+                            inputMode="decimal"
+                            value={entry?.requestedAmount ?? product.defaultAmount}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) =>
+                              setCustomAmount(item.id, e.target.value)
+                            }
+                          />
+                          <span className="qty-unit">{product.unit}</span>
+                          {entry?.isCustom && (
+                            <button
+                              type="button"
+                              className="qty-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                saveDefaultFromCart(item);
+                              }}
+                            >
+                              Зберегти як новий дефолт
+                            </button>
+                          )}
+                        </label>
+                      )}
+                    </>
                   )}
                 </div>
-              )}
+              </div>
               <div className="votes">
                 <button
                   type="button"
@@ -1467,7 +1555,7 @@ export function StaplesCompare() {
             </div>
           );
         })}
-        {visibleItems.length === 0 && (
+        {catalogReady && visibleItems.length === 0 && (
           <p className="empty-grid">
             {query.trim()
               ? "У списку немає такого товару — обери з підказок вище, щоб додати."
@@ -1475,6 +1563,102 @@ export function StaplesCompare() {
           </p>
         )}
       </section>
+
+      {settingsId &&
+        (() => {
+          const item = items.find((x) => x.id === settingsId);
+          if (!item) return null;
+          const product = productOf(item);
+          return (
+            <ProductSettings
+              product={product}
+              open
+              onClose={() => setSettingsId(null)}
+              onSave={(ov, changed) => {
+                void saveProductSettings(item, ov, changed);
+              }}
+              confirmedStoreProducts={
+                overrides[item.id]?.confirmedStoreProducts
+              }
+              storeOffers={[
+                {
+                  retailer: "walmart_ca",
+                  label: "Walmart",
+                  productId: item.walmartCached?.productId,
+                  name: item.walmartCached?.name,
+                },
+                {
+                  retailer: "no_frills",
+                  label: "No Frills",
+                  productId: item.noFrillsCached?.productId,
+                  name: item.noFrillsCached?.name,
+                },
+                {
+                  retailer: "wholesale_club",
+                  label: "Wholesale Club",
+                  productId: item.wholesaleClubCached?.productId,
+                  name: item.wholesaleClubCached?.name,
+                },
+                {
+                  retailer: "mvr",
+                  label: "MVR",
+                  productId: item.mvrCached?.productId,
+                  name: item.mvrCached?.name,
+                },
+              ]}
+            />
+          );
+        })()}
+
+      {showCart && (
+        <div className="cart-drawer">
+          <header>
+            <strong>Кошик · {cartSize(cart)} товарів</strong>
+            <button type="button" onClick={() => setShowCart(false)}>
+              Закрити
+            </button>
+          </header>
+          <ul>
+            {Object.keys(cart).map((id) => {
+              const item = items.find((x) => x.id === id);
+              const e = cart[id]!;
+              return (
+                <li key={id}>
+                  <span>
+                    {item?.label ?? id} · {e.requestedAmount} {e.unit}
+                    {e.isCustom ? " (змінено)" : ""}
+                  </span>
+                  <button type="button" onClick={() => toggle(id)}>
+                    Прибрати
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+
+      <div className="cart-bar">
+        <span>{cartSize(cart)} товарів</span>
+        <button type="button" onClick={() => setShowCart(true)}>
+          Переглянути кошик
+        </button>
+        <button
+          type="button"
+          disabled={cartSize(cart) === 0}
+          onClick={clearEntireCart}
+        >
+          Очистити кошик
+        </button>
+        <button
+          type="button"
+          className="cta"
+          disabled={pending || cartSize(cart) === 0 || busy != null}
+          onClick={runCompare}
+        >
+          {busy === "compare" ? "Comparing…" : "Порівняти"}
+        </button>
+      </div>
 
       <div className="actions">
         <button
@@ -1484,8 +1668,8 @@ export function StaplesCompare() {
           onClick={allVisibleSelected ? clearVisibleSelection : selectAllVisible}
         >
           {allVisibleSelected
-            ? "Зняти всі"
-            : `Виділити всі (${visibleItems.length})`}
+            ? "Зняти видимі"
+            : `Виділити видимі (${visibleItems.length})`}
         </button>
         <button
           type="button"
@@ -1497,71 +1681,6 @@ export function StaplesCompare() {
             ? "Оновлюю ціни…"
             : "Оновити ціни"}
         </button>
-        <button
-          type="button"
-          className="cta"
-          disabled={pending || selected.size === 0 || busy != null}
-          onClick={runCompare}
-        >
-          {busy === "compare"
-            ? "Comparing…"
-            : `Compare ${selected.size} items`}
-        </button>
-        <button
-          type="button"
-          className="cta secondary"
-          disabled={
-            pending ||
-            selected.size === 0 ||
-            busy != null ||
-            walmartSource === "missing_key"
-          }
-          onClick={refreshSelected}
-        >
-          {busy === "refresh"
-            ? "Refreshing WM…"
-            : `Refresh WM (${selected.size})`}
-        </button>
-        <button
-          type="button"
-          className="cta secondary"
-          disabled={pending || selected.size === 0 || busy != null}
-          onClick={refreshNoFrillsSelected}
-        >
-          {busy === "refresh-nf"
-            ? "Refreshing NF…"
-            : `Refresh NF (${selected.size})`}
-        </button>
-        <button
-          type="button"
-          className="cta secondary"
-          disabled={pending || selected.size === 0 || busy != null}
-          onClick={refreshWholesaleClubSelected}
-        >
-          {busy === "refresh-wc"
-            ? "Refreshing WC…"
-            : `Refresh WC (${selected.size})`}
-        </button>
-        <button
-          type="button"
-          className="cta secondary"
-          disabled={pending || selected.size === 0 || busy != null}
-          onClick={refreshMvrSelected}
-        >
-          {busy === "refresh-mvr"
-            ? "Refreshing MVR…"
-            : `Refresh MVR (${selected.size})`}
-        </button>
-        <button
-          type="button"
-          className="cta secondary"
-          disabled={pending || selected.size === 0 || busy != null}
-          onClick={refreshSobeysSelected}
-        >
-          {busy === "refresh-sobeys"
-            ? "Refreshing Sobeys flyer…"
-            : `Refresh Sobeys flyer (${selected.size})`}
-        </button>
       </div>
 
       {error && <p className="err">{error}</p>}
@@ -1569,9 +1688,6 @@ export function StaplesCompare() {
       {rows && (
         <section className="results">
           <h2>Results</h2>
-          {matchLogId && (
-            <p className="meta">Match log: data/runs/{matchLogId}.json</p>
-          )}
           {rows.map((r) => (
             <article key={r.id} className="row">
               <div className="row-head">
@@ -1588,11 +1704,13 @@ export function StaplesCompare() {
                   <strong>
                     {r.label}
                     {r.confirmed ? " · locked" : ""}
-                    {r.grams
-                      ? ` · ${r.grams} g`
-                      : r.qty != null && r.qty > 1
-                        ? ` · ×${r.qty}`
-                        : ""}
+                    {r.requestedAmount != null
+                      ? ` · треба ${r.requestedAmount} ${r.requestedUnit ?? ""}`
+                      : r.grams
+                        ? ` · ${r.grams} g`
+                        : r.qty != null && r.qty > 1
+                          ? ` · ×${r.qty}`
+                          : ""}
                   </strong>
                   <div className="badge">
                     {r.cheaper === "incomplete" && r.fairBasis === "incomparable"
@@ -1634,51 +1752,63 @@ export function StaplesCompare() {
             </article>
           ))}
 
-          {totals && totals.completeCount > 0 && (
+          {totals && (
             <div className="totals">
               <div>
-                Walmart basket: <strong>${totals.walmart.toFixed(2)}</strong>
-              </div>
-              <div>
-                No Frills basket: <strong>${totals.noFrills.toFixed(2)}</strong>
-              </div>
-              <div>
-                Wholesale Club basket:{" "}
+                Walmart:{" "}
                 <strong>
-                  $
-                  {(totals.wholesaleClub ?? 0).toFixed(2)}
+                  {money(totals.walmartComplete?.checkoutTotal)}
                 </strong>
-                {totals.tripleCount
-                  ? ` · ${totals.tripleCount} items at all three`
+                {totals.walmartComplete?.coverage
+                  ? ` · ${totals.walmartComplete.coverage}`
                   : ""}
               </div>
               <div>
-                MVR basket:{" "}
-                <strong>${(totals.mvr ?? 0).toFixed(2)}</strong>
-                {totals.quadCount
-                  ? ` · ${totals.quadCount} items at all four`
+                No Frills:{" "}
+                <strong>
+                  {money(totals.noFrillsComplete?.checkoutTotal)}
+                </strong>
+                {totals.noFrillsComplete?.coverage
+                  ? ` · ${totals.noFrillsComplete.coverage}`
+                  : ""}
+              </div>
+              <div>
+                Wholesale Club:{" "}
+                <strong>
+                  {money(totals.wholesaleClubComplete?.checkoutTotal)}
+                </strong>
+                {totals.wholesaleClubComplete?.coverage
+                  ? ` · ${totals.wholesaleClubComplete.coverage}`
+                  : ""}
+              </div>
+              <div>
+                MVR:{" "}
+                <strong>{money(totals.mvrComplete?.checkoutTotal)}</strong>
+                {totals.mvrComplete?.coverage
+                  ? ` · ${totals.mvrComplete.coverage}`
                   : ""}
               </div>
               <div className="winner">
-                {totals.cheaper === "walmart"
-                  ? "Cheaper overall: Walmart"
-                  : totals.cheaper === "nofrills"
-                    ? "Cheaper overall: No Frills"
-                    : totals.cheaper === "wholesaleclub"
-                      ? "Cheaper overall: Wholesale Club"
-                      : totals.cheaper === "mvr"
-                        ? "Cheaper overall: MVR"
-                        : "Overall: tie"}
+                {totals.cheaper === "incomplete"
+                  ? "Немає повного кошика — загального переможця немає"
+                  : totals.cheaper === "walmart"
+                    ? "Cheaper overall: Walmart"
+                    : totals.cheaper === "nofrills"
+                      ? "Cheaper overall: No Frills"
+                      : totals.cheaper === "wholesaleclub"
+                        ? "Cheaper overall: Wholesale Club"
+                        : totals.cheaper === "mvr"
+                          ? "Cheaper overall: MVR"
+                          : "Overall: tie"}
               </div>
-              {totals.cheaperTwoWay &&
-                totals.tripleCount != null &&
-                totals.tripleCount > 0 &&
-                totals.cheaperTwoWay !== totals.cheaper && (
-                  <div className="tiny mute">
-                    WM vs NF only ({totals.completeCount} items):{" "}
-                    {cheaperLabel(totals.cheaperTwoWay)}
-                  </div>
-                )}
+              {totals.incompleteItems && totals.incompleteItems.length > 0 && (
+                <div className="tiny">
+                  Неповні:{" "}
+                  {totals.incompleteItems
+                    .map((it) => `${it.label} (${it.missing.join(", ")})`)
+                    .join(" · ")}
+                </div>
+              )}
               {totals.note && <div className="tiny mute">{totals.note}</div>}
             </div>
           )}
@@ -1783,13 +1913,6 @@ export function StaplesCompare() {
           </>
         )}
       </section>
-
-      {logPreview && (
-        <section className="log">
-          <h2>Останній лог матчів</h2>
-          <pre>{JSON.stringify(logPreview, null, 2)}</pre>
-        </section>
-      )}
 
       <style jsx>{`
         .staples {
@@ -2054,17 +2177,65 @@ export function StaplesCompare() {
           font-size: 0.9rem;
         }
         .qty-btn {
-          width: 1.85rem;
-          height: 1.85rem;
+          min-height: 1.85rem;
           border: 1px solid rgba(30, 40, 30, 0.25);
           background: #fff;
           cursor: pointer;
-          font-size: 1.05rem;
-          line-height: 1;
-          padding: 0;
+          font-size: 0.75rem;
+          line-height: 1.2;
+          padding: 0.25rem 0.45rem;
+          width: auto;
         }
         .qty-unit {
           opacity: 0.7;
+        }
+        .settings-btn {
+          margin: 0 0.55rem 0.25rem;
+          font: inherit;
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+          background: #fff;
+          border: 1px solid rgba(30, 40, 30, 0.25);
+        }
+        .card.skeleton {
+          min-height: 12rem;
+          pointer-events: none;
+          opacity: 0.55;
+        }
+        .cart-bar {
+          position: sticky;
+          bottom: 0;
+          z-index: 30;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.45rem;
+          align-items: center;
+          background: rgba(247, 243, 236, 0.96);
+          border-top: 1px solid rgba(30, 40, 30, 0.12);
+          padding: 0.55rem 0.2rem;
+          margin: 0.8rem -0.2rem 0;
+        }
+        .cart-bar .cta {
+          margin-left: auto;
+        }
+        .cart-drawer {
+          background: #fffdf8;
+          border: 1px solid rgba(30, 40, 30, 0.15);
+          padding: 0.7rem 0.85rem;
+          margin: 0.8rem 0;
+        }
+        .cart-drawer ul {
+          list-style: none;
+          padding: 0;
+          margin: 0.4rem 0 0;
+        }
+        .cart-drawer li {
+          display: flex;
+          justify-content: space-between;
+          gap: 0.5rem;
+          padding: 0.25rem 0;
+          font-size: 0.85rem;
         }
         .actions {
           margin: 1.25rem 0;
@@ -2240,58 +2411,24 @@ export function StaplesCompare() {
 function Side({
   title,
   side,
-  grams,
-  qty,
 }: {
   title: string;
   side: SideResult;
   grams?: number | null;
   qty?: number;
 }) {
-  const buy = side.purchase;
-  const productName = side.name ?? buy?.name ?? null;
-  // Only this store's offer photo — never the shared staple / other column.
+  const checkout = side.checkout;
+  const productName = side.name ?? side.purchase?.name ?? null;
   const productImage = side.image ?? null;
-  const usable =
-    side.lineTotal != null &&
-    (side.status === "ok" || side.status === "stale" || !side.status);
-  const byWeight = side.nativeUnitPrice != null && side.nativeUnit != null;
-  const scaled =
-    grams != null &&
-    grams > 0 &&
-    side.pricePerKg != null &&
-    (side.status === "ok" || side.status === "stale" || !side.status)
-      ? side.pricePerKg * (grams / 1000)
-      : null;
-  const packQty = qty != null && qty > 1 ? qty : null;
-  const primary =
-    buy != null
-      ? buy.totalPrice
-      : scaled != null
-        ? scaled
-        : packQty != null && side.lineTotal != null
-          ? side.lineTotal
-          : byWeight
-            ? side.nativeUnitPrice!
-            : (side.lineTotal ?? null);
-  const unitLabel =
-    buy != null
-      ? buy.soldByWeight
-        ? `за ${buy.neededGrams} g`
-        : `${buy.packs} × ${buy.packGrams} g`
-      : scaled != null
-        ? `за ${grams} g`
-        : packQty != null
-          ? `×${packQty}`
-          : byWeight
-            ? (side.nativeUnitLabel ?? side.compareUnitLabel ?? null)
-            : (side.compareUnitLabel ?? null);
-  const otherUnit =
-    byWeight && side.nativeUnit === "kg" && side.pricePerLb != null
-      ? `= $${side.pricePerLb.toFixed(2)} / lb`
-      : byWeight && side.nativeUnit === "lb" && side.pricePerKg != null
-        ? `= $${side.pricePerKg.toFixed(2)} / kg`
-        : null;
+  const cost = checkout?.valid ? checkout.checkoutCost : side.lineTotal;
+  const usable = cost != null && Number.isFinite(cost);
+  const reject =
+    checkout?.reason ||
+    side.matchStatus ||
+    side.statusReason ||
+    (side.status && side.status !== "ok" && side.status !== "stale"
+      ? statusLabel(side.status)
+      : null);
 
   return (
     <div>
@@ -2317,45 +2454,35 @@ function Side({
           {statusLabel(side.status)}
         </span>
       </div>
-      {usable && primary != null ? (
+      {usable ? (
         <>
-          <div className="big">${primary.toFixed(2)}</div>
-          {unitLabel && <div className="unit">{unitLabel}</div>}
-          {otherUnit && <div className="tiny mute">{otherUnit}</div>}
-          {byWeight &&
-            side.shelfPrice != null &&
-            side.nativeUnitPrice != null &&
-            Math.abs(side.shelfPrice - side.nativeUnitPrice) > 0.005 && (
-              <div className="tiny mute">
-                полиця ${side.shelfPrice.toFixed(2)}
-              </div>
-            )}
-          {buy && (
-            <>
-              <div className="tiny">потрібно {buy.neededGrams} g</div>
-              {buy.soldByWeight ? (
-                <div className="tiny mute">на вагу, без пачки</div>
-              ) : (
-                <>
-                  <div className="tiny">
-                    пачка {buy.packGrams} g · {buy.packs} шт · разом {buy.gotGrams} g
-                  </div>
-                  <div className="tiny mute">
-                    {buy.deltaGrams === 0
-                      ? "без відхилення"
-                      : buy.deltaGrams < 0
-                        ? `недостача ${Math.abs(buy.deltaGrams)} g (${Math.abs(buy.deltaPct)}%)`
-                        : `надлишок ${buy.deltaGrams} g (+${buy.deltaPct}%)`}
-                    {buy.coverFallback ? " · перевищує бажану кількість" : ""}
-                  </div>
-                </>
-              )}
-              <div className="tiny mute">
-                ${buy.pricePer100g.toFixed(2)}/100g
-              </div>
-            </>
+          <div className="big">${cost!.toFixed(2)}</div>
+          <div className="tiny">
+            треба {side.requestedAmount ?? checkout?.purchasedAmount ?? "—"}
+            {side.requestedUnit ? ` ${side.requestedUnit}` : ""}
+          </div>
+          {checkout?.packs != null && checkout.packAmount != null && (
+            <div className="tiny">
+              {checkout.packs} × {checkout.packAmount} {side.requestedUnit ?? ""}
+              {checkout.saleMode === "case" ? " (case)" : ""}
+            </div>
           )}
-          {side.note && <div className="tiny mute">{side.note}</div>}
+          {checkout?.purchasedAmount != null && (
+            <div className="tiny">
+              куплено {checkout.purchasedAmount} {side.requestedUnit ?? ""}
+              {checkout.leftoverAmount
+                ? ` · leftover ${checkout.leftoverAmount}`
+                : ""}
+            </div>
+          )}
+          {checkout?.shelfPrice != null && (
+            <div className="tiny mute">полиця ${checkout.shelfPrice.toFixed(2)}</div>
+          )}
+          {checkout?.unitPrice != null && (
+            <div className="tiny mute">
+              ${checkout.unitPrice.toFixed(2)} / од. (лише для порівняння value)
+            </div>
+          )}
           {side.ageLabel && (
             <div className="tiny mute">
               {"\u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
@@ -2365,9 +2492,10 @@ function Side({
         </>
       ) : (
         <>
-          <div className="mute">немає порівнянної ціни</div>
-          {side.statusReason && (
-            <div className="tiny mute">{side.statusReason}</div>
+          <div className="mute">N/A</div>
+          {reject && <div className="tiny mute">{reject}</div>}
+          {checkout?.warning && (
+            <div className="tiny mute">{checkout.warning}</div>
           )}
         </>
       )}

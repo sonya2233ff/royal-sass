@@ -55,6 +55,9 @@ export function ProductSearch({
   const [active, setActive] = useState(0);
   const [err, setErr] = useState<string | null>(null);
 
+  const [retry, setRetry] = useState(0);
+  const reqSeq = useRef(0);
+
   useEffect(() => {
     const q = query.trim();
     if (q.length < 2) {
@@ -68,14 +71,39 @@ export function ProductSearch({
     }
     setLoading(true);
     setErr(null);
+    const seq = ++reqSeq.current;
     const ac = new AbortController();
     const t = window.setTimeout(() => {
       fetch(`/api/staples/search?q=${encodeURIComponent(q)}`, {
         signal: ac.signal,
       })
-        .then((r) => r.json())
+        .then(async (r) => {
+          const text = await r.text();
+          if (seq !== reqSeq.current) return null;
+          if (!r.ok) {
+            throw new Error("search_http");
+          }
+          if (!text.trim()) {
+            throw new Error("search_empty");
+          }
+          try {
+            return JSON.parse(text) as {
+              ok?: boolean;
+              error?: string;
+              staples?: StapleHit[];
+              walmart?: StoreHit[];
+              noFrills?: StoreHit[];
+              wholesaleClub?: StoreHit[];
+              mvr?: StoreHit[];
+              walmartSourceWarning?: string;
+            };
+          } catch {
+            throw new Error("search_json");
+          }
+        })
         .then((data) => {
-          if (!data.ok) throw new Error(data.error ?? "search failed");
+          if (!data || seq !== reqSeq.current) return;
+          if (!data.ok) throw new Error("search_failed");
           setStaples(data.staples ?? []);
           setWalmart(data.walmart ?? []);
           setNoFrills(data.noFrills ?? []);
@@ -91,15 +119,18 @@ export function ProductSearch({
         })
         .catch((e) => {
           if (e?.name === "AbortError" || ac.signal.aborted) return;
-          setErr(e instanceof Error ? e.message : String(e));
+          if (seq !== reqSeq.current) return;
+          setErr("Не вдалося завантажити результати. Спробувати ще раз");
         })
-        .finally(() => setLoading(false));
-    }, 350);
+        .finally(() => {
+          if (seq === reqSeq.current) setLoading(false);
+        });
+    }, 400);
     return () => {
       window.clearTimeout(t);
       ac.abort();
     };
-  }, [query]);
+  }, [query, retry]);
 
   useEffect(() => {
     function onDoc(e: MouseEvent) {
@@ -197,7 +228,18 @@ export function ProductSearch({
       </div>
       {showPanel && (
         <div className="search-panel" role="listbox">
-          {err && <div className="search-err">{err}</div>}
+          {err && (
+            <div className="search-err">
+              {err}{" "}
+              <button
+                type="button"
+                className="search-retry"
+                onClick={() => setRetry((n) => n + 1)}
+              >
+                Спробувати ще раз
+              </button>
+            </div>
+          )}
           {adopting && <div className="search-hint">Додаю в список…</div>}
           {staples.length > 0 && (
             <div className="search-sec">У списку</div>
@@ -207,6 +249,7 @@ export function ProductSearch({
               key={`s-${hit.id}`}
               type="button"
               role="option"
+              aria-selected={active === i}
               className={active === i ? "search-hit on" : "search-hit"}
               onMouseEnter={() => setActive(i)}
               onClick={() => choose(i)}
@@ -240,6 +283,7 @@ export function ProductSearch({
                 key={`w-${hit.productId}`}
                 type="button"
                 role="option"
+                aria-selected={active === idx}
                 className={active === idx ? "search-hit on" : "search-hit"}
                 onMouseEnter={() => setActive(idx)}
                 onClick={() => choose(idx)}
@@ -269,6 +313,7 @@ export function ProductSearch({
                 key={`n-${hit.productId}`}
                 type="button"
                 role="option"
+                aria-selected={active === idx}
                 className={active === idx ? "search-hit on" : "search-hit"}
                 onMouseEnter={() => setActive(idx)}
                 onClick={() => choose(idx)}
@@ -301,6 +346,7 @@ export function ProductSearch({
                 key={`wc-${hit.productId}`}
                 type="button"
                 role="option"
+                aria-selected={active === idx}
                 className={active === idx ? "search-hit on" : "search-hit"}
                 onMouseEnter={() => setActive(idx)}
                 onClick={() => choose(idx)}
@@ -335,6 +381,7 @@ export function ProductSearch({
                 key={`mvr-${hit.productId}`}
                 type="button"
                 role="option"
+                aria-selected={active === idx}
                 className={active === idx ? "search-hit on" : "search-hit"}
                 onMouseEnter={() => setActive(idx)}
                 onClick={() => choose(idx)}

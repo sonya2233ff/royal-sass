@@ -39,6 +39,12 @@ import { searchWholesaleClubPool } from "@/lib/wholesaleclub-observe";
 import { loadMvrCatalog } from "@/lib/mvr-catalog";
 import { searchMvrPool } from "@/lib/mvr-observe";
 import { recordCompareResult } from "@/lib/compare-stats";
+import { parseOverrideMap, effectiveProduct } from "@/lib/product-config";
+import type { Cart } from "@/domain/restaurant-product";
+import {
+  completeBasketWinner,
+  storeCoverage,
+} from "@/domain/basket-coverage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -82,18 +88,22 @@ function toCatalogOffer(
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => ({}))) as {
     ids?: string[];
-    /** If true, always hit No Frills live API (skip NF cache). */
     refreshNoFrills?: boolean;
-    /** Grams needed for sold-by-weight items (id → grams). */
     grams?: Record<string, number>;
-    /** Pack / carton count for other staples (id → qty). Default 1. */
     qty?: Record<string, number>;
+    cart?: Cart;
+    productOverrides?: unknown;
   };
   const cfg = await loadStaplesConfig();
+  const overrides = parseOverrideMap(body.productOverrides);
   const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
-  const wanted = (body.ids?.length ? body.ids : [...allowed]).filter((id) =>
-    allowed.has(id),
-  );
+  const cartIds = body.cart ? Object.keys(body.cart) : [];
+  const wanted = (cartIds.length
+    ? cartIds
+    : body.ids?.length
+      ? body.ids
+      : [...allowed]
+  ).filter((id) => allowed.has(id));
 
   const catalog = await loadWalmartCatalog();
   const nfCatalog = await loadNoFrillsCatalog();
@@ -124,26 +134,70 @@ export async function POST(request: Request) {
     if (conf?.productId) {
       item.preferredProductId = conf.productId;
     }
+    const ov = overrides[id];
+    if (ov?.matchMode) item.matchMode = ov.matchMode;
+    if (ov?.preferredProductId) item.preferredProductId = ov.preferredProductId;
+    if (ov?.matchRules) {
+      item.mustIncludeAll = ov.matchRules.mustIncludeAll ?? item.mustIncludeAll;
+      item.mustIncludeAny = ov.matchRules.mustIncludeAny ?? item.mustIncludeAny;
+      item.mustNotInclude = ov.matchRules.mustNotInclude ?? item.mustNotInclude;
+    }
 
     const mode = resolveMatchMode(item);
     const productMap = mappings.products[id];
-    const wmLink: RetailerSkuLink | undefined =
-      productMap?.retailers.walmart_ca;
-    const nfLink: RetailerSkuLink | undefined =
-      productMap?.retailers.nofrills;
-    const wcLink: RetailerSkuLink | undefined =
-      productMap?.retailers.wholesaleclub;
-    const mvrLink: RetailerSkuLink | undefined =
-      productMap?.retailers.mvr;
+    const withConfirm = (
+      link: RetailerSkuLink | undefined,
+      retailer: string,
+    ): RetailerSkuLink | undefined => {
+      const pid = ov?.confirmedStoreProducts?.[retailer];
+      if (pid) {
+        return {
+          retailer,
+          storeId: link?.storeId ?? "",
+          retailerProductId: pid,
+          matchMethod: "manual_mapping",
+          matchConfidence: 1,
+          verified: true,
+          decision: "auto_linked",
+          kind: "identity",
+          updatedAt: new Date().toISOString(),
+        };
+      }
+      if (ov?.needsReview && link) {
+        return { ...link, decision: "needs_review", verified: false };
+      }
+      return link;
+    };
+    const wmLink = withConfirm(productMap?.retailers.walmart_ca, "walmart_ca");
+    const nfLink = withConfirm(productMap?.retailers.nofrills, "no_frills");
+    const wcLink = withConfirm(productMap?.retailers.wholesaleclub, "wholesale_club");
+    const mvrLink = withConfirm(productMap?.retailers.mvr, "mvr");
 
     const rawGrams = Number(body.grams?.[id]);
     const soldByWeight = isSoldByWeightItem(item);
+    const product = effectiveProduct(
+      { ...item, soldByWeight },
+      overrides[id],
+    );
+    if (overrides[id]?.preferredProductId) {
+      item.preferredProductId = overrides[id]!.preferredProductId;
+    }
     const packPickGrams = explicitNeededGrams(item, rawGrams);
+    const cartItem = body.cart?.[id];
+    const requestedAmount =
+      cartItem?.requestedAmount != null && cartItem.requestedAmount > 0
+        ? cartItem.requestedAmount
+        : product.defaultAmount;
     const grams = soldByWeight
-      ? Number.isFinite(rawGrams) && rawGrams > 0
-        ? rawGrams
-        : defaultNeededGrams(item)
-      : packPickGrams ?? null;
+      ? product.unit === "g"
+        ? requestedAmount
+        : product.unit === "kg"
+          ? requestedAmount * 1000
+          : Number.isFinite(rawGrams) && rawGrams > 0
+            ? rawGrams
+            : defaultNeededGrams(item)
+      : packPickGrams ??
+        (product.unit === "g" ? requestedAmount : null);
 
     let wmRow = catById.get(id) ?? null;
     let wmResolved = resolveCatalogOffer({
@@ -416,10 +470,15 @@ export async function POST(request: Request) {
     entries.push(nfLog);
 
     const rawQty = Number(body.qty?.[id]);
+    const qtyFromCart =
+      cartItem && (product.unit === "pack" || product.unit === "ea")
+        ? Math.max(1, Math.round(cartItem.requestedAmount))
+        : null;
     const qty =
-      !soldByWeight && Number.isFinite(rawQty) && rawQty > 0
+      qtyFromCart ??
+      (!soldByWeight && Number.isFinite(rawQty) && rawQty > 0
         ? Math.max(1, Math.round(rawQty))
-        : 1;
+        : 1);
 
     const nfEval = nfCacheUsable
       ? nfCacheEval
@@ -739,6 +798,9 @@ export async function POST(request: Request) {
         mvrUsable,
         grams,
         qty,
+        requestedAmount,
+        productOverride: overrides[id],
+        confirmedStoreProducts: overrides[id]?.confirmedStoreProducts,
         confirmed: Boolean(conf),
         mappingDecision: wmLink?.decision,
         resolveReason: {
@@ -826,15 +888,55 @@ export async function POST(request: Request) {
         ])
       : cheaperThree;
 
+  const wmCov = storeCoverage(rows.map((r) => r.basketWalmart));
+  const nfCov = storeCoverage(rows.map((r) => r.basketNoFrills));
+  const wcCov = storeCoverage(rows.map((r) => r.basketWholesaleClub));
+  const mvrCov = storeCoverage(rows.map((r) => r.basketMvr));
+  const cheaperOverall = completeBasketWinner([
+    { id: "walmart", coverage: wmCov },
+    { id: "nofrills", coverage: nfCov },
+    { id: "wholesaleclub", coverage: wcCov },
+    { id: "mvr", coverage: mvrCov },
+  ]);
+  const completeParts = [
+    { id: "walmart", total: wmCov.checkoutTotal },
+    { id: "nofrills", total: nfCov.checkoutTotal },
+    { id: "wholesaleclub", total: wcCov.checkoutTotal },
+    { id: "mvr", total: mvrCov.checkoutTotal },
+  ].filter((p): p is { id: string; total: number } => p.total != null);
+  const incompleteItems = rows
+    .filter(
+      (r) =>
+        r.basketWalmart == null ||
+        r.basketNoFrills == null ||
+        r.basketWholesaleClub == null ||
+        r.basketMvr == null,
+    )
+    .map((r) => ({
+      id: r.id,
+      label: r.label,
+      missing: [
+        r.basketWalmart == null ? "Walmart" : null,
+        r.basketNoFrills == null ? "No Frills" : null,
+        r.basketWholesaleClub == null ? "Wholesale Club" : null,
+        r.basketMvr == null ? "MVR" : null,
+      ].filter(Boolean),
+    }));
+
   const logId = await appendMatchLog(entries);
   const comparedAt = new Date().toISOString();
   const totals = {
     completeCount: wmNfRows.length,
-    walmart: roundMoney(wmSum),
-    noFrills: roundMoney(nfSum),
-    wholesaleClub: roundMoney(tripleRows.length ? tripleWc : wcAllSum),
-    mvr: roundMoney(quadRows.length ? quadMvr : mvrAllSum),
-    cheaper: cheaperFour,
+    requestedItems: rows.length,
+    walmart: wmCov.checkoutTotal ?? 0,
+    noFrills: nfCov.checkoutTotal ?? 0,
+    wholesaleClub: wcCov.checkoutTotal ?? 0,
+    mvr: mvrCov.checkoutTotal ?? 0,
+    walmartComplete: wmCov,
+    noFrillsComplete: nfCov,
+    wholesaleClubComplete: wcCov,
+    mvrComplete: mvrCov,
+    cheaper: cheaperOverall,
     cheaperTwoWay,
     cheaperThree,
     tripleCount: tripleRows.length,
@@ -848,12 +950,13 @@ export async function POST(request: Request) {
     quadWholesaleClub: roundMoney(quadWc),
     quadMvr: roundMoney(quadMvr),
     mvrItemCount: mvrAllRows.length,
+    incompleteItems,
     note:
-      quadRows.length > 0
-        ? `Порівнянна сума. 4 магазини: ${quadRows.length} спільних позицій. 3 магазини: ${tripleRows.length}. WM vs NF окремо: ${wmNfRows.length} позицій. Різні пачки → $/kg × кг, яйця → 30 шт × пачки. Відхилена identity не входить у кошик.`
-        : tripleRows.length > 0
-        ? `Порівнянна сума. 3 магазини: ${tripleRows.length} спільних позицій. WM vs NF окремо: ${wmNfRows.length} позицій. Різні пачки → $/kg × кг, яйця → 30 шт × пачки. Відхилена identity не входить у кошик.`
-        : "Порівнянна сума: різні пачки → $/kg × кг, яйця → 30 шт × пачки, схожі пачки → ціна полиці × кількість. Відхилена identity не входить у кошик.",
+      cheaperOverall === "incomplete"
+        ? `Немає повного кошика в жодному магазині. Покриття: WM ${wmCov.coverage}, NF ${nfCov.coverage}, WC ${wcCov.coverage}, MVR ${mvrCov.coverage}. Missing ≠ $0.`
+        : completeParts.length === 1
+          ? `Повний кошик лише в одному магазині (${completeParts[0].id}). Інші — неповні, не переможець.`
+          : `Повний кошик: ${rows.length} товарів. Checkout, не пропорційна ціна пачки.`,
   };
   const saved = await recordCompareResult({
     comparedAt,

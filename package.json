@@ -32,6 +32,8 @@
     "poc:fair-compare": "tsx src/poc/fair-compare-self-check.ts",
     "poc:compare-stats": "tsx src/poc/compare-stats-self-check.ts",
     "poc:staple-filter": "tsx src/poc/staple-filter-self-check.ts",
+    "poc:pilot-logic": "tsx src/poc/pilot-logic-self-check.ts",
+    "typecheck": "tsc --noEmit",
     "poc:entity-match": "tsx src/poc/entity-match-benchmark.ts",
     "poc:seed-match": "tsx src/poc/seed-and-match.ts",
     "poc:compare-audit": "tsx src/poc/full-app-compare-audit.ts",
@@ -49,9 +51,12 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.6",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.23",
     "prisma": "^6.5.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"

@@ -46,17 +46,23 @@ Search/adopt can still add `custom: true` rows (`config/custom-staples.json`, us
 
 ## Category A vs Category B
 
-Same JSON staple shape. The split is **match mode + identity filters**, not two schemas.
+Match rules and purchase quantity are **independent**. Canonical fields:
+
+- `matchMode`: `"exact"` (A) or `"cheapest_equivalent"` (B)
+- `purchaseStrategy`: `"exact_need"` (close to requested ± `tolerancePercent`, default 15%) or `"stock_up"` (buy more only up to explicit `maximumAmount` — never invented)
+
+Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_equivalent`. Missing strategy → `exact_need`. `resolveMatchMode()` still returns the legacy pair for connectors.
 
 | | Category A | Category B |
 | --- | --- | --- |
-| Intent | Exact branded / preferred SKU | Cheapest suitable produce, fruit, or frozen |
-| `matchMode` | `"preferred"` (default for grocery/dairy/supplies) | `"cheapest"` |
-| Typical fields | `preferredProductId`, `preferNameIncludes` | `category: "produce"` or `"frozen"`, `mustInclude*` / `mustNotInclude` / `rejectNameIncludes` |
-| Identity gate | Locked mapping / preferred SKU | `isActualCategoryBOffer` (`src/domain/same-packed-item.ts`) — reject juice/candy/soap/seeds-as-grapes/etc. |
-| UI badge | **А** — саме цей продукт | **Б** — овочі й фрукти / frozen, бренд не важливий |
+| Intent | Exact branded / preferred SKU | Cheapest suitable equivalent (brand optional) |
+| `matchMode` | `"exact"` (legacy `"preferred"`) | `"cheapest_equivalent"` (legacy `"cheapest"`) |
+| Typical fields | `preferredProductId`, `preferNameIncludes` | `matchRules` / `mustInclude*` / `mustNotInclude` |
+| Identity gate | Confirmed store product ID, then UPC/SKU, brand, type/form/variant, allowed size. No analog if exact is missing. | Type/form/variant + include/exclude. Fresh ≠ canned/sauce; white quinoa ≠ red; pack purpose must match. |
+| Quantity | Usually `exact_need` | Either strategy (tomato = exact_need 2 kg; OJ pulp = stock_up 1–2 L) |
+| UI badge | **А** — точний продукт | **Б** — найдешевший відповідний |
 
-`resolveMatchMode`: explicit `item.matchMode`, else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred.
+`resolveMatchMode`: explicit `item.matchMode` (canonicalized), else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred.
 
 **Category B identity** (`usesCategoryBIdentity` / `isCategoryBStaple`) is **only** `category === "produce" | "frozen"`. Eggs can be cheapest via `EGG_PACK_IDS` without produce-identity filters.
 
@@ -70,12 +76,14 @@ Same JSON staple shape. The split is **match mode + identity filters**, not two 
 - `grayridge_eggs` — **18-count lock** (`preferredProductId` `6000191268613` when set). Not the dozen.
 - Egg fair unit is **$/egg**; basket line is **30 eggs × pack qty**.
 - `ice_cubes` — bag of ice (Arctic Glacier ~2.3 kg class). Not gum, not storage bins.
-- Sold-by-weight ids (`SOLD_BY_WEIGHT_IDS`): user enters **grams** (compare default 1000 g). UI: WM **$/kg**, NF/WC **$/lb** on cards; fair deal across pack sizes is **$/100 g**.
-- Packed produce (`PACK_COMPARE_IDS` / `isPackedProduceItem`): cheapest pack, pack qty stepper, no kg input.
-- Frozen bags: cheapest $/kg, any brand, unit price for bag-size compare.
-- Other grocery: pack qty stepper, default 1.
+- Cart is one map `id → { requestedAmount, unit, isCustom }`. Selected = key exists. Search filter never mutates cart. Clear cart removes hidden-by-search items too.
+- Adding to cart uses `defaultAmount`. Custom amount is cart-only unless the operator saves it as the new default (`localStorage` key `royal-sass-product-overrides-v1`).
+- Sold-by-weight ids (`SOLD_BY_WEIGHT_IDS`) still exist for catalog matching. Checkout uses `saleMode`: `loose_weight` | `fixed_pack` | `case`. A `$/kg` label is **not** enough to treat a 15 lb case / bag / box / pack as loose.
+- Basket money is **checkout cost** (full packs, 2 decimal line totals). `$/100 g` is display-only for value. Missing item = `N/A`, not `$0`. Overall winner only when a store can price the **same complete** set.
+- Packed produce (`PACK_COMPARE_IDS` / `isPackedProduceItem`): cheapest suitable pack, then quantity rules.
+- Frozen bags: cheapest equivalent, then quantity rules.
 
-Do not compare different pack masses as raw shelf prices (`src/domain/fair-compare.ts`).
+Do not compare different pack masses as raw shelf prices (`src/domain/fair-compare.ts`). Checkout overlays that with `src/domain/checkout.ts`.
 
 ## Architecture
 
@@ -94,23 +102,26 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `data/catalog/confirmed.json` | 👍 locked WM `productId` |
 | `data/stats/compare-history.json` | Server compare history (gitignored; local/writable FS only) |
 | `src/connectors/` | Retailer I/O |
-| `src/domain/` | Units, matching, fair compare, Category B identity |
+| `src/domain/` | Units, identity, sale mode, checkout, fair compare, Category B identity |
 | `src/lib/staples.ts` | Catalog I/O, `summarizeOffer`, egg/weight sets |
-| `src/lib/staple-compare-row.ts` | One compare row + basket amounts |
+| `src/lib/staple-compare-row.ts` | One compare row: identity → pack fit → checkout |
+| `src/lib/product-config.ts` | Effective `RestaurantProduct` + localStorage override keys (temporary adapter; not Vercel FS) |
 | `src/lib/compare-stats.ts` | Compact compare-run persist + summaries |
-| `src/app/StaplesCompare.tsx` | Main UI (select, compare, stats) |
+| `src/app/StaplesCompare.tsx` | Main UI (cart, settings, compare, stats) |
+| `src/app/ProductSettings.tsx` | Per-card match/quantity settings modal |
 
 **Live data flow**
 
 1. Offers land in catalog JSON (refresh APIs / `npm run cache:*` / `cache:prices`).
-2. `resolveCatalogOffer` picks the catalog row from mapping + filters. **No Rapid/PCX in this step.**
-3. `buildStapleCompareRow` → `summarizeOffer` + `fairCompareThree` (four sides) + `scaleBasketAmount`.
-4. UI: `GET /api/staples`, `POST /api/staples/compare`. Compare also records stats.
+2. `resolveCatalogOffer` picks the catalog row from mapping + filters. Mapping `decision: needs_review` is **not** a lock. **No Rapid/PCX in this step.**
+3. `buildStapleCompareRow` → identity, then `evaluatePurchase` checkout (not proportional case split).
+4. UI: `GET /api/staples` (base config), `POST /api/staples/compare` with `{ cart, productOverrides }`. Client localStorage is the live override store on Vercel.
 
 ## Live API (`nodejs`)
 
-- `GET /api/staples` — card payload from catalogs + mappings
-- `POST /api/staples/compare` — `{ ids, grams?, qty? }`; fair compare; writes match log when FS allows; **always returns a stats snapshot** (`savedRunId`, `stats`, `statsPersisted`)
+- `GET /api/staples` — card payload from catalogs + mappings (`restaurantProduct` on each item)
+- `POST /api/staples/compare` — `{ cart, productOverrides, ids?, grams?, qty? }`; checkout coverage (`N із M`); missing ≠ `$0`; writes match log when FS allows; **always returns a stats snapshot**
+- `GET/POST /api/staples/product-config` — best-effort JSON on disk; `persisted: false` on Vercel. Client localStorage is source of truth for the single-cafe test. Changing `matchMode` marks mappings `needs_review` without deleting them.
 - `GET /api/staples/compare-stats` — last runs + win-rate summary from disk (empty on Vercel)
 - `POST /api/staples/refresh` — rematch selected WM SKUs
 - `POST /api/staples/refresh-nf` | `refresh-wc` | `refresh-mvr` | `refresh-sobeys` — live search for that retailer

@@ -114,8 +114,9 @@ export function isLockedIdentityLink(link?: RetailerSkuLink): boolean {
  * a different coffee). Still show both shelves, but never call that a deal.
  */
 export function isPreferredIdentityRejected(
-  mode: "preferred" | "cheapest",
+  mode: "preferred" | "cheapest" | "exact" | "cheapest_equivalent",
   link?: { decision?: string },
 ): boolean {
-  return mode === "preferred" && link?.decision === "rejected";
+  const exact = mode === "preferred" || mode === "exact";
+  return exact && link?.decision === "rejected";
 }

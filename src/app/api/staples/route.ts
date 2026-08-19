@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { toRestaurantProduct } from "@/domain/restaurant-product";
 import {
   CACHE_STALE_HOURS,
   evaluateOfferStatus,
@@ -316,6 +317,10 @@ export async function GET() {
         confirmedProductId: conf?.productId ?? null,
         preferredProductId: lockedSku,
         matchMode: resolveMatchMode(i),
+        restaurantProduct: toRestaurantProduct({
+          ...i,
+          soldByWeight: isSoldByWeightItem(i),
+        }),
         weightCompare: showWeightUnits || eggItem,
         soldByWeight: isSoldByWeightItem(i),
         typicalEachGrams: typicalEachGramsOf(i) ?? null,

@@ -34,9 +34,13 @@
       "expectedPackKg": 1,
       "minPlausiblePrice": 5,
       "maxPlausiblePrice": 16,
-      "matchMode": "preferred",
+      "matchMode": "exact",
       "image": "https://i5.walmartimages.ca/asr/27f45e00-d8ab-4e43-8d58-7f154396ec4c.cf834bc8397cfaf849bd3aeab61f9014.jpeg",
-      "notes": "Exact branded carton — Burnbrae Naturegg Simply Egg Whites 1kg (WM 6000196635381). Do not substitute Free Run / cheaper analogue."
+      "notes": "Exact branded carton — Burnbrae Naturegg Simply Egg Whites 1kg (WM 6000196635381). Do not substitute Free Run / cheaper analogue.",
+      "purchaseStrategy": "exact_need",
+      "defaultAmount": 1,
+      "unit": "kg",
+      "tolerancePercent": 15
     },
     {
       "id": "tomatoes_grape",
@@ -714,9 +718,6 @@
         "tropicana orange juice no pulp",
         "tropicana 100% pure orange juice no pulp 2.63"
       ],
-      "mustIncludeAll": [
-        "tropicana"
-      ],
       "mustIncludeAny": [
         "no pulp",
         "sans pulpe",
@@ -745,7 +746,35 @@
       "minPlausiblePrice": 5,
       "maxPlausiblePrice": 16,
       "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L — WM product_id 205804",
-      "image": "https://i5.walmartimages.ca/asr/86a56b6a-8d88-4779-bf1f-7362a66d4ed4.ee3d4d02ac6a29e56b4db89f4a377075.png"
+      "image": "https://i5.walmartimages.ca/asr/86a56b6a-8d88-4779-bf1f-7362a66d4ed4.ee3d4d02ac6a29e56b4db89f4a377075.png",
+      "matchMode": "cheapest_equivalent",
+      "purchaseStrategy": "stock_up",
+      "defaultAmount": 1,
+      "maximumAmount": 2,
+      "unit": "l",
+      "tolerancePercent": 15,
+      "matchRules": {
+        "productType": "orange juice",
+        "form": "juice",
+        "mustIncludeAny": [
+          "orange juice",
+          "orange",
+          "jus d'orange"
+        ],
+        "mustNotInclude": [
+          "lots of pulp",
+          "some pulp",
+          "with pulp",
+          "extra pulp",
+          "homestyle",
+          "drink",
+          "cocktail",
+          "sparkling",
+          "zero",
+          "concentrate",
+          "calcium"
+        ]
+      }
     },
     {
       "id": "realemon_440ml",
@@ -3106,10 +3135,36 @@
         "soup",
         "greenhouse"
       ],
-      "matchMode": "cheapest",
+      "matchMode": "cheapest_equivalent",
       "category": "produce",
       "notes": "From receipts catalog (produce)",
-      "typicalEachGrams": 180
+      "typicalEachGrams": 180,
+      "purchaseStrategy": "exact_need",
+      "defaultAmount": 2,
+      "unit": "kg",
+      "tolerancePercent": 15,
+      "matchRules": {
+        "productType": "tomato",
+        "form": "fresh",
+        "mustIncludeAny": [
+          "tomato",
+          "tomatoes"
+        ],
+        "mustNotInclude": [
+          "grape",
+          "cherry",
+          "roma",
+          "sauce",
+          "paste",
+          "canned",
+          "sun dried",
+          "sundried",
+          "juice",
+          "soup",
+          "greenhouse",
+          "can"
+        ]
+      }
     },
     {
       "id": "tongs",
@@ -3225,24 +3280,53 @@
         "White Quinoa Grains 750gr"
       ],
       "mustIncludeAny": [
-        "white",
-        "quinoa",
-        "grains",
-        "750gr"
+        "white"
       ],
       "mustNotInclude": [
         "toy",
         "book",
         "costume",
         "bread",
-        "flour"
+        "flour",
+        "red",
+        "black",
+        "tricolor",
+        "tri-color",
+        "tri colour"
       ],
-      "matchMode": "cheapest",
+      "matchMode": "cheapest_equivalent",
       "category": "grocery",
       "notes": "From receipts catalog (grocery)",
       "mustIncludeAll": [
         "quinoa"
-      ]
+      ],
+      "purchaseStrategy": "exact_need",
+      "defaultAmount": 750,
+      "unit": "g",
+      "tolerancePercent": 15,
+      "matchRules": {
+        "productType": "quinoa",
+        "form": "grain",
+        "variant": "white",
+        "mustIncludeAll": [
+          "quinoa"
+        ],
+        "mustIncludeAny": [
+          "white"
+        ],
+        "mustNotInclude": [
+          "toy",
+          "book",
+          "costume",
+          "bread",
+          "flour",
+          "red",
+          "black",
+          "tricolor",
+          "tri-color",
+          "tri colour"
+        ]
+      }
     },
     {
       "id": "yellow_peppers_case",

@@ -3,12 +3,10 @@
  * Used by /api/staples/compare and the full-app audit. No Rapid/PCX calls.
  */
 import {
-  basketAmountForSide,
   classifyMatchKind,
   extractBarcodes,
   fairCompareThree,
   packMassKg,
-  scaleBasketAmount,
 } from "@/domain/fair-compare";
 import type { ResolveReason } from "@/domain/compare-resolve";
 import {
@@ -33,6 +31,17 @@ import {
   type WeightPurchasePlan,
 } from "@/domain/needed-weight-pick";
 import type { OfferStatus } from "@/domain/sanity";
+import {
+  applyProductOverride,
+  toRestaurantProduct,
+  type ProductOverride,
+} from "@/domain/restaurant-product";
+import {
+  evaluatePurchase,
+  fairCompareCheckouts,
+  type PurchaseOption,
+} from "@/domain/checkout";
+import { offerMatchesIdentity } from "@/domain/product-identity";
 
 export interface SideEval {
   status: OfferStatus;
@@ -68,6 +77,10 @@ export interface StapleCompareRow {
   basketNoFrills: number | null;
   basketWholesaleClub: number | null;
   basketMvr: number | null;
+  requestedAmount?: number;
+  requestedUnit?: string;
+  purchaseStrategy?: string;
+  matchModeCanonical?: string;
 }
 
 function asCatalogOffer(
@@ -93,6 +106,9 @@ export function buildStapleCompareRow(input: {
   grams: number | null;
   /** Pack / carton count for non-weight staples. Default 1. */
   qty?: number;
+  requestedAmount?: number;
+  productOverride?: ProductOverride | null;
+  confirmedStoreProducts?: Record<string, string>;
   confirmed: boolean;
   mappingDecision?: string;
   resolveReason?: {
@@ -291,6 +307,78 @@ export function buildStapleCompareRow(input: {
     },
   );
 
+  const product = applyProductOverride(
+    toRestaurantProduct({
+      ...item,
+      soldByWeight,
+    }),
+    input.productOverride,
+  );
+  const requested =
+    input.requestedAmount != null && input.requestedAmount > 0
+      ? input.requestedAmount
+      : product.unit === "g" && neededGrams
+        ? neededGrams
+        : product.unit === "kg" && neededGrams
+          ? neededGrams / 1000
+          : packQty;
+
+  const ident = (
+    raw: CatalogOffer | null,
+    retailer: string,
+  ): { ok: boolean; reason?: string } => {
+    if (!raw) return { ok: false, reason: "no_match" };
+    return offerMatchesIdentity({
+      product,
+      offer: raw,
+      confirmedProductId: input.confirmedStoreProducts?.[retailer],
+      preferredUpc: extractBarcodes(...item.queries, item.preferredProductId)[0],
+    });
+  };
+
+  const purchaseOf = (
+    raw: CatalogOffer | null,
+    retailer: string,
+    summarized: { pricePerKg?: number } | null,
+  ): PurchaseOption | null => {
+    const idn = ident(raw, retailer);
+    if (!raw || !idn.ok) {
+      return {
+        valid: false,
+        reason: idn.reason ?? "no_match",
+        saleMode: "fixed_pack",
+        packs: 0,
+        packAmount: null,
+        packUnit: null,
+        purchasedAmount: 0,
+        purchasedUnit: product.unit,
+        leftoverAmount: 0,
+        leftoverUnit: product.unit,
+        shelfPrice: raw?.price ?? 0,
+        checkoutCost: null,
+        unitPrice: null,
+      };
+    }
+    return evaluatePurchase({
+      product,
+      requested,
+      offer: {
+        price: raw.price,
+        name: raw.name,
+        packageSize: raw.packageSize,
+        parsedMassKg: raw.parsedMassKg,
+        pricePerKg: summarized?.pricePerKg,
+        stapleSoldByWeight: soldByWeight,
+        checkedAt: raw.checkedAt,
+      },
+    });
+  };
+
+  const wmBuy = purchaseOf(wmRaw, "walmart_ca", walmart);
+  const nfBuy = purchaseOf(nfRaw, "no_frills", noFrills);
+  const wcBuy = purchaseOf(wcRaw, "wholesale_club", wholesaleClub);
+  const mvrBuy = purchaseOf(mvrRaw, "mvr", mvr);
+
   if (isPreferredIdentityRejected(mode, { decision: input.mappingDecision })) {
     fair = {
       cheaper: "incomplete",
@@ -346,30 +434,61 @@ export function buildStapleCompareRow(input: {
     }
   }
 
-  const wmBasket = scaleBasketAmount(
-    basketAmountForSide(fair, "walmart", wmOk ? walmart!.lineTotal : null),
-    fair,
-    { packQty, qtyKg },
+  const wmBasket = wmBuy?.valid ? wmBuy.checkoutCost : null;
+  const nfBasket = nfBuy?.valid ? nfBuy.checkoutCost : null;
+  const wcBasket = wcBuy?.valid ? wcBuy.checkoutCost : null;
+  const mvrBasket = mvrBuy?.valid ? mvrBuy.checkoutCost : null;
+
+  const checkoutFair = fairCompareCheckouts(
+    [
+      {
+        storeId: "walmart",
+        valid: Boolean(wmBuy?.valid),
+        checkoutCost: wmBasket,
+        purchasedAmount: wmBuy?.purchasedAmount ?? 0,
+        option: wmBuy!,
+      },
+      {
+        storeId: "nofrills",
+        valid: Boolean(nfBuy?.valid),
+        checkoutCost: nfBasket,
+        purchasedAmount: nfBuy?.purchasedAmount ?? 0,
+        option: nfBuy!,
+      },
+      {
+        storeId: "wholesaleclub",
+        valid: Boolean(wcBuy?.valid),
+        checkoutCost: wcBasket,
+        purchasedAmount: wcBuy?.purchasedAmount ?? 0,
+        option: wcBuy!,
+      },
+      {
+        storeId: "mvr",
+        valid: Boolean(mvrBuy?.valid),
+        checkoutCost: mvrBasket,
+        purchasedAmount: mvrBuy?.purchasedAmount ?? 0,
+        option: mvrBuy!,
+      },
+    ].filter((row) => row.option),
+    product,
+    requested,
   );
-  const nfBasket = scaleBasketAmount(
-    basketAmountForSide(fair, "nofrills", nfOk ? noFrills!.lineTotal : null),
-    fair,
-    { packQty, qtyKg },
-  );
-  const wcBasket = scaleBasketAmount(
-    basketAmountForSide(
-      fair,
-      "wholesaleclub",
-      wcOk ? wholesaleClub!.lineTotal : null,
-    ),
-    fair,
-    { packQty, qtyKg },
-  );
-  const mvrBasket = scaleBasketAmount(
-    basketAmountForSide(fair, "mvr", mvrOk ? mvr!.lineTotal : null),
-    fair,
-    { packQty, qtyKg },
-  );
+  if (!isPreferredIdentityRejected(mode, { decision: input.mappingDecision })) {
+    fair = {
+      ...fair,
+      cheaper: checkoutFair.cheaper as typeof fair.cheaper,
+      delta: checkoutFair.delta,
+      fairBasis: product.purchaseStrategy === "stock_up" ? "needed_weight" : fair.fairBasis,
+      fairLabel:
+        product.purchaseStrategy === "stock_up"
+          ? "за фактичну закупівлю (stock up)"
+          : "за checkout, не $/100g",
+      wmFair: wmBasket,
+      nfFair: nfBasket,
+      wcFair: wcBasket,
+      mvrFair: mvrBasket,
+    };
+  }
 
   const matchKind = classifyMatchKind({
     mode,
@@ -386,6 +505,46 @@ export function buildStapleCompareRow(input: {
     lineTotal: null as number | null,
     compareUnitLabel: null as string | null,
   });
+
+  const decorate = (
+    summarized: typeof walmart,
+    buy: PurchaseOption | null,
+    plan: WeightPurchasePlan | null,
+    evalRow: SideEval,
+    retailer: "walmart_ca" | "no_frills" | "wholesale_club" | "mvr",
+    raw: CatalogOffer | null,
+  ) => {
+    if (!summarized && !raw) {
+      return {
+        ...emptySide(evalRow),
+        checkout: buy,
+        matchStatus: buy?.reason ?? evalRow.status,
+      };
+    }
+    const cost = buy?.valid ? buy.checkoutCost : null;
+    return {
+      ...(summarized ?? emptySide(evalRow)),
+      lineTotal: cost,
+      ageLabel: evalRow.ageLabel,
+      purchase: plan,
+      checkout: buy,
+      saleMode: buy?.saleMode,
+      requestedAmount: requested,
+      requestedUnit: product.unit,
+      purchasedAmount: buy?.purchasedAmount ?? null,
+      leftoverAmount: buy?.leftoverAmount ?? null,
+      packsNeeded: buy?.packs ?? null,
+      matchStatus: buy?.valid ? "ok" : buy?.reason ?? evalRow.status,
+      image: retailerSideImage({
+        retailer,
+        offer: {
+          image: plan?.image ?? raw?.image,
+          productId: plan?.productId ?? raw?.productId,
+        },
+        stapleImage: retailer === "walmart_ca" ? item.image : undefined,
+      }),
+    };
+  };
 
   return {
     id: item.id,
@@ -407,73 +566,26 @@ export function buildStapleCompareRow(input: {
     fairLabel: fair.fairLabel,
     mappingDecision: input.mappingDecision,
     resolveReason: input.resolveReason,
-    walmart: walmart
-      ? {
-          ...walmart,
-          lineTotal: wmPlan?.totalPrice ?? walmart.lineTotal,
-          ageLabel: input.wmEval.ageLabel,
-          cardStatus: input.wmUsable ? input.wmEval.status : input.wmEval.status,
-          purchase: wmPlan,
-          image: retailerSideImage({
-            retailer: "walmart_ca",
-            offer: {
-              image: wmPlan?.image ?? wmRaw?.image,
-              productId: wmPlan?.productId ?? wmRaw?.productId,
-            },
-            stapleImage: item.image,
-          }),
-        }
-      : emptySide(input.wmEval),
-    noFrills: noFrills
-      ? {
-          ...noFrills,
-          lineTotal: nfPlan?.totalPrice ?? noFrills.lineTotal,
-          ageLabel: input.nfEval.ageLabel,
-          purchase: nfPlan,
-          image: retailerSideImage({
-            retailer: "no_frills",
-            offer: {
-              image: nfPlan?.image ?? nfRaw?.image,
-              productId: nfPlan?.productId ?? nfRaw?.productId,
-            },
-          }),
-        }
-      : emptySide(input.nfEval),
-    wholesaleClub: wholesaleClub
-      ? {
-          ...wholesaleClub,
-          lineTotal: wcPlan?.totalPrice ?? wholesaleClub.lineTotal,
-          ageLabel: wcEval.ageLabel,
-          purchase: wcPlan,
-          image: retailerSideImage({
-            retailer: "wholesale_club",
-            offer: {
-              image: wcPlan?.image ?? wcRaw?.image,
-              productId: wcPlan?.productId ?? wcRaw?.productId,
-            },
-          }),
-        }
-      : emptySide(wcEval),
-    mvr: mvr
-      ? {
-          ...mvr,
-          lineTotal: mvrPlan?.totalPrice ?? mvr.lineTotal,
-          ageLabel: mvrEval.ageLabel,
-          purchase: mvrPlan,
-          image: retailerSideImage({
-            retailer: "mvr",
-            offer: {
-              image: mvrPlan?.image ?? mvrRaw?.image,
-              productId: mvrPlan?.productId ?? mvrRaw?.productId,
-            },
-          }),
-        }
-      : emptySide(mvrEval),
+    walmart: decorate(
+      walmart,
+      wmBuy,
+      wmPlan,
+      input.wmEval,
+      "walmart_ca",
+      wmRaw,
+    ),
+    noFrills: decorate(noFrills, nfBuy, nfPlan, input.nfEval, "no_frills", nfRaw),
+    wholesaleClub: decorate(wholesaleClub, wcBuy, wcPlan, wcEval, "wholesale_club", wcRaw),
+    mvr: decorate(mvr, mvrBuy, mvrPlan, mvrEval, "mvr", mvrRaw),
     cheaper: fair.cheaper,
     delta: fair.delta,
     basketWalmart: wmBasket,
     basketNoFrills: nfBasket,
     basketWholesaleClub: wcBasket,
     basketMvr: mvrBasket,
+    requestedAmount: requested,
+    requestedUnit: product.unit,
+    purchaseStrategy: product.purchaseStrategy,
+    matchModeCanonical: product.matchMode,
   };
 }

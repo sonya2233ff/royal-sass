@@ -6,6 +6,10 @@ import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
+import {
+  canonicalizeMatchMode,
+  toLegacyMatchMode,
+} from "@/domain/restaurant-product";
 import { offerFailsStapleOfferFilters, categoryBSearchQueries, retailerTaxonomyText } from "@/domain/catalog-normalize";
 import { extractRetailerImage } from "@/lib/product-image";
 import { RECEIPT_STAPLE_IDS } from "@/lib/receipt-staple-ids";
@@ -205,7 +209,20 @@ export interface StapleItem {
    * preferred = lock brand/SKU when set (dairy, branded dry).
    * cheapest = produce: any brand OK, pick lowest $/kg (or shelf) in-store.
    */
-  matchMode?: "preferred" | "cheapest";
+  matchMode?: "preferred" | "cheapest" | "exact" | "cheapest_equivalent";
+  purchaseStrategy?: "exact_need" | "stock_up";
+  defaultAmount?: number;
+  unit?: "g" | "kg" | "ml" | "l" | "ea" | "pack";
+  tolerancePercent?: number;
+  maximumAmount?: number;
+  matchRules?: {
+    productType?: string;
+    form?: string;
+    variant?: string;
+    mustIncludeAll?: string[];
+    mustIncludeAny?: string[];
+    mustNotInclude?: string[];
+  };
   category?: string;
   /** Added from in-app search; shown alongside PINNED_IDS. */
   custom?: boolean;
@@ -240,7 +257,8 @@ export function itemPreferredUpc(item: StapleItem): string | undefined {
 export function resolveMatchMode(
   item: StapleItem,
 ): "preferred" | "cheapest" {
-  if (item.matchMode) return item.matchMode;
+  const canonical = canonicalizeMatchMode(item.matchMode);
+  if (canonical) return toLegacyMatchMode(canonical);
   if (
     item.category === "produce" ||
     item.category === "frozen" ||
