@@ -134,7 +134,7 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 - `ice_cubes` — bag of ice (Arctic Glacier ~2.3 kg class). Not gum, not storage bins.
 - Cart is one map `id → { requestedAmount, unit, isCustom }`. Selected = key exists. Search filter never mutates cart. Clear cart removes hidden-by-search items too.
 - Adding to cart uses `defaultAmount`. Custom amount is cart-only unless the operator saves it as the new default (`localStorage` key `royal-sass-product-overrides-v1`).
-- Sold-by-weight ids (`SOLD_BY_WEIGHT_IDS`) still exist for catalog matching. Checkout uses `saleMode`: `loose_weight` | `fixed_pack` | `case`. A `$/kg` label is **not** enough to treat a 15 lb case / bag / box / pack as loose.
+- Sold-by-weight ids (`SOLD_BY_WEIGHT_IDS`) still exist for catalog matching (cafe wants kg). Checkout `saleMode` comes from the **offer**, not that id: `loose_weight` (scale `$/kg` or `$/lb` rate), `fixed_pack` (whole pack with content weight), `case` (crate / `N × unit` / `15 lb case`). `g`/`kg`/`lb` in the title is **content**, not loose sale. `1 ea` is a purchase unit — if the name or structured pack has 5 lb / 800 g, that is content weight. MVR `2.5LB REPACK` is a pack, not a warehouse case. A `$/kg` label is **not** enough to treat a bag, basket, or 15 lb case as loose.
 - Basket money is **checkout cost** (full packs, 2 decimal line totals). `$/100 g` is display-only for value. Missing item = `N/A`, not `$0`. Overall winner only when a store can price the **same complete** set.
 - Packed produce (`PACK_COMPARE_IDS` / `isPackedProduceItem`): cheapest suitable pack, then quantity rules.
 - Frozen bags: cheapest equivalent, then quantity rules.

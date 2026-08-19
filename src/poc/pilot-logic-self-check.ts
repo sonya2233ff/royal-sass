@@ -36,6 +36,7 @@ import {
   type RestaurantProduct,
 } from "@/domain/restaurant-product";
 import { storeCoverage } from "@/domain/basket-coverage";
+import { buildStapleCompareRow } from "@/lib/staple-compare-row";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -205,6 +206,173 @@ const caseMath = checkoutFixedPacks({
 assert(caseMath.packs === 1, "one case");
 assert(caseMath.checkoutCost === 17.99, "full case $17.99");
 assert(caseMath.checkoutCost !== roundMoney(17.99 * (500 / packG)), "not a slice");
+
+const tomatoKg = product({
+  id: "tomato",
+  label: "Tomato",
+  unit: "kg",
+  defaultAmount: 2,
+  purchaseStrategy: "exact_need",
+  tolerancePercent: 15,
+});
+assert(
+  inferSaleMode({
+    name: "Tomato On The Vine Red (1 Bunch)",
+    packageSize: "$5.49/1kg $2.49/1lb",
+    stapleSoldByWeight: true,
+  }) === "loose_weight",
+  "$5.49/kg is loose, not a pack",
+);
+const vineLoose = evaluatePurchase({
+  product: tomatoKg,
+  requested: 2,
+  offer: {
+    price: 3.9,
+    name: "Tomato On The Vine Red (1 Bunch)",
+    packageSize: "$5.49/1kg $2.49/1lb",
+    stapleSoldByWeight: true,
+  },
+});
+assert(vineLoose.saleMode === "loose_weight", `vine sale ${vineLoose.saleMode}`);
+assert(vineLoose.valid && vineLoose.checkoutCost === 10.98, `2kg × $5.49 got ${vineLoose.checkoutCost}`);
+
+const pack800 = evaluatePurchase({
+  product: product({
+    id: "tomato_gh_red_kg",
+    label: "Tomato on the vine",
+    unit: "kg",
+    defaultAmount: 1,
+    purchaseStrategy: "exact_need",
+    tolerancePercent: 15,
+  }),
+  requested: 1,
+  offer: {
+    price: 2.9,
+    name: "Your Fresh Market Tomatoes on the Vine, Sold in packs",
+    packageSize: "800 g",
+    stapleSoldByWeight: true,
+  },
+});
+assert(pack800.saleMode === "fixed_pack", `800g sale ${pack800.saleMode}`);
+assert(!pack800.valid, "800g pack is not 1kg ±15% and must not be prorated");
+assert(pack800.checkoutCost == null, "800g pack has no fake $/kg slice");
+
+const beef = evaluatePurchase({
+  product: tomatoKg,
+  requested: 2,
+  offer: {
+    price: 9.99,
+    name: "Tomato Beefsteak 5Lb",
+    packageSize: "1 ea, $999.00/100ea",
+    stapleSoldByWeight: true,
+  },
+});
+assert(beef.saleMode === "fixed_pack", `5lb 1ea sale ${beef.saleMode}`);
+assert(beef.valid, "5 lb content covers 2kg ±15%");
+assert(beef.packs === 1 && beef.checkoutCost === 9.99, "buy the whole 5 lb pack, not a 2kg slice");
+
+assert(
+  inferSaleMode({ name: "Grape Tomatoes 12 x 1 pint case" }) === "case",
+  "12 × 1 pint case is a case",
+);
+assert(
+  inferSaleMode({
+    name: "VEGETABLES - PEPPERS RED 2.5LB REPACK",
+    packageSize: "2.5 LBS",
+    stapleSoldByWeight: true,
+  }) === "fixed_pack",
+  "MVR 2.5 lb repack is a pack, not a warehouse case",
+);
+assert(
+  inferSaleMode({
+    name: "Yellow Onions, Your Fresh Market, 4.54 kg (10 lbs)",
+    stapleSoldByWeight: true,
+  }) === "fixed_pack",
+  "kg in the title is content, not loose scale",
+);
+assert(
+  inferSaleMode({
+    name: "Bananas, Bunch",
+    packageSize: "$1.52/1kg $0.69/1lb",
+    stapleSoldByWeight: true,
+  }) === "loose_weight",
+  "embedded $/kg keeps bananas loose",
+);
+const bananas = evaluatePurchase({
+  product: product({
+    id: "bananas_kg",
+    label: "Bananas",
+    unit: "kg",
+    defaultAmount: 1,
+    purchaseStrategy: "exact_need",
+  }),
+  requested: 1,
+  offer: {
+    price: 1.75,
+    name: "Bananas, Bunch",
+    packageSize: "$1.52/1kg $0.69/1lb",
+    stapleSoldByWeight: true,
+  },
+});
+assert(bananas.saleMode === "loose_weight", `banana sale ${bananas.saleMode}`);
+assert(bananas.valid && bananas.checkoutCost === 1.52, `use $1.52/kg not bunch $1.75, got ${bananas.checkoutCost}`);
+assert(
+  inferSaleMode({ name: "Sunbulah Puff Pastry Sheets 10x15" }) === "fixed_pack",
+  "10x15 sheet size is not a case",
+);
+assert(
+  inferSaleMode({
+    name: "Cucumber, English, Sold in Single Wrap",
+    stapleSoldByWeight: true,
+  }) === "fixed_pack",
+  "1 cucumber is ea/pack, not loose kg",
+);
+
+const tomatoStaple = {
+  id: "tomato",
+  label: "Tomato",
+  queries: ["tomato"],
+  matchMode: "cheapest" as const,
+  category: "produce",
+  unit: "kg" as const,
+  defaultAmount: 2,
+  purchaseStrategy: "exact_need" as const,
+  tolerancePercent: 15,
+  mustIncludeAny: ["tomato", "tomatoes"],
+};
+const tomatoRow = buildStapleCompareRow({
+  item: tomatoStaple,
+  wmOffer: {
+    productId: "vine-kg",
+    name: "Tomatoes",
+    packageSize: "$5.49/1kg $2.49/1lb",
+    price: 3.9,
+  },
+  nfOffer: {
+    productId: "beef-5lb",
+    name: "Tomato Beefsteak 5Lb",
+    packageSize: "1 ea, $999.00/100ea",
+    price: 9.99,
+  },
+  wmEval: { status: "ok", ageLabel: null },
+  nfEval: { status: "ok", ageLabel: null },
+  wmUsable: true,
+  nfUsable: true,
+  grams: 2000,
+  requestedAmount: 2,
+  confirmed: false,
+});
+assert(tomatoRow.basketWalmart === 10.98, `loose 2kg × $5.49 got ${tomatoRow.basketWalmart}`);
+assert(tomatoRow.basketNoFrills === 9.99, `5 lb pack must be $9.99 not a 2kg slice, got ${tomatoRow.basketNoFrills}`);
+assert(tomatoRow.cheaper === "nofrills", `beefsteak pack beats prorated vine ${tomatoRow.cheaper}`);
+assert(
+  (tomatoRow.walmart as { saleMode?: string }).saleMode === "loose_weight",
+  "vine column stays loose",
+);
+assert(
+  (tomatoRow.noFrills as { saleMode?: string }).saleMode === "fixed_pack",
+  "5 lb 1ea column is a pack",
+);
 
 const oj = product({
   id: "orange_juice",

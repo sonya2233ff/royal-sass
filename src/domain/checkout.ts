@@ -3,7 +3,7 @@
  * Basket totals always use checkoutCost (2 decimal line totals).
  */
 import { inferSaleMode, type SaleMode } from "@/domain/sale-mode";
-import { parseCountPack } from "@/domain/units";
+import { KG_PER_LB, parseCountPack, parseEmbeddedWeightRates } from "@/domain/units";
 import {
   convertAmount,
   dimensionOf,
@@ -49,6 +49,7 @@ export function saleModeOf(offer: StoreOfferInput): SaleMode {
   return inferSaleMode({
     name: offer.name,
     packageSize: offer.packageSize,
+    parsedMassKg: offer.parsedMassKg,
     stapleSoldByWeight: offer.stapleSoldByWeight,
   });
 }
@@ -93,12 +94,21 @@ function pricePerProductUnitLoose(
   product: RestaurantProduct,
 ): number | null {
   if (dimensionOf(product.unit) !== "mass") return null;
+  const text = `${offer.name} ${offer.packageSize ?? ""}`;
+  const embedded = parseEmbeddedWeightRates(text);
+  const fromEmbedded =
+    embedded.perKg ??
+    (embedded.perLb != null && embedded.perLb > 0
+      ? embedded.perLb / KG_PER_LB
+      : null);
   const perKg =
     offer.pricePerKg && offer.pricePerKg > 0
       ? offer.pricePerKg
-      : /per\s*kg/i.test(`${offer.name} ${offer.packageSize ?? ""}`)
-        ? offer.price
-        : null;
+      : fromEmbedded != null && fromEmbedded > 0
+        ? fromEmbedded
+        : /per\s*kg/i.test(text)
+          ? offer.price
+          : null;
   if (perKg == null || !(perKg > 0)) return null;
   if (product.unit === "g") return perKg / 1000;
   return perKg;

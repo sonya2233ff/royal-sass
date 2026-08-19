@@ -42,6 +42,7 @@ import {
   type PurchaseOption,
 } from "@/domain/checkout";
 import { offerMatchesIdentity } from "@/domain/product-identity";
+import { inferSaleMode } from "@/domain/sale-mode";
 
 export interface SideEval {
   status: OfferStatus;
@@ -243,24 +244,31 @@ export function buildStapleCompareRow(input: {
   const planFor = (
     raw: CatalogOffer | null,
     summarized: { pricePerKg?: number } | null,
-  ): WeightPurchasePlan | null =>
-    neededGrams != null && raw
-      ? soldByWeight && summarized?.pricePerKg
-        ? looseWeightPurchase({
-            neededGrams,
-            pricePerKg: summarized.pricePerKg,
-            productId: raw.productId,
-            name: raw.name,
-            image: raw.image,
-            shelfPrice: raw.price,
-          })
-        : soldByWeight
-          ? null
-          : purchasePlanForPack(neededGrams, {
-              ...raw,
-              typicalEachGrams,
-            })
-      : null;
+  ): WeightPurchasePlan | null => {
+    if (neededGrams == null || !raw) return null;
+    const mode = inferSaleMode({
+      name: raw.name,
+      packageSize: raw.packageSize,
+      parsedMassKg: raw.parsedMassKg,
+      stapleSoldByWeight: soldByWeight,
+    });
+    if (mode === "loose_weight") {
+      const perKg = summarized?.pricePerKg;
+      if (!(perKg && perKg > 0)) return null;
+      return looseWeightPurchase({
+        neededGrams,
+        pricePerKg: perKg,
+        productId: raw.productId,
+        name: raw.name,
+        image: raw.image,
+        shelfPrice: raw.price,
+      });
+    }
+    return purchasePlanForPack(neededGrams, {
+      ...raw,
+      typicalEachGrams,
+    });
+  };
 
   const wmPlan = planFor(wmRaw, walmart);
   const nfPlan = planFor(nfRaw, noFrills);

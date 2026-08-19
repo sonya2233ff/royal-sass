@@ -370,6 +370,30 @@ const eachNoMass = purchasePlanForPack(500, {
 assert(eachNoMass?.packs === 4, `1 ea plan without parsed mass ${eachNoMass?.packs}`);
 assert(eachNoMass?.packGrams === 120, "1 ea uses 120 g");
 assert(eachNoMass?.totalPrice === 3.96, `1 ea 500g spend ${eachNoMass?.totalPrice}`);
+
+const tomatoBeef = {
+  id: "tomato",
+  category: "produce",
+  typicalEachGrams: 180,
+  mustIncludeAny: ["tomato", "tomatoes"],
+};
+const beefsteakEa = {
+  productId: "beef-5lb",
+  name: "Tomato Beefsteak 5Lb",
+  packageSize: "1 ea, $999.00/100ea",
+  price: 9.99,
+};
+assert(
+  Math.abs((offerMassKg(tomatoBeef, beefsteakEa) ?? 0) - 5 * 0.45359237) < 0.02,
+  "1 ea with 5 lb content uses 5 lb, not typical 180g",
+);
+const beefPlan = purchasePlanForPack(2000, {
+  ...beefsteakEa,
+  typicalEachGrams: 180,
+});
+assert(beefPlan?.packs === 1, `5 lb pack count ${beefPlan?.packs}`);
+assert(beefPlan?.totalPrice === 9.99, "whole 5 lb pack $9.99");
+assert((beefPlan?.packGrams ?? 0) > 2200, `5 lb grams ${beefPlan?.packGrams}`);
 assert(
   purchasePlanForPack(500, {
     productId: lemonEach.productId,
