@@ -61,3 +61,24 @@ export function mergeEggCountChoices(discovered: number[]): {
     largestPack: maxPack >= 30 ? maxPack : null,
   };
 }
+
+/**
+ * Cafe search: Ukrainian "яйця" must find the two shell-egg staples
+ * (Grayridge + large dozen), not eggplant / egg whites.
+ */
+export function queryLooksLikeShellEggs(q: string): boolean {
+  const t = q.trim().toLowerCase();
+  if (!t) return false;
+  if (
+    /eggplant|баклажан|egg\s*whites?|яєчн\w*\s*білк|\bбілок\b|\bбілка\b/.test(t)
+  ) {
+    return false;
+  }
+  if (/яйц|яєц/.test(t)) return true;
+  return /\beggs?\b/.test(t);
+}
+
+export function englishEggSearchQueries(q: string): string[] {
+  if (!queryLooksLikeShellEggs(q)) return [];
+  return ["eggs", "large eggs", "gray ridge eggs", "large eggs dozen"];
+}

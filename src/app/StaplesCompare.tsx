@@ -25,6 +25,7 @@ import {
 import {
   EGG_COUNT_PRESETS,
   isEggPackStaple,
+  queryLooksLikeShellEggs,
   typicalEggCartonCount,
   ukEggCountLabel,
 } from "@/domain/egg-pack";
@@ -754,6 +755,7 @@ export function StaplesCompare() {
     const q = query.trim().toLowerCase();
     return items.filter((item) => {
       if (!q) return true;
+      if (queryLooksLikeShellEggs(q) && isEggPackStaple(item)) return true;
       const blob = [
         item.label,
         item.walmartCached?.name,

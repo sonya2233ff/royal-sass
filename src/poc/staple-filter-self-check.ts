@@ -15,6 +15,7 @@ import {
   loadStaplesConfig,
   resolveMatchMode,
 } from "@/lib/staples";
+import { queryLooksLikeShellEggs } from "@/domain/egg-pack";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -418,6 +419,15 @@ async function main() {
     ) === true,
     "grayridge keeps 10×18 case of 18-count cartons",
   );
+
+  assert(queryLooksLikeShellEggs("яйця") === true, "UA яйця is shell eggs");
+  assert(queryLooksLikeShellEggs("яєць") === true, "UA яєць is shell eggs");
+  assert(queryLooksLikeShellEggs("eggs") === true, "eggs is shell eggs");
+  assert(queryLooksLikeShellEggs("eggplant") === false, "eggplant is not eggs");
+  assert(queryLooksLikeShellEggs("egg whites") === false, "whites are not shell eggs");
+  const eggIds = cfg.items
+    .filter((i) => queryLooksLikeShellEggs("яйця") && (i.id === "grayridge_eggs" || i.id === "large_eggs_dozen"));
+  assert(eggIds.length === 2, "two shell-egg staples for яйця");
 
   const shown = cfg.items.filter(isShownStaple);
   assert(shown.length >= 125, `shown staples ${shown.length}`);
