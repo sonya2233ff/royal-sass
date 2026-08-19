@@ -127,6 +127,16 @@ console.log(
   if (extracted !== rapidImg) {
     throw new Error(`extractRetailerImage ${extracted}`);
   }
+  const shopifyProto =
+    "//cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760301070p.jpg";
+  const fromShopify = extractRetailerImage({
+    featured_image: shopifyProto,
+    images: [shopifyProto],
+    media: [{ src: "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760301070p.jpg" }],
+  });
+  if (fromShopify !== "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760301070p.jpg") {
+    throw new Error(`Shopify protocol-relative photo ${fromShopify}`);
+  }
   const catA = preferredStapleImage({
     matchMode: "preferred",
     stapleImage: "/products/simply_egg_whites.png",

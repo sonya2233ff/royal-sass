@@ -1204,7 +1204,8 @@
         "ripple"
       ],
       "maxPlausiblePrice": 20,
-      "minPlausiblePrice": 1
+      "minPlausiblePrice": 1,
+      "image": "/products/cups_12oz_black_ripple.jpg"
     },
     {
       "id": "cups_12oz_squat_pet",
@@ -1232,7 +1233,8 @@
       "category": "supplies",
       "notes": "From receipts catalog (supplies)",
       "maxPlausiblePrice": 20,
-      "minPlausiblePrice": 1
+      "minPlausiblePrice": 1,
+      "image": "/products/cups_12oz_squat_pet.jpg"
     },
     {
       "id": "oven_mitts",
@@ -1285,7 +1287,8 @@
         "ripple"
       ],
       "maxPlausiblePrice": 20,
-      "minPlausiblePrice": 1
+      "minPlausiblePrice": 1,
+      "image": "/products/cups_16oz_black_ripple.jpg"
     },
     {
       "id": "cups_16oz_pet",

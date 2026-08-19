@@ -1,7 +1,8 @@
 /**
  * Retailer product photos (Rapid / OpenWeb Ninja `image` + `images[]`,
- * PCX `productImage[].imageUrl`). Results columns must use that store's
- * own object — never the shared staple art or the other store's CDN.
+ * PCX `productImage[].imageUrl`, MVR Shopify `featured_image` / `media`).
+ * Results columns must use that store's own object — never the shared
+ * staple art or the other store's CDN.
  */
 import { catalogedOfferImage } from "@/lib/retailer-offer-images";
 
@@ -11,19 +12,31 @@ function asRecord(v: unknown): Record<string, unknown> | null {
     : null;
 }
 
+/** Shopify ajax often returns `//cdn.shopify.com/...` — make it fetchable. */
+export function normalizeImageUrl(url: unknown): string | undefined {
+  if (typeof url !== "string") return undefined;
+  let t = url.trim();
+  if (!t) return undefined;
+  if (t.startsWith("//")) t = `https:${t}`;
+  if (!/^https?:\/\//i.test(t)) return undefined;
+  return t;
+}
+
 export function isHttpImageUrl(url: unknown): url is string {
-  return typeof url === "string" && /^https?:\/\//i.test(url.trim());
+  return Boolean(normalizeImageUrl(url));
 }
 
 function firstHttp(...candidates: unknown[]): string | undefined {
   for (const c of candidates) {
-    if (isHttpImageUrl(c)) return c.trim();
+    const n = normalizeImageUrl(c);
+    if (n) return n;
   }
   return undefined;
 }
 
 function imageFromObject(v: unknown): string | undefined {
-  if (isHttpImageUrl(v)) return v.trim();
+  const direct = normalizeImageUrl(v);
+  if (direct) return direct;
   const rec = asRecord(v);
   if (!rec) return undefined;
   return firstHttp(
@@ -32,12 +45,12 @@ function imageFromObject(v: unknown): string | undefined {
     rec.imageUrl,
     rec.url,
     rec.image,
+    rec.src,
     rec.mediumUrl,
     rec.smallUrl,
     rec.smallRetinaUrl,
     rec.thumbnail,
     rec.thumbnailUrl,
-    rec.src,
   );
 }
 
@@ -48,6 +61,8 @@ export function extractRetailerImage(raw: unknown): string | undefined {
   const data = asRecord(root.data) ?? root;
   const fromScalar = firstHttp(
     data.image,
+    data.featured_image,
+    data.featuredImage,
     data.thumbnail,
     data.product_image,
     data.imageUrl,
@@ -58,6 +73,17 @@ export function extractRetailerImage(raw: unknown): string | undefined {
   if (Array.isArray(data.images)) {
     for (const img of data.images) {
       const url = imageFromObject(img);
+      if (url) return url;
+    }
+  }
+
+  if (Array.isArray(data.media)) {
+    for (const media of data.media) {
+      const rec = asRecord(media);
+      const url =
+        imageFromObject(rec?.src) ??
+        imageFromObject(rec?.preview_image) ??
+        imageFromObject(media);
       if (url) return url;
     }
   }
@@ -156,7 +182,16 @@ export function preferredStapleImage(input: {
   mvrOffer?: { image?: string | null; raw?: unknown } | null;
 }): string | null {
   const fallback = input.stapleImage ?? null;
-  if (input.matchMode !== "preferred") return fallback;
+  if (input.matchMode !== "preferred") {
+    if (fallback) return fallback;
+    return (
+      offerImageUrl(input.mvrOffer) ??
+      offerImageUrl(input.wmOffer) ??
+      offerImageUrl(input.nfOffer) ??
+      offerImageUrl(input.wcOffer) ??
+      null
+    );
+  }
   return (
     offerImageUrl(input.wmOffer) ??
     offerImageUrl(input.nfOffer) ??

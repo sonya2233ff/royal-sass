@@ -114,10 +114,12 @@ function mapProduct(input: {
     confidence: "exact",
     checkedAt: new Date().toISOString(),
     sourceUrl: absUrl(input.url) ?? absUrl(input.handle),
-    image: extractRetailerImage({
-      image: input.image,
-      featured_image: input.image,
-    }),
+    image:
+      extractRetailerImage(input.raw) ??
+      extractRetailerImage({
+        image: input.image,
+        featured_image: input.image,
+      }),
     raw: input.raw,
   };
 }
