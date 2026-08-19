@@ -145,7 +145,16 @@ export function buildStapleCompareRow(input: {
           input.grams > 0
         ? input.grams / 1000
         : 1;
-  const summarizeQty = soldByWeight ? qtyKg : packQty;
+  const summarizeQty = isEggPackItem(item)
+    ? Math.max(
+        1,
+        Math.round(
+          Number(input.requestedAmount) || Number(input.qty) || packQty,
+        ),
+      )
+    : soldByWeight
+      ? qtyKg
+      : packQty;
 
   const wmOffer = input.wmUsable ? asCatalogOffer(input.wmOffer) : null;
   const nfOffer = input.nfUsable ? asCatalogOffer(input.nfOffer) : null;

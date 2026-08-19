@@ -12,14 +12,20 @@ import {
   isProduceWeightItem,
   isSoldByWeightItem,
   isEggPackItem,
+  eggCartonCountOk,
   explicitNeededGrams,
 } from "@/lib/staples";
 import { typicalEachGramsOf } from "@/domain/same-packed-item";
+import {
+  eggCountsFromOffer,
+  mergeEggCountChoices,
+} from "@/domain/egg-pack";
 import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import {
   defaultWeightUnit,
   formatMoneyPerWeight,
   formatMoneyPerEach,
+  parseCountPack,
   parsePackCount,
   resolveUnitPrices,
   weightUnitLabel,
@@ -35,6 +41,30 @@ import { preferredStapleImage } from "@/lib/product-image";
 import { loadSobeysCatalog } from "@/lib/sobeys-catalog";
 import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
 import { loadMvrCatalog } from "@/lib/mvr-catalog";
+
+function eggChoicesFromCatalogs(
+  item: { id: string },
+  rows: Array<
+    | {
+        offer?: { name?: string; packageSize?: string } | null;
+        alternates?: Array<{ name?: string; packageSize?: string } | null>;
+      }
+    | null
+    | undefined
+  >,
+) {
+  const discovered: number[] = [];
+  for (const row of rows) {
+    if (!row) continue;
+    const offers = [row.offer, ...(row.alternates ?? [])];
+    for (const offer of offers) {
+      if (!offer?.name) continue;
+      if (!eggCartonCountOk(item, offer.name, offer.packageSize)) continue;
+      discovered.push(...eggCountsFromOffer(offer.name, offer.packageSize));
+    }
+  }
+  return mergeEggCountChoices(discovered);
+}
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -79,7 +109,8 @@ function eggUnitFields(offer: {
   priceEach: number;
   label: string;
 } | null {
-  const count = parsePackCount(offer.name, offer.packageSize);
+  const parsed = parseCountPack(offer.name, offer.packageSize);
+  const count = parsed?.totalCount ?? parsePackCount(offer.name, offer.packageSize);
   if (!count || count <= 0 || !(offer.price > 0)) return null;
   const priceEach = offer.price / count;
   return {
@@ -296,6 +327,9 @@ export async function GET() {
       const eggMvr =
         mvrUsable && mvrOffer && eggItem ? eggUnitFields(mvrOffer) : null;
       const mvrOnSale = mvrUsable ? offerIsOnSale(mvrOffer) : false;
+      const eggPackUi = eggItem
+        ? eggChoicesFromCatalogs(i, [cat, nfCat, wcCat, mvrCat])
+        : null;
 
       return {
         id: i.id,
@@ -324,6 +358,8 @@ export async function GET() {
         weightCompare: showWeightUnits || eggItem,
         soldByWeight: isSoldByWeightItem(i),
         typicalEachGrams: typicalEachGramsOf(i) ?? null,
+        eggCountChoices: eggPackUi?.choices ?? null,
+        largestEggPack: eggPackUi?.largestPack ?? null,
         onSale: wmOnSale || nfOnSale || wcOnSale || mvrOnSale,
         walmartCached: usable
           ? {

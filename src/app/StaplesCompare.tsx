@@ -23,6 +23,12 @@ import {
   type RestaurantProduct,
 } from "@/domain/restaurant-product";
 import {
+  EGG_COUNT_PRESETS,
+  isEggPackStaple,
+  typicalEggCartonCount,
+  ukEggCountLabel,
+} from "@/domain/egg-pack";
+import {
   CART_STORAGE_KEY,
   PRODUCT_OVERRIDE_STORAGE_KEY,
 } from "@/lib/product-config";
@@ -56,6 +62,8 @@ type Staple = {
   weightCompare?: boolean;
   soldByWeight?: boolean;
   typicalEachGrams?: number | null;
+  eggCountChoices?: number[] | null;
+  largestEggPack?: number | null;
   walmartCached: {
     name: string;
     price: number;
@@ -376,6 +384,11 @@ function categoryBPreview(
     typicalEachGrams: typicalEachGrams ?? undefined,
     image: side.image ?? undefined,
   });
+}
+
+function amountLabel(item: { id: string }, amount: number, unit: string): string {
+  if (isEggPackStaple(item)) return ukEggCountLabel(amount);
+  return `${amount} ${unit}`;
 }
 
 function formatBBuy(plan: NonNullable<ReturnType<typeof categoryBPreview>>): string {
@@ -704,6 +717,25 @@ export function StaplesCompare() {
     }
   }, [overrides]);
 
+  useEffect(() => {
+    if (!items.length) return;
+    setCart((prev) => {
+      let changed = false;
+      const next: Cart = { ...prev };
+      for (const [id, entry] of Object.entries(prev)) {
+        if (!isEggPackStaple({ id }) || entry.unit !== "pack") continue;
+        const carton = typicalEggCartonCount({ id });
+        const amt =
+          entry.requestedAmount <= 10
+            ? Math.round(entry.requestedAmount * carton)
+            : Math.round(entry.requestedAmount);
+        next[id] = { ...entry, unit: "ea", requestedAmount: amt };
+        changed = true;
+      }
+      return changed ? next : prev;
+    });
+  }, [items]);
+
   function productOf(item: Staple): RestaurantProduct {
     return applyProductOverride(
       item.restaurantProduct ??
@@ -793,6 +825,15 @@ export function StaplesCompare() {
         setCartCustomAmount(addCartItem(prev, id, product), id, n, product.unit),
       );
     }
+  }
+
+  function setEggCount(id: string, count: number) {
+    const item = items.find((x) => x.id === id);
+    if (!item || !(count > 0)) return;
+    const product = productOf(item);
+    setCart((prev) =>
+      setCartCustomAmount(addCartItem(prev, id, product), id, count, "ea"),
+    );
   }
 
   function persistOverrides(next: Record<string, ProductOverride>) {
@@ -1260,7 +1301,7 @@ export function StaplesCompare() {
                     {on && entry?.isCustom ? (
                       <span className="qty-mark">
                         {" "}
-                        {requested} {product.unit}
+                        {amountLabel(item, requested, product.unit)}
                       </span>
                     ) : null}
                   </strong>
@@ -1487,8 +1528,32 @@ export function StaplesCompare() {
                 </button>
                 <div className="qty-row">
                   <span>
-                    Зазвичай: {product.defaultAmount} {product.unit}
+                    Зазвичай: {amountLabel(item, product.defaultAmount, product.unit)}
                   </span>
+                  {isEggPackStaple(item) && (
+                    <div className="egg-picks">
+                      <span>Скільки яєць</span>
+                      {(item.eggCountChoices?.length
+                        ? item.eggCountChoices
+                        : EGG_COUNT_PRESETS
+                      ).map((n) => (
+                        <button
+                          key={n}
+                          type="button"
+                          className={
+                            requested === n ? "qty-btn egg-on" : "qty-btn"
+                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEggCount(item.id, n);
+                          }}
+                        >
+                          {n}
+                          {item.largestEggPack === n ? " · найбільша" : ""}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   {on && (
                     <>
                       <button
@@ -1515,7 +1580,9 @@ export function StaplesCompare() {
                               setCustomAmount(item.id, e.target.value)
                             }
                           />
-                          <span className="qty-unit">{product.unit}</span>
+                          <span className="qty-unit">
+                            {isEggPackStaple(item) ? "яєць" : product.unit}
+                          </span>
                           {entry?.isCustom && (
                             <button
                               type="button"
@@ -1625,7 +1692,7 @@ export function StaplesCompare() {
               return (
                 <li key={id}>
                   <span>
-                    {item?.label ?? id} · {e.requestedAmount} {e.unit}
+                    {item?.label ?? id} · {amountLabel(item ?? { id }, e.requestedAmount, e.unit)}
                     {e.isCustom ? " (змінено)" : ""}
                   </span>
                   <button type="button" onClick={() => toggle(id)}>
@@ -1705,7 +1772,11 @@ export function StaplesCompare() {
                     {r.label}
                     {r.confirmed ? " · locked" : ""}
                     {r.requestedAmount != null
-                      ? ` · треба ${r.requestedAmount} ${r.requestedUnit ?? ""}`
+                      ? ` · треба ${
+                          isEggPackStaple({ id: r.id })
+                            ? ukEggCountLabel(r.requestedAmount)
+                            : `${r.requestedAmount} ${r.requestedUnit ?? ""}`
+                        }`
                       : r.grams
                         ? ` · ${r.grams} g`
                         : r.qty != null && r.qty > 1
@@ -2188,6 +2259,22 @@ export function StaplesCompare() {
         }
         .qty-unit {
           opacity: 0.7;
+        }
+        .egg-picks {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0.25rem;
+          flex-basis: 100%;
+        }
+        .egg-picks > span {
+          opacity: 0.75;
+          margin-right: 0.15rem;
+        }
+        .qty-btn.egg-on {
+          background: #1e4030;
+          color: #fff;
+          border-color: #1e4030;
         }
         .settings-btn {
           margin: 0 0.55rem 0.25rem;

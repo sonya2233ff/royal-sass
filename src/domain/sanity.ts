@@ -1,4 +1,5 @@
-import { parseMassFromText } from "@/domain/units";
+import { parseCountPack, parseMassFromText } from "@/domain/units";
+import { isEggPackStaple } from "@/domain/egg-pack";
 
 export type OfferStatus =
   | "ok"
@@ -41,6 +42,16 @@ export interface SanityResult {
 }
 
 const DEFAULT_STALE_HOURS = 24;
+
+/** Egg warehouse cases: compare $/carton, not the $58 case sticker. */
+function comparableShelfPrice(input: SanityInput): number {
+  if (!isEggPackStaple({ id: input.itemId }) || !(input.price > 0)) {
+    return input.price;
+  }
+  const pack = parseCountPack(input.name, input.packageSize);
+  const outer = pack && pack.outerCount > 1 ? pack.outerCount : 1;
+  return input.price / outer;
+}
 
 /** Reject only mini packs. Same branded 1.36L vs expected 2.63L is still cafe-size. */
 export const MIN_COMPARABLE_PACK_RATIO = 0.35;
@@ -94,7 +105,8 @@ export function sanityCheckOffer(input: SanityInput): SanityResult {
     return { ok: false, status: "rejected", reason: "non-positive price", ageHours: age };
   }
 
-  if (input.minPlausiblePrice != null && input.price < input.minPlausiblePrice) {
+  const comparablePrice = comparableShelfPrice(input);
+  if (input.minPlausiblePrice != null && comparablePrice < input.minPlausiblePrice) {
     return {
       ok: false,
       status: "wrong_pack",
@@ -102,7 +114,7 @@ export function sanityCheckOffer(input: SanityInput): SanityResult {
       ageHours: age,
     };
   }
-  if (input.maxPlausiblePrice != null && input.price > input.maxPlausiblePrice) {
+  if (input.maxPlausiblePrice != null && comparablePrice > input.maxPlausiblePrice) {
     return {
       ok: false,
       status: "rejected",

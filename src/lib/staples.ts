@@ -4,6 +4,7 @@ import { NoFrillsConnector } from "@/connectors/nofrills";
 import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
+import { isEggPackStaple } from "@/domain/egg-pack";
 import { pickBestOffer } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
 import {
@@ -52,6 +53,7 @@ import {
   formatMoneyPerWeight,
   formatMoneyPerEach,
   parseMassFromText,
+  parseCountPack,
   parsePackCount,
   priceByPackCount,
   resolveUnitPrices,
@@ -149,26 +151,23 @@ const SOLD_BY_WEIGHT_IDS = new Set([
   "tomato",
 ]);
 
-/** Shell-egg cartons — fair compare is $/egg. */
-const EGG_PACK_IDS = new Set([
-  "grayridge_eggs",
-  "large_eggs_dozen",
-]);
-
-export function isEggPackItem(item: StapleItem): boolean {
-  return EGG_PACK_IDS.has(item.id);
+/** Shell-egg cartons — fair compare is $/egg. Quantity is eggs, not packs. */
+export function isEggPackItem(item: { id: string; category?: string }): boolean {
+  return isEggPackStaple(item);
 }
 
 /**
- * Dozen staple is 12-count only (18EA / 30ct are different SKUs).
- * Grayridge receipt is the 18-count brand lock; titles without a count stay.
+ * Dozen staple is 12-count cartons (including 15×1 dozen cases).
+ * Grayridge receipt is the 18-count brand lock (including 10×18 cases).
+ * A bulk "180 ea" with no inner carton is not the same SKU.
  */
 export function eggCartonCountOk(
   item: { id: string },
   name: string,
   packageSize?: string,
 ): boolean {
-  const n = parsePackCount(name, packageSize);
+  const parsed = parseCountPack(name, packageSize);
+  const n = parsed?.innerCount ?? parsePackCount(name, packageSize);
   if (item.id === "large_eggs_dozen") return n === 12;
   if (item.id === "grayridge_eggs") return n === 18;
   return true;
@@ -265,7 +264,7 @@ export function resolveMatchMode(
     item.category === "eggs" ||
     PRODUCE_IDS.has(item.id) ||
     FROZEN_BAG_IDS.has(item.id) ||
-    EGG_PACK_IDS.has(item.id)
+    isEggPackItem(item)
   ) {
     return "cheapest";
   }
@@ -1216,9 +1215,11 @@ export function summarizeOffer(
 
   const byWeight = isProduceWeightItem(item);
   const eggPack = isEggPackItem(item);
-  const eggCount = eggPack
-    ? parsePackCount(offer.name, offer.packageSize)
+  const eggParsed = eggPack
+    ? parseCountPack(offer.name, offer.packageSize)
     : null;
+  const eggCount = eggParsed?.totalCount ?? null;
+  const eggInner = eggParsed?.innerCount ?? null;
   const pricePerEgg =
     eggCount && eggCount > 0 ? round2(offer.price / eggCount) : null;
   const eggFields =
@@ -1331,17 +1332,18 @@ export function summarizeOffer(
   }
 
   if (eggPack && pricePerEgg != null) {
-    const compareCount = 30;
-    const packs = qty > 0 ? qty : 1;
+    const requestedEggs = qty > 0 ? qty : (eggCount ?? 1);
+    const caseHint =
+      eggInner && eggCount && eggInner !== eggCount
+        ? ` (${eggParsed!.outerCount}×${eggInner})`
+        : "";
     return {
       name: offer.name,
       productId: offer.productId,
       shelfPrice: offer.price,
-      lineTotal: round2(pricePerEgg * compareCount * packs),
+      lineTotal: round2(pricePerEgg * requestedEggs),
       pack: pack ?? `${eggCount} шт`,
-      note: `${eggCount} шт · ${formatMoneyPerEach(pricePerEgg)} · порівняння за ${compareCount}${
-        packs > 1 ? ` ×${packs}` : ""
-      }`,
+      note: `${eggCount} шт у пачці${caseHint} · ${formatMoneyPerEach(pricePerEgg)} · треба ${requestedEggs} шт`,
       confidence: offer.confidence,
       compareUnit: "per_pack",
       compareUnitLabel: "за 1 яйце",

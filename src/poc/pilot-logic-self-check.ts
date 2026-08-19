@@ -8,9 +8,15 @@ import {
   evaluatePurchase,
   fairCompareCheckouts,
   inExactNeedRange,
+  pickCheapestCoveringOffer,
 } from "@/domain/checkout";
 import { inferSaleMode } from "@/domain/sale-mode";
 import { convertAmount, roundMoney } from "@/domain/purchase-units";
+import { parseCountPack } from "@/domain/units";
+import {
+  mergeEggCountChoices,
+  ukEggCountLabel,
+} from "@/domain/egg-pack";
 import {
   offerMatchesIdentity,
   type IdentityOffer,
@@ -413,5 +419,97 @@ assert(cart.tomato == null && cart.hidden == null, "clear empties all");
 cart = addCartItem({}, "a", tomatoP);
 cart = addCartItem(cart, "b", quinoa);
 assert(cartSize(cart) === 2, "compare count matches cart size");
+
+const dozenCase = parseCountPack("GRAY RIDGE - EGGS WHITE LARGE 15x1 DOZ");
+assert(dozenCase?.innerCount === 12, "15x1 DOZ inner is dozen");
+assert(dozenCase?.outerCount === 15, "15x1 DOZ is 15 cartons");
+assert(dozenCase?.totalCount === 180, "15x1 DOZ is 180 eggs");
+const grayCase = parseCountPack(
+  "GRAY RIDGE - WHITE EGGS EXTRA LARGE 10x18EA",
+  "10x18EA",
+);
+assert(grayCase?.innerCount === 18, "10x18 inner 18");
+assert(grayCase?.totalCount === 180, "10x18 is 180 eggs");
+
+const dozenEggs = toRestaurantProduct({
+  id: "large_eggs_dozen",
+  label: "Large Eggs Dozen",
+  category: "eggs",
+  matchMode: "cheapest",
+  defaultAmount: 12,
+  unit: "ea",
+});
+assert(dozenEggs.unit === "ea", "dozen eggs unit is ea");
+assert(dozenEggs.defaultAmount === 12, "default one dozen in eggs");
+
+const buy180case = evaluatePurchase({
+  product: dozenEggs,
+  requested: 180,
+  offer: { price: 57.99, name: "GRAY RIDGE - EGGS WHITE LARGE 15x1 DOZ" },
+});
+assert(buy180case.valid, "180 eggs matches 15x1 case");
+assert(buy180case.packs === 1, "one wholesale case");
+assert(buy180case.checkoutCost === 57.99, "case checkout $57.99");
+
+const buy180cartons = evaluatePurchase({
+  product: dozenEggs,
+  requested: 180,
+  offer: { price: 4.19, name: "GRAY RIDGE - EGGS WHITE LARGE 1DOZ" },
+});
+assert(buy180cartons.valid, "15 retail dozens cover 180 eggs");
+assert(buy180cartons.packs === 15, `15 cartons not ${buy180cartons.packs}`);
+assert(buy180cartons.checkoutCost === 62.85, "15×$4.19");
+
+const buy30 = evaluatePurchase({
+  product: dozenEggs,
+  requested: 30,
+  offer: { price: 4.19, name: "Large Eggs 1DOZ" },
+});
+assert(buy30.valid, "30 eggs buys whole dozens");
+assert(buy30.packs === 3 && buy30.purchasedAmount === 36, "3×12=36 eggs");
+
+const grayEggs = toRestaurantProduct({
+  id: "grayridge_eggs",
+  label: "Grayridge Eggs",
+  matchMode: "preferred",
+  defaultAmount: 18,
+  unit: "ea",
+});
+assert(grayEggs.defaultAmount === 18, "grayridge default 18 eggs");
+const tooBig = evaluatePurchase({
+  product: grayEggs,
+  requested: 18,
+  offer: {
+    price: 60.89,
+    name: "GRAY RIDGE - WHITE EGGS EXTRA LARGE 10x18EA",
+    packageSize: "10x18EA",
+  },
+});
+assert(!tooBig.valid, "10x18 case is too big for 18 eggs");
+const gray180 = evaluatePurchase({
+  product: grayEggs,
+  requested: 180,
+  offer: {
+    price: 60.89,
+    name: "GRAY RIDGE - WHITE EGGS EXTRA LARGE 10x18EA",
+    packageSize: "10x18EA",
+  },
+});
+assert(gray180.valid && gray180.packs === 1, "180 eggs buys one 10x18 case");
+assert(gray180.checkoutCost === 60.89, "case $60.89");
+
+const covering = pickCheapestCoveringOffer(dozenEggs, 180, [
+  { price: 4.19, name: "GRAY RIDGE - EGGS WHITE LARGE 1DOZ" },
+  { price: 57.99, name: "GRAY RIDGE - EGGS WHITE LARGE 15x1 DOZ" },
+]);
+assert(
+  covering?.name.includes("15x1"),
+  "MVR case wins 180-egg checkout vs 15 retail dozens",
+);
+assert(ukEggCountLabel(18) === "18 яєць", "18 eggs label");
+assert(ukEggCountLabel(1) === "1 яйце", "1 egg label");
+const eggUi = mergeEggCountChoices([12, 180]);
+assert(eggUi.choices.includes(30) && eggUi.choices.includes(180), "presets plus case");
+assert(eggUi.largestPack === 180, "largest pack is 180");
 
 console.log("poc:pilot-logic ok");

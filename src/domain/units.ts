@@ -366,25 +366,91 @@ export function formatMoneyPerWeight(
   return `$${round2(price).toFixed(2)} / ${unit}`;
 }
 
-/** Carton / dozen count from name or "30 ea, $0.58/1ea". */
-export function parsePackCount(
+/** Inner carton vs warehouse case: `10x18EA` → 10 cartons of 18 (180 eggs). */
+export interface ParsedCountPack {
+  /** Eggs (or pieces) in one inner carton. */
+  innerCount: number;
+  /** How many inner cartons this SKU contains. */
+  outerCount: number;
+  /** Total pieces in the SKU. */
+  totalCount: number;
+}
+
+/**
+ * Carton / case count from name or "30 ea, $0.58/1ea".
+ * `15x1 DOZ` is 15 dozen (180 eggs), not a 12-egg unit price of $58.
+ */
+export function parseCountPack(
   ...parts: Array<string | undefined | null>
-): number | null {
-  const t = parts.filter(Boolean).join(" ").toLowerCase();
+): ParsedCountPack | null {
+  const t = parts.filter(Boolean).join(" ").toLowerCase().replace(/,/g, "");
   if (!t) return null;
+
+  const nxDoz = t.match(/(\d+)\s*[x×]\s*(\d+)\s*doz(?:en)?\b/);
+  if (nxDoz) {
+    const dozens = Number(nxDoz[1]) * Number(nxDoz[2]);
+    if (dozens >= 1 && dozens <= 60) {
+      return {
+        innerCount: 12,
+        outerCount: dozens,
+        totalCount: dozens * 12,
+      };
+    }
+  }
+
+  const nxEa = t.match(/(\d+)\s*[x×]\s*(\d+)\s*(?:ea|count|ct|eggs?)\b/);
+  if (nxEa) {
+    const outer = Number(nxEa[1]);
+    const inner = Number(nxEa[2]);
+    if (outer >= 2 && inner >= 6 && inner <= 360 && outer * inner <= 720) {
+      return {
+        innerCount: inner,
+        outerCount: outer,
+        totalCount: outer * inner,
+      };
+    }
+  }
+
   let best: number | null = null;
   for (const m of t.matchAll(/(\d+)\s*(?:ea|count|ct|eggs?)\b/g)) {
     const n = Number(m[1]);
     if (n >= 6 && n <= 360 && (best == null || n > best)) best = n;
   }
-  if (best != null) return best;
-  // "1DOZ" / "15x1 doz" — digit+doz is one word, so \bdozen\b misses it.
-  if (/\bdozen\b/.test(t) || /\d\s*doz(?:en)?\b/.test(t) || /\bdoz\b/.test(t)) {
-    return 12;
+  if (best != null) {
+    return { innerCount: best, outerCount: 1, totalCount: best };
   }
-  const bare = t.match(/\b(6|12|18|24|30|36|60|180)\b/);
-  if (bare) return Number(bare[1]);
+
+  // "1DOZ" / "15x1 doz" — digit+doz is one word, so \bdozen\b misses 1doz.
+  if (
+    /\bdozen\b/.test(t) ||
+    /\d\s*doz(?:en)?\b/.test(t) ||
+    /\bdoz\b/.test(t) ||
+    /\d+doz(?:en)?\b/.test(t)
+  ) {
+    return { innerCount: 12, outerCount: 1, totalCount: 12 };
+  }
+
+  const pack = t.match(/\b(\d+)\s*pack\b/);
+  if (pack) {
+    const n = Number(pack[1]);
+    if (n >= 6 && n <= 36) {
+      return { innerCount: n, outerCount: 1, totalCount: n };
+    }
+  }
+
+  const bare = t.match(/\b(6|12|18|24|30|36|60)\b/);
+  if (bare) {
+    const n = Number(bare[1]);
+    return { innerCount: n, outerCount: 1, totalCount: n };
+  }
   return null;
+}
+
+/** Inner carton size (12 vs 18). Use parseCountPack().totalCount for $/egg. */
+export function parsePackCount(
+  ...parts: Array<string | undefined | null>
+): number | null {
+  return parseCountPack(...parts)?.innerCount ?? null;
 }
 
 export function formatMoneyPerEach(price: number, unit = "egg"): string {

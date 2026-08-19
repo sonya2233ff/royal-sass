@@ -3,6 +3,7 @@
  * Basket totals always use checkoutCost (2 decimal line totals).
  */
 import { inferSaleMode, type SaleMode } from "@/domain/sale-mode";
+import { parseCountPack } from "@/domain/units";
 import {
   convertAmount,
   dimensionOf,
@@ -76,6 +77,13 @@ function packBaseInProductUnit(
     const amount = convertAmount(ml, "ml", unit);
     if (amount == null) return null;
     return { amount, unit };
+  }
+  const parsed = parseCountPack(offer.name, offer.packageSize);
+  if (product.unit === "ea" && parsed) {
+    return { amount: parsed.totalCount, unit: "ea" };
+  }
+  if (product.unit === "pack" && parsed) {
+    return { amount: parsed.outerCount, unit: "pack" };
   }
   return { amount: 1, unit: product.unit === "ea" ? "ea" : "pack" };
 }
@@ -357,6 +365,20 @@ function finalizeStrategy(
     return best;
   }
 
+  // Eggs / count SKUs: you cannot split a carton. Ceil leftover is OK when
+  // the inner pack itself is not a warehouse case far above the need.
+  if (dimensionOf(product.unit) === "count") {
+    const { minimumAmount, maximumAmount } = exactNeedBounds(
+      requested,
+      product.tolerancePercent,
+    );
+    if (ceilPlan.purchasedAmount + 1e-6 >= minimumAmount) {
+      const packFits = packAmount <= maximumAmount + 1e-6;
+      const totalFits = ceilPlan.purchasedAmount <= maximumAmount + 1e-6;
+      if (packFits || totalFits) return ceilPlan;
+    }
+  }
+
   const ok = inExactNeedRange(
     ceilPlan.purchasedAmount,
     requested,
@@ -472,4 +494,21 @@ export function toBaseRequested(amount: number, unit: AmountUnit): {
 
 export function fromBaseAmount(amount: number, unit: AmountUnit): number {
   return fromBase(amount, unit);
+}
+
+/** Among whole SKUs, pick the cheapest checkout that covers `requested`. */
+export function pickCheapestCoveringOffer<T extends StoreOfferInput>(
+  product: RestaurantProduct,
+  requested: number,
+  offers: T[],
+): T | null {
+  let best: { offer: T; cost: number } | null = null;
+  for (const offer of offers) {
+    const opt = evaluatePurchase({ product, requested, offer });
+    if (!opt.valid || opt.checkoutCost == null) continue;
+    if (!best || opt.checkoutCost + 1e-9 < best.cost) {
+      best = { offer, cost: opt.checkoutCost };
+    }
+  }
+  return best?.offer ?? null;
 }

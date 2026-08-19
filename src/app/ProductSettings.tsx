@@ -8,6 +8,10 @@ import type {
   PurchaseStrategy,
   RestaurantProduct,
 } from "@/domain/restaurant-product";
+import {
+  EGG_COUNT_PRESETS,
+  isEggPackStaple,
+} from "@/domain/egg-pack";
 
 type Props = {
   product: RestaurantProduct;
@@ -84,7 +88,7 @@ export function ProductSettings({
       matchMode,
       purchaseStrategy,
       defaultAmount: Number.parseFloat(defaultAmount) || product.defaultAmount,
-      unit,
+      unit: isEggPackStaple(product) ? "ea" : unit,
       tolerancePercent: Number.parseFloat(tolerancePercent) || 15,
       matchRules: {
         productType: productType.trim() || undefined,
@@ -135,12 +139,34 @@ export function ProductSettings({
             inputMode="decimal"
           />
         </label>
+        {isEggPackStaple(product) && (
+          <div className="ps-eggs">
+            <span>Пачки в яйцях</span>
+            {EGG_COUNT_PRESETS.map((n) => (
+              <button
+                key={n}
+                type="button"
+                className={defaultAmount === String(n) ? "on" : ""}
+                onClick={() => {
+                  setDefaultAmount(String(n));
+                  setUnit("ea");
+                }}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+        )}
         <label>
           Одиниця
-          <select value={unit} onChange={(e) => setUnit(e.target.value as AmountUnit)}>
+          <select
+            value={isEggPackStaple(product) ? "ea" : unit}
+            onChange={(e) => setUnit(e.target.value as AmountUnit)}
+            disabled={isEggPackStaple(product)}
+          >
             {UNITS.map((u) => (
               <option key={u} value={u}>
-                {u}
+                {isEggPackStaple(product) && u === "ea" ? "яєць (шт)" : u}
               </option>
             ))}
           </select>
@@ -266,6 +292,22 @@ export function ProductSettings({
           color: #fff;
           border: 0;
           padding: 0.55rem 0.8rem;
+        }
+        .ps-eggs {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0.3rem;
+          font-size: 0.8rem;
+        }
+        .ps-eggs button {
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+        }
+        .ps-eggs button.on {
+          background: #1e4030;
+          color: #fff;
+          border-color: #1e4030;
         }
       `}</style>
     </div>

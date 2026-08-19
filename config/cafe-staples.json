@@ -107,8 +107,12 @@
       "preferredProductId": "6000191268613",
       "minPlausiblePrice": 4,
       "maxPlausiblePrice": 12,
-      "notes": "Receipt UPC 064767343050 @ $6.98 — Gray Ridge Premium Large White 18 (WM 6000191268613)",
-      "image": "/products/grayridge_eggs.jpg"
+      "notes": "Receipt UPC 064767343050 @ $6.98 — Gray Ridge Premium Large White 18 (WM 6000191268613). Quantity is eggs, not packs: 18 / 30 / 10×18 case.",
+      "image": "/products/grayridge_eggs.jpg",
+      "purchaseStrategy": "exact_need",
+      "defaultAmount": 18,
+      "unit": "ea",
+      "tolerancePercent": 15
     },
     {
       "id": "lemons_2lb",
@@ -707,9 +711,13 @@
       "category": "eggs",
       "minPlausiblePrice": 2,
       "maxPlausiblePrice": 8,
-      "notes": "Receipt shell eggs — cheapest large dozen (not 18/30, not Grayridge lock)",
+      "notes": "Receipt shell eggs — cheapest large dozen (not 18/30, not Grayridge lock). Quantity is eggs: 12 / 18 / 30 / 15×1 dozen case.",
       "targetMassKg": 0.7,
-      "image": "/products/large_eggs_dozen.jpg"
+      "image": "/products/large_eggs_dozen.jpg",
+      "purchaseStrategy": "exact_need",
+      "defaultAmount": 12,
+      "unit": "ea",
+      "tolerancePercent": 15
     },
     {
       "id": "orange_juice_pulp",

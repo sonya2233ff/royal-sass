@@ -5,6 +5,7 @@ import {
   DEFAULT_TOLERANCE_PERCENT,
   type AmountUnit,
 } from "@/domain/purchase-units";
+import { isEggPackStaple, typicalEggCartonCount } from "@/domain/egg-pack";
 
 export type { AmountUnit };
 
@@ -88,6 +89,7 @@ export function inferPurchaseStrategy(item: StapleLike): PurchaseStrategy {
 }
 
 export function inferUnit(item: StapleLike): AmountUnit {
+  if (isEggPackStaple(item)) return "ea";
   const u = item.unit;
   if (u === "g" || u === "kg" || u === "ml" || u === "l" || u === "ea" || u === "pack") {
     return u;
@@ -101,6 +103,7 @@ export function inferUnit(item: StapleLike): AmountUnit {
 
 export function inferDefaultAmount(item: StapleLike, unit: AmountUnit): number {
   if (item.defaultAmount != null && item.defaultAmount > 0) return item.defaultAmount;
+  if (isEggPackStaple(item) && unit === "ea") return typicalEggCartonCount(item);
   if (unit === "kg" && item.soldByWeight) return 1;
   if (unit === "g" && item.expectedPackKg) return Math.round(item.expectedPackKg * 1000);
   if (unit === "g" && /750/.test(item.label)) return 750;
@@ -161,6 +164,20 @@ export type ProductOverride = Partial<
   maximumAmount?: number | null;
 };
 
+function eggOverrideAmount(
+  base: RestaurantProduct,
+  override: ProductOverride,
+): number {
+  const raw =
+    override.defaultAmount != null && override.defaultAmount > 0
+      ? override.defaultAmount
+      : base.defaultAmount;
+  if (isEggPackStaple(base) && override.unit === "pack" && raw <= 10) {
+    return raw * typicalEggCartonCount(base);
+  }
+  return raw;
+}
+
 export function applyProductOverride(
   base: RestaurantProduct,
   override?: ProductOverride | null,
@@ -186,11 +203,10 @@ export function applyProductOverride(
       override.purchaseStrategy === "exact_need"
         ? override.purchaseStrategy
         : base.purchaseStrategy,
-    unit: (override.unit as AmountUnit) ?? base.unit,
-    defaultAmount:
-      override.defaultAmount != null && override.defaultAmount > 0
-        ? override.defaultAmount
-        : base.defaultAmount,
+    unit: isEggPackStaple(base)
+      ? "ea"
+      : ((override.unit as AmountUnit) ?? base.unit),
+    defaultAmount: eggOverrideAmount(base, override),
     tolerancePercent:
       override.tolerancePercent != null && override.tolerancePercent >= 0
         ? override.tolerancePercent

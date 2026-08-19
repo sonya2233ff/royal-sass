@@ -406,6 +406,18 @@ async function main() {
     eggCartonCountOk(dozen, "GRAY RIDGE - EGGS WHITE LARGE 1DOZ") === true,
     "dozen treats 1DOZ as 12",
   );
+  assert(
+    eggCartonCountOk(dozen, "GRAY RIDGE - EGGS WHITE LARGE 15x1 DOZ") === true,
+    "dozen keeps 15×1 dozen wholesale case",
+  );
+  assert(
+    eggCartonCountOk(
+      grayridge,
+      "GRAY RIDGE - WHITE EGGS EXTRA LARGE 10x18EA",
+      "10x18EA",
+    ) === true,
+    "grayridge keeps 10×18 case of 18-count cartons",
+  );
 
   const shown = cfg.items.filter(isShownStaple);
   assert(shown.length >= 125, `shown staples ${shown.length}`);

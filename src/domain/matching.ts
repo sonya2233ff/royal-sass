@@ -1,5 +1,10 @@
 import type { ProductOffer } from "@/connectors/types";
-import { scoreMassMatch, resolveUnitPrices, parsePackCount } from "@/domain/units";
+import {
+  scoreMassMatch,
+  resolveUnitPrices,
+  parseCountPack,
+  parsePackCount,
+} from "@/domain/units";
 import { extractBarcodes, packMassKg, upcsMatch } from "@/domain/fair-compare";
 
 const STOP = new Set([
@@ -213,7 +218,8 @@ export function pickCheapestOffer(
     if (rawScore === -Infinity && opts?.requireQueryMatch) continue;
     const matchScore = rawScore === -Infinity ? 0 : rawScore;
 
-    const count = parsePackCount(offer.name, offer.packageSize);
+    const parsed = parseCountPack(offer.name, offer.packageSize);
+    const count = parsed?.totalCount ?? parsePackCount(offer.name, offer.packageSize);
     if (opts?.byEach) {
       const each =
         count && count > 0

@@ -16,12 +16,15 @@ import {
   catalogOfferFromLive,
   defaultNeededGrams,
   isSoldByWeightItem,
+  isEggPackItem,
+  eggCartonCountOk,
   resolveMatchMode,
   explicitNeededGrams,
   type CatalogOffer,
   type MatchLogEntry,
 } from "@/lib/staples";
-import { offerIsOnShelf, resolveCatalogOffer } from "@/domain/compare-resolve";
+import { offerIsOnShelf, resolveCatalogOffer, catalogCandidates } from "@/domain/compare-resolve";
+import { pickCheapestCoveringOffer } from "@/domain/checkout";
 import { buildStapleCompareRow } from "@/lib/staple-compare-row";
 import {
   mergeLivePackSizes,
@@ -49,6 +52,21 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
+
+function coveringEggOffer(
+  item: { id: string; category?: string },
+  product: Parameters<typeof pickCheapestCoveringOffer>[0],
+  requested: number,
+  row: Parameters<typeof catalogCandidates>[0],
+  fallback: CatalogOffer | null,
+): CatalogOffer | null {
+  if (!isEggPackItem(item) || !row) return fallback;
+  const pool = catalogCandidates(row)
+    .filter(offerIsOnShelf)
+    .filter((o) => eggCartonCountOk(item, o.name, o.packageSize));
+  const picked = pickCheapestCoveringOffer(product, requested, pool);
+  return picked ? toCatalogOffer(picked) : fallback;
+}
 
 function toCatalogOffer(
   offer: {
@@ -781,21 +799,77 @@ export async function POST(request: Request) {
         (mvrEval.status === "ok" || mvrEval.status === "stale"),
     );
 
+    const wmCompare = coveringEggOffer(
+      item,
+      product,
+      requestedAmount,
+      wmRow,
+      wmUsable ? wmOffer : null,
+    );
+    const nfCompare = coveringEggOffer(
+      item,
+      product,
+      requestedAmount,
+      nfRow,
+      nfUsable ? nfCatalogOffer : null,
+    );
+    const wcCompare = coveringEggOffer(
+      item,
+      product,
+      requestedAmount,
+      wcRow,
+      wcUsable ? wcCatalogOffer : null,
+    );
+    const mvrCompare = coveringEggOffer(
+      item,
+      product,
+      requestedAmount,
+      mvrRow,
+      mvrUsable ? mvrCatalogOffer : null,
+    );
+    const wmEggEval = wmCompare
+      ? evaluateOfferStatus(item, wmCompare, {
+          unavailable: item.unavailableAtWalmart,
+          catalogStatus: wmRow?.status,
+        })
+      : wmEval;
+    const nfEggEval = nfCompare
+      ? evaluateOfferStatus(item, nfCompare, { catalogStatus: nfRow?.status })
+      : nfEval;
+    const wcEggEval = wcCompare
+      ? evaluateOfferStatus(item, wcCompare, { catalogStatus: wcRow?.status })
+      : wcEval;
+    const mvrEggEval = mvrCompare
+      ? evaluateOfferStatus(item, mvrCompare, { catalogStatus: mvrRow?.status })
+      : mvrEval;
+    const wmEggUsable = Boolean(
+      wmCompare && (wmEggEval.status === "ok" || wmEggEval.status === "stale"),
+    );
+    const nfEggUsable = Boolean(
+      nfCompare && (nfEggEval.status === "ok" || nfEggEval.status === "stale"),
+    );
+    const wcEggUsable = Boolean(
+      wcCompare && (wcEggEval.status === "ok" || wcEggEval.status === "stale"),
+    );
+    const mvrEggUsable = Boolean(
+      mvrCompare && (mvrEggEval.status === "ok" || mvrEggEval.status === "stale"),
+    );
+
     rows.push(
       buildStapleCompareRow({
         item,
-        wmOffer: wmUsable ? wmOffer : null,
-        nfOffer: nfUsable ? nfCatalogOffer : null,
-        wcOffer: wcUsable ? wcCatalogOffer : null,
-        mvrOffer: mvrUsable ? mvrCatalogOffer : null,
-        wmEval,
-        nfEval,
-        wcEval,
-        mvrEval,
-        wmUsable,
-        nfUsable,
-        wcUsable,
-        mvrUsable,
+        wmOffer: wmEggUsable ? wmCompare : null,
+        nfOffer: nfEggUsable ? nfCompare : null,
+        wcOffer: wcEggUsable ? wcCompare : null,
+        mvrOffer: mvrEggUsable ? mvrCompare : null,
+        wmEval: wmEggEval,
+        nfEval: nfEggEval,
+        wcEval: wcEggEval,
+        mvrEval: mvrEggEval,
+        wmUsable: wmEggUsable,
+        nfUsable: nfEggUsable,
+        wcUsable: wcEggUsable,
+        mvrUsable: mvrEggUsable,
         grams,
         qty,
         requestedAmount,
