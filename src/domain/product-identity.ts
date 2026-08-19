@@ -1,9 +1,10 @@
 /**
  * Identity checks independent of how much we buy.
  */
-import { packsSimilar } from "@/domain/fair-compare";
 import { nameMatchesFilterToken } from "@/domain/catalog-normalize";
+import { identityKeywords } from "@/domain/pack-tokens";
 import { parseMassKg, parseVolumeMl } from "@/domain/purchase-units";
+import { isComparablePackKg } from "@/domain/sanity";
 import type { RestaurantProduct } from "@/domain/restaurant-product";
 import {
   isActualCategoryBOffer,
@@ -64,13 +65,13 @@ function keywordsPass(product: RestaurantProduct, text: string): string | null {
   for (const n of rules.mustNotInclude ?? []) {
     if (n && hasToken(text, n)) return `mustNotInclude: ${n}`;
   }
-  if (rules.mustIncludeAll?.length) {
-    for (const n of rules.mustIncludeAll) {
-      if (n && !hasToken(text, n)) return `mustIncludeAll missing: ${n}`;
-    }
+  const mustAll = identityKeywords(rules.mustIncludeAll);
+  for (const n of mustAll) {
+    if (!hasToken(text, n)) return `mustIncludeAll missing: ${n}`;
   }
-  if (rules.mustIncludeAny?.length) {
-    const ok = rules.mustIncludeAny.some((n) => n && hasToken(text, n));
+  const mustAny = identityKeywords(rules.mustIncludeAny);
+  if (mustAny.length) {
+    const ok = mustAny.some((n) => hasToken(text, n));
     if (!ok) return "mustIncludeAny";
   }
   if (rules.productType && !hasToken(text, rules.productType)) {
@@ -88,16 +89,15 @@ function sizeCompatible(
   if (!exact) return null;
   const text = `${offer.name} ${offer.packageSize ?? ""}`;
   const want = `${product.label} ${product.preferredProductId ?? ""}`;
+  // Card litres (2.63L vs store 1.36L) are not identity — only mini packs are.
   const wantL = parseVolumeMl(want);
   const gotL = parseVolumeMl(text);
-  if (wantL && gotL) {
-    const a = wantL / 1000;
-    const b = gotL / 1000;
-    if (!packsSimilar(a, b, 0.08)) return `size ${gotL}ml ≠ ${wantL}ml`;
+  if (wantL && gotL && !isComparablePackKg(gotL / 1000, wantL / 1000)) {
+    return `size ${gotL}ml ≠ ${wantL}ml`;
   }
   const wantKg = parseMassKg(want);
   const gotKg = parseMassKg(text) ?? offer.parsedMassKg ?? null;
-  if (wantKg && gotKg && !packsSimilar(wantKg, gotKg, 0.08)) {
+  if (wantKg && gotKg != null && !isComparablePackKg(gotKg, wantKg)) {
     return `size ${gotKg}kg ≠ ${wantKg}kg`;
   }
   if (/\bextra\s*large\b/.test(text) && /\blarge\b/.test(product.label.toLowerCase()) && !/\bextra\b/.test(product.label.toLowerCase())) {

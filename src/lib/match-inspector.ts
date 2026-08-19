@@ -37,7 +37,7 @@ import {
   stapleBrandHint,
   upcFromOffer,
 } from "@/domain/catalog-normalize";
-import { scoreOfferMatch, pickBestOffer } from "@/domain/matching";
+import { scoreOfferMatch, pickBestOffer, staplePickQuery } from "@/domain/matching";
 import { parseMassFromText } from "@/domain/units";
 import {
   loadRetailerMappings,
@@ -520,7 +520,12 @@ export async function runMatchInspect(input: {
   const item = input.stapleId
     ? cfg.items.find((i) => i.id === input.stapleId)
     : undefined;
-  const originalQuery = (input.query ?? item?.queries[0] ?? item?.label ?? "").trim();
+  const originalQuery = (
+    input.query?.trim() ||
+    (item ? staplePickQuery(item) : "") ||
+    item?.label ||
+    ""
+  ).trim();
   const live = input.live !== false;
   const includeRaw = input.includeRaw !== false;
   const retailers = input.retailers?.filter(isInspectorRetailer).length

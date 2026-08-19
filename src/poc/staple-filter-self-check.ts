@@ -7,6 +7,7 @@ import {
   categoryBSearchQueries,
   offerFailsStapleFilters,
   offerFailsStapleOfferFilters,
+  stapleBrandHint,
 } from "@/domain/catalog-normalize";
 import { isActualCategoryBOffer } from "@/domain/same-packed-item";
 import {
@@ -22,8 +23,10 @@ import {
   resolveCatalogOffer,
 } from "@/domain/compare-resolve";
 import { pickCheapestCoveringOffer } from "@/domain/checkout";
-import { toRestaurantProduct, stapleWithClientOverride } from "@/domain/restaurant-product";
+import { toRestaurantProduct, stapleWithClientOverride, applyProductOverride } from "@/domain/restaurant-product";
 import { sanityCheckOffer } from "@/domain/sanity";
+import { scoreOfferMatch, staplePickQuery } from "@/domain/matching";
+import { identityKeywords, isPackSizeKeyword } from "@/domain/pack-tokens";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -615,10 +618,98 @@ async function main() {
     "no override returns the same staple",
   );
 
+  const mergedOj = stapleWithClientOverride(oj!, {
+    matchMode: "exact",
+    matchRules: { mustIncludeAny: ["orange juice"] },
+  });
+  assert(
+    mergedOj.mustIncludeAny?.some((t) => /tropicana|no pulp|pulp/i.test(t)),
+    "settings include must keep catalog tropicana/no-pulp filters",
+  );
+  assert(
+    mergedOj.mustIncludeAny?.some((t) => /orange juice/i.test(t)),
+    "settings include is added to catalog filters",
+  );
+
+  const uiOj = applyProductOverride(toRestaurantProduct(oj!), {
+    matchRules: { mustIncludeAny: ["orange juice"] },
+  });
+  assert(
+    uiOj.matchRules?.mustIncludeAny?.some((t) => /tropicana/i.test(t)) &&
+      uiOj.matchRules?.mustIncludeAny?.some((t) => /orange juice/i.test(t)),
+    "product settings merge include with catalog, they do not replace it",
+  );
+
+  assert(
+    offerFailsStapleFilters(
+      {
+        id: "orange_juice_pulp",
+        mustIncludeAny: ["tropicana", "2.63L", "2.63"],
+      },
+      "Tropicana Pulp Free",
+      "Tropicana",
+    ) == null,
+    "pack-size include tokens must not reject titles that omit litres",
+  );
+  assert(
+    offerFailsStapleFilters(
+      {
+        id: "cups",
+        mustIncludeAll: ["ripple", "12oz"],
+      },
+      "BLACK RIPPLE WALL CUP",
+      "Maher",
+    ) == null,
+    "12oz as mustIncludeAll must not reject titles that omit ounces",
+  );
+  assert(
+    identityKeywords(["tropicana", "12oz", "2.63L", "ripple"]).join(",") ===
+      "tropicana,ripple",
+    "identityKeywords drops pack sizes",
+  );
+  assert(isPackSizeKeyword("2.63L") && isPackSizeKeyword("5x1"), "pack keywords");
+
   const ojQs = categoryBSearchQueries(oj!);
   assert(
     ojQs[0]?.toLowerCase().includes("tropicana"),
     `OJ search starts with tropicana query, got ${ojQs[0]}`,
+  );
+
+  const pickQCups = staplePickQuery({
+    label: "12oz Black Ripple Cups",
+    queries: ["12oz Black Ripple Cups"],
+  });
+  assert(
+    !/12oz|12\s*oz/i.test(pickQCups),
+    `pick query must strip pack size from labels, got "${pickQCups}"`,
+  );
+
+  const labelMisses: string[] = [];
+  for (const item of cfg.items.filter(isShownStaple)) {
+    const cheapest = resolveMatchMode(item) === "cheapest";
+    const pickQ = staplePickQuery(item, cheapest);
+    const textQuery = item.queries.find((q) => q && !/^\d+$/.test(q.trim()));
+    if (!cheapest && textQuery && pickQ === item.label && pickQ !== textQuery) {
+      labelMisses.push(`${item.id} exact pick query fell back to card label`);
+    }
+    const hit = {
+      retailer: "walmart_ca" as const,
+      storeId: "5831",
+      productId: `${item.id}-probe`,
+      name: pickQ,
+      brand: stapleBrandHint(item) ?? item.label.split(/\s+/)[0],
+      price: 8,
+      availability: "in_stock" as const,
+      confidence: "exact" as const,
+      checkedAt: "2026-01-01T00:00:00.000Z",
+    };
+    if (scoreOfferMatch(hit, pickQ) === -Infinity) {
+      labelMisses.push(`${item.id} rejects its own pick query "${pickQ}"`);
+    }
+  }
+  assert(
+    labelMisses.length === 0,
+    `staple pick queries must accept their own search titles:\n${labelMisses.join("\n")}`,
   );
 
   console.log("staple-filter-self-check ok");

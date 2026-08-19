@@ -5,7 +5,7 @@ import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
 import { isEggPackStaple } from "@/domain/egg-pack";
-import { pickBestOffer } from "@/domain/matching";
+import { pickBestOffer, staplePickQuery } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
 import {
   canonicalizeMatchMode,
@@ -802,27 +802,7 @@ export async function appendMatchLog(entries: MatchLogEntry[]): Promise<string> 
 }
 
 function matchQueryForPick(item: StapleItem): string {
-  // Mehadrin often listed as "Kosher … Milk" at No Frills (brand omitted).
-  if (item.id === "milk_2pct_2l") return "kosher 2% milk 2l";
-  if (item.id === "homo_milk_2l" || item.id === "homo_milk") {
-    return "kosher homogenized milk 2l";
-  }
-  if (resolveMatchMode(item) === "cheapest") {
-    // Identity already filtered the pool. Rank by price with a short fruit
-    // token — not "blueberries fresh", which used to drop cheaper packs
-    // that omit the word "fresh".
-    return (
-      item.mustIncludeAny?.[0] ??
-      item.queries.find((q) => q && !/^\d+$/.test(q)) ??
-      item.label
-    );
-  }
-  // Never score against the card label: "Tropicana OJ No Pulp 2.63L" requires
-  // the token "oj" and splits 2.63L into "63l", so retailer titles miss.
-  return (
-    item.queries.find((q) => q && !/^\d+$/.test(q)) ??
-    item.label
-  );
+  return staplePickQuery(item, resolveMatchMode(item) === "cheapest");
 }
 
 function passesFilters(

@@ -4,6 +4,10 @@
  */
 import { extractBarcodes, packMassKg } from "@/domain/fair-compare";
 import { normalizeName, type ProductRecord } from "@/domain/entity-match";
+import {
+  identityKeywords,
+  stripPackNoise,
+} from "@/domain/pack-tokens";
 
 export const NOFRILLS_RETAILER = "nofrills";
 export const WALMART_RETAILER = "walmart_ca";
@@ -150,7 +154,9 @@ export function categoryBSearchQueries(
     add(warehouseWordOrder(cleaned));
   }
   for (const p of item.mustIncludeAny ?? []) add(p);
-  if (item.label) add(cleanSearchQuery(item.label.replace(/[()]/g, " ")));
+  if (item.label) {
+    add(stripPackNoise(cleanSearchQuery(item.label.replace(/[()]/g, " "))));
+  }
   return out.slice(0, cap);
 }
 
@@ -292,16 +298,16 @@ export function offerFailsStapleFilters(
   for (const bad of banned) {
     if (bad && nameMatchesFilterToken(n, bad)) return `mustNotInclude:${bad}`;
   }
-  const all = item.mustIncludeAll ?? [];
+  const all = identityKeywords(item.mustIncludeAll);
   for (const need of all) {
-    if (need && !nameMatchesFilterPhrase(n, need, splitAcrossFields)) {
+    if (!nameMatchesFilterPhrase(n, need, splitAcrossFields)) {
       return `mustIncludeAll:${need}`;
     }
   }
-  const any = item.mustIncludeAny ?? [];
+  const any = identityKeywords(item.mustIncludeAny);
   if (
     any.length > 0 &&
-    !any.some((s) => s && nameMatchesFilterPhrase(n, s, splitAcrossFields))
+    !any.some((s) => nameMatchesFilterPhrase(n, s, splitAcrossFields))
   ) {
     return "mustIncludeAny";
   }

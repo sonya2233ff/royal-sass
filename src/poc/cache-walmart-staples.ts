@@ -8,7 +8,7 @@ import path from "node:path";
 import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
-import { pickBestOffer, pickCheapestOffer } from "@/domain/matching";
+import { pickBestOffer, pickCheapestOffer, staplePickQuery } from "@/domain/matching";
 import {
   formatMass,
   parseMassFromText,
@@ -91,12 +91,12 @@ function passesFilters(o: ProductOffer, item: StapleItem): boolean {
 
 function scoreStaple(o: ProductOffer, item: StapleItem): number {
   let score = 0;
-  const match = pickBestOffer([o], item.label);
+  const match = pickBestOffer([o], staplePickQuery(item));
   if (match) score += 10;
   else {
     const n = o.name.toLowerCase();
     for (const t of item.label.toLowerCase().split(/\s+/)) {
-      if (t.length > 3 && n.includes(t)) score += 2;
+      if (t.length > 3 && !/^\d/.test(t) && n.includes(t)) score += 2;
     }
   }
   if (item.targetMassKg != null) score += scoreMassMatch(o, item.targetMassKg);
@@ -140,12 +140,7 @@ function pickForStaple(
     item.category === "frozen" ||
     item.category === "eggs";
 
-  const pickQuery =
-    cheapest
-      ? (item.mustIncludeAny?.[0] ??
-        item.queries.find((q) => q && !/^\d+$/.test(q)) ??
-        item.label)
-      : (item.queries.find((q) => q && !/^\d+$/.test(q)) ?? item.label);
+  const pickQuery = staplePickQuery(item, cheapest);
 
   if (cheapest) {
     return (
@@ -166,7 +161,7 @@ function pickForStaple(
   }
 
   return (
-    pickBestOffer(pool, item.label, item.preferredProductId, {
+    pickBestOffer(pool, pickQuery, item.preferredProductId, {
       targetMassKg: item.targetMassKg,
     }) ?? null
   );

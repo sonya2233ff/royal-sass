@@ -176,6 +176,35 @@ assert(
   `card label 2.63L must not hard-reject Tropicana Pulp Free, got ${tropicanaVsCardLabel}`,
 );
 
+const cupsVsLabel = scoreOfferMatch(
+  offer({
+    productId: "maher-12oz-black-ripple",
+    name: "12 OZ BLACK RIPPLE WALL CUP",
+    brand: "Maher",
+    price: 4.5,
+  }),
+  "12oz Black Ripple Cups",
+);
+assert(
+  cupsVsLabel > 0 && cupsVsLabel !== -Infinity,
+  `12oz card label must not hard-reject ripple cups, got ${cupsVsLabel}`,
+);
+
+const milkVsLabel = scoreOfferMatch(
+  offer({
+    productId: "milk-homo",
+    name: "Homogenized Milk 3.25%",
+    brand: "Mehadrin",
+    price: 6.5,
+    packageSize: "2 l",
+  }),
+  "Mehadrin Homo 3.25% Milk 2L",
+);
+assert(
+  milkVsLabel > 0 && milkVsLabel !== -Infinity,
+  `3.25% card label must not hard-reject homogenized milk, got ${milkVsLabel}`,
+);
+
 const tropicana263 = pickBestOffer(
   [
     offer({

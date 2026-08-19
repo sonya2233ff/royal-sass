@@ -44,7 +44,7 @@ import { searchMvrPool } from "@/lib/mvr-observe";
 import { recordCompareResult } from "@/lib/compare-stats";
 import { parseOverrideMap, effectiveProduct } from "@/lib/product-config";
 import { offerFailsStapleOfferFilters } from "@/domain/catalog-normalize";
-import type { Cart } from "@/domain/restaurant-product";
+import { stapleWithClientOverride, type Cart } from "@/domain/restaurant-product";
 import {
   completeBasketWinner,
   storeCoverage,
@@ -153,20 +153,14 @@ export async function POST(request: Request) {
   let mvrCacheHits = 0;
 
   for (const id of wanted) {
-    const item = byId.get(id);
-    if (!item) continue;
+    const raw = byId.get(id);
+    if (!raw) continue;
 
+    const ov = overrides[id];
     const conf = lookupConfirmed(confirmed, id);
+    const item = stapleWithClientOverride({ ...raw }, ov);
     if (conf?.productId) {
       item.preferredProductId = conf.productId;
-    }
-    const ov = overrides[id];
-    if (ov?.matchMode) item.matchMode = ov.matchMode;
-    if (ov?.preferredProductId) item.preferredProductId = ov.preferredProductId;
-    if (ov?.matchRules) {
-      item.mustIncludeAll = ov.matchRules.mustIncludeAll ?? item.mustIncludeAll;
-      item.mustIncludeAny = ov.matchRules.mustIncludeAny ?? item.mustIncludeAny;
-      item.mustNotInclude = ov.matchRules.mustNotInclude ?? item.mustNotInclude;
     }
 
     const mode = resolveMatchMode(item);

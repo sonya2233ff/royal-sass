@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import { parseMassFromText } from "@/domain/units";
+import { identityKeywords } from "@/domain/pack-tokens";
 import {
   isShownStaple,
   loadNoFrillsCatalog,
@@ -101,7 +102,7 @@ export async function POST(request: Request) {
     id,
     label: name.replace(/\s+/g, " ").slice(0, 80),
     queries: [name],
-    mustIncludeAny: tokens(name).slice(0, 2),
+    mustIncludeAny: identityKeywords(tokens(name)).slice(0, 2),
     preferredProductId: retailer === "walmart_ca" ? productId : undefined,
     minPlausiblePrice: Math.max(0.5, Math.round(price * 0.4 * 100) / 100),
     maxPlausiblePrice: Math.round(price * 2.5 * 100) / 100,

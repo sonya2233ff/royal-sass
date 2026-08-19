@@ -111,6 +111,24 @@ export function inferDefaultAmount(item: StapleLike, unit: AmountUnit): number {
   return 1;
 }
 
+function mergeKeywords(
+  ...lists: Array<readonly string[] | undefined>
+): string[] | undefined {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const list of lists) {
+    for (const raw of list ?? []) {
+      const t = raw.trim();
+      if (!t) continue;
+      const key = t.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(t);
+    }
+  }
+  return out.length ? out : undefined;
+}
+
 export function toRestaurantProduct(item: StapleLike): RestaurantProduct {
   const matchMode = inferMatchMode(item);
   const unit = inferUnit(item);
@@ -121,12 +139,19 @@ export function toRestaurantProduct(item: StapleLike): RestaurantProduct {
       : DEFAULT_TOLERANCE_PERCENT;
   const matchRules: MatchRules = {
     ...(item.matchRules ?? {}),
-    mustIncludeAll: item.matchRules?.mustIncludeAll ?? item.mustIncludeAll,
-    mustIncludeAny: item.matchRules?.mustIncludeAny ?? item.mustIncludeAny,
-    mustNotInclude: [
-      ...(item.matchRules?.mustNotInclude ?? item.mustNotInclude ?? []),
-      ...(item.rejectNameIncludes ?? []),
-    ].filter(Boolean),
+    mustIncludeAll: mergeKeywords(
+      item.matchRules?.mustIncludeAll,
+      item.mustIncludeAll,
+    ),
+    mustIncludeAny: mergeKeywords(
+      item.matchRules?.mustIncludeAny,
+      item.mustIncludeAny,
+    ),
+    mustNotInclude: mergeKeywords(
+      item.matchRules?.mustNotInclude,
+      item.mustNotInclude,
+      item.rejectNameIncludes,
+    ),
   };
   const product: RestaurantProduct = {
     id: item.id,
@@ -193,6 +218,18 @@ export function applyProductOverride(
   const matchRules = {
     ...(base.matchRules ?? {}),
     ...(override.matchRules ?? {}),
+    mustIncludeAny: mergeKeywords(
+      base.matchRules?.mustIncludeAny,
+      override.matchRules?.mustIncludeAny,
+    ),
+    mustIncludeAll: mergeKeywords(
+      base.matchRules?.mustIncludeAll,
+      override.matchRules?.mustIncludeAll,
+    ),
+    mustNotInclude: mergeKeywords(
+      base.matchRules?.mustNotInclude,
+      override.matchRules?.mustNotInclude,
+    ),
   };
   const next: RestaurantProduct = {
     ...base,
@@ -234,9 +271,26 @@ export function stapleWithClientOverride<T extends StapleLike>(
   const rules = override.matchRules;
   if (rules) {
     next.matchRules = { ...(item.matchRules ?? {}), ...rules };
-    if (rules.mustIncludeAny) next.mustIncludeAny = rules.mustIncludeAny;
-    if (rules.mustIncludeAll) next.mustIncludeAll = rules.mustIncludeAll;
-    if (rules.mustNotInclude) next.mustNotInclude = rules.mustNotInclude;
+    next.mustIncludeAny = mergeKeywords(
+      item.mustIncludeAny,
+      item.matchRules?.mustIncludeAny,
+      rules.mustIncludeAny,
+    );
+    next.mustIncludeAll = mergeKeywords(
+      item.mustIncludeAll,
+      item.matchRules?.mustIncludeAll,
+      rules.mustIncludeAll,
+    );
+    next.mustNotInclude = mergeKeywords(
+      item.mustNotInclude,
+      item.matchRules?.mustNotInclude,
+      rules.mustNotInclude,
+    );
+    if (next.matchRules) {
+      next.matchRules.mustIncludeAny = next.mustIncludeAny;
+      next.matchRules.mustIncludeAll = next.mustIncludeAll;
+      next.matchRules.mustNotInclude = next.mustNotInclude;
+    }
     const typeQ = rules.productType?.trim();
     const liveMode =
       mode ?? canonicalizeMatchMode(item.matchMode) ?? inferMatchMode(item);

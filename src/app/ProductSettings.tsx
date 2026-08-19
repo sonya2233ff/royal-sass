@@ -12,6 +12,7 @@ import {
   EGG_COUNT_PRESETS,
   isEggPackStaple,
 } from "@/domain/egg-pack";
+import { isPackSizeKeyword } from "@/domain/pack-tokens";
 
 type Props = {
   product: RestaurantProduct;
@@ -101,7 +102,7 @@ export function ProductSettings({
         mustIncludeAny: include
           .split(",")
           .map((s) => s.trim())
-          .filter(Boolean),
+          .filter((s) => s && !isPackSizeKeyword(s)),
         mustNotInclude: exclude
           .split(",")
           .map((s) => s.trim())
@@ -135,9 +136,10 @@ export function ProductSettings({
             <option value="cheapest_equivalent">Найдешевший відповідний</option>
           </select>
           <span className="ps-hint">
-            Точний продукт = бренд/SKU (для Tropicana 2.63 пиши tropicana у Include).
-            Розмір 2.63L часто немає в назві Walmart — його тримає locked SKU, не ключове слово.
-            Найдешевший відповідний ігнорує бренд і візьме будь-який сік.
+            Точний продукт тримає бренд і SKU. Розмір пачки (2.63L, 12oz, 1kg)
+            не є обовʼязковим словом — магазини часто не пишуть його в назві.
+            Include додає слова до фільтрів з каталогу, не замінює бренд.
+            Найдешевший відповідний ігнорує бренд.
           </span>
         </label>
         <label>

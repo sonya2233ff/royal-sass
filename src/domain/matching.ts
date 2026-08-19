@@ -6,6 +6,7 @@ import {
   parsePackCount,
 } from "@/domain/units";
 import { extractBarcodes, packMassKg, upcsMatch } from "@/domain/fair-compare";
+import { isPackSizeKeyword, stripPackNoise } from "@/domain/pack-tokens";
 
 const STOP = new Set([
   "the",
@@ -26,7 +27,7 @@ const STOP = new Set([
   "oj",
 ]);
 
-/** Size / unit tokens are soft preferences, not hard requirements. */
+/** Size / unit / marketing tokens are soft preferences, not hard identity. */
 const SOFT = new Set([
   "4l",
   "3l",
@@ -40,13 +41,35 @@ const SOFT = new Set([
   "kg",
   "g",
   "ml",
+  "oz",
+  "ounce",
+  "ounces",
+  "fl",
+  "floz",
+  "lb",
+  "lbs",
+  "ct",
+  "count",
   "dozen",
+  "doz",
   "12",
   "ea",
   "each",
   "1kg",
   "500g",
   "1000g",
+  "litre",
+  "liter",
+  "litres",
+  "liters",
+  "gram",
+  "grams",
+  "percent",
+  "pct",
+  "pure",
+  "premium",
+  "original",
+  "classic",
   // Produce search often adds "fresh"; conventional packs rarely say it.
   "fresh",
   "pint",
@@ -83,9 +106,53 @@ function tokens(text: string): string[] {
     .filter((t) => t.length > 0 && !STOP.has(t));
 }
 
-/** "2.63L" → tokens 2 + 63l. Size fragments are preferences, not identity. */
-function isSoftQueryToken(t: string): boolean {
-  return SOFT.has(t) || /^\d/.test(t);
+/** "2.63L" → 2 + 63l. Size, units, and 1–2 letter abbreviations are not identity. */
+export function isSoftQueryToken(t: string): boolean {
+  if (SOFT.has(t)) return true;
+  if (/^\d/.test(t)) return true;
+  if (t.length <= 2) return true;
+  if (/^\d+[a-z]+$/.test(t)) return true;
+  return false;
+}
+
+/**
+ * Query used to rank live/catalog hits. Never the cafe card label — labels
+ * pack size and abbreviations (OJ, 2.63L, 12oz, 3.25%) that retailer titles omit.
+ */
+export function staplePickQuery(
+  item: {
+    id?: string;
+    label: string;
+    queries?: string[];
+    mustIncludeAny?: string[];
+    matchMode?: string | null;
+    category?: string;
+  },
+  cheapest?: boolean,
+): string {
+  if (item.id === "milk_2pct_2l") return "kosher 2% milk 2l";
+  if (item.id === "homo_milk_2l" || item.id === "homo_milk") {
+    return "kosher homogenized milk 2l";
+  }
+  const cheap =
+    cheapest ??
+    (item.matchMode === "cheapest" ||
+      item.matchMode === "cheapest_equivalent" ||
+      item.category === "produce" ||
+      item.category === "frozen" ||
+      item.category === "eggs");
+  const textQuery = (item.queries ?? []).find(
+    (q) => q && !/^\d+$/.test(q.trim()) && !isPackSizeKeyword(q),
+  );
+  const scoringText = (q: string) => stripPackNoise(q) || q.trim();
+  if (cheap) {
+    const fruit = item.mustIncludeAny?.find(
+      (t) => t && t.trim().length >= 3 && !isPackSizeKeyword(t),
+    );
+    if (fruit) return fruit.trim();
+    return scoringText(textQuery ?? item.label);
+  }
+  return scoringText(textQuery ?? item.label);
 }
 
 function tokenHit(needle: string, hay: string[]): boolean {

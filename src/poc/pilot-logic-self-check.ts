@@ -329,9 +329,46 @@ const vodka = product({
 assert(
   !offerMatchesIdentity({
     product: vodka,
-    offer: offer("Smirnoff Vodka 946 ml", { packageSize: "946 ml" }),
+    offer: offer("Smirnoff Vodka 200 ml", { packageSize: "200 ml" }),
   }).ok,
-  "exact 1.75L != 946ml",
+  "exact 1.75L rejects mini 200ml",
+);
+assert(
+  offerMatchesIdentity({
+    product: vodka,
+    offer: offer("Smirnoff Vodka 1.14 L", { packageSize: "1.14 L" }),
+  }).ok,
+  "exact vodka still accepts a smaller cafe bottle",
+);
+
+const tropicana = product({
+  id: "orange_juice_pulp",
+  label: "Tropicana OJ No Pulp 2.63L",
+  matchMode: "exact",
+  unit: "l",
+  matchRules: {
+    mustIncludeAny: ["tropicana", "no pulp", "pulp free"],
+  },
+});
+assert(
+  offerMatchesIdentity({
+    product: tropicana,
+    offer: offer("Tropicana Pulp Free", {
+      brand: "Tropicana",
+      packageSize: "1.36 l",
+    }),
+  }).ok,
+  "exact Tropicana 2.63L card still matches store 1.36L",
+);
+assert(
+  !offerMatchesIdentity({
+    product: tropicana,
+    offer: offer("Tropicana Pulp Free mini", {
+      brand: "Tropicana",
+      packageSize: "200 ml",
+    }),
+  }).ok,
+  "exact Tropicana still rejects mini 200ml",
 );
 
 const cover = product({

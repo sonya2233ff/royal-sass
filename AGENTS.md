@@ -62,7 +62,7 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 | Quantity | Usually `exact_need` (Tropicana OJ 2.63L is exact brand + `stock_up` 1–2 L) | Either strategy (tomato = exact_need 2 kg) |
 | UI badge | **А** — точний продукт | **Б** — найдешевший відповідний |
 
-`resolveMatchMode`: explicit `item.matchMode` (canonicalized), else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred.
+`resolveMatchMode`: explicit `item.matchMode` (canonicalized), else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred. **Never rank hits with the cafe card label** — size and abbreviations (OJ, 2.63L, 12oz) are not identity. Settings Include/Exclude merge with catalog filters; they do not replace them. Pack-size Include tokens are ignored. Exact identity rejects mini packs only, not a smaller cafe bottle of the same product.
 
 **Category B identity** (`usesCategoryBIdentity` / `isCategoryBStaple`) is **only** `category === "produce" | "frozen"`. Eggs can be cheapest via `EGG_PACK_IDS` without produce-identity filters.
 
