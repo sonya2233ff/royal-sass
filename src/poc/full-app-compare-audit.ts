@@ -357,6 +357,33 @@ async function main() {
     !/baking/i.test(wmNameOf("pam_cookware_coating")),
     `pam must not be baking spray, got ${wmNameOf("pam_cookware_coating")}`,
   );
+  assert(
+    !/2oz|shot cup/i.test(wmNameOf("cups_16oz_pet")),
+    `16oz PET must not be 2oz shot cups, got ${wmNameOf("cups_16oz_pet")}`,
+  );
+  const cream = byId.get("cream_cheese_bars");
+  assert(cream, "cream cheese bars");
+  assert(
+    !/mozzarella/i.test(
+      String((cream!.wholesaleClub as { name?: string } | undefined)?.name ?? ""),
+    ),
+    `cream cheese bars WC must not be mozzarella, got ${(cream!.wholesaleClub as { name?: string } | undefined)?.name}`,
+  );
+  assert(
+    !/light brown|golden yellow/i.test(wmNameOf("brown_sugar")),
+    `dark brown sugar must not be light brown, got ${wmNameOf("brown_sugar")}`,
+  );
+  assert(
+    !/11\.02|mini mitt/i.test(wmNameOf("oven_mitts")),
+    `oven mitt must not be 11in consumer, got ${wmNameOf("oven_mitts")}`,
+  );
+  assert(
+    !/284\s*ml/i.test(
+      String((byId.get("mushrooms_sliced")?.noFrills as { name?: string } | undefined)?.name ?? "") +
+        String((byId.get("mushrooms_sliced")?.noFrills as { packageSize?: string } | undefined)?.packageSize ?? ""),
+    ),
+    "sliced mushrooms NF must not be canned 284 ml",
+  );
 
   const complete = rows.filter((r) => r.cheaper !== "incomplete");
 

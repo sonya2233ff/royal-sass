@@ -2,6 +2,7 @@
  * Identity checks independent of how much we buy.
  */
 import {
+  cafeOfferFormFail,
   cottageCheeseFormFail,
   isCategoryBStaple,
   nameMatchesFilterPhrase,
@@ -117,6 +118,8 @@ function bannedFormMismatch(
   if (variant === "round" && /\brectang/.test(text)) return "round ≠ rectangular";
   const cottageForm = cottageCheeseFormFail(product, text);
   if (cottageForm) return cottageForm;
+  const cafeForm = cafeOfferFormFail(product, text);
+  if (cafeForm) return cafeForm;
   return null;
 }
 

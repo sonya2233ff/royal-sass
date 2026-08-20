@@ -3,7 +3,7 @@
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
   "checkedAt": "2026-08-20T00:31:41.999Z",
-  "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
+  "note": "MVR Cash & Carry 3655 Weston Rd \u2014 INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -624,7 +624,7 @@
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088202p.jpg?v=1786638377",
         "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE \u00b7 3655 Weston Rd",
       "alternates": []
     },
     {
@@ -646,7 +646,7 @@
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088219p.jpg?v=1785562350",
         "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE \u00b7 3655 Weston Rd",
       "alternates": []
     },
     {
@@ -687,7 +687,7 @@
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734205p.jpg?v=1777575335",
         "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE \u00b7 3655 Weston Rd",
       "alternates": [
         {
           "productId": "gray-ridge-eggs-large-brown-18ea",
@@ -1653,7 +1653,7 @@
       "label": "Cottage Cheese",
       "status": "no_match",
       "offer": null,
-      "notes": "Exact Mehadrin cottage cheese is NF #3660 only — do not fill with Great Value / Nordica / No Name / mozzarella",
+      "notes": "Exact Mehadrin cottage cheese is NF #3660 only \u2014 do not fill with Great Value / Nordica / No Name / mozzarella",
       "alternates": []
     },
     {
@@ -1667,143 +1667,10 @@
     {
       "id": "cream_cheese_bars",
       "label": "Cream Cheese Bars",
-      "status": "ok",
-      "offer": {
-        "productId": "elite-dairy-deli-cream-cheese-reg-2kg",
-        "name": "ELITE DAIRY - DELI CREAM CHEESE REG 2KG",
-        "brand": "ELITE DAIRY",
-        "packageSize": "2KG",
-        "parsedMassKg": 2,
-        "price": 23.49,
-        "unitPrice": 11.75,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:27.873Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/elite-dairy-deli-cream-cheese-reg-2kg",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0832670005593p_528f874c-df52-4bc5-b2b1-3663b368c527.jpg?v=1770657441"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "Live MVR SKU price refresh",
-      "alternates": [
-        {
-          "productId": "kraft-heinz-philadelphia-deli-cream-cheese-pail-3kg",
-          "name": "PHILADELPHIA - DELI CREAM CHEESE PAIL 3KG",
-          "brand": "PHILADELPHIA",
-          "packageSize": "3KG",
-          "parsedMassKg": 3,
-          "price": 41.99,
-          "unitPrice": 14,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:32.272Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/kraft-heinz-philadelphia-deli-cream-cheese-pail-3kg?_pos=1&_psq=Cream+Cheese+Bars&_psid=057bfb3f5&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006810001532p.jpg?v=1784895817",
-          "taxonomyText": "CREAM CHEESE & SPREADABLES  CREAM CHEESE & SPREADABLES  REFRIGERATED  CHEESE"
-        },
-        {
-          "productId": "kraft-philadelphia-cream-cheese-1-5kg",
-          "name": "KRAFT - PHILADELPHIA CREAM CHEESE 1.5KG",
-          "brand": "KRAFT",
-          "packageSize": "1.5KG",
-          "parsedMassKg": 1.5,
-          "price": 17.99,
-          "unitPrice": 11.99,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:32.272Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/kraft-philadelphia-cream-cheese-1-5kg?_pos=2&_psq=Cream+Cheese+Bars&_psid=057bfb3f5&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006810001531p_b16b1189-158b-4315-816b-8245a4a4866e.jpg?v=1785933693",
-          "taxonomyText": "CREAM CHEESE & SPREADABLES  CREAM CHEESE & SPREADABLES  REFRIGERATED  CHEESE"
-        },
-        {
-          "productId": "kraft-heinz-philadelphia-cream-cheese-200x18gr",
-          "name": "KRAFT - PHILADELPHIA CREAM CHEESE 200x18GR",
-          "brand": "KRAFT",
-          "packageSize": "200x18GR",
-          "parsedMassKg": 3.5999999999999996,
-          "price": 61.99,
-          "unitPrice": 17.22,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:32.272Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/kraft-heinz-philadelphia-cream-cheese-200x18gr?_pos=4&_psq=Cream+Cheese+Bars&_psid=057bfb3f5&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006810089763p.jpg?v=1782484228",
-          "taxonomyText": "CREAM CHEESE & SPREADABLES  CREAM CHEESE & SPREADABLES  REFRIGERATED  CHEESE"
-        },
-        {
-          "productId": "kraft-philadelphia-original-cream-cheese-227gr",
-          "name": "KRAFT - PHILADELPHIA ORIGINAL CREAM CHEESE 227GR",
-          "brand": "KRAFT",
-          "packageSize": "227GR",
-          "parsedMassKg": 0.227,
-          "price": 5.59,
-          "unitPrice": 24.63,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:32.272Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/kraft-philadelphia-original-cream-cheese-227gr?_pos=5&_psq=Cream+Cheese+Bars&_psid=057bfb3f5&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006810089597p_8986cbea-7b42-4fd1-ac74-4c6f5a2add59.jpg?v=1772738039",
-          "taxonomyText": "CREAM CHEESE & SPREADABLES  CREAM CHEESE & SPREADABLES  REFRIGERATED  CHEESE"
-        },
-        {
-          "productId": "arla-cream-cheese-original-10x200-gr",
-          "name": "TRE STELLE - CREAM CHEESE ORIGINAL 10x200 GR",
-          "brand": "TRE STELLE",
-          "packageSize": "10x200 GR",
-          "parsedMassKg": 2,
-          "price": 39.99,
-          "unitPrice": 20,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:32.272Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/arla-cream-cheese-original-10x200-gr?_pos=7&_psq=Cream+Cheese+Bars&_psid=057bfb3f5&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006046612165p.jpg?v=1777622392",
-          "taxonomyText": "CREAM CHEESE & SPREADABLES  CREAM CHEESE & SPREADABLES  REFRIGERATED  CHEESE"
-        },
-        {
-          "productId": "kraft-philadelphia-cream-cheese-6x1-5-kg",
-          "name": "KRAFT - PHILADELPHIA CREAM CHEESE 6x1.5 KG",
-          "brand": "KRAFT",
-          "packageSize": "6x1.5 KG",
-          "parsedMassKg": 9,
-          "price": 106.99,
-          "unitPrice": 11.89,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:32.272Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/kraft-philadelphia-cream-cheese-6x1-5-kg?_pos=8&_psq=Cream+Cheese+Bars&_psid=057bfb3f5&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006810001531p.jpg?v=1785933645",
-          "taxonomyText": "CREAM CHEESE & SPREADABLES  CREAM CHEESE & SPREADABLES  REFRIGERATED  CHEESE"
-        },
-        {
-          "productId": "kraft-philadelphia-cream-cheese-plain-brick-250gr",
-          "name": "KRAFT - PHILADELPHIA CREAM CHEESE PLAIN BRICK 250GR",
-          "brand": "KRAFT",
-          "packageSize": "250GR",
-          "parsedMassKg": 0.25,
-          "price": 5.59,
-          "unitPrice": 22.36,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:32.272Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/kraft-philadelphia-cream-cheese-plain-brick-250gr?_pos=9&_psq=Cream+Cheese+Bars&_psid=057bfb3f5&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006810001125p.jpg?v=1772737952",
-          "taxonomyText": "CREAM CHEESE & SPREADABLES  CREAM CHEESE & SPREADABLES  REFRIGERATED  CHEESE"
-        },
-        {
-          "productId": "santa-lucia-double-cream-brie-500gr",
-          "name": "SANTA LUCIA - DOUBLE CREAM BRIE 500GR",
-          "brand": "SANTA LUCIA",
-          "packageSize": "500GR",
-          "parsedMassKg": 0.5,
-          "price": 11.49,
-          "unitPrice": 22.98,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:32.272Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/santa-lucia-double-cream-brie-500gr?_pos=10&_psq=Cream+Cheese+Bars&_psid=057bfb3f5&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062778300344p.jpg?v=1786976530",
-          "taxonomyText": "SOFT,SEMISOFT, SEMIHARD CHEESE  SOFT  REFRIGERATED SEMIHARD CHEESE SEMISOFT  CHEESE"
-        }
-      ]
+      "alternates": []
     },
     {
       "id": "brown_sugar",
@@ -1891,141 +1758,22 @@
       "label": "Dome Lids 12-24oz",
       "status": "ok",
       "offer": {
-        "productId": "maher-4oz-portion-cups-20x50-ea",
-        "name": "MAHER PRODUCTS - DOME LIDS YELLOW 8-24OZ 20x50 PK",
-        "brand": "MAHER PRODUCTS",
-        "packageSize": "20x50 PK",
-        "parsedMassKg": 0.6803885550000001,
-        "price": 47.99,
-        "unitPrice": 70.53,
+        "productId": "dart-16-24oz-dome-lid-with-wide-hole-10x100-ea",
+        "name": "DART - 16/24OZ  DOME LID WITH WIDE HOLE 10x100 EA",
+        "brand": "DART",
+        "packageSize": "10x100 EA",
+        "parsedMassKg": 0.1133980925,
+        "price": 66.49,
+        "unitPrice": 586.34,
+        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:28.426Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/maher-4oz-portion-cups-20x50-ea",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300348p_3f1e8900-64f5-45ee-8e74-69e2fcead2c7.jpg?v=1770051912"
+        "checkedAt": "2026-08-18T21:52:33.071Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/dart-16-24oz-dome-lid-with-wide-hole-10x100-ea?_pos=8&_psq=dome+lids+12+24+oz&_psid=e4027a855&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004159499476p.jpg?v=1780298988",
+        "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
       },
       "notes": "Live MVR SKU price refresh",
-      "alternates": [
-        {
-          "productId": "maher-products-dome-lids-green-10oz-20oz-1000pk",
-          "name": "MAHER PRODUCTS - DOME LIDS GREEN 10OZ-20OZ 20x50 PK",
-          "brand": "MAHER PRODUCTS",
-          "packageSize": "20x50 PK",
-          "parsedMassKg": 0.5669904625000001,
-          "price": 47.99,
-          "unitPrice": 84.64,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:33.356Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-dome-lids-green-10oz-20oz-1000pk?_pos=8&_psq=sip+dome+lid&_psid=2855a6918&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300034p.jpg?v=1749470382",
-          "taxonomyText": "PLASTIC LIDS  PLASTIC LIDS  SUPPLIES  CUPS"
-        },
-        {
-          "productId": "maher-products-dome-lid-for-16-20-24oz-clear-cup-100ea",
-          "name": "MAHER PRODUCTS - DOME LID FOR 12-24OZ CLEAR CUP 20x50 PK",
-          "brand": "MAHER PRODUCTS",
-          "packageSize": "20x50 PK",
-          "parsedMassKg": 0.6803885550000001,
-          "price": 40.49,
-          "unitPrice": 59.51,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:33.070Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-dome-lid-for-16-20-24oz-clear-cup-100ea?_pos=1&_psq=dome+lids+12+24+oz&_psid=e4027a855&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300129p_acbad30c-8d29-4829-87fa-78ab522abfa3.jpg?v=1784178159",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "maher-products-dome-lids-white-10oz-20oz-20x50-pk",
-          "name": "MAHER - DOME LIDS WHITE 8-24OZ 20x50 PK",
-          "brand": "MAHER",
-          "packageSize": "20x50 PK",
-          "parsedMassKg": 0.6803885550000001,
-          "price": 40.99,
-          "unitPrice": 60.24,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:33.071Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-dome-lids-white-10oz-20oz-20x50-pk?_pos=3&_psq=dome+lids+12+24+oz&_psid=e4027a855&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300016p_5a3e9005-21b9-49bb-9e4a-d77776a158b8.jpg?v=1778341522",
-          "taxonomyText": "HOT CUPS  HOT CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "maher-products-dome-lids-blue-10oz-20oz-1000pk-1",
-          "name": "MAHER PRODUCTS - DOME LIDS BLUE 8-24OZ 20x50 PK",
-          "brand": "MAHER PRODUCTS",
-          "packageSize": "20x50 PK",
-          "parsedMassKg": 0.6803885550000001,
-          "price": 47.99,
-          "unitPrice": 70.53,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:33.071Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-dome-lids-blue-10oz-20oz-1000pk-1?_pos=4&_psq=dome+lids+12+24+oz&_psid=e4027a855&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/6276030009564p_3b99279c-c136-460f-8cd4-23348721f2ee.jpg?v=1770051807",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "maher-products-dome-lids-brown-10oz-20oz-1000pk-1",
-          "name": "MAHER PRODUCTS - DOME LIDS BROWN 8-24OZ 20x50 PK",
-          "brand": "MAHER PRODUCTS",
-          "packageSize": "20x50 PK",
-          "parsedMassKg": 0.6803885550000001,
-          "price": 47.99,
-          "unitPrice": 70.53,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:33.071Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-dome-lids-brown-10oz-20oz-1000pk-1?_pos=5&_psq=dome+lids+12+24+oz&_psid=e4027a855&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/6276030006044p_168ff0a6-1358-4694-9423-9bf2d1428144.jpg?v=1772131353",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "maher-products-dome-lids-red-10oz-20oz-1000pk",
-          "name": "MAHER PRODUCTS - DOME LIDS RED 8-24OZ 20x50 PK",
-          "brand": "MAHER PRODUCTS",
-          "packageSize": "20x50 PK",
-          "parsedMassKg": 0.6803885550000001,
-          "price": 48.49,
-          "unitPrice": 71.27,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:33.071Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-dome-lids-red-10oz-20oz-1000pk?_pos=6&_psq=dome+lids+12+24+oz&_psid=e4027a855&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062845179346p.jpg?v=1770051916",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "maher-4oz-portion-cups-20x50-ea",
-          "name": "MAHER PRODUCTS - DOME LIDS YELLOW 8-24OZ 20x50 PK",
-          "brand": "MAHER PRODUCTS",
-          "packageSize": "20x50 PK",
-          "parsedMassKg": 0.6803885550000001,
-          "price": 47.99,
-          "unitPrice": 70.53,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:33.071Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/maher-4oz-portion-cups-20x50-ea?_pos=7&_psq=dome+lids+12+24+oz&_psid=e4027a855&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300348p_3f1e8900-64f5-45ee-8e74-69e2fcead2c7.jpg?v=1770051912",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "dart-16-24oz-dome-lid-with-wide-hole-10x100-ea",
-          "name": "DART - 16/24OZ  DOME LID WITH WIDE HOLE 10x100 EA",
-          "brand": "DART",
-          "packageSize": "10x100 EA",
-          "parsedMassKg": 0.1133980925,
-          "price": 66.49,
-          "unitPrice": 586.34,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:33.071Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/dart-16-24oz-dome-lid-with-wide-hole-10x100-ea?_pos=8&_psq=dome+lids+12+24+oz&_psid=e4027a855&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004159499476p.jpg?v=1780298988",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        }
-      ]
+      "alternates": []
     },
     {
       "id": "double_burner",
@@ -3077,7 +2825,7 @@
     },
     {
       "id": "jalapeno_peppers_kg",
-      "label": "Jalapeño Peppers",
+      "label": "Jalape\u00f1o Peppers",
       "status": "ok",
       "offer": {
         "productId": "vegetables-peppers-jalapeno-repack-2-5-lbs",
@@ -3803,7 +3551,7 @@
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114902p_f19b77f7-73bb-420e-83fb-1b64c2474f52.jpg?v=1779721227",
         "taxonomyText": "HERBS  HERBS  PRODUCE NUTS  HERBS"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE \u00b7 3655 Weston Rd",
       "alternates": [
         {
           "productId": "vegetables-parsley-italian-repack-3-ea",
@@ -3993,120 +3741,22 @@
       "label": "Pickled Eggplant",
       "status": "ok",
       "offer": {
-        "productId": "vegetables-eggplant-case-25-lbs",
-        "name": "VEGETABLES - EGGPLANT BUSHEL CASE",
-        "brand": "VEGETABLES",
-        "price": 25.99,
+        "productId": "aurora-eggplant-in-oil-hot-4lt",
+        "name": "AURORA - EGGPLANT IN OIL HOT 4LT",
+        "brand": "AURORA",
+        "packageSize": "4LT",
+        "parsedMassKg": 4,
+        "price": 32.49,
+        "unitPrice": 8.12,
+        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:34.606Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-case-25-lbs",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001254000001p.jpg?v=1786383323"
+        "checkedAt": "2026-08-18T21:53:10.251Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/aurora-eggplant-in-oil-hot-4lt?_pos=1&_psq=Pickled+Eggplant&_psid=c02715d00&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006165900714p_4f367eef-ea90-4881-bf54-11dd346173ff.jpg?v=1782887903",
+        "taxonomyText": "BRUSCHETTA MIX  BRUSCHETTA MIX  PANTRY ESSENTIALS  VEGETABLE SPREADS/PASTES"
       },
       "notes": "Live MVR SKU price refresh",
-      "alternates": [
-        {
-          "productId": "vegetables-eggplant-repack-5-lbs",
-          "name": "VEGETABLES - EGGPLANT REPACK 5LB 5 LBS",
-          "brand": "VEGETABLES",
-          "packageSize": "5LB 5 LBS",
-          "parsedMassKg": 2.2679618500000003,
-          "price": 7.99,
-          "unitPrice": 3.52,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:10.251Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-repack-5-lbs?_pos=7&_psq=Pickled+Eggplant&_psid=c02715d00&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001117894p.jpg?v=1782993516",
-          "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
-        },
-        {
-          "productId": "aurora-eggplant-in-oil-hot-4lt",
-          "name": "AURORA - EGGPLANT IN OIL HOT 4LT",
-          "brand": "AURORA",
-          "packageSize": "4LT",
-          "parsedMassKg": 4,
-          "price": 32.49,
-          "unitPrice": 8.12,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:10.251Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/aurora-eggplant-in-oil-hot-4lt?_pos=1&_psq=Pickled+Eggplant&_psid=c02715d00&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006165900714p_4f367eef-ea90-4881-bf54-11dd346173ff.jpg?v=1782887903",
-          "taxonomyText": "BRUSCHETTA MIX  BRUSCHETTA MIX  PANTRY ESSENTIALS  VEGETABLE SPREADS/PASTES"
-        },
-        {
-          "productId": "dora-dora-mild-eggplant-strips-3100g",
-          "name": "DORA - MILD EGGPLANT STRIPS 3100ML",
-          "brand": "DORA",
-          "packageSize": "3100ML",
-          "parsedMassKg": 3.1,
-          "price": 20.99,
-          "unitPrice": 6.77,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:10.251Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/dora-dora-mild-eggplant-strips-3100g?_pos=3&_psq=Pickled+Eggplant&_psid=c02715d00&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/8032774041981p.jpg?v=1782740894",
-          "taxonomyText": "PICKLED VEGETABLES, RELISH  PICKLED VEGETABLES  PANTRY ESSENTIALS RELISH SAUCES  CONDIMENTS"
-        },
-        {
-          "productId": "dora-hot-eggplant-strips-1062ml",
-          "name": "DORA - HOT EGGPLANT STRIPS 1062ML",
-          "brand": "DORA",
-          "packageSize": "1062ML",
-          "parsedMassKg": 1.062,
-          "price": 6.49,
-          "unitPrice": 6.11,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:10.251Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/dora-hot-eggplant-strips-1062ml?_pos=4&_psq=Pickled+Eggplant&_psid=c02715d00&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/8032774044630p.jpg?v=1782740890",
-          "taxonomyText": "PICKLED VEGETABLES, RELISH  PICKLED VEGETABLES  PANTRY ESSENTIALS RELISH SAUCES  CONDIMENTS"
-        },
-        {
-          "productId": "vegetables-eggplant-case-25-lbs",
-          "name": "VEGETABLES - EGGPLANT BUSHEL CASE",
-          "brand": "VEGETABLES",
-          "price": 25.99,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:10.251Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-case-25-lbs?_pos=5&_psq=Pickled+Eggplant&_psid=c02715d00&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001254000001p.jpg?v=1786383323",
-          "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
-        },
-        {
-          "productId": "dora-fire-roasted-eggplants-3100ml",
-          "name": "DORA - FIRE ROASTED EGGPLANTS 3100ML",
-          "brand": "DORA",
-          "packageSize": "3100ML",
-          "parsedMassKg": 3.1,
-          "price": 30.49,
-          "unitPrice": 9.84,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:10.251Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/dora-fire-roasted-eggplants-3100ml?_pos=9&_psq=Pickled+Eggplant&_psid=c02715d00&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062812012030p.jpg?v=1780515197",
-          "taxonomyText": "CANNED VEGETABLES  CANNED VEGETABLES  PANTRY ESSENTIALS  CANNED FOODS"
-        },
-        {
-          "productId": "oncu-roasted-eggplant-6x2700-gr",
-          "name": "ONCU - ROASTED EGGPLANT 6x2700 GR",
-          "brand": "ONCU",
-          "packageSize": "6x2700 GR",
-          "parsedMassKg": 16.200000000000003,
-          "price": 56.99,
-          "unitPrice": 3.52,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:10.251Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/oncu-roasted-eggplant-6x2700-gr?_pos=10&_psq=Pickled+Eggplant&_psid=c02715d00&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/8693891827003p.jpg?v=1785560947",
-          "taxonomyText": "CANNED VEGETABLES  CANNED VEGETABLES  PANTRY ESSENTIALS  CANNED FOODS"
-        }
-      ]
+      "alternates": []
     },
     {
       "id": "wraps_plain_10in",
@@ -4591,87 +4241,36 @@
     {
       "id": "lids_deli_round",
       "label": "Round Deli Container Lids",
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "Live MVR SKU price refresh \u00b7 impostor cleared, no_match",
+      "alternates": [],
+      "rejected": {
         "productId": "nuvo-32oz-deli-round-combo-with-lid-240ea",
         "name": "LR - 32OZ DELI ROUND COMBO WITH LID 240EA",
-        "brand": "LR",
-        "packageSize": "240EA",
-        "parsedMassKg": 0.90718474,
-        "price": 56.49,
-        "unitPrice": 62.27,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:37.120Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/nuvo-32oz-deli-round-combo-with-lid-240ea",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000010098p.jpg?v=1785561945"
-      },
-      "notes": "Live MVR SKU price refresh",
-      "alternates": [
-        {
-          "productId": "nuvo-16oz-deli-round-combo-with-lid-240ea",
-          "name": "LR - 16OZ DELI ROUND COMBO WITH LID 240EA",
-          "brand": "LR",
-          "packageSize": "240EA",
-          "parsedMassKg": 0.45359237,
-          "price": 39.49,
-          "unitPrice": 87.06,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:54:47.394Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/nuvo-16oz-deli-round-combo-with-lid-240ea?_pos=2&_psq=Round+Deli+Container+Lids&_psid=0aa048083&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000010096p_1f0aab48-d5b6-45a2-b9a6-0ccbcb4bd457.jpg?v=1749643169",
-          "taxonomyText": "DELI CONTAINERS  DELI CONTAINERS  FOOD SERVICE SUPPLIES  TAKE OUT CONTAINERS"
-        },
-        {
-          "productId": "nuvo-24oz-deli-round-combo-with-lid-240ea",
-          "name": "LR - 24OZ DELI ROUND COMBO WITH LID 240EA",
-          "brand": "LR",
-          "packageSize": "240EA",
-          "parsedMassKg": 0.6803885550000001,
-          "price": 47.99,
-          "unitPrice": 70.53,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:54:47.394Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/nuvo-24oz-deli-round-combo-with-lid-240ea?_pos=4&_psq=Round+Deli+Container+Lids&_psid=0aa048083&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000010097p_ad83021d-e0d4-4e32-acfd-7404275abff4.jpg?v=1749643161",
-          "taxonomyText": "DELI CONTAINERS  DELI CONTAINERS  FOOD SERVICE SUPPLIES  TAKE OUT CONTAINERS"
-        },
-        {
-          "productId": "nuvo-8oz-deli-round-combo-with-lid-240ea",
-          "name": "LR - 8OZ DELI ROUND COMBO WITH LID 240EA",
-          "brand": "LR",
-          "packageSize": "240EA",
-          "parsedMassKg": 0.226796185,
-          "price": 34.49,
-          "unitPrice": 152.07,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:54:47.394Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/nuvo-8oz-deli-round-combo-with-lid-240ea?_pos=6&_psq=Round+Deli+Container+Lids&_psid=0aa048083&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000010094p_2155a1f5-fd0f-474d-8212-9e0236359da6.jpg?v=1749643157",
-          "taxonomyText": "DELI CONTAINERS  DELI CONTAINERS  FOOD SERVICE SUPPLIES  TAKE OUT CONTAINERS"
-        }
-      ]
+        "reason": "deli lids \u2260 combo container"
+      }
     },
     {
       "id": "san_pellegrino_aranciata_or",
       "label": "San Pellegrino Aranciata/Or",
       "status": "ok",
       "offer": {
-        "productId": "san-pellegrino-aranciata-rossa-cans-6x330-ml-1",
-        "name": "SAN PELLEGRINO - ROSSA(RED) ARANCIATA ROSSA CANS 6x330 ML",
+        "productId": "san-pellegrino-aranciata-cans-6x330ml-1",
+        "name": "SAN PELLEGRINO - ARANCIATA CANS 6x330ML",
         "brand": "SAN PELLEGRINO",
-        "packageSize": "6x330 ML",
+        "packageSize": "6x330ML",
         "parsedMassKg": 1.98,
         "price": 6.39,
         "unitPrice": 3.23,
+        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:37.379Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/san-pellegrino-aranciata-rossa-cans-6x330-ml-1",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005500020142p.jpg?v=1769274081"
+        "checkedAt": "2026-08-18T21:53:22.580Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/san-pellegrino-aranciata-cans-6x330ml-1?_pos=4&_psq=san+pellegrino+aranciata&_psid=ed226db64&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005500020145p.jpg?v=1777739657",
+        "taxonomyText": "CARBONATED FLAVOURED DRINKS  CARBONATED FLAVOURED DRINKS  BEVERAGE  SODA"
       },
-      "notes": "Live MVR SKU price refresh",
+      "notes": "Live MVR SKU price refresh \u00b7 impostor cleared, promoted alternate",
       "alternates": [
         {
           "productId": "san-pellegrino-aranciata-cans-24x330ml-1",
@@ -4687,23 +4286,13 @@
           "sourceUrl": "https://plus.mvrwholesale.com/products/san-pellegrino-aranciata-cans-24x330ml-1?_pos=2&_psq=san+pellegrino+aranciata&_psid=ed226db64&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005500020143c_cec59a41-be03-46dd-b3da-7ddfc6f83959.jpg?v=1778331017",
           "taxonomyText": "CARBONATED FLAVOURED DRINKS  CARBONATED FLAVOURED DRINKS  BEVERAGE  SODA"
-        },
-        {
-          "productId": "san-pellegrino-aranciata-cans-6x330ml-1",
-          "name": "SAN PELLEGRINO - ARANCIATA CANS 6x330ML",
-          "brand": "SAN PELLEGRINO",
-          "packageSize": "6x330ML",
-          "parsedMassKg": 1.98,
-          "price": 6.39,
-          "unitPrice": 3.23,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:22.580Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/san-pellegrino-aranciata-cans-6x330ml-1?_pos=4&_psq=san+pellegrino+aranciata&_psid=ed226db64&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005500020145p.jpg?v=1777739657",
-          "taxonomyText": "CARBONATED FLAVOURED DRINKS  CARBONATED FLAVOURED DRINKS  BEVERAGE  SODA"
         }
-      ]
+      ],
+      "rejected": {
+        "productId": "san-pellegrino-aranciata-rossa-cans-6x330-ml-1",
+        "name": "SAN PELLEGRINO - ROSSA(RED) ARANCIATA ROSSA CANS 6x330 ML",
+        "reason": "aranciata \u2260 rossa"
+      }
     },
     {
       "id": "schtark_3_cheese_blend",
@@ -5115,80 +4704,22 @@
       "label": "Sliced White Mushrooms",
       "status": "ok",
       "offer": {
-        "productId": "vegetables-mushrooms-sliced-cremini-680-g-24-oz",
-        "name": "VEGETABLES - MUSHROOMS SLICED CREMINI 680 G / 24 OZ",
+        "productId": "vegetables-mushrooms-sliced-454-g",
+        "name": "VEGETABLES - MUSHROOMS SLICED PKG 454 G",
         "brand": "VEGETABLES",
-        "packageSize": "680 G / 24 OZ",
-        "parsedMassKg": 0.68,
-        "price": 4.99,
-        "unitPrice": 7.34,
+        "packageSize": "454 G",
+        "parsedMassKg": 0.454,
+        "price": 3.99,
+        "unitPrice": 8.79,
+        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:38.454Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-sliced-cremini-680-g-24-oz",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0077494100260p.jpg?v=1773057257"
+        "checkedAt": "2026-08-18T21:53:25.759Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-sliced-454-g?_pos=5&_psq=Sliced+White+Mushrooms&_psid=2d4829261&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003338345075p_63566bcf-7010-45df-b589-017ae9ec3807.jpg?v=1782139941",
+        "taxonomyText": "MUSHROOMS  MUSHROOMS  PRODUCE  FRESH VEGETABLES"
       },
       "notes": "Live MVR SKU price refresh",
       "alternates": [
-        {
-          "productId": "vegetables-mushrooms-blanched-sliced-15-lbs-1",
-          "name": "VEGETABLES - MUSHROOMS BLANCHED SLICED 15 LBS",
-          "brand": "VEGETABLES",
-          "packageSize": "15 LBS",
-          "parsedMassKg": 6.80388555,
-          "price": 56.99,
-          "unitPrice": 8.38,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:25.759Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-blanched-sliced-15-lbs-1?_pos=1&_psq=Sliced+White+Mushrooms&_psid=2d4829261&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001213510p.jpg?v=1782139946",
-          "taxonomyText": "MUSHROOMS  MUSHROOMS  PRODUCE  FRESH VEGETABLES"
-        },
-        {
-          "productId": "vegetables-mushrooms-1-bulk-5-lbs",
-          "name": "VEGETABLES - MUSHROOMS # 1 BULK 5LB 5 LBS",
-          "brand": "VEGETABLES",
-          "packageSize": "5LB 5 LBS",
-          "parsedMassKg": 2.2679618500000003,
-          "price": 15.99,
-          "unitPrice": 7.05,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:25.759Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-1-bulk-5-lbs?_pos=9&_psq=Sliced+White+Mushrooms&_psid=2d4829261&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114085p.jpg?v=1782734542",
-          "taxonomyText": "MUSHROOMS  MUSHROOMS  PRODUCE  FRESH VEGETABLES"
-        },
-        {
-          "productId": "vegetables-mushrooms-sliced-454-g",
-          "name": "VEGETABLES - MUSHROOMS SLICED PKG 454 G",
-          "brand": "VEGETABLES",
-          "packageSize": "454 G",
-          "parsedMassKg": 0.454,
-          "price": 3.99,
-          "unitPrice": 8.79,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:25.759Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-sliced-454-g?_pos=5&_psq=Sliced+White+Mushrooms&_psid=2d4829261&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003338345075p_63566bcf-7010-45df-b589-017ae9ec3807.jpg?v=1782139941",
-          "taxonomyText": "MUSHROOMS  MUSHROOMS  PRODUCE  FRESH VEGETABLES"
-        },
-        {
-          "productId": "vegetables-mushrooms-oyster-2-lbs",
-          "name": "VEGETABLES - MUSHROOMS OYSTER 2 LBS",
-          "brand": "VEGETABLES",
-          "packageSize": "2 LBS",
-          "parsedMassKg": 0.90718474,
-          "price": 16.99,
-          "unitPrice": 18.73,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:27.057Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-oyster-2-lbs?_pos=6&_psq=mushrooms&_psid=79a1c08c8&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001100000494p_b821213b-35e9-43b9-bf7f-d8548ead488c.jpg?v=1783533160",
-          "taxonomyText": "MUSHROOMS  MUSHROOMS  PRODUCE  FRESH VEGETABLES"
-        },
         {
           "productId": "vegetables-mushrooms-sliced-5-lbs",
           "name": "VEGETABLES - MUSHROOMS SLICED LOOSE 5 LBS",
@@ -5202,36 +4733,6 @@
           "checkedAt": "2026-08-18T21:53:25.759Z",
           "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-sliced-5-lbs?_pos=2&_psq=Sliced+White+Mushrooms&_psid=2d4829261&_ss=e",
           "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001118520p_8fe9fe10-1c1b-4710-a02e-686a466d5230.jpg?v=1786624829",
-          "taxonomyText": "MUSHROOMS  MUSHROOMS  PRODUCE  FRESH VEGETABLES"
-        },
-        {
-          "productId": "vegetables-mushrooms-brown-bulk-5-lbs",
-          "name": "VEGETABLES - MUSHROOMS BROWN BULK 5 LBS",
-          "brand": "VEGETABLES",
-          "packageSize": "5 LBS",
-          "parsedMassKg": 2.2679618500000003,
-          "price": 17.99,
-          "unitPrice": 7.93,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:27.057Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-brown-bulk-5-lbs?_pos=7&_psq=mushrooms&_psid=79a1c08c8&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114653p_39017157-51da-4f0a-9a6b-eed2ab5a82fd.jpg?v=1784030356",
-          "taxonomyText": "MUSHROOMS  MUSHROOMS  PRODUCE  FRESH VEGETABLES"
-        },
-        {
-          "productId": "vegetables-mushrooms-portabella-5-lbs-1",
-          "name": "VEGETABLES - MUSHROOMS PORTABELLO 5LB 5 LBS",
-          "brand": "VEGETABLES",
-          "packageSize": "5LB 5 LBS",
-          "parsedMassKg": 2.2679618500000003,
-          "price": 21.99,
-          "unitPrice": 9.7,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:27.057Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-portabella-5-lbs-1?_pos=8&_psq=mushrooms&_psid=79a1c08c8&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114937p_85550969-9a4a-4be1-a8fc-918711a7daba.jpg?v=1782139830",
           "taxonomyText": "MUSHROOMS  MUSHROOMS  PRODUCE  FRESH VEGETABLES"
         }
       ]
@@ -5580,34 +5081,22 @@
       "label": "Tomato",
       "status": "ok",
       "offer": {
-        "productId": "vegetables-grape-tomatoes-case-15-x-1-lb",
-        "name": "VEGETABLES - TOMATOES LOOSE CASE 13 LB",
+        "productId": "vegetables-tomatoes-5x6-case-25-lbs",
+        "name": "VEGETABLES - TOMATOES 5X6 CASE 25 LBS",
         "brand": "VEGETABLES",
-        "packageSize": "13 LB",
-        "parsedMassKg": 5.8967008100000005,
-        "price": 13.99,
-        "unitPrice": 2.37,
+        "packageSize": "25 LBS",
+        "parsedMassKg": 11.33980925,
+        "price": 29.99,
+        "unitPrice": 2.64,
+        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:39.592Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-grape-tomatoes-case-15-x-1-lb"
+        "checkedAt": "2026-08-18T21:53:32.553Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-5x6-case-25-lbs?_pos=2&_psq=tomatoes&_psid=c2e9e3261&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114817p_7fd56fcb-2c89-49ec-801e-d5709445259d.jpg?v=1786713683",
+        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
       },
       "notes": "Live MVR SKU price refresh",
       "alternates": [
-        {
-          "productId": "vegetables-tomatoes-5x6-case-25-lbs",
-          "name": "VEGETABLES - TOMATOES 5X6 CASE 25 LBS",
-          "brand": "VEGETABLES",
-          "packageSize": "25 LBS",
-          "parsedMassKg": 11.33980925,
-          "price": 29.99,
-          "unitPrice": 2.64,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:53:32.553Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-5x6-case-25-lbs?_pos=2&_psq=tomatoes&_psid=c2e9e3261&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114817p_7fd56fcb-2c89-49ec-801e-d5709445259d.jpg?v=1786713683",
-          "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
-        },
         {
           "productId": "vegetables-tomatoes-hot-house-case-15-lbs",
           "name": "VEGETABLES - TOMATOES HOT HOUSE CASE 15 LBS",
@@ -6204,5 +5693,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-08-20T00:31:41.999Z"
+  "updatedAt": "2026-08-20T00:31:41.999Z",
+  "matched": 89,
+  "itemCount": 125
 }

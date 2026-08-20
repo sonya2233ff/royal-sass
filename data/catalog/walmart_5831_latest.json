@@ -8,8 +8,8 @@
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
   "checkedAt": "2026-08-20T04:26:56.298Z",
-  "itemCount": 30,
-  "matched": 22,
+  "itemCount": 134,
+  "matched": 83,
   "items": [
     {
       "id": "simply_egg_whites",
@@ -1301,21 +1301,15 @@
         "fire resistant oven mitt",
         "15 inch oven mitt"
       ],
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (supplies) · impostor cleared, no_match",
+      "alternates": [],
+      "rejected": {
         "productId": "78OOOZH5SPWP",
         "name": "Fridja 1Pcs Oven Mitts, 11.02x6.69in Silver Heat Resistants High Temperature Non-Slip Kitchen Restaurant Mitts for Oven with Loop, Pratical Oven Mitt Set for Cooking & Baking",
-        "brand": "Fridja",
-        "price": 5.96,
-        "wasPrice": 6.96,
-        "onSale": true,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:29.882Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Fridja-1Pcs-Oven-Mitts-11-02x6-69in-Silver-Heat-Resistants-High-Temperature-Non-Slip-Kitchen-Restaurant-Mitts-Loop-Pratical-Mitt-Set-Cooking-Baking/4JV8MG4JOFYS?classType=VARIANT&athbdg=L1400",
-        "image": "https://i5.walmartimages.ca/asr/2c12f41f-c471-44f0-bfe6-f907e50ac669.d68462b520929531e8e19b560dc780ba.jpeg"
-      },
-      "notes": "From receipts catalog (supplies)",
-      "alternates": []
+        "reason": "15in oven mitt ≠ mini mitt"
+      }
     },
     {
       "id": "cups_16oz_black_ripple",
@@ -1343,19 +1337,8 @@
         "16 oz pet cups",
         "pet cold cup 16oz"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "1FCER0LGMJ1C",
-        "name": "Woeilo 2oz Clear PET Cups - 20 Count, Durable Plastic Shot Cups for Parties and Events Clear 2 oz",
-        "brand": "Woeilo",
-        "packageSize": "57 g",
-        "parsedMassKg": 0.05669904625,
-        "price": 20.48,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:37.605Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Woeilo-2oz-Clear-PET-Cups-20-Count-Durable-Plastic-Shot-Cups-for-Parties-and-Events-Clear-2-oz/1FCER0LGMJ1C?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/asr/a3a95e8f-6256-4bf9-b2cc-790374241021.6a647bd247f31d0fbe09c36af977725e.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (supplies) · kept last WM price",
       "alternates": [],
       "rejected": {
@@ -1390,17 +1373,8 @@
         "apple strawberry jam",
         "strawberry apple jam"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "2EB3JXW96CZD",
-        "name": "Del Monte STRAWBERRY JAM",
-        "brand": "Del Monte",
-        "price": 3.97,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:41.504Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Del-Monte-STRAWBERRY-JAM/2EB3JXW96CZD?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/asr/bf7ace97-4dc6-495c-88fb-1e7c5af7147b.1b368fa269b55d375a260e973656476c.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (grocery)",
       "alternates": []
     },
@@ -1411,20 +1385,8 @@
         "bagasse bowl lids",
         "bagasse lid"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "3U03SCZVNQWY",
-        "name": "Packaging Naturally 4oz Bagasse Portion Cup Lid | 2000/case",
-        "brand": "Packaging Naturally",
-        "packageSize": "113 g",
-        "parsedMassKg": 0.1133980925,
-        "price": 99.73,
-        "availability": "unknown",
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:35:04.433Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/4oz-Bagasse-Portion-Cup-Lid-2000-case/3U03SCZVNQWY?classType=REGULAR",
-        "image": "https://i5.walmartimages.com/asr/c7e42eb7-7ba0-44b4-9959-0f0ffa7cc205.59585fc1ed96dc62e00eeb41251ebce0.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (supplies)",
       "alternates": []
     },
@@ -1489,18 +1451,8 @@
       "queriesTried": [
         "Bamboo Paddles 3in"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "3TVVTAL9YION",
-        "name": "Crooked Creek C10304 Wood Paddle",
-        "brand": "Crooked Creek",
-        "price": 84.95,
-        "availability": "unknown",
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:35:09.376Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Crooked-Creek-C10304-Wood-Paddle/3TVVTAL9YION?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/asr/77f7b0f5-d36c-4d6a-8603-34fa1c707f6c.8c1fd4b1534e5cea01884e9984231bfb.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (supplies)",
       "alternates": []
     },
@@ -1536,22 +1488,15 @@
       "queriesTried": [
         "Cake Kits"
       ],
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (grocery) · impostor cleared, no_match",
+      "alternates": [],
+      "rejected": {
         "productId": "7BVE4IDY7X1C",
         "name": "Unbranded Cake Decorating Kit,72 Pcs Cake Supplies Set 72 Nozzles Coupler Diy Supplies Supplies With Pcs Cake Supplies Tools Dsfen Cake Kit 72 Mewmewcat",
-        "brand": "Unbranded",
-        "price": 19.38,
-        "wasPrice": 24.22,
-        "onSale": true,
-        "availability": "unknown",
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:35:25.779Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Cake-Decorating-Kit-72-Pcs-Cake-Supplies-Set-72-Nozzles-Coupler-Diy-Supplies-Supplies-With-Pcs-Cake-Supplies-Tools-Dsfen-Cake-Kit-72-Mewmewcat/7BVE4IDY7X1C?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/asr/01d78107-04da-4e9a-8ef1-979aa241fe1f.81d3b8df0e718c79a02ca50e5f6ace2d.jpeg"
-      },
-      "notes": "From receipts catalog (grocery)",
-      "alternates": []
+        "reason": "cake kit ≠ decorating tools"
+      }
     },
     {
       "id": "cantaloupe",
@@ -1561,31 +1506,18 @@
       ],
       "status": "ok",
       "offer": {
-        "productId": "6000205287054",
-        "name": "Your Fresh Market Cantaloupe Chunks, 280 g",
-        "brand": "Your Fresh Market",
-        "packageSize": "280 g",
-        "parsedMassKg": 0.28,
-        "price": 3.97,
+        "productId": "6000191268946",
+        "name": "Cantaloupe, Sold in singles",
+        "parsedMassKg": 0,
+        "price": 2.84,
+        "availability": "out_of_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:50.524Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-cantaloupe-chunks/6000205287055?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/images/Enlarge/025/496/6000206025496.jpg"
+        "checkedAt": "2026-08-18T22:02:38.418Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/cantaloupe/6000191268947?classType=REGULAR&athbdg=L1200",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/894/7_r/6000191268947_R.jpg"
       },
       "notes": "From receipts catalog (produce)",
-      "alternates": [
-        {
-          "productId": "6000191268946",
-          "name": "Cantaloupe, Sold in singles",
-          "parsedMassKg": 0,
-          "price": 2.84,
-          "availability": "out_of_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:02:38.418Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/cantaloupe/6000191268947?classType=REGULAR&athbdg=L1200",
-          "image": "https://i5.walmartimages.ca/images/Enlarge/894/7_r/6000191268947_R.jpg"
-        }
-      ]
+      "alternates": []
     },
     {
       "id": "celery",
@@ -1660,19 +1592,8 @@
       "queriesTried": [
         "Clear Party Tray 12x12"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "40JH7K7PPKBP",
-        "name": "MIANHT Plastic Fruit Serving Tray for Party Clear Appetizer Platter with Non Slip Bottom 7.7 Inch Round Food Grade PVC Tray for Snacks Desserts Vegetables Fruit Display Tray for Entertaining Home Kitchen",
-        "brand": "MIANHT",
-        "price": 6.64,
-        "wasPrice": 10.64,
-        "onSale": true,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:00.145Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Plastic-Fruit-Serving-Tray-Party-Clear-Appetizer-Platter-Non-Slip-Bottom-7-7-Inch-Round-Food-Grade-PVC-Snacks-Desserts-Vegetables-Display-Entertainin/5KIH0FBF6MKN?classType=REGULAR&athbdg=L1400",
-        "image": "https://i5.walmartimages.ca/asr/a02e608c-b3ba-4629-b87d-2fd3d0986c74.e1f4f302559251204f6faeb469181a39.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (supplies)",
       "alternates": []
     },
@@ -1726,32 +1647,10 @@
       "queriesTried": [
         "Cream Cheese Bars"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "6000001850463",
-        "name": "Great Value Cream Cheese",
-        "brand": "Great Value",
-        "price": 2.98,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:05.766Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/great-value-cream-cheese/10054562?classType=REGULAR&athbdg=L1600",
-        "image": "https://i5.walmartimages.ca/images/Enlarge/877/765/605388877765.jpg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (dairy)",
-      "alternates": [
-        {
-          "productId": "6000196253709",
-          "name": "Great Value Cream Cheese Spread",
-          "brand": "Great Value",
-          "parsedMassKg": 0,
-          "price": 2.98,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:03:26.021Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/great-value-cream-cheese-spread/6000196253710?classType=REGULAR&athbdg=L1600",
-          "image": "https://i5.walmartimages.ca/images/Enlarge/362/336/628915362336.jpg"
-        }
-      ]
+      "alternates": []
     },
     {
       "id": "brown_sugar",
@@ -1759,23 +1658,15 @@
       "queriesTried": [
         "Dark Brown Sugar"
       ],
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (grocery) · impostor cleared, no_match",
+      "alternates": [],
+      "rejected": {
         "productId": "2D051QDL3Z0J",
         "name": "Rogers Golden Yellow light brown Sugar 2Kg/4.41 LBS",
-        "brand": "Rogers",
-        "packageSize": "2 kg",
-        "parsedMassKg": 2,
-        "price": 18.04,
-        "wasPrice": 18.99,
-        "onSale": true,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:09.584Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Rogers-Golden-Yellow-light-brown-Sugar-2Kg-4-41-LBS/2D051QDL3Z0J?classType=REGULAR&athbdg=L1700",
-        "image": "https://i5.walmartimages.ca/asr/eef851a5-09d4-42bd-9063-17fb801dbb9a.5b6abfc6f3b5d6d3f6f14dab1f1fde84.jpeg"
-      },
-      "notes": "From receipts catalog (grocery)",
-      "alternates": []
+        "reason": "dark brown sugar needs dark"
+      }
     },
     {
       "id": "lids_dome_12_24oz",
@@ -1784,19 +1675,8 @@
         "dome lids 12 24 oz",
         "sip dome lid"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "2I03ZIBPB8JQ",
-        "name": "Pack N' Eat Plastic Dome Lid for 12 oz Bowl -- 400 per case",
-        "brand": "Pack n' Eat",
-        "packageSize": "340 g",
-        "parsedMassKg": 0.34019427750000003,
-        "price": 102.65,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:12.386Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Pack-N-Eat-Plastic-Dome-Lid-for-12-oz-Bowl-400-per-case/2I03ZIBPB8JQ?classType=REGULAR",
-        "image": "https://i5.walmartimages.com/asr/a4fabf23-aa0b-4ad2-aa58-297e821c90af.e0ee345805d278bde0ea94c223bb9f50.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (supplies)",
       "alternates": []
     },
@@ -1827,19 +1707,15 @@
       "queriesTried": [
         "Edible Decor"
       ],
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (grocery) · impostor cleared, no_match",
+      "alternates": [],
+      "rejected": {
         "productId": "6000206769912",
         "name": "Twinkle Baking Decor Barbie Triplet Sprinkles by Twinkle",
-        "brand": "Twinkle Baking Decor",
-        "price": 7.77,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:21.985Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Barbie-Triplet-Sprinkles-by-Twinkle/6000206769912?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/asr/24d382e3-4b9b-45a1-8613-67c3c89e6486.b93d8f28cd51826ae157f9ba4450ab8f.png"
-      },
-      "notes": "From receipts catalog (grocery)",
-      "alternates": []
+        "reason": "edible decor ≠ character sprinkles"
+      }
     },
     {
       "id": "fettuccine",
@@ -1869,19 +1745,8 @@
       "queriesTried": [
         "Floor Cleaner Lavender 4lt"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "5QLW9AK2EDS5",
-        "name": "Janitori™ Floor Cleaner, 4L",
-        "brand": "Janitori™",
-        "packageSize": "4 kg",
-        "parsedMassKg": 4,
-        "price": 18.66,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:30.348Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Janitori-Floor-Cleaner-4L/5QLW9AK2EDS5?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/asr/2d3fd5c2-516b-4a8b-9ef4-38fc196f1f4c.cd51522836d3976badbcb21052142041.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (grocery)",
       "alternates": []
     },
@@ -1965,20 +1830,8 @@
         "carrot",
         "carrots"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "6000202249059",
-        "name": "Great Value Frozen Peas and Carrots Mix, 750 g",
-        "brand": "Great Value",
-        "packageSize": "750 g",
-        "parsedMassKg": 0.75,
-        "price": 3.37,
-        "availability": "unknown",
-        "confidence": "exact",
-        "checkedAt": "2026-08-18T22:04:10.414Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Peas-and-Carrots-Mix/6000202249059?classType=REGULAR&athbdg=L1200",
-        "image": "https://i5.walmartimages.ca/asr/bff5c6b8-ddf1-46ad-9c29-d82d66d3f767.5ff8e783656acbc38fba163d480389e5.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (frozen) · kept last WM price",
       "alternates": [],
       "rejected": {
@@ -2067,21 +1920,15 @@
       "queriesTried": [
         "Guest Towel Napkins"
       ],
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (supplies) · impostor cleared, no_match",
+      "alternates": [],
+      "rejected": {
         "productId": "2BUMJLVT0PL9",
         "name": "Unbranded Disposable Napkins for Parties,Bow Tie Pattern Paper Guest Towels for Showers and Special Occasions",
-        "brand": "Unbranded",
-        "price": 5,
-        "wasPrice": 21.99,
-        "onSale": true,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:46.204Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Disposable-Napkins-for-Parties-Bow-Tie-Pattern-Paper-Guest-Towels-for-Showers-and-Special-Occasions/5UI9AMU767MU?classType=VARIANT&athbdg=L1400",
-        "image": "https://i5.walmartimages.ca/asr/4f1d60f0-293e-49f8-9e15-f6399d5cb1d6.994ba7d483e3dbae9e4fd1c25730abe2.jpeg"
-      },
-      "notes": "From receipts catalog (supplies)",
-      "alternates": []
+        "reason": "guest towel ≠ party napkin"
+      }
     },
     {
       "id": "haolam_havarti_and_dill",
@@ -2338,23 +2185,15 @@
       "queriesTried": [
         "Measuring Cup"
       ],
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (supplies) · impostor cleared, no_match",
+      "alternates": [],
+      "rejected": {
         "productId": "66UV6Q3RT35W",
         "name": "EGNMCR Kitchen Gadgets, Kitchen Accessories Kitchen Measuring Cup 1000ml Filter Cup Goog Beater Fruit Washing Multifunctional Microwave Household Baking Tool Kitchen measuring cup",
-        "brand": "EGNMCR",
-        "packageSize": "1 kg",
-        "parsedMassKg": 1,
-        "price": 7.1,
-        "wasPrice": 14.1,
-        "onSale": true,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:01.008Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/EGNMCR-Kitchen-Gadgets-Accessories-Measuring-Cup-1000ml-Filter-Goog-Beater-Fruit-Washing-Multifunctional-Microwave-Household-Baking-Tool-measuring-cu/66UV6Q3RT35W?classType=REGULAR&athbdg=L1400",
-        "image": "https://i5.walmartimages.ca/asr/875b7ba2-5b95-40c4-b2c4-a528f8116dfd.49bb96d83397eaf67cdc7c21fe1996ff.jpeg"
-      },
-      "notes": "From receipts catalog (supplies)",
-      "alternates": []
+        "reason": "measuring cup ≠ gadget"
+      }
     },
     {
       "id": "milan_grated_parmesan",
@@ -2424,19 +2263,8 @@
         "no hole dome lids",
         "dome lid no hole"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "5SUK8UH71R3B",
-        "name": "Green Century Enterprises Inc. PET Dome Lid 98mm (Clear) without Hole for 12oz - 24oz PET Cold Cups (Recyclable) 1000 unit/Pack",
-        "brand": "Green Century Enterprises Inc.",
-        "packageSize": "680 g",
-        "parsedMassKg": 0.6803885550000001,
-        "price": 95.03,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:18.786Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/PET-Dome-Lid-98mm-Clear-without-Hole-for-12oz-24oz-PET-Cold-Cups-Recyclable-1000-unit-Pack/5SUK8UH71R3B?classType=REGULAR",
-        "image": "https://i5.walmartimages.com/asr/41966705-56cb-4df5-841f-232d4704cfd1.d679208bf880d85b7e76c0607ef08df0.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (supplies)",
       "alternates": []
     },
@@ -2447,19 +2275,11 @@
         "oreo sandwich cookies",
         "oreo original cookies"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "6000202891594",
-        "name": "Oreo Mint Crème Sandwich Cookies",
-        "brand": "OREO",
-        "price": 2.98,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:25.008Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Oreo-Mint-Cr-me-Sandwich-Cookies/6000202891594?classType=REGULAR&athbdg=L1102",
-        "image": "https://i5.walmartimages.ca/asr/7af20e50-1ff5-4b1f-a834-1653c5a8b6dd.c190e63291023d555f31718995283caf.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (grocery)",
-      "image": "https://i5.walmartimages.ca/asr/7af20e50-1ff5-4b1f-a834-1653c5a8b6dd.c190e63291023d555f31718995283caf.jpeg"
+      "image": "https://i5.walmartimages.ca/asr/7af20e50-1ff5-4b1f-a834-1653c5a8b6dd.c190e63291023d555f31718995283caf.jpeg",
+      "alternates": []
     },
     {
       "id": "pam_cookware_coating",
@@ -2468,19 +2288,10 @@
         "pam cooking spray",
         "pam original"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "6000188002396",
-        "name": "PAM Baking No-Stick Cooking Spray",
-        "brand": "Pam",
-        "price": 6.62,
-        "availability": "unknown",
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:38:45.958Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/PAM-Baking-No-Stick-Cooking-Spray/6000188002396",
-        "image": "https://i5.walmartimages.ca/asr/5bdc58d8-7f49-43ea-81b7-0cade8c5472c.255e90ae87a3a90e8c1f91fc7b85fa98.jpeg"
-      },
-      "notes": "From receipts catalog (grocery)"
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
     },
     {
       "id": "parsley",
@@ -3090,19 +2901,10 @@
         "splenda sweetener",
         "splenda packets"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "6000197803590",
-        "name": "Splenda Stevia No Calorie Sweetener",
-        "brand": "Splenda",
-        "price": 8.47,
-        "availability": "unknown",
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:40:00.870Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Splenda-Stevia-No-Calorie-Sweetener/6000197803590?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/asr/2089749f-2fb0-4f0b-89f8-e99f1119d7f3.1d17f634ea4c15c498fd1523d381f551.png"
-      },
-      "notes": "From receipts catalog (grocery)"
+      "status": "no_match",
+      "offer": null,
+      "notes": "From receipts catalog (grocery)",
+      "alternates": []
     },
     {
       "id": "jam_strawberry_4kg",
@@ -3111,18 +2913,8 @@
         "strawberry jam 4kg",
         "strawberry jam 4 kg"
       ],
-      "status": "ok",
-      "offer": {
-        "productId": "2EB3JXW96CZD",
-        "name": "Del Monte STRAWBERRY JAM",
-        "brand": "Del Monte",
-        "price": 3.97,
-        "availability": "unknown",
-        "confidence": "exact",
-        "checkedAt": "2026-08-18T22:08:32.527Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Del-Monte-STRAWBERRY-JAM/2EB3JXW96CZD?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/asr/bf7ace97-4dc6-495c-88fb-1e7c5af7147b.1b368fa269b55d375a260e973656476c.jpeg"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "From receipts catalog (grocery) · kept last WM price",
       "alternates": [],
       "rejected": {

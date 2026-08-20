@@ -8,6 +8,7 @@ import {
   looksLikeWalmartProductId,
   offerFailsStapleFilters,
   cottageCheeseFormFail,
+  cafeOfferFormFail,
   offerFailsStapleOfferFilters,
   stapleBrandHint,
   walmartCheapestHintIds,
@@ -1222,6 +1223,170 @@ async function main() {
     ) == null,
     "Mehadrin cottage cheese stays",
   );
+
+  const creamBars = cfg.items.find((i) => i.id === "cream_cheese_bars");
+  assert(creamBars, "cream cheese bars staple");
+  assert(
+    cafeOfferFormFail(creamBars!, "Sunspun Pizza Mozzarella Cheese") ===
+      "cream cheese bars ≠ mozzarella",
+    "cream cheese bars reject mozzarella",
+  );
+  assert(
+    cafeOfferFormFail(creamBars!, "Great Value Cream Cheese") ===
+      "cream cheese bars ≠ tub",
+    "cream cheese bars reject a tub",
+  );
+  assert(
+    cafeOfferFormFail(creamBars!, "J and J Cream Cheese Bars") == null,
+    "J&J cream cheese bars stay",
+  );
+
+  const pet16 = cfg.items.find((i) => i.id === "cups_16oz_pet");
+  assert(
+    cafeOfferFormFail(
+      pet16!,
+      "Woeilo 2oz Clear PET Cups - 20 Count, Durable Plastic Shot Cups",
+    ) === "16oz PET ≠ mini/shot cup",
+    "16oz PET rejects 2oz shot cups",
+  );
+  assert(
+    cafeOfferFormFail(pet16!, "16oz Pet Cups, 50 Per Pack") == null,
+    "16oz PET keeps a 16oz pack",
+  );
+
+  const appleJam = cfg.items.find((i) => i.id === "jam_apple_strawberry");
+  assert(
+    cafeOfferFormFail(appleJam!, "Del Monte STRAWBERRY JAM") ===
+      "apple strawberry jam needs both fruits",
+    "apple strawberry jam rejects strawberry-only",
+  );
+  assert(
+    cafeOfferFormFail(appleJam!, "LYNCH - APPLE STRAWBERRY JAM 14KG") == null,
+    "apple strawberry jam keeps both fruits",
+  );
+
+  const freshMozz = cfg.items.find((i) => i.id === "fresh_mozzarella");
+  assert(
+    cafeOfferFormFail(freshMozz!, "Schomberg Mozzarella Block") ===
+      "fresh mozzarella ≠ block",
+    "fresh mozzarella rejects a pizza block",
+  );
+  assert(
+    cafeOfferFormFail(freshMozz!, "Galbani Fresh Mozzarella") == null,
+    "fresh mozzarella keeps fresca/fresh",
+  );
+
+  const cantaloupe = cfg.items.find((i) => i.id === "cantaloupe");
+  assert(
+    cafeOfferFormFail(
+      cantaloupe!,
+      "Your Fresh Market Cantaloupe Chunks, 280 g",
+    ) === "whole cantaloupe ≠ chunks",
+    "cantaloupe rejects cut fruit chunks",
+  );
+
+  const splenda = cfg.items.find((i) => i.id === "splenda_sweetener_cal");
+  assert(
+    cafeOfferFormFail(splenda!, "Splenda Stevia No Calorie Sweetener") ===
+      "splenda ≠ stevia",
+    "Splenda original rejects Stevia",
+  );
+
+  const mushrooms = cfg.items.find((i) => i.id === "mushrooms_sliced");
+  assert(
+    cafeOfferFormFail(mushrooms!, "No Name Sliced Mushrooms 284 ml") ===
+      "fresh ≠ canned ml",
+    "sliced mushrooms reject a canned ml tin",
+  );
+  assert(
+    cafeOfferFormFail(
+      mushrooms!,
+      "President's Choice Sliced White Mushrooms 227 g",
+    ) == null,
+    "fresh sliced white mushrooms stay",
+  );
+
+  const brownSugar = cfg.items.find((i) => i.id === "brown_sugar");
+  assert(
+    cafeOfferFormFail(
+      brownSugar!,
+      "Rogers Golden Yellow light brown Sugar 2Kg",
+    ) === "dark brown sugar needs dark",
+    "dark brown sugar rejects light brown",
+  );
+  assert(
+    cafeOfferFormFail(brownSugar!, "Lantic Natural Dark Brown Sugar") == null,
+    "dark brown sugar stays",
+  );
+
+  const ovenMitts = cfg.items.find((i) => i.id === "oven_mitts");
+  assert(
+    cafeOfferFormFail(
+      ovenMitts!,
+      "Fridja 1Pcs Oven Mitts, 11.02x6.69in Silver",
+    ) === "15in oven mitt ≠ mini mitt",
+    "oven mitt rejects 11in consumer mitt",
+  );
+  assert(
+    cafeOfferFormFail(ovenMitts!, "WINCO - SILICONE OVEN MITT 15in 1EA") == null,
+    "15in restaurant mitt stays",
+  );
+
+  const measuring = cfg.items.find((i) => i.id === "measuring_cup");
+  assert(
+    cafeOfferFormFail(
+      measuring!,
+      "Kitchen Measuring Cup 1000ml Filter Cup Fruit Washing Multifunctional",
+    ) === "measuring cup ≠ gadget",
+    "measuring cup rejects a washing gadget",
+  );
+
+  const pellegrino = cfg.items.find((i) => i.id === "san_pellegrino_aranciata_or");
+  assert(
+    cafeOfferFormFail(
+      pellegrino!,
+      "SAN PELLEGRINO - ROSSA(RED) ARANCIATA ROSSA CANS 6x330 ML",
+    ) === "aranciata ≠ rossa",
+    "Aranciata rejects Rossa",
+  );
+  assert(
+    cafeOfferFormFail(
+      pellegrino!,
+      "SAN PELLEGRINO - ARANCIATA CANS 6x330ML",
+    ) == null,
+    "plain Aranciata stays",
+  );
+
+  const deliLids = cfg.items.find((i) => i.id === "lids_deli_round");
+  assert(
+    cafeOfferFormFail(
+      deliLids!,
+      "LR - 32OZ DELI ROUND COMBO WITH LID 240EA",
+    ) === "deli lids ≠ combo container",
+    "deli lids reject combo tubs",
+  );
+
+  const wraps10 = cfg.items.find((i) => i.id === "wraps_plain_10in");
+  assert(
+    cafeOfferFormFail(wraps10!, "No Name 10 Wheat Tortillas 320 g") ===
+      "10in wrap ≠ 7in pack",
+    "10in wraps reject a 320 g small pack",
+  );
+  assert(
+    cafeOfferFormFail(
+      wraps10!,
+      "Sonora Flour Tortilla, 10 in 864 g $0.69/100g",
+    ) == null,
+    "10in wraps keep a 10 in pack despite /100g unit price",
+  );
+  assert(
+    cafeOfferFormFail(
+      wraps10!,
+      "Great Value 10\" White Tortillas 640 g",
+    ) == null,
+    "10in 640 g tortillas stay",
+  );
+
   const cheeseOnlyInclude = stapleWithClientOverride(cottage!, {
     matchMode: "exact",
     matchRules: { mustIncludeAny: ["mehadrin", "cheese"] },

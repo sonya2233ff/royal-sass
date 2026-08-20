@@ -1784,18 +1784,8 @@
     {
       "id": "gloves_nitrile_large",
       "label": "Nitrile Gloves Large",
-      "status": "ok",
-      "offer": {
-        "productId": "21335396_EA",
-        "name": "President's Choice Large Nitrile Cleaning Gloves",
-        "brand": "President's Choice",
-        "packageSize": "1 ea, $3.29/1ea",
-        "price": 3.29,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:25.540Z",
-        "sourceUrl": "https://www.nofrills.ca/en/large-nitrile-cleaning-gloves/p/21335396_EA",
-        "image": "https://digital.loblaws.ca/PCX/21335396_EA/en/8/6038388829_enfr_front_noPlunge_ecomm_GS1_Ecommerce_1200.png"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "Live NF SKU price refresh",
       "alternates": []
     },
@@ -1849,33 +1839,19 @@
       "label": "Parsley",
       "status": "ok",
       "offer": {
-        "productId": "21056543_EA",
-        "name": "Gefen Chopped Parsley",
-        "brand": "Gefen",
-        "packageSize": "71 g, $5.62/100g",
-        "parsedMassKg": 0.071,
-        "price": 3.99,
-        "wasPrice": 5,
-        "onSale": true,
+        "productId": "20139141001_EA",
+        "name": "Italian Parsley",
+        "packageSize": "1 ea, $2.49/1ea",
+        "parsedMassKg": 0,
+        "price": 2.49,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:26.880Z",
-        "sourceUrl": "https://www.nofrills.ca/en/chopped-parsley/p/21056543_EA",
-        "image": "https://digital.loblaws.ca/PCX/21056543_EA/en/1/21056543_en_front_1200.png"
+        "checkedAt": "2026-08-18T21:58:45.462Z",
+        "sourceUrl": "https://www.nofrills.ca/en/italian-parsley/p/20139141001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20139141001_EA/en/1/20139141001_en_front_1200.png"
       },
       "notes": "Live NF SKU price refresh",
       "alternates": [
-        {
-          "productId": "20139141001_EA",
-          "name": "Italian Parsley",
-          "packageSize": "1 ea, $2.49/1ea",
-          "parsedMassKg": 0,
-          "price": 2.49,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:58:45.462Z",
-          "sourceUrl": "https://www.nofrills.ca/en/italian-parsley/p/20139141001_EA",
-          "image": "https://digital.loblaws.ca/PCX/20139141001_EA/en/1/20139141001_en_front_1200.png"
-        },
         {
           "productId": "20015746001_EA",
           "name": "Curly Parsley",
@@ -1887,19 +1863,6 @@
           "checkedAt": "2026-08-18T21:58:45.462Z",
           "sourceUrl": "https://www.nofrills.ca/en/curly-parsley/p/20015746001_EA",
           "image": "https://digital.loblaws.ca/PCX/20015746001_EA/en/1/20015746001_en_front_v1_1200.png"
-        },
-        {
-          "productId": "20618784_EA",
-          "name": "No Name Parsley Flakes",
-          "brand": "No Name",
-          "packageSize": "15 g, $16.67/100g",
-          "parsedMassKg": 0.015,
-          "price": 2.5,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:58:45.462Z",
-          "sourceUrl": "https://www.nofrills.ca/en/parsley-flakes/p/20618784_EA",
-          "image": "https://digital.loblaws.ca/PCX/20618784_EA/en/1/20618784_en_front_v1_1200.png"
         }
       ]
     },
@@ -1960,36 +1923,21 @@
     {
       "id": "wraps_plain_10in",
       "label": "Plain Wraps 10\"",
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "Live NF SKU price refresh · impostor cleared, no_match",
+      "alternates": [],
+      "rejected": {
         "productId": "21064397_EA",
         "name": "No Name 10 Wheat Tortillas",
-        "brand": "No Name",
-        "packageSize": "320 g, $0.84/100g",
-        "parsedMassKg": 0.32,
-        "price": 2.69,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:28.027Z",
-        "sourceUrl": "https://www.nofrills.ca/en/10-wheat-tortillas/p/21064397_EA",
-        "image": "https://digital.loblaws.ca/PCX/21064397_EA/en/1/21064397_en_front_1200.png"
-      },
-      "notes": "Live NF SKU price refresh",
-      "alternates": []
+        "reason": "10in wrap ≠ 7in pack"
+      }
     },
     {
       "id": "wraps_plain_6in",
       "label": "Plain Wraps 6\"",
-      "status": "ok",
-      "offer": {
-        "productId": "21718133_EA",
-        "name": "Foam Pumpkin Decoration 4.75\" x 6\" - Orange",
-        "packageSize": "1 ea, $6.00/1ea",
-        "price": 6,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:28.633Z",
-        "sourceUrl": "https://www.nofrills.ca/en/foam-pumpkin-decoration-4-75-x-6-orange/p/21718133_EA",
-        "image": "https://digital.loblaws.ca/PCX/21718133_EA/en/1/21718133_en_front_1200.png"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "Live NF SKU price refresh",
       "alternates": []
     },
@@ -2324,46 +2272,25 @@
       "label": "Sliced White Mushrooms",
       "status": "ok",
       "offer": {
+        "productId": "20743653_EA",
+        "name": "President's Choice Sliced White Mushrooms",
+        "brand": "President's Choice",
+        "packageSize": "227 g, $1.10/100g",
+        "parsedMassKg": 0.227,
+        "price": 2.49,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-18T21:59:11.371Z",
+        "sourceUrl": "https://www.nofrills.ca/en/sliced-white-mushrooms/p/20743653_EA",
+        "image": "https://digital.loblaws.ca/PCX/20743653_EA/en/1/20743653_en_front_1200.png"
+      },
+      "notes": "Live NF SKU price refresh · impostor cleared, promoted alternate",
+      "alternates": [],
+      "rejected": {
         "productId": "20299211_EA",
         "name": "No Name Sliced Mushrooms",
-        "brand": "No Name",
-        "packageSize": "284 ml, $0.45/100ml",
-        "parsedMassKg": 0.284,
-        "price": 1.29,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:35.322Z",
-        "sourceUrl": "https://www.nofrills.ca/en/sliced-mushrooms/p/20299211_EA",
-        "image": "https://digital.loblaws.ca/PCX/20299211_EA/en/1/20299211_en_front_v2_1200.png"
-      },
-      "notes": "Live NF SKU price refresh",
-      "alternates": [
-        {
-          "productId": "20743653_EA",
-          "name": "President's Choice Sliced White Mushrooms",
-          "brand": "President's Choice",
-          "packageSize": "227 g, $1.10/100g",
-          "parsedMassKg": 0.227,
-          "price": 2.49,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:59:11.371Z",
-          "sourceUrl": "https://www.nofrills.ca/en/sliced-white-mushrooms/p/20743653_EA",
-          "image": "https://digital.loblaws.ca/PCX/20743653_EA/en/1/20743653_en_front_1200.png"
-        },
-        {
-          "productId": "20755816_EA",
-          "name": "President's Choice Sliced Portobello Mushrooms",
-          "brand": "President's Choice",
-          "packageSize": "170 g, $2.94/100g",
-          "parsedMassKg": 0.17,
-          "price": 5,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:59:12.514Z",
-          "sourceUrl": "https://www.nofrills.ca/en/sliced-portobello-mushrooms/p/20755816_EA",
-          "image": "https://digital.loblaws.ca/PCX/20755816_EA/en/1/20755816_en_front_1200.png"
-        }
-      ]
+        "reason": "fresh ≠ canned ml"
+      }
     },
     {
       "id": "sour_cream",
@@ -2497,21 +2424,8 @@
     {
       "id": "tomato",
       "label": "Tomato",
-      "status": "ok",
-      "offer": {
-        "productId": "20314629004_EA",
-        "name": "Unico Tomatoes",
-        "brand": "Unico",
-        "packageSize": "796 ml, $0.19/100ml",
-        "parsedMassKg": 0.796,
-        "price": 1.5,
-        "wasPrice": 2.39,
-        "onSale": true,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:38.021Z",
-        "sourceUrl": "https://www.nofrills.ca/en/tomatoes/p/20314629004_EA",
-        "image": "https://digital.loblaws.ca/PCX/20314629004_EA/en/1/6780000227_en_front_centre_marketing_GS1_Ecommerce_1200.png"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "Live NF SKU price refresh",
       "alternates": []
     },
@@ -2749,5 +2663,7 @@
       "alternates": []
     }
   ],
-  "updatedAt": "2026-08-20T01:54:41.184Z"
+  "updatedAt": "2026-08-20T01:54:41.184Z",
+  "matched": 83,
+  "itemCount": 134
 }

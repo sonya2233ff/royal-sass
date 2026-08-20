@@ -379,6 +379,160 @@ export function cottageCheeseFormFail(
 }
 
 /**
+ * Durable form gates for receipt/grocery impostors that OR-includes miss
+ * (`cream` OR `cheese` → mozzarella). Prefer no_match over a fill-in SKU.
+ */
+export function cafeOfferFormFail(
+  item: { id?: string; label?: string; category?: string },
+  hay: string,
+): string | null {
+  const id = (item.id ?? "").toLowerCase();
+  const t = hay.toLowerCase();
+  if (
+    item.category === "produce" &&
+    /\b\d+(?:[.,]\d+)?\s*ml\b/.test(t)
+  ) {
+    return "fresh ≠ canned ml";
+  }
+  if (id === "cream_cheese_bars") {
+    if (/\bmozz/.test(t) || /\bpizza\b/.test(t)) {
+      return "cream cheese bars ≠ mozzarella";
+    }
+    if (!/\bcream\s+cheese\b/.test(t)) {
+      return "cream cheese bars need cream cheese";
+    }
+    if (!/\bbar/.test(t)) return "cream cheese bars ≠ tub";
+    return null;
+  }
+  if (id === "cups_16oz_pet") {
+    if (/\b(2\s*oz|2oz|4\s*oz|4oz|shot cup|portion cup)\b/.test(t)) {
+      return "16oz PET ≠ mini/shot cup";
+    }
+    return null;
+  }
+  if (id === "jam_apple_strawberry") {
+    if (!/\bapple\b/.test(t) || !/\bstrawberr/.test(t)) {
+      return "apple strawberry jam needs both fruits";
+    }
+    return null;
+  }
+  if (id === "fresh_mozzarella") {
+    const fresh = /\b(fresh|fresca|buffalo|bocconcini)\b/.test(t);
+    if (/\b(block|loaf|shredded)\b/.test(t) && !fresh) {
+      return "fresh mozzarella ≠ block";
+    }
+    if (!fresh) return "fresh mozzarella needs fresh/fresca";
+    return null;
+  }
+  if (id === "cantaloupe") {
+    if (/\b(chunk|chunks|cubed|cut fruit)\b/.test(t)) {
+      return "whole cantaloupe ≠ chunks";
+    }
+    return null;
+  }
+  if (id === "bamboo_paddles") {
+    if (/\b(kayak|canoe|oar|boat|marine|wood paddle)\b/.test(t)) {
+      return "tasting paddle ≠ boat paddle";
+    }
+    if (/\bwood\b/.test(t) && !/\bbamboo\b/.test(t)) {
+      return "bamboo paddles ≠ wood paddle";
+    }
+    return null;
+  }
+  if (id === "floor_cleaner_lavender") {
+    if (!/\blavender\b/.test(t)) return "floor cleaner needs lavender";
+    return null;
+  }
+  if (id === "splenda_sweetener_cal") {
+    if (/\bstevia\b/.test(t)) return "splenda ≠ stevia";
+    return null;
+  }
+  if (id === "shredded_cheddar_cheese") {
+    if (/\bflavou?red\s+topping\b/.test(t) || /\bimitation\b/.test(t)) {
+      return "shredded cheddar ≠ flavoured topping";
+    }
+    return null;
+  }
+  if (id === "gloves_nitrile_large" || id === "gloves_nitrile_medium") {
+    if (/\bcleaning gloves\b/.test(t)) return "nitrile exam ≠ cleaning gloves";
+    return null;
+  }
+  if (id === "mushrooms_sliced") {
+    if (/\b(cremini|crimini|portobello|shiitake|blanched)\b/.test(t)) {
+      return "white mushrooms ≠ cremini/blanched";
+    }
+    return null;
+  }
+  if (id === "lids_dome_12_24oz") {
+    if (/\b20\s*x\s*50\b/.test(t) || /\b400\s+per\s+case\b/.test(t)) {
+      return "12-24oz dome lids ≠ warehouse case";
+    }
+    return null;
+  }
+  if (id === "brown_sugar") {
+    if (!/\bdark\b/.test(t)) return "dark brown sugar needs dark";
+    if (/\b(light|golden)\b/.test(t)) return "dark brown ≠ light brown";
+    return null;
+  }
+  if (id === "oven_mitts") {
+    if (
+      /\b1[0-2](?:\.\d+)?\s*(in|inch|")/.test(t) ||
+      /\b1[0-2](?:\.\d+)?\s*x/.test(t)
+    ) {
+      return "15in oven mitt ≠ mini mitt";
+    }
+    return null;
+  }
+  if (id === "measuring_cup") {
+    if (
+      /\b(filter cup|fruit washing|gadget|beater|multifunctional)\b/.test(t)
+    ) {
+      return "measuring cup ≠ gadget";
+    }
+    return null;
+  }
+  if (id === "edible_decor") {
+    if (/\b(barbie|disney|marvel|peppa)\b/.test(t)) {
+      return "edible decor ≠ character sprinkles";
+    }
+    return null;
+  }
+  if (id === "guest_towel_napkins") {
+    if (/\b(party|parties|bow tie|shower)\b/.test(t)) {
+      return "guest towel ≠ party napkin";
+    }
+    return null;
+  }
+  if (id === "lids_deli_round") {
+    if (/\bcombo\b/.test(t)) return "deli lids ≠ combo container";
+    return null;
+  }
+  if (id === "san_pellegrino_aranciata_or") {
+    if (/\brossa\b/.test(t) || /\bblood\b/.test(t)) {
+      return "aranciata ≠ rossa";
+    }
+    return null;
+  }
+  if (id === "cake_kits") {
+    if (/\b(nozzle|decorating kit|72 pcs)\b/.test(t)) {
+      return "cake kit ≠ decorating tools";
+    }
+    return null;
+  }
+  if (id === "wraps_plain_10in") {
+    if (/\b(6|7|8)\s*(in|inch|")/.test(t)) {
+      return "10in wrap ≠ small tortilla";
+    }
+    // 7–8" 10-count packs are ~320–340 g. Ignore PCX "$/100g" unit prices.
+    if (/(?<!\/)\b([2-3]\d{2})\s*g\b/.test(t)) {
+      return "10in wrap ≠ 7in pack";
+    }
+    return null;
+  }
+  return null;
+}
+
+/**
  * Phrase = substring; single token = word boundary (seed ≠ seedless, waffle = waffles).
  */
 export function nameMatchesFilterToken(hay: string, needle: string): boolean {
@@ -419,6 +573,8 @@ export function offerFailsStapleFilters(
   const n = `${brand ?? ""} ${name} ${extra}`.toLowerCase();
   const cottageForm = cottageCheeseFormFail(item, n);
   if (cottageForm) return cottageForm;
+  const cafeForm = cafeOfferFormFail(item, n);
+  if (cafeForm) return cafeForm;
   const banned = [
     ...(item.mustNotInclude ?? []),
     ...(item.rejectNameIncludes ?? []),
@@ -448,7 +604,10 @@ export function offerFailsStapleOfferFilters(
   offer: StapleOfferFilterInput,
 ): string | null {
   if (!isCategoryBStaple(item)) {
-    return offerFailsStapleFilters(item, offer.name, offer.brand);
+    const extra = [offer.packageSize ?? "", offerHandleHay(offer)]
+      .filter((s) => s.trim())
+      .join(" ");
+    return offerFailsStapleFilters(item, offer.name, offer.brand, extra);
   }
   const name = warehouseTitleView(offer.name);
   const brand = /^(fruits|vegetables)$/i.test(offer.brand ?? "")

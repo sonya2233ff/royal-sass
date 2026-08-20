@@ -1264,7 +1264,7 @@
       ],
       "matchMode": "cheapest",
       "category": "supplies",
-      "notes": "From receipts catalog (supplies)"
+      "notes": "From receipts catalog (supplies). 15in restaurant mitt; reject 11in consumer mitts."
     },
     {
       "id": "cups_16oz_black_ripple",
@@ -1317,7 +1317,12 @@
         "12 oz",
         "lid",
         "lids",
-        "squat"
+        "squat",
+        "2oz",
+        "2 oz",
+        "4oz",
+        "4 oz",
+        "shot"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -1363,6 +1368,10 @@
       "mustIncludeAny": [
         "jam",
         "jelly"
+      ],
+      "mustIncludeAll": [
+        "apple",
+        "strawberry"
       ],
       "mustNotInclude": [
         "4kg",
@@ -1465,7 +1474,8 @@
         "boat",
         "canoe",
         "sailing",
-        "wooden"
+        "wooden",
+        "wood"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -1506,7 +1516,9 @@
       "mustNotInclude": [
         "box",
         "boxes",
-        "board"
+        "board",
+        "nozzle",
+        "decorating"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -1537,7 +1549,10 @@
         "dried",
         "can",
         "canned",
-        "bowl"
+        "bowl",
+        "chunk",
+        "chunks",
+        "cubed"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -1753,9 +1768,11 @@
         "Cream Cheese Bars"
       ],
       "mustIncludeAny": [
-        "cream",
-        "cheese",
+        "bar",
         "bars"
+      ],
+      "mustIncludeAll": [
+        "cream cheese"
       ],
       "mustNotInclude": [
         "toy",
@@ -1766,7 +1783,10 @@
         "product",
         "shredded",
         "tex",
-        "marble"
+        "marble",
+        "mozzarella",
+        "pizza",
+        "tub"
       ],
       "matchMode": "cheapest",
       "category": "dairy",
@@ -1781,10 +1801,15 @@
       "mustIncludeAny": [
         "brown sugar"
       ],
+      "mustIncludeAll": [
+        "dark"
+      ],
       "mustNotInclude": [
         "white",
         "icing",
-        "powdered"
+        "powdered",
+        "light",
+        "golden"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -1818,7 +1843,7 @@
       "matchMode": "cheapest",
       "category": "supplies",
       "notes": "From receipts catalog (supplies)",
-      "maxPlausiblePrice": 20
+      "maxPlausiblePrice": 80
     },
     {
       "id": "double_burner",
@@ -1856,7 +1881,9 @@
         "costume",
         "topper",
         "card",
-        "mother"
+        "mother",
+        "barbie",
+        "disney"
       ],
       "matchMode": "cheapest",
       "category": "grocery",
@@ -1892,6 +1919,9 @@
       ],
       "mustIncludeAny": [
         "floor cleaner"
+      ],
+      "mustIncludeAll": [
+        "lavender"
       ],
       "mustNotInclude": [
         "toy",
@@ -1936,7 +1966,10 @@
         "Fresh Mozzarella"
       ],
       "mustIncludeAny": [
-        "mozzarella"
+        "fresh mozzarella",
+        "mozzarella fresca",
+        "buffalo mozzarella",
+        "bocconcini"
       ],
       "mustNotInclude": [
         "toy",
@@ -1953,7 +1986,8 @@
         "perogi",
         "perogy",
         "pierogi",
-        "cheemo"
+        "cheemo",
+        "block"
       ],
       "matchMode": "cheapest",
       "category": "deli",
@@ -2113,7 +2147,10 @@
       ],
       "mustNotInclude": [
         "luncheon",
-        "dinner napkin"
+        "dinner napkin",
+        "party",
+        "parties",
+        "bow tie"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2434,7 +2471,10 @@
         "costume",
         "cooker",
         "rice",
-        "machine"
+        "machine",
+        "gadget",
+        "filter",
+        "washing"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2478,7 +2518,8 @@
         "xl",
         "x-large",
         "vinyl",
-        "latex"
+        "latex",
+        "cleaning gloves"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2502,7 +2543,8 @@
         "small",
         "xl",
         "vinyl",
-        "latex"
+        "latex",
+        "cleaning gloves"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2686,6 +2728,11 @@
         "6 inch",
         "6in",
         "6\"",
+        "7 inch",
+        "7in",
+        "7\"",
+        "8 inch",
+        "8in",
         "spinach",
         "whole wheat",
         "corn",
@@ -2812,7 +2859,8 @@
         "frozen puff pastry"
       ],
       "mustIncludeAny": [
-        "puff pastry"
+        "puff pastry",
+        "puff dough"
       ],
       "mustNotInclude": [
         "shell",
@@ -2899,7 +2947,8 @@
       ],
       "mustNotInclude": [
         "container",
-        "tub"
+        "tub",
+        "combo"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2918,7 +2967,10 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "rossa",
+        "limonata",
+        "chinotto"
       ],
       "matchMode": "preferred",
       "category": "grocery",
@@ -2960,7 +3012,10 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "flavoured",
+        "flavored",
+        "imitation"
       ],
       "matchMode": "cheapest",
       "category": "deli",
@@ -3032,7 +3087,13 @@
         "can",
         "canned",
         "potato",
-        "potatoes"
+        "potatoes",
+        "cremini",
+        "crimini",
+        "portobello",
+        "shiitake",
+        "blanched",
+        "ml"
       ],
       "matchMode": "cheapest",
       "category": "produce",
@@ -3098,7 +3159,8 @@
       "mustNotInclude": [
         "toy",
         "book",
-        "costume"
+        "costume",
+        "stevia"
       ],
       "matchMode": "preferred",
       "category": "grocery",
@@ -3303,8 +3365,7 @@
       "mustNotInclude": [
         "orange",
         "grape",
-        "cocktail",
-        "pressed"
+        "cocktail"
       ],
       "matchMode": "preferred",
       "category": "grocery",

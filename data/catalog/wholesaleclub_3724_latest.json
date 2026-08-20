@@ -3,7 +3,7 @@
   "storeId": "3724",
   "source": "pcx_bff_wholesaleclub_3724",
   "checkedAt": "2026-08-20T00:31:17.059Z",
-  "note": "Wholesale Club Richmond Hill #3724 — PCX BFF shelf, same client as No Frills.",
+  "note": "Wholesale Club Richmond Hill #3724 \u2014 PCX BFF shelf, same client as No Frills.",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -882,7 +882,7 @@
       "label": "Cottage Cheese",
       "status": "no_match",
       "offer": null,
-      "notes": "Exact Mehadrin cottage cheese is NF #3660 only — do not fill with Great Value / Nordica / No Name / mozzarella",
+      "notes": "Exact Mehadrin cottage cheese is NF #3660 only \u2014 do not fill with Great Value / Nordica / No Name / mozzarella",
       "alternates": []
     },
     {
@@ -896,19 +896,8 @@
     {
       "id": "cream_cheese_bars",
       "label": "Cream Cheese Bars",
-      "status": "ok",
-      "offer": {
-        "productId": "21383785_EA",
-        "name": "Sunspun Pizza Mozzarella Cheese",
-        "brand": "Sunspun",
-        "packageSize": "2.4 kg, $1.33/100g",
-        "parsedMassKg": 2.4,
-        "price": 31.99,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:59.593Z",
-        "sourceUrl": "https://www.wholesaleclub.ca/en/pizza-mozzarella-cheese/p/21383785_EA",
-        "image": "https://digital.loblaws.ca/PCX/21383785_EA/en/1/6148300372_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "Live WC SKU price refresh",
       "alternates": []
     },
@@ -1004,19 +993,8 @@
     {
       "id": "fresh_mozzarella",
       "label": "Fresh Mozzarella",
-      "status": "ok",
-      "offer": {
-        "productId": "20812112_EA",
-        "name": "Schomberg Mozzarella Block",
-        "brand": "Schomberg",
-        "packageSize": "2 kg, $1.35/100g",
-        "parsedMassKg": 2,
-        "price": 26.99,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:01.960Z",
-        "sourceUrl": "https://www.wholesaleclub.ca/en/mozzarella-block/p/20812112_EA",
-        "image": "https://digital.loblaws.ca/PCX/20812112_EA/en/1/20812112_en_front_1200.png"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "Live WC SKU price refresh",
       "alternates": []
     },
@@ -1173,7 +1151,7 @@
     },
     {
       "id": "jalapeno_peppers_kg",
-      "label": "Jalapeño Peppers",
+      "label": "Jalape\u00f1o Peppers",
       "status": "ok",
       "offer": {
         "productId": "20088387001_KG",
@@ -1369,29 +1347,19 @@
       "label": "Parsley",
       "status": "ok",
       "offer": {
-        "productId": "20167477001_EA",
-        "name": "Parsley Root",
-        "packageSize": "1 ea, $4.99/1ea",
-        "price": 4.99,
+        "productId": "20139141001_EA",
+        "name": "Italian Parsley",
+        "packageSize": "1 ea, $2.49/1ea",
+        "parsedMassKg": 0,
+        "price": 2.49,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:07.949Z",
-        "sourceUrl": "https://www.wholesaleclub.ca/en/parsley-root/p/20167477001_EA",
-        "image": "https://digital.loblaws.ca/PCX/20167477001_EA/en/1/20167477001_en_front_1200.png"
+        "checkedAt": "2026-08-18T22:00:42.543Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/italian-parsley/p/20139141001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20139141001_EA/en/1/20139141001_en_front_1200.png"
       },
       "notes": "Live WC SKU price refresh",
       "alternates": [
-        {
-          "productId": "20139141001_EA",
-          "name": "Italian Parsley",
-          "packageSize": "1 ea, $2.49/1ea",
-          "parsedMassKg": 0,
-          "price": 2.49,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:00:42.543Z",
-          "sourceUrl": "https://www.wholesaleclub.ca/en/italian-parsley/p/20139141001_EA",
-          "image": "https://digital.loblaws.ca/PCX/20139141001_EA/en/1/20139141001_en_front_1200.png"
-        },
         {
           "productId": "20015746001_EA",
           "name": "Curly Parsley",
@@ -1647,19 +1615,8 @@
     {
       "id": "shredded_cheddar_cheese",
       "label": "Shredded Cheddar Cheese",
-      "status": "ok",
-      "offer": {
-        "productId": "21764568_EA",
-        "name": "COUNTRY FARMS Shredded Cheddar Flavoured Topping",
-        "brand": "COUNTRY FARMS",
-        "packageSize": "2 kg, $1.30/100g",
-        "parsedMassKg": 2,
-        "price": 25.99,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:12.433Z",
-        "sourceUrl": "https://www.wholesaleclub.ca/en/shredded-cheddar-flavoured-topping/p/21764568_EA",
-        "image": "https://digital.loblaws.ca/PCX/21764568_EA/en/1/5975606066_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
-      },
+      "status": "no_match",
+      "offer": null,
       "notes": "Live WC SKU price refresh",
       "alternates": []
     },
@@ -1695,32 +1652,20 @@
       "label": "Sliced White Mushrooms",
       "status": "ok",
       "offer": {
-        "productId": "20299211_EA",
-        "name": "No Name Sliced Mushrooms",
-        "brand": "No Name",
-        "packageSize": "284 ml, $0.45/100ml",
-        "parsedMassKg": 0.284,
-        "price": 1.29,
+        "productId": "20768283_EA",
+        "name": "President's Choice Sliced White Mushrooms",
+        "brand": "President's Choice",
+        "packageSize": "454 g, $0.88/100g",
+        "parsedMassKg": 0.454,
+        "price": 3.99,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:13.529Z",
-        "sourceUrl": "https://www.wholesaleclub.ca/en/sliced-mushrooms/p/20299211_EA",
-        "image": "https://digital.loblaws.ca/PCX/20299211_EA/en/1/20299211_en_front_v2_1200.png"
+        "checkedAt": "2026-08-18T22:01:00.188Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/sliced-white-mushrooms/p/20768283_EA",
+        "image": "https://digital.loblaws.ca/PCX/20768283_EA/en/1/20768283_en_front_1200.png"
       },
-      "notes": "Live WC SKU price refresh",
+      "notes": "Live WC SKU price refresh \u00b7 impostor cleared, promoted alternate",
       "alternates": [
-        {
-          "productId": "20768283_EA",
-          "name": "President's Choice Sliced White Mushrooms",
-          "brand": "President's Choice",
-          "packageSize": "454 g, $0.88/100g",
-          "parsedMassKg": 0.454,
-          "price": 3.99,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:01:00.188Z",
-          "sourceUrl": "https://www.wholesaleclub.ca/en/sliced-white-mushrooms/p/20768283_EA",
-          "image": "https://digital.loblaws.ca/PCX/20768283_EA/en/1/20768283_en_front_1200.png"
-        },
         {
           "productId": "20743653_EA",
           "name": "President's Choice Sliced White Mushrooms",
@@ -1734,7 +1679,12 @@
           "sourceUrl": "https://www.wholesaleclub.ca/en/sliced-white-mushrooms/p/20743653_EA",
           "image": "https://digital.loblaws.ca/PCX/20743653_EA/en/1/20743653_en_front_1200.png"
         }
-      ]
+      ],
+      "rejected": {
+        "productId": "20299211_EA",
+        "name": "No Name Sliced Mushrooms",
+        "reason": "fresh \u2260 canned ml"
+      }
     },
     {
       "id": "sour_cream",
@@ -1987,5 +1937,7 @@
       "alternates": []
     }
   ],
-  "updatedAt": "2026-08-20T00:31:17.059Z"
+  "updatedAt": "2026-08-20T00:31:17.059Z",
+  "matched": 59,
+  "itemCount": 125
 }

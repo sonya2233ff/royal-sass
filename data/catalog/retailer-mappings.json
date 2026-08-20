@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T22:01:18.402Z",
+  "updatedAt": "2026-08-20T21:55:03.949Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -4635,9 +4635,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:52:32.402Z"
+          "updatedAt": "2026-08-20T21:46:22.311Z",
+          "filterReason": "cream cheese bars ≠ tub"
         },
         "wholesaleclub": {
           "retailer": "wholesaleclub",
@@ -4647,9 +4648,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:59:56.370Z"
+          "updatedAt": "2026-08-20T21:46:22.302Z",
+          "filterReason": "cream cheese bars ≠ mozzarella"
         }
       },
       "prices": [
@@ -4902,9 +4904,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T22:00:02.885Z"
+          "updatedAt": "2026-08-20T21:46:22.302Z",
+          "filterReason": "fresh mozzarella ≠ block"
         }
       },
       "prices": [
@@ -5792,7 +5795,7 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T22:00:44.981Z"
+          "updatedAt": "2026-08-20T21:55:00.000Z"
         }
       },
       "prices": [
@@ -6173,9 +6176,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:54:47.531Z"
+          "updatedAt": "2026-08-20T21:54:15.524Z",
+          "filterReason": "deli lids ≠ combo container"
         }
       },
       "prices": [
@@ -6199,15 +6203,14 @@
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "san-pellegrino-aranciata-rossa-cans-6x330-ml-1",
-          "name": "SAN PELLEGRINO - ROSSA(RED) ARANCIATA ROSSA CANS 6x330 ML",
-          "upc": "0005500020142",
+          "retailerProductId": "san-pellegrino-aranciata-cans-6x330ml-1",
+          "name": "SAN PELLEGRINO - ARANCIATA CANS 6x330ML",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.9,
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-18T21:53:23.081Z"
+          "updatedAt": "2026-08-20T21:55:00.000Z"
         }
       },
       "prices": [
@@ -6249,9 +6252,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T22:00:59.022Z"
+          "updatedAt": "2026-08-20T21:46:22.306Z",
+          "filterReason": "shredded cheddar ≠ flavoured topping"
         }
       },
       "prices": [
@@ -6377,9 +6381,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:53:27.282Z"
+          "updatedAt": "2026-08-20T21:46:22.312Z",
+          "filterReason": "white mushrooms ≠ cremini/blanched"
         },
         "wholesaleclub": {
           "retailer": "wholesaleclub",
@@ -6389,9 +6394,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T22:01:01.601Z"
+          "updatedAt": "2026-08-20T21:54:15.524Z",
+          "filterReason": "fresh ≠ canned ml"
         }
       },
       "prices": [
@@ -6563,9 +6569,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:53:34.524Z"
+          "updatedAt": "2026-08-20T21:46:22.312Z",
+          "filterReason": "mustNotInclude:grape"
         },
         "wholesaleclub": {
           "retailer": "wholesaleclub",
