@@ -238,7 +238,10 @@ async function getJson(
   pathAndQuery: string,
 ): Promise<unknown> {
   const url = `${baseUrl()}${pathAndQuery.startsWith("/") ? "" : "/"}${pathAndQuery}`;
-  const res = await fetch(url, { headers: authHeaders() });
+  const res = await fetch(url, {
+    headers: authHeaders(),
+    signal: AbortSignal.timeout(25_000),
+  });
   const text = await res.text();
   let body: unknown = null;
   try {

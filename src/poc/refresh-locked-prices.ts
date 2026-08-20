@@ -62,7 +62,7 @@ function storeSummary(
 async function main() {
   const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
   const all = [...PINNED_IDS, ...RECEIPT_STAPLE_IDS];
-  const ids = (args.length ? args : all).filter((id) => isShownStaple({ id }));
+  const ids = [...new Set((args.length ? args : all).filter((id) => isShownStaple({ id })))];
   if (!ids.length) {
     console.error("No valid staple ids");
     process.exit(1);

@@ -83,6 +83,35 @@ function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+async function runPool<T>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T) => Promise<void>,
+): Promise<void> {
+  let next = 0;
+  async function run() {
+    for (;;) {
+      const i = next;
+      next += 1;
+      if (i >= items.length) return;
+      await worker(items[i]);
+    }
+  }
+  const n = Math.max(1, Math.min(concurrency, items.length));
+  await Promise.all(Array.from({ length: n }, () => run()));
+}
+
+function isTimeoutError(e: unknown): boolean {
+  if (!e || typeof e !== "object") return false;
+  const name = "name" in e ? String(e.name) : "";
+  const msg = e instanceof Error ? e.message : String(e);
+  return (
+    name === "TimeoutError" ||
+    name === "AbortError" ||
+    /aborted|timeout/i.test(msg)
+  );
+}
+
 function slimOffer(o: ProductOffer, previous?: CatalogOffer | null): CatalogOffer {
   const mass =
     parseMassFromText(o.packageSize ?? "") ?? parseMassFromText(o.name);
@@ -171,6 +200,7 @@ async function fetchMatchingSku(
         blocked = e;
         break;
       }
+      if (isTimeoutError(e)) break;
     }
     await sleep(250);
   }
@@ -239,6 +269,12 @@ function looksLikeTomatoSeeds(itemId: string, name: string): boolean {
   return itemId === "tomatoes_grape" && /\bseeds?\b/i.test(name);
 }
 
+function logRefreshProgress(store: string, n: number, total: number, id: string) {
+  if (n === 1 || n === total || n % 10 === 0) {
+    console.error(`  ${store} ${n}/${total} ${id}`);
+  }
+}
+
 /** Live price refresh for known SKUs. Keeps identity; skips rows with no SKU. */
 export async function refreshCatalogPrices(
   ids: string[],
@@ -279,15 +315,18 @@ export async function refreshCatalogPrices(
   let wmBlocked: string | null =
     wmSource === "missing_key" ? WALMART_RAPID_MISSING_KEY : null;
 
-  for (const id of ids) {
+  let wmN = 0;
+  await runPool(ids, 4, async (id) => {
+    wmN += 1;
+    logRefreshProgress("walmart", wmN, ids.length, id);
     const item = byId.get(id);
     if (!item) {
       result.walmart.skipped.push({ id, reason: "unknown staple" });
-      continue;
+      return;
     }
     if (item.unavailableAtWalmart) {
       result.walmart.skipped.push({ id, reason: "unavailable at Walmart" });
-      continue;
+      return;
     }
     const row = (wmCatalog.items as Array<Record<string, unknown>>).find(
       (r) => r.id === id,
@@ -301,14 +340,14 @@ export async function refreshCatalogPrices(
     );
     if (!sku) {
       result.walmart.skipped.push({ id, reason: "no locked/catalog SKU" });
-      continue;
+      return;
     }
     if (!wm || wmBlocked) {
       result.walmart.failed.push({
         id,
         reason: wmBlocked ?? WALMART_RAPID_MISSING_KEY,
       });
-      continue;
+      return;
     }
     try {
       const prev = (row?.offer as CatalogOffer | undefined)?.price;
@@ -318,21 +357,21 @@ export async function refreshCatalogPrices(
           id,
           reason: `SKU ${sku} not found on refresh`,
         });
-        continue;
+        return;
       }
       if (looksLikeTomatoSeeds(id, live.name)) {
         result.walmart.failed.push({
           id,
           reason: `refused seed hit for grape tomatoes (${live.productId})`,
         });
-        continue;
+        return;
       }
       if (priceJumpTooBig(prev, live.price)) {
         result.walmart.failed.push({
           id,
           reason: `price jump $${prev} → $${live.price} rejected`,
         });
-        continue;
+        return;
       }
       const sanity = sanityCheckOffer({
         itemId: id,
@@ -348,7 +387,7 @@ export async function refreshCatalogPrices(
           id,
           reason: sanity.reason ?? sanity.status,
         });
-        continue;
+        return;
       }
       const prevOffer = row?.offer as CatalogOffer | undefined;
       const offer = slimOffer(live, prevOffer);
@@ -386,7 +425,7 @@ export async function refreshCatalogPrices(
       }
       result.walmart.failed.push({ id, reason: msg });
     }
-  }
+  });
 
   if (wm && result.walmart.updated.length > 0) {
     (wmCatalog as { checkedAt: string }).checkedAt = new Date().toISOString();
@@ -397,7 +436,10 @@ export async function refreshCatalogPrices(
   const nf = new NoFrillsConnector();
   let nfBlocked: string | null = null;
 
+  let nfN = 0;
   for (const id of ids) {
+    nfN += 1;
+    logRefreshProgress("nofrills", nfN, ids.length, id);
     const item = byId.get(id);
     if (!item) {
       result.noFrills.skipped.push({ id, reason: "unknown staple" });
@@ -461,7 +503,10 @@ export async function refreshCatalogPrices(
       items: [],
     } as Awaited<ReturnType<typeof loadWholesaleClubCatalog>>);
 
+  let wcN = 0;
   for (const id of ids) {
+    wcN += 1;
+    logRefreshProgress("wholesaleclub", wcN, ids.length, id);
     const item = byId.get(id);
     if (!item) {
       result.wholesaleClub.skipped.push({ id, reason: "unknown staple" });
@@ -525,7 +570,10 @@ export async function refreshCatalogPrices(
       items: [],
     } as Awaited<ReturnType<typeof loadMvrCatalog>>);
 
+  let mvrN = 0;
   for (const id of ids) {
+    mvrN += 1;
+    logRefreshProgress("mvr", mvrN, ids.length, id);
     const item = byId.get(id);
     if (!item) {
       result.mvr.skipped.push({ id, reason: "unknown staple" });

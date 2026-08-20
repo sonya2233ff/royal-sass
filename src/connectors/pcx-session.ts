@@ -148,6 +148,7 @@ export async function fetchWithPcxJar(
       body: followRedirect ? undefined : init.body,
       headers,
       redirect: "manual",
+      signal: init.signal ?? AbortSignal.timeout(20_000),
     });
     applySetCookiesFromResponse(jar, res);
     if (res.status >= 300 && res.status < 400) {

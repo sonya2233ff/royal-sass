@@ -304,6 +304,7 @@ async function postPcxSearch(
     method: "POST",
     headers: buildHeaders(originHost, banner, jar),
     body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(25_000),
   });
   applySetCookiesFromResponse(jar, res);
   const body = await res.text();

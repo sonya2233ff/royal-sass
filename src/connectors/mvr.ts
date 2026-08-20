@@ -140,6 +140,7 @@ type SuggestProduct = {
 async function getJson(url: string): Promise<unknown> {
   const res = await fetch(url, {
     headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(20_000),
   });
   const text = await res.text();
   if (!res.ok) {
