@@ -28,6 +28,11 @@ import { toRestaurantProduct, stapleWithClientOverride, applyProductOverride } f
 import { sanityCheckOffer } from "@/domain/sanity";
 import { scoreOfferMatch, staplePickQuery } from "@/domain/matching";
 import { identityKeywords, isPackSizeKeyword } from "@/domain/pack-tokens";
+import {
+  catalogSearchHay,
+  searchShownCatalog,
+  stapleMatchesCatalogQuery,
+} from "@/domain/staple-search";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -69,6 +74,7 @@ async function main() {
   const dozen = cfg.items.find((i) => i.id === "large_eggs_dozen");
   const tomato = cfg.items.find((i) => i.id === "tomato");
   const wraps = cfg.items.find((i) => i.id === "wraps_plain_6in");
+  const eggplant = cfg.items.find((i) => i.id === "eggplant_kg");
   if (
     !frozen ||
     !fresh ||
@@ -87,7 +93,8 @@ async function main() {
     !grayridge ||
     !dozen ||
     !tomato ||
-    !wraps
+    !wraps ||
+    !eggplant
   ) {
     throw new Error("missing staples");
   }
@@ -627,6 +634,54 @@ async function main() {
   assert(isShownStaple(grayridge) === false, "Grayridge lock is not a second catalog egg");
   const shownEggs = cfg.items.filter((i) => isShownStaple(i) && queryLooksLikeShellEggs("яйця") && (i.id === "grayridge_eggs" || i.id === "large_eggs_dozen" || i.category === "eggs"));
   assert(shownEggs.length === 1 && shownEggs[0]!.id === "large_eggs_dozen", "catalog has one shell-egg staple");
+
+  assert(
+    !catalogSearchHay(wraps).includes("pumpkin"),
+    "wraps catalog hay must not include banned pumpkin",
+  );
+  assert(
+    !stapleMatchesCatalogQuery(wraps, "pumpkin"),
+    "pumpkin must not match wraps via catalog search",
+  );
+  const pumpkinHits = searchShownCatalog(cfg.items.filter(isShownStaple), "pumpkin", 50);
+  assert(
+    pumpkinHits.every((i) => i.id !== "wraps_plain_6in"),
+    "pumpkin search must not surface wraps",
+  );
+  const eggUaHits = searchShownCatalog(cfg.items.filter(isShownStaple), "яйця", 50);
+  assert(
+    eggUaHits.length === 1 && eggUaHits[0]!.id === "large_eggs_dozen",
+    `яйця must only hit Large Eggs, got ${eggUaHits.map((i) => i.id).join(",")}`,
+  );
+  const eggEnHits = searchShownCatalog(cfg.items.filter(isShownStaple), "eggs", 50);
+  assert(
+    eggEnHits.length === 1 && eggEnHits[0]!.id === "large_eggs_dozen",
+    `eggs must only hit Large Eggs, got ${eggEnHits.map((i) => i.id).join(",")}`,
+  );
+  assert(
+    !stapleMatchesCatalogQuery(egg, "eggs"),
+    "eggs must not match egg whites",
+  );
+  assert(
+    !stapleMatchesCatalogQuery(eggplant, "eggs"),
+    "eggs must not fall through to eggplant",
+  );
+  assert(
+    stapleMatchesCatalogQuery(eggplant, "eggplant"),
+    "eggplant query still finds eggplant",
+  );
+  assert(
+    stapleMatchesCatalogQuery(tomato, "tomato"),
+    "tomato query finds the tomato card",
+  );
+  assert(
+    !stapleMatchesCatalogQuery(tomato, "unico"),
+    "Unico canned title must not be the tomato search hay",
+  );
+  assert(
+    !catalogSearchHay(tomato).includes("unico"),
+    "tomato catalog hay excludes mustNotInclude unico",
+  );
 
   const shown = cfg.items.filter(isShownStaple);
   assert(shown.length >= 124, `shown staples ${shown.length}`);

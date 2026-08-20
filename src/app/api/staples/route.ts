@@ -38,6 +38,7 @@ import {
   loadRetailerMappings,
   lookupConfirmed,
 } from "@/lib/retailer-mappings";
+import { catalogSearchHay } from "@/domain/staple-search";
 import { preferredStapleImage } from "@/lib/product-image";
 import { loadSobeysCatalog } from "@/lib/sobeys-catalog";
 import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
@@ -363,6 +364,10 @@ export async function GET() {
           ...i,
           soldByWeight: isSoldByWeightItem(i),
         }),
+        searchHay: catalogSearchHay(i),
+        queries: i.queries,
+        mustIncludeAny: i.mustIncludeAny,
+        mustIncludeAll: i.mustIncludeAll,
         weightCompare: showWeightUnits || eggItem,
         soldByWeight: isSoldByWeightItem(i),
         typicalEachGrams: typicalEachGramsOf(i) ?? null,

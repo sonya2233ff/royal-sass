@@ -6,6 +6,7 @@ import {
   type AmountUnit,
 } from "@/domain/purchase-units";
 import { isEggPackStaple, typicalEggCartonCount } from "@/domain/egg-pack";
+import { stapleMatchesCatalogQuery } from "@/domain/staple-search";
 
 export type { AmountUnit };
 
@@ -348,14 +349,20 @@ export function cartSize(cart: Cart): number {
   return Object.keys(cart).length;
 }
 
-/** Search filter helper — never mutates cart. */
+/** Search filter helper — never mutates cart. Shown-catalog hay only. */
 export function filterVisibleIds(
-  items: Array<{ id: string; label: string }>,
+  items: Array<{
+    id: string;
+    label: string;
+    queries?: string[];
+    mustIncludeAny?: string[];
+    mustIncludeAll?: string[];
+    searchHay?: string;
+  }>,
   query: string,
 ): string[] {
-  const q = query.trim().toLowerCase();
   return items
-    .filter((item) => !q || item.label.toLowerCase().includes(q))
+    .filter((item) => stapleMatchesCatalogQuery(item, query))
     .map((item) => item.id);
 }
 

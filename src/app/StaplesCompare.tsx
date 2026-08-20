@@ -25,10 +25,10 @@ import {
 import {
   EGG_COUNT_PRESETS,
   isEggPackStaple,
-  queryLooksLikeShellEggs,
   typicalEggCartonCount,
   ukEggCountLabel,
 } from "@/domain/egg-pack";
+import { stapleMatchesCatalogQuery } from "@/domain/staple-search";
 import {
   CART_STORAGE_KEY,
   PRODUCT_OVERRIDE_STORAGE_KEY,
@@ -59,6 +59,10 @@ type Staple = {
   id: string;
   label: string;
   image: string | null;
+  searchHay?: string;
+  queries?: string[];
+  mustIncludeAny?: string[];
+  mustIncludeAll?: string[];
   notes?: string;
   status: OfferStatus;
   statusReason?: string | null;
@@ -772,29 +776,28 @@ export function StaplesCompare() {
   }
 
   const visibleItems = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return items.filter((item) => {
-      if (!q) return true;
-      if (queryLooksLikeShellEggs(q) && isEggPackStaple(item)) return true;
-      const blob = [
-        item.label,
-        item.walmartCached?.name,
-        item.noFrillsCached?.name,
-        item.wholesaleClubCached?.name,
-        item.mvrCached?.name,
-        item.walmartCached?.productId,
-        item.noFrillsCached?.productId,
-        item.wholesaleClubCached?.productId,
-        item.mvrCached?.productId,
-        item.sobeysCached?.name,
-        item.sobeysCached?.productId,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-      return blob.includes(q);
-    });
+    const q = query.trim();
+    if (!q) return items;
+    return items.filter((item) => stapleMatchesCatalogQuery(item, q));
   }, [items, query]);
+
+  const searchCatalog = useMemo(
+    () =>
+      items.map((item) => ({
+        id: item.id,
+        label: item.label,
+        image: item.image,
+        searchHay: item.searchHay,
+        queries: item.queries,
+        mustIncludeAny: item.mustIncludeAny,
+        mustIncludeAll: item.mustIncludeAll,
+        wmPrice: item.walmartCached?.price ?? null,
+        nfPrice: item.noFrillsCached?.price ?? null,
+        wcPrice: item.wholesaleClubCached?.price ?? null,
+        mvrPrice: item.mvrCached?.price ?? null,
+      })),
+    [items],
+  );
 
   const cacheIsOld = useMemo(() => {
     const cutoffMs = 12 * 36e5;
@@ -830,11 +833,6 @@ export function StaplesCompare() {
         .getElementById(`staple-${id}`)
         ?.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 50);
-  }
-
-  async function onAdopted(id: string) {
-    await reload();
-    pickStaple(id);
   }
 
   function setCustomAmount(id: string, value: string) {
@@ -1385,9 +1383,8 @@ export function StaplesCompare() {
           query={query}
           onQueryChange={setQuery}
           onPickStaple={pickStaple}
-          onAdopted={(id) => {
-            void onAdopted(id);
-          }}
+          catalogReady={catalogReady}
+          catalog={searchCatalog}
         />
       </header>
 
@@ -1798,7 +1795,7 @@ export function StaplesCompare() {
         {catalogReady && visibleItems.length === 0 && (
           <p className="empty-grid">
             {query.trim()
-              ? "У списку немає такого товару — обери з підказок вище, щоб додати."
+              ? "У списку немає такого продукту"
               : "Немає карток."}
           </p>
         )}

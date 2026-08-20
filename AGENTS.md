@@ -98,7 +98,7 @@ Shown cards = `PINNED_IDS` **or** `RECEIPT_STAPLE_IDS` **or** `custom: true` (`i
 - `RECEIPT_STAPLE_IDS`: **94** ids from `data/catalog/new-from-receipts.json` (supplies, kosher dairy, branded grocery, more produce/frozen). `ice_cubes` overlaps pinned.
 - **Shown unique ids:** 124 (31 + 94 − 1 overlap). `config/cafe-staples.json` still contains hidden rows such as `grayridge_eggs` for catalog merge.
 
-Search/adopt can still add `custom: true` rows (`config/custom-staples.json`, usually untracked). Those show up locally; do not commit that file unless asked.
+Homepage search is **shown-catalog only** (`src/domain/staple-search.ts`): card label, id, queries, and include tokens — never retailer offer names, handles, or live WM/NF/WC/MVR hits. Searching `pumpkin` must not surface wraps because an NF foam pumpkin sat on that SKU. `яйця` / `eggs` hits only `large_eggs_dozen`. The homepage typeahead does **not** adopt a new product; `POST /api/staples/adopt` remains for the match inspector. Custom `custom: true` rows (`config/custom-staples.json`, usually untracked) still show if present; do not commit that file unless asked.
 
 ## Category A vs Category B
 
@@ -161,6 +161,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `src/domain/` | Units, identity, sale mode, checkout, fair compare, Category B identity |
 | `src/domain/pack-tokens.ts` | Pack size is not identity (`stripPackNoise`, `identityKeywords`) |
 | `src/domain/egg-pack.ts` | Egg chips, Ukrainian search, catalog source merge |
+| `src/domain/staple-search.ts` | Homepage catalog-only search hay / scoring |
 | `src/domain/matching.ts` | `staplePickQuery`, `scoreOfferMatch` (soft size tokens) |
 | `src/domain/restaurant-product.ts` | Settings merge (`stapleWithClientOverride`) |
 | `src/lib/staples.ts` | Catalog I/O, `summarizeOffer`, egg/weight sets |
@@ -170,6 +171,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `src/lib/product-image.ts` | Protocol-relative Shopify → `https:` |
 | `src/lib/compare-stats.ts` | Compact compare-run persist + summaries |
 | `src/app/StaplesCompare.tsx` | Main UI (cart, settings, compare, rematch, stats) |
+| `src/app/ProductSearch.tsx` | Homepage typeahead over shown staples only |
 | `src/app/ProductSettings.tsx` | Per-card match/quantity settings modal |
 
 **Live data flow**
@@ -189,7 +191,8 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/refresh-nf` | `refresh-wc` | `refresh-mvr` | `refresh-sobeys` — live search for that retailer
 - `POST /api/staples/rematch` — live rematch **selected ids** across WM+NF+WC+MVR using client `productOverrides`. Not price-only. Not “all visible cards”.
 - `POST /api/staples/refresh-prices` — price-only `getProduct` on locked/catalog SKUs (no rematch)
-- `POST /api/staples/search` | `adopt` | `confirm` — find/add staple; 👍/👎 lock
+- `GET /api/staples/search` — shown cafe staples only (no live store hits, empty `walmart`/`noFrills`/`wholesaleClub`/`mvr` arrays)
+- `POST /api/staples/adopt` | `confirm` — adopt remains for the match inspector; homepage search does not call it; 👍/👎 lock
 - `GET|POST /api/staples/delete` — **405**, deletion disabled
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.

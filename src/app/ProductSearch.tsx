@@ -1,136 +1,56 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  searchShownCatalog,
+  type CatalogSearchItem,
+} from "@/domain/staple-search";
 
-type StapleHit = {
-  id: string;
-  label: string;
-  image: string | null;
-  wmName?: string | null;
-  nfName?: string | null;
-  wcName?: string | null;
-  mvrName?: string | null;
+export type CatalogSearchHit = CatalogSearchItem & {
+  image?: string | null;
   wmPrice?: number | null;
   nfPrice?: number | null;
   wcPrice?: number | null;
   mvrPrice?: number | null;
 };
 
-type StoreHit = {
-  retailer: "walmart_ca" | "no_frills" | "wholesale_club" | "mvr";
-  productId: string;
-  name: string;
-  price: number;
-  packageSize?: string;
-  sourceUrl?: string;
-  image?: string | null;
-  onSale?: boolean;
-  wasPrice?: number;
-  stapleId?: string | null;
-};
-
 type Props = {
   query: string;
   onQueryChange: (q: string) => void;
   onPickStaple: (id: string) => void;
-  onAdopted: (id: string) => void;
+  catalog: CatalogSearchHit[];
+  catalogReady?: boolean;
 };
+
+function priceLine(hit: CatalogSearchHit): string {
+  const bits: string[] = [];
+  if (hit.wmPrice != null) bits.push(`WM $${hit.wmPrice.toFixed(2)}`);
+  if (hit.nfPrice != null) bits.push(`NF $${hit.nfPrice.toFixed(2)}`);
+  if (hit.wcPrice != null) bits.push(`WC $${hit.wcPrice.toFixed(2)}`);
+  if (hit.mvrPrice != null) bits.push(`MVR $${hit.mvrPrice.toFixed(2)}`);
+  return bits.join(" · ");
+}
 
 export function ProductSearch({
   query,
   onQueryChange,
   onPickStaple,
-  onAdopted,
+  catalog,
+  catalogReady = true,
 }: Props) {
   const boxId = useId();
   const wrapRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [adopting, setAdopting] = useState(false);
-  const [staples, setStaples] = useState<StapleHit[]>([]);
-  const [walmart, setWalmart] = useState<StoreHit[]>([]);
-  const [noFrills, setNoFrills] = useState<StoreHit[]>([]);
-  const [wholesaleClub, setWholesaleClub] = useState<StoreHit[]>([]);
-  const [mvr, setMvr] = useState<StoreHit[]>([]);
   const [active, setActive] = useState(0);
-  const [err, setErr] = useState<string | null>(null);
 
-  const [retry, setRetry] = useState(0);
-  const reqSeq = useRef(0);
+  const staples = useMemo(
+    () => (catalogReady ? searchShownCatalog(catalog, query, 12) : []),
+    [catalog, catalogReady, query],
+  );
 
   useEffect(() => {
-    const q = query.trim();
-    if (q.length < 2) {
-      setStaples([]);
-      setWalmart([]);
-      setNoFrills([]);
-      setWholesaleClub([]);
-      setMvr([]);
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    setErr(null);
-    const seq = ++reqSeq.current;
-    const ac = new AbortController();
-    const t = window.setTimeout(() => {
-      fetch(`/api/staples/search?q=${encodeURIComponent(q)}`, {
-        signal: ac.signal,
-      })
-        .then(async (r) => {
-          const text = await r.text();
-          if (seq !== reqSeq.current) return null;
-          if (!r.ok) {
-            throw new Error("search_http");
-          }
-          if (!text.trim()) {
-            throw new Error("search_empty");
-          }
-          try {
-            return JSON.parse(text) as {
-              ok?: boolean;
-              error?: string;
-              staples?: StapleHit[];
-              walmart?: StoreHit[];
-              noFrills?: StoreHit[];
-              wholesaleClub?: StoreHit[];
-              mvr?: StoreHit[];
-              walmartSourceWarning?: string;
-            };
-          } catch {
-            throw new Error("search_json");
-          }
-        })
-        .then((data) => {
-          if (!data || seq !== reqSeq.current) return;
-          if (!data.ok) throw new Error("search_failed");
-          setStaples(data.staples ?? []);
-          setWalmart(data.walmart ?? []);
-          setNoFrills(data.noFrills ?? []);
-          setWholesaleClub(data.wholesaleClub ?? []);
-          setMvr(data.mvr ?? []);
-          if (data.walmartSourceWarning && !(data.walmart ?? []).length) {
-            setErr(
-              "WM пошук через RapidAPI вимкнено — немає ключа. No Frills нижче.",
-            );
-          }
-          setOpen(true);
-          setActive(0);
-        })
-        .catch((e) => {
-          if (e?.name === "AbortError" || ac.signal.aborted) return;
-          if (seq !== reqSeq.current) return;
-          setErr("Не вдалося завантажити результати. Спробувати ще раз");
-        })
-        .finally(() => {
-          if (seq === reqSeq.current) setLoading(false);
-        });
-    }, 400);
-    return () => {
-      window.clearTimeout(t);
-      ac.abort();
-    };
-  }, [query, retry]);
+    setActive(0);
+  }, [query, staples.length]);
 
   useEffect(() => {
     function onDoc(e: MouseEvent) {
@@ -140,56 +60,15 @@ export function ProductSearch({
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
-  const rows: Array<
-    | { kind: "staple"; hit: StapleHit }
-    | { kind: "store"; hit: StoreHit }
-  > = [
-    ...staples.map((hit) => ({ kind: "staple" as const, hit })),
-    ...walmart.map((hit) => ({ kind: "store" as const, hit })),
-    ...noFrills.map((hit) => ({ kind: "store" as const, hit })),
-    ...wholesaleClub.map((hit) => ({ kind: "store" as const, hit })),
-    ...mvr.map((hit) => ({ kind: "store" as const, hit })),
-  ];
-
-  async function adopt(hit: StoreHit) {
-    if (hit.stapleId) {
-      onPickStaple(hit.stapleId);
-      setOpen(false);
-      return;
-    }
-    setAdopting(true);
-    setErr(null);
-    try {
-      const res = await fetch("/api/staples/adopt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(hit),
-      });
-      const data = await res.json();
-      if (!data.ok) throw new Error(data.error ?? "adopt failed");
-      onAdopted(data.id);
-      onQueryChange("");
-      setOpen(false);
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : String(e));
-    } finally {
-      setAdopting(false);
-    }
-  }
-
   function choose(i: number) {
-    const row = rows[i];
-    if (!row) return;
-    if (row.kind === "staple") {
-      onPickStaple(row.hit.id);
-      setOpen(false);
-      return;
-    }
-    void adopt(row.hit);
+    const hit = staples[i];
+    if (!hit) return;
+    onPickStaple(hit.id);
+    setOpen(false);
   }
 
-  const showPanel =
-    open && query.trim().length >= 2 && (loading || rows.length > 0 || err);
+  const q = query.trim();
+  const showPanel = open && q.length >= 2;
 
   return (
     <div className="product-search" ref={wrapRef}>
@@ -201,18 +80,18 @@ export function ProductSearch({
           id={boxId}
           type="search"
           autoComplete="off"
-          placeholder="Назва або посилання Walmart…"
+          placeholder="Назва зі списку кафе…"
           value={query}
           onChange={(e) => {
             onQueryChange(e.target.value);
             setOpen(true);
           }}
-          onFocus={() => query.trim().length >= 2 && setOpen(true)}
+          onFocus={() => q.length >= 2 && setOpen(true)}
           onKeyDown={(e) => {
             if (!showPanel) return;
             if (e.key === "ArrowDown") {
               e.preventDefault();
-              setActive((n) => Math.min(n + 1, Math.max(rows.length - 1, 0)));
+              setActive((n) => Math.min(n + 1, Math.max(staples.length - 1, 0)));
             } else if (e.key === "ArrowUp") {
               e.preventDefault();
               setActive((n) => Math.max(n - 1, 0));
@@ -224,69 +103,25 @@ export function ProductSearch({
             }
           }}
         />
-        {(loading || adopting) && <span className="search-spin">…</span>}
       </div>
       {showPanel && (
         <div className="search-panel" role="listbox">
-          {err && (
-            <div className="search-err">
-              {err}{" "}
-              <button
-                type="button"
-                className="search-retry"
-                onClick={() => setRetry((n) => n + 1)}
-              >
-                Спробувати ще раз
-              </button>
-            </div>
+          {!catalogReady && (
+            <div className="search-hint">Завантаження каталогу…</div>
           )}
-          {adopting && <div className="search-hint">Додаю в список…</div>}
-          {staples.length > 0 && (
+          {catalogReady && staples.length > 0 && (
             <div className="search-sec">У списку</div>
           )}
-          {staples.map((hit, i) => (
-            <button
-              key={`s-${hit.id}`}
-              type="button"
-              role="option"
-              aria-selected={active === i}
-              className={active === i ? "search-hit on" : "search-hit"}
-              onMouseEnter={() => setActive(i)}
-              onClick={() => choose(i)}
-            >
-              {hit.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={hit.image} alt="" referrerPolicy="no-referrer" />
-              ) : (
-                <span className="ph" />
-              )}
-              <span>
-                <strong>{hit.label}</strong>
-                <em>
-                  {hit.wmPrice != null ? `WM $${hit.wmPrice.toFixed(2)}` : ""}
-                  {hit.wmPrice != null && hit.nfPrice != null ? " · " : ""}
-                  {hit.nfPrice != null ? `NF $${hit.nfPrice.toFixed(2)}` : ""}
-                  {(hit.wmPrice != null || hit.nfPrice != null) &&
-                  hit.wcPrice != null
-                    ? " · "
-                    : ""}
-                  {hit.wcPrice != null ? `WC $${hit.wcPrice.toFixed(2)}` : ""}
-                </em>
-              </span>
-            </button>
-          ))}
-          {walmart.length > 0 && <div className="search-sec">Walmart</div>}
-          {walmart.map((hit, i) => {
-            const idx = staples.length + i;
-            return (
+          {catalogReady &&
+            staples.map((hit, i) => (
               <button
-                key={`w-${hit.productId}`}
+                key={`s-${hit.id}`}
                 type="button"
                 role="option"
-                aria-selected={active === idx}
-                className={active === idx ? "search-hit on" : "search-hit"}
-                onMouseEnter={() => setActive(idx)}
-                onClick={() => choose(idx)}
+                aria-selected={active === i}
+                className={active === i ? "search-hit on" : "search-hit"}
+                onMouseEnter={() => setActive(i)}
+                onClick={() => choose(i)}
               >
                 {hit.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -295,116 +130,13 @@ export function ProductSearch({
                   <span className="ph" />
                 )}
                 <span>
-                  <strong>{hit.name}</strong>
-                  <em>
-                    ${hit.price.toFixed(2)}
-                    {hit.packageSize ? ` · ${hit.packageSize}` : ""}
-                    {hit.stapleId ? " · уже в списку" : " · додати"}
-                  </em>
+                  <strong>{hit.label}</strong>
+                  <em>{priceLine(hit)}</em>
                 </span>
               </button>
-            );
-          })}
-          {noFrills.length > 0 && <div className="search-sec">No Frills</div>}
-          {noFrills.map((hit, i) => {
-            const idx = staples.length + walmart.length + i;
-            return (
-              <button
-                key={`n-${hit.productId}`}
-                type="button"
-                role="option"
-                aria-selected={active === idx}
-                className={active === idx ? "search-hit on" : "search-hit"}
-                onMouseEnter={() => setActive(idx)}
-                onClick={() => choose(idx)}
-              >
-                {hit.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={hit.image} alt="" referrerPolicy="no-referrer" />
-                ) : (
-                  <span className="ph" />
-                )}
-                <span>
-                  <strong>{hit.name}</strong>
-                  <em>
-                    ${hit.price.toFixed(2)}
-                    {hit.packageSize ? ` · ${hit.packageSize}` : ""}
-                    {hit.stapleId ? " · уже в списку" : " · додати"}
-                  </em>
-                </span>
-              </button>
-            );
-          })}
-          {wholesaleClub.length > 0 && (
-            <div className="search-sec">Wholesale Club</div>
-          )}
-          {wholesaleClub.map((hit, i) => {
-            const idx =
-              staples.length + walmart.length + noFrills.length + i;
-            return (
-              <button
-                key={`wc-${hit.productId}`}
-                type="button"
-                role="option"
-                aria-selected={active === idx}
-                className={active === idx ? "search-hit on" : "search-hit"}
-                onMouseEnter={() => setActive(idx)}
-                onClick={() => choose(idx)}
-              >
-                {hit.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={hit.image} alt="" referrerPolicy="no-referrer" />
-                ) : (
-                  <span className="ph" />
-                )}
-                <span>
-                  <strong>{hit.name}</strong>
-                  <em>
-                    ${hit.price.toFixed(2)}
-                    {hit.packageSize ? ` · ${hit.packageSize}` : ""}
-                    {hit.stapleId ? " · уже в списку" : " · додати"}
-                  </em>
-                </span>
-              </button>
-            );
-          })}
-          {mvr.length > 0 && <div className="search-sec">MVR Cash & Carry</div>}
-          {mvr.map((hit, i) => {
-            const idx =
-              staples.length +
-              walmart.length +
-              noFrills.length +
-              wholesaleClub.length +
-              i;
-            return (
-              <button
-                key={`mvr-${hit.productId}`}
-                type="button"
-                role="option"
-                aria-selected={active === idx}
-                className={active === idx ? "search-hit on" : "search-hit"}
-                onMouseEnter={() => setActive(idx)}
-                onClick={() => choose(idx)}
-              >
-                {hit.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={hit.image} alt="" referrerPolicy="no-referrer" />
-                ) : (
-                  <span className="ph" />
-                )}
-                <span>
-                  <strong>{hit.name}</strong>
-                  <em>
-                    ${hit.price.toFixed(2)}
-                    {hit.packageSize ? ` · ${hit.packageSize}` : ""}
-                    {hit.stapleId ? " · уже в списку" : " · додати"}
-                  </em>
-                </span>
-              </button>
-            );
-          })}
-          {!loading && rows.length === 0 && !err && (
-            <div className="search-hint">Нічого не знайдено</div>
+            ))}
+          {catalogReady && staples.length === 0 && (
+            <div className="search-hint">У списку немає такого продукту</div>
           )}
         </div>
       )}
@@ -439,13 +171,6 @@ export function ProductSearch({
         input:focus {
           outline: 2px solid #2f4a3a;
           outline-offset: 1px;
-        }
-        .search-spin {
-          position: absolute;
-          right: 0.7rem;
-          top: 50%;
-          transform: translateY(-50%);
-          opacity: 0.55;
         }
         .search-panel {
           position: absolute;
@@ -506,13 +231,9 @@ export function ProductSearch({
           opacity: 0.7;
           margin-top: 0.1rem;
         }
-        .search-hint,
-        .search-err {
+        .search-hint {
           padding: 0.55rem 0.7rem;
           font-size: 0.82rem;
-        }
-        .search-err {
-          color: #8a2f22;
         }
       `}</style>
     </div>
