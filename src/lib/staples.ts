@@ -15,7 +15,7 @@ import {
   toLegacyMatchMode,
   type ProductOverride,
 } from "@/domain/restaurant-product";
-import { offerFailsStapleOfferFilters, categoryBSearchQueries, looksLikeWalmartProductId, retailerTaxonomyText } from "@/domain/catalog-normalize";
+import { offerFailsStapleOfferFilters, categoryBSearchQueries, retailerTaxonomyText, walmartCheapestHintIds } from "@/domain/catalog-normalize";
 import { extractRetailerImage } from "@/lib/product-image";
 import { RECEIPT_STAPLE_IDS } from "@/lib/receipt-staple-ids";
 import {
@@ -927,6 +927,29 @@ export function refreshSkipIdentityLock(
   return resolveMatchMode(item) === "cheapest";
 }
 
+/** Cheapest Category B: keep the mapped SKU in the pool even when search misses it. */
+export async function addCheapestMappedSkuHint(
+  getProduct: (sku: string) => Promise<ProductOffer | null>,
+  item: StapleItem,
+  mappedSku: string | undefined,
+  seen: Map<string, ProductOffer>,
+  log?: MatchLogEntry,
+): Promise<void> {
+  if (resolveMatchMode(item) !== "cheapest") return;
+  const sku = mappedSku?.trim();
+  if (!sku) return;
+  if ([...seen.values()].some((o) => o.productId === sku)) return;
+  try {
+    const direct = await getProduct(sku);
+    if (direct) seen.set(direct.productId, direct);
+  } catch (e) {
+    log?.rejected.push({
+      productId: sku,
+      reason: `hint SKU: ${e instanceof Error ? e.message.slice(0, 80) : String(e)}`,
+    });
+  }
+}
+
 /** Live PCX hits that pass staple filters. Category B uses the full pool as pack sizes. */
 export async function searchNoFrillsPool(
   item: StapleItem,
@@ -958,6 +981,13 @@ export async function searchNoFrillsPool(
       });
     }
   }
+  await addCheapestMappedSkuHint(
+    (sku) => nf.getProduct(sku, "3660"),
+    item,
+    nfLink?.retailerProductId,
+    seen,
+    log,
+  );
 
   for (const q of queries) {
     try {
@@ -1101,13 +1131,11 @@ export async function searchNoFrills(
   return pickStapleSearchWinner(item, pool, log, lockedNfSku);
 }
 
-function walmartSkuHintIds(item: StapleItem): string[] {
-  const out: string[] = [];
-  for (const q of item.queries) {
-    const id = looksLikeWalmartProductId(q);
-    if (id && !out.includes(id)) out.push(id);
-  }
-  return out;
+function walmartPoolHintIds(
+  item: StapleItem,
+  extraIds?: Array<string | null | undefined>,
+): string[] {
+  return walmartCheapestHintIds(item, extraIds).slice(0, 5);
 }
 
 async function addWalmartSkuHints(
@@ -1115,8 +1143,9 @@ async function addWalmartSkuHints(
   item: StapleItem,
   seen: Map<string, ProductOffer>,
   log?: MatchLogEntry,
+  extraIds?: Array<string | null | undefined>,
 ): Promise<void> {
-  for (const sku of walmartSkuHintIds(item)) {
+  for (const sku of walmartPoolHintIds(item, extraIds)) {
     if ([...seen.values()].some((o) => offerMatchesRetailerSku(o, sku))) continue;
     try {
       const direct = await wm.getProduct(sku, "5831");
@@ -1137,6 +1166,27 @@ async function addWalmartSkuHints(
   }
 }
 
+async function walmartCatalogHintIds(itemId: string): Promise<string[]> {
+  const extra: string[] = [];
+  try {
+    const mappings = await loadRetailerMappings();
+    extra.push(
+      mappings.products[itemId]?.retailers.walmart_ca?.retailerProductId ?? "",
+    );
+  } catch {
+    /* ignore */
+  }
+  try {
+    const catalog = await loadWalmartCatalog({ applyShelf: false });
+    const row = catalog?.items.find((r) => r.id === itemId);
+    if (row?.offer?.productId) extra.push(row.offer.productId);
+    for (const alt of row?.alternates ?? []) extra.push(alt.productId);
+  } catch {
+    /* ignore */
+  }
+  return extra.filter(Boolean);
+}
+
 /** Search Walmart #5831 by staple queries. Category A and B both use this for fallbacks. */
 export async function searchWalmartQueryPool(
   item: StapleItem,
@@ -1153,13 +1203,12 @@ export async function searchWalmartQueryPool(
     return [];
   }
   const seen = new Map<string, ProductOffer>();
-  await addWalmartSkuHints(wm, item, seen, log);
+  const extraHints = await walmartCatalogHintIds(item.id);
+  await addWalmartSkuHints(wm, item, seen, log, extraHints);
   const queries = categoryBSearchQueries(item, 6);
   if (log) {
-    log.queries = [
-      ...walmartSkuHintIds(item),
-      ...queries.filter((q) => !walmartSkuHintIds(item).includes(q)),
-    ];
+    const hints = walmartPoolHintIds(item, extraHints);
+    log.queries = [...hints, ...queries.filter((q) => !hints.includes(q))];
   }
   for (const q of queries) {
     try {
@@ -1702,9 +1751,18 @@ export async function refreshWalmartSelected(
         ov.productId &&
         offerMatchesRetailerSku(pinHitEarly, ov.productId),
     );
-    // Rapid text search often omits grape packs like Devours — fetch SKU hints
-    // before burning the search quota.
-    await addWalmartSkuHints(wm, item, seen, log);
+    // Rapid text search often omits a known Category B pack — fetch mapping /
+    // catalog / query SKUs into the cheapest pool before burning search quota.
+    const hintRow = (catalog.items as Array<Record<string, unknown>>).find(
+      (r) => r.id === id,
+    );
+    const rowOffer = hintRow?.offer as CatalogOffer | null | undefined;
+    const rowAlts = (hintRow?.alternates as CatalogOffer[] | undefined) ?? [];
+    await addWalmartSkuHints(wm, item, seen, log, [
+      mappedWm?.retailerProductId,
+      rowOffer?.productId,
+      ...rowAlts.map((a) => a.productId),
+    ]);
     if (!pinAlreadySeen || pinNotOnShelf) {
       const extra = opts?.skipIdentityLock
         ? queries.filter((q) => q && !/^\d+$/.test(q)).slice(0, 6)

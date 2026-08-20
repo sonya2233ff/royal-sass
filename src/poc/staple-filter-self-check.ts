@@ -9,6 +9,7 @@ import {
   offerFailsStapleFilters,
   offerFailsStapleOfferFilters,
   stapleBrandHint,
+  walmartCheapestHintIds,
 } from "@/domain/catalog-normalize";
 import { isActualCategoryBOffer } from "@/domain/same-packed-item";
 import {
@@ -378,6 +379,22 @@ async function main() {
   assert(
     qs.every((q) => !looksLikeWalmartProductId(q)),
     "WM Rapid ids stay out of shared NF/MVR search queries",
+  );
+  const grapeHints = walmartCheapestHintIds(
+    { queries: grape.queries, preferredProductId: grape.preferredProductId },
+    ["6000196099049", "72CDS4R4V81X"],
+  );
+  assert(
+    grapeHints.includes("72CDS4R4V81X") && grapeHints.includes("6000196099049"),
+    `grape cheapest hints ${grapeHints.join(",")}`,
+  );
+  const blueHints = walmartCheapestHintIds(
+    { queries: ["blueberries"], preferredProductId: undefined },
+    ["6000197209331"],
+  );
+  assert(
+    blueHints.includes("6000197209331"),
+    "Category B cheapest still getProduct the mapped WM SKU when search omits it",
   );
   const blueQs = categoryBSearchQueries(blueberries);
   assert(

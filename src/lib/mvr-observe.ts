@@ -28,6 +28,7 @@ import {
   loadStaplesConfig,
   pickStapleSearchWinner,
   refreshSkipIdentityLock,
+  addCheapestMappedSkuHint,
   resolveMatchMode,
   type MatchLogEntry,
   type StapleItem,
@@ -101,6 +102,13 @@ export async function searchMvrPool(
       });
     }
   }
+  await addCheapestMappedSkuHint(
+    (sku) => mvr.getProduct(sku, MVR_STORE_ID),
+    item,
+    link?.retailerProductId,
+    seen,
+    log,
+  );
 
   for (const q of queries) {
     try {

@@ -28,6 +28,7 @@ import {
   loadStaplesConfig,
   pickStapleSearchWinner,
   refreshSkipIdentityLock,
+  addCheapestMappedSkuHint,
   resolveMatchMode,
   usesNeededWeightPick,
   type MatchLogEntry,
@@ -118,6 +119,13 @@ export async function searchWholesaleClubPool(
       });
     }
   }
+  await addCheapestMappedSkuHint(
+    (sku) => wc.getProduct(sku, WHOLESALECLUB_STORE_ID),
+    item,
+    wcLink?.retailerProductId,
+    seen,
+    log,
+  );
 
   for (const q of queries) {
     try {

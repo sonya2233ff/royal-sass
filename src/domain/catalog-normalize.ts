@@ -129,6 +129,25 @@ export function looksLikeWalmartProductId(q: string): string | null {
   return null;
 }
 
+/**
+ * Category B / cheapest eggs: getProduct these WM ids into the search pool
+ * (Rapid text search often omits a known pack). Not an identity lock.
+ */
+export function walmartCheapestHintIds(
+  item: { queries?: string[]; preferredProductId?: string },
+  extraIds?: Array<string | null | undefined>,
+): string[] {
+  const out: string[] = [];
+  const add = (raw?: string | null) => {
+    const id = looksLikeWalmartProductId(raw ?? "");
+    if (id && !out.includes(id)) out.push(id);
+  };
+  for (const q of item.queries ?? []) add(q);
+  add(item.preferredProductId);
+  for (const extra of extraIds ?? []) add(extra);
+  return out;
+}
+
 /** "grape tomatoes" → "tomatoes grape" for MVR warehouse titles. */
 function warehouseWordOrder(q: string): string | undefined {
   const parts = q.split(/\s+/).filter(Boolean);
