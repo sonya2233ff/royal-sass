@@ -11,12 +11,14 @@ import {
 } from "@/domain/catalog-normalize";
 import { isActualCategoryBOffer } from "@/domain/same-packed-item";
 import {
+  collectPriceRefreshIds,
   eggCartonCountOk,
   isShownStaple,
   loadStaplesConfig,
   resolveMatchMode,
 } from "@/lib/staples";
 import { eggCatalogSourceIds, queryLooksLikeShellEggs } from "@/domain/egg-pack";
+import { rapidOfferMatchesSku } from "@/connectors/walmart-rapid";
 import {
   catalogRowForStaple,
   catalogSkuForPriceRefresh,
@@ -203,6 +205,22 @@ async function main() {
       },
     }) == null,
     "price refresh must not keep a foam pumpkin as 6in wraps",
+  );
+  assert(
+    rapidOfferMatchesSku(
+      { productId: "PRD6000196635381", sourceUrl: "https://www.walmart.ca/en/ip/x/6000196635381" },
+      "6000196635381",
+    ),
+    "Rapid search SKU match strips PRD and accepts the CA product id",
+  );
+  const refreshIds = collectPriceRefreshIds([
+    { id: "large_eggs_dozen" },
+    { id: "simply_egg_whites" },
+    { id: "grayridge_eggs" },
+  ]);
+  assert(
+    refreshIds.includes("grayridge_eggs") && refreshIds.includes("eggs_30ct"),
+    "price refresh also covers hidden egg catalog source rows",
   );
   assert(
     offerFailsStapleOfferFilters(banana, {

@@ -84,6 +84,31 @@ export type CatalogPriceRefreshResult = {
   };
 };
 
+export type PriceRefreshStore =
+  | "walmart"
+  | "nofrills"
+  | "wholesaleclub"
+  | "mvr";
+
+export type CatalogPriceRefreshOptions = {
+  stores?: PriceRefreshStore[];
+};
+
+const ALL_PRICE_REFRESH_STORES: PriceRefreshStore[] = [
+  "walmart",
+  "nofrills",
+  "wholesaleclub",
+  "mvr",
+];
+
+function wantsStore(
+  store: PriceRefreshStore,
+  opts?: CatalogPriceRefreshOptions,
+): boolean {
+  const stores = opts?.stores?.length ? opts.stores : ALL_PRICE_REFRESH_STORES;
+  return stores.includes(store);
+}
+
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -115,6 +140,19 @@ function isTimeoutError(e: unknown): boolean {
     name === "AbortError" ||
     /aborted|timeout/i.test(msg)
   );
+}
+
+function isTransientRapidError(e: unknown): boolean {
+  const msg = e instanceof Error ? e.message : String(e);
+  return (
+    isTimeoutError(e) ||
+    /HTTP (429|503)|temporarily unavailable|status 456/i.test(msg)
+  );
+}
+
+function isHardBlockError(e: unknown): boolean {
+  const msg = e instanceof Error ? e.message : String(e);
+  return /401|403|PerimeterX|unauthorized|invalid_client/i.test(msg);
 }
 
 function slimOffer(o: ProductOffer, previous?: CatalogOffer | null): CatalogOffer {
@@ -184,30 +222,38 @@ async function fetchMatchingSku(
 
   let blocked: unknown = null;
   for (const [i, id] of tryIds.entries()) {
-    try {
-      const offer = await connector.getProduct(id, storeId);
-      if (!offer) {
-        await sleep(250);
-        continue;
-      }
-      const exact = offer.productId === sku || Boolean(offer.sourceUrl?.includes(sku));
-      const aliasOk =
-        i > 0 &&
-        offerMatchesRetailerSku(offer, sku) &&
-        !priceJumpTooBig(previousPrice, offer.price);
-      if (exact || aliasOk) {
-        if (priceJumpTooBig(previousPrice, offer.price)) return null;
-        return offer;
-      }
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      if (/401|403|blocked|unauthorized|invalid_client|PerimeterX/i.test(msg)) {
-        blocked = e;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const offer = await connector.getProduct(id, storeId);
+        if (!offer) {
+          await sleep(300);
+          break;
+        }
+        const exact =
+          offer.productId === sku || Boolean(offer.sourceUrl?.includes(sku));
+        const aliasOk =
+          i > 0 &&
+          offerMatchesRetailerSku(offer, sku) &&
+          !priceJumpTooBig(previousPrice, offer.price);
+        if (exact || aliasOk) {
+          if (priceJumpTooBig(previousPrice, offer.price)) return null;
+          return offer;
+        }
+        break;
+      } catch (e) {
+        if (isHardBlockError(e)) {
+          blocked = e;
+          break;
+        }
+        if (isTransientRapidError(e) && attempt < 2) {
+          await sleep(1500 * (attempt + 1));
+          continue;
+        }
         break;
       }
-      if (isTimeoutError(e)) break;
     }
-    await sleep(250);
+    if (blocked) break;
+    await sleep(300);
   }
   if (blocked) throw blocked;
   return null;
@@ -299,6 +345,7 @@ function logRefreshProgress(store: string, n: number, total: number, id: string)
 /** Live price refresh for known SKUs. Keeps identity; skips rows with no SKU. */
 export async function refreshCatalogPrices(
   ids: string[],
+  opts?: CatalogPriceRefreshOptions,
 ): Promise<CatalogPriceRefreshResult> {
   const cfg = await loadStaplesConfig();
   const byId = new Map(cfg.items.map((i) => [i.id, i]));
@@ -329,6 +376,7 @@ export async function refreshCatalogPrices(
     mvr: { updated: [], failed: [], skipped: [] },
   };
 
+  if (wantsStore("walmart", opts)) {
   const wmSource = resolveWalmartSource();
   const wm =
     wmSource === "missing_key" ? null : createWalmartConnector("L4J0A7");
@@ -440,21 +488,20 @@ export async function refreshCatalogPrices(
         previousPrice: prev,
         price: offer.price,
       });
+      (wmCatalog as { checkedAt: string }).checkedAt = new Date().toISOString();
+      await saveWalmartCatalog(wmCatalog);
     } catch (e) {
       const msg = e instanceof Error ? e.message.slice(0, 160) : String(e);
-      if (/blocked|PerimeterX|401|403/i.test(msg)) {
+      if (isHardBlockError(e)) {
         wmBlocked = msg;
       }
       result.walmart.failed.push({ id, reason: msg });
     }
   });
-
-  if (wm && result.walmart.updated.length > 0) {
-    (wmCatalog as { checkedAt: string }).checkedAt = new Date().toISOString();
-    await saveWalmartCatalog(wmCatalog);
-  }
   await closeWalmartBrowser().catch(() => undefined);
+  }
 
+  if (wantsStore("nofrills", opts)) {
   const nf = new NoFrillsConnector();
   let nfBlocked: string | null = null;
 
@@ -523,7 +570,9 @@ export async function refreshCatalogPrices(
     }
     await sleep(200);
   }
+  }
 
+  if (wantsStore("wholesaleclub", opts)) {
   const wc = new WholesaleClubConnector();
   let wcBlocked: string | null = null;
   const wcCatalog =
@@ -599,7 +648,9 @@ export async function refreshCatalogPrices(
     }
     await sleep(200);
   }
+  }
 
+  if (wantsStore("mvr", opts)) {
   const mvr = new MvrConnector();
   let mvrBlocked: string | null = null;
   const mvrCatalog =
@@ -674,6 +725,7 @@ export async function refreshCatalogPrices(
       }
     }
     await sleep(150);
+  }
   }
 
   return result;

@@ -4,7 +4,7 @@ import { NoFrillsConnector } from "@/connectors/nofrills";
 import { createWalmartConnector } from "@/connectors/create-walmart-connector";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
 import type { ProductOffer } from "@/connectors/types";
-import { isEggPackStaple } from "@/domain/egg-pack";
+import { EGG_CATALOG_SOURCE_IDS, isEggPackStaple } from "@/domain/egg-pack";
 import { pickBestOffer, staplePickQuery } from "@/domain/matching";
 import { extractBarcodes } from "@/domain/fair-compare";
 import {
@@ -398,6 +398,17 @@ export function isShownStaple(item: { id: string; custom?: boolean }): boolean {
     (PINNED_IDS as readonly string[]).includes(item.id) ||
     (RECEIPT_STAPLE_IDS as readonly string[]).includes(item.id)
   );
+}
+
+/** Shown cafe cards plus hidden egg carton rows that still feed the dozen compare. */
+export function collectPriceRefreshIds(
+  items: Array<{ id: string; custom?: boolean }>,
+): string[] {
+  const ids = items.filter((item) => isShownStaple(item)).map((item) => item.id);
+  for (const id of EGG_CATALOG_SOURCE_IDS) {
+    if (!ids.includes(id)) ids.push(id);
+  }
+  return [...new Set(ids)];
 }
 
 export function applyRemovedStapleIds<T extends { id: string }>(

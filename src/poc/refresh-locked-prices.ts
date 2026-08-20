@@ -3,14 +3,25 @@
  *
  *   npm run cache:prices
  *   npm run cache:prices -- tomatoes_grape ziploc_sandwich
+ *   npm run cache:prices -- --stores=walmart
+ *   npm run cache:prices -- --stores=walmart --fill-missing
  */
-import { isShownStaple, PINNED_IDS, RECEIPT_STAPLE_IDS } from "@/lib/staples";
+import { collectPriceRefreshIds, isShownStaple, loadStaplesConfig, refreshWalmartSelected } from "@/lib/staples";
 import {
   refreshCatalogPrices,
+  type CatalogPriceRefreshOptions,
   type CatalogPriceRefreshResult,
   type PriceRefreshFailure,
   type PriceRefreshHit,
+  type PriceRefreshStore,
 } from "@/lib/refresh-catalog-prices";
+
+const STORE_FLAGS: PriceRefreshStore[] = [
+  "walmart",
+  "nofrills",
+  "wholesaleclub",
+  "mvr",
+];
 
 function printRetailer(
   title: string,
@@ -59,22 +70,77 @@ function storeSummary(
   };
 }
 
+function parseStores(raw: string): PriceRefreshStore[] {
+  const out: PriceRefreshStore[] = [];
+  for (const part of raw.split(",").map((s) => s.trim().toLowerCase())) {
+    if (!part) continue;
+    const alias =
+      part === "wm" ? "walmart" : part === "nf" ? "nofrills" : part === "wc" ? "wholesaleclub" : part;
+    if (!(STORE_FLAGS as string[]).includes(alias)) {
+      throw new Error(`Unknown store "${part}". Use walmart,nofrills,wholesaleclub,mvr`);
+    }
+    out.push(alias as PriceRefreshStore);
+  }
+  return [...new Set(out)];
+}
+
 async function main() {
-  const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
-  const all = [...PINNED_IDS, ...RECEIPT_STAPLE_IDS];
-  const ids = [...new Set((args.length ? args : all).filter((id) => isShownStaple({ id })))];
+  const argv = process.argv.slice(2);
+  const flags = argv.filter((a) => a.startsWith("-"));
+  const args = argv.filter((a) => !a.startsWith("-"));
+  const storeArg = flags.find((a) => a.startsWith("--stores="));
+  const stores = storeArg ? parseStores(storeArg.slice("--stores=".length)) : undefined;
+  const fillMissing = flags.includes("--fill-missing");
+  const opts: CatalogPriceRefreshOptions | undefined = stores?.length
+    ? { stores }
+    : undefined;
+
+  const cfg = await loadStaplesConfig();
+  const all = collectPriceRefreshIds(cfg.items);
+  const ids = [...new Set((args.length ? args : all).filter((id) => all.includes(id) || isShownStaple({ id })))];
   if (!ids.length) {
     console.error("No valid staple ids");
     process.exit(1);
   }
 
-  console.error(`Refreshing catalog prices for ${ids.length} staples…`);
-  const result: CatalogPriceRefreshResult = await refreshCatalogPrices(ids);
+  console.error(
+    `Refreshing catalog prices for ${ids.length} staples${stores ? ` (${stores.join(",")})` : ""}…`,
+  );
+  const result: CatalogPriceRefreshResult = await refreshCatalogPrices(ids, opts);
 
-  printRetailer("Walmart", result.walmart);
-  printRetailer("No Frills", result.noFrills);
-  printRetailer("Wholesale Club", result.wholesaleClub);
-  printRetailer("MVR Weston", result.mvr);
+  if (!stores || stores.includes("walmart")) {
+    printRetailer("Walmart", result.walmart);
+  }
+  if (!stores || stores.includes("nofrills")) {
+    printRetailer("No Frills", result.noFrills);
+  }
+  if (!stores || stores.includes("wholesaleclub")) {
+    printRetailer("Wholesale Club", result.wholesaleClub);
+  }
+  if (!stores || stores.includes("mvr")) {
+    printRetailer("MVR Weston", result.mvr);
+  }
+
+  if (fillMissing && (!stores || stores.includes("walmart"))) {
+    const missing = result.walmart.skipped
+      .filter((row) => row.reason === "no locked/catalog SKU")
+      .map((row) => row.id)
+      .filter((id) => isShownStaple({ id }));
+    if (missing.length) {
+      console.error(`\nFilling ${missing.length} Walmart rows with no SKU (search rematch)…`);
+      const filled = await refreshWalmartSelected(missing);
+      console.error(
+        `  WM fill-missing updated=${filled.updated.length} log=${filled.logId}`,
+      );
+      for (const e of filled.entries) {
+        const a = e.accepted;
+        if (!a) continue;
+        console.log(
+          `  ${e.itemId.padEnd(28)} $${a.price.toFixed(2)}  ${a.name}`,
+        );
+      }
+    }
+  }
 
   const summary = {
     walmart: storeSummary(result.walmart, { source: result.walmart.source }),
@@ -101,7 +167,7 @@ async function main() {
     summary.noFrills.updated +
     summary.wholesaleClub.updated +
     summary.mvr.updated;
-  if (totalUpdated === 0) {
+  if (totalUpdated === 0 && !fillMissing) {
     console.error("No catalog prices updated.");
     process.exit(2);
   }

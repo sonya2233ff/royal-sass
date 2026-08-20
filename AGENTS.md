@@ -191,7 +191,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/refresh` — rematch selected WM SKUs (older WM-only path)
 - `POST /api/staples/refresh-nf` | `refresh-wc` | `refresh-mvr` | `refresh-sobeys` — live search for that retailer
 - `POST /api/staples/rematch` — live rematch **selected ids** across WM+NF+WC+MVR using client `productOverrides`. Not price-only. Not “all visible cards”.
-- `POST /api/staples/refresh-prices` — price-only `getProduct` on locked/catalog SKUs (no rematch)
+- `POST /api/staples/refresh-prices` — price-only SKU refresh (no rematch). Walmart Rapid looks up the locked SKU via store search first; `/product-details` often 456/503 on walmart.ca.
 - `GET /api/staples/search` — shown cafe staples only (no live store hits, empty `walmart`/`noFrills`/`wholesaleClub`/`mvr` arrays)
 - `POST /api/staples/adopt` | `confirm` — adopt remains for the match inspector; homepage search does not call it; 👍/👎 lock
 - `GET|POST /api/staples/delete` — **405**, deletion disabled
@@ -256,7 +256,7 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - **Production** = `master` → Vercel project `royal-sass` (team `noir-detailing`), alias https://royal-sass.vercel.app
 - PR branches get **Preview** deployments. Putting “these changes on Vercel” / “run prod” for the live phone demo means **fast-forward `master`**, not only a preview URL.
 - Serverless catalog/stats writes may no-op. Refresh on Vercel does not persist JSON into git. Local `npm start` on a VM can write catalogs.
-- **Nightly shelf prices (all four stores):** GitHub Action `.github/workflows/refresh-catalog-prices.yml` runs `npm run cache:prices` (locked SKUs only — **not** rematch) at **00:00 America/Toronto**, then commits `data/catalog/{walmart_5831,nofrills_3660,wholesaleclub_3724,mvr_weston}_latest.json` so Vercel redeploys `master`. Manual run: Actions → “Refresh catalog prices”. Repo secrets: `RAPIDAPI_KEY` or `OPENWEBNINJA_API_KEY`; optional `NOFRILLS_API_KEY`, `PCX_COOKIE`. Scheduled workflows only fire after this file is on **master**.
+- **Nightly shelf prices (all four stores):** GitHub Action `.github/workflows/refresh-catalog-prices.yml` runs `npm run cache:prices` (locked SKUs only — **not** rematch) at **00:00 America/Toronto**, then commits `data/catalog/{walmart_5831,nofrills_3660,wholesaleclub_3724,mvr_weston}_latest.json` so Vercel redeploys `master`. Manual: `npm run cache:prices -- --stores=walmart` (WM only); `--fill-missing` rematches shown rows that still have no WM SKU. Repo secrets: `RAPIDAPI_KEY` or `OPENWEBNINJA_API_KEY`; optional `NOFRILLS_API_KEY`, `PCX_COOKIE`. Scheduled workflows only fire after this file is on **master**.
 
 ## Development workflow
 

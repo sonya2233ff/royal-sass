@@ -234,36 +234,89 @@ export function mapRapidProduct(
   };
 }
 
-async function getJson(
-  pathAndQuery: string,
-): Promise<unknown> {
+function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+function isTimeoutLike(e: unknown): boolean {
+  if (!e || typeof e !== "object") return false;
+  const name = "name" in e ? String(e.name) : "";
+  const msg = e instanceof Error ? e.message : String(e);
+  return (
+    name === "TimeoutError" ||
+    name === "AbortError" ||
+    /aborted|timeout/i.test(msg)
+  );
+}
+
+/** Rapid product-details for walmart.ca often 456/503; search-by-SKU still works. */
+export function rapidOfferMatchesSku(
+  offer: { productId: string; sourceUrl?: string | null },
+  sku: string,
+): boolean {
+  const want = sku.replace(/^PRD/i, "").trim();
+  if (!want || !offer.productId) return false;
+  const got = offer.productId.replace(/^PRD/i, "").trim();
+  if (got === want) return true;
+  return Boolean(offer.sourceUrl?.includes(want));
+}
+
+async function getJson(pathAndQuery: string): Promise<unknown> {
   const url = `${baseUrl()}${pathAndQuery.startsWith("/") ? "" : "/"}${pathAndQuery}`;
-  const res = await fetch(url, {
-    headers: authHeaders(),
-    signal: AbortSignal.timeout(25_000),
-  });
-  const text = await res.text();
-  let body: unknown = null;
-  try {
-    body = text ? JSON.parse(text) : null;
-  } catch {
-    body = { raw: text.slice(0, 500) };
+  let lastErr: unknown;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) await sleep(1500 * attempt);
+    try {
+      const res = await fetch(url, {
+        headers: authHeaders(),
+        signal: AbortSignal.timeout(25_000),
+      });
+      const text = await res.text();
+      let body: unknown = null;
+      try {
+        body = text ? JSON.parse(text) : null;
+      } catch {
+        body = { raw: text.slice(0, 500) };
+      }
+      if (res.status === 401 || res.status === 403) {
+        throw new ConnectorError(
+          `Walmart Rapid auth failed (${res.status})`,
+          "walmart_ca",
+          "blocked",
+        );
+      }
+      if (res.status === 429 || res.status === 503) {
+        lastErr = new ConnectorError(
+          `Walmart Rapid HTTP ${res.status}: ${text.slice(0, 160)}`,
+          "walmart_ca",
+          "http",
+        );
+        continue;
+      }
+      if (!res.ok) {
+        throw new ConnectorError(
+          `Walmart Rapid HTTP ${res.status}: ${text.slice(0, 160)}`,
+          "walmart_ca",
+          "http",
+        );
+      }
+      return body;
+    } catch (e) {
+      if (e instanceof ConnectorError && e.code === "blocked") throw e;
+      if (e instanceof ConnectorError && !/HTTP (429|503)/.test(e.message)) {
+        throw e;
+      }
+      lastErr = e;
+      if (!isTimeoutLike(e) && !(e instanceof ConnectorError)) throw e;
+    }
   }
-  if (res.status === 401 || res.status === 403) {
-    throw new ConnectorError(
-      `Walmart Rapid auth failed (${res.status})`,
-      "walmart_ca",
-      "blocked",
-    );
-  }
-  if (!res.ok) {
-    throw new ConnectorError(
-      `Walmart Rapid HTTP ${res.status}: ${text.slice(0, 160)}`,
-      "walmart_ca",
-      "http",
-    );
-  }
-  return body;
+  throw lastErr instanceof Error
+    ? lastErr
+    : new ConnectorError(
+        "Walmart Rapid request failed",
+        "walmart_ca",
+        "http",
+      );
 }
 
 export class WalmartRapidConnector implements RetailerConnector {
@@ -298,18 +351,33 @@ export class WalmartRapidConnector implements RetailerConnector {
     productId: string,
     storeId: string,
   ): Promise<ProductOffer | null> {
+    const sku = productId.replace(/^PRD/i, "").trim();
+    // CA product-details often returns HTTP 400/456 or 503. Store search by
+    // the same SKU is faster and still store-scoped.
+    try {
+      const hits = await this.searchProducts(sku, storeId);
+      const hit = hits.find((h) => rapidOfferMatchesSku(h, sku));
+      if (hit) return hit;
+    } catch (e) {
+      if (e instanceof ConnectorError && e.code === "blocked") throw e;
+    }
+
     const params = new URLSearchParams({
-      product_id: productId,
+      product_id: sku,
       domain: "ca",
     });
-    // Some gateways also accept store/zip on details
     params.set("store_id", storeId);
     params.set("zip", this.postalCode.replace(/\s+/g, ""));
-    const body = await getJson(`/product-details?${params}`);
-    const rows = extractProductRows(body);
-    for (const row of rows) {
-      const offer = mapRapidProduct(row, storeId);
-      if (offer) return offer;
+    try {
+      const body = await getJson(`/product-details?${params}`);
+      const rows = extractProductRows(body);
+      for (const row of rows) {
+        const offer = mapRapidProduct(row, storeId);
+        if (offer && rapidOfferMatchesSku(offer, sku)) return offer;
+        if (offer) return offer;
+      }
+    } catch (e) {
+      if (e instanceof ConnectorError && e.code === "blocked") throw e;
     }
     return null;
   }
