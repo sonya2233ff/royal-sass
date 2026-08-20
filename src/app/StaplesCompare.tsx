@@ -10,6 +10,7 @@ import {
 import { ProductSearch } from "./ProductSearch";
 import { ProductSettings } from "./ProductSettings";
 import { ReceiptUpload } from "./ReceiptUpload";
+import { OfferAuditGrid, OfferVerdictButtons, storeOfferCell } from "./OfferAudit";
 import {
   addCartItem,
   applyProductOverride,
@@ -69,6 +70,24 @@ import {
   cheaperAmongStores,
   type CompareStoreId,
 } from "@/domain/compare-stores";
+import {
+  countOfferAuditProgress,
+  mergeOfferVerdictMaps,
+  offerVerdictPayload,
+  parseOfferVerdictMap,
+  stapleHasNoVerdict,
+  stapleHasUnratedStore,
+  toggleOfferVerdict,
+  type OfferAuditCell,
+  type OfferVerdictMap,
+  type OfferVerdictValue,
+} from "@/domain/offer-verdicts";
+import {
+  readAuditMode,
+  readOfferVerdicts,
+  writeAuditMode,
+  writeOfferVerdicts,
+} from "@/lib/offer-verdicts";
 import { useCompareStores } from "./CompareStoresContext";
 
 type OfferStatus =
@@ -735,6 +754,13 @@ export function StaplesCompare() {
     {},
   );
   const [storageReady, setStorageReady] = useState(false);
+  const [auditMode, setAuditMode] = useState(false);
+  const [verdicts, setVerdicts] = useState<OfferVerdictMap>({});
+  const [auditFilter, setAuditFilter] = useState<"all" | "unrated" | "no">(
+    "unrated",
+  );
+  const [auditNotice, setAuditNotice] = useState<string | null>(null);
+  const [auditCopyOpen, setAuditCopyOpen] = useState(false);
   const [settingsId, setSettingsId] = useState<string | null>(null);
   const [qtyOpenId, setQtyOpenId] = useState<string | null>(null);
   const [showCart, setShowCart] = useState(false);
@@ -836,6 +862,8 @@ export function StaplesCompare() {
       }
       setOverrides(readProductOverrides());
       setRemovedIds(readRemovedStapleIds());
+      setVerdicts(readOfferVerdicts());
+      setAuditMode(readAuditMode());
     } catch {
       /* ignore */
     }
@@ -849,6 +877,19 @@ export function StaplesCompare() {
         setOverrides((local) => {
           const merged = mergeOverrideMaps(server, local);
           writeProductOverrides(merged);
+          return merged;
+        });
+      })
+      .catch(() => undefined);
+    void fetch("/api/staples/verdicts")
+      .then((res) => res.json())
+      .then((data: { ok?: boolean; verdicts?: unknown }) => {
+        if (cancelled || !data?.ok) return;
+        const server = parseOfferVerdictMap(data.verdicts);
+        if (!Object.keys(server).length) return;
+        setVerdicts((local) => {
+          const merged = mergeOfferVerdictMaps(server, local);
+          writeOfferVerdicts(merged);
           return merged;
         });
       })
@@ -871,6 +912,16 @@ export function StaplesCompare() {
     if (!storageReady) return;
     writeProductOverrides(overrides);
   }, [overrides, storageReady]);
+
+  useEffect(() => {
+    if (!storageReady) return;
+    writeOfferVerdicts(verdicts);
+  }, [verdicts, storageReady]);
+
+  useEffect(() => {
+    if (!storageReady) return;
+    writeAuditMode(auditMode);
+  }, [auditMode, storageReady]);
 
   useEffect(() => {
     if (!items.length) return;
@@ -911,11 +962,132 @@ export function StaplesCompare() {
     return items.filter((item) => !gone.has(item.id));
   }, [items, removedIds]);
 
+  const auditCellsFor = useCallback(
+    (item: Staple): OfferAuditCell[] => {
+      const cells: OfferAuditCell[] = [];
+      if (isOn("walmart")) {
+        cells.push(
+          storeOfferCell(item.id, item.label, "walmart", item.walmartCached),
+        );
+      }
+      if (isOn("nofrills")) {
+        cells.push(
+          storeOfferCell(item.id, item.label, "nofrills", item.noFrillsCached),
+        );
+      }
+      if (isOn("wholesaleclub")) {
+        cells.push(
+          storeOfferCell(
+            item.id,
+            item.label,
+            "wholesaleclub",
+            item.wholesaleClubCached ?? null,
+          ),
+        );
+      }
+      if (isOn("mvr")) {
+        cells.push(
+          storeOfferCell(item.id, item.label, "mvr", item.mvrCached ?? null),
+        );
+      }
+      return cells;
+    },
+    [isOn],
+  );
+
   const visibleItems = useMemo(() => {
     const q = query.trim();
-    if (!q) return liveItems;
-    return liveItems.filter((item) => stapleMatchesCatalogQuery(item, q));
-  }, [liveItems, query]);
+    const searched = q
+      ? liveItems.filter((item) => stapleMatchesCatalogQuery(item, q))
+      : liveItems;
+    if (!auditMode || auditFilter === "all") return searched;
+    return searched.filter((item) => {
+      const cells = auditCellsFor(item);
+      if (auditFilter === "no") return stapleHasNoVerdict(cells, verdicts);
+      return stapleHasUnratedStore(cells, verdicts);
+    });
+  }, [liveItems, query, auditMode, auditFilter, auditCellsFor, verdicts]);
+
+  const auditProgress = useMemo(() => {
+    const cells = liveItems.flatMap((item) => auditCellsFor(item));
+    return countOfferAuditProgress(cells, verdicts);
+  }, [liveItems, auditCellsFor, verdicts]);
+
+  const auditClipboard = useMemo(
+    () => JSON.stringify(offerVerdictPayload(verdicts), null, 2),
+    [verdicts],
+  );
+
+  function rateOffer(cell: OfferAuditCell, verdict: OfferVerdictValue) {
+    setVerdicts((prev) => toggleOfferVerdict(prev, cell, verdict));
+    setAuditNotice(null);
+  }
+
+  function sideAudit(
+    id: string,
+    label: string,
+    store: CompareStoreId,
+    side: SideResult,
+  ) {
+    if (!auditMode) return undefined;
+    return {
+      cell: storeOfferCell(id, label, store, {
+        productId: side.productId,
+        name: side.name,
+        image: side.image,
+        price: side.shelfPrice ?? side.lineTotal,
+      }),
+      map: verdicts,
+      onRate: rateOffer,
+    };
+  }
+
+  async function copyAuditVerdicts() {
+    const text = auditClipboard;
+    try {
+      await navigator.clipboard.writeText(text);
+      setAuditCopyOpen(false);
+      setAuditNotice(
+        `Скопійовано ${offerVerdictPayload(verdicts).verdicts.length} оцінок. Встав у чат агента.`,
+      );
+    } catch {
+      setAuditCopyOpen(true);
+      setAuditNotice("Скопіюй текст нижче і встав у чат агента.");
+    }
+  }
+
+  async function sendAuditVerdicts() {
+    setAuditNotice(null);
+    try {
+      const res = await fetch("/api/staples/verdicts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: auditClipboard,
+      });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        persisted?: boolean;
+        count?: number;
+        error?: string;
+      };
+      if (!data.ok) throw new Error(data.error ?? "verdicts failed");
+      if (data.persisted) {
+        setAuditNotice(
+          `Збережено ${data.count ?? 0} оцінок на сервері. Скопіюй їх ще й у чат, якщо агент на Vercel.`,
+        );
+      } else {
+        setAuditNotice(
+          "Телефон/Vercel не пише файл. Натисни «Скопіювати оцінки» і встав у чат агента.",
+        );
+      }
+    } catch (e) {
+      setAuditNotice(
+        e instanceof Error
+          ? e.message
+          : "Не вдалося надіслати. Скопіюй оцінки в чат.",
+      );
+    }
+  }
 
   const searchCatalog = useMemo(
     () =>
@@ -1656,9 +1828,77 @@ export function StaplesCompare() {
           catalogReady={catalogReady}
           catalog={searchCatalog}
         />
+        <div className="audit-bar">
+          <button
+            type="button"
+            className={auditMode ? "audit-toggle on" : "audit-toggle"}
+            aria-pressed={auditMode}
+            onClick={() => {
+              setAuditMode((on) => !on);
+              setAuditNotice(null);
+            }}
+          >
+            {auditMode ? "Оцінка підбору · увімкнено" : "Оцінити фото: так / ні"}
+          </button>
+          {auditMode && (
+            <>
+              <p className="audit-hint">
+                Так = правильний товар (або правильно, що порожньо). Ні =
+                підміна. Не здогадуємось SKU. Це не 👍 замок. Оцінено{" "}
+                {auditProgress.rated} з {auditProgress.total}
+                {auditProgress.no ? ` · ні ${auditProgress.no}` : ""}
+                {auditProgress.unrated ? ` · ще ${auditProgress.unrated}` : ""}.
+              </p>
+              <div className="audit-filters">
+                {(
+                  [
+                    ["unrated", "Не оцінені"],
+                    ["no", "Лише ні"],
+                    ["all", "Усі картки"],
+                  ] as const
+                ).map(([id, label]) => (
+                  <button
+                    key={id}
+                    type="button"
+                    className={auditFilter === id ? "qty-btn egg-on" : "qty-btn"}
+                    onClick={() => setAuditFilter(id)}
+                  >
+                    {label}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  className="cta secondary"
+                  disabled={!auditProgress.rated}
+                  onClick={() => void copyAuditVerdicts()}
+                >
+                  Скопіювати оцінки
+                </button>
+                <button
+                  type="button"
+                  className="cta secondary"
+                  disabled={!auditProgress.rated}
+                  onClick={() => void sendAuditVerdicts()}
+                >
+                  Надіслати на сервер
+                </button>
+              </div>
+              {auditNotice && <p className="audit-note">{auditNotice}</p>}
+              {auditCopyOpen && (
+                <textarea
+                  className="audit-json"
+                  readOnly
+                  rows={8}
+                  value={auditClipboard}
+                  onFocus={(e) => e.currentTarget.select()}
+                />
+              )}
+            </>
+          )}
+        </div>
       </header>
 
-      <section className="grid">
+      <section className={auditMode ? "grid audit-on" : "grid"}>
         {!catalogReady &&
           Array.from({ length: 8 }).map((_, i) => (
             <div key={`sk-${i}`} className="card skeleton" aria-hidden>
@@ -1709,6 +1949,7 @@ export function StaplesCompare() {
                 className="card-main"
                 onClick={() => toggle(item.id)}
               >
+                {!auditMode && (
                 <div className="thumb">
                   {thumb ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -1726,6 +1967,7 @@ export function StaplesCompare() {
                     </span>
                   )}
                 </div>
+                )}
                 <div className="body">
                   <strong>
                     {item.label}
@@ -1920,6 +2162,13 @@ export function StaplesCompare() {
                 </div>
                 <span className="check">{on ? "✓" : ""}</span>
               </button>
+              {auditMode && (
+                <OfferAuditGrid
+                  cells={auditCellsFor(item)}
+                  map={verdicts}
+                  onRate={rateOffer}
+                />
+              )}
               <div className="card-tools">
                 <button
                   type="button"
@@ -2030,6 +2279,7 @@ export function StaplesCompare() {
                   )}
                 </div>
               </div>
+              {!auditMode && (
               <div className="votes">
                 <button
                   type="button"
@@ -2048,6 +2298,7 @@ export function StaplesCompare() {
                   👎
                 </button>
               </div>
+              )}
             </div>
           );
         })}
@@ -2055,7 +2306,11 @@ export function StaplesCompare() {
           <p className="empty-grid">
             {query.trim()
               ? "У списку немає такого продукту"
-              : "Немає карток."}
+              : auditMode && auditFilter === "unrated"
+                ? "Усі видимі фото вже оцінені."
+                : auditMode && auditFilter === "no"
+                  ? "Немає оцінок «ні»."
+                  : "Немає карток."}
           </p>
         )}
       </section>
@@ -2272,6 +2527,7 @@ export function StaplesCompare() {
                   grams={r.grams}
                   qty={r.qty}
                   cheaperSale={compareSideCheaperSale(r.cheaper, "walmart", r.walmart)}
+                  audit={sideAudit(r.id, r.label, "walmart", r.walmart)}
                 />
                 )}
                 {isOn("nofrills") && (
@@ -2281,6 +2537,7 @@ export function StaplesCompare() {
                   grams={r.grams}
                   qty={r.qty}
                   cheaperSale={compareSideCheaperSale(r.cheaper, "nofrills", r.noFrills)}
+                  audit={sideAudit(r.id, r.label, "nofrills", r.noFrills)}
                 />
                 )}
                 {isOn("wholesaleclub") && (
@@ -2294,6 +2551,12 @@ export function StaplesCompare() {
                     "wholesaleclub",
                     r.wholesaleClub ?? { lineTotal: null, status: "no_match" },
                   )}
+                  audit={sideAudit(
+                    r.id,
+                    r.label,
+                    "wholesaleclub",
+                    r.wholesaleClub ?? { lineTotal: null, status: "no_match" },
+                  )}
                 />
                 )}
                 {isOn("mvr") && (
@@ -2304,6 +2567,12 @@ export function StaplesCompare() {
                   qty={r.qty}
                   cheaperSale={compareSideCheaperSale(
                     r.cheaper,
+                    "mvr",
+                    r.mvr ?? { lineTotal: null, status: "no_match" },
+                  )}
+                  audit={sideAudit(
+                    r.id,
+                    r.label,
                     "mvr",
                     r.mvr ?? { lineTotal: null, status: "no_match" },
                   )}
@@ -2597,6 +2866,56 @@ export function StaplesCompare() {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
           gap: 0.75rem;
+        }
+        .grid.audit-on {
+          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        }
+        .audit-bar {
+          margin-top: 0.85rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.45rem;
+          align-items: flex-start;
+        }
+        .audit-toggle {
+          border: 1px solid rgba(47, 74, 58, 0.35);
+          background: #fff;
+          color: #2f4a3a;
+          font: inherit;
+          font-weight: 750;
+          padding: 0.42rem 0.85rem;
+          cursor: pointer;
+        }
+        .audit-toggle.on {
+          background: #2f4a3a;
+          color: #f7f3ec;
+          border-color: #2f4a3a;
+        }
+        .audit-hint,
+        .audit-note {
+          margin: 0;
+          font-size: 0.82rem;
+          line-height: 1.35;
+          max-width: 42rem;
+        }
+        .audit-note {
+          color: #7a4a32;
+          font-weight: 650;
+        }
+        .audit-filters {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.35rem;
+          align-items: center;
+        }
+        .audit-json {
+          width: 100%;
+          max-width: 42rem;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 0.72rem;
+          padding: 0.5rem;
+          border: 1px solid rgba(40, 50, 40, 0.2);
+          background: #fffdf8;
         }
         .card {
           border: 1px solid rgba(40, 50, 40, 0.15);
@@ -3133,12 +3452,18 @@ function Side({
   title,
   side,
   cheaperSale,
+  audit,
 }: {
   title: string;
   side: SideResult;
   grams?: number | null;
   qty?: number;
   cheaperSale?: boolean;
+  audit?: {
+    cell: OfferAuditCell;
+    map: OfferVerdictMap;
+    onRate: (cell: OfferAuditCell, verdict: OfferVerdictValue) => void;
+  };
 }) {
   const checkout = side.checkout;
   const productName = side.name ?? side.purchase?.name ?? null;
@@ -3172,6 +3497,13 @@ function Side({
           {productName ? tidyOfferName(productName) : "немає товару"}
         </div>
       </div>
+      {audit && (
+        <OfferVerdictButtons
+          cell={audit.cell}
+          map={audit.map}
+          onRate={audit.onRate}
+        />
+      )}
       <div>
         <span className={`pill ${side.status ?? "no_match"}`}>
           {statusLabel(side.status)}

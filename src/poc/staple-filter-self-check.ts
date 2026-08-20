@@ -54,6 +54,17 @@ import {
   searchShownCatalog,
   stapleMatchesCatalogQuery,
 } from "@/domain/staple-search";
+import {
+  countOfferAuditProgress,
+  lookupOfferVerdict,
+  makeOfferVerdict,
+  mergeOfferVerdictMaps,
+  offerVerdictPayload,
+  parseOfferVerdictMap,
+  parseOfferVerdictMapFromText,
+  stapleHasUnratedStore,
+  toggleOfferVerdict,
+} from "@/domain/offer-verdicts";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -1539,6 +1550,88 @@ async function main() {
       { store: "nofrills", price: 11.49 },
     ]) === "WM дешевше · знижка",
     "homepage/search hint names the cheaper sale store",
+  );
+
+  const creamCell = {
+    stapleId: "cream_cheese_bars",
+    label: "Cream Cheese Bars",
+    store: "wholesaleclub" as const,
+    productId: "wc-mozz",
+    name: "Sunspun Pizza Mozzarella Cheese",
+    image: null,
+    price: 31.99,
+  };
+  let vmap = toggleOfferVerdict({}, creamCell, "no");
+  assert(
+    lookupOfferVerdict(vmap, creamCell)?.verdict === "no",
+    "operator no sticks to that store SKU",
+  );
+  vmap = toggleOfferVerdict(vmap, creamCell, "no");
+  assert(
+    lookupOfferVerdict(vmap, creamCell) == null,
+    "second tap on the same verdict clears it",
+  );
+  vmap = toggleOfferVerdict({}, creamCell, "no");
+  assert(
+    lookupOfferVerdict(vmap, { ...creamCell, productId: "wc-bars" }) == null,
+    "verdict does not follow a rematched SKU",
+  );
+  const emptyCell = {
+    stapleId: "lids_bagasse_bowl",
+    label: "Bagasse Bowl Lids",
+    store: "nofrills" as const,
+    productId: null,
+    name: null,
+    image: null,
+    price: null,
+  };
+  const emptyYes = makeOfferVerdict(emptyCell, "yes");
+  assert(emptyYes.empty && emptyYes.productId === "", "empty yes is a hole OK");
+  const payload = offerVerdictPayload({
+    "cream_cheese_bars::wholesaleclub": makeOfferVerdict(creamCell, "no"),
+    "lids_bagasse_bowl::nofrills": emptyYes,
+  });
+  assert(
+    payload.kind === "royal-sass-offer-verdicts-v1" &&
+      payload.no === 1 &&
+      payload.emptyYes === 1,
+    "clipboard payload counts yes/no and empty",
+  );
+  const roundTrip = parseOfferVerdictMapFromText(
+    "```json\n" + JSON.stringify(payload) + "\n```",
+  );
+  assert(
+    lookupOfferVerdict(roundTrip, creamCell)?.verdict === "no",
+    "pasted fenced JSON still parses for the agent",
+  );
+  const uk = parseOfferVerdictMap([
+    {
+      stapleId: "oreo_sandwich_cookies",
+      store: "walmart",
+      verdict: "ні",
+      productId: "mint",
+      name: "Oreo Mint Crème",
+    },
+  ]);
+  assert(
+    uk["oreo_sandwich_cookies::walmart"]?.verdict === "no",
+    "Ukrainian ні stores as no",
+  );
+  const merged = mergeOfferVerdictMaps(
+    { "a::walmart": makeOfferVerdict({ ...creamCell, stapleId: "a", store: "walmart" }, "yes", "2026-01-01T00:00:00.000Z") },
+    { "a::walmart": makeOfferVerdict({ ...creamCell, stapleId: "a", store: "walmart" }, "no", "2026-08-20T00:00:00.000Z") },
+  );
+  assert(merged["a::walmart"]?.verdict === "no", "newer ratedAt wins on merge");
+  const progress = countOfferAuditProgress(
+    [creamCell, emptyCell],
+    { "cream_cheese_bars::wholesaleclub": makeOfferVerdict(creamCell, "no") },
+  );
+  assert(progress.rated === 1 && progress.unrated === 1 && progress.no === 1, "audit progress");
+  assert(
+    stapleHasUnratedStore([creamCell, emptyCell], {
+      "cream_cheese_bars::wholesaleclub": makeOfferVerdict(creamCell, "yes"),
+    }),
+    "card stays in unrated filter until every visible store is rated",
   );
 
   console.log("staple-filter-self-check ok");
