@@ -176,6 +176,15 @@ async function main() {
     Math.abs((gWm.shelfPrice ?? 0) - 2.97) > 0.05,
     `OOS 10 oz must not win WM grape compare (shelf=${gWm.shelfPrice})`,
   );
+  const gNf = grape!.noFrills as { name?: string };
+  assert(
+    !/pickled|blue grapes|398\s*ml/i.test(gNf.name ?? ""),
+    `grape NF must not be pickled/grapes/canned, got ${gNf.name}`,
+  );
+  assert(
+    /grape tomato/i.test(gNf.name ?? ""),
+    `grape NF must be a grape tomato pack, got ${gNf.name}`,
+  );
 
   const ziploc = byId.get("ziploc_sandwich");
   assert(ziploc, "ziploc row");

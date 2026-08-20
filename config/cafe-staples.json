@@ -58,7 +58,6 @@
         "tomatoes grape",
         "tomato, grape",
         "tomato grape",
-        "organic grape",
         "cherry tomato",
         "cherry tomatoes",
         "tomatoes cherry"
@@ -69,6 +68,7 @@
         "diced",
         "crushed",
         "can",
+        "canned",
         "juice",
         "soup",
         "vine",
@@ -76,7 +76,11 @@
         "1.5 lb",
         "seed",
         "seeds",
-        "plant"
+        "plant",
+        "pickled",
+        "pickle",
+        "grapes",
+        "cucumber"
       ],
       "image": "/products/tomatoes_grape.jpg",
       "notes": "Produce: cheapest grape tomato pack (brand irrelevant)",

@@ -92,6 +92,11 @@ export const DEFAULT_PRODUCE_JUNK = [
   "loaf",
   "mochi",
   "turnover",
+  "pickled",
+  "pickle",
+  "canned",
+  "marinated",
+  "grapes",
 ] as const;
 
 /** Fresh produce shapes that must not win a frozen-bag staple. */

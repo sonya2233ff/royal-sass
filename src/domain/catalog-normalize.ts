@@ -342,6 +342,26 @@ export function retailerCategoryFromTaxonomy(
   return undefined;
 }
 
+/**
+ * Fresh grape/cherry tomato packs only. Split Include ("organic grape",
+ * "cherry tomato") otherwise matches table grapes and pickled cherry mixes.
+ */
+export function grapeTomatoFormFail(
+  item: { id?: string; label?: string },
+  hay: string,
+): string | null {
+  if ((item.id ?? "").toLowerCase() !== "tomatoes_grape") return null;
+  const t = hay.toLowerCase();
+  if (/\b(pickled|pickle|pickeled|marinated)\b/.test(t)) {
+    return "grape tomatoes ≠ pickled";
+  }
+  if (/\b(canned|tin|tinned|jarred)\b/.test(t)) {
+    return "grape tomatoes ≠ canned";
+  }
+  if (!/\btomato/.test(t)) return "grape tomatoes ≠ table grapes";
+  return null;
+}
+
 /** Cafe cottage cheese — never mozzarella, cheddar, or another cheese form. */
 export function isCottageCheeseStaple(item: {
   id?: string;
@@ -395,6 +415,8 @@ export function cafeOfferFormFail(
   ) {
     return "fresh ≠ canned ml";
   }
+  const grapeTomato = grapeTomatoFormFail(item, t);
+  if (grapeTomato) return grapeTomato;
   if (id === "cream_cheese_bars") {
     if (/\bmozz/.test(t) || /\bpizza\b/.test(t)) {
       return "cream cheese bars ≠ mozzarella";

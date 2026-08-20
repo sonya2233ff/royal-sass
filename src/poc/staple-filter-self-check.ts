@@ -9,6 +9,7 @@ import {
   offerFailsStapleFilters,
   cottageCheeseFormFail,
   cafeOfferFormFail,
+  grapeTomatoFormFail,
   offerFailsStapleOfferFilters,
   stapleBrandHint,
   walmartCheapestHintIds,
@@ -210,6 +211,83 @@ async function main() {
       name: "Your Fresh Market Cherry Tomatoes 10 oz",
     }) == null,
     "cherry tomato clamshell is the same cafe pack as grape",
+  );
+  assert(
+    grapeTomatoFormFail(grape, "Traditional Flavour Pickled Tomatoes Cherry And Cucumbers") ===
+      "grape tomatoes ≠ pickled",
+    "pickled cherry mix is not grape tomatoes",
+  );
+  assert(
+    offerFailsStapleOfferFilters(grape, {
+      name: 'Traditional Flavour Pickled Tomatoes "Cherry" And Cucumbers',
+      packageSize: "1000 ml, $0.50/100ml",
+      productId: "20997195_EA",
+    }) != null,
+    "NF pickled cherry tomatoes must not pass grape filters",
+  );
+  assert(
+    !isActualCategoryBOffer(grape, {
+      productId: "20997195_EA",
+      name: 'Traditional Flavour Pickled Tomatoes "Cherry" And Cucumbers',
+      packageSize: "1000 ml, $0.50/100ml",
+      price: 4.99,
+    }),
+    "pickled cherry mix is not category B grape tomatoes",
+  );
+  assert(
+    grapeTomatoFormFail(grape, "PC Organics Blue Grapes") ===
+      "grape tomatoes ≠ table grapes",
+    "table grapes are not grape tomatoes",
+  );
+  assert(
+    !isActualCategoryBOffer(grape, {
+      productId: "20032253_EA",
+      name: "PC Organics Blue Grapes",
+      packageSize: "2 l, $0.30/100ml",
+      price: 5.99,
+    }),
+    "PC Organics Blue Grapes must not win grape tomatoes",
+  );
+  assert(
+    offerFailsStapleOfferFilters(grape, {
+      name: "AURORA - TOMATOES CHERRY 398ML",
+      packageSize: "398ML",
+      productId: "aurora-tomatoes-cherry-398ml",
+    }) != null,
+    "canned cherry tomatoes 398ml are not a fresh grape pack",
+  );
+  assert(
+    !isActualCategoryBOffer(grape, {
+      productId: "aurora-tomatoes-cherry-398ml",
+      name: "AURORA - TOMATOES CHERRY 398ML",
+      packageSize: "398ML",
+      price: 1.69,
+    }),
+    "MVR Aurora 398ml is canned, not grape tomatoes",
+  );
+  const nfGrapePack = {
+    productId: "20840038001_EA",
+    name: "Farmer's Market Grape Tomato",
+    packageSize: "907 g, $0.88/100g",
+    parsedMassKg: 0.907,
+    price: 7.99,
+  };
+  const grapeFromImpostors = resolveCatalogOffer({
+    item: grape,
+    row: {
+      offer: {
+        productId: "20997195_EA",
+        name: 'Traditional Flavour Pickled Tomatoes "Cherry" And Cucumbers',
+        packageSize: "1000 ml, $0.50/100ml",
+        price: 4.99,
+      },
+      alternates: [nfGrapePack],
+    },
+    matchMode: "cheapest",
+  });
+  assert(
+    grapeFromImpostors.offer?.productId === nfGrapePack.productId,
+    `grape catalog must skip pickled winner, got ${grapeFromImpostors.offer?.productId}`,
   );
   const mvrGrapeHandle = {
     productId: "vegetables-grape-tomatoes-case-15-x-1-lb",
