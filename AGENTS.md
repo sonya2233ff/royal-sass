@@ -120,7 +120,7 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 
 `resolveMatchMode`: explicit `item.matchMode` (canonicalized), else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred.
 
-**Category B identity** (`usesCategoryBIdentity` / `isCategoryBStaple`) is **only** `category === "produce" | "frozen"`. Eggs can be cheapest via `EGG_PACK_IDS` without produce-identity filters.
+**Category B identity** (`usesCategoryBIdentity` / `isActualCategoryBOffer`) is **only** `category === "produce" | "frozen"`. Eggs can be cheapest via `EGG_PACK_IDS` without produce-identity filters. Filters also read the Shopify handle / `productId` / URL slug (`offerHandleHay`), so a relabeled `vegetables-grape-tomatoes-case` cannot win the round `tomato` card.
 
 **Frozen vs produce:** bags such as `frozen_pineapple` (Alasko 5×1) are **frozen**, not fresh produce, even if an old receipt dump listed `produce`. Frozen skips the “fresh pack shape” checks; fresh must look like produce (warehouse titles like `Fruits - Grape Tomato` are OK via `warehouseTitleView`).
 
@@ -243,8 +243,8 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - **No per-card × and no «Видалити вибрані».** Selection is only for compare / refresh / rematch / copy.
 - Actions: select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
 - Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**.
-- Results: four columns, then baskets, then stats.
-- Nav: Cafe staples + Match inspector (`src/app/SiteNav.tsx`).
+- Nav: Cafe staples + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
+- Results: columns for the selected stores, then baskets, then stats.
 - Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand.
 
 ## Deploy

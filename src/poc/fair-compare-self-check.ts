@@ -17,6 +17,11 @@ import { pickBestOffer, pickCheapestOffer, scoreOfferMatch } from "@/domain/matc
 import { stapleBrandHint } from "@/domain/catalog-normalize";
 import { sanityCheckOffer } from "@/domain/sanity";
 import type { ProductOffer } from "@/connectors/types";
+import {
+  cheaperAmongStores,
+  parseCompareStores,
+  toggleCompareStore,
+} from "@/domain/compare-stores";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -385,6 +390,27 @@ assert(
   bluePick?.productId === cheapBlue.productId,
   `cheapest WM blueberries is 312g not organic 6oz, got ${bluePick?.productId}`,
 );
+
+const allFour = new Set(parseCompareStores(null));
+assert(allFour.size === 4, "default all four stores");
+assert(
+  toggleCompareStore(allFour, "mvr").has("mvr") === false,
+  "can turn MVR off",
+);
+assert(
+  toggleCompareStore(new Set(["walmart"]), "walmart").has("walmart"),
+  "cannot turn off the last store",
+);
+const wmNf = cheaperAmongStores(
+  { walmart: 10, nofrills: 8, wholesaleclub: 12, mvr: 9 },
+  new Set(["walmart", "nofrills"]),
+);
+assert(wmNf.cheaper === "nofrills" && wmNf.delta === -2, `WM vs NF ${wmNf.cheaper} ${wmNf.delta}`);
+const hideWc = cheaperAmongStores(
+  { walmart: 10, nofrills: 8, wholesaleclub: 1, mvr: null },
+  new Set(["walmart", "nofrills"]),
+);
+assert(hideWc.cheaper === "nofrills", "hidden WC $1 must not win");
 
 console.log("fair-compare-self-check ok", {
   grape: { cheaper: grape.cheaper, basis: grape.fairBasis, wm: grape.wmFair, nf: grape.nfFair },

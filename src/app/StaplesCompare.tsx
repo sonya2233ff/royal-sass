@@ -38,6 +38,13 @@ import {
   looseWeightPurchase,
   purchasePlanForPack,
 } from "@/domain/needed-weight-pick";
+import { completeBasketWinner } from "@/domain/basket-coverage";
+import {
+  COMPARE_STORES,
+  cheaperAmongStores,
+  type CompareStoreId,
+} from "@/domain/compare-stores";
+import { useCompareStores } from "./CompareStoresContext";
 
 type OfferStatus =
   | "ok"
@@ -415,6 +422,18 @@ function cheaperLabel(cheaper: string): string {
   return "Incomplete";
 }
 
+const STORE_MISSING_LABEL: Record<CompareStoreId, string> = {
+  walmart: "Walmart",
+  nofrills: "No Frills",
+  wholesaleclub: "Wholesale Club",
+  mvr: "MVR",
+};
+
+function sideLineTotal(side?: { lineTotal?: number | null } | null): number | null {
+  const n = side?.lineTotal;
+  return n != null && Number.isFinite(n) ? n : null;
+}
+
 function storeShort(cheaper: string): string {
   if (cheaper === "walmart") return "Walmart";
   if (cheaper === "nofrills") return "No Frills";
@@ -629,6 +648,7 @@ export function StaplesCompare() {
   const [statsSummary, setStatsSummary] = useState<StatsSummary | null>(null);
   const [statsRuns, setStatsRuns] = useState<StatsRun[]>([]);
   const [openRunId, setOpenRunId] = useState<string | null>(null);
+  const { isOn, enabled, count: storeCount } = useCompareStores();
 
   const applyStats = useCallback(
     (payload: { summary?: StatsSummary; runs?: StatsRun[] } | null | undefined) => {
@@ -1245,17 +1265,85 @@ export function StaplesCompare() {
     }
   }
 
+  const displayRows = useMemo(() => {
+    if (!rows) return null;
+    return rows.map((row) => {
+      const next = cheaperAmongStores(
+        {
+          walmart: sideLineTotal(row.walmart),
+          nofrills: sideLineTotal(row.noFrills),
+          wholesaleclub: sideLineTotal(row.wholesaleClub),
+          mvr: sideLineTotal(row.mvr),
+        },
+        enabled,
+      );
+      return { ...row, cheaper: next.cheaper, delta: next.delta };
+    });
+  }, [rows, enabled]);
+
+  const displayTotals = useMemo(() => {
+    if (!totals) return null;
+    const coverageOf: Record<
+      CompareStoreId,
+      CompareTotals["walmartComplete"]
+    > = {
+      walmart: totals.walmartComplete,
+      nofrills: totals.noFrillsComplete,
+      wholesaleclub: totals.wholesaleClubComplete,
+      mvr: totals.mvrComplete,
+    };
+    const winnerStores = COMPARE_STORES.filter((s) => enabled.has(s.id))
+      .map((s) => {
+        const coverage = coverageOf[s.id];
+        if (!coverage) return null;
+        return {
+          id: s.id,
+          coverage: {
+            requestedItems: coverage.requestedItems,
+            availableComparableItems: coverage.availableComparableItems,
+            checkoutTotal: coverage.checkoutTotal,
+            complete: coverage.complete,
+            coverage: coverage.coverage ?? "",
+          },
+        };
+      })
+      .filter(
+        (row): row is NonNullable<typeof row> => row != null,
+      );
+    const enabledMissing = new Set(
+      COMPARE_STORES.filter((s) => enabled.has(s.id)).map(
+        (s) => STORE_MISSING_LABEL[s.id],
+      ),
+    );
+    const incompleteItems = (totals.incompleteItems ?? [])
+      .map((it) => ({
+        ...it,
+        missing: it.missing.filter((name) => enabledMissing.has(name)),
+      }))
+      .filter((it) => it.missing.length > 0);
+    return {
+      ...totals,
+      cheaper: completeBasketWinner(winnerStores),
+      incompleteItems,
+    };
+  }, [totals, enabled]);
+
+  const compareLine = COMPARE_STORES.filter((s) => isOn(s.id))
+    .map((s) =>
+      s.id === "mvr" ? `${s.label} Cash & Carry (${s.detail})` : `${s.label} ${s.detail}`,
+    )
+    .join(" vs ");
+
   return (
     <div className="staples">
       <header className="hero">
         <p className="brand">Royal SASS</p>
         <h1>Cafe staples</h1>
         <p className="sub">
-          Walmart #5831 vs No Frills #3660 vs Wholesale Club #3724 vs MVR Cash
-          & Carry (3655 Weston Rd). <strong>А</strong> — точний продукт.{" "}
-          <strong>Б</strong> — найдешевший відповідний (бренд не важливий).
-          Кількість за замовчуванням береться з картки; зміна в кошику не
-          змінює дефолт, поки не натиснеш «Зберегти як новий дефолт».
+          {compareLine || "Оберіть магазини зверху"}. <strong>А</strong> — точний
+          продукт. <strong>Б</strong> — найдешевший відповідний (бренд не
+          важливий). Кількість за замовчуванням береться з картки; зміна в
+          кошику не змінює дефолт, поки не натиснеш «Зберегти як новий дефолт».
         </p>
         <p
           className={
@@ -1380,7 +1468,8 @@ export function StaplesCompare() {
                   <span className={`pill cat-${cat.key}`} title={cat.title}>
                     {cat.short}
                   </span>
-                  {item.walmartCached ? (
+                  {isOn("walmart") &&
+                    (item.walmartCached ? (
                     <>
                       <span className="sku">
                         WM {tidyOfferName(item.walmartCached.name)}
@@ -1406,8 +1495,9 @@ export function StaplesCompare() {
                     </>
                   ) : (
                     <span className="price mute">немає WM ціни</span>
-                  )}
-                  {item.noFrillsCached ? (
+                  ))}
+                  {isOn("nofrills") &&
+                    (item.noFrillsCached ? (
                     <>
                       <span className="sku">
                         NF {tidyOfferName(item.noFrillsCached.name)}
@@ -1433,8 +1523,9 @@ export function StaplesCompare() {
                     </>
                   ) : (
                     <span className="price mute">немає NF ціни</span>
-                  )}
-                  {item.wholesaleClubCached ? (
+                  ))}
+                  {isOn("wholesaleclub") &&
+                    (item.wholesaleClubCached ? (
                     <>
                       <span className="sku">
                         WC {tidyOfferName(item.wholesaleClubCached.name)}
@@ -1460,8 +1551,9 @@ export function StaplesCompare() {
                     </>
                   ) : (
                     <span className="price mute">немає WC ціни</span>
-                  )}
-                  {item.mvrCached ? (
+                  ))}
+                  {isOn("mvr") &&
+                    (item.mvrCached ? (
                     <>
                       <span className="sku">
                         MVR {tidyOfferName(item.mvrCached.name)}
@@ -1486,7 +1578,7 @@ export function StaplesCompare() {
                     </>
                   ) : (
                     <span className="price mute">немає MVR ціни</span>
-                  )}
+                  ))}
                   {item.sobeysCached ? (
                     <>
                       <span className="sku">
@@ -1501,25 +1593,25 @@ export function StaplesCompare() {
                       </span>
                     </>
                   ) : null}
-                  {item.ageLabel && (
+                  {isOn("walmart") && item.ageLabel && (
                     <span className="age">
                       {"WM \u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
                       {item.ageLabel}
                     </span>
                   )}
-                  {item.noFrillsCached?.ageLabel && (
+                  {isOn("nofrills") && item.noFrillsCached?.ageLabel && (
                     <span className="age">
                       {"NF \u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
                       {item.noFrillsCached.ageLabel}
                     </span>
                   )}
-                  {item.wholesaleClubCached?.ageLabel && (
+                  {isOn("wholesaleclub") && item.wholesaleClubCached?.ageLabel && (
                     <span className="age">
                       {"WC \u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
                       {item.wholesaleClubCached.ageLabel}
                     </span>
                   )}
-                  {item.mvrCached?.ageLabel && (
+                  {isOn("mvr") && item.mvrCached?.ageLabel && (
                     <span className="age">
                       {"MVR \u0446\u0456\u043d\u0430 \u0432\u0456\u0434 "}
                       {item.mvrCached.ageLabel}
@@ -1555,22 +1647,22 @@ export function StaplesCompare() {
                       if (!wmBuy && !nfBuy && !wcBuy && !mvrBuy) return null;
                       return (
                         <>
-                          {wmBuy && (
+                          {isOn("walmart") && wmBuy && (
                             <span className="unitprice">
                               WM {formatBBuy(wmBuy)}
                             </span>
                           )}
-                          {nfBuy && (
+                          {isOn("nofrills") && nfBuy && (
                             <span className="unitprice">
                               NF {formatBBuy(nfBuy)}
                             </span>
                           )}
-                          {wcBuy && (
+                          {isOn("wholesaleclub") && wcBuy && (
                             <span className="unitprice">
                               WC {formatBBuy(wcBuy)}
                             </span>
                           )}
-                          {mvrBuy && (
+                          {isOn("mvr") && mvrBuy && (
                             <span className="unitprice">
                               MVR {formatBBuy(mvrBuy)}
                             </span>
@@ -1842,10 +1934,10 @@ export function StaplesCompare() {
 
       {error && <p className="err">{error}</p>}
 
-      {rows && (
+      {displayRows && (
         <section className="results">
           <h2>Results</h2>
-          {rows.map((r) => (
+          {displayRows.map((r) => (
             <article key={r.id} className="row">
               <div className="row-head">
                 {r.image && (
@@ -1874,103 +1966,130 @@ export function StaplesCompare() {
                           : ""}
                   </strong>
                   <div className="badge">
-                    {r.cheaper === "incomplete" && r.fairBasis === "incomparable"
+                    {storeCount < 2
+                      ? "Оберіть ще магазин зверху"
+                      : r.cheaper === "incomplete" && r.fairBasis === "incomparable"
                       ? "Incomparable"
                       : cheaperLabel(r.cheaper)}
-                    {r.delta != null && r.cheaper !== "tie"
+                    {r.delta != null && r.cheaper !== "tie" && storeCount >= 2
                       ? ` · Δ $${Math.abs(r.delta).toFixed(2)}`
                       : ""}
                     {r.fairLabel ? ` · ${r.fairLabel}` : ""}
                   </div>
                 </div>
               </div>
-              <div className="cols">
+              <div
+                className="cols"
+                style={{
+                  gridTemplateColumns: `repeat(${Math.max(storeCount, 1)}, minmax(0, 1fr))`,
+                }}
+              >
+                {isOn("walmart") && (
                 <Side
                   title="Walmart"
                   side={r.walmart}
                   grams={r.grams}
                   qty={r.qty}
                 />
+                )}
+                {isOn("nofrills") && (
                 <Side
                   title="No Frills"
                   side={r.noFrills}
                   grams={r.grams}
                   qty={r.qty}
                 />
+                )}
+                {isOn("wholesaleclub") && (
                 <Side
                   title="Wholesale Club"
                   side={r.wholesaleClub ?? { lineTotal: null, status: "no_match" }}
                   grams={r.grams}
                   qty={r.qty}
                 />
+                )}
+                {isOn("mvr") && (
                 <Side
                   title="MVR Cash & Carry"
                   side={r.mvr ?? { lineTotal: null, status: "no_match" }}
                   grams={r.grams}
                   qty={r.qty}
                 />
+                )}
               </div>
             </article>
           ))}
 
-          {totals && (
+          {displayTotals && (
             <div className="totals">
+              {isOn("walmart") && (
               <div>
                 Walmart:{" "}
                 <strong>
-                  {money(totals.walmartComplete?.checkoutTotal)}
+                  {money(displayTotals.walmartComplete?.checkoutTotal)}
                 </strong>
-                {totals.walmartComplete?.coverage
-                  ? ` · ${totals.walmartComplete.coverage}`
+                {displayTotals.walmartComplete?.coverage
+                  ? ` · ${displayTotals.walmartComplete.coverage}`
                   : ""}
               </div>
+              )}
+              {isOn("nofrills") && (
               <div>
                 No Frills:{" "}
                 <strong>
-                  {money(totals.noFrillsComplete?.checkoutTotal)}
+                  {money(displayTotals.noFrillsComplete?.checkoutTotal)}
                 </strong>
-                {totals.noFrillsComplete?.coverage
-                  ? ` · ${totals.noFrillsComplete.coverage}`
+                {displayTotals.noFrillsComplete?.coverage
+                  ? ` · ${displayTotals.noFrillsComplete.coverage}`
                   : ""}
               </div>
+              )}
+              {isOn("wholesaleclub") && (
               <div>
                 Wholesale Club:{" "}
                 <strong>
-                  {money(totals.wholesaleClubComplete?.checkoutTotal)}
+                  {money(displayTotals.wholesaleClubComplete?.checkoutTotal)}
                 </strong>
-                {totals.wholesaleClubComplete?.coverage
-                  ? ` · ${totals.wholesaleClubComplete.coverage}`
+                {displayTotals.wholesaleClubComplete?.coverage
+                  ? ` · ${displayTotals.wholesaleClubComplete.coverage}`
                   : ""}
               </div>
+              )}
+              {isOn("mvr") && (
               <div>
                 MVR:{" "}
-                <strong>{money(totals.mvrComplete?.checkoutTotal)}</strong>
-                {totals.mvrComplete?.coverage
-                  ? ` · ${totals.mvrComplete.coverage}`
+                <strong>{money(displayTotals.mvrComplete?.checkoutTotal)}</strong>
+                {displayTotals.mvrComplete?.coverage
+                  ? ` · ${displayTotals.mvrComplete.coverage}`
                   : ""}
               </div>
+              )}
               <div className="winner">
-                {totals.cheaper === "incomplete"
+                {storeCount < 2
+                  ? "Оберіть ще магазин зверху, щоб порівняти кошик"
+                  : displayTotals.cheaper === "incomplete"
                   ? "Немає повного кошика — загального переможця немає"
-                  : totals.cheaper === "walmart"
+                  : displayTotals.cheaper === "walmart"
                     ? "Cheaper overall: Walmart"
-                    : totals.cheaper === "nofrills"
+                    : displayTotals.cheaper === "nofrills"
                       ? "Cheaper overall: No Frills"
-                      : totals.cheaper === "wholesaleclub"
+                      : displayTotals.cheaper === "wholesaleclub"
                         ? "Cheaper overall: Wholesale Club"
-                        : totals.cheaper === "mvr"
+                        : displayTotals.cheaper === "mvr"
                           ? "Cheaper overall: MVR"
                           : "Overall: tie"}
               </div>
-              {totals.incompleteItems && totals.incompleteItems.length > 0 && (
+              {displayTotals.incompleteItems && displayTotals.incompleteItems.length > 0 && (
                 <div className="tiny">
                   Неповні:{" "}
-                  {totals.incompleteItems
+                  {displayTotals.incompleteItems
                     .map((it) => `${it.label} (${it.missing.join(", ")})`)
                     .join(" · ")}
                 </div>
               )}
-              {totals.note && <div className="tiny mute">{totals.note}</div>}
+              {storeCount === 4 && displayTotals.note && (
+                <div className="tiny mute">{displayTotals.note}</div>
+              )}
             </div>
           )}
           <p className="meta">Збережено в статистику порівнянь</p>
@@ -2486,7 +2605,7 @@ export function StaplesCompare() {
         }
         @media (max-width: 800px) {
           .cols {
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr !important;
           }
         }
         .store {

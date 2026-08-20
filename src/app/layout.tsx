@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CompareStoresProvider } from "./CompareStoresContext";
 import { SiteNav } from "./SiteNav";
 
 export const metadata: Metadata = {
@@ -14,8 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ margin: 0 }}>
-        <SiteNav />
-        {children}
+        <CompareStoresProvider>
+          <SiteNav />
+          {children}
+        </CompareStoresProvider>
       </body>
     </html>
   );
