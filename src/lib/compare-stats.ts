@@ -28,15 +28,24 @@ export interface CompareRunItem {
 
 export interface CompareRunTotals {
   completeCount: number;
-  walmart: number;
-  noFrills: number;
-  wholesaleClub: number;
-  mvr: number;
+  /** Complete-basket checkout; null when that store is incomplete. Never $0. */
+  walmart: number | null;
+  noFrills: number | null;
+  wholesaleClub: number | null;
+  mvr: number | null;
   cheaper: string;
   cheaperTwoWay?: string;
   cheaperThree?: string;
   tripleCount?: number;
   quadCount?: number;
+}
+
+/** Incomplete store baskets are N/A, never a $0 total. */
+export function nullUnlessPositiveTotal(
+  n: number | null | undefined,
+): number | null {
+  if (n == null || !Number.isFinite(n) || n <= 0) return null;
+  return n;
 }
 
 export interface CompareRunRecord {
@@ -137,10 +146,10 @@ export function buildCompareRunRecord(input: {
     })),
     totals: {
       completeCount: input.totals.completeCount,
-      walmart: input.totals.walmart,
-      noFrills: input.totals.noFrills,
-      wholesaleClub: input.totals.wholesaleClub,
-      mvr: input.totals.mvr,
+      walmart: nullUnlessPositiveTotal(input.totals.walmart),
+      noFrills: nullUnlessPositiveTotal(input.totals.noFrills),
+      wholesaleClub: nullUnlessPositiveTotal(input.totals.wholesaleClub),
+      mvr: nullUnlessPositiveTotal(input.totals.mvr),
       cheaper: input.totals.cheaper,
       cheaperTwoWay: input.totals.cheaperTwoWay,
       cheaperThree: input.totals.cheaperThree,
@@ -197,7 +206,18 @@ export async function loadCompareHistory(
     const parsed = JSON.parse(raw) as CompareHistoryFile | CompareRunRecord[];
     const runs = Array.isArray(parsed) ? parsed : parsed.runs;
     if (!Array.isArray(runs)) return [];
-    return capCompareHistory(runs.filter(isRunRecord));
+    return capCompareHistory(
+      runs.filter(isRunRecord).map((run) => ({
+        ...run,
+        totals: {
+          ...run.totals,
+          walmart: nullUnlessPositiveTotal(run.totals.walmart),
+          noFrills: nullUnlessPositiveTotal(run.totals.noFrills),
+          wholesaleClub: nullUnlessPositiveTotal(run.totals.wholesaleClub),
+          mvr: nullUnlessPositiveTotal(run.totals.mvr),
+        },
+      })),
+    );
   } catch (err) {
     const code = (err as NodeJS.ErrnoException).code;
     if (code === "ENOENT") return [];

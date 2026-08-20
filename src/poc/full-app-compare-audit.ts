@@ -331,6 +331,33 @@ async function main() {
     `6in wraps NF must not be a foam pumpkin, got ${(wraps!.noFrills as { name?: string }).name}`,
   );
 
+  const wmNameOf = (id: string) =>
+    String((byId.get(id)?.walmart as { name?: string } | undefined)?.name ?? "");
+  assert(
+    !/portion cup|2000\/case|4oz/i.test(wmNameOf("lids_bagasse_bowl")),
+    `bagasse lids must not be a 4oz portion-cup case, got ${wmNameOf("lids_bagasse_bowl")}`,
+  );
+  assert(
+    !/per case|12 oz bowl/i.test(wmNameOf("lids_dome_12_24oz")),
+    `12-24oz dome lids must not be a bowl warehouse case, got ${wmNameOf("lids_dome_12_24oz")}`,
+  );
+  assert(
+    !/1000 unit/i.test(wmNameOf("lids_dome_no_hole")),
+    `no-hole dome lids must not be a 1000-unit pack, got ${wmNameOf("lids_dome_no_hole")}`,
+  );
+  assert(
+    !/7\.7/i.test(wmNameOf("party_tray_12x12")),
+    `12x12 tray must not be 7.7 inch, got ${wmNameOf("party_tray_12x12")}`,
+  );
+  assert(
+    !/mint/i.test(wmNameOf("oreo_sandwich_cookies")),
+    `oreo must not be mint crème, got ${wmNameOf("oreo_sandwich_cookies")}`,
+  );
+  assert(
+    !/baking/i.test(wmNameOf("pam_cookware_coating")),
+    `pam must not be baking spray, got ${wmNameOf("pam_cookware_coating")}`,
+  );
+
   const complete = rows.filter((r) => r.cheaper !== "incomplete");
 
   const wmSum = complete.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);

@@ -1386,14 +1386,22 @@
         "lids"
       ],
       "mustNotInclude": [
-        "bowl only"
+        "bowl only",
+        "portion cup",
+        "4oz",
+        "4 oz",
+        "2oz",
+        "2 oz",
+        "per case",
+        "case"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
       "notes": "From receipts catalog (supplies)",
       "mustIncludeAll": [
         "bagasse"
-      ]
+      ],
+      "maxPlausiblePrice": 25
     },
     {
       "id": "bagels",
@@ -1643,11 +1651,14 @@
         "box",
         "tote",
         "candy",
-        "household"
+        "household",
+        "7.7",
+        "round"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
-      "notes": "From receipts catalog (supplies)"
+      "notes": "From receipts catalog (supplies)",
+      "maxPlausiblePrice": 25
     },
     {
       "id": "coke_classic_cdn_cans_24x35",
@@ -1767,7 +1778,8 @@
       "label": "Dome Lids 12-24oz",
       "queries": [
         "dome lids 12 24 oz",
-        "sip dome lid"
+        "sip dome lid",
+        "dome lid for cup"
       ],
       "mustIncludeAny": [
         "dome lid",
@@ -1776,11 +1788,20 @@
       "mustNotInclude": [
         "no hole",
         "no-hole",
-        "flat"
+        "flat",
+        "portion cup",
+        "4oz",
+        "4 oz",
+        "bowl",
+        "yellow",
+        "8-24oz",
+        "per case",
+        "case"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
-      "notes": "From receipts catalog (supplies)"
+      "notes": "From receipts catalog (supplies)",
+      "maxPlausiblePrice": 20
     },
     {
       "id": "double_burner",
@@ -2488,7 +2509,10 @@
       "mustNotInclude": [
         "with hole",
         "w/ hole",
-        "sip"
+        "sip",
+        "per case",
+        "case",
+        "1000"
       ],
       "matchMode": "cheapest",
       "category": "supplies",
@@ -2496,7 +2520,8 @@
       "preferNameIncludes": [
         "no hole",
         "no-hole"
-      ]
+      ],
+      "maxPlausiblePrice": 15
     },
     {
       "id": "oreo_sandwich_cookies",
@@ -2511,7 +2536,12 @@
       "mustNotInclude": [
         "thins",
         "ice cream",
-        "pie"
+        "pie",
+        "mint",
+        "golden",
+        "lemon",
+        "peanut",
+        "birthday"
       ],
       "matchMode": "preferred",
       "category": "grocery",
@@ -2529,7 +2559,13 @@
       ],
       "mustNotInclude": [
         "pamper",
-        "diaper"
+        "diaper",
+        "baking",
+        "grilling",
+        "avocado",
+        "olive",
+        "coconut",
+        "butter"
       ],
       "matchMode": "preferred",
       "category": "grocery",
@@ -2563,7 +2599,9 @@
         "cube",
         "frozen",
         "flake",
-        "spice"
+        "spice",
+        "root",
+        "chopped"
       ],
       "matchMode": "cheapest",
       "category": "produce",

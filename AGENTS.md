@@ -57,6 +57,13 @@ These are live on **production** `master` (`7d405de` and descendants). Phone dem
 
 **Oat Original (`oat_beverage_original`)** — operator exception. WM #5831 stays identity-locked on Earth's Own **Zero Sugar** 1.75L `2ADJVX8MAQ1Q` `$4.47` (same shelf price as Original `54TFZVS2LHS3`). Catalog `mustNotInclude` still has `zero sugar` so search/rematch will not pick a new Zero Sugar hit. Do **not** rematch this card onto Original. Other identity-locked SKUs must still pass `mustNotInclude` (`identityLockAllowsFilterMismatch`).
 
+**Supplies / grocery impostors (do not regress)**
+
+- WM #5831 **must not** keep warehouse cases or the wrong variant when a cafe pack is unknown: bagasse bowl lids ≠ 4 oz portion-cup 2000/case; 12–24 oz dome lids ≠ bowl lids / 400-per-case; no-hole dome lids ≠ 1000-unit PET cases; 12×12 party tray ≠ 7.7" round platter; Oreo ≠ mint crème; PAM ≠ baking spray. Prefer `no_match` over those SKUs.
+- MVR cafe packs (50 ct lids, Talthi 12×12 5-pk) stay valid. Do not reject `50 CT` / `5 PK` as if they were WM `/case` dumps.
+- Fresh parsley is a bunch, not parsley root, flakes, or chopped/jarred herb.
+- Incomplete store baskets persist as `null` (UI **N/A**), never `$0`. `storeCoverage.checkoutTotal` is already null when the store cannot fill every line.
+
 **Rematch vs prices**
 
 - After changing Include / match mode in **Налаштування**, the operator must rematch. **Оновити ціни** does not re-search.
@@ -194,7 +201,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 ## Live API (`nodejs`)
 
 - `GET /api/staples` — card payload from catalogs + mappings (`restaurantProduct` on each item)
-- `POST /api/staples/compare` — `{ cart, productOverrides, ids?, grams?, qty? }`; checkout coverage (`N із M`); missing ≠ `$0`; writes match log when FS allows; **always returns a stats snapshot**
+- `POST /api/staples/compare` — `{ cart, productOverrides, ids?, grams?, qty? }`; checkout coverage (`N із M`); missing ≠ `$0`; writes match log when FS allows; **always returns a stats snapshot**. Store-level history totals are `null` when that store’s basket is incomplete.
 - `GET/POST /api/staples/product-config` — best-effort JSON on disk; `persisted: false` on Vercel. Client localStorage is source of truth for the single-cafe test. Changing `matchMode` marks mappings `needs_review` without deleting them.
 - `GET /api/staples/compare-stats` — last runs + win-rate summary from disk (empty on Vercel)
 - `POST /api/staples/refresh` — rematch selected WM SKUs (older WM-only path)
@@ -295,7 +302,7 @@ npm run poc:store-connector
 npm run poc:pcx-session
 ```
 
-Price/matching diffs: `npm run cache:prices` (and `cache:walmart` / `cache:nofrills` / `cache:wholesaleclub` / `cache:mvr`) only when live keys work and the task is a refresh. Nightly CI is price-only (`cache:prices`), never a full rematch of all 124. Spot-check: grape tomatoes ≠ seeds, ice ≠ gum, dozen card still compares 12 vs 18 vs 30 as $/egg, `qty > 1`, missing offer stays empty, Tropicana label/`2.63` does not `no_match` a Pulp Free title, settings Include does not wipe catalog tropicana. UI: select + grams/qty → Compare → `fairLabel` + baskets + stats row.
+Price/matching diffs: `npm run cache:prices` (and `cache:walmart` / `cache:nofrills` / `cache:wholesaleclub` / `cache:mvr`) only when live keys work and the task is a refresh. Nightly CI is price-only (`cache:prices`), never a full rematch of all 124. Spot-check: grape tomatoes ≠ seeds, ice ≠ gum, dozen card still compares 12 vs 18 vs 30 as $/egg, `qty > 1`, missing offer stays empty, Tropicana label/`2.63` does not `no_match` a Pulp Free title, settings Include does not wipe catalog tropicana, bagasse lids ≠ 4 oz 2000/case, Oreo ≠ mint, PAM ≠ baking, incomplete baskets never `$0`. UI: select + grams/qty → Compare → `fairLabel` + baskets + stats row.
 
 If a script is not run, say so.
 

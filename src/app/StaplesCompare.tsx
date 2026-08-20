@@ -258,10 +258,10 @@ type StoreCoverage = {
 };
 
 type CompareTotals = {
-  walmart: number;
-  noFrills: number;
-  wholesaleClub?: number;
-  mvr?: number;
+  walmart: number | null;
+  noFrills: number | null;
+  wholesaleClub?: number | null;
+  mvr?: number | null;
   cheaper: string;
   cheaperTwoWay?: string;
   cheaperThree?: string;
@@ -487,6 +487,12 @@ function money(n: number | null | undefined): string {
   return `$${n.toFixed(2)}`;
 }
 
+/** Store basket totals: missing/incomplete is N/A, never $0.00. */
+function moneyBasket(n: number | null | undefined): string {
+  if (n == null || !Number.isFinite(n) || n <= 0) return "N/A";
+  return `$${n.toFixed(2)}`;
+}
+
 function torontoWhen(iso: string | null | undefined): string {
   if (!iso) return "";
   const d = new Date(iso);
@@ -518,10 +524,10 @@ type StatsRun = {
   items: StatsRunItem[];
   totals: {
     completeCount: number;
-    walmart: number;
-    noFrills: number;
-    wholesaleClub: number;
-    mvr: number;
+    walmart: number | null;
+    noFrills: number | null;
+    wholesaleClub: number | null;
+    mvr: number | null;
     cheaper: string;
     tripleCount?: number;
     quadCount?: number;
@@ -2139,13 +2145,13 @@ export function StaplesCompare() {
                       <span>
                         {storeShort(run.totals.cheaper)}
                         {" · WM "}
-                        {money(run.totals.walmart)}
+                        {moneyBasket(run.totals.walmart)}
                         {" · NF "}
-                        {money(run.totals.noFrills)}
+                        {moneyBasket(run.totals.noFrills)}
                         {" · WC "}
-                        {money(run.totals.wholesaleClub)}
+                        {moneyBasket(run.totals.wholesaleClub)}
                         {" · MVR "}
-                        {money(run.totals.mvr)}
+                        {moneyBasket(run.totals.mvr)}
                       </span>
                     </button>
                     {open && (

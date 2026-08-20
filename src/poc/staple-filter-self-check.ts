@@ -1024,6 +1024,144 @@ async function main() {
     `OJ search starts with tropicana query, got ${ojQs[0]}`,
   );
 
+  const bagasse = cfg.items.find((i) => i.id === "lids_bagasse_bowl");
+  assert(bagasse, "bagasse bowl lids staple");
+  assert(
+    offerFailsStapleFilters(
+      bagasse!,
+      "Packaging Naturally 4oz Bagasse Portion Cup Lid | 2000/case",
+      "Packaging Naturally",
+    ) === "mustNotInclude:portion cup" ||
+      offerFailsStapleFilters(
+        bagasse!,
+        "Packaging Naturally 4oz Bagasse Portion Cup Lid | 2000/case",
+        "Packaging Naturally",
+      ) === "mustNotInclude:case" ||
+      offerFailsStapleFilters(
+        bagasse!,
+        "Packaging Naturally 4oz Bagasse Portion Cup Lid | 2000/case",
+        "Packaging Naturally",
+      ) === "mustNotInclude:4oz",
+    "bagasse lids reject 4oz portion-cup warehouse cases",
+  );
+  assert(
+    offerFailsStapleFilters(
+      bagasse!,
+      "MAHER PRODUCTS - CLEAR LID FOR BAGASSE BOWL 24/32OZ 50 CT",
+      "MAHER PRODUCTS",
+    ) == null,
+    "bagasse lids keep cafe 50-count bowl lids",
+  );
+
+  const domeCups = cfg.items.find((i) => i.id === "lids_dome_12_24oz");
+  assert(domeCups, "dome lids 12-24oz staple");
+  assert(
+    offerFailsStapleFilters(
+      domeCups!,
+      "Pack N' Eat Plastic Dome Lid for 12 oz Bowl -- 400 per case",
+      "Pack n' Eat",
+    ) != null,
+    "12-24oz dome lids reject bowl lids and per-case warehouse packs",
+  );
+  assert(
+    offerFailsStapleFilters(
+      domeCups!,
+      "MAHER PRODUCTS - DOME LID FOR 12-24oz CLEAR CUP 50 PK",
+      "MAHER PRODUCTS",
+    ) == null,
+    "12-24oz dome lids keep cafe cup 50-packs",
+  );
+
+  const noHole = cfg.items.find((i) => i.id === "lids_dome_no_hole");
+  assert(noHole, "no-hole dome lids staple");
+  assert(
+    offerFailsStapleFilters(
+      noHole!,
+      "PET Dome Lid 98mm (Clear) without Hole for 12oz - 24oz PET Cold Cups 1000 unit/Pack",
+      "Green Century",
+    ) === "mustNotInclude:1000",
+    "no-hole dome lids reject 1000-unit warehouse packs",
+  );
+
+  const tray = cfg.items.find((i) => i.id === "party_tray_12x12");
+  assert(tray, "12x12 party tray staple");
+  assert(
+    offerFailsStapleFilters(
+      tray!,
+      "MIANHT Plastic Fruit Serving Tray 7.7 Inch Round Food Grade PVC",
+      "MIANHT",
+    ) != null,
+    "12x12 tray rejects 7.7 inch round platters",
+  );
+  assert(
+    offerFailsStapleFilters(
+      tray!,
+      "TALTHI - CLEAR PARTY TRAY 12x12 IN 5 PK",
+      "TALTHI",
+    ) == null,
+    "12x12 tray keeps the square 12x12 cafe pack",
+  );
+
+  const oreo = cfg.items.find((i) => i.id === "oreo_sandwich_cookies");
+  assert(oreo, "oreo staple");
+  assert(
+    offerFailsStapleFilters(
+      oreo!,
+      "Oreo Mint Crème Sandwich Cookies",
+      "OREO",
+    ) === "mustNotInclude:mint",
+    "oreo rejects mint crème",
+  );
+  assert(
+    offerFailsStapleFilters(
+      oreo!,
+      "Christie OREO Double Stuf Sandwich Cookies",
+      "Christie",
+    ) == null,
+    "oreo keeps chocolate sandwich cookies",
+  );
+
+  const pam = cfg.items.find((i) => i.id === "pam_cookware_coating");
+  assert(pam, "pam staple");
+  assert(
+    offerFailsStapleFilters(
+      pam!,
+      "PAM Baking No-Stick Cooking Spray",
+      "Pam",
+    ) === "mustNotInclude:baking",
+    "pam rejects baking spray",
+  );
+  assert(
+    offerFailsStapleFilters(
+      pam!,
+      "PAM Original No-Stick Cooking Spray",
+      "Pam",
+    ) == null,
+    "pam keeps original cookware coating",
+  );
+
+  const parsley = cfg.items.find((i) => i.id === "parsley");
+  assert(parsley, "parsley staple");
+  assert(
+    offerFailsStapleFilters(parsley!, "Parsley Root") === "mustNotInclude:root",
+    "parsley rejects parsley root",
+  );
+  assert(
+    offerFailsStapleFilters(
+      parsley!,
+      "Gefen Chopped Parsley",
+      "Gefen",
+    ) === "mustNotInclude:chopped",
+    "parsley rejects chopped/jarred herb",
+  );
+  assert(
+    offerFailsStapleFilters(
+      parsley!,
+      "Parsley, Flat, Fresh, Sold in bunches",
+    ) == null,
+    "parsley keeps a fresh bunch",
+  );
+
   const pickQCups = staplePickQuery({
     label: "12oz Black Ripple Cups",
     queries: ["12oz Black Ripple Cups"],

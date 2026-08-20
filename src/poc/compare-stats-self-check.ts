@@ -15,6 +15,7 @@ import {
   summarizeCompareHistory,
   type CompareRowSnapshot,
 } from "@/lib/compare-stats";
+import { storeCoverage } from "@/domain/basket-coverage";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -83,6 +84,18 @@ const runB = buildCompareRunRecord({
     cheaper: "nofrills",
   },
 });
+assert(runB.totals.mvr === null, "incomplete MVR basket is null, not $0");
+assert(
+  runA.totals.walmart === 6.72 && runA.totals.mvr === 3.4,
+  "complete baskets keep positive totals",
+);
+
+const incompleteCoverage = storeCoverage([1.74, 4.98, null]);
+assert(incompleteCoverage.complete === false, "coverage incomplete");
+assert(
+  incompleteCoverage.checkoutTotal === null,
+  "incomplete store coverage is null, not $0",
+);
 
 const summary = summarizeCompareHistory([runA, runB]);
 assert(summary.runCount === 2, "run count");
