@@ -14,6 +14,37 @@ export const PRODUCT_OVERRIDE_STORAGE_KEY = "royal-sass-product-overrides-v1";
 export const CART_STORAGE_KEY = "royal-sass-cart-v1";
 /** Waiter portal draft list (local only — not sent to a driver). */
 export const WAITER_LIST_STORAGE_KEY = "royal-sass-waiter-list-v1";
+/** Hidden cafe cards. Live store on Vercel (read-only FS); disk copy is best-effort. */
+export const REMOVED_STAPLES_STORAGE_KEY = "royal-sass-removed-staples-v1";
+
+export function parseRemovedStapleIds(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return [
+    ...new Set(
+      raw.filter((id): id is string => typeof id === "string" && id.length > 0),
+    ),
+  ];
+}
+
+export function readRemovedStapleIds(): string[] {
+  try {
+    const raw = window.localStorage.getItem(REMOVED_STAPLES_STORAGE_KEY);
+    if (!raw) return [];
+    return parseRemovedStapleIds(JSON.parse(raw) as unknown);
+  } catch {
+    return [];
+  }
+}
+
+export function writeRemovedStapleIds(ids: Iterable<string>): string[] {
+  const next = parseRemovedStapleIds([...ids]);
+  try {
+    window.localStorage.setItem(REMOVED_STAPLES_STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    /* ignore quota */
+  }
+  return next;
+}
 
 export function effectiveProduct(
   item: StapleLike,

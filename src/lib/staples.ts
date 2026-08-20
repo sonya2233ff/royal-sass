@@ -419,6 +419,62 @@ export function applyRemovedStapleIds<T extends { id: string }>(
   return items.filter((item) => !gone.has(item.id));
 }
 
+/** Hidden egg carton rows that still feed `large_eggs_dozen`. Not homepage cards. */
+const PROTECTED_DELETE_IDS = new Set(
+  EGG_CATALOG_SOURCE_IDS.filter((id) => id !== "large_eggs_dozen"),
+);
+
+const REMOVED_STAPLES_FILE = path.join(
+  process.cwd(),
+  "data",
+  "catalog",
+  "removed-staples.json",
+);
+
+export async function loadRemovedStapleIds(): Promise<string[]> {
+  try {
+    const raw = await readFile(REMOVED_STAPLES_FILE, "utf8");
+    const parsed = JSON.parse(raw) as { ids?: unknown };
+    if (!Array.isArray(parsed.ids)) return [];
+    return [
+      ...new Set(
+        parsed.ids
+          .filter((id): id is string => typeof id === "string" && id.length > 0),
+      ),
+    ];
+  } catch {
+    return [];
+  }
+}
+
+export async function saveRemovedStapleIds(ids: Iterable<string>): Promise<boolean> {
+  const next = [
+    ...new Set(
+      [...(await loadRemovedStapleIds()), ...ids].filter(
+        (id) => id && !PROTECTED_DELETE_IDS.has(id),
+      ),
+    ),
+  ].sort();
+  try {
+    await mkdir(path.dirname(REMOVED_STAPLES_FILE), { recursive: true });
+    await writeFile(
+      REMOVED_STAPLES_FILE,
+      `${JSON.stringify({ updatedAt: new Date().toISOString(), ids: next }, null, 2)}\n`,
+      "utf8",
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function shownStaples<T extends { id: string; custom?: boolean }>(
+  items: T[],
+): Promise<T[]> {
+  const removed = await loadRemovedStapleIds();
+  return applyRemovedStapleIds(items.filter(isShownStaple), removed);
+}
+
 export const CACHE_STALE_HOURS = Number(
   process.env.STAPLES_CACHE_STALE_HOURS ?? "72",
 );
@@ -478,9 +534,10 @@ export async function saveCustomStaple(item: StapleItem): Promise<void> {
 export async function deleteStaplesCompletely(ids: string[]): Promise<{
   deleted: string[];
   skipped: string[];
+  persisted: boolean;
 }> {
   const unique = [...new Set(ids.filter(Boolean))];
-  if (!unique.length) return { deleted: [], skipped: [] };
+  if (!unique.length) return { deleted: [], skipped: [], persisted: false };
 
   const raw = await readFile(CAFE_STAPLES, "utf8");
   const cafe = JSON.parse(raw) as { items: StapleItem[]; [k: string]: unknown };
@@ -488,15 +545,27 @@ export async function deleteStaplesCompletely(ids: string[]): Promise<{
   const known = new Set(
     [...cafe.items, ...custom].map((item) => item.id).filter(Boolean),
   );
-  const deleted = unique.filter((id) => known.has(id));
-  const skipped = unique.filter((id) => !known.has(id));
-  if (!deleted.length) return { deleted, skipped };
+  const skipped = unique.filter(
+    (id) => !known.has(id) || PROTECTED_DELETE_IDS.has(id),
+  );
+  const deleted = unique.filter(
+    (id) => known.has(id) && !PROTECTED_DELETE_IDS.has(id),
+  );
+  if (!deleted.length) return { deleted, skipped, persisted: false };
+
+  const listPersisted = await saveRemovedStapleIds(deleted);
 
   const gone = new Set(deleted);
-  cafe.items = cafe.items.filter((item) => !gone.has(item.id));
-  await mkdir(path.dirname(CAFE_STAPLES), { recursive: true });
-  await writeFile(CAFE_STAPLES, JSON.stringify(cafe, null, 2) + "\n", "utf8");
-  await saveCustomStaples(custom.filter((item) => !gone.has(item.id)));
+  let persisted = listPersisted;
+  try {
+    cafe.items = cafe.items.filter((item) => !gone.has(item.id));
+    await mkdir(path.dirname(CAFE_STAPLES), { recursive: true });
+    await writeFile(CAFE_STAPLES, JSON.stringify(cafe, null, 2) + "\n", "utf8");
+    await saveCustomStaples(custom.filter((item) => !gone.has(item.id)));
+    persisted = true;
+  } catch {
+    /* Serverless read-only FS — localStorage / removed-staples.json still hide */
+  }
 
   const wm = await loadWalmartCatalog();
   if (wm) {
@@ -555,7 +624,7 @@ export async function deleteStaplesCompletely(ids: string[]): Promise<{
     /* mappings optional */
   }
 
-  return { deleted, skipped };
+  return { deleted, skipped, persisted };
 }
 
 export async function upsertWalmartCatalogItem(input: {

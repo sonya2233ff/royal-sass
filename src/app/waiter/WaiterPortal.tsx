@@ -5,7 +5,7 @@ import {
   searchShownCatalog,
   type CatalogSearchItem,
 } from "@/domain/staple-search";
-import { WAITER_LIST_STORAGE_KEY } from "@/lib/product-config";
+import { REMOVED_STAPLES_STORAGE_KEY, WAITER_LIST_STORAGE_KEY } from "@/lib/product-config";
 
 type CatalogItem = CatalogSearchItem & {
   image?: string | null;
@@ -42,6 +42,20 @@ function ukLineCount(n: number): string {
   if (n10 === 1 && n100 !== 11) return `${n} позиція`;
   if (n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14)) return `${n} позиції`;
   return `${n} позицій`;
+}
+
+function loadRemovedIds(): Set<string> {
+  try {
+    const raw = window.localStorage.getItem(REMOVED_STAPLES_STORAGE_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return new Set();
+    return new Set(
+      parsed.filter((id): id is string => typeof id === "string" && id.length > 0),
+    );
+  } catch {
+    return new Set();
+  }
 }
 
 function loadDraft(): ListLine[] {
@@ -87,7 +101,8 @@ export function WaiterPortal() {
         if (!data.ok || !Array.isArray(data.items)) {
           throw new Error("catalog failed");
         }
-        setItems(data.items);
+        const gone = loadRemovedIds();
+        setItems(data.items.filter((item) => !gone.has(item.id)));
       })
       .catch((e) =>
         setError(e instanceof Error ? e.message : "Не вдалося завантажити каталог"),

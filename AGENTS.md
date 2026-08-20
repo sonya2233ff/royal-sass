@@ -30,7 +30,7 @@ Master product id = cafe staple id (`simply_egg_whites`, `large_eggs_dozen`), **
 - **Do not rewrite** Walmart, No Frills, or Wholesale Club connectors, API hosts, or store IDs (`5831` / `3660` / `3724`). Do not casually edit `compare-resolve.ts`, `matching.ts`, or `entity-match.ts` unless the task says to.
 - **Do not guess missing prices.** No match → `no_match` / empty cell. Never pick an impostor SKU to fill a hole (Ice Breakers for ice, Sterilite bin for ice, vinegar for marshmallow, watermelon for honeydew, 4 oz cups for 12 oz, gym “Smith machine” for PET cups, etc.).
 - **Do not restore deleted staples** unless they appear in `data/catalog/new-from-receipts.json` (or the operator names them).
-- **Do not delete staples from the product.** UI delete and `POST /api/staples/delete` are disabled (405). `deleteStaplesCompletely` may still exist in `src/lib/staples.ts` for scripts; do not wire it back to the app.
+- **Deleting staples is allowed.** Per-card **Видалити** and toolbar **Видалити вибрані** call `POST /api/staples/delete` (confirm first). Hide immediately via `localStorage` `royal-sass-removed-staples-v1` (Vercel source of truth). Disk: `data/catalog/removed-staples.json` (gitignored) plus best-effort `deleteStaplesCompletely`. Do **not** delete hidden egg catalog rows `grayridge_eggs` / `eggs_30ct`. Do not commit leftover catalog deletions unless the operator asked to persist those ids.
 - **Do not commit** `.env`, secrets, `config/custom-staples.json`, `tsconfig.tsbuildinfo`, `data/runs/`, `data/stats/`, receipt photos, `docs/royal-sass-overview.pdf`, leftover catalog dumps, or probe dumps. Do not commit leftover catalog edits unless the task is a rematch/price refresh.
 - **Do not re-enable Sobeys** as a compare column.
 - **Do not show two shell-egg cards.** Homepage eggs = one `large_eggs_dozen` line. `grayridge_eggs` stays in JSON as a catalog source row only.
@@ -200,7 +200,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 
 ## Live API (`nodejs`)
 
-- `GET /api/staples` — card payload from catalogs + mappings (`restaurantProduct` on each item)
+- `GET /api/staples` — card payload from catalogs + mappings (`restaurantProduct` on each item). Filters `removed-staples.json` when present.
 - `POST /api/staples/compare` — `{ cart, productOverrides, ids?, grams?, qty? }`; checkout coverage (`N із M`); missing ≠ `$0`; writes match log when FS allows; **always returns a stats snapshot**. Store-level history totals are `null` when that store’s basket is incomplete.
 - `GET/POST /api/staples/product-config` — best-effort JSON on disk; `persisted: false` on Vercel. Client localStorage is source of truth for the single-cafe test. Changing `matchMode` marks mappings `needs_review` without deleting them.
 - `GET /api/staples/compare-stats` — last runs + win-rate summary from disk (empty on Vercel)
@@ -210,7 +210,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/refresh-prices` — price-only SKU refresh (no rematch). Walmart Rapid looks up the locked SKU via store search first; `/product-details` often 456/503 on walmart.ca.
 - `GET /api/staples/search` — shown cafe staples only (no live store hits, empty `walmart`/`noFrills`/`wholesaleClub`/`mvr` arrays)
 - `POST /api/staples/adopt` | `confirm` — adopt remains for the match inspector; homepage search does not call it; 👍/👎 lock
-- `GET|POST /api/staples/delete` — **405**, deletion disabled
+- `POST /api/staples/delete` — hide/remove shown cafe staples (`ids`). Confirm in UI. Skips `grayridge_eggs` / `eggs_30ct`. `persisted: false` on Vercel; client localStorage still hides.
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
 - `/waiter` — waiter portal: shown catalog search + local list; send-to-driver is visual only (no API)
@@ -262,8 +262,8 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 ## UI (current)
 
 - Cards: select for compare; grams on weight items; egg chips / pack qty otherwise; 👍/👎 confirm on WM when present.
-- **No per-card × and no «Видалити вибрані».** Selection is only for compare / refresh / rematch / copy.
-- Actions: select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
+- Per-card **Видалити** and toolbar **Видалити вибрані** (cart ids), with confirm. Hidden via `royal-sass-removed-staples-v1`.
+- Actions: select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), **Видалити вибрані**, Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
 - Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**.
 - Nav: Cafe staples + **Офіціант** (`/waiter`) + **Водій** (`/driver`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
 - **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.

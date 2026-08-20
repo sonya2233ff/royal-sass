@@ -4,7 +4,7 @@ import {
   appendMatchLog,
   CACHE_STALE_HOURS,
   evaluateOfferStatus,
-  isShownStaple,
+  shownStaples,
   loadConfirmed,
   loadNoFrillsCatalog,
   loadStaplesConfig,
@@ -169,7 +169,9 @@ export async function POST(request: Request) {
   };
   const cfg = await loadStaplesConfig();
   const overrides = parseOverrideMap(body.productOverrides);
-  const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
+  const allowed = new Set(
+    (await shownStaples(cfg.items)).map((i) => i.id),
+  );
   const cartIds = body.cart ? Object.keys(body.cart) : [];
   const wanted = (cartIds.length
     ? cartIds

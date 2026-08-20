@@ -32,6 +32,8 @@ import { stapleMatchesCatalogQuery } from "@/domain/staple-search";
 import {
   CART_STORAGE_KEY,
   PRODUCT_OVERRIDE_STORAGE_KEY,
+  readRemovedStapleIds,
+  writeRemovedStapleIds,
 } from "@/lib/product-config";
 import { toBase } from "@/domain/purchase-units";
 import {
@@ -684,6 +686,7 @@ export function StaplesCompare() {
   const [sobeysCatalogAt, setSobeysCatalogAt] = useState<string | null>(null);
   const [staleHours, setStaleHours] = useState(24);
   const [query, setQuery] = useState("");
+  const [removedIds, setRemovedIds] = useState<string[]>([]);
   const [walmartSource, setWalmartSource] = useState<
     "rapid" | "browser" | "missing_key" | null
   >(null);
@@ -759,6 +762,7 @@ export function StaplesCompare() {
         const parsed = JSON.parse(rawOv) as Record<string, ProductOverride>;
         if (parsed && typeof parsed === "object") setOverrides(parsed);
       }
+      setRemovedIds(readRemovedStapleIds());
     } catch {
       /* ignore */
     }
@@ -816,15 +820,21 @@ export function StaplesCompare() {
     );
   }
 
+  const liveItems = useMemo(() => {
+    if (!removedIds.length) return items;
+    const gone = new Set(removedIds);
+    return items.filter((item) => !gone.has(item.id));
+  }, [items, removedIds]);
+
   const visibleItems = useMemo(() => {
     const q = query.trim();
-    if (!q) return items;
-    return items.filter((item) => stapleMatchesCatalogQuery(item, q));
-  }, [items, query]);
+    if (!q) return liveItems;
+    return liveItems.filter((item) => stapleMatchesCatalogQuery(item, q));
+  }, [liveItems, query]);
 
   const searchCatalog = useMemo(
     () =>
-      items.map((item) => ({
+      liveItems.map((item) => ({
         id: item.id,
         label: item.label,
         image: item.image,
@@ -837,7 +847,7 @@ export function StaplesCompare() {
         wcPrice: item.wholesaleClubCached?.price ?? null,
         mvrPrice: item.mvrCached?.price ?? null,
       })),
-    [items],
+    [liveItems],
   );
 
   const cacheIsOld = useMemo(() => {
@@ -1071,6 +1081,52 @@ export function StaplesCompare() {
 
   function clearEntireCart() {
     setCart(clearCart());
+  }
+
+  function persistRemoved(ids: string[]) {
+    const next = writeRemovedStapleIds(ids);
+    setRemovedIds(next);
+  }
+
+  function deleteStaples(ids: string[]) {
+    const unique = [...new Set(ids.filter(Boolean))];
+    if (!unique.length) return;
+    const labels = unique
+      .map((id) => liveItems.find((item) => item.id === id)?.label ?? id)
+      .slice(0, 4);
+    const extra = unique.length > 4 ? ` (+${unique.length - 4})` : "";
+    const ok = window.confirm(
+      unique.length === 1
+        ? `Видалити «${labels[0]}» з кафе?`
+        : `Видалити ${unique.length} продукти: ${labels.join(", ")}${extra}?`,
+    );
+    if (!ok) return;
+    persistRemoved([...removedIds, ...unique]);
+    setCart((prev) => {
+      const next = { ...prev };
+      for (const id of unique) delete next[id];
+      return next;
+    });
+    setSettingsId((cur) => (cur && unique.includes(cur) ? null : cur));
+    setBusy("delete");
+    setError(null);
+    startTransition(async () => {
+      try {
+        const res = await fetch("/api/staples/delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: unique }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error ?? "delete failed");
+        }
+      } catch (e) {
+        setError(e instanceof Error ? friendlyError(e.message) : String(e));
+      } finally {
+        setBusy(null);
+      }
+    });
   }
 
   function runCompare() {
@@ -1694,6 +1750,18 @@ export function StaplesCompare() {
                 >
                   {busy === "rematch" ? "Оновлюю…" : "Оновити"}
                 </button>
+                <button
+                  type="button"
+                  className="settings-btn danger"
+                  disabled={pending || busy != null}
+                  title="Прибрати цю картку з кафе"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteStaples([item.id]);
+                  }}
+                >
+                  {busy === "delete" ? "Видаляю…" : "Видалити"}
+                </button>
                 <div className="qty-row">
                   <span>
                     Зазвичай: {amountLabel(item, product.defaultAmount, product.unit)}
@@ -1924,6 +1992,15 @@ export function StaplesCompare() {
           onClick={() => rematchItems([...selected])}
         >
           {busy === "rematch" ? "Шукаю товари…" : "Оновити вибрані"}
+        </button>
+        <button
+          type="button"
+          className="cta secondary danger"
+          disabled={pending || cartSize(cart) === 0 || busy != null}
+          title="Прибрати вибрані картки з кафе"
+          onClick={() => deleteStaples([...selected])}
+        >
+          {busy === "delete" ? "Видаляю…" : "Видалити вибрані"}
         </button>
       </div>
 
@@ -2498,6 +2575,15 @@ export function StaplesCompare() {
         .settings-btn:disabled {
           opacity: 0.55;
           cursor: not-allowed;
+        }
+        .settings-btn.danger,
+        .cta.danger {
+          color: #7a2424;
+          border-color: rgba(122, 36, 36, 0.35);
+        }
+        .cta.danger {
+          background: #f7ece8;
+          color: #7a2424;
         }
         .card.skeleton {
           min-height: 12rem;

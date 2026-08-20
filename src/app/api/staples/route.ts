@@ -3,7 +3,7 @@ import { toRestaurantProduct } from "@/domain/restaurant-product";
 import {
   CACHE_STALE_HOURS,
   evaluateOfferStatus,
-  isShownStaple,
+  shownStaples,
   loadConfirmed,
   loadNoFrillsCatalog,
   loadStaplesConfig,
@@ -172,9 +172,7 @@ export async function GET() {
   const wcById = new Map(wcCatalog?.items.map((i) => [i.id, i]) ?? []);
   const mvrById = new Map(mvrCatalog?.items.map((i) => [i.id, i]) ?? []);
 
-  const items = cfg.items
-    .filter(isShownStaple)
-    .map((i) => {
+  const items = (await shownStaples(cfg.items)).map((i) => {
       const cat = catalogRowForStaple(i, byId);
       const mode = resolveMatchMode(i);
       const wmLink = mappings.products[i.id]?.retailers.walmart_ca;

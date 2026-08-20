@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isShownStaple, loadStaplesConfig } from "@/lib/staples";
+import { loadStaplesConfig, shownStaples } from "@/lib/staples";
 import {
   catalogSearchHay,
   searchShownCatalog,
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
   }
 
   const cfg = await loadStaplesConfig();
-  const shown = cfg.items.filter(isShownStaple).map((item) => ({
+  const shown = (await shownStaples(cfg.items)).map((item) => ({
     ...item,
     searchHay: catalogSearchHay(item),
   }));
