@@ -1694,94 +1694,13 @@
     {
       "id": "cottage_cheese",
       "label": "Cottage Cheese",
+      "status": "no_match",
+      "offer": null,
+      "notes": "Exact Mehadrin cottage cheese is NF #3660 only — do not fill with Great Value / Nordica / No Name / mozzarella",
+      "alternates": [],
       "queriesTried": [
-        "Cottage Cheese"
-      ],
-      "status": "ok",
-      "offer": {
-        "productId": "6000196306141",
-        "name": "Great Value 2% Cottage Cheese",
-        "brand": "Great Value",
-        "price": 4.48,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:02.646Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-2-Cottage-Cheese/6000196306141?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/asr/4c0bb258-d3d4-44ca-8f5d-b7830483082c.8d37ece57ab4c3df2956a908c73c5a38.jpeg"
-      },
-      "notes": "From receipts catalog (dairy)",
-      "alternates": [
-        {
-          "productId": "6000200025051",
-          "name": "Great Value 1% Cottage Cheese",
-          "brand": "Great Value",
-          "parsedMassKg": 0,
-          "price": 6.58,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:12:06.793Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-1-Cottage-Cheese/6000200025051?classType=REGULAR&athbdg=L1200",
-          "image": "https://i5.walmartimages.ca/asr/aa6547e7-d88c-4e1c-8ed2-9c977e48ea2d.d37cd26a2ebd006f48f486ca81dcb96d.jpeg"
-        },
-        {
-          "productId": "6000195508438",
-          "name": "Nordica 2% Cottage Cheese",
-          "brand": "Nordica",
-          "parsedMassKg": 0,
-          "price": 8.18,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:12:06.793Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Nordica-2-Cottage-Cheese/6000195508438?classType=REGULAR",
-          "image": "https://i5.walmartimages.ca/asr/7d6c7f4b-a254-45c6-89f3-5d9c8c9a8a60.5db742472be21fac7bc3ab69c9f951a3.jpeg"
-        },
-        {
-          "productId": "6000196306138",
-          "name": "Great Value 1% Cottage Cheese",
-          "brand": "Great Value",
-          "parsedMassKg": 0,
-          "price": 4.48,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:12:06.793Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-1-Cottage-Cheese/6000196306138?classType=REGULAR",
-          "image": "https://i5.walmartimages.ca/asr/ff22af5d-35c8-4dee-9885-e239ed9e428f.4942e0bbe62f4b1ec69a8fed046f0e6b.jpeg"
-        },
-        {
-          "productId": "6000191276951",
-          "name": "Nordica 2% Cottage Cheese",
-          "brand": "Nordica",
-          "parsedMassKg": 0,
-          "price": 5.24,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:12:06.793Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Nordica-2-Cottage-Cheese/6000191276951?classType=REGULAR&athbdg=L1600",
-          "image": "https://i5.walmartimages.ca/asr/ceb79af3-e4df-45c5-bcd3-f41c8577e561.998f106f016b9fd1cede9cd26b452578.jpeg"
-        },
-        {
-          "productId": "6000195508237",
-          "name": "Nordica 1% Cottage Cheese",
-          "brand": "Nordica",
-          "parsedMassKg": 0,
-          "price": 5.24,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:12:06.793Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Nordica-1-Cottage-Cheese/6000195508237?classType=REGULAR",
-          "image": "https://i5.walmartimages.ca/asr/4861e8cf-ceb0-460d-9333-36ea462ece0a.f426c5845eab96df6faaa99d37ac23bb.jpeg"
-        },
-        {
-          "productId": "6000195508444",
-          "name": "Nordica 1% Cottage Cheese",
-          "brand": "Nordica",
-          "parsedMassKg": 0,
-          "price": 8.18,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:12:06.793Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Nordica-1-Cottage-Cheese/6000195508444?classType=REGULAR",
-          "image": "https://i5.walmartimages.ca/asr/b3dbba66-8e30-44d2-a462-b6e5ea31404a.f931b495f745b3e5bbc806826c05abcd.jpeg"
-        }
+        "mehadrin cottage cheese",
+        "cottage cheese"
       ]
     },
     {

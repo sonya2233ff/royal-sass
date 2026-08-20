@@ -1317,48 +1317,8 @@
         "sourceUrl": "https://www.nofrills.ca/en/cottage-cheese-0-01/p/21387030_EA",
         "image": "https://digital.loblaws.ca/PCX/21387030_EA/en/1/1435300051_en_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live NF SKU price refresh",
-      "alternates": [
-        {
-          "productId": "20183991002_EA",
-          "name": "No Name Cottage Cheese",
-          "brand": "No Name",
-          "packageSize": "500 g, $0.90/100g",
-          "parsedMassKg": 0.5,
-          "price": 4.49,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:58:53.031Z",
-          "sourceUrl": "https://www.nofrills.ca/en/cottage-cheese/p/20183991002_EA",
-          "image": "https://digital.loblaws.ca/PCX/20183991002_EA/en/1/20183991002_en_front_v1_1200.png"
-        },
-        {
-          "productId": "20833357_EA",
-          "name": "No Name 1% M.F. Cottage Cheese",
-          "brand": "No Name",
-          "packageSize": "750 g, $0.73/100g",
-          "parsedMassKg": 0.75,
-          "price": 5.49,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:58:53.031Z",
-          "sourceUrl": "https://www.nofrills.ca/en/1-m-f-cottage-cheese/p/20833357_EA",
-          "image": "https://digital.loblaws.ca/PCX/20833357_EA/en/1/6038313019_en_front_centre_marketing_1_GS1_Ecommerce_1200.png"
-        },
-        {
-          "productId": "20002410_EA",
-          "name": "Lactaid Cottage Cheese",
-          "brand": "Lactaid",
-          "packageSize": "454 g, $1.98/100g",
-          "parsedMassKg": 0.454,
-          "price": 8.99,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:58:53.031Z",
-          "sourceUrl": "https://www.nofrills.ca/en/cottage-cheese/p/20002410_EA",
-          "image": "https://assets.loblaws.ca/pcx_bronx_fe_assets/images/common/coming-soon-en-web.png"
-        }
-      ]
+      "notes": "Exact Mehadrin cottage cheese (NF #3660). No mozzarella/cheddar.",
+      "alternates": []
     },
     {
       "id": "craize_snack_cracker",

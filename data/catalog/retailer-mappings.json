@@ -4567,51 +4567,56 @@
       "label": "Cottage Cheese",
       "category": "dairy",
       "retailers": {
+        "nofrills": {
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21387030_EA",
+          "name": "Mehadrin Cottage Cheese 0.01",
+          "matchMethod": "live_search",
+          "matchConfidence": 1,
+          "verified": true,
+          "verifiedAt": "2026-08-20T21:10:00.000Z",
+          "decision": "auto_linked",
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-20T21:10:00.000Z"
+        },
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
           "retailerProductId": "gay-lea-2-nordica-cottage-cheese-750gr-1",
           "name": "GAY LEA - 2% NORDICA COTTAGE CHEESE 750GR",
-          "upc": "0006601315243",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:52:30.961Z"
+          "updatedAt": "2026-08-20T21:10:00.000Z",
+          "notes": "Nordica is not Mehadrin cottage cheese"
         },
         "wholesaleclub": {
           "retailer": "wholesaleclub",
           "storeId": "3724",
           "retailerProductId": "20183991002_EA",
-          "name": "Cottage Cheese",
+          "name": "No Name Cottage Cheese",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:59:54.966Z"
+          "updatedAt": "2026-08-20T21:10:00.000Z",
+          "notes": "No Name is not Mehadrin cottage cheese"
         }
       },
       "prices": [
         {
-          "retailer": "mvr",
-          "storeId": "weston",
-          "retailerProductId": "gay-lea-2-nordica-cottage-cheese-750gr-1",
-          "price": 5.29,
-          "availability": "in_stock",
-          "checkedAt": "2026-08-18T21:52:30.954Z",
-          "source": "catalog_mvr_weston_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        },
-        {
-          "retailer": "wholesaleclub",
-          "storeId": "3724",
-          "retailerProductId": "20183991002_EA",
-          "price": 4.49,
+          "retailer": "nofrills",
+          "storeId": "3660",
+          "retailerProductId": "21387030_EA",
+          "price": 11.49,
           "availability": "unknown",
-          "checkedAt": "2026-08-18T21:59:54.959Z",
-          "source": "catalog_wholesaleclub_3724_latest",
+          "checkedAt": "2026-08-20T21:10:00.000Z",
+          "source": "catalog_nofrills_3660_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]

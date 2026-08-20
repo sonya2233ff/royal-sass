@@ -1691,11 +1691,14 @@
       "id": "cottage_cheese",
       "label": "Cottage Cheese",
       "queries": [
-        "Cottage Cheese"
+        "mehadrin cottage cheese",
+        "cottage cheese"
+      ],
+      "mustIncludeAll": [
+        "cottage"
       ],
       "mustIncludeAny": [
-        "cottage",
-        "cheese"
+        "mehadrin"
       ],
       "mustNotInclude": [
         "toy",
@@ -1704,11 +1707,25 @@
         "whipped",
         "product",
         "baker",
-        "wolski"
+        "wolski",
+        "mozzarella",
+        "mozzerella",
+        "mozz",
+        "cheddar",
+        "shredded",
+        "pizza",
+        "marble",
+        "string",
+        "cream cheese",
+        "ricotta"
       ],
-      "matchMode": "cheapest",
+      "preferNameIncludes": [
+        "mehadrin"
+      ],
+      "matchMode": "exact",
+      "purchaseStrategy": "exact_need",
       "category": "dairy",
-      "notes": "From receipts catalog (dairy)"
+      "notes": "Exact Mehadrin cottage cheese. No Frills #3660 only (21387030_EA). Do not fill WM/WC/MVR with Great Value, Nordica, No Name, or mozzarella/cheddar."
     },
     {
       "id": "craize_snack_cracker",

@@ -342,6 +342,42 @@ export function retailerCategoryFromTaxonomy(
   return undefined;
 }
 
+/** Cafe cottage cheese — never mozzarella, cheddar, or another cheese form. */
+export function isCottageCheeseStaple(item: {
+  id?: string;
+  label?: string;
+}): boolean {
+  const id = (item.id ?? "").toLowerCase().replace(/_/g, " ");
+  const label = (item.label ?? "").toLowerCase();
+  if ((item.id ?? "").toLowerCase() === "cottage_cheese") return true;
+  const hay = `${id} ${label}`;
+  return /\bcottage\b/.test(hay) && /\bcheese\b/.test(hay);
+}
+
+/**
+ * Mozzerella (NF typo) is not the token "mozzarella". Require the word
+ * cottage, and reject other cheese forms even when Include is only "cheese".
+ */
+export function cottageCheeseFormFail(
+  item: { id?: string; label?: string },
+  hay: string,
+): string | null {
+  if (!isCottageCheeseStaple(item)) return null;
+  const t = hay.toLowerCase();
+  if (
+    /\bmozz/.test(t) ||
+    /\b(cheddar|shredded|pizza|marble|ricotta|parmesan|swiss|gouda|havarti)\b/.test(
+      t,
+    ) ||
+    /\bstring\s+cheese\b/.test(t)
+  ) {
+    return "cottage cheese ≠ mozzarella/cheddar";
+  }
+  if (/\bcream\s+cheese\b/.test(t)) return "cottage cheese ≠ cream cheese";
+  if (!/\bcottage\b/.test(t)) return "cottage cheese ≠ other cheese";
+  return null;
+}
+
 /**
  * Phrase = substring; single token = word boundary (seed ≠ seedless, waffle = waffles).
  */
@@ -381,6 +417,8 @@ export function offerFailsStapleFilters(
   const extra = extraHay?.trim() ?? "";
   const splitAcrossFields = isCategoryBStaple(item);
   const n = `${brand ?? ""} ${name} ${extra}`.toLowerCase();
+  const cottageForm = cottageCheeseFormFail(item, n);
+  if (cottageForm) return cottageForm;
   const banned = [
     ...(item.mustNotInclude ?? []),
     ...(item.rejectNameIncludes ?? []),

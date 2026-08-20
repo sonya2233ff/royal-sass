@@ -2,6 +2,7 @@
  * Identity checks independent of how much we buy.
  */
 import {
+  cottageCheeseFormFail,
   isCategoryBStaple,
   nameMatchesFilterPhrase,
   nameMatchesFilterToken,
@@ -114,6 +115,8 @@ function bannedFormMismatch(
     if (/\bround\b/.test(text)) return "rectangular ≠ round";
   }
   if (variant === "round" && /\brectang/.test(text)) return "round ≠ rectangular";
+  const cottageForm = cottageCheeseFormFail(product, text);
+  if (cottageForm) return cottageForm;
   return null;
 }
 
@@ -188,6 +191,11 @@ export function offerMatchesIdentity(input: {
 }): IdentityResult {
   const { product, offer } = input;
   const text = hay(offer);
+  const cottageForm = cottageCheeseFormFail(
+    product,
+    `${text} ${offerHandleHay(offer)}`,
+  );
+  if (cottageForm) return { ok: false, reason: cottageForm };
 
   if (
     input.confirmedProductId &&

@@ -63,6 +63,7 @@ These are live on **production** `master` (`7d405de` and descendants). Phone dem
 - WM #5831 **must not** keep warehouse cases or the wrong variant when a cafe pack is unknown: bagasse bowl lids ≠ 4 oz portion-cup 2000/case; 12–24 oz dome lids ≠ bowl lids / 400-per-case; no-hole dome lids ≠ 1000-unit PET cases; 12×12 party tray ≠ 7.7" round platter; Oreo ≠ mint crème; PAM ≠ baking spray. Prefer `no_match` over those SKUs.
 - MVR cafe packs (50 ct lids, Talthi 12×12 5-pk) stay valid. Do not reject `50 CT` / `5 PK` as if they were WM `/case` dumps.
 - Fresh parsley is a bunch, not parsley root, flakes, or chopped/jarred herb.
+- Mehadrin cottage cheese (`cottage_cheese`) is Category A exact, No Frills `#3660` only (`21387030_EA`). WM Great Value / Nordica / No Name / mozzarella-cheddar (including the NF typo `Mozzerella`) are impostors — `no_match`, not a fill-in. The cottage-form gate requires `cottage` and rejects other cheese forms even when Include is only `cheese`.
 - Incomplete store baskets persist as `null` (UI **N/A**), never `$0`. `storeCoverage.checkoutTotal` is already null when the store cannot fill every line.
 
 **Rematch vs prices**

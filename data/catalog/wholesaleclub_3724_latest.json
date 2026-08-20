@@ -880,20 +880,9 @@
     {
       "id": "cottage_cheese",
       "label": "Cottage Cheese",
-      "status": "ok",
-      "offer": {
-        "productId": "20183991002_EA",
-        "name": "No Name Cottage Cheese",
-        "brand": "No Name",
-        "packageSize": "500 g, $0.90/100g",
-        "parsedMassKg": 0.5,
-        "price": 4.49,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:59.066Z",
-        "sourceUrl": "https://www.wholesaleclub.ca/en/cottage-cheese/p/20183991002_EA",
-        "image": "https://digital.loblaws.ca/PCX/20183991002_EA/en/1/20183991002_en_front_v1_1200.png"
-      },
-      "notes": "Live WC SKU price refresh",
+      "status": "no_match",
+      "offer": null,
+      "notes": "Exact Mehadrin cottage cheese is NF #3660 only — do not fill with Great Value / Nordica / No Name / mozzarella",
       "alternates": []
     },
     {

@@ -7,6 +7,7 @@ import {
   categoryBSearchQueries,
   looksLikeWalmartProductId,
   offerFailsStapleFilters,
+  cottageCheeseFormFail,
   offerFailsStapleOfferFilters,
   stapleBrandHint,
   walmartCheapestHintIds,
@@ -1165,6 +1166,110 @@ async function main() {
       "Parsley, Flat, Fresh, Sold in bunches",
     ) == null,
     "parsley keeps a fresh bunch",
+  );
+
+  const cottage = cfg.items.find((i) => i.id === "cottage_cheese");
+  assert(cottage, "cottage cheese staple");
+  assert(cottage!.matchMode === "exact", "Mehadrin cottage is Category A exact");
+  assert(
+    cottageCheeseFormFail(
+      cottage!,
+      "Mehadrin Mozzerella Cheddar Cheese",
+    ) === "cottage cheese ≠ mozzarella/cheddar",
+    "typo Mozzerella is still not cottage cheese",
+  );
+  assert(
+    offerFailsStapleFilters(
+      cottage!,
+      "Mehadrin Mozzerella Cheddar Cheese",
+      "Mehadrin",
+    ) === "cottage cheese ≠ mozzarella/cheddar",
+    "NF mozzarella/cheddar must not fill cottage cheese",
+  );
+  assert(
+    offerFailsStapleFilters(
+      cottage!,
+      "Great Value 2% Cottage Cheese",
+      "Great Value",
+    ) === "mustIncludeAny",
+    "Great Value cottage is not Mehadrin",
+  );
+  assert(
+    offerFailsStapleFilters(
+      cottage!,
+      "Mehadrin Cottage Cheese 0.01",
+      "Mehadrin",
+    ) == null,
+    "Mehadrin cottage cheese stays",
+  );
+  const cheeseOnlyInclude = stapleWithClientOverride(cottage!, {
+    matchMode: "exact",
+    matchRules: { mustIncludeAny: ["mehadrin", "cheese"] },
+  });
+  assert(
+    offerFailsStapleFilters(
+      cheeseOnlyInclude,
+      "Mehadrin Mozzerella Cheddar Cheese",
+      "Mehadrin",
+    ) === "cottage cheese ≠ mozzarella/cheddar",
+    "settings Include cheese must not let mozzarella win",
+  );
+  const cottageProduct = toRestaurantProduct(cottage!);
+  assert(
+    !offerMatchesIdentity({
+      product: cottageProduct,
+      offer: {
+        productId: "mozz-lock",
+        name: "Mehadrin Mozzerella Cheddar Cheese",
+        brand: "Mehadrin",
+      },
+      confirmedProductId: "mozz-lock",
+    }).ok,
+    "👍 on mozzarella must not lock cottage cheese",
+  );
+  const nfCottageResolved = resolveCatalogOffer({
+    item: cottage!,
+    row: {
+      offer: {
+        productId: "21387030_EA",
+        name: "Mehadrin Cottage Cheese 0.01",
+        brand: "Mehadrin",
+        price: 11.49,
+        packageSize: "12x453.0 g",
+      },
+    },
+    matchMode: "preferred",
+    product: cottageProduct,
+    requested: 1,
+    link: {
+      retailerProductId: "21387030_EA",
+      verified: true,
+      decision: "auto_linked",
+      kind: "identity",
+      skippedRematch: true,
+    },
+  });
+  assert(
+    nfCottageResolved.offer?.productId === "21387030_EA",
+    `NF keeps Mehadrin cottage, got ${nfCottageResolved.offer?.productId}`,
+  );
+  const wmGvResolved = resolveCatalogOffer({
+    item: cottage!,
+    row: {
+      offer: {
+        productId: "6000196306141",
+        name: "Great Value 2% Cottage Cheese",
+        brand: "Great Value",
+        price: 4.48,
+      },
+    },
+    matchMode: "preferred",
+    product: cottageProduct,
+    requested: 1,
+  });
+  assert(
+    wmGvResolved.offer == null,
+    `WM Great Value must not fill Mehadrin cottage, got ${wmGvResolved.offer?.productId}`,
   );
 
   const pickQCups = staplePickQuery({
