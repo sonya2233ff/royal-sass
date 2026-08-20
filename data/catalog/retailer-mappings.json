@@ -5,20 +5,22 @@
   "products": {
     "simply_egg_whites": {
       "masterId": "simply_egg_whites",
-      "label": "Egg Whites (cheapest carton)",
+      "label": "Naturegg Simply Egg Whites 1kg",
       "category": "eggs",
       "retailers": {
         "nofrills": {
           "retailer": "nofrills",
           "storeId": "3660",
-          "retailerProductId": "20820130001_EA",
-          "name": "Burnbrae Farms Naturegg Free Run Egg Whites",
-          "matchMethod": "seed_catalog",
+          "retailerProductId": "20820355001_EA",
+          "name": "Burnbrae Farms Naturegg Simply Egg Whites",
+          "matchMethod": "live_search",
           "matchConfidence": 1,
-          "verified": false,
+          "verified": true,
+          "verifiedAt": "2026-08-20T01:54:41.184Z",
           "decision": "auto_linked",
-          "kind": "staple_winner",
-          "updatedAt": "2026-08-17T12:22:06.403Z"
+          "kind": "identity",
+          "skippedRematch": true,
+          "updatedAt": "2026-08-20T01:54:41.184Z"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -40,9 +42,9 @@
         {
           "retailer": "nofrills",
           "storeId": "3660",
-          "retailerProductId": "20820130001_EA",
-          "price": 5.5,
-          "checkedAt": "2026-08-16T00:49:30.338Z",
+          "retailerProductId": "20820355001_EA",
+          "price": 5.49,
+          "checkedAt": "2026-08-20T01:54:40.686Z",
           "source": "catalog_nofrills_3660_latest",
           "priceConfidence": "LIVE_VERIFIED"
         },

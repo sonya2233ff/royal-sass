@@ -605,6 +605,33 @@ assert(
   "500g Simply is the same product as the 1kg card",
 );
 assert(
+  offerMatchesIdentity({
+    product: whitesNeed,
+    offer: offer("Burnbrae Farms Naturegg Simply Egg Whites", {
+      productId: "20820355001_EA",
+      packageSize: "500 ml, $1.10/100ml",
+      parsedMassKg: 0.5,
+    }),
+  }).ok,
+  "500ml Simply at No Frills is the same product as the 1kg card",
+);
+const buy500ml = evaluatePurchase({
+  product: whitesNeed,
+  requested: 1,
+  offer: {
+    price: 5.49,
+    name: "Burnbrae Farms Naturegg Simply Egg Whites",
+    packageSize: "500 ml, $1.10/100ml",
+    parsedMassKg: 0.5,
+  },
+});
+assert(buy500ml.valid, `2×500ml covers 1kg (${buy500ml.reason})`);
+assert(buy500ml.packs === 2, `2×500ml packs ${buy500ml.packs}`);
+assert(
+  buy500ml.checkoutCost === 10.98,
+  `2×$5.49 = $10.98 got ${buy500ml.checkoutCost}`,
+);
+assert(
   !offerMatchesIdentity({
     product: whitesNeed,
     offer: offer("Burnbrae Farms Naturegg Free Run Egg Whites", {

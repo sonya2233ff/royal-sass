@@ -158,17 +158,24 @@ async function main() {
 
   const grape = byId.get("tomatoes_grape");
   assert(grape, "grape row");
-  assert(
-    grape!.fairBasis === "per_100g" || grape!.fairBasis === "per_pack",
-    `grape packed basis ${grape!.fairBasis}`,
-  );
   const gWm = grape!.walmart as { shelfPrice?: number; name?: string };
   assert(!/seed/i.test(gWm.name ?? ""), "grape must not show seeds");
-  assert(
-    grape!.cheaper !== "walmart" ||
-      Math.abs((gWm.shelfPrice ?? 0) - 2.97) > 0.05,
-    `OOS 10 oz must not win WM grape compare (cheaper=${grape!.cheaper} shelf=${gWm.shelfPrice})`,
-  );
+  if (grape!.basketWalmart == null) {
+    assert(
+      grape!.cheaper === "incomplete",
+      `grape without a WM pack is incomplete, got ${grape!.cheaper} / ${grape!.fairBasis}`,
+    );
+  } else {
+    assert(
+      grape!.fairBasis === "per_100g" || grape!.fairBasis === "per_pack",
+      `grape packed basis ${grape!.fairBasis}`,
+    );
+    assert(
+      grape!.cheaper !== "walmart" ||
+        Math.abs((gWm.shelfPrice ?? 0) - 2.97) > 0.05,
+      `OOS 10 oz must not win WM grape compare (cheaper=${grape!.cheaper} shelf=${gWm.shelfPrice})`,
+    );
+  }
 
   const ziploc = byId.get("ziploc_sandwich");
   assert(ziploc, "ziploc row");
@@ -197,6 +204,9 @@ async function main() {
     pricePerKg?: number;
     shelfPrice?: number;
     name?: string;
+    productId?: string;
+    packsNeeded?: number | null;
+    lineTotal?: number | null;
   };
   assert(
     /simply egg whites/i.test(wWm.name ?? ""),
@@ -210,20 +220,38 @@ async function main() {
     whites!.matchKind === "preferred_sku" || whites!.matchKind === "upc",
     `egg whites matchKind ${whites!.matchKind}`,
   );
-  // Category A: Free Run 500g is a different product — not a deal vs 1kg Simply.
-  if (/free run/i.test(wNf.name ?? "")) {
-    assert(
-      whites!.cheaper === "incomplete",
-      `egg whites Free Run analogue must not be a deal (${whites!.cheaper})`,
-    );
-  } else if (whites!.fairBasis === "per_100g" || whites!.fairBasis === "per_pack") {
-    assert(whites!.cheaper !== "incomplete", "egg whites same-product compare");
-  } else {
-    assert(
-      whites!.cheaper === "incomplete",
-      `egg whites expected incomplete until NF has Simply 1kg, got ${whites!.fairBasis}`,
-    );
-  }
+  assert(
+    !/free run/i.test(wNf.name ?? ""),
+    `NF egg whites must not be Free Run, got ${wNf.name}`,
+  );
+  assert(
+    /simply egg whites/i.test(wNf.name ?? ""),
+    `NF egg whites must be Simply, got ${wNf.name}`,
+  );
+  assert(
+    wNf.productId === "20820355001_EA",
+    `NF Simply SKU ${wNf.productId}`,
+  );
+  assert(
+    Math.abs((wNf.shelfPrice ?? 0) - 5.49) < 0.01,
+    `NF Simply 500 ml shelf ${wNf.shelfPrice}`,
+  );
+  assert(
+    wNf.packsNeeded === 2,
+    `NF 500 ml composes to 2 packs, got ${wNf.packsNeeded}`,
+  );
+  assert(
+    Math.abs((wNf.lineTotal ?? 0) - 10.98) < 0.01,
+    `NF 2 × $5.49 = $10.98, got ${wNf.lineTotal}`,
+  );
+  assert(
+    Math.abs((whites!.basketNoFrills ?? 0) - 10.98) < 0.01,
+    `NF basket line ${whites!.basketNoFrills}`,
+  );
+  assert(
+    whites!.cheaper !== "incomplete",
+    "WM 1kg Simply and NF 2×500 ml Simply are the same product",
+  );
 
   const butter = byId.get("butter_454g");
   assert(butter, "butter");

@@ -131,7 +131,8 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 - `large_eggs_dozen` — **the** shell-egg card. Accepts Large cartons of **12 / 18 / 30** (`eggCartonCountOk`). `parsePackCount` understands `1DOZ` / dozen. MVR cases OK when they are N× those counts.
 - `grayridge_eggs` — **not shown**. 18-count catalog source only (`preferredProductId` `6000191268613` when set on that hidden row).
 - Egg fair unit is **$/egg**; basket line is **requested eggs × carton math**, not “1 pack”.
-- Category A branded packs (egg whites, milk, juice): a **smaller same-product pack** may cover the cafe size — e.g. 2×500 g Simply Egg Whites ≈ 1 kg. Checkout is `N × shelf`. Free Run / other brands stay rejected. Mini bottles (200 ml vs 1 kg) stay rejected. Do not auto-link 500 g and 1 kg as one SKU.
+- Category A branded packs (egg whites, milk, juice): a **smaller same-product pack** may cover the cafe size — e.g. 2×500 ml Simply Egg Whites ≈ 1 kg. Checkout is `N × shelf`. Free Run / other brands stay rejected. Mini bottles (200 ml vs 1 kg) stay rejected. Do not auto-link 500 ml and 1 kg as one SKU.
+- No Frills `#3660` stocks Naturegg Simply Egg Whites as **500 ml** `20820355001_EA` (`$5.49`, two packs cover the 1 kg card). It does not appear to stock the 1 kg carton. Do **not** persist Free Run `20820130001_EA` onto `simply_egg_whites` — Category A rejects it, so the NF cell was N/A. The mapping is identity-locked so nightly price refresh keeps the Simply SKU.
 - `ice_cubes` — bag of ice (Arctic Glacier ~2.3 kg class). Not gum, not storage bins.
 - Cart is one map `id → { requestedAmount, unit, isCustom }`. Selected = key exists. Search filter never mutates cart. Clear cart removes hidden-by-search items too.
 - Adding to cart uses `defaultAmount`. Custom amount is cart-only unless the operator saves it as the new default (`localStorage` key `royal-sass-product-overrides-v1`).

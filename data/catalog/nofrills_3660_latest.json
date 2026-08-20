@@ -1,24 +1,26 @@
 {
   "storeId": "3660",
-  "checkedAt": "2026-08-20T00:30:40.716Z",
+  "checkedAt": "2026-08-20T01:54:41.184Z",
   "items": [
     {
       "id": "simply_egg_whites",
       "label": "Naturegg Simply Egg Whites 1kg",
       "status": "ok",
       "offer": {
-        "productId": "20820130001_EA",
-        "name": "Burnbrae Farms Naturegg Free Run Egg Whites",
+        "productId": "20820355001_EA",
+        "name": "Burnbrae Farms Naturegg Simply Egg Whites",
         "brand": "Burnbrae Farms",
-        "packageSize": "500 g, $1.10/100g $0.50/1lb",
+        "packageSize": "500 ml, $1.10/100ml",
         "parsedMassKg": 0.5,
-        "price": 5.5,
+        "price": 5.49,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:29:52.974Z",
-        "sourceUrl": "https://www.nofrills.ca/en/naturegg-free-run-egg-whites/p/20820130001_EA",
-        "image": "https://digital.loblaws.ca/PCX/20820130001_EA/en/1/6565100526_en_front_centre_marketing_GS1_Ecommerce_1200.png"
+        "checkedAt": "2026-08-20T01:54:40.686Z",
+        "sourceUrl": "https://www.nofrills.ca/en/naturegg-simply-egg-whites/p/20820355001_EA",
+        "image": "https://digital.loblaws.ca/PCX/20820355001_EA/en/1/6565100249_en_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live NF SKU price refresh"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "oat_beverage_original",
@@ -2787,5 +2789,5 @@
       "alternates": []
     }
   ],
-  "updatedAt": "2026-08-20T00:30:40.716Z"
+  "updatedAt": "2026-08-20T01:54:41.184Z"
 }

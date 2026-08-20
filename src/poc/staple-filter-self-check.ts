@@ -25,7 +25,8 @@ import {
   mergeCatalogRows,
   resolveCatalogOffer,
 } from "@/domain/compare-resolve";
-import { pickCheapestCoveringOffer } from "@/domain/checkout";
+import { evaluatePurchase, pickCheapestCoveringOffer } from "@/domain/checkout";
+import { offerMatchesIdentity } from "@/domain/product-identity";
 import { toRestaurantProduct, stapleWithClientOverride, applyProductOverride } from "@/domain/restaurant-product";
 import { sanityCheckOffer } from "@/domain/sanity";
 import { scoreOfferMatch, staplePickQuery } from "@/domain/matching";
@@ -241,6 +242,90 @@ async function main() {
     offerFailsStapleFilters(egg, "Naturegg Egg Whites 1kg", "Naturegg") ===
       "mustIncludeAny",
     "category A does not split simply egg whites across tokens",
+  );
+  const nfFreeRunWhites = {
+    productId: "20820130001_EA",
+    name: "Burnbrae Farms Naturegg Free Run Egg Whites",
+    brand: "Burnbrae Farms",
+    packageSize: "500 g",
+    parsedMassKg: 0.5,
+    price: 5.5,
+  };
+  const nfSimply500ml = {
+    productId: "20820355001_EA",
+    name: "Burnbrae Farms Naturegg Simply Egg Whites",
+    brand: "Burnbrae Farms",
+    packageSize: "500 ml, $1.10/100ml",
+    parsedMassKg: 0.5,
+    price: 5.49,
+    sourceUrl:
+      "https://www.nofrills.ca/en/naturegg-simply-egg-whites/p/20820355001_EA",
+  };
+  assert(
+    offerFailsStapleOfferFilters(egg, nfFreeRunWhites) ===
+      "mustNotInclude:free run",
+    "NF Free Run egg whites fail Category A filters",
+  );
+  assert(
+    offerFailsStapleOfferFilters(egg, nfSimply500ml) == null,
+    "NF Simply Egg Whites 500 ml pass Category A filters",
+  );
+  assert(
+    offerFailsStapleFilters(egg, "Egg Whites 1 kg", "") === "mustIncludeAny",
+    "generic egg whites is not Simply",
+  );
+  const whitesProduct = toRestaurantProduct(egg);
+  assert(
+    !offerMatchesIdentity({
+      product: whitesProduct,
+      offer: nfFreeRunWhites,
+    }).ok,
+    "identity rejects Free Run for the Simply card",
+  );
+  assert(
+    offerMatchesIdentity({
+      product: whitesProduct,
+      offer: nfSimply500ml,
+    }).ok,
+    "identity accepts Simply 500 ml as the same branded product",
+  );
+  const freeRunResolved = resolveCatalogOffer({
+    item: egg,
+    row: { offer: nfFreeRunWhites },
+    matchMode: "preferred",
+  });
+  assert(
+    freeRunResolved.offer == null,
+    `Free Run catalog winner must be dropped, got ${freeRunResolved.offer?.productId}`,
+  );
+  const simplyResolved = resolveCatalogOffer({
+    item: egg,
+    row: { offer: nfSimply500ml },
+    matchMode: "preferred",
+    product: whitesProduct,
+    requested: 1,
+    link: {
+      retailerProductId: "20820355001_EA",
+      verified: true,
+      decision: "auto_linked",
+      kind: "identity",
+      skippedRematch: true,
+    },
+  });
+  assert(
+    simplyResolved.offer?.productId === "20820355001_EA",
+    `identity lock keeps NF Simply 500 ml, got ${simplyResolved.offer?.productId}`,
+  );
+  const buySimply500 = evaluatePurchase({
+    product: whitesProduct,
+    requested: 1,
+    offer: nfSimply500ml,
+  });
+  assert(buySimply500.valid, `2×500 ml Simply must cover 1 kg (${buySimply500.reason})`);
+  assert(buySimply500.packs === 2, `2×500 ml packs, got ${buySimply500.packs}`);
+  assert(
+    buySimply500.checkoutCost === 10.98,
+    `2 × $5.49 = $10.98, got ${buySimply500.checkoutCost}`,
   );
   const qs = categoryBSearchQueries(grape);
   assert(
