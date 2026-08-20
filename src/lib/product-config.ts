@@ -12,6 +12,8 @@ import {
 
 export const PRODUCT_OVERRIDE_STORAGE_KEY = "royal-sass-product-overrides-v1";
 export const CART_STORAGE_KEY = "royal-sass-cart-v1";
+/** Waiter portal draft list (local only — not sent to a driver). */
+export const WAITER_LIST_STORAGE_KEY = "royal-sass-waiter-list-v1";
 
 export function effectiveProduct(
   item: StapleLike,

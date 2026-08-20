@@ -173,6 +173,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `src/lib/compare-stats.ts` | Compact compare-run persist + summaries |
 | `src/app/StaplesCompare.tsx` | Main UI (cart, settings, compare, rematch, stats) |
 | `src/app/ProductSearch.tsx` | Homepage typeahead over shown staples only |
+| `src/app/waiter/WaiterPortal.tsx` | Waiter list for the driver (visual send only) |
 | `src/app/ProductSettings.tsx` | Per-card match/quantity settings modal |
 
 **Live data flow**
@@ -197,6 +198,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `GET|POST /api/staples/delete` — **405**, deletion disabled
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
+- `/waiter` — waiter portal: shown catalog search + local list; send-to-driver is visual only (no API)
 - `GET /api/compare` — **legacy** basket POC, not the staples UI
 
 Refresh/compare/rematch routes use `maxDuration = 60`.
@@ -247,7 +249,8 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - **No per-card × and no «Видалити вибрані».** Selection is only for compare / refresh / rematch / copy.
 - Actions: select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
 - Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**.
-- Nav: Cafe staples + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
+- Nav: Cafe staples + **Офіціант** (`/waiter`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
+- **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.
 - Results: columns for the selected stores, then baskets, then stats.
 - Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand.
 
