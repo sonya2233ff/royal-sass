@@ -399,21 +399,15 @@
     {
       "id": "eggplant_kg",
       "label": "Eggplant (by kg)",
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "operator photo audit: globe eggplant ≠ long",
+      "alternates": [],
+      "rejected": {
         "productId": "21681207001_EA",
         "name": "No Name Naturally Imperfect Long Eggplants",
-        "brand": "No Name",
-        "packageSize": "907 g, $0.39/100g",
-        "parsedMassKg": 0.907,
-        "price": 3.5,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:29:56.024Z",
-        "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-long-eggplants/p/21681207001_EA",
-        "image": "https://digital.loblaws.ca/PCX/21681207001_EA/en/1/21681207001_en_front_v1_1200.png"
-      },
-      "notes": "Live NF SKU price refresh",
-      "alternates": []
+        "reason": "globe eggplant ≠ long/asian"
+      }
     },
     {
       "id": "tomato_gh_red_kg",

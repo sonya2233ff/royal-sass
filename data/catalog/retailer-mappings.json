@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-20T21:55:03.949Z",
+  "updatedAt": "2026-08-20T23:30:00.000Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -728,9 +728,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 1,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-17T12:22:06.408Z"
+          "updatedAt": "2026-08-20T23:30:00.000Z",
+          "filterReason": "globe eggplant ≠ long/asian"
         },
         "walmart_ca": {
           "retailer": "walmart_ca",
@@ -810,9 +811,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T20:23:50.932Z"
+          "updatedAt": "2026-08-20T23:30:00.000Z",
+          "filterReason": "globe eggplant ≠ long/asian"
         },
         "mvr": {
           "retailer": "mvr",
@@ -1155,9 +1157,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.9,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "identity",
-          "updatedAt": "2026-08-18T19:02:37.832Z"
+          "updatedAt": "2026-08-20T23:30:00.000Z",
+          "filterReason": "oat original 1.75L ≠ 946ml"
         }
       },
       "prices": [
@@ -4806,9 +4809,10 @@
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.85,
           "verified": false,
-          "decision": "auto_linked",
+          "decision": "rejected",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:52:34.850Z"
+          "updatedAt": "2026-08-20T23:30:00.000Z",
+          "filterReason": "fettuccine ≠ warehouse case"
         },
         "wholesaleclub": {
           "retailer": "wholesaleclub",

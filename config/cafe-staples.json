@@ -202,7 +202,11 @@
         "oregano",
         "rosemary",
         "kit",
-        "genovese"
+        "genovese",
+        "long",
+        "chinese",
+        "indian",
+        "japanese"
       ],
       "preferNameIncludes": [
         "sold in singles"
@@ -1916,7 +1920,10 @@
         "michelina",
         "alfredo",
         "dinner",
-        "entree"
+        "entree",
+        "catelli",
+        "de cecco",
+        "de-cecco"
       ],
       "matchMode": "cheapest",
       "category": "grocery",

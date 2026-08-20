@@ -113,19 +113,15 @@
     {
       "id": "eggplant_kg",
       "label": "Eggplant (by kg)",
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "operator photo audit: globe eggplant ≠ long",
+      "alternates": [],
+      "rejected": {
         "productId": "20159013001_KG",
         "name": "Long Eggplants",
-        "packageSize": "$5.49/1kg $2.49/1lb",
-        "price": 1.37,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:43.660Z",
-        "sourceUrl": "https://www.wholesaleclub.ca/en/long-eggplants/p/20159013001_KG",
-        "image": "https://digital.loblaws.ca/PCX/20159013001_KG/en/1/20159013001_en_front_1200.png"
-      },
-      "notes": "Live WC SKU price refresh",
-      "alternates": []
+        "reason": "globe eggplant ≠ long/asian"
+      }
     },
     {
       "id": "tomato_gh_red_kg",

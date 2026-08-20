@@ -342,6 +342,36 @@ export function retailerCategoryFromTaxonomy(
   return undefined;
 }
 
+/** Globe eggplant card: long / Chinese / Indian / graffiti are a different cafe cut. */
+export function eggplantFormFail(
+  item: { id?: string },
+  hay: string,
+): string | null {
+  if ((item.id ?? "").toLowerCase() !== "eggplant_kg") return null;
+  const t = hay.toLowerCase();
+  if (/\b(long|chinese|indian|japanese|graffiti|fairy\s*tale)\b/.test(t)) {
+    return "globe eggplant ≠ long/asian";
+  }
+  return null;
+}
+
+/** Cafe oat 1.75L: 946 ml / single-serve is a mini carton, not the card. */
+export function oatOriginalFormFail(
+  item: { id?: string },
+  hay: string,
+): string | null {
+  if ((item.id ?? "").toLowerCase() !== "oat_beverage_original") return null;
+  const t = hay.toLowerCase();
+  if (
+    /\b946\s*ml\b/.test(t) ||
+    /\b946ml\b/.test(t) ||
+    /\bsingle\s*serve\b/.test(t)
+  ) {
+    return "oat original 1.75L ≠ 946ml";
+  }
+  return null;
+}
+
 /**
  * Fresh grape/cherry tomato packs only. Split Include ("organic grape",
  * "cherry tomato") otherwise matches table grapes and pickled cherry mixes.
@@ -420,6 +450,10 @@ export function cafeOfferFormFail(
   }
   const grapeTomato = grapeTomatoFormFail(item, t);
   if (grapeTomato) return grapeTomato;
+  const eggplant = eggplantFormFail(item, t);
+  if (eggplant) return eggplant;
+  const oatOriginal = oatOriginalFormFail(item, t);
+  if (oatOriginal) return oatOriginal;
   if (id === "cream_cheese_bars") {
     if (/\bmozz/.test(t) || /\bpizza\b/.test(t)) {
       return "cream cheese bars ≠ mozzarella";
@@ -486,6 +520,19 @@ export function cafeOfferFormFail(
   if (id === "mushrooms_sliced") {
     if (/\b(cremini|crimini|portobello|shiitake|blanched)\b/.test(t)) {
       return "white mushrooms ≠ cremini/blanched";
+    }
+    // Canned Great Value at WM #5831 beat the fresh 8 oz clamshell on cheapest.
+    if (/\bgreat value\b/.test(t) && !/\b(white|fresh market|8\s*oz)\b/.test(t)) {
+      return "fresh sliced ≠ canned";
+    }
+    return null;
+  }
+  if (id === "fettuccine") {
+    if (/\b(catelli|de cecco|de-cecco|dececco)\b/.test(t)) {
+      return "fettuccine ≠ Catelli/De Cecco";
+    }
+    if (/\bcase\b/.test(t) || /\b\d+\s*x\s*\d+/.test(t) || /\b5\s*kg\b/.test(t)) {
+      return "fettuccine ≠ warehouse case";
     }
     return null;
   }

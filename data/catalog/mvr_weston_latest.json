@@ -3,7 +3,7 @@
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
   "checkedAt": "2026-08-20T00:31:41.999Z",
-  "note": "MVR Cash & Carry 3655 Weston Rd \u2014 INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
+  "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -113,65 +113,15 @@
     {
       "id": "oat_beverage_original",
       "label": "Oat Beverage Original 1.75L",
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "operator photo audit: 946ml ≠ 1.75L",
+      "alternates": [],
+      "rejected": {
         "productId": "earths-own-oat-original-946-ml",
         "name": "EARTH'S OWN - OAT ORIGINAL 946ML",
-        "brand": "EARTH'S OWN",
-        "packageSize": "946ML",
-        "parsedMassKg": 0.946,
-        "price": 2.99,
-        "unitPrice": 3.16,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:18.784Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-946-ml",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062602781402p.jpg?v=1782240016"
-      },
-      "notes": "Live MVR SKU price refresh",
-      "alternates": [
-        {
-          "productId": "earths-own-oat-original-single-serve-24x250-ml",
-          "name": "EARTH'S OWN - OAT ORIGINAL SINGLE SERVE 8x3x250 ML",
-          "brand": "EARTH'S OWN",
-          "packageSize": "3x250 ML",
-          "parsedMassKg": 0.75,
-          "price": 32.99,
-          "unitPrice": 43.99,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T19:02:37.713Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-single-serve-24x250-ml?_pos=1&_psq=oat+milk+original&_psid=8a41869e9&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1062602781502p_77d51892-1c4a-49e9-95c5-df3cba91a6ab.jpg?v=1759258157"
-        },
-        {
-          "productId": "earths-own-oat-original-12x946-ml",
-          "name": "EARTH'S OWN - OAT ORIGINAL 12x946 ML",
-          "brand": "EARTH'S OWN",
-          "packageSize": "12x946 ML",
-          "parsedMassKg": 11.352,
-          "price": 33.89,
-          "unitPrice": 2.99,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T19:02:37.713Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-12x946-ml?_pos=3&_psq=oat+milk+original&_psid=8a41869e9&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1062602781402p.jpg?v=1782240033"
-        },
-        {
-          "productId": "earths-own-oat-original-single-serve-250ml",
-          "name": "EARTH'S OWN - OAT ORIGINAL SINGLE SERVE 3x250 ML",
-          "brand": "EARTH'S OWN",
-          "packageSize": "3x250 ML",
-          "parsedMassKg": 0.75,
-          "price": 4.19,
-          "unitPrice": 5.59,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T19:02:37.713Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-single-serve-250ml?_pos=4&_psq=oat+milk+original&_psid=8a41869e9&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062602781502p.jpg?v=1759258060"
-        }
-      ]
+        "reason": "oat original 1.75L ≠ 946ml"
+      }
     },
     {
       "id": "red_peppers_kg",
@@ -624,7 +574,7 @@
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088202p.jpg?v=1786638377",
         "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE \u00b7 3655 Weston Rd",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": []
     },
     {
@@ -646,7 +596,7 @@
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088219p.jpg?v=1785562350",
         "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE \u00b7 3655 Weston Rd",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": []
     },
     {
@@ -687,7 +637,7 @@
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734205p.jpg?v=1777575335",
         "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE \u00b7 3655 Weston Rd",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
         {
           "productId": "gray-ridge-eggs-large-brown-18ea",
@@ -1653,7 +1603,7 @@
       "label": "Cottage Cheese",
       "status": "no_match",
       "offer": null,
-      "notes": "Exact Mehadrin cottage cheese is NF #3660 only \u2014 do not fill with Great Value / Nordica / No Name / mozzarella",
+      "notes": "Exact Mehadrin cottage cheese is NF #3660 only — do not fill with Great Value / Nordica / No Name / mozzarella",
       "alternates": []
     },
     {
@@ -1794,128 +1744,15 @@
     {
       "id": "fettuccine",
       "label": "Fettuccine",
-      "status": "ok",
-      "offer": {
-        "productId": "granaria-fettuccine-4-x-5-lb",
-        "name": "GRANARIA - FETTUCCINE 4 X 5 LB",
-        "brand": "GRANARIA",
-        "packageSize": "4 X 5 LB",
-        "parsedMassKg": 9.071847400000001,
-        "price": 25.79,
-        "unitPrice": 2.84,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:28.681Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/granaria-fettuccine-4-x-5-lb",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068022210270c_c9c1e928-9720-48b4-a80a-5f05678df293.jpg?v=1785563580"
-      },
-      "notes": "Live MVR SKU price refresh",
-      "alternates": [
-        {
-          "productId": "de-cecco-6-fettuccine-4x5lb",
-          "name": "DE CECCO - #6  FETTUCCINE 4x5LB",
-          "brand": "DE CECCO",
-          "packageSize": "4x5LB",
-          "parsedMassKg": 9.071847400000001,
-          "price": 44.49,
-          "unitPrice": 4.9,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:34.642Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/de-cecco-6-fettuccine-4x5lb?_pos=1&_psq=Fettuccine&_psid=ce0a50084&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0002409468006p_2ce5d7a1-dfa5-4264-bada-b8783541a9df.jpg?v=1772355046",
-          "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
-        },
-        {
-          "productId": "granaria-fettuccine-4-x-5-lb",
-          "name": "GRANARIA - FETTUCCINE 4 X 5 LB",
-          "brand": "GRANARIA",
-          "packageSize": "4 X 5 LB",
-          "parsedMassKg": 9.071847400000001,
-          "price": 25.79,
-          "unitPrice": 2.84,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:34.642Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/granaria-fettuccine-4-x-5-lb?_pos=2&_psq=Fettuccine&_psid=ce0a50084&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068022210270c_c9c1e928-9720-48b4-a80a-5f05678df293.jpg?v=1785563580",
-          "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
-        },
-        {
-          "productId": "unico-fettuccine-12x900-gr",
-          "name": "UNICO - FETTUCCINE 12x900 GR",
-          "brand": "UNICO",
-          "packageSize": "12x900 GR",
-          "parsedMassKg": 10.8,
-          "price": 23.79,
-          "unitPrice": 2.2,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:34.642Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/unico-fettuccine-12x900-gr?_pos=4&_psq=Fettuccine&_psid=ce0a50084&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006780000544p.jpg?v=1786364177",
-          "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
-        },
-        {
-          "productId": "l-m-egg-fettuccine-204-12x250-g",
-          "name": "LA MOLISANA - EGG FETTUCCINE #204 12x250 G",
-          "brand": "LA MOLISANA",
-          "packageSize": "12x250 G",
-          "parsedMassKg": 3,
-          "price": 33.49,
-          "unitPrice": 11.16,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:34.642Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/l-m-egg-fettuccine-204-12x250-g?_pos=5&_psq=Fettuccine&_psid=ce0a50084&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/2077992100204p_a7ef1dfa-5c89-4566-90a9-0bf8f8bee895.jpg?v=1770847306",
-          "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
-        },
-        {
-          "productId": "de-cecco-233-fettuccine-500gr",
-          "name": "DE CECCO - #233 FETTUCCINE 500GR",
-          "brand": "DE CECCO",
-          "packageSize": "500GR",
-          "parsedMassKg": 0.5,
-          "price": 3.99,
-          "unitPrice": 7.98,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:34.642Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/de-cecco-233-fettuccine-500gr?_pos=8&_psq=Fettuccine&_psid=ce0a50084&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0002409425233p_4db191f2-ca5c-473f-8281-14b775eb52b0.jpg?v=1770019727",
-          "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
-        },
-        {
-          "productId": "divella-fettuccine-12-24x500-gr",
-          "name": "DIVELLA - FETTUCCINE #12 24x500 GR",
-          "brand": "DIVELLA",
-          "packageSize": "24x500 GR",
-          "parsedMassKg": 12,
-          "price": 39.99,
-          "unitPrice": 3.33,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:34.642Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/divella-fettuccine-12-24x500-gr?_pos=9&_psq=Fettuccine&_psid=ce0a50084&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0800512151012p_d6e24b5f-cbe1-4d37-a476-b587502cf37c.jpg?v=1780302299",
-          "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
-        },
-        {
-          "productId": "de-cecco-233-fettuccine-8x500-gr-1",
-          "name": "DE CECCO - #233 FETTUCCINE 8x500 GR",
-          "brand": "DE CECCO",
-          "packageSize": "8x500 GR",
-          "parsedMassKg": 4,
-          "price": 28.49,
-          "unitPrice": 7.12,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:52:34.642Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/de-cecco-233-fettuccine-8x500-gr-1?_pos=10&_psq=Fettuccine&_psid=ce0a50084&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0002409400177p_2ccc1d3d-613f-47df-8144-9ada96c4ab76.jpg?v=1770019753",
-          "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
-        }
-      ]
+      "status": "no_match",
+      "offer": null,
+      "notes": "operator photo audit: De Cecco/warehouse case ≠ No Name fettuccine",
+      "alternates": [],
+      "rejected": {
+        "productId": "de-cecco-233-fettuccine-500gr",
+        "name": "DE CECCO - #233 FETTUCCINE 500GR",
+        "reason": "fettuccine ≠ Catelli/De Cecco"
+      }
     },
     {
       "id": "floor_cleaner_lavender",
@@ -2825,7 +2662,7 @@
     },
     {
       "id": "jalapeno_peppers_kg",
-      "label": "Jalape\u00f1o Peppers",
+      "label": "Jalapeño Peppers",
       "status": "ok",
       "offer": {
         "productId": "vegetables-peppers-jalapeno-repack-2-5-lbs",
@@ -3551,7 +3388,7 @@
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114902p_f19b77f7-73bb-420e-83fb-1b64c2474f52.jpg?v=1779721227",
         "taxonomyText": "HERBS  HERBS  PRODUCE NUTS  HERBS"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE \u00b7 3655 Weston Rd",
+      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
       "alternates": [
         {
           "productId": "vegetables-parsley-italian-repack-3-ea",
@@ -4243,12 +4080,12 @@
       "label": "Round Deli Container Lids",
       "status": "no_match",
       "offer": null,
-      "notes": "Live MVR SKU price refresh \u00b7 impostor cleared, no_match",
+      "notes": "Live MVR SKU price refresh · impostor cleared, no_match",
       "alternates": [],
       "rejected": {
         "productId": "nuvo-32oz-deli-round-combo-with-lid-240ea",
         "name": "LR - 32OZ DELI ROUND COMBO WITH LID 240EA",
-        "reason": "deli lids \u2260 combo container"
+        "reason": "deli lids ≠ combo container"
       }
     },
     {
@@ -4270,7 +4107,7 @@
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005500020145p.jpg?v=1777739657",
         "taxonomyText": "CARBONATED FLAVOURED DRINKS  CARBONATED FLAVOURED DRINKS  BEVERAGE  SODA"
       },
-      "notes": "Live MVR SKU price refresh \u00b7 impostor cleared, promoted alternate",
+      "notes": "Live MVR SKU price refresh · impostor cleared, promoted alternate",
       "alternates": [
         {
           "productId": "san-pellegrino-aranciata-cans-24x330ml-1",
@@ -4291,7 +4128,7 @@
       "rejected": {
         "productId": "san-pellegrino-aranciata-rossa-cans-6x330-ml-1",
         "name": "SAN PELLEGRINO - ROSSA(RED) ARANCIATA ROSSA CANS 6x330 ML",
-        "reason": "aranciata \u2260 rossa"
+        "reason": "aranciata ≠ rossa"
       }
     },
     {

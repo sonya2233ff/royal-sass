@@ -292,32 +292,9 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/eggplant/6000191270103?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/094/510/6000200094510.jpg"
       },
-      "alternates": [
-        {
-          "productId": "6000196795052",
-          "name": "Chinese Eggplant, Sold in singles, 0.32 - 0.35 KG",
-          "packageSize": "350 g",
-          "parsedMassKg": 0.35,
-          "price": 2.29,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:26.466Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/chinese-eggplant/6000196795053?classType=REGULAR&athbdg=L1600"
-        },
-        {
-          "productId": "6000197106998",
-          "name": "Eggplant, Indian, Sold in singles, 0.03 - 0.11 KG",
-          "packageSize": "110 g",
-          "parsedMassKg": 0.11,
-          "price": 0.82,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-14T01:31:26.466Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/eggplant-indian/6000197106999?classType=REGULAR&athbdg=L1600"
-        }
-      ],
+      "alternates": [],
       "image": "/products/eggplant_kg.jpg",
-      "notes": "Produce: cheapest matching offer (brand irrelevant)"
+      "notes": "Produce: cheapest matching offer (brand irrelevant) · operator audit: drop Chinese/Indian"
     },
     {
       "id": "tomato_gh_red_kg",
@@ -1723,21 +1700,15 @@
       "queriesTried": [
         "Fettuccine"
       ],
-      "status": "ok",
-      "offer": {
+      "status": "no_match",
+      "offer": null,
+      "notes": "operator photo audit: Catelli ≠ No Name fettuccine",
+      "alternates": [],
+      "rejected": {
         "productId": "2UULWUYW45DF",
         "name": "Catelli Classic All-Natural Fettuccine, 454g",
-        "brand": "CATELLI",
-        "packageSize": "454 g",
-        "parsedMassKg": 0.454,
-        "price": 2.47,
-        "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:27.943Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Catelli-Classic-All-Natural-Fettuccine-454g/2UULWUYW45DF?classType=REGULAR&athbdg=L1600",
-        "image": "https://i5.walmartimages.ca/asr/eae07a57-8e9a-4fe5-97b2-4d62ecb2f903.b0561c65c6fa201405650b9df6e4ad67.jpeg"
-      },
-      "notes": "From receipts catalog (grocery)",
-      "alternates": []
+        "reason": "fettuccine ≠ Catelli/De Cecco"
+      }
     },
     {
       "id": "floor_cleaner_lavender",
@@ -2823,21 +2794,13 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/mushrooms-white-sliced-your-fresh-market/6000196142669?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/163/460/6000202163460.jpg"
       },
-      "notes": "From receipts catalog (produce)",
-      "alternates": [
-        {
-          "productId": "6000197760572",
-          "name": "Great Value Sliced Mushrooms",
-          "brand": "Great Value",
-          "parsedMassKg": 0,
-          "price": 1.27,
-          "availability": "unknown",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T22:08:13.068Z",
-          "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Sliced-Mushrooms/6000197760572?classType=REGULAR&athbdg=L1600",
-          "image": "https://i5.walmartimages.ca/asr/9c611362-86bf-4698-b481-5972aabdb9ce.62568ad53aa8b4345c29eefa8702929b.jpeg"
-        }
-      ]
+      "notes": "From receipts catalog (produce) · operator audit: drop canned Great Value",
+      "alternates": [],
+      "rejected": {
+        "productId": "6000197760572",
+        "name": "Great Value Sliced Mushrooms",
+        "reason": "fresh sliced ≠ canned"
+      }
     },
     {
       "id": "sour_cream",

@@ -1410,11 +1410,130 @@ async function main() {
     "sliced mushrooms reject a canned ml tin",
   );
   assert(
+    cafeOfferFormFail(mushrooms!, "Great Value Sliced Mushrooms") ===
+      "fresh sliced ≠ canned",
+    "sliced mushrooms reject canned Great Value without a fresh pack",
+  );
+  assert(
     cafeOfferFormFail(
       mushrooms!,
       "President's Choice Sliced White Mushrooms 227 g",
     ) == null,
     "fresh sliced white mushrooms stay",
+  );
+  assert(
+    cafeOfferFormFail(
+      mushrooms!,
+      "Mushrooms, White Sliced, Your Fresh Market, 8 oz",
+    ) == null,
+    "YFM sliced white 8 oz stays",
+  );
+  const yfmMush = {
+    productId: "6000196142668",
+    name: "Mushrooms, White Sliced, Your Fresh Market, 8 oz",
+    brand: "Your Fresh Market",
+    packageSize: "227 g",
+    parsedMassKg: 0.227,
+    price: 2.44,
+  };
+  const gvMush = {
+    productId: "6000197760572",
+    name: "Great Value Sliced Mushrooms",
+    brand: "Great Value",
+    parsedMassKg: 0,
+    price: 1.27,
+  };
+  const mushResolved = resolveCatalogOffer({
+    item: mushrooms!,
+    row: { offer: yfmMush, alternates: [gvMush] },
+    matchMode: "cheapest",
+  });
+  assert(
+    mushResolved.offer?.productId === "6000196142668",
+    `cheapest sliced mushrooms must not pick canned GV, got ${mushResolved.offer?.productId}`,
+  );
+
+  assert(
+    cafeOfferFormFail(eggplant!, "No Name Naturally Imperfect Long Eggplants") ===
+      "globe eggplant ≠ long/asian",
+    "eggplant rejects long/imperfect",
+  );
+  assert(
+    cafeOfferFormFail(eggplant!, "Chinese Eggplant, Sold in singles") ===
+      "globe eggplant ≠ long/asian",
+    "eggplant rejects Chinese",
+  );
+  assert(
+    cafeOfferFormFail(
+      eggplant!,
+      "Eggplant, Sold in singles, 0.39 - 0.51 KG",
+    ) == null,
+    "globe eggplant singles stay",
+  );
+
+  const fettuccine = cfg.items.find((i) => i.id === "fettuccine");
+  assert(
+    cafeOfferFormFail(
+      fettuccine!,
+      "Catelli Classic All-Natural Fettuccine, 454g",
+    ) === "fettuccine ≠ Catelli/De Cecco",
+    "fettuccine rejects Catelli",
+  );
+  assert(
+    cafeOfferFormFail(fettuccine!, "DE CECCO - #233 FETTUCCINE 500GR") ===
+      "fettuccine ≠ Catelli/De Cecco",
+    "fettuccine rejects De Cecco",
+  );
+  assert(
+    cafeOfferFormFail(fettuccine!, "GRANARIA - FETTUCCINE 4 X 5 LB") ===
+      "fettuccine ≠ warehouse case",
+    "fettuccine rejects MVR warehouse cases",
+  );
+  assert(
+    cafeOfferFormFail(fettuccine!, "No Name Fettuccine") == null,
+    "No Name fettuccine stays",
+  );
+
+  const oatForm = cfg.items.find((i) => i.id === "oat_beverage_original");
+  assert(
+    cafeOfferFormFail(oatForm!, "EARTH'S OWN - OAT ORIGINAL 946ML") ===
+      "oat original 1.75L ≠ 946ml",
+    "oat original rejects 946 ml",
+  );
+  assert(
+    cafeOfferFormFail(
+      oatForm!,
+      "Earth's Own Gluten-Free, Zero Sugar Original Oat Milk Alternative, 1.75L",
+    ) == null,
+    "oat original keeps the 1.75L WM lock title",
+  );
+  assert(
+    cafeOfferFormFail(
+      oatForm!,
+      "Earth's Own Gluten-Free Original Oat Milk Alternative",
+    ) == null,
+    "oat original keeps NF/WC 1.75L Original",
+  );
+  const oatMini = {
+    productId: "earths-own-oat-original-946-ml",
+    name: "EARTH'S OWN - OAT ORIGINAL 946ML",
+    packageSize: "946ML",
+    parsedMassKg: 0.946,
+    price: 2.99,
+  };
+  const oatMvrRejected = resolveCatalogOffer({
+    item: oatForm!,
+    row: { offer: oatMini, alternates: [] },
+    link: {
+      retailerProductId: "earths-own-oat-original-946-ml",
+      decision: "rejected",
+      kind: "identity",
+    },
+    matchMode: "preferred",
+  });
+  assert(
+    oatMvrRejected.offer == null,
+    `rejected MVR 946ml oat must not stay locked, got ${oatMvrRejected.offer?.productId}`,
   );
 
   const brownSugar = cfg.items.find((i) => i.id === "brown_sugar");
