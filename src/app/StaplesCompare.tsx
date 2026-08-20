@@ -30,6 +30,13 @@ import {
   ukEggCountLabel,
 } from "@/domain/egg-pack";
 import { stapleMatchesCatalogQuery } from "@/domain/staple-search";
+import {
+  cheaperSaleHint,
+  cheaperSaleOffers,
+  isShelfSale,
+  saleOffersFromPrices,
+  saleWasPrice,
+} from "@/domain/shelf-sale";
 import type { ReceiptStapleDraft } from "@/domain/receipt-import";
 import {
   CART_STORAGE_KEY,
@@ -199,6 +206,8 @@ type SideResult = {
   status?: OfferStatus;
   statusReason?: string;
   ageLabel?: string | null;
+  onSale?: boolean;
+  wasPrice?: number | null;
   productId?: string;
   pricePerKg?: number;
   pricePerLb?: number;
@@ -326,17 +335,23 @@ function storePriceLine(
     onSale?: boolean;
     wasPrice?: number | null;
   },
+  extra?: { cheaperSale?: boolean },
 ) {
   const packs = cached.packs != null && cached.packs > 1 ? cached.packs : 1;
   const total =
     packs > 1 && cached.lineTotal != null ? cached.lineTotal : cached.price;
+  const sale = isShelfSale(cached);
+  const was = saleWasPrice(cached);
   return (
     <span className="price">
       {packs > 1
         ? `${tag} ${packs} × $${cached.price.toFixed(2)} = $${total.toFixed(2)}`
         : `${tag} $${cached.price.toFixed(2)}`}
-      {cached.onSale && cached.wasPrice ? (
-        <s className="was">${cached.wasPrice.toFixed(2)}</s>
+      {sale && was ? <s className="was">${was.toFixed(2)}</s> : null}
+      {sale ? (
+        <span className={extra?.cheaperSale ? "sale-now cheap" : "sale-now"}>
+          {extra?.cheaperSale ? " дешевше · знижка" : " знижка"}
+        </span>
       ) : null}
       {cached.packageSize ? ` · ${cached.packageSize}` : ""}
     </span>
@@ -345,35 +360,48 @@ function storePriceLine(
 
 function saleTitle(item: Staple): string {
   const bits: string[] = [];
-  if (item.walmartCached?.onSale) {
+  const add = (
+    tag: string,
+    cached:
+      | {
+          price: number;
+          onSale?: boolean;
+          wasPrice?: number | null;
+        }
+      | null
+      | undefined,
+  ) => {
+    if (!cached || !isShelfSale(cached)) return;
+    const was = saleWasPrice(cached);
     bits.push(
-      item.walmartCached.wasPrice
-        ? `WM знижка: було $${item.walmartCached.wasPrice.toFixed(2)}`
-        : "WM зараз на знижці",
+      was
+        ? `${tag} знижка: $${cached.price.toFixed(2)}, було $${was.toFixed(2)}`
+        : `${tag} зараз на знижці · $${cached.price.toFixed(2)}`,
     );
-  }
-  if (item.noFrillsCached?.onSale) {
-    bits.push(
-      item.noFrillsCached.wasPrice
-        ? `NF знижка: було $${item.noFrillsCached.wasPrice.toFixed(2)}`
-        : "NF зараз на знижці",
-    );
-  }
-  if (item.wholesaleClubCached?.onSale) {
-    bits.push(
-      item.wholesaleClubCached.wasPrice
-        ? `WC знижка: було $${item.wholesaleClubCached.wasPrice.toFixed(2)}`
-        : "WC зараз на знижці",
-    );
-  }
-  if (item.mvrCached?.onSale) {
-    bits.push(
-      item.mvrCached.wasPrice
-        ? `MVR знижка: було $${item.mvrCached.wasPrice.toFixed(2)}`
-        : "MVR зараз на знижці",
-    );
-  }
+  };
+  add("WM", item.walmartCached);
+  add("NF", item.noFrillsCached);
+  add("WC", item.wholesaleClubCached);
+  add("MVR", item.mvrCached);
   return bits.join(" · ") || "Зараз на знижці";
+}
+
+function compareSideCheaperSale(
+  cheaper: string,
+  store: string,
+  side: SideResult,
+): boolean {
+  const price = side.shelfPrice ?? side.checkout?.shelfPrice ?? side.lineTotal;
+  if (
+    !isShelfSale({
+      price,
+      wasPrice: side.wasPrice,
+      onSale: side.onSale,
+    })
+  ) {
+    return false;
+  }
+  return cheaper === store || cheaper === "tie";
 }
 
 function matchCategory(mode?: string): {
@@ -899,12 +927,29 @@ export function StaplesCompare() {
         queries: item.queries,
         mustIncludeAny: item.mustIncludeAny,
         mustIncludeAll: item.mustIncludeAll,
-        wmPrice: item.walmartCached?.price ?? null,
-        nfPrice: item.noFrillsCached?.price ?? null,
-        wcPrice: item.wholesaleClubCached?.price ?? null,
-        mvrPrice: item.mvrCached?.price ?? null,
+        wmPrice: enabled.has("walmart") ? item.walmartCached?.price ?? null : null,
+        nfPrice: enabled.has("nofrills") ? item.noFrillsCached?.price ?? null : null,
+        wcPrice: enabled.has("wholesaleclub")
+          ? item.wholesaleClubCached?.price ?? null
+          : null,
+        mvrPrice: enabled.has("mvr") ? item.mvrCached?.price ?? null : null,
+        wmWasPrice: enabled.has("walmart")
+          ? saleWasPrice(item.walmartCached)
+          : null,
+        nfWasPrice: enabled.has("nofrills")
+          ? saleWasPrice(item.noFrillsCached)
+          : null,
+        wcWasPrice: enabled.has("wholesaleclub")
+          ? saleWasPrice(item.wholesaleClubCached)
+          : null,
+        mvrWasPrice: enabled.has("mvr") ? saleWasPrice(item.mvrCached) : null,
+        wmOnSale: enabled.has("walmart") && isShelfSale(item.walmartCached),
+        nfOnSale: enabled.has("nofrills") && isShelfSale(item.noFrillsCached),
+        wcOnSale:
+          enabled.has("wholesaleclub") && isShelfSale(item.wholesaleClubCached),
+        mvrOnSale: enabled.has("mvr") && isShelfSale(item.mvrCached),
       })),
-    [liveItems],
+    [liveItems, enabled],
   );
 
   const cacheIsOld = useMemo(() => {
@@ -1637,6 +1682,18 @@ export function StaplesCompare() {
           const neededBase = toBase(requested, product.unit);
           const neededG = neededBase.unit === "g" ? neededBase.amount : null;
           const cat = matchCategory(product.matchMode);
+          const saleOffers = saleOffersFromPrices({
+            walmart: isOn("walmart") ? item.walmartCached : null,
+            nofrills: isOn("nofrills") ? item.noFrillsCached : null,
+            wholesaleclub: isOn("wholesaleclub")
+              ? item.wholesaleClubCached
+              : null,
+            mvr: isOn("mvr") ? item.mvrCached : null,
+          });
+          const cheaperSales = cheaperSaleOffers(saleOffers);
+          const cheaperSaleAt = new Set(cheaperSales.map((row) => row.store));
+          const anySale = saleOffers.some((row) => isShelfSale(row));
+          const saleChip = cheaperSaleHint(saleOffers);
           const thumb =
             isCatB && item.walmartCached?.image
               ? item.walmartCached.image
@@ -1663,18 +1720,18 @@ export function StaplesCompare() {
                   ) : (
                     <div className="ph">No photo</div>
                   )}
-                  {item.onSale && (
+                  {anySale && (
                     <span className="sale-bang" title={saleTitle(item)}>
-                      !
+                      {saleChip ? "%" : "З"}
                     </span>
                   )}
                 </div>
                 <div className="body">
                   <strong>
                     {item.label}
-                    {item.onSale ? (
+                    {anySale ? (
                       <span className="sale-mark" title={saleTitle(item)}>
-                        !
+                        {saleChip ?? "знижка"}
                       </span>
                     ) : null}
                     {on && entry?.isCustom ? (
@@ -1696,7 +1753,9 @@ export function StaplesCompare() {
                       <span className="sku">
                         WM {tidyOfferName(item.walmartCached.name)}
                       </span>
-                      {storePriceLine("WM", item.walmartCached)}
+                      {storePriceLine("WM", item.walmartCached, {
+                        cheaperSale: cheaperSaleAt.has("walmart"),
+                      })}
                       {item.weightCompare &&
                         item.walmartCached.nativeUnitPriceLabel && (
                           <span className="unitprice">
@@ -1713,7 +1772,9 @@ export function StaplesCompare() {
                       <span className="sku">
                         NF {tidyOfferName(item.noFrillsCached.name)}
                       </span>
-                      {storePriceLine("NF", item.noFrillsCached)}
+                      {storePriceLine("NF", item.noFrillsCached, {
+                        cheaperSale: cheaperSaleAt.has("nofrills"),
+                      })}
                       {item.weightCompare &&
                         item.noFrillsCached.nativeUnitPriceLabel && (
                           <span className="unitprice">
@@ -1730,7 +1791,9 @@ export function StaplesCompare() {
                       <span className="sku">
                         WC {tidyOfferName(item.wholesaleClubCached.name)}
                       </span>
-                      {storePriceLine("WC", item.wholesaleClubCached)}
+                      {storePriceLine("WC", item.wholesaleClubCached, {
+                        cheaperSale: cheaperSaleAt.has("wholesaleclub"),
+                      })}
                       {item.weightCompare &&
                         item.wholesaleClubCached.nativeUnitPriceLabel && (
                           <span className="unitprice">
@@ -1747,7 +1810,9 @@ export function StaplesCompare() {
                       <span className="sku">
                         MVR {tidyOfferName(item.mvrCached.name)}
                       </span>
-                      {storePriceLine("MVR", item.mvrCached)}
+                      {storePriceLine("MVR", item.mvrCached, {
+                        cheaperSale: cheaperSaleAt.has("mvr"),
+                      })}
                       {item.weightCompare &&
                         item.mvrCached.nativeUnitPriceLabel && (
                           <span className="unitprice">
@@ -2206,6 +2271,7 @@ export function StaplesCompare() {
                   side={r.walmart}
                   grams={r.grams}
                   qty={r.qty}
+                  cheaperSale={compareSideCheaperSale(r.cheaper, "walmart", r.walmart)}
                 />
                 )}
                 {isOn("nofrills") && (
@@ -2214,6 +2280,7 @@ export function StaplesCompare() {
                   side={r.noFrills}
                   grams={r.grams}
                   qty={r.qty}
+                  cheaperSale={compareSideCheaperSale(r.cheaper, "nofrills", r.noFrills)}
                 />
                 )}
                 {isOn("wholesaleclub") && (
@@ -2222,6 +2289,11 @@ export function StaplesCompare() {
                   side={r.wholesaleClub ?? { lineTotal: null, status: "no_match" }}
                   grams={r.grams}
                   qty={r.qty}
+                  cheaperSale={compareSideCheaperSale(
+                    r.cheaper,
+                    "wholesaleclub",
+                    r.wholesaleClub ?? { lineTotal: null, status: "no_match" },
+                  )}
                 />
                 )}
                 {isOn("mvr") && (
@@ -2230,6 +2302,11 @@ export function StaplesCompare() {
                   side={r.mvr ?? { lineTotal: null, status: "no_match" }}
                   grams={r.grams}
                   qty={r.qty}
+                  cheaperSale={compareSideCheaperSale(
+                    r.cheaper,
+                    "mvr",
+                    r.mvr ?? { lineTotal: null, status: "no_match" },
+                  )}
                 />
                 )}
               </div>
@@ -2552,24 +2629,35 @@ export function StaplesCompare() {
           right: 0.4rem;
           bottom: 0.4rem;
           z-index: 2;
-          width: 1.55rem;
+          min-width: 1.55rem;
           height: 1.55rem;
+          padding: 0 0.28rem;
           border-radius: 2px;
           background: #c43c1a;
           color: #fff;
           font-weight: 800;
-          font-size: 1.15rem;
+          font-size: 0.92rem;
           line-height: 1;
           display: grid;
           place-items: center;
           box-shadow: 0 1px 4px rgba(40, 20, 10, 0.28);
         }
         .sale-mark {
-          margin-left: 0.2rem;
+          display: inline-block;
+          margin-left: 0.35rem;
           color: #c43c1a;
-          font-weight: 800;
-          font-size: 1.05rem;
-          line-height: 1;
+          font-weight: 750;
+          font-size: 0.72rem;
+          line-height: 1.2;
+          vertical-align: middle;
+        }
+        .sale-now {
+          margin-left: 0.3rem;
+          color: #c43c1a;
+          font-weight: 700;
+        }
+        .sale-now.cheap {
+          color: #1e4030;
         }
         .qty-mark {
           margin-left: 0.15rem;
@@ -3044,11 +3132,13 @@ export function StaplesCompare() {
 function Side({
   title,
   side,
+  cheaperSale,
 }: {
   title: string;
   side: SideResult;
   grams?: number | null;
   qty?: number;
+  cheaperSale?: boolean;
 }) {
   const checkout = side.checkout;
   const productName = side.name ?? side.purchase?.name ?? null;
@@ -3110,6 +3200,21 @@ function Side({
           )}
           {checkout?.shelfPrice != null && (
             <div className="tiny mute">полиця ${checkout.shelfPrice.toFixed(2)}</div>
+          )}
+          {isShelfSale({
+            price: side.shelfPrice ?? checkout?.shelfPrice ?? side.lineTotal,
+            wasPrice: side.wasPrice,
+            onSale: side.onSale,
+          }) && (
+            <div className="tiny sale-now">
+              {cheaperSale
+                ? side.wasPrice != null
+                  ? `дешевше · знижка · було $${side.wasPrice.toFixed(2)}`
+                  : "дешевше · знижка"
+                : side.wasPrice != null
+                  ? `знижка · було $${side.wasPrice.toFixed(2)}`
+                  : "знижка"}
+            </div>
           )}
           {checkout?.unitPrice != null && (
             <div className="tiny mute">
@@ -3197,6 +3302,10 @@ function Side({
         .tiny {
           font-size: 0.78rem;
           line-height: 1.3;
+        }
+        .sale-now {
+          color: #c43c1a;
+          font-weight: 700;
         }
         .mute {
           opacity: 0.55;

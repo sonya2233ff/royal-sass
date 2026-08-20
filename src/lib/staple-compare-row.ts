@@ -45,6 +45,7 @@ import {
 import { dimensionOf } from "@/domain/purchase-units";
 import { offerMatchesIdentity } from "@/domain/product-identity";
 import { inferSaleMode } from "@/domain/sale-mode";
+import { isShelfSale, saleWasPrice } from "@/domain/shelf-sale";
 
 export interface SideEval {
   status: OfferStatus;
@@ -591,6 +592,8 @@ export function buildStapleCompareRow(input: {
       ...(summarized ?? emptySide(evalRow)),
       lineTotal: cost,
       ageLabel: evalRow.ageLabel,
+      onSale: Boolean(raw && isShelfSale(raw)),
+      wasPrice: saleWasPrice(raw),
       purchase: plan,
       checkout: buy,
       saleMode: buy?.saleMode,

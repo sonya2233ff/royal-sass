@@ -5,6 +5,14 @@ import {
   searchShownCatalog,
   type CatalogSearchItem,
 } from "@/domain/staple-search";
+import {
+  cheaperSaleHint,
+  isShelfSale,
+  saleOffersFromPrices,
+  saleWasPrice,
+  SALE_STORE_SHORT,
+  type SaleStoreId,
+} from "@/domain/shelf-sale";
 
 export type CatalogSearchHit = CatalogSearchItem & {
   image?: string | null;
@@ -12,6 +20,14 @@ export type CatalogSearchHit = CatalogSearchItem & {
   nfPrice?: number | null;
   wcPrice?: number | null;
   mvrPrice?: number | null;
+  wmWasPrice?: number | null;
+  nfWasPrice?: number | null;
+  wcWasPrice?: number | null;
+  mvrWasPrice?: number | null;
+  wmOnSale?: boolean;
+  nfOnSale?: boolean;
+  wcOnSale?: boolean;
+  mvrOnSale?: boolean;
 };
 
 type Props = {
@@ -22,12 +38,57 @@ type Props = {
   catalogReady?: boolean;
 };
 
+function hitSaleOffers(hit: CatalogSearchHit) {
+  return saleOffersFromPrices({
+    walmart:
+      hit.wmPrice != null
+        ? { price: hit.wmPrice, wasPrice: hit.wmWasPrice, onSale: hit.wmOnSale }
+        : null,
+    nofrills:
+      hit.nfPrice != null
+        ? { price: hit.nfPrice, wasPrice: hit.nfWasPrice, onSale: hit.nfOnSale }
+        : null,
+    wholesaleclub:
+      hit.wcPrice != null
+        ? { price: hit.wcPrice, wasPrice: hit.wcWasPrice, onSale: hit.wcOnSale }
+        : null,
+    mvr:
+      hit.mvrPrice != null
+        ? {
+            price: hit.mvrPrice,
+            wasPrice: hit.mvrWasPrice,
+            onSale: hit.mvrOnSale,
+          }
+        : null,
+  });
+}
+
+function priceBit(
+  store: SaleStoreId,
+  price: number | null | undefined,
+  wasPrice: number | null | undefined,
+  onSale?: boolean,
+): string | null {
+  if (price == null) return null;
+  const short = SALE_STORE_SHORT[store];
+  const offer = { store, price, wasPrice, onSale };
+  const was = saleWasPrice(offer);
+  if (isShelfSale(offer) && was != null) {
+    return `${short} $${price.toFixed(2)} · було $${was.toFixed(2)}`;
+  }
+  if (isShelfSale(offer)) return `${short} $${price.toFixed(2)} · знижка`;
+  return `${short} $${price.toFixed(2)}`;
+}
+
 function priceLine(hit: CatalogSearchHit): string {
-  const bits: string[] = [];
-  if (hit.wmPrice != null) bits.push(`WM $${hit.wmPrice.toFixed(2)}`);
-  if (hit.nfPrice != null) bits.push(`NF $${hit.nfPrice.toFixed(2)}`);
-  if (hit.wcPrice != null) bits.push(`WC $${hit.wcPrice.toFixed(2)}`);
-  if (hit.mvrPrice != null) bits.push(`MVR $${hit.mvrPrice.toFixed(2)}`);
+  const bits = [
+    priceBit("walmart", hit.wmPrice, hit.wmWasPrice, hit.wmOnSale),
+    priceBit("nofrills", hit.nfPrice, hit.nfWasPrice, hit.nfOnSale),
+    priceBit("wholesaleclub", hit.wcPrice, hit.wcWasPrice, hit.wcOnSale),
+    priceBit("mvr", hit.mvrPrice, hit.mvrWasPrice, hit.mvrOnSale),
+  ].filter((bit): bit is string => Boolean(bit));
+  const hint = cheaperSaleHint(hitSaleOffers(hit));
+  if (hint) bits.push(hint);
   return bits.join(" · ");
 }
 
@@ -113,7 +174,11 @@ export function ProductSearch({
             <div className="search-sec">У списку</div>
           )}
           {catalogReady &&
-            staples.map((hit, i) => (
+            staples.map((hit, i) => {
+              const offers = hitSaleOffers(hit);
+              const cheapHint = cheaperSaleHint(offers);
+              const anySale = offers.some((row) => isShelfSale(row));
+              return (
               <button
                 key={`s-${hit.id}`}
                 type="button"
@@ -130,11 +195,19 @@ export function ProductSearch({
                   <span className="ph" />
                 )}
                 <span>
-                  <strong>{hit.label}</strong>
+                  <strong>
+                    {hit.label}
+                    {cheapHint ? (
+                      <em className="sale-flag"> дешевше</em>
+                    ) : anySale ? (
+                      <em className="sale-flag"> знижка</em>
+                    ) : null}
+                  </strong>
                   <em>{priceLine(hit)}</em>
                 </span>
               </button>
-            ))}
+              );
+            })}
           {catalogReady && staples.length === 0 && (
             <div className="search-hint">У списку немає такого продукту</div>
           )}
@@ -223,6 +296,12 @@ export function ProductSearch({
           display: block;
           font-size: 0.86rem;
           line-height: 1.25;
+        }
+        .sale-flag {
+          font-style: normal;
+          color: #c43c1a;
+          font-weight: 750;
+          font-size: 0.72rem;
         }
         .search-hit em {
           display: block;

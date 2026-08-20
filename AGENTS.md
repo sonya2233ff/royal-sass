@@ -250,7 +250,7 @@ Refresh/compare/rematch routes use `maxDuration = 60`.
 
 - Pack items: shelf × qty. Weight items: grams. Eggs: $/egg; line is requested egg count.
 - Different pack masses → fair **$/100 g**. Similar packs → per pack. Different OJ litres → `$/L` via that fair path (not `no_match`).
-- `wasPrice` / `onSale` are display-only. Staples totals use `offer.price`, not `promoPrice`.
+- `wasPrice` / `onSale` are display-only. Staples totals use `offer.price`, not `promoPrice`. Sale flags live in the four catalog JSON files and show on the **homepage list, cards, and compare columns** when that store is on sale. If the sale store is also the cheapest visible price, the UI says **дешевше · знижка**. There is **no separate sales page**.
 - Staples compare does **not** filter `availability === in_stock`.
 - Ignore absurd WM `unitPrice` in `resolveUnitPrices`.
 
@@ -281,7 +281,7 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - Nav: Cafe staples + **Офіціант** (`/waiter`) + **Водій** (`/driver`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
 - **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.
 - **Driver portal** (`/driver`): visual inbox of waiter product lists (mock tickets; local waiter draft may appear as a this-phone mock). **No accept / in-transit / message-waiter API.**
-- Results: columns for the selected stores, then one-store basket totals, then **Як закупити** (1–2 stop plans; 3 only to fill holes), then stats.
+- Results: columns for the selected stores, then one-store basket totals, then **Як закупити** (1–2 stop plans; 3 only to fill holes), then stats. Catalog `onSale` / `wasPrice` show as **знижка** (and **дешевше · знижка** when that store is the cheapest). Search typeahead uses the same flags. No `/sales` page.
 - Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand. Category A settings can name one **альтернативний продукт** (search + Include/Exclude + cheaper checkbox).
 
 ## Deploy

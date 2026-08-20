@@ -45,6 +45,11 @@ import { sanityCheckOffer } from "@/domain/sanity";
 import { scoreOfferMatch, staplePickQuery } from "@/domain/matching";
 import { identityKeywords, isPackSizeKeyword } from "@/domain/pack-tokens";
 import {
+  cheaperSaleHint,
+  cheaperSaleOffers,
+  isShelfSale,
+} from "@/domain/shelf-sale";
+import {
   catalogSearchHay,
   searchShownCatalog,
   stapleMatchesCatalogQuery,
@@ -1502,6 +1507,38 @@ async function main() {
   assert(
     wrapped.cottage_cheese?.matchMode === "exact",
     "legacy preferred in stored overrides becomes exact",
+  );
+
+  assert(
+    isShelfSale({ price: 4.48, wasPrice: 5.97, onSale: true }),
+    "wasPrice above shelf is a sale",
+  );
+  assert(
+    !isShelfSale({ price: 4.48, wasPrice: 4.48 }),
+    "equal wasPrice is not a sale",
+  );
+  const wmSaleCheaper = cheaperSaleOffers([
+    { store: "walmart", price: 4.48, wasPrice: 5.97, onSale: true },
+    { store: "nofrills", price: 11.49 },
+  ]);
+  assert(
+    wmSaleCheaper.length === 1 && wmSaleCheaper[0]?.store === "walmart",
+    "sale store that is cheapest is flagged cheaper+sale",
+  );
+  const saleButNotCheapest = cheaperSaleOffers([
+    { store: "walmart", price: 6.48, wasPrice: 7.97, onSale: true },
+    { store: "nofrills", price: 5.49 },
+  ]);
+  assert(
+    saleButNotCheapest.length === 0,
+    "a sale that is still more expensive is not 'дешевше'",
+  );
+  assert(
+    cheaperSaleHint([
+      { store: "walmart", price: 4.48, wasPrice: 5.97, onSale: true },
+      { store: "nofrills", price: 11.49 },
+    ]) === "WM дешевше · знижка",
+    "homepage/search hint names the cheaper sale store",
   );
 
   console.log("staple-filter-self-check ok");
