@@ -17,7 +17,7 @@ import {
 import { resolveCatalogOffer } from "@/domain/compare-resolve";
 import { shouldExpandPackSizes } from "@/lib/expand-pack-sizes";
 import { buildStapleCompareRow } from "@/lib/staple-compare-row";
-import { explicitNeededGrams } from "@/lib/staples";
+import { explicitNeededGrams, usesSharedPackCover } from "@/lib/staples";
 import {
   isActualCategoryBOffer,
   offerMassKg,
@@ -285,6 +285,179 @@ assert(grapePackRow.cheaper === "mvr", `grape cover cheaper ${grapePackRow.cheap
 assert(
   Math.abs((grapeWmBuy.checkout?.checkoutCost ?? 0) - 7.32) < 0.011,
   "cell price is 3 packs, not the 283 g shelf",
+);
+assert(
+  usesSharedPackCover({
+    id: "frozen_blueberry",
+    queries: ["frozen blueberries"],
+    label: "Frozen Blueberries",
+    category: "frozen",
+  }) === true,
+  "frozen bags use shared pack cover",
+);
+assert(
+  usesSharedPackCover({
+    id: "simply_egg_whites",
+    queries: ["simply egg whites"],
+    label: "Naturegg Simply Egg Whites 1kg",
+    unit: "kg",
+    matchMode: "exact",
+  }) === true,
+  "branded cartons use shared pack cover",
+);
+assert(
+  usesSharedPackCover({
+    id: "cups_12oz_black_ripple",
+    queries: ["ripple cups"],
+    label: "12oz Black Ripple Cups",
+    category: "supplies",
+  }) === false,
+  "cups stay count, not 12 oz of plastic",
+);
+assert(
+  usesSharedPackCover({
+    id: "large_eggs_dozen",
+    queries: ["eggs"],
+    label: "Large Eggs",
+    category: "eggs",
+  }) === false,
+  "eggs stay $/egg",
+);
+
+const frozenPackRow = buildStapleCompareRow({
+  item: {
+    id: "frozen_blueberry",
+    queries: ["frozen blueberries"],
+    label: "Frozen Blueberries",
+    category: "frozen",
+    matchMode: "cheapest",
+    mustIncludeAny: ["blueberry", "blueberries"],
+    mustIncludeAll: ["frozen"],
+  },
+  wmOffer: {
+    productId: "gv-600",
+    name: "Great Value Frozen Blueberries 600g",
+    packageSize: "600 g",
+    parsedMassKg: 0.6,
+    price: 5,
+  },
+  nfOffer: {
+    productId: "nf-2kg",
+    name: "Frozen Blueberries 2kg",
+    packageSize: "2 kg",
+    parsedMassKg: 2,
+    price: 12,
+  },
+  wmEval: { status: "ok", ageLabel: null },
+  nfEval: { status: "ok", ageLabel: null },
+  wmUsable: true,
+  nfUsable: true,
+  grams: null,
+  qty: 1,
+  confirmed: false,
+});
+assert(
+  frozenPackRow.fairBasis === "needed_weight",
+  `frozen dissimilar packs ${frozenPackRow.fairBasis}`,
+);
+assert(frozenPackRow.requestedAmount === 2000, `frozen need ${frozenPackRow.requestedAmount}`);
+const frozenWm = frozenPackRow.walmart as {
+  checkout?: { packs?: number; checkoutCost?: number | null };
+};
+const frozenNf = frozenPackRow.noFrills as {
+  checkout?: { packs?: number; checkoutCost?: number | null };
+};
+assert(frozenWm.checkout?.packs === 3, `600 g needs 3 packs to cover 2 kg, got ${frozenWm.checkout?.packs}`);
+assert(frozenNf.checkout?.packs === 1, `2 kg stays 1 pack, got ${frozenNf.checkout?.packs}`);
+assert(
+  Math.abs((frozenPackRow.basketWalmart ?? 0) - 15) < 0.011,
+  `WM 3×$5 ${frozenPackRow.basketWalmart}`,
+);
+assert(
+  Math.abs((frozenPackRow.basketNoFrills ?? 0) - 12) < 0.011,
+  `NF 1×$12 ${frozenPackRow.basketNoFrills}`,
+);
+assert(frozenPackRow.cheaper === "nofrills", `frozen cover cheaper ${frozenPackRow.cheaper}`);
+
+const whitesPackRow = buildStapleCompareRow({
+  item: {
+    id: "simply_egg_whites",
+    queries: ["simply egg whites"],
+    label: "Naturegg Simply Egg Whites 1kg",
+    matchMode: "exact",
+    unit: "kg",
+    defaultAmount: 1,
+    expectedPackKg: 1,
+    mustIncludeAny: ["simply egg white", "simply egg whites"],
+    mustNotInclude: ["free run"],
+  },
+  wmOffer: {
+    productId: "6000196635381",
+    name: "Naturegg Simply Egg Whites 1kg",
+    packageSize: "1 kg",
+    parsedMassKg: 1,
+    price: 9.97,
+  },
+  nfOffer: {
+    productId: "20820355001_EA",
+    name: "Naturegg Simply Egg Whites 500ml",
+    packageSize: "500 ml",
+    parsedMassKg: 0.5,
+    price: 5.49,
+  },
+  wmEval: { status: "ok", ageLabel: null },
+  nfEval: { status: "ok", ageLabel: null },
+  wmUsable: true,
+  nfUsable: true,
+  grams: null,
+  qty: 1,
+  confirmed: false,
+});
+const whitesNf = whitesPackRow.noFrills as {
+  checkout?: { packs?: number; checkoutCost?: number | null };
+};
+assert(
+  whitesPackRow.fairBasis === "needed_weight",
+  `egg whites 500 ml vs 1 kg ${whitesPackRow.fairBasis}`,
+);
+assert(whitesNf.checkout?.packs === 2, `500 ml needs 2 packs, got ${whitesNf.checkout?.packs}`);
+assert(
+  Math.abs((whitesPackRow.basketNoFrills ?? 0) - 10.98) < 0.02,
+  `NF 2×$5.49 ${whitesPackRow.basketNoFrills}`,
+);
+
+const cupPackRow = buildStapleCompareRow({
+  item: {
+    id: "cups_12oz_black_ripple",
+    queries: ["ripple cups"],
+    label: "12oz Black Ripple Cups",
+    category: "supplies",
+    matchMode: "cheapest",
+    mustIncludeAll: ["cup", "ripple"],
+  },
+  wmOffer: {
+    productId: "wm-12",
+    name: "12 OZ BLACK RIPPLE WALL CUP",
+    packageSize: "12 oz",
+    price: 4.5,
+  },
+  nfOffer: {
+    productId: "nf-12",
+    name: "12 oz Black Ripple Cups 50 ct",
+    packageSize: "12 oz",
+    price: 6,
+  },
+  wmEval: { status: "ok", ageLabel: null },
+  nfEval: { status: "ok", ageLabel: null },
+  wmUsable: true,
+  nfUsable: true,
+  grams: null,
+  qty: 1,
+  confirmed: false,
+});
+assert(
+  cupPackRow.fairBasis !== "needed_weight",
+  `cups must not treat oz as grams, got ${cupPackRow.fairBasis}`,
 );
 
 const lemonItem = {

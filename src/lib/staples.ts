@@ -326,6 +326,17 @@ export function isPackedProduceItem(item: StapleItem): boolean {
   );
 }
 
+/**
+ * When two stores sell different pack masses (283 g vs 907 g, 500 ml vs 1 kg,
+ * 600 g frozen vs 2 kg), buy N small packs to cover the largest. Eggs stay
+ * $/egg; loose produce stays grams; supplies stay count (12 oz cups are size).
+ */
+export function usesSharedPackCover(item: StapleItem): boolean {
+  if (isSoldByWeightItem(item) || isEggPackItem(item)) return false;
+  if (item.category === "supplies") return false;
+  return true;
+}
+
 export function defaultNeededGrams(item: StapleItem): number {
   if (isSoldByWeightItem(item)) return 1000;
   if (usesNeededWeightPick(item)) return 500;

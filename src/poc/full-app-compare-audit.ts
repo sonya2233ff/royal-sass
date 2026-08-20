@@ -274,6 +274,7 @@ async function main() {
   assert(
     milk!.fairBasis === "per_pack" ||
       milk!.fairBasis === "per_100g" ||
+      milk!.fairBasis === "needed_weight" ||
       milk!.fairBasis === "incomparable",
     `milk basis ${milk!.fairBasis}`,
   );

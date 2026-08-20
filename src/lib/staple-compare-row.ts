@@ -12,11 +12,11 @@ import type { ResolveReason } from "@/domain/compare-resolve";
 import {
   defaultNeededGrams,
   isEggPackItem,
-  isPackedProduceItem,
   isSoldByWeightItem,
   resolveMatchMode,
   summarizeOffer,
   usesNeededWeightPick,
+  usesSharedPackCover,
   withExpectedPackSize,
   type CatalogOffer,
   type StapleItem,
@@ -182,7 +182,7 @@ export function buildStapleCompareRow(input: {
   const sharedCoverGrams =
     userNeededGrams == null &&
     !soldByWeight &&
-    isPackedProduceItem(item)
+    usesSharedPackCover(item)
       ? sharedCoverGramsForDissimilarPacks(
           [wmRaw, nfRaw, wcRaw, mvrRaw].map((offer) =>
             offer ? offerMassKg(item, offer) : null,

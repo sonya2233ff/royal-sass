@@ -46,8 +46,9 @@ export interface WeightPurchasePlan {
 }
 
 /**
- * When packed produce on one row is 283 g vs ~907 g, cover the largest pack
- * (qty of cafe packs × that mass). Similar packs stay 1-for-1.
+ * When packs on one row differ in mass (283 g vs ~907 g, 500 ml vs 1 kg),
+ * cover the largest pack (qty of cafe packs × that mass). Similar packs
+ * stay 1-for-1.
  */
 export function sharedCoverGramsForDissimilarPacks(
   packKgList: Array<number | null | undefined>,
