@@ -108,6 +108,11 @@ export function inferDefaultAmount(item: StapleLike, unit: AmountUnit): number {
   if (unit === "kg" && item.soldByWeight) return 1;
   if (unit === "g" && item.expectedPackKg) return Math.round(item.expectedPackKg * 1000);
   if (unit === "g" && /750/.test(item.label)) return 750;
+  if (unit === "l") {
+    const blob = `${item.id.replace(/_/g, " ")} ${item.label}`;
+    const labeled = blob.match(/(\d+(?:\.\d+)?)\s*l\b/i);
+    if (labeled) return Number(labeled[1]);
+  }
   return 1;
 }
 

@@ -276,7 +276,9 @@ async function main() {
   assert(oj, "orange juice");
   assert(oj!.cheaper !== "incomplete", `OJ should compare (${oj!.cheaper})`);
   assert(
-    oj!.fairBasis === "per_100g" || oj!.fairBasis === "per_pack",
+    oj!.fairBasis === "per_100g" ||
+      oj!.fairBasis === "per_pack" ||
+      oj!.fairBasis === "needed_weight",
     `OJ basis ${oj!.fairBasis}`,
   );
   const ojNf = oj!.noFrills as { shelfPrice?: number; name?: string };

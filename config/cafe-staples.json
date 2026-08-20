@@ -765,7 +765,7 @@
       "matchMode": "exact",
       "purchaseStrategy": "stock_up",
       "defaultAmount": 1,
-      "maximumAmount": 2,
+      "maximumAmount": 3,
       "unit": "l",
       "tolerancePercent": 15,
       "matchRules": {
@@ -3155,7 +3155,8 @@
         "sundried",
         "juice",
         "soup",
-        "greenhouse"
+        "greenhouse",
+        "unico"
       ],
       "matchMode": "cheapest_equivalent",
       "category": "produce",
@@ -3184,7 +3185,8 @@
           "juice",
           "soup",
           "greenhouse",
-          "can"
+          "can",
+          "unico"
         ]
       }
     },

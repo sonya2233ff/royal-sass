@@ -717,4 +717,153 @@ const eggUi = mergeEggCountChoices([12, 180]);
 assert(eggUi.choices.includes(30) && eggUi.choices.includes(180), "presets plus case");
 assert(eggUi.largestPack === 180, "largest pack is 180");
 
+assert(
+  !offerMatchesIdentity({
+    product: freshTomato,
+    offer: offer("Unico Tomatoes", { packageSize: "796 ml" }),
+  }).ok,
+  "fresh tomato != Unico canned jar",
+);
+
+const redPepper = product({
+  id: "red_peppers_kg",
+  label: "Red Bell Pepper (by kg)",
+  matchMode: "cheapest_equivalent",
+  category: "produce",
+  unit: "kg",
+  matchRules: { mustIncludeAny: ["bell pepper", "red pepper"] },
+});
+assert(
+  offerMatchesIdentity({
+    product: redPepper,
+    offer: offer("VEGETABLES - PEPPERS RED 2.5LB REPACK", {
+      packageSize: "2.5 LBS",
+    }),
+  }).ok,
+  "warehouse PEPPERS RED matches red pepper",
+);
+assert(
+  offerMatchesIdentity({
+    product: product({
+      id: "cucumber_english",
+      label: "English Cucumber",
+      matchMode: "cheapest_equivalent",
+      category: "produce",
+      matchRules: {
+        mustIncludeAny: ["english cucumber", "cucumbers english"],
+      },
+    }),
+    offer: offer("Cucumber, English, Sold in Single Wrap"),
+  }).ok,
+  "Cucumber, English matches english cucumber",
+);
+assert(
+  offerMatchesIdentity({
+    product: product({
+      id: "frozen_pineapple",
+      label: "Alasko Pineapple Chunks",
+      matchMode: "cheapest_equivalent",
+      category: "frozen",
+      matchRules: {
+        mustIncludeAny: ["pineapple"],
+        mustIncludeAll: ["frozen"],
+      },
+    }),
+    offer: offer("ALASKO - PINEAPPLE CHUNKS 1KG", { packageSize: "1KG" }),
+  }).ok,
+  "Alasko IQF bag counts as frozen",
+);
+assert(
+  offerMatchesIdentity({
+    product: product({
+      id: "vanilla_ice_cream",
+      label: "Vanilla Ice Cream",
+      matchMode: "cheapest_equivalent",
+      category: "frozen",
+      matchRules: { mustIncludeAny: ["vanilla ice cream"] },
+    }),
+    offer: offer("CHAPMANS - CHAPMAN'S ICE CREAM VANILLA", {
+      packageSize: "11.4LT",
+    }),
+  }).ok,
+  "ice cream vanilla word order still matches",
+);
+
+const milk2l = toRestaurantProduct({
+  id: "milk_2pct_2l",
+  label: "Mehadrin 2% Milk 2L",
+  expectedPackKg: 2,
+});
+assert(milk2l.unit === "l" && milk2l.defaultAmount === 2, "2L milk default is 2 L");
+const milkBuy = evaluatePurchase({
+  product: milk2l,
+  requested: milk2l.defaultAmount,
+  offer: {
+    price: 6.47,
+    name: "Mehadrin 2% 2LT milk",
+    packageSize: "2 kg",
+  },
+});
+assert(
+  milkBuy.valid && milkBuy.checkoutCost === 6.47,
+  `2L milk checkout ${milkBuy.valid} ${milkBuy.checkoutCost}`,
+);
+
+const olives2l = toRestaurantProduct({
+  id: "unico_pizza_style_olives_2l",
+  label: "Unico Pizza Style Olives 2l",
+});
+assert(olives2l.unit === "l" && olives2l.defaultAmount === 2, "2L olives default is 2 L");
+
+const tropicanaStock = product({
+  id: "orange_juice_pulp",
+  label: "Tropicana OJ No Pulp 2.63L",
+  matchMode: "exact",
+  purchaseStrategy: "stock_up",
+  defaultAmount: 1,
+  maximumAmount: 3,
+  unit: "l",
+});
+const tropicanaJug = evaluatePurchase({
+  product: tropicanaStock,
+  requested: 1,
+  offer: { price: 8.97, name: "Tropicana Pulp Free", packageSize: "2.63 L" },
+});
+assert(
+  tropicanaJug.valid && tropicanaJug.purchasedAmount === 2.63,
+  `2.63L jug allowed under stock_up max 3, got ${tropicanaJug.valid} ${tropicanaJug.purchasedAmount}`,
+);
+
+const butterRow = buildStapleCompareRow({
+  item: {
+    id: "butter_454g",
+    label: "Gay Lea Unsalted Butter 454g",
+    preferredProductId: "6000201029320",
+    expectedPackKg: 0.454,
+    matchMode: "preferred",
+    queries: ["gay lea unsalted butter"],
+  },
+  wmOffer: {
+    productId: "6000201029320",
+    name: "Gay Lea Unsalted Butter",
+    price: 7.96,
+  },
+  nfOffer: {
+    productId: "nf-butter",
+    name: "Gay Lea Unsalted Butter",
+    packageSize: "454 g",
+    parsedMassKg: 0.454,
+    price: 8.29,
+  },
+  wmEval: { status: "ok", ageLabel: null },
+  nfEval: { status: "ok", ageLabel: null },
+  wmUsable: true,
+  nfUsable: true,
+  confirmed: false,
+});
+assert(
+  butterRow.basketWalmart === 7.96,
+  `locked butter without Rapid pack size still checks out, got ${butterRow.basketWalmart}`,
+);
+
 console.log("poc:pilot-logic ok");

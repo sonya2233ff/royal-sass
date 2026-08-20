@@ -66,7 +66,7 @@ These are live on **production** `master` (`7d405de` and descendants). Phone dem
 **Tropicana (`orange_juice_pulp`) — worked example of a class of bugs**
 
 - Card label: `Tropicana OJ No Pulp 2.63L`. WM locked SKU **205804** is the 2.63 L jug; Rapid often **omits size in the title**. NF/MVR usually stock Tropicana **1.36 L**, not 2.63. Compare as `$/L`, not “out of stock”.
-- `matchMode: "exact"`; `purchaseStrategy: "stock_up"` 1–2 L. Catalog `mustIncludeAny` includes tropicana + no-pulp / pulp free. Do **not** put `concentrate` in include (matches “not from concentrate”). Do **not** require `2.63` as a must-include token.
+- `matchMode: "exact"`; `purchaseStrategy: "stock_up"` 1–3 L (covers the WM **2.63 L** jug). Catalog `mustIncludeAny` includes tropicana + no-pulp / pulp free. Do **not** put `concentrate` in include (matches “not from concentrate”). Do **not** require `2.63` as a must-include token.
 - Operator UX: **Точний продукт**; Include `tropicana, no pulp, pulp free`; **Зберегти і оновити**. WM can show 2.63 L; other stores show the Tropicana no-pulp they actually sell.
 
 **Matching for every staple (generalized after Tropicana)**
@@ -115,7 +115,7 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 | `matchMode` | `"exact"` (legacy `"preferred"`) | `"cheapest_equivalent"` (legacy `"cheapest"`) |
 | Typical fields | `preferredProductId`, `preferNameIncludes` | `matchRules` / `mustInclude*` / `mustNotInclude` |
 | Identity gate | Confirmed store product ID, then UPC/SKU, brand, type/form/variant. Pack size on the **card** is not a hard 8% match — mini packs only. No analog if exact is missing. | Type/form/variant + include/exclude. Fresh ≠ canned/sauce; white quinoa ≠ red; pack purpose must match. |
-| Quantity | Usually `exact_need` (Tropicana OJ is exact brand + `stock_up` 1–2 L) | Either strategy (tomato = exact_need 2 kg) |
+| Quantity | Usually `exact_need` (Tropicana OJ is exact brand + `stock_up` 1–3 L so the WM 2.63 L jug is allowed) | Either strategy (tomato = exact_need 2 kg) |
 | UI badge | **А** — точний продукт | **Б** — найдешевший відповідний |
 
 `resolveMatchMode`: explicit `item.matchMode` (canonicalized), else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred.

@@ -16,6 +16,7 @@ import {
   resolveMatchMode,
   summarizeOffer,
   usesNeededWeightPick,
+  withExpectedPackSize,
   type CatalogOffer,
   type StapleItem,
 } from "@/lib/staples";
@@ -41,6 +42,7 @@ import {
   fairCompareCheckouts,
   type PurchaseOption,
 } from "@/domain/checkout";
+import { dimensionOf } from "@/domain/purchase-units";
 import { offerMatchesIdentity } from "@/domain/product-identity";
 import { inferSaleMode } from "@/domain/sale-mode";
 
@@ -161,10 +163,18 @@ export function buildStapleCompareRow(input: {
   const nfOffer = input.nfUsable ? asCatalogOffer(input.nfOffer) : null;
   const wcOffer = input.wcUsable ? asCatalogOffer(input.wcOffer ?? null) : null;
   const mvrOffer = input.mvrUsable ? asCatalogOffer(input.mvrOffer ?? null) : null;
-  const wmRaw = wmOffer ? withTypicalEachMass(item, wmOffer) : null;
-  const nfRaw = nfOffer ? withTypicalEachMass(item, nfOffer) : null;
-  const wcRaw = wcOffer ? withTypicalEachMass(item, wcOffer) : null;
-  const mvrRaw = mvrOffer ? withTypicalEachMass(item, mvrOffer) : null;
+  const wmRaw = wmOffer
+    ? withExpectedPackSize(item, withTypicalEachMass(item, wmOffer))
+    : null;
+  const nfRaw = nfOffer
+    ? withExpectedPackSize(item, withTypicalEachMass(item, nfOffer))
+    : null;
+  const wcRaw = wcOffer
+    ? withExpectedPackSize(item, withTypicalEachMass(item, wcOffer))
+    : null;
+  const mvrRaw = mvrOffer
+    ? withExpectedPackSize(item, withTypicalEachMass(item, mvrOffer))
+    : null;
   const typicalEachGrams = typicalEachGramsOf(item);
 
   const walmart = summarizeOffer(item, wmRaw, summarizeQty, "walmart_ca");
@@ -338,7 +348,9 @@ export function buildStapleCompareRow(input: {
         ? neededGrams
         : product.unit === "kg" && neededGrams
           ? neededGrams / 1000
-          : packQty;
+          : dimensionOf(product.unit) !== "count"
+            ? product.defaultAmount
+            : packQty;
 
   const ident = (
     raw: CatalogOffer | null,
@@ -451,10 +463,37 @@ export function buildStapleCompareRow(input: {
     }
   }
 
-  const wmBasket = wmBuy?.valid ? wmBuy.checkoutCost : null;
-  const nfBasket = nfBuy?.valid ? nfBuy.checkoutCost : null;
-  const wcBasket = wcBuy?.valid ? wcBuy.checkoutCost : null;
-  const mvrBasket = mvrBuy?.valid ? mvrBuy.checkoutCost : null;
+  const useNeededWeightPlan =
+    neededPickActive && !soldByWeight && !egg && Boolean(wmPlan || nfPlan || wcPlan || mvrPlan);
+
+  const wmBasket = useNeededWeightPlan
+    ? ident(wmRaw, "walmart_ca").ok && wmPlan
+      ? wmPlan.totalPrice
+      : null
+    : wmBuy?.valid
+      ? wmBuy.checkoutCost
+      : null;
+  const nfBasket = useNeededWeightPlan
+    ? ident(nfRaw, "no_frills").ok && nfPlan
+      ? nfPlan.totalPrice
+      : null
+    : nfBuy?.valid
+      ? nfBuy.checkoutCost
+      : null;
+  const wcBasket = useNeededWeightPlan
+    ? ident(wcRaw, "wholesale_club").ok && wcPlan
+      ? wcPlan.totalPrice
+      : null
+    : wcBuy?.valid
+      ? wcBuy.checkoutCost
+      : null;
+  const mvrBasket = useNeededWeightPlan
+    ? ident(mvrRaw, "mvr").ok && mvrPlan
+      ? mvrPlan.totalPrice
+      : null
+    : mvrBuy?.valid
+      ? mvrBuy.checkoutCost
+      : null;
 
   const checkoutFair = fairCompareCheckouts(
     [
@@ -490,7 +529,10 @@ export function buildStapleCompareRow(input: {
     product,
     requested,
   );
-  if (!isPreferredIdentityRejected(mode, { decision: input.mappingDecision })) {
+  if (
+    !isPreferredIdentityRejected(mode, { decision: input.mappingDecision }) &&
+    !useNeededWeightPlan
+  ) {
     fair = {
       ...fair,
       cheaper: checkoutFair.cheaper as typeof fair.cheaper,
@@ -538,7 +580,13 @@ export function buildStapleCompareRow(input: {
         matchStatus: buy?.reason ?? evalRow.status,
       };
     }
-    const cost = buy?.valid ? buy.checkoutCost : null;
+    const identOk = ident(raw, retailer).ok;
+    const cost =
+      useNeededWeightPlan && plan && identOk
+        ? plan.totalPrice
+        : buy?.valid
+          ? buy.checkoutCost
+          : null;
     return {
       ...(summarized ?? emptySide(evalRow)),
       lineTotal: cost,
@@ -551,7 +599,12 @@ export function buildStapleCompareRow(input: {
       purchasedAmount: buy?.purchasedAmount ?? null,
       leftoverAmount: buy?.leftoverAmount ?? null,
       packsNeeded: buy?.packs ?? null,
-      matchStatus: buy?.valid ? "ok" : buy?.reason ?? evalRow.status,
+      matchStatus:
+        useNeededWeightPlan && plan && identOk
+          ? "ok"
+          : buy?.valid
+            ? "ok"
+            : buy?.reason ?? evalRow.status,
       image: retailerSideImage({
         retailer,
         offer: {

@@ -10,6 +10,7 @@ import { extractBarcodes } from "@/domain/fair-compare";
 import {
   canonicalizeMatchMode,
   confirmedStoreSku,
+  inferUnit,
   stapleWithClientOverride,
   toLegacyMatchMode,
   type ProductOverride,
@@ -1464,17 +1465,25 @@ export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
   };
 }
 
-/** Rapid/PCX often omit "2.63L" on the Tropicana jug title — keep expected size on the locked SKU. */
-function withExpectedPackSize(item: StapleItem, offer: CatalogOffer): CatalogOffer {
+/** Rapid/PCX often omit pack size on the locked SKU — stamp expected size on that SKU only. */
+export function withExpectedPackSize(item: StapleItem, offer: CatalogOffer): CatalogOffer {
   if (offer.parsedMassKg != null && offer.parsedMassKg > 0) return offer;
   if (item.expectedPackKg == null || !(item.expectedPackKg > 0)) return offer;
   const locked =
     Boolean(item.preferredProductId) && offer.productId === item.preferredProductId;
   if (!locked) return offer;
+  const unit = inferUnit(item);
+  const kg = item.expectedPackKg;
+  const stamped =
+    unit === "l" || unit === "ml"
+      ? `${kg} L`
+      : unit === "g"
+        ? `${Math.round(kg * 1000)} g`
+        : `${kg} kg`;
   return {
     ...offer,
-    packageSize: offer.packageSize ?? `${item.expectedPackKg} L`,
-    parsedMassKg: item.expectedPackKg,
+    packageSize: offer.packageSize ?? stamped,
+    parsedMassKg: kg,
   };
 }
 

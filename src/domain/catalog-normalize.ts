@@ -326,10 +326,16 @@ export function offerFailsStapleOfferFilters(
   const brand = /^(fruits|vegetables)$/i.test(offer.brand ?? "")
     ? undefined
     : offer.brand;
+  const frozenHint =
+    item.category === "frozen" &&
+    /\b(iqf|alasko)\b/i.test(`${offer.name} ${offer.brand ?? ""}`)
+      ? "frozen"
+      : "";
   const extra = [
     offer.packageSize ?? "",
     offer.taxonomyText ?? "",
     retailerTaxonomyText(offer.raw),
+    frozenHint,
   ]
     .filter((s) => s.trim())
     .join(" ");

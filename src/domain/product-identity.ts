@@ -1,7 +1,12 @@
 /**
  * Identity checks independent of how much we buy.
  */
-import { nameMatchesFilterToken } from "@/domain/catalog-normalize";
+import {
+  isCategoryBStaple,
+  nameMatchesFilterPhrase,
+  nameMatchesFilterToken,
+  warehouseTitleView,
+} from "@/domain/catalog-normalize";
 import { identityKeywords } from "@/domain/pack-tokens";
 import { parseMassKg, parseVolumeMl } from "@/domain/purchase-units";
 import { isComparablePackKg } from "@/domain/sanity";
@@ -33,6 +38,37 @@ function hasToken(text: string, token: string): boolean {
   return nameMatchesFilterToken(text, token);
 }
 
+function withFrozenSynonyms(text: string): string {
+  if (/\b(iqf|alasko)\b/i.test(text) && !/\bfrozen\b/i.test(text)) {
+    return `${text} frozen`;
+  }
+  return text;
+}
+
+/**
+ * Category B uses the same warehouse / split-phrase hay as catalog filters
+ * so "PEPPERS RED" still matches "red pepper".
+ */
+function identitySearchText(
+  product: RestaurantProduct,
+  offer: IdentityOffer,
+): { text: string; split: boolean } {
+  if (isCategoryBStaple(product) || product.matchMode === "cheapest_equivalent") {
+    const name = isCategoryBStaple(product)
+      ? warehouseTitleView(offer.name)
+      : offer.name;
+    const brand = /^(fruits|vegetables)$/i.test(offer.brand ?? "")
+      ? ""
+      : (offer.brand ?? "");
+    const extra = offer.packageSize ?? "";
+    return {
+      text: withFrozenSynonyms(`${brand} ${name} ${extra}`),
+      split: true,
+    };
+  }
+  return { text: hay(offer), split: false };
+}
+
 function bannedFormMismatch(product: RestaurantProduct, text: string): string | null {
   const form = (product.matchRules?.form ?? product.category ?? "").toLowerCase();
   if (form === "fresh" || product.category === "produce") {
@@ -41,6 +77,12 @@ function bannedFormMismatch(product: RestaurantProduct, text: string): string | 
       return "fresh tomato ≠ sauce/paste/juice";
     }
     if (/\bfrozen\b/.test(text) && form !== "frozen") return "fresh ≠ frozen";
+    const tomato =
+      product.id === "tomato" ||
+      /\btomato/.test((product.matchRules?.productType ?? "").toLowerCase());
+    if (tomato && (/\b\d+(?:\.\d+)?\s*ml\b/i.test(text) || /\bunico\b/i.test(text))) {
+      return "fresh ≠ canned";
+    }
   }
   if (form === "frozen" || product.category === "frozen") {
     if (/\bfresh\b/.test(text) && !/\bfrozen\b/.test(text)) return "frozen ≠ fresh";
@@ -60,22 +102,27 @@ function bannedFormMismatch(product: RestaurantProduct, text: string): string | 
   return null;
 }
 
-function keywordsPass(product: RestaurantProduct, text: string): string | null {
+function keywordsPass(product: RestaurantProduct, offer: IdentityOffer): string | null {
+  const { text, split } = identitySearchText(product, offer);
   const rules = product.matchRules ?? {};
   for (const n of rules.mustNotInclude ?? []) {
     if (n && hasToken(text, n)) return `mustNotInclude: ${n}`;
   }
   const mustAll = identityKeywords(rules.mustIncludeAll);
   for (const n of mustAll) {
-    if (!hasToken(text, n)) return `mustIncludeAll missing: ${n}`;
+    if (!nameMatchesFilterPhrase(text, n, split)) {
+      return `mustIncludeAll missing: ${n}`;
+    }
   }
   const mustAny = identityKeywords(rules.mustIncludeAny);
   if (mustAny.length) {
-    const ok = mustAny.some((n) => hasToken(text, n));
+    const ok = mustAny.some((n) => nameMatchesFilterPhrase(text, n, split));
     if (!ok) return "mustIncludeAny";
   }
-  if (rules.productType && !hasToken(text, rules.productType)) {
-    const any = rules.mustIncludeAny?.some((n) => hasToken(text, n));
+  if (rules.productType && !nameMatchesFilterPhrase(text, rules.productType, split)) {
+    const any = rules.mustIncludeAny?.some((n) =>
+      nameMatchesFilterPhrase(text, n, split),
+    );
     if (!any) return `productType: ${rules.productType}`;
   }
   return null;
@@ -132,7 +179,7 @@ export function offerMatchesIdentity(input: {
     if (product.preferredProductId && offer.productId === product.preferredProductId) {
       return { ok: true };
     }
-    const kw = keywordsPass(product, text);
+    const kw = keywordsPass(product, offer);
     if (kw) return { ok: false, reason: kw };
     const form = bannedFormMismatch(product, text);
     if (form) return { ok: false, reason: form };
@@ -167,7 +214,7 @@ export function offerMatchesIdentity(input: {
     return { ok: true };
   }
 
-  const kw = keywordsPass(product, text);
+  const kw = keywordsPass(product, offer);
   if (kw) return { ok: false, reason: kw };
   const form = bannedFormMismatch(product, text);
   if (form) return { ok: false, reason: form };
