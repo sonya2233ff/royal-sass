@@ -166,6 +166,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `config/cafe-staples.json` | Master staple definitions |
 | `config/stores.json` | Locked stores (Sobeys `active: false`) |
 | `src/domain/receipt-import.ts` | Receipt text → existing vs new `receipt_*` drafts |
+| `src/domain/purchase-plans.ts` | 1–2 stop buy plans (never 4-way cheapest-item split) |
 | `src/lib/receipt-ocr.ts` | Optional OpenAI / OCR.space / tesseract; no photo persistence |
 | `src/app/ReceiptUpload.tsx` | Homepage **Чек** modal |
 | `src/lib/receipt-staple-ids.ts` | Receipt ids that are shown |
@@ -255,7 +256,8 @@ Refresh/compare/rematch routes use `maxDuration = 60`.
 **Basket winner**
 
 - Row `cheaper` / `delta` are unit-fair, not “who has the smaller pack”.
-- Totals: intersection by store count. WM vs NF = rows with both baskets. 3-store = WM+NF+WC. 4-store = all four. A missing MVR/WC price is not $0. `totals.cheaper` is the 4-store winner when `quadCount > 0`, else 3-store, else 2-store.
+- Totals: intersection by store count. WM vs NF = rows with both baskets. 3-store = WM+NF+WC. 4-store = all four. A missing MVR/WC price is not $0. `totals.cheaper` is the **one-store** 4-store winner when `quadCount > 0`, else 3-store, else 2-store.
+- **Purchase plans** (`src/domain/purchase-plans.ts`): after Compare, recommend a few buy options — all at one store, or split across **two** stores when that is cheaper or fills a missing SKU. Three stops only if 1–2 cannot cover the cart. **Never four stores** (no one-item-per-shop mix). Extra stop for a cheaper price needs ≥ $0.50 (and ≥ $2 if the extra stop is a single item the primary also sells). Hidden store chips are omitted, not $0. Incomplete plan totals are the sum of assigned lines, with missing names listed — not `$0`.
 
 ## Compare statistics
 
@@ -278,7 +280,7 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - Nav: Cafe staples + **Офіціант** (`/waiter`) + **Водій** (`/driver`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
 - **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.
 - **Driver portal** (`/driver`): visual inbox of waiter product lists (mock tickets; local waiter draft may appear as a this-phone mock). **No accept / in-transit / message-waiter API.**
-- Results: columns for the selected stores, then baskets, then stats.
+- Results: columns for the selected stores, then one-store basket totals, then **Як закупити** (1–2 stop plans; 3 only to fill holes), then stats.
 - Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand. Category A settings can name one **альтернативний продукт** (search + Include/Exclude + cheaper checkbox).
 
 ## Deploy
@@ -311,6 +313,7 @@ npm run poc:entity-match
 npm run poc:store-connector
 npm run poc:pcx-session
 npm run poc:receipt-import
+npm run poc:purchase-plans
 ```
 
 Price/matching diffs: `npm run cache:prices` (and `cache:walmart` / `cache:nofrills` / `cache:wholesaleclub` / `cache:mvr`) only when live keys work and the task is a refresh. Nightly CI is price-only (`cache:prices`), never a full rematch of all 124. Spot-check: grape tomatoes ≠ seeds, ice ≠ gum, dozen card still compares 12 vs 18 vs 30 as $/egg, `qty > 1`, missing offer stays empty, Tropicana label/`2.63` does not `no_match` a Pulp Free title, settings Include does not wipe catalog tropicana, bagasse lids ≠ 4 oz 2000/case, Oreo ≠ mint, PAM ≠ baking, incomplete baskets never `$0`. UI: select + grams/qty → Compare → `fairLabel` + baskets + stats row.

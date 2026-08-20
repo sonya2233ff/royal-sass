@@ -56,6 +56,10 @@ import {
   completeBasketWinner,
   storeCoverage,
 } from "@/domain/basket-coverage";
+import {
+  linesFromBasketRows,
+  recommendPurchasePlans,
+} from "@/domain/purchase-plans";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -1130,6 +1134,7 @@ export async function POST(request: Request) {
 
   const logId = await appendMatchLog(entries);
   const comparedAt = new Date().toISOString();
+  const purchasePlans = recommendPurchasePlans(linesFromBasketRows(rows));
   const totals = {
     completeCount: wmNfRows.length,
     requestedItems: rows.length,
@@ -1215,7 +1220,7 @@ export async function POST(request: Request) {
     mvrEnabled: true,
     matchLogId: logId,
     rows,
-    totals,
+    totals: { ...totals, purchasePlans },
     savedRunId: saved.run.id,
     statsPersisted: saved.persisted,
     stats: { summary: saved.summary, runs: saved.runs.slice(0, 40) },

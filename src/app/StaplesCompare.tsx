@@ -48,6 +48,13 @@ import {
 } from "@/domain/needed-weight-pick";
 import { completeBasketWinner } from "@/domain/basket-coverage";
 import {
+  linesFromBasketRows,
+  recommendPurchasePlans,
+  storePlanLabel,
+  storePlanShort,
+  type PurchasePlan,
+} from "@/domain/purchase-plans";
+import {
   COMPARE_STORES,
   cheaperAmongStores,
   type CompareStoreId,
@@ -256,6 +263,10 @@ type CompareRow = {
   requestedUnit?: string;
   purchaseStrategy?: string;
   matchModeCanonical?: string;
+  basketWalmart?: number | null;
+  basketNoFrills?: number | null;
+  basketWholesaleClub?: number | null;
+  basketMvr?: number | null;
 };
 
 type StoreCoverage = {
@@ -489,6 +500,21 @@ function storeShort(cheaper: string): string {
   if (cheaper === "mvr") return "MVR";
   if (cheaper === "tie") return "нічия";
   return "неповне";
+}
+
+function planHeadline(plan: PurchasePlan): string {
+  if (plan.stopCount === 1 && plan.stops[0]) {
+    return plan.complete
+      ? `Все в ${storePlanLabel(plan.stops[0].store)}`
+      : `${storePlanLabel(plan.stops[0].store)} · неповний кошик`;
+  }
+  return plan.stops.map((s) => storePlanLabel(s.store)).join(" + ");
+}
+
+function planStopItems(labels: string[]): string {
+  const shown = labels.slice(0, 4);
+  const extra = labels.length > 4 ? ` +${labels.length - 4}` : "";
+  return shown.join(", ") + extra;
 }
 
 function money(n: number | null | undefined): string {
@@ -1505,6 +1531,11 @@ export function StaplesCompare() {
     };
   }, [totals, enabled]);
 
+  const purchasePlans = useMemo(() => {
+    if (!displayRows?.length) return [];
+    return recommendPurchasePlans(linesFromBasketRows(displayRows), enabled);
+  }, [displayRows, enabled]);
+
   const compareLine = COMPARE_STORES.filter((s) => isOn(s.id))
     .map((s) =>
       s.id === "mvr" ? `${s.label} Cash & Carry (${s.detail})` : `${s.label} ${s.detail}`,
@@ -2238,17 +2269,77 @@ export function StaplesCompare() {
                 {storeCount < 2
                   ? "Оберіть ще магазин зверху, щоб порівняти кошик"
                   : displayTotals.cheaper === "incomplete"
-                  ? "Немає повного кошика — загального переможця немає"
+                  ? "Жоден магазин не закриває весь список сам"
                   : displayTotals.cheaper === "walmart"
-                    ? "Cheaper overall: Walmart"
+                    ? "Найдешевший один магазин: Walmart"
                     : displayTotals.cheaper === "nofrills"
-                      ? "Cheaper overall: No Frills"
+                      ? "Найдешевший один магазин: No Frills"
                       : displayTotals.cheaper === "wholesaleclub"
-                        ? "Cheaper overall: Wholesale Club"
+                        ? "Найдешевший один магазин: Wholesale Club"
                         : displayTotals.cheaper === "mvr"
-                          ? "Cheaper overall: MVR"
-                          : "Overall: tie"}
+                          ? "Найдешевший один магазин: MVR"
+                          : "Один магазин: нічия"}
               </div>
+              {purchasePlans.length > 0 && storeCount >= 2 && (
+                <div className="plans">
+                  <h3>Як закупити</h3>
+                  <p className="tiny mute">
+                    Кілька варіантів: один заїзд, або поділ між двома магазинами,
+                    якщо так дешевше чи треба закрити відсутні позиції. Не
+                    розкидаємо по одному товару в кожному з чотирьох.
+                  </p>
+                  {purchasePlans.map((plan) => (
+                    <article
+                      key={plan.id}
+                      className={plan.recommended ? "plan rec" : "plan"}
+                    >
+                      <div className="plan-head">
+                        {plan.recommended ? (
+                          <span className="plan-badge">Рекомендовано</span>
+                        ) : (
+                          <span className="plan-badge alt">Варіант</span>
+                        )}
+                        <strong>{planHeadline(plan)}</strong>
+                        <span>
+                          {money(plan.total)}
+                          {` · ${plan.coverage}`}
+                          {plan.complete ? "" : " · неповний"}
+                        </span>
+                      </div>
+                      {plan.kind === "split_cheaper" &&
+                        plan.savingsVsBestOneStore != null &&
+                        plan.savingsVsBestOneStore > 0 && (
+                          <div className="tiny">
+                            дешевше на ${plan.savingsVsBestOneStore.toFixed(2)} ніж
+                            купити все в одному найдешевшому магазині
+                          </div>
+                        )}
+                      {plan.kind === "split_fill" && (
+                        <div className="tiny">
+                          {plan.complete
+                            ? "один магазин не має всіх позицій — цей поділ закриває список"
+                            : "набрано максимум без чотирьох заїздів"}
+                        </div>
+                      )}
+                      {plan.stops.map((stop) => (
+                        <div key={stop.store} className="tiny plan-stop">
+                          {storePlanShort(stop.store)} · {stop.itemCount}{" "}
+                          {stop.itemCount === 1 ? "товар" : "товарів"} · $
+                          {stop.subtotal.toFixed(2)}
+                          {stop.labels.length
+                            ? ` — ${planStopItems(stop.labels)}`
+                            : ""}
+                        </div>
+                      ))}
+                      {plan.missingLabels.length > 0 && (
+                        <div className="tiny mute">
+                          немає в цьому наборі: {plan.missingLabels.join(", ")}
+                        </div>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              )}
               {displayTotals.incompleteItems && displayTotals.incompleteItems.length > 0 && (
                 <div className="tiny">
                   Неповні:{" "}
@@ -2819,6 +2910,48 @@ export function StaplesCompare() {
           margin-top: 0.25rem;
           font-weight: 650;
           color: #2f4a3a;
+        }
+        .plans {
+          margin-top: 0.65rem;
+          display: grid;
+          gap: 0.45rem;
+        }
+        .plans h3 {
+          font-size: 0.95rem;
+          margin: 0.2rem 0 0;
+        }
+        .plan {
+          border: 1px solid #d7cfc2;
+          padding: 0.45rem 0.55rem 0.55rem;
+          display: grid;
+          gap: 0.2rem;
+          background: #fffdf8;
+        }
+        .plan.rec {
+          border-color: #1e4030;
+          background: rgba(47, 74, 58, 0.08);
+        }
+        .plan-head {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.35rem 0.55rem;
+          align-items: baseline;
+        }
+        .plan-badge {
+          font-size: 0.68rem;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          background: #1e4030;
+          color: #fff;
+          padding: 0.1rem 0.35rem;
+        }
+        .plan-badge.alt {
+          background: transparent;
+          color: #1e4030;
+          border: 1px solid #1e4030;
+        }
+        .plan-stop {
+          opacity: 0.9;
         }
         .log {
           margin-top: 1.5rem;
