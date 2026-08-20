@@ -14,6 +14,8 @@ import {
 import { eggCatalogSourceIds } from "@/domain/egg-pack";
 import { pickCheapestByFairUnit } from "@/domain/matching";
 import { pickNeededWeightPurchase } from "@/domain/needed-weight-pick";
+import { pickCheapestCoveringOffer } from "@/domain/checkout";
+import type { RestaurantProduct } from "@/domain/restaurant-product";
 import {
   isActualCategoryBOffer,
   preferNonCasePacks,
@@ -231,6 +233,9 @@ export function resolveCatalogOffer(input: {
   matchMode: "preferred" | "cheapest";
   /** Category B only: pick among catalog sizes for this needed weight. */
   neededGrams?: number;
+  /** Category A: pick the cheapest checkout that covers this amount. */
+  product?: RestaurantProduct;
+  requested?: number;
 }): {
   offer: CatalogOfferRef | null;
   reason: ResolveReason;
@@ -285,6 +290,23 @@ export function resolveCatalogOffer(input: {
     if (input.matchMode === "cheapest") {
       const cheapest = pickCheapestByFairUnit(passing);
       if (cheapest) return resolveFromOffer(cheapest, input.row);
+    } else if (
+      input.product &&
+      input.requested != null &&
+      input.requested > 0
+    ) {
+      const covering = pickCheapestCoveringOffer(
+        input.product,
+        input.requested,
+        passing,
+      );
+      if (covering) {
+        return resolveFromOffer(
+          covering,
+          input.row,
+          `cover ${input.requested} with checkout`,
+        );
+      }
     }
     return resolveFromOffer(passing[0]!, input.row);
   }

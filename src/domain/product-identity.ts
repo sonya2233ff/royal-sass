@@ -10,7 +10,11 @@ import {
 } from "@/domain/catalog-normalize";
 import { identityKeywords } from "@/domain/pack-tokens";
 import { parseMassKg, parseVolumeMl } from "@/domain/purchase-units";
-import { isComparablePackKg } from "@/domain/sanity";
+import {
+  canComposeToNeed,
+  isComparablePackKg,
+  MAX_IDENTITY_COMPOSE_PACKS,
+} from "@/domain/sanity";
 import type { RestaurantProduct } from "@/domain/restaurant-product";
 import {
   isActualCategoryBOffer,
@@ -150,13 +154,25 @@ function sizeCompatible(
   // Card litres (2.63L vs store 1.36L) are not identity — only mini packs are.
   const wantL = parseVolumeMl(want);
   const gotL = parseVolumeMl(text);
-  if (wantL && gotL && !isComparablePackKg(gotL / 1000, wantL / 1000)) {
-    return `size ${gotL}ml ≠ ${wantL}ml`;
+  if (wantL && gotL) {
+    if (gotL + 1e-6 < wantL) {
+      if (!canComposeToNeed(gotL / 1000, wantL / 1000, MAX_IDENTITY_COMPOSE_PACKS)) {
+        return `size ${gotL}ml ≠ ${wantL}ml`;
+      }
+    } else if (!isComparablePackKg(gotL / 1000, wantL / 1000)) {
+      return `size ${gotL}ml ≠ ${wantL}ml`;
+    }
   }
   const wantKg = parseMassKg(want);
   const gotKg = parseMassKg(text) ?? offer.parsedMassKg ?? null;
-  if (wantKg && gotKg != null && !isComparablePackKg(gotKg, wantKg)) {
-    return `size ${gotKg}kg ≠ ${wantKg}kg`;
+  if (wantKg && gotKg != null) {
+    if (gotKg + 1e-6 < wantKg) {
+      if (!canComposeToNeed(gotKg, wantKg, MAX_IDENTITY_COMPOSE_PACKS)) {
+        return `size ${gotKg}kg ≠ ${wantKg}kg`;
+      }
+    } else if (!isComparablePackKg(gotKg, wantKg)) {
+      return `size ${gotKg}kg ≠ ${wantKg}kg`;
+    }
   }
   if (/\bextra\s*large\b/.test(text) && /\blarge\b/.test(product.label.toLowerCase()) && !/\bextra\b/.test(product.label.toLowerCase())) {
     return "Large ≠ Extra Large";

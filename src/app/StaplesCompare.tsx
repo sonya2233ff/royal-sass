@@ -92,6 +92,8 @@ type Staple = {
     wasPrice?: number | null;
     onSale?: boolean;
     image?: string | null;
+    packs?: number | null;
+    lineTotal?: number | null;
   } | null;
   noFrillsCached: {
     name: string;
@@ -110,6 +112,8 @@ type Staple = {
     wasPrice?: number | null;
     onSale?: boolean;
     image?: string | null;
+    packs?: number | null;
+    lineTotal?: number | null;
   } | null;
   wholesaleClubCached?: {
     name: string;
@@ -128,6 +132,8 @@ type Staple = {
     wasPrice?: number | null;
     onSale?: boolean;
     image?: string | null;
+    packs?: number | null;
+    lineTotal?: number | null;
   } | null;
   mvrCached?: {
     name: string;
@@ -146,6 +152,8 @@ type Staple = {
     wasPrice?: number | null;
     onSale?: boolean;
     image?: string | null;
+    packs?: number | null;
+    lineTotal?: number | null;
   } | null;
   sobeysCached?: {
     name: string;
@@ -283,6 +291,33 @@ function tidyOfferName(name: string): string {
     out.push(p);
   }
   return out.join(", ");
+}
+
+function storePriceLine(
+  tag: string,
+  cached: {
+    price: number;
+    packs?: number | null;
+    lineTotal?: number | null;
+    packageSize?: string;
+    onSale?: boolean;
+    wasPrice?: number | null;
+  },
+) {
+  const packs = cached.packs != null && cached.packs > 1 ? cached.packs : 1;
+  const total =
+    packs > 1 && cached.lineTotal != null ? cached.lineTotal : cached.price;
+  return (
+    <span className="price">
+      {packs > 1
+        ? `${tag} ${packs} × $${cached.price.toFixed(2)} = $${total.toFixed(2)}`
+        : `${tag} $${cached.price.toFixed(2)}`}
+      {cached.onSale && cached.wasPrice ? (
+        <s className="was">${cached.wasPrice.toFixed(2)}</s>
+      ) : null}
+      {cached.packageSize ? ` · ${cached.packageSize}` : ""}
+    </span>
+  );
 }
 
 function saleTitle(item: Staple): string {
@@ -1471,18 +1506,7 @@ export function StaplesCompare() {
                       <span className="sku">
                         WM {tidyOfferName(item.walmartCached.name)}
                       </span>
-                      <span className="price">
-                        WM ${item.walmartCached.price.toFixed(2)}
-                        {item.walmartCached.onSale &&
-                        item.walmartCached.wasPrice ? (
-                          <s className="was">
-                            ${item.walmartCached.wasPrice.toFixed(2)}
-                          </s>
-                        ) : null}
-                        {item.walmartCached.packageSize
-                          ? ` · ${item.walmartCached.packageSize}`
-                          : ""}
-                      </span>
+                      {storePriceLine("WM", item.walmartCached)}
                       {item.weightCompare &&
                         item.walmartCached.nativeUnitPriceLabel && (
                           <span className="unitprice">
@@ -1499,18 +1523,7 @@ export function StaplesCompare() {
                       <span className="sku">
                         NF {tidyOfferName(item.noFrillsCached.name)}
                       </span>
-                      <span className="price">
-                        NF ${item.noFrillsCached.price.toFixed(2)}
-                        {item.noFrillsCached.onSale &&
-                        item.noFrillsCached.wasPrice ? (
-                          <s className="was">
-                            ${item.noFrillsCached.wasPrice.toFixed(2)}
-                          </s>
-                        ) : null}
-                        {item.noFrillsCached.packageSize
-                          ? ` · ${item.noFrillsCached.packageSize}`
-                          : ""}
-                      </span>
+                      {storePriceLine("NF", item.noFrillsCached)}
                       {item.weightCompare &&
                         item.noFrillsCached.nativeUnitPriceLabel && (
                           <span className="unitprice">
@@ -1527,18 +1540,7 @@ export function StaplesCompare() {
                       <span className="sku">
                         WC {tidyOfferName(item.wholesaleClubCached.name)}
                       </span>
-                      <span className="price">
-                        WC ${item.wholesaleClubCached.price.toFixed(2)}
-                        {item.wholesaleClubCached.onSale &&
-                        item.wholesaleClubCached.wasPrice ? (
-                          <s className="was">
-                            ${item.wholesaleClubCached.wasPrice.toFixed(2)}
-                          </s>
-                        ) : null}
-                        {item.wholesaleClubCached.packageSize
-                          ? ` · ${item.wholesaleClubCached.packageSize}`
-                          : ""}
-                      </span>
+                      {storePriceLine("WC", item.wholesaleClubCached)}
                       {item.weightCompare &&
                         item.wholesaleClubCached.nativeUnitPriceLabel && (
                           <span className="unitprice">
@@ -1555,17 +1557,7 @@ export function StaplesCompare() {
                       <span className="sku">
                         MVR {tidyOfferName(item.mvrCached.name)}
                       </span>
-                      <span className="price">
-                        MVR ${item.mvrCached.price.toFixed(2)}
-                        {item.mvrCached.onSale && item.mvrCached.wasPrice ? (
-                          <s className="was">
-                            ${item.mvrCached.wasPrice.toFixed(2)}
-                          </s>
-                        ) : null}
-                        {item.mvrCached.packageSize
-                          ? ` · ${item.mvrCached.packageSize}`
-                          : ""}
-                      </span>
+                      {storePriceLine("MVR", item.mvrCached)}
                       {item.weightCompare &&
                         item.mvrCached.nativeUnitPriceLabel && (
                           <span className="unitprice">

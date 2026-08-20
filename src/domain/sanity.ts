@@ -78,6 +78,9 @@ export function offerFailsPlausibleShelfPrice(
 
 /** Reject only mini packs. Same branded 1.36L vs expected 2.63L is still cafe-size. */
 export const MIN_COMPARABLE_PACK_RATIO = 0.35;
+/** 2×500g egg whites; not 10×100ml minis. */
+export const MAX_COMPOSE_PACKS = 6;
+export const MAX_IDENTITY_COMPOSE_PACKS = 4;
 
 export function isComparablePackKg(
   inferredKg: number | undefined,
@@ -86,6 +89,25 @@ export function isComparablePackKg(
   if (expectedKg == null || !(expectedKg > 0)) return true;
   if (inferredKg == null || !(inferredKg > 0)) return true;
   return inferredKg >= expectedKg * MIN_COMPARABLE_PACK_RATIO;
+}
+
+export function composePackCount(packKg: number, needKg: number): number {
+  if (!(packKg > 0) || !(needKg > 0)) return 0;
+  return Math.max(1, Math.ceil(needKg / packKg - 1e-9));
+}
+
+/** Smaller same-product packs may cover the cafe size (2×500g ≈ 1kg). */
+export function canComposeToNeed(
+  packKg: number | undefined,
+  needKg: number | undefined,
+  maxPacks = MAX_COMPOSE_PACKS,
+): boolean {
+  if (needKg == null || !(needKg > 0)) return true;
+  if (packKg == null || !(packKg > 0)) return true;
+  if (isComparablePackKg(packKg, needKg)) return true;
+  if (packKg + 1e-9 >= needKg) return false;
+  const n = composePackCount(packKg, needKg);
+  return n >= 2 && n <= maxPacks;
 }
 
 /** Infer pack volume/mass from unit price string math: price / (unitPer100ml) */
@@ -128,8 +150,30 @@ export function sanityCheckOffer(input: SanityInput): SanityResult {
     return { ok: false, status: "rejected", reason: "non-positive price", ageHours: age };
   }
 
+  const mass =
+    parseMassFromText(input.packageSize ?? "") ??
+    parseMassFromText(input.name);
+  let inferred = mass?.kg;
+  if (inferred == null && input.unitPrice != null) {
+    inferred = inferPackKgFromUnitPrice(input.price, input.unitPrice);
+  }
+
+  const composing =
+    Boolean(input.allowCompose) &&
+    input.expectedPackKg != null &&
+    inferred != null &&
+    inferred > 0 &&
+    inferred + 1e-9 < input.expectedPackKg;
+  const composePacks = composing
+    ? composePackCount(inferred!, input.expectedPackKg!)
+    : 1;
   const comparablePrice = comparableShelfPrice(input);
-  if (input.minPlausiblePrice != null && comparablePrice < input.minPlausiblePrice) {
+  const minCheckPrice =
+    composing && composePacks >= 2
+      ? comparablePrice * composePacks
+      : comparablePrice;
+
+  if (input.minPlausiblePrice != null && minCheckPrice < input.minPlausiblePrice) {
     return {
       ok: false,
       status: "wrong_pack",
@@ -146,25 +190,13 @@ export function sanityCheckOffer(input: SanityInput): SanityResult {
     };
   }
 
-  const mass =
-    parseMassFromText(input.packageSize ?? "") ??
-    parseMassFromText(input.name);
-  let inferred = mass?.kg;
-  if (inferred == null && input.unitPrice != null) {
-    inferred = inferPackKgFromUnitPrice(input.price, input.unitPrice);
-  }
-
   if (input.expectedPackKg != null && inferred != null) {
-    // Smaller packs: allow when we can compose (eggs 500ml → 2× for 1kg)
-    if (input.allowCompose && inferred > 0 && inferred < input.expectedPackKg) {
-      const packs = Math.ceil(input.expectedPackKg / inferred - 1e-9);
-      if (packs >= 1 && packs <= 12) {
-        // ok — summarizeOffer will price as composed_packs
-      } else {
+    if (composing) {
+      if (composePacks < 1 || composePacks > MAX_COMPOSE_PACKS) {
         return {
           ok: false,
           status: "wrong_size",
-          reason: `pack ~${inferred.toFixed(2)} kg too small to compose (need ${packs}×)`,
+          reason: `pack ~${inferred.toFixed(2)} kg too small to compose (need ${composePacks}×)`,
           inferredPackKg: inferred,
           ageHours: age,
         };

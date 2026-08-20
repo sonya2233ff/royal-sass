@@ -580,6 +580,116 @@ assert(
   "exact does not accept other brand analog",
 );
 
+const whitesNeed = toRestaurantProduct({
+  id: "simply_egg_whites",
+  label: "Naturegg Simply Egg Whites 1kg",
+  matchMode: "exact",
+  preferredProductId: "6000196635381",
+  expectedPackKg: 1,
+  defaultAmount: 1,
+  unit: "kg",
+  purchaseStrategy: "exact_need",
+  tolerancePercent: 15,
+  mustIncludeAny: ["simply egg white", "simply egg whites"],
+  mustNotInclude: ["free run"],
+});
+assert(
+  offerMatchesIdentity({
+    product: whitesNeed,
+    offer: offer("Burnbrae Farms Naturegg Simply Egg Whites", {
+      productId: "nf-500",
+      packageSize: "500 g",
+      parsedMassKg: 0.5,
+    }),
+  }).ok,
+  "500g Simply is the same product as the 1kg card",
+);
+assert(
+  !offerMatchesIdentity({
+    product: whitesNeed,
+    offer: offer("Burnbrae Farms Naturegg Free Run Egg Whites", {
+      productId: "nf-free-run",
+      packageSize: "500 g",
+      parsedMassKg: 0.5,
+    }),
+  }).ok,
+  "Free Run 500g is not Simply Egg Whites",
+);
+assert(
+  !offerMatchesIdentity({
+    product: whitesNeed,
+    offer: offer("Naturegg Simply Egg Whites mini", {
+      productId: "mini",
+      packageSize: "200 g",
+      parsedMassKg: 0.2,
+    }),
+  }).ok,
+  "200g mini does not compose into 1kg",
+);
+const buy500 = evaluatePurchase({
+  product: whitesNeed,
+  requested: 1,
+  offer: {
+    price: 5.5,
+    name: "Burnbrae Farms Naturegg Simply Egg Whites",
+    packageSize: "500 g",
+    parsedMassKg: 0.5,
+  },
+});
+assert(buy500.valid, "2×500g covers 1kg");
+assert(buy500.packs === 2, `2×500g packs ${buy500.packs}`);
+assert(buy500.checkoutCost === 11, `2×$5.50 = $11 got ${buy500.checkoutCost}`);
+const buy1kg = evaluatePurchase({
+  product: whitesNeed,
+  requested: 1,
+  offer: {
+    price: 9.47,
+    name: "Burnbrae Farms Naturegg Simply Egg Whites 1KG",
+    packageSize: "1 kg",
+    parsedMassKg: 1,
+  },
+});
+assert(buy1kg.valid && buy1kg.packs === 1, "1kg is one pack");
+assert(buy1kg.checkoutCost === 9.47, `1kg checkout ${buy1kg.checkoutCost}`);
+const coverWhites = pickCheapestCoveringOffer(whitesNeed, 1, [
+  {
+    price: 5.5,
+    name: "Simply Egg Whites 500g",
+    packageSize: "500 g",
+    parsedMassKg: 0.5,
+  },
+  {
+    price: 9.47,
+    name: "Simply Egg Whites 1KG",
+    packageSize: "1 kg",
+    parsedMassKg: 1,
+  },
+]);
+assert(
+  coverWhites?.name.includes("1KG"),
+  "1kg pack beats 2×500g when both cover",
+);
+const onlySmall = pickCheapestCoveringOffer(whitesNeed, 1, [
+  {
+    price: 5.5,
+    name: "Simply Egg Whites 500g",
+    packageSize: "500 g",
+    parsedMassKg: 0.5,
+  },
+]);
+assert(onlySmall?.name.includes("500g"), "NF may cover 1kg with 2 small packs");
+const tooManyMinis = evaluatePurchase({
+  product: whitesNeed,
+  requested: 1,
+  offer: {
+    price: 1.2,
+    name: "Simply Egg Whites 100g",
+    packageSize: "100 g",
+    parsedMassKg: 0.1,
+  },
+});
+assert(!tooManyMinis.valid, "10×100g is not a cafe compose");
+
 // --- cart ---
 let cart: Cart = {};
 const tomatoP = toRestaurantProduct({
@@ -817,6 +927,16 @@ const milkBuy = evaluatePurchase({
 assert(
   milkBuy.valid && milkBuy.checkoutCost === 6.47,
   `2L milk checkout ${milkBuy.valid} ${milkBuy.checkoutCost}`,
+);
+const milk1l = evaluatePurchase({
+  product: milk2l,
+  requested: milk2l.defaultAmount,
+  offer: { price: 3.49, name: "Mehadrin 2% 1L milk", packageSize: "1 L" },
+});
+assert(milk1l.valid && milk1l.packs === 2, `2×1L covers 2L, packs ${milk1l.packs}`);
+assert(
+  milk1l.checkoutCost === 6.98,
+  `2×$3.49 = $6.98 got ${milk1l.checkoutCost}`,
 );
 
 const olives2l = toRestaurantProduct({

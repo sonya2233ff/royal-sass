@@ -881,7 +881,7 @@ export function evaluateOfferStatus(
     packageSize: offer.packageSize,
     unitPrice: offer.unitPrice,
     expectedPackKg: expectedPackFor(item),
-    allowCompose: item.targetMassKg != null,
+    allowCompose: expectedPackFor(item) != null,
     minPlausiblePrice: item.minPlausiblePrice,
     maxPlausiblePrice: item.maxPlausiblePrice,
     checkedAt: offer.checkedAt,
@@ -1027,7 +1027,7 @@ export function pickStapleSearchWinner(
       packageSize: best.packageSize,
       unitPrice: best.unitPrice,
       expectedPackKg: expectedPackFor(item),
-      allowCompose: item.targetMassKg != null,
+      allowCompose: expectedPackFor(item) != null,
       minPlausiblePrice: item.minPlausiblePrice,
       maxPlausiblePrice: item.maxPlausiblePrice,
       checkedAt: best.checkedAt,
@@ -1268,7 +1268,7 @@ export function summarizeOffer(
     packageSize: offer.packageSize,
     unitPrice: offer.unitPrice,
     expectedPackKg: expectedPackFor(item),
-    allowCompose: item.targetMassKg != null,
+    allowCompose: expectedPackFor(item) != null,
     minPlausiblePrice: item.minPlausiblePrice,
     maxPlausiblePrice: item.maxPlausiblePrice,
     checkedAt: offer.checkedAt,
@@ -1304,12 +1304,13 @@ export function summarizeOffer(
         : formatMass(mass.kg)
       : undefined);
 
-  if (item.targetMassKg != null) {
-    const need = item.targetMassKg * qty;
+  if (item.targetMassKg != null || expectedPackFor(item) != null) {
+    const composeNeedKg = item.targetMassKg ?? expectedPackFor(item)!;
+    const need = composeNeedKg * qty;
     const asPacks = priceByPackCount(asProduct, need);
     if (asPacks) {
       const sameSize =
-        Math.abs(asPacks.packKg - item.targetMassKg) / item.targetMassKg <= 0.2;
+        Math.abs(asPacks.packKg - composeNeedKg) / composeNeedKg <= 0.2;
       const unit: CompareUnit = sameSize ? "per_pack" : "composed_packs";
       return {
         name: offer.name,
@@ -1744,7 +1745,7 @@ export async function refreshWalmartSelected(
         packageSize: best.packageSize,
         unitPrice: best.unitPrice,
         expectedPackKg: expectedPackFor(item),
-        allowCompose: item.targetMassKg != null,
+        allowCompose: expectedPackFor(item) != null,
         minPlausiblePrice: item.minPlausiblePrice,
         maxPlausiblePrice: item.maxPlausiblePrice,
         checkedAt: best.checkedAt,

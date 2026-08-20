@@ -34,6 +34,8 @@ import {
 import type { ProductOffer } from "@/connectors/types";
 import { offerIsOnSale } from "@/connectors/types";
 import { resolveCatalogOffer, catalogRowForStaple } from "@/domain/compare-resolve";
+import { evaluatePurchase } from "@/domain/checkout";
+import type { RestaurantProduct } from "@/domain/restaurant-product";
 import {
   loadRetailerMappings,
   lookupConfirmed,
@@ -73,6 +75,32 @@ function eggChoicesFromCatalogs(
     }
   }
   return mergeEggCountChoices(discovered);
+}
+
+function composeCheckout(
+  product: RestaurantProduct,
+  offer: {
+    name: string;
+    price: number;
+    packageSize?: string;
+    parsedMassKg?: number | null;
+  } | null | undefined,
+): { packs: number | null; lineTotal: number | null } {
+  if (!offer || !(offer.price > 0)) return { packs: null, lineTotal: null };
+  const buy = evaluatePurchase({
+    product,
+    requested: product.defaultAmount,
+    offer: {
+      price: offer.price,
+      name: offer.name,
+      packageSize: offer.packageSize,
+      parsedMassKg: offer.parsedMassKg ?? undefined,
+    },
+  });
+  if (!buy.valid || buy.checkoutCost == null) {
+    return { packs: null, lineTotal: null };
+  }
+  return { packs: buy.packs, lineTotal: buy.checkoutCost };
 }
 
 export const runtime = "nodejs";
@@ -155,12 +183,18 @@ export async function GET() {
       const wcLink = mappings.products[i.id]?.retailers.wholesaleclub;
       const mvrLink = mappings.products[i.id]?.retailers.mvr;
       const packPickGrams = explicitNeededGrams(i);
+      const restaurantProduct = toRestaurantProduct({
+        ...i,
+        soldByWeight: isSoldByWeightItem(i),
+      });
       const wmResolved = resolveCatalogOffer({
         item: i,
         row: cat,
         link: wmLink,
         matchMode: mode,
         neededGrams: packPickGrams,
+        product: restaurantProduct,
+        requested: restaurantProduct.defaultAmount,
       });
       const offer = wmResolved.offer;
       const evalStatus = evaluateOfferStatus(i, offer ?? null, {
@@ -231,6 +265,8 @@ export async function GET() {
         link: nfLink,
         matchMode: mode,
         neededGrams: packPickGrams,
+        product: restaurantProduct,
+        requested: restaurantProduct.defaultAmount,
       });
       const nfOffer = nfResolved.offer ?? null;
       const nfEval = evaluateOfferStatus(i, nfOffer, {
@@ -272,6 +308,8 @@ export async function GET() {
         link: wcLink,
         matchMode: mode,
         neededGrams: packPickGrams,
+        product: restaurantProduct,
+        requested: restaurantProduct.defaultAmount,
       });
       const wcOffer = wcResolved.offer ?? null;
       const wcEval = evaluateOfferStatus(i, wcOffer, {
@@ -308,6 +346,8 @@ export async function GET() {
         link: mvrLink,
         matchMode: mode,
         neededGrams: packPickGrams,
+        product: restaurantProduct,
+        requested: restaurantProduct.defaultAmount,
       });
       const mvrOffer = mvrResolved.offer ?? null;
       const mvrEval = evaluateOfferStatus(i, mvrOffer, {
@@ -336,6 +376,19 @@ export async function GET() {
       const eggMvr =
         mvrUsable && mvrOffer && eggItem ? eggUnitFields(mvrOffer) : null;
       const mvrOnSale = mvrUsable ? offerIsOnSale(mvrOffer) : false;
+      const wmCompose = composeCheckout(restaurantProduct, usable ? offer : null);
+      const nfCompose = composeCheckout(
+        restaurantProduct,
+        nfUsable ? nfOffer : null,
+      );
+      const wcCompose = composeCheckout(
+        restaurantProduct,
+        wcUsable ? wcOffer : null,
+      );
+      const mvrCompose = composeCheckout(
+        restaurantProduct,
+        mvrUsable ? mvrOffer : null,
+      );
       const eggPackUi = eggItem
         ? eggChoicesFromCatalogs(i, [cat, nfCat, wcCat, mvrCat])
         : null;
@@ -360,10 +413,7 @@ export async function GET() {
         confirmedProductId: conf?.productId ?? null,
         preferredProductId: lockedSku,
         matchMode: resolveMatchMode(i),
-        restaurantProduct: toRestaurantProduct({
-          ...i,
-          soldByWeight: isSoldByWeightItem(i),
-        }),
+        restaurantProduct,
         searchHay: catalogSearchHay(i),
         queries: i.queries,
         mustIncludeAny: i.mustIncludeAny,
@@ -399,6 +449,8 @@ export async function GET() {
                   ? formatMoneyPerWeight(units.nativePrice, units.nativeUnit)
                   : null,
               image: offer!.image ?? null,
+              packs: wmCompose.packs,
+              lineTotal: wmCompose.lineTotal,
             }
           : null,
         noFrillsCached: nfUsable
@@ -427,6 +479,8 @@ export async function GET() {
                   ? formatMoneyPerWeight(nfUnits.nativePrice, nfUnits.nativeUnit)
                   : null,
               image: nfOffer!.image ?? null,
+              packs: nfCompose.packs,
+              lineTotal: nfCompose.lineTotal,
             }
           : null,
         wholesaleClubCached: wcUsable
@@ -455,6 +509,8 @@ export async function GET() {
                   ? formatMoneyPerWeight(wcUnits.nativePrice, wcUnits.nativeUnit)
                   : null,
               image: wcOffer!.image ?? null,
+              packs: wcCompose.packs,
+              lineTotal: wcCompose.lineTotal,
             }
           : null,
         mvrCached: mvrUsable
@@ -483,6 +539,8 @@ export async function GET() {
                   ? formatMoneyPerWeight(mvrUnits.nativePrice, mvrUnits.nativeUnit)
                   : null,
               image: mvrOffer!.image ?? null,
+              packs: mvrCompose.packs,
+              lineTotal: mvrCompose.lineTotal,
             }
           : null,
         sobeysCached: (() => {
@@ -493,6 +551,8 @@ export async function GET() {
             link: sobeysLink,
             matchMode: mode,
             neededGrams: packPickGrams,
+            product: restaurantProduct,
+            requested: restaurantProduct.defaultAmount,
           });
           const sobeysOffer = sobeysResolved.offer ?? null;
           const sobeysEval = evaluateOfferStatus(i, sobeysOffer, {

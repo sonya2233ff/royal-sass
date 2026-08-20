@@ -44,6 +44,7 @@ import { searchMvrPool } from "@/lib/mvr-observe";
 import { recordCompareResult } from "@/lib/compare-stats";
 import { parseOverrideMap, effectiveProduct } from "@/lib/product-config";
 import { offerFailsStapleOfferFilters } from "@/domain/catalog-normalize";
+import { offerMatchesIdentity } from "@/domain/product-identity";
 import { stapleWithClientOverride, type Cart } from "@/domain/restaurant-product";
 import {
   completeBasketWinner,
@@ -54,7 +55,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-function coveringEggOffer(
+function coveringPackedOffer(
   item: {
     id: string;
     category?: string;
@@ -66,14 +67,60 @@ function coveringEggOffer(
   requested: number,
   row: Parameters<typeof catalogCandidates>[0],
   fallback: CatalogOffer | null,
+  matchMode: "preferred" | "cheapest",
 ): CatalogOffer | null {
-  if (!isEggPackItem(item) || !row) return fallback;
+  if (!row) return fallback;
+  if (matchMode === "cheapest" && !isEggPackItem(item)) return fallback;
   const pool = catalogCandidates(row)
     .filter(offerIsOnShelf)
     .filter((o) => offerFailsStapleOfferFilters(item, o) == null)
     .filter((o) => eggCartonCountOk(item, o.name, o.packageSize));
-  const picked = pickCheapestCoveringOffer(product, requested, pool);
+  const identPool = isEggPackItem(item)
+    ? pool
+    : pool.filter((o) => offerMatchesIdentity({ product, offer: o }).ok);
+  const picked = pickCheapestCoveringOffer(
+    product,
+    requested,
+    identPool.length ? identPool : pool,
+  );
   return picked ? toCatalogOffer(picked) : fallback;
+}
+
+function coveringFromLivePool(
+  item: {
+    id: string;
+    category?: string;
+    mustIncludeAny?: string[];
+    mustIncludeAll?: string[];
+    mustNotInclude?: string[];
+  },
+  product: Parameters<typeof pickCheapestCoveringOffer>[0],
+  requested: number,
+  pool: Array<{
+    productId: string;
+    name: string;
+    price: number;
+    packageSize?: string;
+    parsedMassKg?: number;
+    brand?: string;
+    image?: string | null;
+    sourceUrl?: string;
+    upc?: string;
+  }>,
+): { offer: CatalogOffer | null; alternates: CatalogOffer[] } {
+  const passing = pool
+    .filter((o) => o.price > 0)
+    .filter((o) => offerFailsStapleOfferFilters(item, o) == null)
+    .filter((o) => eggCartonCountOk(item, o.name, o.packageSize))
+    .filter((o) => offerMatchesIdentity({ product, offer: o }).ok)
+    .map((o) => toCatalogOffer({ ...o, image: o.image ?? undefined }))
+    .filter((o): o is CatalogOffer => o != null);
+  const picked = pickCheapestCoveringOffer(product, requested, passing);
+  if (!picked) return { offer: null, alternates: passing };
+  return {
+    offer: toCatalogOffer(picked),
+    alternates: passing.filter((o) => o.productId !== picked.productId),
+  };
 }
 
 function toCatalogOffer(
@@ -225,8 +272,10 @@ export async function POST(request: Request) {
       row: wmRow,
       link: wmLink,
       matchMode: mode,
-      neededGrams: packPickGrams,
-    });
+        neededGrams: packPickGrams,
+        product,
+        requested: requestedAmount,
+      });
 
     const wmLog: MatchLogEntry = {
       at: new Date().toISOString(),
@@ -278,8 +327,10 @@ export async function POST(request: Request) {
           row: wmRow,
           link: wmLink,
           matchMode: mode,
-          neededGrams: packPickGrams,
-        });
+        neededGrams: packPickGrams,
+        product,
+        requested: requestedAmount,
+      });
       }
     }
 
@@ -317,8 +368,10 @@ export async function POST(request: Request) {
           row: wmRow,
           link: wmLink,
           matchMode: mode,
-          neededGrams: packPickGrams,
-        });
+        neededGrams: packPickGrams,
+        product,
+        requested: requestedAmount,
+      });
       }
     }
 
@@ -366,8 +419,10 @@ export async function POST(request: Request) {
       row: nfRow,
       link: nfLink,
       matchMode: mode,
-      neededGrams: packPickGrams,
-    });
+        neededGrams: packPickGrams,
+        product,
+        requested: requestedAmount,
+      });
     const nfCacheEval = evaluateOfferStatus(item, nfResolved.offer, {
       catalogStatus:
         nfResolved.reason === "rejected_filter"
@@ -407,7 +462,12 @@ export async function POST(request: Request) {
         name: nfResolved.offer.name,
         price: nfResolved.offer.price,
       };
-    } else if (body.refreshNoFrills || !nfRow?.offer || needNfExpand) {
+    } else if (
+      body.refreshNoFrills ||
+      !nfRow?.offer ||
+      !nfResolved.offer ||
+      needNfExpand
+    ) {
       const pool = await searchNoFrillsPool(item, nfLog);
       nfLiveHits += 1;
       const best = pickStapleSearchWinner(item, pool, nfLog);
@@ -420,29 +480,37 @@ export async function POST(request: Request) {
             ? best?.productId
             : (nfRow?.offer?.productId ?? best?.productId),
         });
-        const offer = merged.offer ?? (best ? {
-          productId: best.productId,
-          name: best.name,
-          price: best.price,
-          packageSize: best.packageSize,
-          image: best.image,
-        } : null);
+        const covering =
+          mode === "preferred"
+            ? coveringFromLivePool(item, product, requestedAmount, pool)
+            : { offer: null as CatalogOffer | null, alternates: [] as CatalogOffer[] };
+        const offer =
+          covering.offer ??
+          merged.offer ??
+          (best &&
+          (mode !== "preferred" ||
+            offerMatchesIdentity({ product, offer: best }).ok)
+            ? catalogOfferFromLive(best)
+            : null);
+        const alternates = covering.offer
+          ? covering.alternates
+          : merged.alternates;
         await persistPackSizeRow({
           retailer: "no_frills",
           id,
           label: item.label,
           offer,
-          alternates: merged.alternates,
+          alternates,
           notes:
-            merged.alternates.length > 0
-              ? packSizeNotes("no_frills", 1 + merged.alternates.length)
+            alternates.length > 0
+              ? packSizeNotes("no_frills", 1 + alternates.length)
               : `Cached from live NF search (TTL ${CACHE_STALE_HOURS}h)`,
         });
         nfRow = {
           id,
           status: offer ? "ok" : "no_match",
           offer,
-          alternates: merged.alternates,
+          alternates,
         };
         nfById.set(id, nfRow);
         nfResolved = resolveCatalogOffer({
@@ -450,8 +518,10 @@ export async function POST(request: Request) {
           row: nfRow,
           link: nfLink,
           matchMode: mode,
-          neededGrams: packPickGrams,
-        });
+        neededGrams: packPickGrams,
+        product,
+        requested: requestedAmount,
+      });
         nfCatalogOffer = toCatalogOffer(nfResolved.offer);
         nfOfferUpc = best?.upc;
       } else if (nfRow?.offer && !body.refreshNoFrills) {
@@ -523,8 +593,10 @@ export async function POST(request: Request) {
       row: wcRow,
       link: wcLink,
       matchMode: mode,
-      neededGrams: packPickGrams,
-    });
+        neededGrams: packPickGrams,
+        product,
+        requested: requestedAmount,
+      });
     const wcCacheEval = evaluateOfferStatus(item, wcResolved.offer, {
       catalogStatus:
         wcResolved.reason === "rejected_filter"
@@ -562,7 +634,7 @@ export async function POST(request: Request) {
         name: wcResolved.offer.name,
         price: wcResolved.offer.price,
       };
-    } else if (!wcRow?.offer || needWcExpand) {
+    } else if (!wcRow?.offer || !wcResolved.offer || needWcExpand) {
       const pool = await searchWholesaleClubPool(item, wcLog);
       wcLiveHits += 1;
       const best = pickStapleSearchWinner(item, pool, wcLog);
@@ -573,31 +645,37 @@ export async function POST(request: Request) {
           live: pool,
           keepProductId: wcRow?.offer?.productId ?? best?.productId,
         });
-        const offer = merged.offer ?? (best
-          ? {
-              productId: best.productId,
-              name: best.name,
-              price: best.price,
-              packageSize: best.packageSize,
-              image: best.image,
-            }
-          : null);
+        const covering =
+          mode === "preferred"
+            ? coveringFromLivePool(item, product, requestedAmount, pool)
+            : { offer: null as CatalogOffer | null, alternates: [] as CatalogOffer[] };
+        const offer =
+          covering.offer ??
+          merged.offer ??
+          (best &&
+          (mode !== "preferred" ||
+            offerMatchesIdentity({ product, offer: best }).ok)
+            ? catalogOfferFromLive(best)
+            : null);
+        const alternates = covering.offer
+          ? covering.alternates
+          : merged.alternates;
         await persistPackSizeRow({
           retailer: "wholesale_club",
           id,
           label: item.label,
           offer,
-          alternates: merged.alternates,
+          alternates,
           notes:
-            merged.alternates.length > 0
-              ? packSizeNotes("wholesale_club", 1 + merged.alternates.length)
+            alternates.length > 0
+              ? packSizeNotes("wholesale_club", 1 + alternates.length)
               : `Cached from live WC search (TTL ${CACHE_STALE_HOURS}h)`,
         });
         wcRow = {
           id,
           status: offer ? "ok" : "no_match",
           offer,
-          alternates: merged.alternates,
+          alternates,
         };
         wcById.set(id, wcRow);
         wcResolved = resolveCatalogOffer({
@@ -605,8 +683,10 @@ export async function POST(request: Request) {
           row: wcRow,
           link: wcLink,
           matchMode: mode,
-          neededGrams: packPickGrams,
-        });
+        neededGrams: packPickGrams,
+        product,
+        requested: requestedAmount,
+      });
         wcCatalogOffer = toCatalogOffer(wcResolved.offer);
       } else if (wcRow?.offer) {
         wcCatalogOffer = toCatalogOffer(wcResolved.offer);
@@ -665,8 +745,10 @@ export async function POST(request: Request) {
       row: mvrRow,
       link: mvrLink,
       matchMode: mode,
-      neededGrams: packPickGrams,
-    });
+        neededGrams: packPickGrams,
+        product,
+        requested: requestedAmount,
+      });
     const mvrCacheEval = evaluateOfferStatus(item, mvrResolved.offer, {
       catalogStatus:
         mvrResolved.reason === "rejected_filter"
@@ -704,7 +786,7 @@ export async function POST(request: Request) {
         name: mvrResolved.offer.name,
         price: mvrResolved.offer.price,
       };
-    } else if (!mvrRow?.offer || needMvrExpand) {
+    } else if (!mvrRow?.offer || !mvrResolved.offer || needMvrExpand) {
       const pool = await searchMvrPool(item, mvrLog);
       mvrLiveHits += 1;
       const best = pickStapleSearchWinner(item, pool, mvrLog);
@@ -715,31 +797,37 @@ export async function POST(request: Request) {
           live: pool,
           keepProductId: mvrRow?.offer?.productId ?? best?.productId,
         });
-        const offer = merged.offer ?? (best
-          ? {
-              productId: best.productId,
-              name: best.name,
-              price: best.price,
-              packageSize: best.packageSize,
-              image: best.image,
-            }
-          : null);
+        const covering =
+          mode === "preferred"
+            ? coveringFromLivePool(item, product, requestedAmount, pool)
+            : { offer: null as CatalogOffer | null, alternates: [] as CatalogOffer[] };
+        const offer =
+          covering.offer ??
+          merged.offer ??
+          (best &&
+          (mode !== "preferred" ||
+            offerMatchesIdentity({ product, offer: best }).ok)
+            ? catalogOfferFromLive(best)
+            : null);
+        const alternates = covering.offer
+          ? covering.alternates
+          : merged.alternates;
         await persistPackSizeRow({
           retailer: "mvr",
           id,
           label: item.label,
           offer,
-          alternates: merged.alternates,
+          alternates,
           notes:
-            merged.alternates.length > 0
-              ? packSizeNotes("mvr", 1 + merged.alternates.length)
+            alternates.length > 0
+              ? packSizeNotes("mvr", 1 + alternates.length)
               : `Cached from live MVR search (TTL ${CACHE_STALE_HOURS}h)`,
         });
         mvrRow = {
           id,
           status: offer ? "ok" : "no_match",
           offer,
-          alternates: merged.alternates,
+          alternates,
         };
         mvrById.set(id, mvrRow);
         mvrResolved = resolveCatalogOffer({
@@ -747,8 +835,10 @@ export async function POST(request: Request) {
           row: mvrRow,
           link: mvrLink,
           matchMode: mode,
-          neededGrams: packPickGrams,
-        });
+        neededGrams: packPickGrams,
+        product,
+        requested: requestedAmount,
+      });
         mvrCatalogOffer = toCatalogOffer(mvrResolved.offer);
       } else if (mvrRow?.offer) {
         mvrCatalogOffer = toCatalogOffer(mvrResolved.offer);
@@ -801,33 +891,37 @@ export async function POST(request: Request) {
         (mvrEval.status === "ok" || mvrEval.status === "stale"),
     );
 
-    const wmCompare = coveringEggOffer(
+    const wmCompare = coveringPackedOffer(
       item,
       product,
       requestedAmount,
       wmRow,
       wmUsable ? wmOffer : null,
+      mode,
     );
-    const nfCompare = coveringEggOffer(
+    const nfCompare = coveringPackedOffer(
       item,
       product,
       requestedAmount,
       nfRow,
       nfUsable ? nfCatalogOffer : null,
+      mode,
     );
-    const wcCompare = coveringEggOffer(
+    const wcCompare = coveringPackedOffer(
       item,
       product,
       requestedAmount,
       wcRow,
       wcUsable ? wcCatalogOffer : null,
+      mode,
     );
-    const mvrCompare = coveringEggOffer(
+    const mvrCompare = coveringPackedOffer(
       item,
       product,
       requestedAmount,
       mvrRow,
       mvrUsable ? mvrCatalogOffer : null,
+      mode,
     );
     const wmEggEval = wmCompare
       ? evaluateOfferStatus(item, wmCompare, {

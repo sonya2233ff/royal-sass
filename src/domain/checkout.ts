@@ -16,6 +16,7 @@ import {
   type BaseUnit,
 } from "@/domain/purchase-units";
 import type { RestaurantProduct } from "@/domain/restaurant-product";
+import { MAX_COMPOSE_PACKS } from "@/domain/sanity";
 
 export interface StoreOfferInput {
   price: number;
@@ -202,13 +203,18 @@ function iteratePackCounts(
   packAmount: number,
   minPurchased: number,
   maxPurchased: number,
+  maxPacks = 40,
 ): number[] {
   if (!(packAmount > 0)) return [];
   const start = Math.max(1, Math.ceil(minPurchased / packAmount - 1e-9));
   const end = Math.floor(maxPurchased / packAmount + 1e-9);
   const out: number[] = [];
-  for (let n = start; n <= end && n <= 40; n++) out.push(n);
+  for (let n = start; n <= end && n <= maxPacks; n++) out.push(n);
   return out;
+}
+
+function maxComposePacks(product: RestaurantProduct): number {
+  return dimensionOf(product.unit) === "count" ? 40 : MAX_COMPOSE_PACKS;
 }
 
 export function evaluatePurchase(input: {
@@ -331,7 +337,8 @@ function finalizeStrategy(
         checkoutCost: null,
       };
     }
-    const counts = iteratePackCounts(packAmount, requested, max);
+    const maxPacks = maxComposePacks(product);
+    const counts = iteratePackCounts(packAmount, requested, max, maxPacks);
     let best: PurchaseOption | null = null;
     for (const n of counts) {
       const purchased = n * packAmount;
@@ -389,17 +396,23 @@ function finalizeStrategy(
     }
   }
 
+  const maxPacks = maxComposePacks(product);
   const ok = inExactNeedRange(
     ceilPlan.purchasedAmount,
     requested,
     product.tolerancePercent,
   );
-  if (ok) return ceilPlan;
+  if (ok && ceilPlan.packs <= maxPacks) return ceilPlan;
   const { minimumAmount, maximumAmount } = exactNeedBounds(
     requested,
     product.tolerancePercent,
   );
-  const counts = iteratePackCounts(packAmount, minimumAmount, maximumAmount);
+  const counts = iteratePackCounts(
+    packAmount,
+    minimumAmount,
+    maximumAmount,
+    maxPacks,
+  );
   if (counts.length) {
     const n = counts[0]!;
     const purchased = n * packAmount;

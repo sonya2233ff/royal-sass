@@ -131,6 +131,7 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 - `large_eggs_dozen` — **the** shell-egg card. Accepts Large cartons of **12 / 18 / 30** (`eggCartonCountOk`). `parsePackCount` understands `1DOZ` / dozen. MVR cases OK when they are N× those counts.
 - `grayridge_eggs` — **not shown**. 18-count catalog source only (`preferredProductId` `6000191268613` when set on that hidden row).
 - Egg fair unit is **$/egg**; basket line is **requested eggs × carton math**, not “1 pack”.
+- Category A branded packs (egg whites, milk, juice): a **smaller same-product pack** may cover the cafe size — e.g. 2×500 g Simply Egg Whites ≈ 1 kg. Checkout is `N × shelf`. Free Run / other brands stay rejected. Mini bottles (200 ml vs 1 kg) stay rejected. Do not auto-link 500 g and 1 kg as one SKU.
 - `ice_cubes` — bag of ice (Arctic Glacier ~2.3 kg class). Not gum, not storage bins.
 - Cart is one map `id → { requestedAmount, unit, isCustom }`. Selected = key exists. Search filter never mutates cart. Clear cart removes hidden-by-search items too.
 - Adding to cart uses `defaultAmount`. Custom amount is cart-only unless the operator saves it as the new default (`localStorage` key `royal-sass-product-overrides-v1`).
