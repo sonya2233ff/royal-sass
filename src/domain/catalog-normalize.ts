@@ -355,8 +355,11 @@ export function grapeTomatoFormFail(
   if (/\b(pickled|pickle|pickeled|marinated)\b/.test(t)) {
     return "grape tomatoes ≠ pickled";
   }
-  if (/\b(canned|tin|tinned|jarred)\b/.test(t)) {
+  if (/\b(canned|tin|tinned|jarred|mutti|passata|pelati)\b/.test(t)) {
     return "grape tomatoes ≠ canned";
+  }
+  if (/\b(sundried|sun-dried|semi-dry|semi dry)\b/.test(t)) {
+    return "grape tomatoes ≠ sundried";
   }
   if (!/\btomato/.test(t)) return "grape tomatoes ≠ table grapes";
   return null;

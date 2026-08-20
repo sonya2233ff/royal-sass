@@ -265,6 +265,23 @@ async function main() {
     }),
     "MVR Aurora 398ml is canned, not grape tomatoes",
   );
+  assert(
+    offerFailsStapleOfferFilters(grape, {
+      name: "Mutti Cherry Tomatoes",
+      packageSize: "400 g, $0.82/100g",
+      productId: "20934796_EA",
+    }) != null,
+    "Mutti canned cherry tomatoes are not a fresh grape pack",
+  );
+  assert(
+    !isActualCategoryBOffer(grape, {
+      productId: "20934796_EA",
+      name: "Mutti Cherry Tomatoes",
+      packageSize: "400 g, $0.82/100g",
+      price: 3.29,
+    }),
+    "Mutti 400g tin must not win grape tomatoes",
+  );
   const nfGrapePack = {
     productId: "20840038001_EA",
     name: "Farmer's Market Grape Tomato",
