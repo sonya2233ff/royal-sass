@@ -205,13 +205,13 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 1. Offers land in catalog JSON (refresh APIs / `npm run cache:*` / `cache:prices`).
 2. `resolveCatalogOffer` picks the catalog row from mapping + filters. Mapping `decision: needs_review` is **not** a lock. **No Rapid/PCX in this step.**
 3. `buildStapleCompareRow` → identity, then `evaluatePurchase` checkout (not proportional case split).
-4. UI: `GET /api/staples` (base config), `POST /api/staples/compare` with `{ cart, productOverrides, customStaples? }`. Client applies `stapleWithClientOverride` on the server from that body. Client localStorage is the live override store on Vercel (also `royal-sass-custom-staples-v1` for receipt cards).
+4. UI: `GET /api/staples` (base config), `POST /api/staples/compare` with `{ cart, productOverrides, customStaples? }`. Client applies `stapleWithClientOverride` on the server from that body. Client localStorage is the live override store on Vercel (also `royal-sass-custom-staples-v1` for receipt cards). Product settings (A/B, Include, quantity) must survive refresh — hydrate `royal-sass-product-overrides-v1` before writing it.
 
 ## Live API (`nodejs`)
 
 - `GET /api/staples` — card payload from catalogs + mappings (`restaurantProduct` on each item). Filters `removed-staples.json` when present.
 - `POST /api/staples/compare` — `{ cart, productOverrides, ids?, grams?, qty? }`; checkout coverage (`N із M`); missing ≠ `$0`; writes match log when FS allows; **always returns a stats snapshot**. Store-level history totals are `null` when that store’s basket is incomplete.
-- `GET/POST /api/staples/product-config` — best-effort JSON on disk; `persisted: false` on Vercel. Client localStorage is source of truth for the single-cafe test. Changing `matchMode` marks mappings `needs_review` without deleting them.
+- `GET/POST /api/staples/product-config` — best-effort JSON on disk (`data/catalog/product-overrides.json`, gitignored); `persisted: false` on Vercel. Client `localStorage` `royal-sass-product-overrides-v1` is the live store. **Do not write `{}` into that key before reading it** (empty React state used to wipe A/B + Include on refresh). Hydrate from localStorage first, then merge GET product-config (disk backup fills gaps; local wins on the same id). POST may send `allOverrides` so the disk file is the full map. Settings must survive a page refresh on that phone. They do not sync across devices on Vercel.
 - `GET /api/staples/compare-stats` — last runs + win-rate summary from disk (empty on Vercel)
 - `POST /api/staples/refresh` — rematch selected WM SKUs (older WM-only path)
 - `POST /api/staples/refresh-nf` | `refresh-wc` | `refresh-mvr` | `refresh-sobeys` — live search for that retailer
@@ -277,7 +277,7 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - Per-card **Видалити** and toolbar **Видалити вибрані** (cart ids), with confirm. Hidden via `royal-sass-removed-staples-v1`. Receipt `receipt_*` cards are also dropped from `royal-sass-custom-staples-v1`.
 - **Чек**: camera (`capture="environment"`) or pasted text. Review lines (**вже в каталозі** / **новий** / **пропустити**). **Додати нові** creates `no_match` cards. **Додати і знайти в магазинах** rematches **only those new ids**. Photos are not saved. On Vercel the cards live in `localStorage` `royal-sass-custom-staples-v1`.
 - Actions: **Чек** (photo or pasted text → confirm new cards), select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), **Видалити вибрані**, Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
-- Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**.
+- Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**. A/B, Include/Exclude, quantity, and the named alternate persist across refresh on that phone (`royal-sass-product-overrides-v1`). They must not reset to catalog defaults on reload.
 - Nav: Cafe staples + **Офіціант** (`/waiter`) + **Водій** (`/driver`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
 - **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.
 - **Driver portal** (`/driver`): visual inbox of waiter product lists (mock tickets; local waiter draft may appear as a this-phone mock). **No accept / in-transit / message-waiter API.**

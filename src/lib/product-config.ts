@@ -4,7 +4,11 @@
  */
 import {
   applyProductOverride,
+  canonicalizeMatchMode,
+  normalizeAlternateProduct,
   toRestaurantProduct,
+  type AlternateProduct,
+  type MatchRules,
   type ProductOverride,
   type RestaurantProduct,
   type StapleLike,
@@ -185,12 +189,120 @@ export function dropCustomStaples(ids: Iterable<string>): ClientCustomStaple[] {
   return writeCustomStaples(readCustomStaples().filter((item) => !gone.has(item.id)));
 }
 
+const OVERRIDE_UNITS = new Set(["g", "kg", "ml", "l", "ea", "pack"]);
+
+function parseMatchRules(raw: unknown): MatchRules | undefined {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined;
+  const r = raw as Record<string, unknown>;
+  const out: MatchRules = {};
+  const productType = String(r.productType ?? "").trim().slice(0, 80);
+  const form = String(r.form ?? "").trim().slice(0, 80);
+  const variant = String(r.variant ?? "").trim().slice(0, 80);
+  if (productType) out.productType = productType;
+  if (form) out.form = form;
+  if (variant) out.variant = variant;
+  const includeAny = asTrimmedList(r.mustIncludeAny, 24);
+  const includeAll = asTrimmedList(r.mustIncludeAll, 24);
+  const exclude = asTrimmedList(r.mustNotInclude, 24);
+  if (includeAny) out.mustIncludeAny = includeAny;
+  if (includeAll) out.mustIncludeAll = includeAll;
+  if (exclude) out.mustNotInclude = exclude;
+  return Object.keys(out).length ? out : undefined;
+}
+
+function parseOneOverride(value: unknown): ProductOverride | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const v = value as Record<string, unknown>;
+  const out: ProductOverride = {};
+  const mode = canonicalizeMatchMode(
+    typeof v.matchMode === "string" ? v.matchMode : null,
+  );
+  if (mode) out.matchMode = mode;
+  if (v.purchaseStrategy === "stock_up" || v.purchaseStrategy === "exact_need") {
+    out.purchaseStrategy = v.purchaseStrategy;
+  }
+  const amount = Number(v.defaultAmount);
+  if (Number.isFinite(amount) && amount > 0) out.defaultAmount = amount;
+  const unit = String(v.unit ?? "");
+  if (OVERRIDE_UNITS.has(unit)) out.unit = unit as ProductOverride["unit"];
+  const tolerance = Number(v.tolerancePercent);
+  if (Number.isFinite(tolerance) && tolerance >= 0) {
+    out.tolerancePercent = tolerance;
+  }
+  const maxN = Number(v.maximumAmount);
+  if (Number.isFinite(maxN) && maxN > 0) out.maximumAmount = maxN;
+  else if (v.maximumAmount === null) out.maximumAmount = null;
+  const rules = parseMatchRules(v.matchRules);
+  if (rules) out.matchRules = rules;
+  const preferred = String(v.preferredProductId ?? "").trim();
+  if (preferred) out.preferredProductId = preferred.slice(0, 80);
+  if (v.needsReview === true) out.needsReview = true;
+  if (v.alternateProduct === null) {
+    out.alternateProduct = null;
+  } else {
+    const alt = normalizeAlternateProduct(v.alternateProduct as AlternateProduct);
+    if (alt) out.alternateProduct = alt;
+  }
+  if (v.confirmedStoreProducts && typeof v.confirmedStoreProducts === "object") {
+    const map: Record<string, string> = {};
+    for (const [key, sku] of Object.entries(
+      v.confirmedStoreProducts as Record<string, unknown>,
+    )) {
+      if (typeof sku === "string" && sku.trim()) map[key] = sku.trim();
+    }
+    if (Object.keys(map).length) out.confirmedStoreProducts = map;
+  }
+  return Object.keys(out).length ? out : null;
+}
+
+/** Accept a raw id→override map or `{ overrides: { … } }`. */
 export function parseOverrideMap(raw: unknown): Record<string, ProductOverride> {
-  if (!raw || typeof raw !== "object") return {};
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+  const rec = raw as Record<string, unknown>;
+  const source =
+    rec.overrides &&
+    typeof rec.overrides === "object" &&
+    !Array.isArray(rec.overrides)
+      ? (rec.overrides as Record<string, unknown>)
+      : rec;
   const out: Record<string, ProductOverride> = {};
-  for (const [id, value] of Object.entries(raw as Record<string, unknown>)) {
-    if (!id || !value || typeof value !== "object") continue;
-    out[id] = value as ProductOverride;
+  for (const [id, value] of Object.entries(source)) {
+    if (!id || id === "updatedAt" || id === "overrides") continue;
+    const parsed = parseOneOverride(value);
+    if (parsed) out[id] = parsed;
   }
   return out;
+}
+
+/** Overlay wins on the same staple id. Used to recover disk backups without wiping local. */
+export function mergeOverrideMaps(
+  base: Record<string, ProductOverride>,
+  overlay: Record<string, ProductOverride>,
+): Record<string, ProductOverride> {
+  return { ...base, ...overlay };
+}
+
+export function readProductOverrides(): Record<string, ProductOverride> {
+  try {
+    const raw = window.localStorage.getItem(PRODUCT_OVERRIDE_STORAGE_KEY);
+    if (!raw) return {};
+    return parseOverrideMap(JSON.parse(raw) as unknown);
+  } catch {
+    return {};
+  }
+}
+
+export function writeProductOverrides(
+  map: Record<string, ProductOverride>,
+): Record<string, ProductOverride> {
+  const next = parseOverrideMap(map);
+  try {
+    window.localStorage.setItem(
+      PRODUCT_OVERRIDE_STORAGE_KEY,
+      JSON.stringify(next),
+    );
+  } catch {
+    /* private mode / quota — keep in memory for this visit */
+  }
+  return next;
 }

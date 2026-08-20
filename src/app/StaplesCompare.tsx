@@ -33,11 +33,14 @@ import { stapleMatchesCatalogQuery } from "@/domain/staple-search";
 import type { ReceiptStapleDraft } from "@/domain/receipt-import";
 import {
   CART_STORAGE_KEY,
-  PRODUCT_OVERRIDE_STORAGE_KEY,
   dropCustomStaples,
+  mergeOverrideMaps,
+  parseOverrideMap,
   readCustomStaples,
+  readProductOverrides,
   readRemovedStapleIds,
   upsertCustomStaples,
+  writeProductOverrides,
   writeRemovedStapleIds,
 } from "@/lib/product-config";
 import { mergeServerItemsWithCustom } from "@/lib/custom-staple-card";
@@ -700,7 +703,10 @@ export function StaplesCompare() {
   const [items, setItems] = useState<Staple[]>([]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [cart, setCart] = useState<Cart>({});
-  const [overrides, setOverrides] = useState<Record<string, ProductOverride>>({});
+  const [overrides, setOverrides] = useState<Record<string, ProductOverride>>(
+    {},
+  );
+  const [storageReady, setStorageReady] = useState(false);
   const [settingsId, setSettingsId] = useState<string | null>(null);
   const [qtyOpenId, setQtyOpenId] = useState<string | null>(null);
   const [showCart, setShowCart] = useState(false);
@@ -787,6 +793,7 @@ export function StaplesCompare() {
   }, [applyStats]);
 
   useEffect(() => {
+    let cancelled = false;
     reload().catch((e) =>
       setError(friendlyError(e instanceof Error ? e.message : String(e))),
     );
@@ -795,37 +802,47 @@ export function StaplesCompare() {
       const rawCart = window.localStorage.getItem(CART_STORAGE_KEY);
       if (rawCart) {
         const parsed = JSON.parse(rawCart) as Cart;
-        if (parsed && typeof parsed === "object") setCart(parsed);
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          setCart(parsed);
+        }
       }
-      const rawOv = window.localStorage.getItem(PRODUCT_OVERRIDE_STORAGE_KEY);
-      if (rawOv) {
-        const parsed = JSON.parse(rawOv) as Record<string, ProductOverride>;
-        if (parsed && typeof parsed === "object") setOverrides(parsed);
-      }
+      setOverrides(readProductOverrides());
       setRemovedIds(readRemovedStapleIds());
     } catch {
       /* ignore */
     }
+    setStorageReady(true);
+    void fetch("/api/staples/product-config")
+      .then((res) => res.json())
+      .then((data: { ok?: boolean; overrides?: unknown }) => {
+        if (cancelled || !data?.ok) return;
+        const server = parseOverrideMap(data.overrides);
+        if (!Object.keys(server).length) return;
+        setOverrides((local) => {
+          const merged = mergeOverrideMaps(server, local);
+          writeProductOverrides(merged);
+          return merged;
+        });
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
   }, [reload, reloadStats]);
 
   useEffect(() => {
+    if (!storageReady) return;
     try {
       window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
     } catch {
       /* ignore */
     }
-  }, [cart]);
+  }, [cart, storageReady]);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(
-        PRODUCT_OVERRIDE_STORAGE_KEY,
-        JSON.stringify(overrides),
-      );
-    } catch {
-      /* ignore */
-    }
-  }, [overrides]);
+    if (!storageReady) return;
+    writeProductOverrides(overrides);
+  }, [overrides, storageReady]);
 
   useEffect(() => {
     if (!items.length) return;
@@ -948,15 +965,8 @@ export function StaplesCompare() {
   }
 
   function persistOverrides(next: Record<string, ProductOverride>) {
-    setOverrides(next);
-    try {
-      window.localStorage.setItem(
-        PRODUCT_OVERRIDE_STORAGE_KEY,
-        JSON.stringify(next),
-      );
-    } catch {
-      /* ignore */
-    }
+    const saved = writeProductOverrides(next);
+    setOverrides(saved);
   }
 
   async function saveProductSettings(
@@ -994,6 +1004,7 @@ export function StaplesCompare() {
           id: item.id,
           override: nextOverride,
           previousMatchMode: prev.matchMode,
+          allOverrides: nextOverrides,
         }),
       });
     } catch {
@@ -1128,7 +1139,11 @@ export function StaplesCompare() {
     void fetch("/api/staples/product-config", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: item.id, override: next[item.id] }),
+      body: JSON.stringify({
+        id: item.id,
+        override: next[item.id],
+        allOverrides: next,
+      }),
     }).catch(() => {});
     setCart((c) => ({
       ...c,

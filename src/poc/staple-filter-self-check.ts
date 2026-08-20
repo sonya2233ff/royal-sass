@@ -33,6 +33,10 @@ import { evaluatePurchase, pickCheapestCoveringOffer } from "@/domain/checkout";
 import { offerMatchesIdentity } from "@/domain/product-identity";
 import { toRestaurantProduct, stapleWithClientOverride, applyProductOverride } from "@/domain/restaurant-product";
 import {
+  mergeOverrideMaps,
+  parseOverrideMap,
+} from "@/lib/product-config";
+import {
   asAlternateStapleView,
   pickCategoryAPrimaryOrAlternate,
   withCategoryAAlternateQueries,
@@ -1454,6 +1458,50 @@ async function main() {
   assert(
     oatAltResolve.offer?.productId === "2ADJVX8MAQ1Q",
     `oat exception keeps Zero Sugar even with a cheaper Original alternate, got ${oatAltResolve.offer?.productId}`,
+  );
+
+  const savedOv = parseOverrideMap({
+    cottage_cheese: {
+      matchMode: "exact",
+      purchaseStrategy: "exact_need",
+      defaultAmount: 1,
+      unit: "pack",
+      matchRules: { mustIncludeAny: ["mehadrin"] },
+    },
+    updatedAt: "2026-08-20T21:00:00.000Z",
+  });
+  assert(
+    savedOv.cottage_cheese?.matchMode === "exact",
+    "override map keeps Category A after JSON round-trip",
+  );
+  assert(
+    savedOv.cottage_cheese?.matchRules?.mustIncludeAny?.includes("mehadrin"),
+    "override map keeps Include keywords",
+  );
+  assert(
+    savedOv.updatedAt == null,
+    "updatedAt is not a staple override",
+  );
+  const recovered = mergeOverrideMaps(savedOv, {});
+  assert(
+    recovered.cottage_cheese?.matchMode === "exact",
+    "empty local overlay must not wipe a disk/local backup",
+  );
+  const localWins = mergeOverrideMaps(savedOv, {
+    cottage_cheese: { matchMode: "cheapest_equivalent" },
+  });
+  assert(
+    localWins.cottage_cheese?.matchMode === "cheapest_equivalent",
+    "same-phone localStorage wins over an older disk copy",
+  );
+  const wrapped = parseOverrideMap({
+    overrides: {
+      cottage_cheese: { matchMode: "preferred", matchRules: { mustIncludeAny: ["mehadrin"] } },
+    },
+  });
+  assert(
+    wrapped.cottage_cheese?.matchMode === "exact",
+    "legacy preferred in stored overrides becomes exact",
   );
 
   console.log("staple-filter-self-check ok");

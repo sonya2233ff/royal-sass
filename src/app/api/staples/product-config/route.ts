@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { canonicalizeMatchMode } from "@/domain/restaurant-product";
-import { parseOverrideMap } from "@/lib/product-config";
+import { parseOverrideMap, mergeOverrideMaps } from "@/lib/product-config";
 import {
   loadRetailerMappings,
   saveRetailerMappings,
@@ -17,7 +17,11 @@ const FILE = path.join(process.cwd(), "data", "catalog", "product-overrides.json
 export async function GET() {
   try {
     const raw = await readFile(FILE, "utf8");
-    return NextResponse.json({ ok: true, persisted: true, overrides: JSON.parse(raw) });
+    return NextResponse.json({
+      ok: true,
+      persisted: true,
+      overrides: parseOverrideMap(JSON.parse(raw) as unknown),
+    });
   } catch {
     return NextResponse.json({ ok: true, persisted: false, overrides: {} });
   }
@@ -28,9 +32,11 @@ export async function POST(request: Request) {
     id?: string;
     override?: unknown;
     overrides?: unknown;
+    allOverrides?: unknown;
     previousMatchMode?: string;
   };
   const overrideBlob = body.override ?? body.overrides;
+  const fullMap = parseOverrideMap(body.allOverrides);
   const cfg = await loadStaplesConfig();
   if (!body.id || !cfg.items.some((i) => i.id === body.id && isShownStaple(i))) {
     return NextResponse.json({ ok: false, error: "invalid id" }, { status: 400 });
@@ -62,14 +68,18 @@ export async function POST(request: Request) {
 
   let persisted = false;
   try {
-    let current: Record<string, unknown> = {};
+    let current = {} as ReturnType<typeof parseOverrideMap>;
     try {
-      current = JSON.parse(await readFile(FILE, "utf8")) as Record<string, unknown>;
+      current = parseOverrideMap(JSON.parse(await readFile(FILE, "utf8")) as unknown);
     } catch {
       current = {};
     }
-    const parsed = parseOverrideMap({ [body.id]: overrideBlob });
-    current[body.id] = parsed[body.id];
+    if (Object.keys(fullMap).length) {
+      current = mergeOverrideMaps(current, fullMap);
+    } else {
+      const parsed = parseOverrideMap({ [body.id]: overrideBlob });
+      if (parsed[body.id]) current[body.id] = parsed[body.id];
+    }
     await mkdir(path.dirname(FILE), { recursive: true });
     await writeFile(FILE, JSON.stringify(current, null, 2) + "\n", "utf8");
     persisted = true;
