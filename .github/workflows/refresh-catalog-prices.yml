@@ -1,0 +1,80 @@
+# Nightly locked-SKU price refresh for all four compare stores.
+#
+# Vercel serverless cannot persist catalog JSON into git. This job runs
+# `npm run cache:prices` (price-only, no rematch) and commits
+# data/catalog/*_latest.json so master → Vercel picks up new shelf prices.
+#
+# Scheduled workflows only run from the default branch (master) after merge.
+# Add repo secrets: RAPIDAPI_KEY or OPENWEBNINJA_API_KEY. Optional:
+# NOFRILLS_API_KEY, PCX_COOKIE.
+
+name: Refresh catalog prices
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+      timezone: "America/Toronto"
+  workflow_dispatch:
+
+concurrency:
+  group: refresh-catalog-prices
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      WALMART_SOURCE: rapid
+      WALMART_USE_BROWSER: "0"
+      WALMART_ALLOW_FLIPP_FALLBACK: "0"
+      NOFRILLS_ALLOW_FLIPP_FALLBACK: "0"
+      PCX_BOOTSTRAP_BROWSER: "1"
+      PCX_PREWARM_COOKIES: "1"
+      OPENWEBNINJA_API_KEY: ${{ secrets.OPENWEBNINJA_API_KEY }}
+      RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+      NOFRILLS_API_KEY: ${{ secrets.NOFRILLS_API_KEY }}
+      PCX_COOKIE: ${{ secrets.PCX_COOKIE }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium (PCX cookie bootstrap)
+        run: npx playwright install --with-deps chromium
+
+      - name: Warn if Walmart key is missing
+        run: |
+          if [ -z "$RAPIDAPI_KEY" ] && [ -z "$OPENWEBNINJA_API_KEY" ]; then
+            echo "::warning::RAPIDAPI_KEY / OPENWEBNINJA_API_KEY not set; Walmart prices will not refresh"
+          fi
+
+      - name: Refresh locked SKU prices
+        run: |
+          touch .env
+          npm run cache:prices
+
+      - name: Commit catalog JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            data/catalog/walmart_5831_latest.json \
+            data/catalog/nofrills_3660_latest.json \
+            data/catalog/wholesaleclub_3724_latest.json \
+            data/catalog/mvr_weston_latest.json
+          if git diff --cached --quiet; then
+            echo "No catalog changes"
+            exit 0
+          fi
+          git commit -m "chore: nightly locked-SKU price refresh ($(TZ=America/Toronto date +%Y-%m-%d))"
+          git push

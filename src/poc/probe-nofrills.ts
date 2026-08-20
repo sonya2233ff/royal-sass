@@ -45,6 +45,8 @@ async function main() {
         storeId: result.storeId,
         httpStatus: result.httpStatus,
         originTried: result.originTried,
+        cookieCount: result.cookieCount ?? 0,
+        retriedWithCookies: result.retriedWithCookies ?? false,
         ms: result.ms,
         tileCount: result.tileCount,
         mappedCount: result.mappedCount,

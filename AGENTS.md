@@ -200,8 +200,8 @@ Refresh/compare/rematch routes use `maxDuration = 60`.
 ## Retailer integrations
 
 - **Walmart #5831:** `createWalmartConnector`. Flags in `walmart-source.ts` (no Playwright import on homepage load). `WALMART_SOURCE=rapid` needs `OPENWEBNINJA_API_KEY` or `RAPIDAPI_KEY`. Blank keys → `missing_key`, **do not** scrape walmart.ca (PerimeterX). Rapid `domain=ca`, `store_id=5831`, `zip=L4J0A7`. Rapid ids may be **±1** vs PDP (`offerMatchesRetailerSku`). Rapid “In stock” is a listing flag, not proof of #5831 shelf. Rapid titles often omit pack size.
-- **No Frills #3660:** `NoFrillsConnector` / `pcx-bff.ts`. Blank `NOFRILLS_API_KEY` uses public web fallback; do not send empty `X-Apikey`. Akamai may 403 some IPs. Flipp only if `NOFRILLS_ALLOW_FLIPP_FALLBACK=1` (not shelf).
-- **Wholesale Club #3724:** reuse the same PCX client. Skip `*_C##` case packs for consumer compare. Not Flipp. Do not copy the BFF client.
+- **No Frills #3660:** `NoFrillsConnector` / `pcx-bff.ts`. Blank `NOFRILLS_API_KEY` uses public web fallback; do not send empty `X-Apikey`. Each search mints a new `cartId` / `sessionId` and a Toronto `fulfillmentInfo.date`. On HTTP 401/403 the client harvests banner `Set-Cookie` (optional `PCX_COOKIE`) and retries; `PCX_BOOTSTRAP_BROWSER=1` then tries Playwright. Akamai may still 403 some IPs. Flipp only if `NOFRILLS_ALLOW_FLIPP_FALLBACK=1` (not shelf).
+- **Wholesale Club #3724:** reuse the same PCX client (same cookie rewrite). Skip `*_C##` case packs for consumer compare. Not Flipp. Do not copy the BFF client.
 - **MVR Weston:** `src/connectors/mvr.ts`. Offer is dropped if INSTOREPRICE is missing. Case packs kept when the staple wants a case. Warehouse produce titles (`Fruits - …`) are valid Category B names. Image URLs may be protocol-relative.
 - **Mappings:** `src/lib/retailer-mappings.ts`. Pairwise `product-matches.json` and Prisma `ProductMatch` are **not** read by live compare.
 
@@ -252,6 +252,7 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - **Production** = `master` → Vercel project `royal-sass` (team `noir-detailing`), alias https://royal-sass.vercel.app
 - PR branches get **Preview** deployments. Putting “these changes on Vercel” / “run prod” for the live phone demo means **fast-forward `master`**, not only a preview URL.
 - Serverless catalog/stats writes may no-op. Refresh on Vercel does not persist JSON into git. Local `npm start` on a VM can write catalogs.
+- **Nightly shelf prices (all four stores):** GitHub Action `.github/workflows/refresh-catalog-prices.yml` runs `npm run cache:prices` (locked SKUs only — **not** rematch) at **00:00 America/Toronto**, then commits `data/catalog/{walmart_5831,nofrills_3660,wholesaleclub_3724,mvr_weston}_latest.json` so Vercel redeploys `master`. Manual run: Actions → “Refresh catalog prices”. Repo secrets: `RAPIDAPI_KEY` or `OPENWEBNINJA_API_KEY`; optional `NOFRILLS_API_KEY`, `PCX_COOKIE`. Scheduled workflows only fire after this file is on **master**.
 
 ## Development workflow
 
@@ -273,15 +274,16 @@ npm run poc:staple-filter
 npm run poc:pilot-logic
 npm run poc:entity-match
 npm run poc:store-connector
+npm run poc:pcx-session
 ```
 
-Price/matching diffs: `npm run cache:prices` (and `cache:walmart` / `cache:nofrills` / `cache:wholesaleclub` / `cache:mvr`) only when live keys work and the task is a refresh. Spot-check: grape tomatoes ≠ seeds, ice ≠ gum, dozen card still compares 12 vs 18 vs 30 as $/egg, `qty > 1`, missing offer stays empty, Tropicana label/`2.63` does not `no_match` a Pulp Free title, settings Include does not wipe catalog tropicana. UI: select + grams/qty → Compare → `fairLabel` + baskets + stats row.
+Price/matching diffs: `npm run cache:prices` (and `cache:walmart` / `cache:nofrills` / `cache:wholesaleclub` / `cache:mvr`) only when live keys work and the task is a refresh. Nightly CI is price-only (`cache:prices`), never a full rematch of all 124. Spot-check: grape tomatoes ≠ seeds, ice ≠ gum, dozen card still compares 12 vs 18 vs 30 as $/egg, `qty > 1`, missing offer stays empty, Tropicana label/`2.63` does not `no_match` a Pulp Free title, settings Include does not wipe catalog tropicana. UI: select + grams/qty → Compare → `fairLabel` + baskets + stats row.
 
 If a script is not run, say so.
 
 ## Environment (names only)
 
-See `.env.example`: `DATABASE_URL`, `WALMART_SOURCE`, `WALMART_USE_BROWSER`, `WALMART_ALLOW_FLIPP_FALLBACK`, `WALMART_POSTAL_CODE`, `OPENWEBNINJA_API_KEY`, `RAPIDAPI_KEY`, `WALMART_RAPID_HOST`, `NOFRILLS_API_KEY`, `NOFRILLS_SEARCH_URL`, `NOFRILLS_ALLOW_FLIPP_FALLBACK`, `WHOLESALECLUB_BANNER`, `WHOLESALECLUB_STORE_ID`, `SOBEYS_POSTAL_CODE`, `FRESHCO_POSTAL_CODE`, `MVR_SHOPIFY_BASE`, `STAPLES_CACHE_STALE_HOURS`, `ENTITY_MATCH_AUTO_LINK_THRESHOLD`, `ALLOW_MATCH_INSPECTOR`.
+See `.env.example`: `DATABASE_URL`, `WALMART_SOURCE`, `WALMART_USE_BROWSER`, `WALMART_ALLOW_FLIPP_FALLBACK`, `WALMART_POSTAL_CODE`, `OPENWEBNINJA_API_KEY`, `RAPIDAPI_KEY`, `WALMART_RAPID_HOST`, `NOFRILLS_API_KEY`, `NOFRILLS_SEARCH_URL`, `NOFRILLS_ALLOW_FLIPP_FALLBACK`, `PCX_COOKIE`, `PCX_BOOTSTRAP_BROWSER`, `PCX_PREWARM_COOKIES`, `WHOLESALECLUB_BANNER`, `WHOLESALECLUB_STORE_ID`, `SOBEYS_POSTAL_CODE`, `FRESHCO_POSTAL_CODE`, `MVR_SHOPIFY_BASE`, `STAPLES_CACHE_STALE_HOURS`, `ENTITY_MATCH_AUTO_LINK_THRESHOLD`, `ALLOW_MATCH_INSPECTOR`.
 
 ## Planned / not live
 

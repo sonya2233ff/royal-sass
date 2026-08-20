@@ -5,7 +5,59 @@
  *   npm run cache:prices -- tomatoes_grape ziploc_sandwich
  */
 import { isShownStaple, PINNED_IDS, RECEIPT_STAPLE_IDS } from "@/lib/staples";
-import { refreshCatalogPrices } from "@/lib/refresh-catalog-prices";
+import {
+  refreshCatalogPrices,
+  type CatalogPriceRefreshResult,
+  type PriceRefreshFailure,
+  type PriceRefreshHit,
+} from "@/lib/refresh-catalog-prices";
+
+function printRetailer(
+  title: string,
+  block: {
+    updated: PriceRefreshHit[];
+    failed: PriceRefreshFailure[];
+    skipped: PriceRefreshFailure[];
+    blocked?: string;
+  },
+) {
+  console.error(`\n${title}`);
+  if (block.blocked) {
+    console.error(`  blocked: ${block.blocked}`);
+  }
+  for (const hit of block.updated) {
+    const prev =
+      hit.previousPrice != null ? `$${hit.previousPrice.toFixed(2)} → ` : "";
+    console.log(
+      `  ${hit.id.padEnd(28)} ${prev}$${hit.price.toFixed(2)}  ${hit.name}`,
+    );
+  }
+  const shown = block.failed.slice(0, 8);
+  for (const row of shown) {
+    console.log(`  ${row.id.padEnd(28)} FAIL  ${row.reason}`);
+  }
+  if (block.failed.length > shown.length) {
+    console.log(`  … ${block.failed.length - shown.length} more failures`);
+  }
+}
+
+function storeSummary(
+  block: {
+    updated: PriceRefreshHit[];
+    failed: PriceRefreshFailure[];
+    skipped: PriceRefreshFailure[];
+    blocked?: string;
+  },
+  extra?: Record<string, unknown>,
+) {
+  return {
+    updated: block.updated.length,
+    failed: block.failed.length,
+    skipped: block.skipped.length,
+    blocked: Boolean(block.blocked),
+    ...extra,
+  };
+}
 
 async function main() {
   const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
@@ -17,47 +69,42 @@ async function main() {
   }
 
   console.error(`Refreshing catalog prices for ${ids.length} staples…`);
-  const result = await refreshCatalogPrices(ids);
+  const result: CatalogPriceRefreshResult = await refreshCatalogPrices(ids);
 
-  console.error("\nWalmart");
-  for (const hit of result.walmart.updated) {
-    const prev =
-      hit.previousPrice != null ? `$${hit.previousPrice.toFixed(2)} → ` : "";
-    console.log(
-      `  ${hit.id.padEnd(28)} ${prev}$${hit.price.toFixed(2)}  ${hit.name}`,
-    );
-  }
-  for (const row of result.walmart.failed) {
-    console.log(`  ${row.id.padEnd(28)} FAIL  ${row.reason}`);
-  }
-  for (const row of result.walmart.skipped) {
-    console.log(`  ${row.id.padEnd(28)} skip  ${row.reason}`);
-  }
+  printRetailer("Walmart", result.walmart);
+  printRetailer("No Frills", result.noFrills);
+  printRetailer("Wholesale Club", result.wholesaleClub);
+  printRetailer("MVR Weston", result.mvr);
 
-  console.error("\nNo Frills");
-  if (result.noFrills.blocked) {
-    console.error(`  blocked: ${result.noFrills.blocked}`);
-  }
-  for (const hit of result.noFrills.updated) {
-    const prev =
-      hit.previousPrice != null ? `$${hit.previousPrice.toFixed(2)} → ` : "";
-    console.log(
-      `  ${hit.id.padEnd(28)} ${prev}$${hit.price.toFixed(2)}  ${hit.name}`,
-    );
-  }
-  for (const row of result.noFrills.failed.slice(0, 5)) {
-    console.log(`  ${row.id.padEnd(28)} FAIL  ${row.reason}`);
-  }
-  if (result.noFrills.failed.length > 5) {
-    console.log(`  … ${result.noFrills.failed.length - 5} more NF failures`);
-  }
-
+  const summary = {
+    walmart: storeSummary(result.walmart, { source: result.walmart.source }),
+    noFrills: storeSummary(result.noFrills),
+    wholesaleClub: storeSummary(result.wholesaleClub),
+    mvr: storeSummary(result.mvr),
+  };
   console.error(
-    `\nDone. WM updated=${result.walmart.updated.length} failed=${result.walmart.failed.length} skip=${result.walmart.skipped.length}`,
+    `\nDone. WM updated=${summary.walmart.updated} failed=${summary.walmart.failed} skip=${summary.walmart.skipped}`,
   );
   console.error(
-    `     NF updated=${result.noFrills.updated.length} failed=${result.noFrills.failed.length} skip=${result.noFrills.skipped.length}`,
+    `     NF updated=${summary.noFrills.updated} failed=${summary.noFrills.failed} skip=${summary.noFrills.skipped}`,
   );
+  console.error(
+    `     WC updated=${summary.wholesaleClub.updated} failed=${summary.wholesaleClub.failed} skip=${summary.wholesaleClub.skipped}`,
+  );
+  console.error(
+    `     MVR updated=${summary.mvr.updated} failed=${summary.mvr.failed} skip=${summary.mvr.skipped}`,
+  );
+  console.error(`SUMMARY ${JSON.stringify(summary)}`);
+
+  const totalUpdated =
+    summary.walmart.updated +
+    summary.noFrills.updated +
+    summary.wholesaleClub.updated +
+    summary.mvr.updated;
+  if (totalUpdated === 0) {
+    console.error("No catalog prices updated.");
+    process.exit(2);
+  }
 }
 
 main().catch((e) => {

@@ -8,6 +8,7 @@ data/observations
 data/walmart-profile
 data/runs
 data/catalog/product-overrides.json
+data/catalog/*_probe_latest.json
 data/catalog/walmart_5831_20*
 data/receipts/*.JPG
 data/receipts/*.jpg

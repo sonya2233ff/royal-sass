@@ -5,6 +5,18 @@ import {
   type ProductOffer,
 } from "./types";
 import { extractRetailerImage } from "@/lib/product-image";
+import {
+  applySetCookiesFromResponse,
+  cookieHeaderFromJar,
+  formatPcxFulfillmentDate,
+  initialPcxJar,
+  pcxCookieCount,
+  pcxShouldPrewarmCookies,
+  prewarmPcxJar,
+  refreshPcxJar,
+  type CookieJar,
+  PCX_BROWSER_UA,
+} from "./pcx-session";
 
 /** Current Loblaw PCX BFF search. */
 export const PCX_SEARCH_URL =
@@ -51,6 +63,8 @@ export type PcxProbeResult = {
   bodyPreview?: string;
   error?: string;
   ms: number;
+  cookieCount?: number;
+  retriedWithCookies?: boolean;
 };
 
 export function pcxProductIdsMatch(a: string, b: string): boolean {
@@ -62,11 +76,7 @@ export function pcxProductIdsMatch(a: string, b: string): boolean {
 }
 
 function todayDdmmyyyy(): string {
-  const d = new Date();
-  const dd = String(d.getDate()).padStart(2, "0");
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const yyyy = String(d.getFullYear());
-  return `${dd}${mm}${yyyy}`;
+  return formatPcxFulfillmentDate();
 }
 
 function parseMoney(value: unknown): number | undefined {
@@ -253,8 +263,12 @@ function mapProduct(
   };
 }
 
-function buildHeaders(originHost: string, banner: PcxBanner): Record<string, string> {
-  return {
+function buildHeaders(
+  originHost: string,
+  banner: PcxBanner,
+  jar: CookieJar,
+): Record<string, string> {
+  const headers: Record<string, string> = {
     Accept: "*/*",
     "Content-Type": "application/json",
     "Accept-Language": "en",
@@ -270,12 +284,30 @@ function buildHeaders(originHost: string, banner: PcxBanner): Record<string, str
     "Site-Banner": banner,
     Origin: originHost,
     Referer: `${originHost}/`,
-    "User-Agent":
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "User-Agent": PCX_BROWSER_UA,
     "Sec-Fetch-Site": "cross-site",
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Dest": "empty",
   };
+  const cookie = cookieHeaderFromJar(jar);
+  if (cookie) headers.Cookie = cookie;
+  return headers;
+}
+
+async function postPcxSearch(
+  originHost: string,
+  banner: PcxBanner,
+  payload: unknown,
+  jar: CookieJar,
+): Promise<{ status: number; body: string }> {
+  const res = await fetch(PCX_SEARCH_URL, {
+    method: "POST",
+    headers: buildHeaders(originHost, banner, jar),
+    body: JSON.stringify(payload),
+  });
+  applySetCookiesFromResponse(jar, res);
+  const body = await res.text();
+  return { status: res.status, body };
 }
 
 export async function probePcxSearch(opts: PcxSearchOpts): Promise<PcxProbeResult> {
@@ -302,7 +334,7 @@ export async function probePcxSearch(opts: PcxSearchOpts): Promise<PcxProbeResul
     };
   }
 
-  const payload = {
+  const makePayload = () => ({
     cart: { cartId: crypto.randomUUID() },
     fulfillmentInfo: {
       storeId,
@@ -327,26 +359,57 @@ export async function probePcxSearch(opts: PcxSearchOpts): Promise<PcxProbeResul
       term: query,
       options: [{ name: "rmp.unifiedSearchVariant", value: "Y" }],
     },
-  };
+  });
 
   let lastStatus = 0;
   let lastBody = "";
   let lastOrigin: string | null = null;
+  let lastCookieCount = 0;
+  let retriedWithCookies = false;
 
   for (const origin of opts.origins) {
     lastOrigin = origin;
-    const res = await fetch(PCX_SEARCH_URL, {
-      method: "POST",
-      headers: buildHeaders(origin, opts.banner),
-      body: JSON.stringify(payload),
-    });
-    lastStatus = res.status;
-    lastBody = await res.text();
+    let jar = initialPcxJar(origin);
+    if (pcxShouldPrewarmCookies() && jar.size === 0) {
+      jar = await prewarmPcxJar(origin);
+    }
 
-    if (res.status === 403 || res.status === 401) {
+    let posted = await postPcxSearch(origin, opts.banner, makePayload(), jar);
+    lastStatus = posted.status;
+    lastBody = posted.body;
+    lastCookieCount = pcxCookieCount(jar);
+
+    if (posted.status === 403 || posted.status === 401) {
+      console.error(
+        `pcx: HTTP ${posted.status} from ${origin}; rewriting session + banner cookies and retrying`,
+      );
+      jar = await refreshPcxJar(origin, false);
+      posted = await postPcxSearch(origin, opts.banner, makePayload(), jar);
+      lastStatus = posted.status;
+      lastBody = posted.body;
+      lastCookieCount = pcxCookieCount(jar);
+      retriedWithCookies = true;
+    }
+
+    if (
+      (posted.status === 403 || posted.status === 401) &&
+      process.env.PCX_BOOTSTRAP_BROWSER === "1"
+    ) {
+      console.error(
+        `pcx: HTTP ${posted.status} after HTTP cookies; trying browser bootstrap for ${origin}`,
+      );
+      jar = await refreshPcxJar(origin, true);
+      posted = await postPcxSearch(origin, opts.banner, makePayload(), jar);
+      lastStatus = posted.status;
+      lastBody = posted.body;
+      lastCookieCount = pcxCookieCount(jar);
+      retriedWithCookies = true;
+    }
+
+    if (posted.status === 403 || posted.status === 401) {
       continue;
     }
-    if (!res.ok) {
+    if (posted.status < 200 || posted.status >= 300) {
       return {
         ok: false,
         query,
@@ -354,13 +417,15 @@ export async function probePcxSearch(opts: PcxSearchOpts): Promise<PcxProbeResul
         banner: opts.banner,
         searchUrl: PCX_SEARCH_URL,
         originTried: origin,
-        httpStatus: res.status,
+        httpStatus: posted.status,
         mappedCount: 0,
         tileCount: 0,
         offers: [],
         bodyPreview: lastBody.slice(0, 500),
-        error: `HTTP ${res.status}`,
+        error: `HTTP ${posted.status}`,
         ms: Date.now() - started,
+        cookieCount: lastCookieCount,
+        retriedWithCookies,
       };
     }
 
@@ -375,13 +440,15 @@ export async function probePcxSearch(opts: PcxSearchOpts): Promise<PcxProbeResul
         banner: opts.banner,
         searchUrl: PCX_SEARCH_URL,
         originTried: origin,
-        httpStatus: res.status,
+        httpStatus: posted.status,
         mappedCount: 0,
         tileCount: 0,
         offers: [],
         bodyPreview: lastBody.slice(0, 500),
         error: "non-JSON body",
         ms: Date.now() - started,
+        cookieCount: lastCookieCount,
+        retriedWithCookies,
       };
     }
 
@@ -404,7 +471,7 @@ export async function probePcxSearch(opts: PcxSearchOpts): Promise<PcxProbeResul
       banner: opts.banner,
       searchUrl: PCX_SEARCH_URL,
       originTried: origin,
-      httpStatus: res.status,
+      httpStatus: posted.status,
       mappedCount: unique.length,
       tileCount: tiles.length,
       offers: includeRaw
@@ -415,6 +482,8 @@ export async function probePcxSearch(opts: PcxSearchOpts): Promise<PcxProbeResul
           }),
       rawTiles: includeRaw ? tiles.slice(0, rawLimit) : undefined,
       ms: Date.now() - started,
+      cookieCount: lastCookieCount,
+      retriedWithCookies,
     };
   }
 
@@ -432,6 +501,8 @@ export async function probePcxSearch(opts: PcxSearchOpts): Promise<PcxProbeResul
     bodyPreview: lastBody.slice(0, 500),
     error: `blocked or unauthorized (HTTP ${lastStatus})`,
     ms: Date.now() - started,
+    cookieCount: lastCookieCount,
+    retriedWithCookies,
   };
 }
 
@@ -474,7 +545,7 @@ export async function pcxSearchOrThrow(opts: {
     );
   }
   throw new ConnectorError(
-    `${opts.label} blocked or unauthorized (HTTP ${probed.httpStatus ?? "?"}). Empty NOFRILLS_API_KEY is ignored (public web key is used). If this is still 401/403, the edge may be filtering this IP — paste a fresh X-Apikey from a banner Network tab into NOFRILLS_API_KEY. Body: ${(probed.bodyPreview ?? "").slice(0, 120)}`,
+    `${opts.label} blocked or unauthorized (HTTP ${probed.httpStatus ?? "?"}). Empty NOFRILLS_API_KEY is ignored (public web key is used). On 401/403 the client rewrites banner cookies (and Playwright when PCX_BOOTSTRAP_BROWSER=1). If this is still blocked, the edge may be filtering this IP — paste a fresh X-Apikey into NOFRILLS_API_KEY or PCX_COOKIE from the banner Network tab. Body: ${(probed.bodyPreview ?? "").slice(0, 120)}`,
     opts.retailer,
     "blocked",
   );
