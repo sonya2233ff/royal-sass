@@ -5,6 +5,7 @@
 import { MvrConnector, MVR_STORE_ID, hydrateMvrOffer } from "@/connectors/mvr";
 import type { ProductOffer } from "@/connectors/types";
 import { offerFailsStapleOfferFilters, nameMatchesFilterToken, categoryBSearchQueries } from "@/domain/catalog-normalize";
+import { asAlternateStapleView, withCategoryAAlternateQueries } from "@/domain/category-a-alternate";
 import { identityLockAllowsFilterMismatch } from "@/domain/compare-resolve";
 import { offerFailsPlausibleShelfPrice } from "@/domain/sanity";
 import {
@@ -28,6 +29,8 @@ import {
   isSoldByWeightItem,
   loadStaplesConfig,
   pickStapleSearchWinner,
+  pickStapleOfferWithAlternate,
+  catalogExtrasForCategoryAAlternate,
   refreshSkipIdentityLock,
   addCheapestMappedSkuHint,
   resolveMatchMode,
@@ -73,6 +76,12 @@ function passesMvrFilters(offer: ProductOffer, item: StapleItem): boolean {
   return isActualCategoryBOffer(item, offer);
 }
 
+function passesMvrPrimaryOrAlternate(offer: ProductOffer, item: StapleItem): boolean {
+  if (passesMvrFilters(offer, item)) return true;
+  const alt = asAlternateStapleView(item);
+  return Boolean(alt && passesMvrFilters(offer, alt as StapleItem));
+}
+
 export async function searchMvrPool(
   item: StapleItem,
   log?: MatchLogEntry,
@@ -89,7 +98,10 @@ export async function searchMvrPool(
       : link?.verified
         ? link.retailerProductId
         : null);
-  const queries = categoryBSearchQueries(item, 6);
+  const queries = withCategoryAAlternateQueries(
+    item,
+    categoryBSearchQueries(item, 6),
+  );
   if (log) log.queries = lockedSku ? [lockedSku, ...queries] : [...queries];
 
   if (lockedSku) {
@@ -130,11 +142,11 @@ export async function searchMvrPool(
       o.productId === lockedSku &&
       Boolean(link?.verified);
     if (verifiedLock) {
-      if (identityLockAllowsFilterMismatch(item) || passesMvrFilters(o, item)) {
+      if (identityLockAllowsFilterMismatch(item) || passesMvrPrimaryOrAlternate(o, item)) {
         return true;
       }
     }
-    if (!passesMvrFilters(o, item)) {
+    if (!passesMvrPrimaryOrAlternate(o, item)) {
       log?.rejected.push({
         productId: o.productId,
         name: o.name,
@@ -266,7 +278,7 @@ export async function refreshMvrSelected(
       skipIdentityLock: refreshSkipIdentityLock(item, opts, pinMvr),
       pinSku: pinMvr,
     });
-    let picked = pickStapleSearchWinner(item, pool, log, pinMvr);
+    let picked = pickStapleOfferWithAlternate(item, pool, log, pinMvr);
     if (picked) {
       if (isSoldByWeightItem(item)) {
         const perKg = pool.find((o) => /per\s*kg/i.test(`${o.name} ${o.packageSize ?? ""}`));

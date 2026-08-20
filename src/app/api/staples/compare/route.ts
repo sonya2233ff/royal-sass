@@ -9,7 +9,7 @@ import {
   loadNoFrillsCatalog,
   loadStaplesConfig,
   loadWalmartCatalog,
-  pickStapleSearchWinner,
+  pickStapleOfferWithAlternate,
   searchNoFrillsPool,
   searchWalmartPackPool,
   searchWalmartQueryPool,
@@ -22,6 +22,7 @@ import {
   explicitNeededGrams,
   type CatalogOffer,
   type MatchLogEntry,
+  type StapleItem,
 } from "@/lib/staples";
 import { offerIsOnShelf, resolveCatalogOffer, catalogCandidates, catalogRowForStaple } from "@/domain/compare-resolve";
 import { pickCheapestCoveringOffer } from "@/domain/checkout";
@@ -47,6 +48,11 @@ import { offerFailsStapleOfferFilters } from "@/domain/catalog-normalize";
 import { offerMatchesIdentity } from "@/domain/product-identity";
 import { stapleWithClientOverride, type Cart } from "@/domain/restaurant-product";
 import {
+  asAlternateStapleView,
+  hasCategoryAAlternate,
+  pickCategoryAPrimaryOrAlternate,
+} from "@/domain/category-a-alternate";
+import {
   completeBasketWinner,
   storeCoverage,
 } from "@/domain/basket-coverage";
@@ -56,13 +62,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 function coveringPackedOffer(
-  item: {
-    id: string;
-    category?: string;
-    mustIncludeAny?: string[];
-    mustIncludeAll?: string[];
-    mustNotInclude?: string[];
-  },
+  item: StapleItem,
   product: Parameters<typeof pickCheapestCoveringOffer>[0],
   requested: number,
   row: Parameters<typeof catalogCandidates>[0],
@@ -83,17 +83,27 @@ function coveringPackedOffer(
     requested,
     identPool.length ? identPool : pool,
   );
-  return picked ? toCatalogOffer(picked) : fallback;
+  if (!hasCategoryAAlternate(item)) {
+    return picked ? toCatalogOffer(picked) : fallback;
+  }
+  const alt = asAlternateStapleView(item);
+  const altPool = catalogCandidates(row)
+    .filter(offerIsOnShelf)
+    .filter((o) =>
+      alt ? offerFailsStapleOfferFilters(alt, o) == null : false,
+    )
+    .filter((o) => eggCartonCountOk(item, o.name, o.packageSize));
+  const altCover = pickCheapestCoveringOffer(product, requested, altPool);
+  const chosen = pickCategoryAPrimaryOrAlternate(
+    item,
+    picked ?? fallback,
+    altCover,
+  );
+  return chosen ? toCatalogOffer(chosen) : fallback;
 }
 
 function coveringFromLivePool(
-  item: {
-    id: string;
-    category?: string;
-    mustIncludeAny?: string[];
-    mustIncludeAll?: string[];
-    mustNotInclude?: string[];
-  },
+  item: StapleItem,
   product: Parameters<typeof pickCheapestCoveringOffer>[0],
   requested: number,
   pool: Array<{
@@ -116,10 +126,31 @@ function coveringFromLivePool(
     .map((o) => toCatalogOffer({ ...o, image: o.image ?? undefined }))
     .filter((o): o is CatalogOffer => o != null);
   const picked = pickCheapestCoveringOffer(product, requested, passing);
-  if (!picked) return { offer: null, alternates: passing };
+  if (!hasCategoryAAlternate(item)) {
+    if (!picked) return { offer: null, alternates: passing };
+    return {
+      offer: toCatalogOffer(picked),
+      alternates: passing.filter((o) => o.productId !== picked.productId),
+    };
+  }
+  const alt = asAlternateStapleView(item);
+  const altPassing = pool
+    .filter((o) => o.price > 0)
+    .filter((o) =>
+      alt ? offerFailsStapleOfferFilters(alt, o) == null : false,
+    )
+    .filter((o) => eggCartonCountOk(item, o.name, o.packageSize))
+    .map((o) => toCatalogOffer({ ...o, image: o.image ?? undefined }))
+    .filter((o): o is CatalogOffer => o != null);
+  const altCover = pickCheapestCoveringOffer(product, requested, altPassing);
+  const chosen = pickCategoryAPrimaryOrAlternate(item, picked, altCover);
+  const extras = [
+    ...passing.filter((o) => o.productId !== chosen?.productId),
+    ...altPassing.filter((o) => o.productId !== chosen?.productId),
+  ];
   return {
-    offer: toCatalogOffer(picked),
-    alternates: passing.filter((o) => o.productId !== picked.productId),
+    offer: chosen ? toCatalogOffer(chosen) : null,
+    alternates: extras,
   };
 }
 
@@ -342,7 +373,7 @@ export async function POST(request: Request) {
       (!wmResolved.offer || !offerIsOnShelf(wmResolved.offer))
     ) {
       const pool = await searchWalmartQueryPool(item, wmLog);
-      const best = pickStapleSearchWinner(item, pool, wmLog);
+      const best = pickStapleOfferWithAlternate(item, pool, wmLog);
       if (best) {
         const offer = catalogOfferFromLive(best);
         const others = pool
@@ -472,7 +503,7 @@ export async function POST(request: Request) {
     ) {
       const pool = await searchNoFrillsPool(item, nfLog);
       nfLiveHits += 1;
-      const best = pickStapleSearchWinner(item, pool, nfLog);
+      const best = pickStapleOfferWithAlternate(item, pool, nfLog);
       if (pool.length || best) {
         const merged = mergeLivePackSizes({
           item,
@@ -639,7 +670,7 @@ export async function POST(request: Request) {
     } else if (!wcRow?.offer || !wcResolved.offer || needWcExpand) {
       const pool = await searchWholesaleClubPool(item, wcLog);
       wcLiveHits += 1;
-      const best = pickStapleSearchWinner(item, pool, wcLog);
+      const best = pickStapleOfferWithAlternate(item, pool, wcLog);
       if (pool.length || best) {
         const merged = mergeLivePackSizes({
           item,
@@ -791,7 +822,7 @@ export async function POST(request: Request) {
     } else if (!mvrRow?.offer || !mvrResolved.offer || needMvrExpand) {
       const pool = await searchMvrPool(item, mvrLog);
       mvrLiveHits += 1;
-      const best = pickStapleSearchWinner(item, pool, mvrLog);
+      const best = pickStapleOfferWithAlternate(item, pool, mvrLog);
       if (pool.length || best) {
         const merged = mergeLivePackSizes({
           item,

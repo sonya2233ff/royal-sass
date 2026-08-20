@@ -4,6 +4,7 @@ import {
 } from "@/connectors/wholesaleclub";
 import type { ProductOffer } from "@/connectors/types";
 import { offerFailsStapleOfferFilters, nameMatchesFilterToken, categoryBSearchQueries } from "@/domain/catalog-normalize";
+import { asAlternateStapleView, withCategoryAAlternateQueries } from "@/domain/category-a-alternate";
 import { identityLockAllowsFilterMismatch } from "@/domain/compare-resolve";
 import { offerFailsPlausibleShelfPrice } from "@/domain/sanity";
 import {
@@ -27,7 +28,8 @@ import {
   isSoldByWeightItem,
   isProduceWeightItem,
   loadStaplesConfig,
-  pickStapleSearchWinner,
+  pickStapleOfferWithAlternate,
+  catalogExtrasForCategoryAAlternate,
   refreshSkipIdentityLock,
   addCheapestMappedSkuHint,
   resolveMatchMode,
@@ -90,6 +92,12 @@ function passesWcFilters(offer: ProductOffer, item: StapleItem): boolean {
   });
 }
 
+function passesWcPrimaryOrAlternate(offer: ProductOffer, item: StapleItem): boolean {
+  if (passesWcFilters(offer, item)) return true;
+  const alt = asAlternateStapleView(item);
+  return Boolean(alt && passesWcFilters(offer, alt as StapleItem));
+}
+
 export async function searchWholesaleClubPool(
   item: StapleItem,
   log?: MatchLogEntry,
@@ -106,7 +114,10 @@ export async function searchWholesaleClubPool(
       : wcLink?.verified
         ? wcLink.retailerProductId
         : null);
-  const queries = categoryBSearchQueries(item, 6);
+  const queries = withCategoryAAlternateQueries(
+    item,
+    categoryBSearchQueries(item, 6),
+  );
   if (log) log.queries = lockedSku ? [lockedSku, ...queries] : [...queries];
 
   if (lockedSku) {
@@ -147,7 +158,7 @@ export async function searchWholesaleClubPool(
       o.productId === lockedSku &&
       Boolean(wcLink?.verified);
     if (verifiedLock) {
-      if (identityLockAllowsFilterMismatch(item) || passesWcFilters(o, item)) {
+      if (identityLockAllowsFilterMismatch(item) || passesWcPrimaryOrAlternate(o, item)) {
         return true;
       }
     }
@@ -160,7 +171,7 @@ export async function searchWholesaleClubPool(
       });
       return false;
     }
-    if (!passesWcFilters(o, item)) {
+    if (!passesWcPrimaryOrAlternate(o, item)) {
       log?.rejected.push({
         productId: o.productId,
         name: o.name,
@@ -295,7 +306,7 @@ export async function refreshWholesaleClubSelected(
       skipIdentityLock: refreshSkipIdentityLock(item, opts, pinWc),
       pinSku: pinWc,
     });
-    const offer = pickStapleSearchWinner(item, pool, log, pinWc);
+    const offer = pickStapleOfferWithAlternate(item, pool, log, pinWc);
     entries.push(log);
     updated.push(id);
 
@@ -316,7 +327,7 @@ export async function refreshWholesaleClubSelected(
         alternates:
           usesNeededWeightPick(item) && !isSoldByWeightItem(item)
             ? split.alternates
-            : [],
+            : catalogExtrasForCategoryAAlternate(item, pool, offer.productId),
         notes: "Live Wholesale Club PCX #3724",
       });
       applyWcMapping(mappings, item, offer);

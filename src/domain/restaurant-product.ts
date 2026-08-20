@@ -7,8 +7,34 @@ import {
 } from "@/domain/purchase-units";
 import { isEggPackStaple, typicalEggCartonCount } from "@/domain/egg-pack";
 import { stapleMatchesCatalogQuery } from "@/domain/staple-search";
+import { identityKeywords } from "@/domain/pack-tokens";
 
 export type { AmountUnit };
+
+/** Named second product for Category A only — not cheapest-equivalent search. */
+export type AlternateProduct = {
+  query: string;
+  mustIncludeAny?: string[];
+  mustNotInclude?: string[];
+  /** Default true: pick the alternate when both exist and it is cheaper (fair unit). */
+  useIfCheaper?: boolean;
+};
+
+export function normalizeAlternateProduct(
+  raw?: AlternateProduct | null,
+): AlternateProduct | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const query = String(raw.query ?? "").trim();
+  if (!query) return undefined;
+  const mustIncludeAny = identityKeywords(raw.mustIncludeAny);
+  const mustNotInclude = identityKeywords(raw.mustNotInclude);
+  return {
+    query,
+    mustIncludeAny: mustIncludeAny.length ? mustIncludeAny : undefined,
+    mustNotInclude: mustNotInclude.length ? mustNotInclude : undefined,
+    useIfCheaper: raw.useIfCheaper !== false,
+  };
+}
 
 export type MatchMode = "exact" | "cheapest_equivalent";
 export type PurchaseStrategy = "exact_need" | "stock_up";
@@ -35,6 +61,8 @@ export interface RestaurantProduct {
   matchRules?: MatchRules;
   preferredProductId?: string;
   category?: string;
+  /** Category A only: named fallback / cheaper second product. */
+  alternateProduct?: AlternateProduct;
 }
 
 export interface StapleLike {
@@ -57,6 +85,8 @@ export interface StapleLike {
   mustNotInclude?: string[];
   rejectNameIncludes?: string[];
   queries?: string[];
+  preferNameIncludes?: string[];
+  alternateProduct?: AlternateProduct | null;
 }
 
 export function canonicalizeMatchMode(raw?: string | null): MatchMode | null {
@@ -174,6 +204,8 @@ export function toRestaurantProduct(item: StapleLike): RestaurantProduct {
   if (item.maximumAmount != null && item.maximumAmount > 0) {
     product.maximumAmount = item.maximumAmount;
   }
+  const alternate = normalizeAlternateProduct(item.alternateProduct);
+  if (alternate) product.alternateProduct = alternate;
   return product;
 }
 
@@ -194,6 +226,8 @@ export type ProductOverride = Partial<
   /** Client flag: old store mappings must not lock Compare until reconfirmed. */
   needsReview?: boolean;
   maximumAmount?: number | null;
+  /** `null` clears a previously saved Category A alternate. */
+  alternateProduct?: AlternateProduct | null;
 };
 
 function eggOverrideAmount(
@@ -219,6 +253,7 @@ export function applyProductOverride(
     confirmedStoreProducts: _confirmed,
     needsReview: _review,
     maximumAmount: overrideMax,
+    alternateProduct: _alt,
     ...rest
   } = override;
   const matchRules = {
@@ -260,6 +295,13 @@ export function applyProductOverride(
     delete next.maximumAmount;
   } else if (overrideMax != null && overrideMax > 0) {
     next.maximumAmount = overrideMax;
+  }
+  if (override.alternateProduct === null) {
+    delete next.alternateProduct;
+  } else if (override.alternateProduct) {
+    const alternate = normalizeAlternateProduct(override.alternateProduct);
+    if (alternate) next.alternateProduct = alternate;
+    else delete next.alternateProduct;
   }
   return next;
 }
@@ -315,6 +357,13 @@ export function stapleWithClientOverride<T extends StapleLike>(
   if (wm) next.preferredProductId = wm;
   else if (override.preferredProductId) {
     next.preferredProductId = override.preferredProductId;
+  }
+  if (override.alternateProduct === null) {
+    delete next.alternateProduct;
+  } else if (override.alternateProduct) {
+    const alternate = normalizeAlternateProduct(override.alternateProduct);
+    if (alternate) next.alternateProduct = alternate;
+    else delete next.alternateProduct;
   }
   return next;
 }

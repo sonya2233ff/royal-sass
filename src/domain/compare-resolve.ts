@@ -17,6 +17,11 @@ import { pickNeededWeightPurchase } from "@/domain/needed-weight-pick";
 import { pickCheapestCoveringOffer } from "@/domain/checkout";
 import type { RestaurantProduct } from "@/domain/restaurant-product";
 import {
+  asAlternateStapleView,
+  hasCategoryAAlternate,
+  pickCategoryAPrimaryOrAlternate,
+} from "@/domain/category-a-alternate";
+import {
   isActualCategoryBOffer,
   preferNonCasePacks,
   samePackedItemCandidates,
@@ -137,6 +142,49 @@ function passingCatalogOffers(
     out.push(offer);
   }
   return preferNonCasePacks(out);
+}
+
+function passingAlternateCatalogOffers(
+  item: StapleFilterItem,
+  row?: CatalogRowRef | null,
+): CatalogOfferRef[] {
+  const alt = asAlternateStapleView(item);
+  if (!alt) return [];
+  const out: CatalogOfferRef[] = [];
+  for (const offer of catalogCandidates(row)) {
+    if (!offerIsOnShelf(offer)) continue;
+    if (offerFailsStapleOfferFilters(alt, offer)) continue;
+    out.push(offer);
+  }
+  return preferNonCasePacks(out);
+}
+
+function resolveCategoryAWithAlternate(
+  item: StapleFilterItem,
+  row: CatalogRowRef | null | undefined,
+  primary: CatalogOfferRef | null,
+  detail?: string,
+): {
+  offer: CatalogOfferRef | null;
+  reason: ResolveReason;
+  detail?: string;
+} | null {
+  if (!hasCategoryAAlternate(item)) return null;
+  const altPool = passingAlternateCatalogOffers(item, row).filter(
+    (o) => o.productId !== primary?.productId,
+  );
+  const alternate = pickCheapestByFairUnit(altPool);
+  const chosen = pickCategoryAPrimaryOrAlternate(item, primary, alternate);
+  if (!chosen) return null;
+  if (primary && chosen.productId === primary.productId) {
+    return null;
+  }
+  return {
+    ...resolveFromOffer(chosen, row, detail ?? "category A alternate"),
+    detail: primary
+      ? "category A alternate cheaper (fair unit)"
+      : "category A alternate fallback",
+  };
 }
 
 function resolveFromOffer(
@@ -268,13 +316,19 @@ export function resolveCatalogOffer(input: {
         offerPassesStapleFilters(input.item, hit)
       ) {
         const alias = hit.productId !== mappedSku;
-        return {
+        const mapped = {
           offer: hit,
-          reason: alias ? "mapped_sku_rapid_alias" : "mapped_sku",
+          reason: (alias ? "mapped_sku_rapid_alias" : "mapped_sku") as ResolveReason,
           detail: alias
             ? `Rapid id ${hit.productId} ≈ lock ${mappedSku}`
             : mappedSku,
         };
+        const swapped = resolveCategoryAWithAlternate(
+          input.item,
+          input.row,
+          hit,
+        );
+        return swapped ?? mapped;
       }
       // Locked SKU fails mustNotInclude — nearest passing alternate below.
     }
@@ -322,6 +376,12 @@ export function resolveCatalogOffer(input: {
         passing,
       );
       if (covering) {
+        const swapped = resolveCategoryAWithAlternate(
+          input.item,
+          input.row,
+          covering,
+        );
+        if (swapped) return swapped;
         return resolveFromOffer(
           covering,
           input.row,
@@ -329,8 +389,18 @@ export function resolveCatalogOffer(input: {
         );
       }
     }
-    return resolveFromOffer(passing[0]!, input.row);
+    const primary = passing[0]!;
+    const swapped = resolveCategoryAWithAlternate(
+      input.item,
+      input.row,
+      primary,
+    );
+    if (swapped) return swapped;
+    return resolveFromOffer(primary, input.row);
   }
+
+  const altOnly = resolveCategoryAWithAlternate(input.item, input.row, null);
+  if (altOnly?.offer) return altOnly;
 
   if (input.row?.offer) {
     if (!offerIsOnShelf(input.row.offer)) {

@@ -70,7 +70,7 @@ These are live on **production** `master` (`7d405de` and descendants). Phone dem
 - UI: per-card **Оновити**, toolbar **Оновити вибрані** (cart ids), settings **Зберегти і оновити**.
 - `POST /api/staples/rematch` → WM then NF then WC then MVR; `productOverrides` from localStorage; `maxDuration = 60`; `skipIdentityLock` so settings apply.
 - WM Rapid key missing → skip WM, still rematch the other three.
-- Exact rematch still prefers confirmed / preferred SKUs when the hit is that product **and it passes `mustNotInclude`**. Exception: `oat_beverage_original` (below). Cheapest may skip identity lock to pick a new equivalent.
+- Exact rematch still prefers confirmed / preferred SKUs when the hit is that product **and it passes `mustNotInclude`**. Exception: `oat_beverage_original` (below). A named Category A `alternateProduct` is still searched: use it when the primary is missing, or when it is cheaper on fair unit. Cheapest may skip identity lock to pick a new equivalent.
 
 **Tropicana (`orange_juice_pulp`) — worked example of a class of bugs**
 
@@ -127,6 +127,8 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 | Quantity | Usually `exact_need` (Tropicana OJ is exact brand + `stock_up` 1–3 L so the WM 2.63 L jug is allowed) | Either strategy (tomato = exact_need 2 kg) |
 | UI badge | **А** — точний продукт | **Б** — найдешевший відповідний |
 
+**Category A alternate product** — operator may name a second branded product in settings (exact mode only). Fields: `alternateProduct.query` plus optional Include/Exclude. Default **Брати альтернативу, якщо вона дешевша**. If the primary SKU is missing / not on the shelf → use the alternate. If both exist and the checkbox is on → pick the cheaper **fair unit** (`$/L` or `$/kg`), not raw shelf. This is **not** Category B cheapest-equivalent (no impostor / any-brand search). Alternate Include does **not** merge into the primary Tropicana-style filters; primary `mustNotInclude` still applies to the alternate. Rematch searches the alternate query even when the Category A SKU is identity-locked. `oat_beverage_original` still stays on locked Zero Sugar and will not cheaper-swap onto Original. Empty query clears the alternate. After changing it, **Зберегти і оновити**.
+
 `resolveMatchMode`: explicit `item.matchMode` (canonicalized), else produce/frozen/eggs/`PRODUCE_IDS`/`FROZEN_BAG_IDS`/`EGG_PACK_IDS` → cheapest, else preferred.
 
 **Category B identity** (`usesCategoryBIdentity` / `isActualCategoryBOffer`) is **only** `category === "produce" | "frozen"`. Eggs can be cheapest via `EGG_PACK_IDS` without produce-identity filters. Filters also read the Shopify handle / `productId` / URL slug (`offerHandleHay`), so a relabeled `vegetables-grape-tomatoes-case` cannot win the round `tomato` card.
@@ -179,6 +181,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `src/domain/staple-search.ts` | Homepage catalog-only search hay / scoring |
 | `src/domain/matching.ts` | `staplePickQuery`, `scoreOfferMatch` (soft size tokens) |
 | `src/domain/restaurant-product.ts` | Settings merge (`stapleWithClientOverride`) |
+| `src/domain/category-a-alternate.ts` | Category A named alternate (fallback / cheaper fair unit) |
 | `src/lib/staples.ts` | Catalog I/O, `summarizeOffer`, egg/weight sets |
 | `src/lib/staple-compare-row.ts` | One compare row: identity → pack fit → checkout |
 | `src/lib/rematch-staples.ts` | Live rematch WM+NF+WC+MVR from client overrides |
@@ -231,7 +234,7 @@ Refresh/compare/rematch routes use `maxDuration = 60`.
 
 **SKU pick** (`resolveCatalogOffer`):
 
-- Locked identity (`verified`, or `auto_linked` + `kind=identity` / `skippedRematch`) → mapped SKU only. Missing SKU → `mapped_sku_missing`, not a different winner.
+- Locked identity (`verified`, or `auto_linked` + `kind=identity` / `skippedRematch`) → mapped SKU only. Missing SKU → `mapped_sku_missing`, not a different winner. **Exception:** a Category A `alternateProduct` may fill a missing primary or win when it is cheaper on fair unit.
 - Else cheapest in-filter offer (Category B must pass `isActualCategoryBOffer`); else alternate; else no price.
 - Locked SKUs skip staple name filters. `matchMode: preferred` + mapping `decision: rejected` → `fairBasis: incomparable`, **excluded from basket**.
 
@@ -269,7 +272,7 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.
 - **Driver portal** (`/driver`): visual inbox of waiter product lists (mock tickets; local waiter draft may appear as a this-phone mock). **No accept / in-transit / message-waiter API.**
 - Results: columns for the selected stores, then baskets, then stats.
-- Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand.
+- Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand. Category A settings can name one **альтернативний продукт** (search + Include/Exclude + cheaper checkbox).
 
 ## Deploy
 

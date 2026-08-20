@@ -31,6 +31,11 @@ import {
 import { evaluatePurchase, pickCheapestCoveringOffer } from "@/domain/checkout";
 import { offerMatchesIdentity } from "@/domain/product-identity";
 import { toRestaurantProduct, stapleWithClientOverride, applyProductOverride } from "@/domain/restaurant-product";
+import {
+  asAlternateStapleView,
+  pickCategoryAPrimaryOrAlternate,
+  withCategoryAAlternateQueries,
+} from "@/domain/category-a-alternate";
 import { sanityCheckOffer } from "@/domain/sanity";
 import { scoreOfferMatch, staplePickQuery } from "@/domain/matching";
 import { identityKeywords, isPackSizeKeyword } from "@/domain/pack-tokens";
@@ -1197,6 +1202,153 @@ async function main() {
   assert(
     labelMisses.length === 0,
     `staple pick queries must accept their own search titles:\n${labelMisses.join("\n")}`,
+  );
+
+  const tropicanaHit = {
+    productId: "205804",
+    name: "Tropicana Orange Juice No Pulp",
+    price: 8.47,
+    packageSize: "2.63 L",
+  };
+  const simplyHit = {
+    productId: "simply-orange-136",
+    name: "Simply Orange Juice Pulp Free",
+    price: 3.49,
+    packageSize: "1.36 L",
+  };
+  const brandedOj = {
+    id: "orange_juice_pulp",
+    label: "Tropicana OJ No Pulp 2.63L",
+    matchMode: "exact" as const,
+    queries: ["tropicana orange juice no pulp"],
+    mustIncludeAny: ["tropicana"],
+    alternateProduct: {
+      query: "simply orange",
+      mustIncludeAny: ["simply orange"],
+      useIfCheaper: true,
+    },
+  };
+  const ojAlt = stapleWithClientOverride(oj!, {
+    matchMode: "exact",
+    alternateProduct: { query: "simply orange", useIfCheaper: true },
+  });
+  assert(
+    ojAlt.mustIncludeAny?.some((t) => /no pulp|pulp/i.test(t)),
+    "alternate must not replace catalog no-pulp include on the primary",
+  );
+  assert(
+    ojAlt.queries[0]?.toLowerCase().includes("tropicana"),
+    "alternate must not replace the Tropicana search query",
+  );
+  assert(
+    ojAlt.alternateProduct?.query === "simply orange",
+    "override stores the Category A alternate query",
+  );
+  const altQs = withCategoryAAlternateQueries(
+    brandedOj,
+    categoryBSearchQueries(
+      { ...brandedOj, queries: brandedOj.queries },
+      6,
+    ),
+  );
+  assert(
+    altQs.some((q) => /simply orange/i.test(q)),
+    `alternate query must be searched, got ${altQs.join(" | ")}`,
+  );
+  const altView = asAlternateStapleView(brandedOj);
+  assert(altView, "alternate staple view");
+  assert(
+    offerFailsStapleOfferFilters(brandedOj, simplyHit) === "mustIncludeAny",
+    "Simply Orange must not pass Tropicana include",
+  );
+  assert(
+    offerFailsStapleOfferFilters(altView!, simplyHit) == null,
+    "Simply Orange passes the alternate view",
+  );
+  assert(
+    pickCategoryAPrimaryOrAlternate(brandedOj, null, simplyHit)?.productId ===
+      "simply-orange-136",
+    "missing primary uses the named alternate",
+  );
+  assert(
+    pickCategoryAPrimaryOrAlternate(brandedOj, tropicanaHit, simplyHit)
+      ?.productId === "simply-orange-136",
+    "cheaper alternate (fair $/L) wins when both exist",
+  );
+  const ojAltKeep = {
+    ...brandedOj,
+    alternateProduct: {
+      query: "simply orange",
+      mustIncludeAny: ["simply orange"],
+      useIfCheaper: false,
+    },
+  };
+  assert(
+    pickCategoryAPrimaryOrAlternate(ojAltKeep, tropicanaHit, simplyHit)
+      ?.productId === "205804",
+    "useIfCheaper false keeps the primary",
+  );
+  const noAlt = resolveCatalogOffer({
+    item: oj!,
+    row: { offer: tropicanaHit, alternates: [simplyHit] },
+    link: {
+      retailerProductId: "205804",
+      verified: true,
+      kind: "identity",
+    },
+    matchMode: "preferred",
+  });
+  assert(
+    noAlt.offer?.productId === "205804",
+    `no alternate keeps Tropicana lock, got ${noAlt.offer?.productId}`,
+  );
+  const cheaperAlt = resolveCatalogOffer({
+    item: brandedOj,
+    row: { offer: tropicanaHit, alternates: [simplyHit] },
+    link: {
+      retailerProductId: "205804",
+      verified: true,
+      kind: "identity",
+    },
+    matchMode: "preferred",
+  });
+  assert(
+    cheaperAlt.offer?.productId === "simply-orange-136",
+    `cheaper named alternate wins catalog resolve, got ${cheaperAlt.offer?.productId}`,
+  );
+  const missingPrimary = resolveCatalogOffer({
+    item: brandedOj,
+    row: { offer: simplyHit, alternates: [] },
+    link: {
+      retailerProductId: "205804",
+      verified: true,
+      kind: "identity",
+    },
+    matchMode: "preferred",
+  });
+  assert(
+    missingPrimary.offer?.productId === "simply-orange-136",
+    `missing primary falls back to named alternate, got ${missingPrimary.offer?.productId}`,
+  );
+  const oatWithAlt = {
+    ...oatItem,
+    label: "Earth's Own Oat Original 1.75L",
+    matchMode: "exact" as const,
+    alternateProduct: { query: "earth's own original oat", useIfCheaper: true },
+  };
+  const oatAltResolve = resolveCatalogOffer({
+    item: oatWithAlt,
+    row: { offer: oatZero, alternates: [{ ...oatOrig, price: 3.97 }] },
+    link: {
+      retailerProductId: "2ADJVX8MAQ1Q",
+      verified: true,
+      kind: "identity",
+    },
+    matchMode: "preferred",
+  });
+  assert(
+    oatAltResolve.offer?.productId === "2ADJVX8MAQ1Q",
+    `oat exception keeps Zero Sugar even with a cheaper Original alternate, got ${oatAltResolve.offer?.productId}`,
   );
 
   console.log("staple-filter-self-check ok");

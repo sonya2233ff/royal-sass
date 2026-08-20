@@ -8,6 +8,7 @@ import {
   identityKeywords,
   stripPackNoise,
 } from "@/domain/pack-tokens";
+import type { AlternateProduct } from "@/domain/restaurant-product";
 
 export const NOFRILLS_RETAILER = "nofrills";
 export const WALMART_RETAILER = "walmart_ca";
@@ -17,7 +18,9 @@ export const MVR_RETAILER = "mvr";
 
 export interface StapleFilterItem {
   id: string;
+  label?: string;
   category?: string;
+  matchMode?: string;
   mustIncludeAny?: string[];
   mustIncludeAll?: string[];
   mustNotInclude?: string[];
@@ -25,6 +28,18 @@ export interface StapleFilterItem {
   rejectNameIncludes?: string[];
   /** When the offer is sold as 1 ea with no grams, use this average fruit/veg weight. */
   typicalEachGrams?: number;
+  queries?: string[];
+  preferredProductId?: string;
+  preferNameIncludes?: string[];
+  matchRules?: {
+    productType?: string;
+    form?: string;
+    variant?: string;
+    mustIncludeAll?: string[];
+    mustIncludeAny?: string[];
+    mustNotInclude?: string[];
+  };
+  alternateProduct?: AlternateProduct | null;
 }
 
 export interface CatalogOfferLike {

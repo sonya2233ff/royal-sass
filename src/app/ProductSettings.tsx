@@ -67,6 +67,17 @@ export function ProductSettings({
     confirmedStoreProducts ?? {},
   );
 
+  const [altQuery, setAltQuery] = useState(product.alternateProduct?.query ?? "");
+  const [altInclude, setAltInclude] = useState(
+    (product.alternateProduct?.mustIncludeAny ?? []).join(", "),
+  );
+  const [altExclude, setAltExclude] = useState(
+    (product.alternateProduct?.mustNotInclude ?? []).join(", "),
+  );
+  const [altIfCheaper, setAltIfCheaper] = useState(
+    product.alternateProduct?.useIfCheaper !== false,
+  );
+
   useEffect(() => {
     if (!open) return;
     setMatchMode(product.matchMode);
@@ -82,6 +93,10 @@ export function ProductSettings({
     setVariant(product.matchRules?.variant ?? "");
     setInclude((product.matchRules?.mustIncludeAny ?? []).join(", "));
     setExclude((product.matchRules?.mustNotInclude ?? []).join(", "));
+    setAltQuery(product.alternateProduct?.query ?? "");
+    setAltInclude((product.alternateProduct?.mustIncludeAny ?? []).join(", "));
+    setAltExclude((product.alternateProduct?.mustNotInclude ?? []).join(", "));
+    setAltIfCheaper(product.alternateProduct?.useIfCheaper !== false);
     setConfirmed(confirmedStoreProducts ?? {});
   }, [open, product, confirmedStoreProducts]);
 
@@ -112,6 +127,23 @@ export function ProductSettings({
     };
     if (purchaseStrategy === "stock_up" && Number.isFinite(maxN) && maxN > 0) {
       override.maximumAmount = maxN;
+    }
+    if (matchMode === "exact") {
+      const q = altQuery.trim();
+      override.alternateProduct = q
+        ? {
+            query: q,
+            mustIncludeAny: altInclude
+              .split(",")
+              .map((s) => s.trim())
+              .filter((s) => s && !isPackSizeKeyword(s)),
+            mustNotInclude: altExclude
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean),
+            useIfCheaper: altIfCheaper,
+          }
+        : null;
     }
     onSave(override, matchMode !== product.matchMode, rematch);
     onClose();
@@ -231,6 +263,48 @@ export function ProductSettings({
           Exclude keywords
           <input value={exclude} onChange={(e) => setExclude(e.target.value)} />
         </label>
+        {matchMode === "exact" && (
+          <fieldset className="ps-alt">
+            <legend>Альтернативний продукт (категорія А)</legend>
+            <span className="ps-hint">
+              Якщо точного немає — цей. Якщо обидва є і галочка увімкнена —
+              береться дешевший за $/L або $/kg. Це не «найдешевший будь-який»:
+              лише названий другий продукт. Розмір пачки не ідентичність.
+              Після зміни — «Зберегти і оновити».
+            </span>
+            <label>
+              Пошук / назва
+              <input
+                value={altQuery}
+                onChange={(e) => setAltQuery(e.target.value)}
+                placeholder="simply orange"
+              />
+            </label>
+            <label>
+              Include (альтернатива)
+              <input
+                value={altInclude}
+                onChange={(e) => setAltInclude(e.target.value)}
+                placeholder="simply orange"
+              />
+            </label>
+            <label>
+              Exclude (альтернатива)
+              <input
+                value={altExclude}
+                onChange={(e) => setAltExclude(e.target.value)}
+              />
+            </label>
+            <label className="ps-check">
+              <input
+                type="checkbox"
+                checked={altIfCheaper}
+                onChange={(e) => setAltIfCheaper(e.target.checked)}
+              />
+              Брати альтернативу, якщо вона дешевша
+            </label>
+          </fieldset>
+        )}
         <div className="ps-stores">
           <p>Підтвердити товар у магазині (після зміни A/B старі mapping — needs_review)</p>
           {storeOffers.map((s) => (
@@ -342,6 +416,24 @@ export function ProductSettings({
           background: #1e4030;
           color: #fff;
           border-color: #1e4030;
+        }
+        .ps-alt {
+          border: 1px solid #d7cfc2;
+          padding: 0.55rem 0.65rem 0.7rem;
+          display: grid;
+          gap: 0.45rem;
+        }
+        .ps-alt legend {
+          font-size: 0.82rem;
+          font-weight: 600;
+        }
+        .ps-check {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+        .ps-check input {
+          width: auto;
         }
       `}</style>
     </div>

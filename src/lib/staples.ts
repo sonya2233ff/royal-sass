@@ -14,8 +14,16 @@ import {
   stapleWithClientOverride,
   toLegacyMatchMode,
   type ProductOverride,
+  type AlternateProduct,
 } from "@/domain/restaurant-product";
 import { offerFailsStapleOfferFilters, categoryBSearchQueries, retailerTaxonomyText, walmartCheapestHintIds } from "@/domain/catalog-normalize";
+import {
+  asAlternateStapleView,
+  categoryAAlternateQuery,
+  hasCategoryAAlternate,
+  pickCategoryAPrimaryOrAlternate,
+  withCategoryAAlternateQueries,
+} from "@/domain/category-a-alternate";
 import { extractRetailerImage } from "@/lib/product-image";
 import { RECEIPT_STAPLE_IDS } from "@/lib/receipt-staple-ids";
 import {
@@ -230,6 +238,8 @@ export interface StapleItem {
     mustNotInclude?: string[];
   };
   category?: string;
+  /** Category A only: named fallback / cheaper second product. */
+  alternateProduct?: AlternateProduct | null;
   /** Added from in-app search; shown alongside PINNED_IDS. */
   custom?: boolean;
 }
@@ -420,7 +430,7 @@ export function applyRemovedStapleIds<T extends { id: string }>(
 }
 
 /** Hidden egg carton rows that still feed `large_eggs_dozen`. Not homepage cards. */
-const PROTECTED_DELETE_IDS = new Set(
+const PROTECTED_DELETE_IDS = new Set<string>(
   EGG_CATALOG_SOURCE_IDS.filter((id) => id !== "large_eggs_dozen"),
 );
 
@@ -919,6 +929,83 @@ function passesFilters(
   });
 }
 
+function passesPrimaryOrAlternate(
+  offer: Parameters<typeof passesFilters>[0],
+  item: StapleItem,
+): boolean {
+  if (passesFilters(offer, item)) return true;
+  const alt = asAlternateStapleView(item);
+  return Boolean(alt && passesFilters(offer, alt as StapleItem));
+}
+
+export function pickStapleOfferWithAlternate(
+  item: StapleItem,
+  pool: ProductOffer[],
+  log?: MatchLogEntry,
+  preferredId?: string | null,
+): ProductOffer | null {
+  const altItem = asAlternateStapleView(item);
+  if (!altItem) {
+    return pickStapleSearchWinner(item, pool, log, preferredId);
+  }
+  const primaryPool = pool.filter((o) => passesFilters(o, item));
+  const altPool = pool.filter(
+    (o) =>
+      passesFilters(o, altItem as StapleItem) &&
+      !primaryPool.some((p) => p.productId === o.productId),
+  );
+  const primary = pickStapleSearchWinner(
+    item,
+    primaryPool,
+    undefined,
+    preferredId,
+  );
+  const alternate = pickStapleSearchWinner(
+    altItem as StapleItem,
+    altPool,
+    undefined,
+  );
+  const chosen = pickCategoryAPrimaryOrAlternate(item, primary, alternate);
+  if (chosen) {
+    if (log) {
+      log.accepted = {
+        productId: chosen.productId,
+        name: chosen.name,
+        price: chosen.price,
+      };
+      log.status = "ok";
+      if (alternate && chosen.productId === alternate.productId) {
+        log.rejected.push({
+          productId: alternate.productId,
+          name: alternate.name,
+          price: alternate.price,
+          reason: primary
+            ? "category A alternate cheaper (fair unit)"
+            : "category A alternate fallback",
+        });
+      }
+    }
+    return chosen;
+  }
+  if (log) {
+    log.status = "no_match";
+    log.rejected.push({ reason: "no relevant hits after filters" });
+  }
+  return null;
+}
+
+export function catalogExtrasForCategoryAAlternate(
+  item: StapleItem,
+  pool: ProductOffer[],
+  chosenId: string,
+): CatalogOffer[] {
+  if (!hasCategoryAAlternate(item)) return [];
+  return pool
+    .filter((o) => o.productId !== chosenId && passesPrimaryOrAlternate(o, item))
+    .slice(0, 8)
+    .map(catalogOfferFromLive);
+}
+
 function expectedPackFor(item: StapleItem): number | undefined {
   if (item.expectedPackKg != null) return item.expectedPackKg;
   if (item.targetMassKg != null) return item.targetMassKg;
@@ -1036,7 +1123,10 @@ export async function searchNoFrillsPool(
       : nfLink && isLockedIdentityLink(nfLink)
         ? nfLink.retailerProductId
         : null);
-  const queries = categoryBSearchQueries(item, 6);
+  const queries = withCategoryAAlternateQueries(
+    item,
+    categoryBSearchQueries(item, 6),
+  );
   if (log) log.queries = lockedNfSku ? [lockedNfSku, ...queries] : [...queries];
 
   if (lockedNfSku) {
@@ -1073,7 +1163,7 @@ export async function searchNoFrillsPool(
 
   const all = [...seen.values()];
   for (const o of all) {
-    if (!passesFilters(o, item)) {
+    if (!passesPrimaryOrAlternate(o, item)) {
       log?.rejected.push({
         productId: o.productId,
         name: o.name,
@@ -1088,11 +1178,14 @@ export async function searchNoFrillsPool(
 
   return all.filter((o) => {
     if (lockedNfSku && o.productId === lockedNfSku) {
-      if (identityLockAllowsFilterMismatch(item) || passesFilters(o, item)) {
+      if (
+        identityLockAllowsFilterMismatch(item) ||
+        passesPrimaryOrAlternate(o, item)
+      ) {
         return true;
       }
     }
-    if (!passesFilters(o, item)) return false;
+    if (!passesPrimaryOrAlternate(o, item)) return false;
     const priceFail = offerFailsPlausibleShelfPrice(item, o);
     if (priceFail) {
       log?.rejected.push({
@@ -1201,7 +1294,7 @@ export async function searchNoFrills(
   const lockedNfSku =
     nfLink && isLockedIdentityLink(nfLink) ? nfLink.retailerProductId : null;
   const pool = await searchNoFrillsPool(item, log);
-  return pickStapleSearchWinner(item, pool, log, lockedNfSku);
+  return pickStapleOfferWithAlternate(item, pool, log, lockedNfSku);
 }
 
 function walmartPoolHintIds(
@@ -1278,7 +1371,10 @@ export async function searchWalmartQueryPool(
   const seen = new Map<string, ProductOffer>();
   const extraHints = await walmartCatalogHintIds(item.id);
   await addWalmartSkuHints(wm, item, seen, log, extraHints);
-  const queries = categoryBSearchQueries(item, 6);
+  const queries = withCategoryAAlternateQueries(
+    item,
+    categoryBSearchQueries(item, 6),
+  );
   if (log) {
     const hints = walmartPoolHintIds(item, extraHints);
     log.queries = [...hints, ...queries.filter((q) => !hints.includes(q))];
@@ -1299,7 +1395,7 @@ export async function searchWalmartQueryPool(
   const shelf = await loadShelfOverrides();
   const ov = shelfOverrideFor(shelf, "walmart_5831", item.id);
   return [...seen.values()].filter((o) => {
-    if (!passesFilters(o, item)) {
+    if (!passesPrimaryOrAlternate(o, item)) {
       log?.rejected.push({
         productId: o.productId,
         name: o.name,
@@ -1791,6 +1887,13 @@ export async function refreshWalmartSelected(
             : item.queries.filter(Boolean).slice(0, 4)),
         ];
     log.queries = pinId ? [pinId, ...queries.filter((q) => q !== pinId)] : queries;
+    const altQueryForLog = categoryAAlternateQuery(item);
+    if (
+      altQueryForLog &&
+      !log.queries.some((q) => q.toLowerCase() === altQueryForLog.toLowerCase())
+    ) {
+      log.queries.push(altQueryForLog);
+    }
 
     const seen = new Map<string, ProductOffer>();
     // Category A: product_id + store first. Search trips PerimeterX and is not needed
@@ -1836,10 +1939,22 @@ export async function refreshWalmartSelected(
       rowOffer?.productId,
       ...rowAlts.map((a) => a.productId),
     ]);
-    if (!pinAlreadySeen || pinNotOnShelf) {
-      const extra = opts?.skipIdentityLock
-        ? queries.filter((q) => q && !/^\d+$/.test(q)).slice(0, 6)
-        : item.queries.filter(Boolean).slice(0, 4);
+    const altQuery = categoryAAlternateQuery(item);
+    if (!pinAlreadySeen || pinNotOnShelf || altQuery) {
+      const extra: string[] = [];
+      if (!pinAlreadySeen || pinNotOnShelf) {
+        extra.push(
+          ...(opts?.skipIdentityLock
+            ? queries.filter((q) => q && !/^\d+$/.test(q)).slice(0, 6)
+            : item.queries.filter(Boolean).slice(0, 4)),
+        );
+      }
+      if (
+        altQuery &&
+        !extra.some((q) => q.toLowerCase() === altQuery.toLowerCase())
+      ) {
+        extra.push(altQuery);
+      }
       for (const q of extra) {
         try {
           const hits = await wm.searchProducts(q, "5831");
@@ -1863,7 +1978,8 @@ export async function refreshWalmartSelected(
     const pinHonored =
       Boolean((lockedId || pinHit) && pinHit && !pinNotOnShelf) &&
       (identityLockAllowsFilterMismatch(item) || passesFilters(pinHit!, item));
-    if (pinHonored && pinHit) {
+    const allowAlt = hasCategoryAAlternate(item);
+    if (pinHonored && pinHit && !allowAlt) {
       const pin = lockedId ?? preferred!;
       best = pinHit;
       for (const o of seen.values()) {
@@ -1878,7 +1994,7 @@ export async function refreshWalmartSelected(
       }
     } else {
       const pool = [...seen.values()].filter((o) => {
-        if (!passesFilters(o, item)) return false;
+        if (!passesPrimaryOrAlternate(o, item)) return false;
         if (
           ov?.availability === "out_of_stock" &&
           ov.productId &&
@@ -1889,7 +2005,7 @@ export async function refreshWalmartSelected(
         return true;
       });
       for (const o of seen.values()) {
-        if (!passesFilters(o, item)) {
+        if (!passesPrimaryOrAlternate(o, item)) {
           log.rejected.push({
             productId: o.productId,
             name: o.name,
@@ -1909,21 +2025,12 @@ export async function refreshWalmartSelected(
           });
         }
       }
-      best =
-        pickBestOffer(
-          pool,
-          matchQueryForPick(item),
-          pinNotOnShelf ? undefined : (preferred ?? undefined),
-          {
-          targetMassKg: item.targetMassKg ?? expectedPackFor(item),
-          mode,
-          preferNameIncludes: item.preferNameIncludes,
-          byEach: isEggPackItem(item),
-          preferLargerPack: preferLargerEggPack(item),
-          preferredUpc: itemPreferredUpc(item),
-          requireQueryMatch: false,
-        },
-        ) ?? (mode === "cheapest" ? pool[0] ?? null : null);
+      best = pickStapleOfferWithAlternate(
+        item,
+        pool,
+        log,
+        pinNotOnShelf ? undefined : (preferred ?? undefined),
+      );
       if (best && mode === "cheapest") {
         log.rejected.push({
           reason: `cheapest produce pick among ${pool.length} filtered hits`,
@@ -1994,6 +2101,12 @@ export async function refreshWalmartSelected(
           sizes,
           best.productId,
         ).alternates;
+      } else if (hasCategoryAAlternate(item)) {
+        row.alternates = catalogExtrasForCategoryAAlternate(
+          item,
+          [...seen.values()],
+          best.productId,
+        );
       }
     } else {
       const previous = row.offer as CatalogOffer | null | undefined;
@@ -2075,7 +2188,7 @@ export async function refreshNoFrillsSelected(
       skipIdentityLock: refreshSkipIdentityLock(item, opts, pinNf),
       pinSku: pinNf,
     });
-    const offer = pickStapleSearchWinner(item, pool, log, pinNf);
+    const offer = pickStapleOfferWithAlternate(item, pool, log, pinNf);
     entries.push(log);
     updated.push(id);
 
@@ -2096,7 +2209,7 @@ export async function refreshNoFrillsSelected(
         alternates:
           usesNeededWeightPick(item) && !isSoldByWeightItem(item)
             ? split.alternates
-            : [],
+            : catalogExtrasForCategoryAAlternate(item, pool, offer.productId),
         notes: `Live NF refresh (TTL ${CACHE_STALE_HOURS}h)`,
       });
     } else {
