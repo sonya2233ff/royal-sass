@@ -3,7 +3,11 @@
  * not cheapest $/100g of a huge bag, and not three tiny expensive packs
  * just because they sit inside −10% / +15%.
  */
-import { packMassKg, pricePer100gFromKg } from "@/domain/fair-compare";
+import {
+  packMassKg,
+  packsSimilar,
+  pricePer100gFromKg,
+} from "@/domain/fair-compare";
 import { isEachSoldOffer } from "@/domain/same-packed-item";
 import { round2 } from "@/domain/units";
 
@@ -39,6 +43,25 @@ export interface WeightPurchasePlan {
   inRange: boolean;
   coverFallback: boolean;
   soldByWeight: boolean;
+}
+
+/**
+ * When packed produce on one row is 283 g vs ~907 g, cover the largest pack
+ * (qty of cafe packs × that mass). Similar packs stay 1-for-1.
+ */
+export function sharedCoverGramsForDissimilarPacks(
+  packKgList: Array<number | null | undefined>,
+  qty = 1,
+): number | null {
+  const kgs = packKgList.filter(
+    (k): k is number => typeof k === "number" && Number.isFinite(k) && k > 0,
+  );
+  if (kgs.length < 2) return null;
+  const maxKg = Math.max(...kgs);
+  const minKg = Math.min(...kgs);
+  if (packsSimilar(minKg, maxKg)) return null;
+  const n = Math.max(1, Math.round(Number(qty) || 1));
+  return Math.round(maxKg * 1000) * n;
 }
 
 export function neededWeightBounds(neededGrams: number): {

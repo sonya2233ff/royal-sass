@@ -251,6 +251,7 @@ type SideResult = {
     saleMode?: string;
     packs?: number;
     packAmount?: number | null;
+    packUnit?: string | null;
     purchasedAmount?: number;
     leftoverAmount?: number;
     leftoverUnit?: string;
@@ -3542,7 +3543,8 @@ function Side({
           </div>
           {checkout?.packs != null && checkout.packAmount != null && (
             <div className="tiny">
-              {checkout.packs} × {checkout.packAmount} {side.requestedUnit ?? ""}
+              {checkout.packs} × {checkout.packAmount}{" "}
+              {checkout.packUnit ?? side.requestedUnit ?? ""}
               {checkout.saleMode === "case" ? " (case)" : ""}
             </div>
           )}

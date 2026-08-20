@@ -169,7 +169,9 @@ async function main() {
     `WM grape pack name ${gWm.name}`,
   );
   assert(
-    grape!.fairBasis === "per_100g" || grape!.fairBasis === "per_pack",
+    grape!.fairBasis === "per_100g" ||
+      grape!.fairBasis === "per_pack" ||
+      grape!.fairBasis === "needed_weight",
     `grape packed basis ${grape!.fairBasis}`,
   );
   assert(

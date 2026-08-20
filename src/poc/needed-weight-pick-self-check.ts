@@ -8,6 +8,7 @@ import {
   neededWeightBounds,
   pickNeededWeightPurchase,
   purchasePlanForPack,
+  sharedCoverGramsForDissimilarPacks,
 } from "@/domain/needed-weight-pick";
 import {
   mergeDistinctPackSizes,
@@ -190,6 +191,100 @@ assert(
     row: grapeRow,
   }) === false,
   "NF with 283g alternate should not expand",
+);
+
+assert(
+  sharedCoverGramsForDissimilarPacks([0.283, 0.907]) === 907,
+  "283 g vs 907 g covers the large pack",
+);
+assert(
+  sharedCoverGramsForDissimilarPacks([0.283, 0.29]) == null,
+  "similar clamshells stay 1-for-1",
+);
+assert(
+  sharedCoverGramsForDissimilarPacks([0.283, 0.907], 2) === 1814,
+  "qty 2 covers two large packs",
+);
+
+const grapePackRow = buildStapleCompareRow({
+  item: {
+    ...grapeItem,
+    queries: ["grape tomatoes"],
+    label: "Grape Tomatoes (pack)",
+  },
+  wmOffer: {
+    productId: "72CDS4R4V81X",
+    name: "Nature Fresh Farms - Devours, Premium Red Grape Tomato - 283g",
+    packageSize: "283 g",
+    parsedMassKg: 0.283,
+    price: 2.44,
+  },
+  nfOffer: {
+    productId: nf907.productId,
+    name: nf907.name,
+    packageSize: nf907.packageSize,
+    parsedMassKg: nf907.parsedMassKg,
+    price: nf907.price,
+  },
+  wcOffer: {
+    productId: "wc-907",
+    name: nf907.name,
+    packageSize: nf907.packageSize,
+    parsedMassKg: nf907.parsedMassKg,
+    price: 7.99,
+  },
+  mvrOffer: {
+    productId: "vegetables-tomatoes-grape-1-pint-21",
+    name: "VEGETABLES - TOMATOES GRAPE 1 PINT",
+    packageSize: "1 PINT",
+    price: 1.99,
+  },
+  wmEval: { status: "ok", ageLabel: null },
+  nfEval: { status: "ok", ageLabel: null },
+  wcEval: { status: "ok", ageLabel: null },
+  mvrEval: { status: "ok", ageLabel: null },
+  wmUsable: true,
+  nfUsable: true,
+  wcUsable: true,
+  mvrUsable: true,
+  grams: null,
+  qty: 1,
+  confirmed: false,
+});
+assert(
+  grapePackRow.fairBasis === "needed_weight",
+  `grape dissimilar packs basis ${grapePackRow.fairBasis}`,
+);
+assert(grapePackRow.requestedAmount === 907, `grape need ${grapePackRow.requestedAmount}`);
+assert(grapePackRow.requestedUnit === "g", `grape unit ${grapePackRow.requestedUnit}`);
+const grapeWmBuy = grapePackRow.walmart as {
+  checkout?: { packs?: number; checkoutCost?: number | null; packAmount?: number | null };
+};
+const grapeNfBuy = grapePackRow.noFrills as {
+  checkout?: { packs?: number; checkoutCost?: number | null };
+};
+const grapeMvrBuy = grapePackRow.mvr as {
+  checkout?: { packs?: number; checkoutCost?: number | null };
+};
+assert(grapeWmBuy.checkout?.packs === 3, `WM 283g needs 3 packs, got ${grapeWmBuy.checkout?.packs}`);
+assert(grapeNfBuy.checkout?.packs === 1, `NF 907g stays 1 pack, got ${grapeNfBuy.checkout?.packs}`);
+assert(grapeMvrBuy.checkout?.packs === 3, `MVR pint needs 3 packs, got ${grapeMvrBuy.checkout?.packs}`);
+assert(
+  Math.abs((grapePackRow.basketWalmart ?? 0) - 7.32) < 0.011,
+  `WM 3×$2.44 ${grapePackRow.basketWalmart}`,
+);
+assert(
+  Math.abs((grapePackRow.basketNoFrills ?? 0) - 7.99) < 0.011,
+  `NF 1×$7.99 ${grapePackRow.basketNoFrills}`,
+);
+assert(
+  Math.abs((grapePackRow.basketMvr ?? 0) - 5.97) < 0.011,
+  `MVR 3×$1.99 ${grapePackRow.basketMvr}`,
+);
+assert(grapePackRow.cheaper === "mvr", `grape cover cheaper ${grapePackRow.cheaper}`);
+assert(
+  Math.abs((grapeWmBuy.checkout?.checkoutCost ?? 0) - 7.32) < 0.011,
+  "cell price is 3 packs, not the 283 g shelf",
 );
 
 const lemonItem = {

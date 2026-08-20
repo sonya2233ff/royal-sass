@@ -12,6 +12,7 @@ import type { ResolveReason } from "@/domain/compare-resolve";
 import {
   defaultNeededGrams,
   isEggPackItem,
+  isPackedProduceItem,
   isSoldByWeightItem,
   resolveMatchMode,
   summarizeOffer,
@@ -21,6 +22,7 @@ import {
   type StapleItem,
 } from "@/lib/staples";
 import {
+  offerMassKg,
   typicalEachGramsOf,
   withTypicalEachMass,
 } from "@/domain/same-packed-item";
@@ -29,6 +31,7 @@ import { preferredStapleImage, retailerSideImage } from "@/lib/product-image";
 import {
   looseWeightPurchase,
   purchasePlanForPack,
+  sharedCoverGramsForDissimilarPacks,
   type WeightPurchasePlan,
 } from "@/domain/needed-weight-pick";
 import type { OfferStatus } from "@/domain/sanity";
@@ -93,6 +96,28 @@ function asCatalogOffer(
   return offer && offer.productId && offer.price > 0 ? offer : null;
 }
 
+function checkoutFromWeightPlan(
+  plan: WeightPurchasePlan,
+  saleMode: PurchaseOption["saleMode"],
+): PurchaseOption {
+  const leftover = Math.max(0, plan.gotGrams - plan.neededGrams);
+  return {
+    valid: true,
+    saleMode: plan.soldByWeight ? "loose_weight" : saleMode,
+    packs: plan.soldByWeight ? 0 : plan.packs,
+    packAmount:
+      plan.soldByWeight || !(plan.packGrams > 0) ? null : plan.packGrams,
+    packUnit: plan.soldByWeight ? null : "g",
+    purchasedAmount: plan.gotGrams,
+    purchasedUnit: "g",
+    leftoverAmount: leftover,
+    leftoverUnit: "g",
+    shelfPrice: plan.shelfPrice,
+    checkoutCost: plan.totalPrice,
+    unitPrice: null,
+  };
+}
+
 export function buildStapleCompareRow(input: {
   item: StapleItem;
   wmOffer: CatalogOffer | null;
@@ -130,16 +155,44 @@ export function buildStapleCompareRow(input: {
     input.grams != null && Number.isFinite(input.grams) && input.grams > 0
       ? input.grams
       : null;
-  const neededGrams = soldByWeight
+  const selectedQty = Math.max(1, Math.round(Number(input.qty) || 1));
+  const userNeededGrams = soldByWeight
     ? (userGrams ?? defaultNeededGrams(item))
     : usesNeededWeightPick(item) && userGrams
       ? userGrams
       : null;
+
+  const wmOffer = input.wmUsable ? asCatalogOffer(input.wmOffer) : null;
+  const nfOffer = input.nfUsable ? asCatalogOffer(input.nfOffer) : null;
+  const wcOffer = input.wcUsable ? asCatalogOffer(input.wcOffer ?? null) : null;
+  const mvrOffer = input.mvrUsable ? asCatalogOffer(input.mvrOffer ?? null) : null;
+  const wmRaw = wmOffer
+    ? withExpectedPackSize(item, withTypicalEachMass(item, wmOffer))
+    : null;
+  const nfRaw = nfOffer
+    ? withExpectedPackSize(item, withTypicalEachMass(item, nfOffer))
+    : null;
+  const wcRaw = wcOffer
+    ? withExpectedPackSize(item, withTypicalEachMass(item, wcOffer))
+    : null;
+  const mvrRaw = mvrOffer
+    ? withExpectedPackSize(item, withTypicalEachMass(item, mvrOffer))
+    : null;
+  const typicalEachGrams = typicalEachGramsOf(item);
+  const sharedCoverGrams =
+    userNeededGrams == null &&
+    !soldByWeight &&
+    isPackedProduceItem(item)
+      ? sharedCoverGramsForDissimilarPacks(
+          [wmRaw, nfRaw, wcRaw, mvrRaw].map((offer) =>
+            offer ? offerMassKg(item, offer) : null,
+          ),
+          selectedQty,
+        )
+      : null;
+  const neededGrams = userNeededGrams ?? sharedCoverGrams;
   const neededPickActive = Boolean(neededGrams && !soldByWeight);
-  const packQty =
-    soldByWeight || neededPickActive
-      ? 1
-      : Math.max(1, Math.round(Number(input.qty) || 1));
+  const packQty = soldByWeight || neededPickActive ? 1 : selectedQty;
   const qtyKg =
     soldByWeight && neededGrams != null
       ? neededGrams / 1000
@@ -159,24 +212,6 @@ export function buildStapleCompareRow(input: {
     : soldByWeight
       ? qtyKg
       : packQty;
-
-  const wmOffer = input.wmUsable ? asCatalogOffer(input.wmOffer) : null;
-  const nfOffer = input.nfUsable ? asCatalogOffer(input.nfOffer) : null;
-  const wcOffer = input.wcUsable ? asCatalogOffer(input.wcOffer ?? null) : null;
-  const mvrOffer = input.mvrUsable ? asCatalogOffer(input.mvrOffer ?? null) : null;
-  const wmRaw = wmOffer
-    ? withExpectedPackSize(item, withTypicalEachMass(item, wmOffer))
-    : null;
-  const nfRaw = nfOffer
-    ? withExpectedPackSize(item, withTypicalEachMass(item, nfOffer))
-    : null;
-  const wcRaw = wcOffer
-    ? withExpectedPackSize(item, withTypicalEachMass(item, wcOffer))
-    : null;
-  const mvrRaw = mvrOffer
-    ? withExpectedPackSize(item, withTypicalEachMass(item, mvrOffer))
-    : null;
-  const typicalEachGrams = typicalEachGramsOf(item);
 
   const walmart = summarizeOffer(item, wmRaw, summarizeQty, "walmart_ca");
   const noFrills = summarizeOffer(
@@ -352,6 +387,10 @@ export function buildStapleCompareRow(input: {
           : dimensionOf(product.unit) !== "count"
             ? product.defaultAmount
             : packQty;
+  const displayRequested =
+    neededPickActive && neededGrams != null ? neededGrams : requested;
+  const displayUnit =
+    neededPickActive && neededGrams != null ? "g" : product.unit;
 
   const ident = (
     raw: CatalogOffer | null,
@@ -444,7 +483,9 @@ export function buildStapleCompareRow(input: {
         cheaper: winners.length > 1 ? "tie" : (winners[0][0] as typeof fair.cheaper),
         delta: second != null ? Math.round((min - second) * 100) / 100 : null,
         fairBasis: "needed_weight",
-        fairLabel: "за потрібну закупівлю",
+        fairLabel: sharedCoverGrams
+          ? `за ${neededGrams} g (різні пачки)`
+          : "за потрібну закупівлю",
         wmFair: wmTotal,
         nfFair: nfTotal,
         wcFair: wcTotal,
@@ -455,7 +496,9 @@ export function buildStapleCompareRow(input: {
         cheaper: "incomplete",
         delta: null,
         fairBasis: "needed_weight",
-        fairLabel: "за потрібну закупівлю",
+        fairLabel: sharedCoverGrams
+          ? `за ${neededGrams} g (різні пачки)`
+          : "за потрібну закупівлю",
         wmFair: wmTotal,
         nfFair: nfTotal,
         wcFair: wcTotal,
@@ -582,12 +625,13 @@ export function buildStapleCompareRow(input: {
       };
     }
     const identOk = ident(raw, retailer).ok;
-    const cost =
+    const fromPlan =
       useNeededWeightPlan && plan && identOk
-        ? plan.totalPrice
-        : buy?.valid
-          ? buy.checkoutCost
-          : null;
+        ? checkoutFromWeightPlan(plan, buy?.saleMode ?? "fixed_pack")
+        : null;
+    const shown = fromPlan ?? buy;
+    const cost = fromPlan?.checkoutCost
+      ?? (buy?.valid ? buy.checkoutCost : null);
     return {
       ...(summarized ?? emptySide(evalRow)),
       lineTotal: cost,
@@ -595,13 +639,14 @@ export function buildStapleCompareRow(input: {
       onSale: Boolean(raw && isShelfSale(raw)),
       wasPrice: saleWasPrice(raw),
       purchase: plan,
-      checkout: buy,
-      saleMode: buy?.saleMode,
-      requestedAmount: requested,
-      requestedUnit: product.unit,
-      purchasedAmount: buy?.purchasedAmount ?? null,
-      leftoverAmount: buy?.leftoverAmount ?? null,
-      packsNeeded: buy?.packs ?? null,
+      checkout: shown,
+      saleMode: shown?.saleMode,
+      requestedAmount: displayRequested,
+      requestedUnit: displayUnit,
+      purchasedAmount: shown?.purchasedAmount ?? null,
+      leftoverAmount: shown?.leftoverAmount ?? null,
+      leftoverUnit: shown?.leftoverUnit ?? null,
+      packsNeeded: shown?.packs ?? null,
       matchStatus:
         useNeededWeightPlan && plan && identOk
           ? "ok"
@@ -656,8 +701,8 @@ export function buildStapleCompareRow(input: {
     basketNoFrills: nfBasket,
     basketWholesaleClub: wcBasket,
     basketMvr: mvrBasket,
-    requestedAmount: requested,
-    requestedUnit: product.unit,
+    requestedAmount: displayRequested,
+    requestedUnit: displayUnit,
     purchaseStrategy: product.purchaseStrategy,
     matchModeCanonical: product.matchMode,
   };

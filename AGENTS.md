@@ -157,10 +157,10 @@ Legacy JSON still accepted: `preferred` → `exact`, `cheapest` → `cheapest_eq
 - Adding to cart uses `defaultAmount`. Custom amount is cart-only unless the operator saves it as the new default (`localStorage` key `royal-sass-product-overrides-v1`).
 - Sold-by-weight ids (`SOLD_BY_WEIGHT_IDS`) still exist for catalog matching (cafe wants kg). Checkout `saleMode` comes from the **offer**, not that id: `loose_weight` (scale `$/kg` or `$/lb` rate), `fixed_pack` (whole pack with content weight), `case` (crate / `N × unit` / `15 lb case`). `g`/`kg`/`lb` in the title is **content**, not loose sale. `1 ea` is a purchase unit — if the name or structured pack has 5 lb / 800 g, that is content weight. MVR `2.5LB REPACK` is a pack, not a warehouse case. A `$/kg` label is **not** enough to treat a bag, basket, or 15 lb case as loose.
 - Basket money is **checkout cost** (full packs, 2 decimal line totals). `$/100 g` is display-only for value. Missing item = `N/A`, not `$0`. Overall winner only when a store can price the **same complete** set.
-- Packed produce (`PACK_COMPARE_IDS` / `isPackedProduceItem`): cheapest suitable pack, then quantity rules.
+- Packed produce (`PACK_COMPARE_IDS` / `isPackedProduceItem`): cheapest suitable pack, then quantity rules. When packs on the row are **not similar** (grape 283 g vs Farmer's Market 907 g), cover the largest pack (−10% / +15%): **3×283 g**, not 1 clamshell vs 1 tub. Similar packs stay 1-for-1. Homepage still does **not** inject 500 g when sizes match. Do not invent `maximumAmount`.
 - Frozen bags: cheapest equivalent, then quantity rules.
 
-Do not compare different pack masses as raw shelf prices (`src/domain/fair-compare.ts`). Checkout overlays that with `src/domain/checkout.ts`.
+Do not compare different pack masses as raw shelf prices (`src/domain/fair-compare.ts`). Packed-produce checkout uses `sharedCoverGramsForDissimilarPacks` + `purchasePlanForPack` so the row winner is the cost to cover the same weight.
 
 ## Architecture
 
@@ -255,7 +255,7 @@ Refresh/compare/rematch routes use `maxDuration = 60`.
 **Price / size / qty**
 
 - Pack items: shelf × qty. Weight items: grams. Eggs: $/egg; line is requested egg count.
-- Different pack masses → fair **$/100 g**. Similar packs → per pack. Different OJ litres → `$/L` via that fair path (not `no_match`).
+- Different pack masses → fair **$/100 g** (or packed-produce **cover the largest pack** with N small packs). Similar packs → per pack. Different OJ litres → `$/L` via that fair path (not `no_match`). Do **not** rank a 283 g clamshell vs a 907 g tub as one checkout pack each.
 - `wasPrice` / `onSale` are display-only. Staples totals use `offer.price`, not `promoPrice`. Sale flags live in the four catalog JSON files and show on the **homepage list, cards, and compare columns** when that store is on sale. If the sale store is also the cheapest visible price, the UI says **дешевше · знижка**. There is **no separate sales page**.
 - Staples compare does **not** filter `availability === in_stock`.
 - Ignore absurd WM `unitPrice` in `resolveUnitPrices`.
