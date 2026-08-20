@@ -295,6 +295,11 @@ async function main() {
   const oat = byId.get("oat_beverage_original");
   assert(oat, "oat");
   assert(oat!.cheaper !== "incomplete", `oat should compare (${oat!.cheaper})`);
+  const oatWm = oat!.walmart as { name?: string };
+  assert(
+    /zero sugar/i.test(oatWm.name ?? ""),
+    `oat WM stays the Zero Sugar exception, got ${oatWm.name}`,
+  );
 
   const almond = byId.get("almond_original");
   assert(almond, "almond");

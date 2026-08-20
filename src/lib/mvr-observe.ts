@@ -5,6 +5,7 @@
 import { MvrConnector, MVR_STORE_ID, hydrateMvrOffer } from "@/connectors/mvr";
 import type { ProductOffer } from "@/connectors/types";
 import { offerFailsStapleOfferFilters, nameMatchesFilterToken, categoryBSearchQueries } from "@/domain/catalog-normalize";
+import { identityLockAllowsFilterMismatch } from "@/domain/compare-resolve";
 import { offerFailsPlausibleShelfPrice } from "@/domain/sanity";
 import {
   isActualCategoryBOffer,
@@ -128,7 +129,11 @@ export async function searchMvrPool(
       Boolean(lockedSku) &&
       o.productId === lockedSku &&
       Boolean(link?.verified);
-    if (verifiedLock) return true;
+    if (verifiedLock) {
+      if (identityLockAllowsFilterMismatch(item) || passesMvrFilters(o, item)) {
+        return true;
+      }
+    }
     if (!passesMvrFilters(o, item)) {
       log?.rejected.push({
         productId: o.productId,

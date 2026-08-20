@@ -24,6 +24,7 @@ import { rapidOfferMatchesSku } from "@/connectors/walmart-rapid";
 import {
   catalogRowForStaple,
   catalogSkuForPriceRefresh,
+  identityLockAllowsFilterMismatch,
   mergeCatalogRows,
   resolveCatalogOffer,
 } from "@/domain/compare-resolve";
@@ -355,6 +356,63 @@ async function main() {
   assert(
     simplyResolved.offer?.productId === "20820355001_EA",
     `identity lock keeps NF Simply 500 ml, got ${simplyResolved.offer?.productId}`,
+  );
+  const oatZero = {
+    productId: "2ADJVX8MAQ1Q",
+    name: "Earth's Own Gluten-Free, Zero Sugar Original Oat Milk Alternative, 1.75L",
+    price: 4.47,
+    packageSize: "1.75 L",
+  };
+  const oatOrig = {
+    productId: "54TFZVS2LHS3",
+    name: "Earth's Own Gluten-Free, Original Oat Milk Alternative, 1.75L",
+    price: 4.47,
+    packageSize: "1.75 L",
+  };
+  const oatItem = {
+    id: "oat_beverage_original",
+    mustIncludeAny: ["earth's own", "earths own"],
+    mustNotInclude: ["zero sugar"],
+  };
+  assert(
+    offerFailsStapleOfferFilters(oatItem, oatZero) === "mustNotInclude:zero sugar",
+    "search still rejects Zero Sugar as Original oat",
+  );
+  assert(
+    identityLockAllowsFilterMismatch(oatItem),
+    "oat Original is the operator Zero Sugar exception",
+  );
+  const oatKeep = resolveCatalogOffer({
+    item: oatItem,
+    row: { offer: oatZero, alternates: [oatOrig] },
+    link: {
+      retailerProductId: "2ADJVX8MAQ1Q",
+      verified: true,
+      kind: "identity",
+    },
+    matchMode: "preferred",
+  });
+  assert(
+    oatKeep.offer?.productId === "2ADJVX8MAQ1Q",
+    `oat exception keeps locked Zero Sugar, got ${oatKeep.offer?.productId}`,
+  );
+  const otherLockedZero = resolveCatalogOffer({
+    item: {
+      id: "almond_original",
+      mustIncludeAny: ["earth's own", "earths own"],
+      mustNotInclude: ["zero sugar"],
+    },
+    row: { offer: oatZero, alternates: [oatOrig] },
+    link: {
+      retailerProductId: "2ADJVX8MAQ1Q",
+      verified: true,
+      kind: "identity",
+    },
+    matchMode: "preferred",
+  });
+  assert(
+    otherLockedZero.offer?.productId === "54TFZVS2LHS3",
+    `non-oat lock cannot keep a mustNotInclude miss, got ${otherLockedZero.offer?.productId}`,
   );
   const buySimply500 = evaluatePurchase({
     product: whitesProduct,

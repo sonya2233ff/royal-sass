@@ -55,13 +55,15 @@ These are live on **production** `master` (`7d405de` and descendants). Phone dem
 - `grayridge_eggs` / `eggs_30ct` catalog rows still feed `large_eggs_dozen` via `eggCatalogSourceIds`. Fair unit **$/egg**. Checkout buys whole cartons to cover the requested egg count.
 - Do not bring back a second Grayridge card.
 
+**Oat Original (`oat_beverage_original`)** — operator exception. WM #5831 stays identity-locked on Earth's Own **Zero Sugar** 1.75L `2ADJVX8MAQ1Q` `$4.47` (same shelf price as Original `54TFZVS2LHS3`). Catalog `mustNotInclude` still has `zero sugar` so search/rematch will not pick a new Zero Sugar hit. Do **not** rematch this card onto Original. Other identity-locked SKUs must still pass `mustNotInclude` (`identityLockAllowsFilterMismatch`).
+
 **Rematch vs prices**
 
 - After changing Include / match mode in **Налаштування**, the operator must rematch. **Оновити ціни** does not re-search.
 - UI: per-card **Оновити**, toolbar **Оновити вибрані** (cart ids), settings **Зберегти і оновити**.
 - `POST /api/staples/rematch` → WM then NF then WC then MVR; `productOverrides` from localStorage; `maxDuration = 60`; `skipIdentityLock` so settings apply.
 - WM Rapid key missing → skip WM, still rematch the other three.
-- Exact rematch still prefers confirmed / preferred SKUs when the hit is that product. Cheapest may skip identity lock to pick a new equivalent.
+- Exact rematch still prefers confirmed / preferred SKUs when the hit is that product **and it passes `mustNotInclude`**. Exception: `oat_beverage_original` (below). Cheapest may skip identity lock to pick a new equivalent.
 
 **Tropicana (`orange_juice_pulp`) — worked example of a class of bugs**
 

@@ -4,6 +4,7 @@ import {
 } from "@/connectors/wholesaleclub";
 import type { ProductOffer } from "@/connectors/types";
 import { offerFailsStapleOfferFilters, nameMatchesFilterToken, categoryBSearchQueries } from "@/domain/catalog-normalize";
+import { identityLockAllowsFilterMismatch } from "@/domain/compare-resolve";
 import { offerFailsPlausibleShelfPrice } from "@/domain/sanity";
 import {
   isActualCategoryBOffer,
@@ -145,7 +146,11 @@ export async function searchWholesaleClubPool(
       Boolean(lockedSku) &&
       o.productId === lockedSku &&
       Boolean(wcLink?.verified);
-    if (verifiedLock) return true;
+    if (verifiedLock) {
+      if (identityLockAllowsFilterMismatch(item) || passesWcFilters(o, item)) {
+        return true;
+      }
+    }
     if (isCasePackSku(o.productId)) {
       log?.rejected.push({
         productId: o.productId,

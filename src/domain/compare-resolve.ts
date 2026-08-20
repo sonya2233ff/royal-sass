@@ -222,6 +222,15 @@ export function offerPassesStapleFilters(
   return offerFailsStapleOfferFilters(item, offer) == null;
 }
 
+/**
+ * Earth's Own Original oat at WM #5831 is locked to Zero Sugar 1.75L
+ * `2ADJVX8MAQ1Q` (same shelf as Original `54TFZVS2LHS3`). Operator exception —
+ * do not rematch off this SKU even though mustNotInclude has "zero sugar".
+ */
+export function identityLockAllowsFilterMismatch(item: { id: string }): boolean {
+  return item.id === "oat_beverage_original";
+}
+
 /** Category B / eggs: a verified SKU must not hide a cheaper equivalent pack. */
 export function cheapestMatchSkipsIdentityLock(item: StapleFilterItem): boolean {
   return (
@@ -254,14 +263,20 @@ export function resolveCatalogOffer(input: {
   if (lockIdentity && mappedSku) {
     const hit = findOfferForSku(input.row, mappedSku);
     if (hit && offerIsOnShelf(hit)) {
-      const alias = hit.productId !== mappedSku;
-      return {
-        offer: hit,
-        reason: alias ? "mapped_sku_rapid_alias" : "mapped_sku",
-        detail: alias
-          ? `Rapid id ${hit.productId} ≈ lock ${mappedSku}`
-          : mappedSku,
-      };
+      if (
+        identityLockAllowsFilterMismatch(input.item) ||
+        offerPassesStapleFilters(input.item, hit)
+      ) {
+        const alias = hit.productId !== mappedSku;
+        return {
+          offer: hit,
+          reason: alias ? "mapped_sku_rapid_alias" : "mapped_sku",
+          detail: alias
+            ? `Rapid id ${hit.productId} ≈ lock ${mappedSku}`
+            : mappedSku,
+        };
+      }
+      // Locked SKU fails mustNotInclude — nearest passing alternate below.
     }
     // Missing or not on the shelf → nearest filter-passing alternate below.
   }

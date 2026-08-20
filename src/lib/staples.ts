@@ -26,7 +26,7 @@ import {
   type RetailerMappingStore,
   type RetailerSkuLink,
 } from "@/lib/retailer-mappings";
-import { offerMatchesRetailerSku } from "@/domain/compare-resolve";
+import { offerMatchesRetailerSku, identityLockAllowsFilterMismatch } from "@/domain/compare-resolve";
 import {
   applyShelfOverrideToOffer,
   loadShelfOverrides,
@@ -1018,7 +1018,11 @@ export async function searchNoFrillsPool(
   }
 
   return all.filter((o) => {
-    if (lockedNfSku && o.productId === lockedNfSku) return true;
+    if (lockedNfSku && o.productId === lockedNfSku) {
+      if (identityLockAllowsFilterMismatch(item) || passesFilters(o, item)) {
+        return true;
+      }
+    }
     if (!passesFilters(o, item)) return false;
     const priceFail = offerFailsPlausibleShelfPrice(item, o);
     if (priceFail) {
@@ -1787,7 +1791,10 @@ export async function refreshWalmartSelected(
       pinId != null
         ? [...seen.values()].find((o) => offerMatchesRetailerSku(o, pinId))
         : undefined;
-    if ((lockedId || pinHit) && pinHit && !pinNotOnShelf) {
+    const pinHonored =
+      Boolean((lockedId || pinHit) && pinHit && !pinNotOnShelf) &&
+      (identityLockAllowsFilterMismatch(item) || passesFilters(pinHit!, item));
+    if (pinHonored && pinHit) {
       const pin = lockedId ?? preferred!;
       best = pinHit;
       for (const o of seen.values()) {
