@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { parseOverrideMap } from "@/lib/product-config";
+import { parseOverrideMap, parseCustomStapleDrafts } from "@/lib/product-config";
 import { isShownStaple, loadStaplesConfig } from "@/lib/staples";
 import { refreshMvrSelected } from "@/lib/mvr-observe";
 import { MVR_STORE_ID } from "@/connectors/mvr";
@@ -13,8 +13,10 @@ export async function POST(request: Request) {
   const body = (await request.json().catch(() => ({}))) as {
     ids?: string[];
     productOverrides?: unknown;
+    customStaples?: unknown;
   };
-  const cfg = await loadStaplesConfig();
+  const extras = parseCustomStapleDrafts(body.customStaples);
+  const cfg = await loadStaplesConfig(extras);
   const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
   const ids = (body.ids?.length ? body.ids : [...allowed]).filter((id) =>
     allowed.has(id),
@@ -30,6 +32,7 @@ export async function POST(request: Request) {
     const result = await refreshMvrSelected(
       ids,
       parseOverrideMap(body.productOverrides),
+      { extraItems: extras },
     );
     return NextResponse.json({
       ok: true,

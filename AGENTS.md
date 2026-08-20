@@ -36,7 +36,8 @@ Master product id = cafe staple id (`simply_egg_whites`, `large_eggs_dozen`), **
 - **Do not show two shell-egg cards.** Homepage eggs = one `large_eggs_dozen` line. `grayridge_eggs` stays in JSON as a catalog source row only.
 - **Do not invent `maximumAmount` for eggs.** Quantity is eggs (`ea`) via chips; checkout buys whole cartons to cover the count.
 - **Do not treat «Оновити ціни» as rematch.** That path is price-only on locked/catalog SKUs.
-- **Do not rematch all visible staples by default** (Rapid/PCX cost). Rematch only the card, the selected cart ids, or settings **Зберегти і оновити**.
+- **Do not rematch all visible staples by default** (Rapid/PCX cost). Rematch only the card, the selected cart ids, settings **Зберегти і оновити**, or receipt **Додати і знайти в магазинах** (new ids only).
+- **Do not commit receipt photos** or `config/custom-staples.json`. Homepage **Чек** OCRs in memory; photos are never written to git.
 - **Do not rank hits with the cafe card label.** Size and abbreviations on the card (`OJ`, `2.63L`, `12oz`, `3.25%`) are not identity.
 - **Do not require pack size as an Include keyword.** WM Rapid titles often omit litres. Compare different cafe bottles as `$/L` or `$/kg`. Reject **mini** packs only (`MIN_COMPARABLE_PACK_RATIO` 0.35 in `src/domain/sanity.ts`).
 - **Do not let settings Include replace catalog brand/type filters.** Merge (union). Pack-size Include tokens are ignored (`src/domain/pack-tokens.ts`).
@@ -105,9 +106,9 @@ Shown cards = `PINNED_IDS` **or** `RECEIPT_STAPLE_IDS` **or** `custom: true` (`i
 
 - `PINNED_IDS`: **31** original cafe staples (dairy, produce, frozen bags, ice, Ziploc, Jello, ReaLemon, `large_eggs_dozen`, `ice_cubes`). **Not** `grayridge_eggs`.
 - `RECEIPT_STAPLE_IDS`: **94** ids from `data/catalog/new-from-receipts.json` (supplies, kosher dairy, branded grocery, more produce/frozen). `ice_cubes` overlaps pinned.
-- **Shown unique ids:** 124 (31 + 94 − 1 overlap). `config/cafe-staples.json` still contains hidden rows such as `grayridge_eggs` for catalog merge.
+- **Shown unique ids:** 124 (31 + 94 − 1 overlap) plus operator `custom: true` rows. `config/cafe-staples.json` still contains hidden rows such as `grayridge_eggs` for catalog merge.
 
-Homepage search is **shown-catalog only** (`src/domain/staple-search.ts`): card label, id, queries, and include tokens — never retailer offer names, handles, or live WM/NF/WC/MVR hits. Searching `pumpkin` must not surface wraps because an NF foam pumpkin sat on that SKU. `яйця` / `eggs` hits only `large_eggs_dozen`. The homepage typeahead does **not** adopt a new product; `POST /api/staples/adopt` remains for the match inspector. Custom `custom: true` rows (`config/custom-staples.json`, usually untracked) still show if present; do not commit that file unless asked.
+Homepage search is **shown-catalog only** (`src/domain/staple-search.ts`): card label, id, queries, and include tokens — never retailer offer names, handles, or live WM/NF/WC/MVR hits. Searching `pumpkin` must not surface wraps because an NF foam pumpkin sat on that SKU. `яйця` / `eggs` hits only `large_eggs_dozen`. The homepage typeahead does **not** adopt a new product; `POST /api/staples/adopt` remains for the match inspector. **Чек** (receipt photo / pasted text) can add `custom: true` `receipt_*` cards after the operator confirms new lines. Custom rows (`config/custom-staples.json` on a writable FS, and `localStorage` `royal-sass-custom-staples-v1` on Vercel) still show if present; do not commit that file unless asked. OCR matching a **deleted** cafe card counts as existing — do not auto-restore it.
 
 ## Category A vs Category B
 
@@ -164,6 +165,9 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | --- | --- |
 | `config/cafe-staples.json` | Master staple definitions |
 | `config/stores.json` | Locked stores (Sobeys `active: false`) |
+| `src/domain/receipt-import.ts` | Receipt text → existing vs new `receipt_*` drafts |
+| `src/lib/receipt-ocr.ts` | Optional OpenAI / OCR.space / tesseract; no photo persistence |
+| `src/app/ReceiptUpload.tsx` | Homepage **Чек** modal |
 | `src/lib/receipt-staple-ids.ts` | Receipt ids that are shown |
 | `data/catalog/new-from-receipts.json` | Source list of 94 receipt staples |
 | `data/catalog/walmart_5831_latest.json` | WM shelf snapshot |
@@ -199,7 +203,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 1. Offers land in catalog JSON (refresh APIs / `npm run cache:*` / `cache:prices`).
 2. `resolveCatalogOffer` picks the catalog row from mapping + filters. Mapping `decision: needs_review` is **not** a lock. **No Rapid/PCX in this step.**
 3. `buildStapleCompareRow` → identity, then `evaluatePurchase` checkout (not proportional case split).
-4. UI: `GET /api/staples` (base config), `POST /api/staples/compare` with `{ cart, productOverrides }`. Client applies `stapleWithClientOverride` on the server from that body. Client localStorage is the live override store on Vercel.
+4. UI: `GET /api/staples` (base config), `POST /api/staples/compare` with `{ cart, productOverrides, customStaples? }`. Client applies `stapleWithClientOverride` on the server from that body. Client localStorage is the live override store on Vercel (also `royal-sass-custom-staples-v1` for receipt cards).
 
 ## Live API (`nodejs`)
 
@@ -212,6 +216,8 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/rematch` — live rematch **selected ids** across WM+NF+WC+MVR using client `productOverrides`. Not price-only. Not “all visible cards”.
 - `POST /api/staples/refresh-prices` — price-only SKU refresh (no rematch). Walmart Rapid looks up the locked SKU via store search first; `/product-details` often 456/503 on walmart.ca.
 - `GET /api/staples/search` — shown cafe staples only (no live store hits, empty `walmart`/`noFrills`/`wholesaleClub`/`mvr` arrays)
+- `POST /api/staples/receipts/parse` — receipt photos (base64, not saved) and/or pasted text → line decisions (`existing` / `new` / `skip`). Confirm in UI before add. Eggs → `large_eggs_dozen` only.
+- `POST /api/staples/receipts/adopt` — confirmed `receipt_*` drafts → `custom: true` (`persisted: false` on Vercel). Does not guess store prices. Does not rematch all 124.
 - `POST /api/staples/adopt` | `confirm` — adopt remains for the match inspector; homepage search does not call it; 👍/👎 lock
 - `POST /api/staples/delete` — hide/remove shown cafe staples (`ids`). Confirm in UI. Skips `grayridge_eggs` / `eggs_30ct`. `persisted: false` on Vercel; client localStorage still hides.
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
@@ -265,8 +271,9 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 ## UI (current)
 
 - Cards: select for compare; grams on weight items; egg chips / pack qty otherwise; 👍/👎 confirm on WM when present.
-- Per-card **Видалити** and toolbar **Видалити вибрані** (cart ids), with confirm. Hidden via `royal-sass-removed-staples-v1`.
-- Actions: select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), **Видалити вибрані**, Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
+- Per-card **Видалити** and toolbar **Видалити вибрані** (cart ids), with confirm. Hidden via `royal-sass-removed-staples-v1`. Receipt `receipt_*` cards are also dropped from `royal-sass-custom-staples-v1`.
+- **Чек**: camera (`capture="environment"`) or pasted text. Review lines (**вже в каталозі** / **новий** / **пропустити**). **Додати нові** creates `no_match` cards. **Додати і знайти в магазинах** rematches **only those new ids**. Photos are not saved. On Vercel the cards live in `localStorage` `royal-sass-custom-staples-v1`.
+- Actions: **Чек** (photo or pasted text → confirm new cards), select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), **Видалити вибрані**, Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
 - Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**.
 - Nav: Cafe staples + **Офіціант** (`/waiter`) + **Водій** (`/driver`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
 - **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.
@@ -303,6 +310,7 @@ npm run poc:pilot-logic
 npm run poc:entity-match
 npm run poc:store-connector
 npm run poc:pcx-session
+npm run poc:receipt-import
 ```
 
 Price/matching diffs: `npm run cache:prices` (and `cache:walmart` / `cache:nofrills` / `cache:wholesaleclub` / `cache:mvr`) only when live keys work and the task is a refresh. Nightly CI is price-only (`cache:prices`), never a full rematch of all 124. Spot-check: grape tomatoes ≠ seeds, ice ≠ gum, dozen card still compares 12 vs 18 vs 30 as $/egg, `qty > 1`, missing offer stays empty, Tropicana label/`2.63` does not `no_match` a Pulp Free title, settings Include does not wipe catalog tropicana, bagasse lids ≠ 4 oz 2000/case, Oreo ≠ mint, PAM ≠ baking, incomplete baskets never `$0`. UI: select + grams/qty → Compare → `fairLabel` + baskets + stats row.
@@ -311,7 +319,7 @@ If a script is not run, say so.
 
 ## Environment (names only)
 
-See `.env.example`: `DATABASE_URL`, `WALMART_SOURCE`, `WALMART_USE_BROWSER`, `WALMART_ALLOW_FLIPP_FALLBACK`, `WALMART_POSTAL_CODE`, `OPENWEBNINJA_API_KEY`, `RAPIDAPI_KEY`, `WALMART_RAPID_HOST`, `NOFRILLS_API_KEY`, `NOFRILLS_SEARCH_URL`, `NOFRILLS_ALLOW_FLIPP_FALLBACK`, `PCX_COOKIE`, `PCX_BOOTSTRAP_BROWSER`, `PCX_PREWARM_COOKIES`, `WHOLESALECLUB_BANNER`, `WHOLESALECLUB_STORE_ID`, `SOBEYS_POSTAL_CODE`, `FRESHCO_POSTAL_CODE`, `MVR_SHOPIFY_BASE`, `STAPLES_CACHE_STALE_HOURS`, `ENTITY_MATCH_AUTO_LINK_THRESHOLD`, `ALLOW_MATCH_INSPECTOR`.
+See `.env.example`: `DATABASE_URL`, `WALMART_SOURCE`, `WALMART_USE_BROWSER`, `WALMART_ALLOW_FLIPP_FALLBACK`, `WALMART_POSTAL_CODE`, `OPENWEBNINJA_API_KEY`, `RAPIDAPI_KEY`, `WALMART_RAPID_HOST`, `NOFRILLS_API_KEY`, `NOFRILLS_SEARCH_URL`, `NOFRILLS_ALLOW_FLIPP_FALLBACK`, `PCX_COOKIE`, `PCX_BOOTSTRAP_BROWSER`, `PCX_PREWARM_COOKIES`, `WHOLESALECLUB_BANNER`, `WHOLESALECLUB_STORE_ID`, `SOBEYS_POSTAL_CODE`, `FRESHCO_POSTAL_CODE`, `MVR_SHOPIFY_BASE`, `STAPLES_CACHE_STALE_HOURS`, `ENTITY_MATCH_AUTO_LINK_THRESHOLD`, `ALLOW_MATCH_INSPECTOR`, `OPENAI_API_KEY`, `OCR_SPACE_API_KEY`.
 
 ## Planned / not live
 

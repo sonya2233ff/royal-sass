@@ -240,9 +240,25 @@ export interface StapleItem {
   category?: string;
   /** Category A only: named fallback / cheaper second product. */
   alternateProduct?: AlternateProduct | null;
-  /** Added from in-app search; shown alongside PINNED_IDS. */
+  /** Added from in-app search or receipt photo; shown alongside PINNED_IDS. */
   custom?: boolean;
 }
+
+export type ExtraStapleInput = {
+  id: string;
+  label: string;
+  queries?: string[];
+  custom?: boolean;
+  mustIncludeAny?: string[];
+  mustIncludeAll?: string[];
+  mustNotInclude?: string[];
+  matchMode?: StapleItem["matchMode"];
+  category?: string;
+  unit?: StapleItem["unit"];
+  notes?: string;
+  defaultAmount?: number;
+  purchaseStrategy?: StapleItem["purchaseStrategy"];
+};
 
 /** Produce / fruit — brand irrelevant; cheapest matching unit wins. */
 export const PRODUCE_IDS = new Set([
@@ -533,15 +549,56 @@ export async function saveCustomStaples(items: StapleItem[]): Promise<void> {
   );
 }
 
-export async function saveCustomStaple(item: StapleItem): Promise<void> {
-  const items = await loadCustomStaples();
-  const idx = items.findIndex((x) => x.id === item.id);
-  if (idx >= 0) items[idx] = item;
-  else items.push(item);
-  await saveCustomStaples(items);
+export async function saveCustomStaple(item: StapleItem): Promise<boolean> {
+  try {
+    const items = await loadCustomStaples();
+    const idx = items.findIndex((x) => x.id === item.id);
+    if (idx >= 0) items[idx] = item;
+    else items.push(item);
+    await saveCustomStaples(items);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-export async function deleteStaplesCompletely(ids: string[]): Promise<{
+export async function saveCustomStaplesMerge(items: StapleItem[]): Promise<boolean> {
+  if (!items.length) return true;
+  try {
+    const existing = await loadCustomStaples();
+    const byId = new Map(existing.map((row) => [row.id, row]));
+    for (const item of items) {
+      if (!item?.id) continue;
+      byId.set(item.id, item);
+    }
+    await saveCustomStaples([...byId.values()]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function unremoveStapleIds(ids: Iterable<string>): Promise<boolean> {
+  const drop = new Set([...ids].filter(Boolean));
+  if (!drop.size) return true;
+  const next = (await loadRemovedStapleIds()).filter((id) => !drop.has(id));
+  try {
+    await mkdir(path.dirname(REMOVED_STAPLES_FILE), { recursive: true });
+    await writeFile(
+      REMOVED_STAPLES_FILE,
+      `${JSON.stringify({ updatedAt: new Date().toISOString(), ids: next }, null, 2)}\n`,
+      "utf8",
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function deleteStaplesCompletely(
+  ids: string[],
+  extraItems?: ExtraStapleInput[],
+): Promise<{
   deleted: string[];
   skipped: string[];
   persisted: boolean;
@@ -553,7 +610,9 @@ export async function deleteStaplesCompletely(ids: string[]): Promise<{
   const cafe = JSON.parse(raw) as { items: StapleItem[]; [k: string]: unknown };
   const custom = await loadCustomStaples();
   const known = new Set(
-    [...cafe.items, ...custom].map((item) => item.id).filter(Boolean),
+    [...cafe.items, ...custom, ...(extraItems ?? [])]
+      .map((item) => item.id)
+      .filter(Boolean),
   );
   const skipped = unique.filter(
     (id) => !known.has(id) || PROTECTED_DELETE_IDS.has(id),
@@ -671,7 +730,28 @@ export async function upsertWalmartCatalogItem(input: {
   await saveWalmartCatalog(existing);
 }
 
-export async function loadStaplesConfig(): Promise<{
+function extraAsStapleItem(item: ExtraStapleInput): StapleItem | null {
+  if (!item.id || !item.label || item.custom !== true) return null;
+  return {
+    id: item.id,
+    label: item.label,
+    queries: item.queries?.length ? item.queries : [item.label],
+    custom: true,
+    mustIncludeAny: item.mustIncludeAny,
+    mustIncludeAll: item.mustIncludeAll,
+    mustNotInclude: item.mustNotInclude,
+    matchMode: item.matchMode,
+    category: item.category,
+    unit: item.unit,
+    notes: item.notes,
+    defaultAmount: item.defaultAmount,
+    purchaseStrategy: item.purchaseStrategy,
+  };
+}
+
+export async function loadStaplesConfig(
+  extraItems?: ReadonlyArray<ExtraStapleInput>,
+): Promise<{
   store: { externalStoreId: string; name: string; address: string };
   items: StapleItem[];
 }> {
@@ -684,6 +764,13 @@ export async function loadStaplesConfig(): Promise<{
   const seen = new Set(cfg.items.map((i) => i.id));
   for (const item of custom) {
     if (seen.has(item.id)) continue;
+    cfg.items.push(item);
+    seen.add(item.id);
+  }
+  for (const extra of extraItems ?? []) {
+    if (seen.has(extra.id)) continue;
+    const item = extraAsStapleItem(extra);
+    if (!item) continue;
     cfg.items.push(item);
     seen.add(item.id);
   }
@@ -1071,6 +1158,8 @@ export type StapleRefreshOpts = {
   skipIdentityLock?: boolean;
   /** Confirmed in-app SKU — fetch even when the mapping is needs_review. */
   pinSku?: string | null;
+  /** Client `custom: true` rows (receipt_* / custom_*) missing from disk. */
+  extraItems?: ExtraStapleInput[];
 };
 
 export function refreshSkipIdentityLock(
@@ -1814,7 +1903,7 @@ export async function refreshWalmartSelected(
   logId: string;
   entries: MatchLogEntry[];
 }> {
-  const cfg = await loadStaplesConfig();
+  const cfg = await loadStaplesConfig(opts?.extraItems);
   const confirmed = await loadConfirmed();
   const catalog =
     (await loadWalmartCatalog({ applyShelf: false })) ??
@@ -2163,7 +2252,7 @@ export async function refreshNoFrillsSelected(
   logId: string;
   entries: MatchLogEntry[];
 }> {
-  const cfg = await loadStaplesConfig();
+  const cfg = await loadStaplesConfig(opts?.extraItems);
   const byId = new Map(cfg.items.map((i) => [i.id, i]));
   const entries: MatchLogEntry[] = [];
   const updated: string[] = [];

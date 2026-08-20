@@ -12,6 +12,7 @@ import { refreshMvrSelected } from "@/lib/mvr-observe";
 import {
   refreshNoFrillsSelected,
   refreshWalmartSelected,
+  type ExtraStapleInput,
   type MatchLogEntry,
   type StapleRefreshOpts,
 } from "@/lib/staples";
@@ -48,6 +49,7 @@ function failResult(error: string): RetailerResult {
 export async function rematchStaples(
   ids: string[],
   overrides: Record<string, ProductOverride>,
+  extraItems?: ExtraStapleInput[],
 ): Promise<{
   walmart: RetailerResult;
   noFrills: RetailerResult;
@@ -59,6 +61,7 @@ export async function rematchStaples(
 }> {
   const source = walmartSourceApiFields();
   const walmartSkipped = resolveWalmartSource() === "missing_key";
+  const opts: StapleRefreshOpts = { ...REMATCH, extraItems };
 
   let walmart: RetailerResult;
   if (walmartSkipped) {
@@ -70,7 +73,7 @@ export async function rematchStaples(
     };
   } else {
     try {
-      const result = await refreshWalmartSelected(ids, overrides, REMATCH);
+      const result = await refreshWalmartSelected(ids, overrides, opts);
       walmart = {
         updated: result.updated,
         logId: result.logId,
@@ -83,7 +86,7 @@ export async function rematchStaples(
 
   let noFrills: RetailerResult;
   try {
-    const result = await refreshNoFrillsSelected(ids, overrides, REMATCH);
+    const result = await refreshNoFrillsSelected(ids, overrides, opts);
     noFrills = {
       updated: result.updated,
       logId: result.logId,
@@ -95,7 +98,7 @@ export async function rematchStaples(
 
   let wholesaleClub: RetailerResult;
   try {
-    const result = await refreshWholesaleClubSelected(ids, overrides, REMATCH);
+    const result = await refreshWholesaleClubSelected(ids, overrides, opts);
     wholesaleClub = {
       updated: result.updated,
       unmatched: result.unmatched,
@@ -108,7 +111,7 @@ export async function rematchStaples(
 
   let mvr: RetailerResult;
   try {
-    const result = await refreshMvrSelected(ids, overrides, REMATCH);
+    const result = await refreshMvrSelected(ids, overrides, opts);
     mvr = {
       updated: result.updated,
       unmatched: result.unmatched,

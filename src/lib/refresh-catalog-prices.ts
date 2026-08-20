@@ -34,6 +34,7 @@ import {
   upsertNoFrillsCatalogItem,
   resolveMatchMode,
   type CatalogOffer,
+  type ExtraStapleInput,
   type StapleItem,
 } from "@/lib/staples";
 import {
@@ -92,6 +93,7 @@ export type PriceRefreshStore =
 
 export type CatalogPriceRefreshOptions = {
   stores?: PriceRefreshStore[];
+  extraItems?: ExtraStapleInput[];
 };
 
 const ALL_PRICE_REFRESH_STORES: PriceRefreshStore[] = [
@@ -347,7 +349,7 @@ export async function refreshCatalogPrices(
   ids: string[],
   opts?: CatalogPriceRefreshOptions,
 ): Promise<CatalogPriceRefreshResult> {
-  const cfg = await loadStaplesConfig();
+  const cfg = await loadStaplesConfig(opts?.extraItems);
   const byId = new Map(cfg.items.map((i) => [i.id, i]));
   const confirmed = await loadConfirmed();
   const mappings = await loadRetailerMappings();

@@ -279,7 +279,7 @@ export async function refreshWholesaleClubSelected(
   storeId: string;
   entries: MatchLogEntry[];
 }> {
-  const cfg = await loadStaplesConfig();
+  const cfg = await loadStaplesConfig(opts?.extraItems);
   const byId = new Map(cfg.items.filter(isShownStaple).map((i) => [i.id, i]));
   const entries: MatchLogEntry[] = [];
   const updated: string[] = [];

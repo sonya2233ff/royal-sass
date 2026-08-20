@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { parseCustomStapleDrafts } from "@/lib/product-config";
 import { isShownStaple, loadStaplesConfig } from "@/lib/staples";
 import { refreshSobeysSelected } from "@/lib/sobeys-observe";
 
@@ -8,8 +9,12 @@ export const maxDuration = 60;
 
 /** Match the current Ontario weekly flyer onto selected staples (estimated). */
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => ({}))) as { ids?: string[] };
-  const cfg = await loadStaplesConfig();
+  const body = (await request.json().catch(() => ({}))) as {
+    ids?: string[];
+    customStaples?: unknown;
+  };
+  const extras = parseCustomStapleDrafts(body.customStaples);
+  const cfg = await loadStaplesConfig(extras);
   const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
   const ids = (body.ids?.length ? body.ids : [...allowed]).filter((id) =>
     allowed.has(id),
@@ -22,7 +27,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await refreshSobeysSelected(ids);
+    const result = await refreshSobeysSelected(ids, extras);
     return NextResponse.json({
       ok: true,
       retailer: "sobeys",

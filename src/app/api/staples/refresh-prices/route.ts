@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { walmartSourceApiFields } from "@/connectors/walmart-source";
 import { refreshCatalogPrices } from "@/lib/refresh-catalog-prices";
+import { parseCustomStapleDrafts } from "@/lib/product-config";
 import { collectPriceRefreshIds, loadStaplesConfig } from "@/lib/staples";
 
 export const runtime = "nodejs";
@@ -9,8 +10,12 @@ export const maxDuration = 60;
 
 /** Re-fetch prices for already mapped/catalog SKUs. Does not rematch. */
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => ({}))) as { ids?: string[] };
-  const cfg = await loadStaplesConfig();
+  const body = (await request.json().catch(() => ({}))) as {
+    ids?: string[];
+    customStaples?: unknown;
+  };
+  const extras = parseCustomStapleDrafts(body.customStaples);
+  const cfg = await loadStaplesConfig(extras);
   const allowed = new Set(collectPriceRefreshIds(cfg.items));
   const ids = (body.ids?.length ? body.ids : [...allowed]).filter((id) =>
     allowed.has(id),
@@ -23,7 +28,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await refreshCatalogPrices(ids);
+    const result = await refreshCatalogPrices(ids, { extraItems: extras });
     return NextResponse.json({
       ok: true,
       ...walmartSourceApiFields(),

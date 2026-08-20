@@ -412,6 +412,7 @@ export async function GET() {
         preferredProductId: lockedSku,
         matchMode: resolveMatchMode(i),
         restaurantProduct,
+        custom: i.custom === true,
         searchHay: catalogSearchHay(i),
         queries: i.queries,
         mustIncludeAny: i.mustIncludeAny,

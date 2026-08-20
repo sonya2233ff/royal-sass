@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { walmartSourceApiFields } from "@/connectors/walmart-source";
-import { parseOverrideMap } from "@/lib/product-config";
+import { parseOverrideMap, parseCustomStapleDrafts } from "@/lib/product-config";
 import { rematchStaples } from "@/lib/rematch-staples";
 import { isShownStaple, loadStaplesConfig } from "@/lib/staples";
 
@@ -13,8 +13,10 @@ export async function POST(request: Request) {
   const body = (await request.json().catch(() => ({}))) as {
     ids?: string[];
     productOverrides?: unknown;
+    customStaples?: unknown;
   };
-  const cfg = await loadStaplesConfig();
+  const extras = parseCustomStapleDrafts(body.customStaples);
+  const cfg = await loadStaplesConfig(extras);
   const allowed = new Set(cfg.items.filter(isShownStaple).map((i) => i.id));
   const ids = (body.ids ?? []).filter((id) => allowed.has(id));
   if (!ids.length) {
@@ -27,7 +29,7 @@ export async function POST(request: Request) {
   const overrides = parseOverrideMap(body.productOverrides);
 
   try {
-    const result = await rematchStaples(ids, overrides);
+    const result = await rematchStaples(ids, overrides, extras);
     const failed = [
       result.walmart.error,
       result.noFrills.error,

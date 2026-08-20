@@ -43,7 +43,7 @@ import { searchWholesaleClubPool } from "@/lib/wholesaleclub-observe";
 import { loadMvrCatalog } from "@/lib/mvr-catalog";
 import { searchMvrPool } from "@/lib/mvr-observe";
 import { recordCompareResult } from "@/lib/compare-stats";
-import { parseOverrideMap, effectiveProduct } from "@/lib/product-config";
+import { parseOverrideMap, parseCustomStapleDrafts, effectiveProduct } from "@/lib/product-config";
 import { offerFailsStapleOfferFilters } from "@/domain/catalog-normalize";
 import { offerMatchesIdentity } from "@/domain/product-identity";
 import { stapleWithClientOverride, type Cart } from "@/domain/restaurant-product";
@@ -197,8 +197,10 @@ export async function POST(request: Request) {
     qty?: Record<string, number>;
     cart?: Cart;
     productOverrides?: unknown;
+    customStaples?: unknown;
   };
-  const cfg = await loadStaplesConfig();
+  const extras = parseCustomStapleDrafts(body.customStaples);
+  const cfg = await loadStaplesConfig(extras);
   const overrides = parseOverrideMap(body.productOverrides);
   const allowed = new Set(
     (await shownStaples(cfg.items)).map((i) => i.id),

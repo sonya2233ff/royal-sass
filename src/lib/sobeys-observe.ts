@@ -27,6 +27,7 @@ import {
   isShownStaple,
   loadStaplesConfig,
   pickStapleSearchWinner,
+  type ExtraStapleInput,
   type MatchLogEntry,
   type StapleItem,
 } from "@/lib/staples";
@@ -180,14 +181,17 @@ function applySobeysMapping(
 }
 
 /** Match weekly flyer items onto cafe staples. Does not rematch WM/NF. */
-export async function refreshSobeysSelected(ids: string[]): Promise<{
+export async function refreshSobeysSelected(
+  ids: string[],
+  extraItems?: ExtraStapleInput[],
+): Promise<{
   updated: string[];
   unmatched: string[];
   logId: string;
   flyer: ReturnType<typeof flyerMeta>;
   entries: MatchLogEntry[];
 }> {
-  const cfg = await loadStaplesConfig();
+  const cfg = await loadStaplesConfig(extraItems);
   const byId = new Map(cfg.items.filter(isShownStaple).map((i) => [i.id, i]));
   const entries: MatchLogEntry[] = [];
   const updated: string[] = [];

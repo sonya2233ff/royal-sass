@@ -16,6 +16,7 @@ data/receipts/*.jpg
 data/receipts/*.JPEG
 data/receipts/*.png
 data/receipts/*.webp
+config/custom-staples.json
 .DS_Store
 dist
 prisma/*.db

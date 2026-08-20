@@ -9,6 +9,7 @@ import {
 } from "react";
 import { ProductSearch } from "./ProductSearch";
 import { ProductSettings } from "./ProductSettings";
+import { ReceiptUpload } from "./ReceiptUpload";
 import {
   addCartItem,
   applyProductOverride,
@@ -29,12 +30,17 @@ import {
   ukEggCountLabel,
 } from "@/domain/egg-pack";
 import { stapleMatchesCatalogQuery } from "@/domain/staple-search";
+import type { ReceiptStapleDraft } from "@/domain/receipt-import";
 import {
   CART_STORAGE_KEY,
   PRODUCT_OVERRIDE_STORAGE_KEY,
+  dropCustomStaples,
+  readCustomStaples,
   readRemovedStapleIds,
+  upsertCustomStaples,
   writeRemovedStapleIds,
 } from "@/lib/product-config";
+import { mergeServerItemsWithCustom } from "@/lib/custom-staple-card";
 import { toBase } from "@/domain/purchase-units";
 import {
   looseWeightPurchase,
@@ -171,6 +177,7 @@ type Staple = {
     ageLabel?: string | null;
   } | null;
   onSale?: boolean;
+  custom?: boolean;
 };
 
 type SideResult = {
@@ -687,6 +694,7 @@ export function StaplesCompare() {
   const [staleHours, setStaleHours] = useState(24);
   const [query, setQuery] = useState("");
   const [removedIds, setRemovedIds] = useState<string[]>([]);
+  const [receiptOpen, setReceiptOpen] = useState(false);
   const [walmartSource, setWalmartSource] = useState<
     "rapid" | "browser" | "missing_key" | null
   >(null);
@@ -722,7 +730,13 @@ export function StaplesCompare() {
       }
       const data = await res.json();
       if (!data.ok) throw new Error(data.error ?? "load failed");
-      setItems(data.items);
+      setItems(
+        mergeServerItemsWithCustom(
+          data.items,
+          readCustomStaples(),
+          readRemovedStapleIds(),
+        ) as Staple[],
+      );
       setCatalogAt(data.catalogCheckedAt ?? null);
       setNfCatalogAt(data.noFrillsCatalogCheckedAt ?? null);
       setWcCatalogAt(data.wholesaleClubCatalogCheckedAt ?? null);
@@ -983,6 +997,7 @@ export function StaplesCompare() {
           body: JSON.stringify({
             ids,
             productOverrides: overrideMap,
+            customStaples: readCustomStaples(),
           }),
         });
         const data = await res.json();
@@ -1027,6 +1042,49 @@ export function StaplesCompare() {
         setBusy(null);
       }
     });
+  }
+
+  async function adoptFromReceipt(drafts: ReceiptStapleDraft[], rematch: boolean) {
+    setBusy("receipt");
+    setError(null);
+    try {
+      const res = await fetch("/api/staples/receipts/adopt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          drafts,
+          customStaples: readCustomStaples(),
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        added?: string[];
+        items?: ReceiptStapleDraft[];
+      };
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error ?? "не вдалося додати продукти з чека");
+      }
+      const addedItems = Array.isArray(data.items) && data.items.length
+        ? data.items
+        : drafts;
+      upsertCustomStaples(addedItems);
+      const addedIds = (
+        Array.isArray(data.added) && data.added.length
+          ? data.added
+          : addedItems.map((item) => item.id)
+      ).filter(Boolean);
+      persistRemoved(removedIds.filter((id) => !addedIds.includes(id)));
+      setReceiptOpen(false);
+      await reload();
+      if (rematch && addedIds.length) {
+        rematchItems(addedIds);
+      }
+    } catch (e) {
+      setError(e instanceof Error ? friendlyError(e.message) : String(e));
+    } finally {
+      setBusy((cur) => (cur === "receipt" ? null : cur));
+    }
   }
 
   function saveDefaultFromCart(item: Staple) {
@@ -1101,7 +1159,9 @@ export function StaplesCompare() {
         : `Видалити ${unique.length} продукти: ${labels.join(", ")}${extra}?`,
     );
     if (!ok) return;
+    const extras = readCustomStaples();
     persistRemoved([...removedIds, ...unique]);
+    dropCustomStaples(unique);
     setCart((prev) => {
       const next = { ...prev };
       for (const id of unique) delete next[id];
@@ -1115,7 +1175,10 @@ export function StaplesCompare() {
         const res = await fetch("/api/staples/delete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids: unique }),
+          body: JSON.stringify({
+            ids: unique,
+            customStaples: extras,
+          }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.ok) {
@@ -1141,6 +1204,7 @@ export function StaplesCompare() {
             ids: [...selected],
             cart,
             productOverrides: overrides,
+            customStaples: readCustomStaples(),
             grams: Object.fromEntries(
               Object.entries(cart).map(([id, e]) => {
                 const base = toBase(e.requestedAmount, e.unit as AmountUnit);
@@ -1179,7 +1243,10 @@ export function StaplesCompare() {
         const res = await fetch("/api/staples/refresh", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids: [...selected] }),
+          body: JSON.stringify({
+            ids: [...selected],
+            customStaples: readCustomStaples(),
+          }),
         });
         const data = await res.json();
         if (!data.ok) throw new Error(data.error ?? "refresh failed");
@@ -1202,7 +1269,10 @@ export function StaplesCompare() {
         const res = await fetch("/api/staples/refresh-nf", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids: [...selected] }),
+          body: JSON.stringify({
+            ids: [...selected],
+            customStaples: readCustomStaples(),
+          }),
         });
         const data = await res.json();
         if (!data.ok) throw new Error(data.error ?? "NF refresh failed");
@@ -1225,7 +1295,10 @@ export function StaplesCompare() {
         const res = await fetch("/api/staples/refresh-wc", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids: [...selected] }),
+          body: JSON.stringify({
+            ids: [...selected],
+            customStaples: readCustomStaples(),
+          }),
         });
         const data = await res.json();
         if (!data.ok) throw new Error(data.error ?? "WC refresh failed");
@@ -1248,7 +1321,10 @@ export function StaplesCompare() {
         const res = await fetch("/api/staples/refresh-mvr", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids: [...selected] }),
+          body: JSON.stringify({
+            ids: [...selected],
+            customStaples: readCustomStaples(),
+          }),
         });
         const data = await res.json();
         if (!data.ok) throw new Error(data.error ?? "MVR refresh failed");
@@ -1271,7 +1347,10 @@ export function StaplesCompare() {
         const res = await fetch("/api/staples/refresh-sobeys", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids: [...selected] }),
+          body: JSON.stringify({
+            ids: [...selected],
+            customStaples: readCustomStaples(),
+          }),
         });
         const data = await res.json();
         if (!data.ok) throw new Error(data.error ?? "Sobeys flyer refresh failed");
@@ -1296,7 +1375,10 @@ export function StaplesCompare() {
         const res = await fetch("/api/staples/refresh-prices", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids }),
+          body: JSON.stringify({
+            ids,
+            customStaples: readCustomStaples(),
+          }),
         });
         const data = await res.json();
         if (!data.ok) throw new Error(data.error ?? "price refresh failed");
@@ -1913,6 +1995,13 @@ export function StaplesCompare() {
           );
         })()}
 
+      <ReceiptUpload
+        open={receiptOpen}
+        busy={busy != null}
+        onClose={() => setReceiptOpen(false)}
+        onAdopt={adoptFromReceipt}
+      />
+
       {showCart && (
         <div className="cart-drawer">
           <header>
@@ -1964,6 +2053,15 @@ export function StaplesCompare() {
       </div>
 
       <div className="actions">
+        <button
+          type="button"
+          className="cta secondary"
+          disabled={pending || busy != null}
+          title="Фото або текст чека — нові продукти додаються картками"
+          onClick={() => setReceiptOpen(true)}
+        >
+          {busy === "receipt" ? "Чек…" : "Чек"}
+        </button>
         <button
           type="button"
           className="cta secondary"
