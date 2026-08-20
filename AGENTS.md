@@ -331,6 +331,16 @@ Merged to `master` / production via PR https://github.com/sonya2233ff/royal-sass
 
 Operator follow-ups that produced those commits: egg chips; one egg card; inspector on; MVR cup photos; “after I change orange juice in settings, add a button”; “why doesn’t it pull Tropicana 2.63?”; “make sure this class of error cannot happen to other products”; “run prod / put all changes on Vercel”.
 
+## Cursor Cloud specific instructions
+
+Runtime is Node 22 + npm (`package-lock.json`). The startup update script already runs `npm install` (its `postinstall` runs `prisma generate`) and copies `.env` from `.env.example` when `.env` is missing. Do not re-run those by hand.
+
+- **Compare demo needs no secrets.** The live homepage compare flow reads shipped JSON snapshots in `data/catalog/*_latest.json`, not live APIs and not Prisma. `npm run dev` (port 3000) → select cards → **Порівняти** works fully offline. All four store columns (WM/NF/WC/MVR) price from cache. Verify end to end with `POST /api/staples/compare` (`{ "cart": { "large_eggs_dozen": {"requestedAmount":12,"unit":"ea"} } }`) — expect `rows` + `totals`.
+- **API keys are only for refresh/rematch, never for the demo.** `RAPIDAPI_KEY`/`OPENWEBNINJA_API_KEY` (Walmart Rapid), `NOFRILLS_API_KEY`, `PCX_COOKIE` etc. are needed only by `cache:*` / `refresh-*` / `rematch` paths. With blank keys those paths skip that store loudly (they do not scrape) — expected, not a failure. Do not add secrets just to run or test the compare UI.
+- **`.env` is required by the POC/cache scripts** (they pass `--env-file=.env`) and is gitignored. `DATABASE_URL` points at SQLite but no `PrismaClient` runs in `src/` (planned only), so no `prisma db push` / migration is needed to run the app.
+- **POC self-checks and lint/build are the test suite** (there is no Jest/Vitest). Commands are in the **Validation** section above. Running the `cache:*` / `poc:compare-audit` / `poc:entity-match` scripts can write into `data/catalog/`, `data/benchmarks/`, `data/stats/` — those writes are gitignored dumps; do not commit them (revert with `git checkout -- data/` and `rm -rf data/stats`).
+- Dev server hot-reloads code, but catalog JSON is read from disk per request, so edits under `data/catalog/` show up on the next compare without restart.
+
 ## Agent response format
 
 After a task, report: what changed; which files; which commands ran; pass/fail; what was not verified and why. Speak to the operator in Ukrainian when they wrote in Ukrainian.
