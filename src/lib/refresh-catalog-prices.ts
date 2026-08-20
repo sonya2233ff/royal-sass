@@ -352,7 +352,7 @@ export async function refreshCatalogPrices(
   const confirmed = await loadConfirmed();
   const mappings = await loadRetailerMappings();
   const wmCatalog =
-    (await loadWalmartCatalog()) ??
+    (await loadWalmartCatalog({ applyShelf: false })) ??
     ({
       type: "walmart-staples-catalog",
       checkedAt: new Date().toISOString(),

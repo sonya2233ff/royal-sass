@@ -568,7 +568,7 @@ export async function upsertWalmartCatalogItem(input: {
   alternates?: CatalogOffer[];
 }): Promise<void> {
   const existing =
-    (await loadWalmartCatalog()) ??
+    (await loadWalmartCatalog({ applyShelf: false })) ??
     ({
       type: "walmart-staples-catalog",
       checkedAt: new Date().toISOString(),
@@ -629,7 +629,9 @@ export async function loadStaplesConfig(): Promise<{
   return cfg;
 }
 
-export async function loadWalmartCatalog(): Promise<{
+export async function loadWalmartCatalog(opts?: {
+  applyShelf?: boolean;
+}): Promise<{
   checkedAt?: string;
   items: Array<{
     id: string;
@@ -658,6 +660,7 @@ export async function loadWalmartCatalog(): Promise<{
         alternates?: CatalogOffer[];
       }>;
     };
+    if (opts?.applyShelf === false) return catalog;
     const shelf = await loadShelfOverrides();
     catalog.items = catalog.items.map((row) => {
       const override = shelfOverrideFor(shelf, "walmart_5831", row.id);
@@ -1553,7 +1556,7 @@ export async function refreshWalmartSelected(
   const cfg = await loadStaplesConfig();
   const confirmed = await loadConfirmed();
   const catalog =
-    (await loadWalmartCatalog()) ??
+    (await loadWalmartCatalog({ applyShelf: false })) ??
     ({
       type: "walmart-staples-catalog",
       checkedAt: new Date().toISOString(),

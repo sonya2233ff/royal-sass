@@ -264,6 +264,7 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - Do not edit `.env*` unless asked. Document **variable names only**.
 - After code changes run the scripts below that apply. There is **no** `typecheck` or Jest/Vitest script. `src/poc` is excluded from `tsconfig.json` `include` (run via `tsx` / npm scripts).
 - If you rematch catalogs, keep impostors out; prefer `no_match` over a wrong SKU.
+- Price refresh must load WM catalog with `applyShelf: false` before saving, or in-store `shelf-overrides.json` (grape tomatoes OOS) gets written into `walmart_5831_latest.json`.
 
 ## Validation
 
