@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type {
-  AmountUnit,
-  MatchMode,
-  ProductOverride,
-  PurchaseStrategy,
-  RestaurantProduct,
+import {
+  stapleForcesExactMatch,
+  type AmountUnit,
+  type MatchMode,
+  type ProductOverride,
+  type PurchaseStrategy,
+  type RestaurantProduct,
 } from "@/domain/restaurant-product";
 import {
   EGG_COUNT_PRESETS,
@@ -42,7 +43,10 @@ export function ProductSettings({
   storeOffers,
   confirmedStoreProducts,
 }: Props) {
-  const [matchMode, setMatchMode] = useState<MatchMode>(product.matchMode);
+  const lockedExact = stapleForcesExactMatch(product);
+  const [matchMode, setMatchMode] = useState<MatchMode>(
+    lockedExact ? "exact" : product.matchMode,
+  );
   const [purchaseStrategy, setPurchaseStrategy] = useState<PurchaseStrategy>(
     product.purchaseStrategy,
   );
@@ -80,7 +84,7 @@ export function ProductSettings({
 
   useEffect(() => {
     if (!open) return;
-    setMatchMode(product.matchMode);
+    setMatchMode(stapleForcesExactMatch(product) ? "exact" : product.matchMode);
     setPurchaseStrategy(product.purchaseStrategy);
     setDefaultAmount(String(product.defaultAmount));
     setUnit(product.unit);
@@ -105,7 +109,7 @@ export function ProductSettings({
   function save(rematch: boolean) {
     const maxN = Number.parseFloat(maximumAmount);
     const override: ProductOverride = {
-      matchMode,
+      matchMode: stapleForcesExactMatch(product) ? "exact" : matchMode,
       purchaseStrategy,
       defaultAmount: Number.parseFloat(defaultAmount) || product.defaultAmount,
       unit: isEggPackStaple(product) ? "ea" : unit,
@@ -161,17 +165,17 @@ export function ProductSettings({
         <label>
           Правило пошуку
           <select
-            value={matchMode}
+            value={lockedExact ? "exact" : matchMode}
             onChange={(e) => setMatchMode(e.target.value as MatchMode)}
+            disabled={lockedExact}
           >
             <option value="exact">Точний продукт</option>
             <option value="cheapest_equivalent">Найдешевший відповідний</option>
           </select>
           <span className="ps-hint">
-            Точний продукт тримає бренд і SKU. Розмір пачки (2.63L, 12oz, 1kg)
-            не є обовʼязковим словом — магазини часто не пишуть його в назві.
-            Include додає слова до фільтрів з каталогу, не замінює бренд.
-            Найдешевший відповідний ігнорує бренд.
+            {lockedExact
+              ? "Ця картка завжди точний продукт: лише Mehadrin cottage cheese на No Frills #3660. Інші бренди (Great Value, Nordica, No Name) не підставляються."
+              : "Точний продукт тримає бренд і SKU. Розмір пачки (2.63L, 12oz, 1kg) не є обовʼязковим словом — магазини часто не пишуть його в назві. Include додає слова до фільтрів з каталогу, не замінює бренд. Найдешевший відповідний ігнорує бренд."}
           </span>
         </label>
         <label>

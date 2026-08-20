@@ -1212,8 +1212,24 @@ async function main() {
       cottage!,
       "Great Value 2% Cottage Cheese",
       "Great Value",
-    ) === "mustIncludeAny",
+    ) === "cottage cheese is Mehadrin only",
     "Great Value cottage is not Mehadrin",
+  );
+  assert(
+    offerFailsStapleFilters(
+      cottage!,
+      "No Name Cottage Cheese",
+      "No Name",
+    ) === "cottage cheese is Mehadrin only",
+    "No Name cottage is not Mehadrin",
+  );
+  assert(
+    offerFailsStapleFilters(
+      cottage!,
+      "GAY LEA - 2% NORDICA COTTAGE CHEESE 750GR",
+      "GAY LEA",
+    ) === "cottage cheese is Mehadrin only",
+    "Nordica cottage is not Mehadrin",
   );
   assert(
     offerFailsStapleFilters(
@@ -1683,6 +1699,18 @@ async function main() {
   assert(
     wrapped.cottage_cheese?.matchMode === "exact",
     "legacy preferred in stored overrides becomes exact",
+  );
+  const cottageForced = applyProductOverride(toRestaurantProduct(cottage!), {
+    matchMode: "cheapest_equivalent",
+  });
+  assert(
+    cottageForced.matchMode === "exact",
+    "settings cannot flip Mehadrin cottage to Category B",
+  );
+  assert(
+    stapleWithClientOverride(cottage!, { matchMode: "cheapest_equivalent" })
+      .matchMode === "exact",
+    "rematch override cannot flip Mehadrin cottage to cheapest",
   );
 
   assert(

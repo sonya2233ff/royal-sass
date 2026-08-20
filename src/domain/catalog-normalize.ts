@@ -375,6 +375,7 @@ export function cottageCheeseFormFail(
   }
   if (/\bcream\s+cheese\b/.test(t)) return "cottage cheese ≠ cream cheese";
   if (!/\bcottage\b/.test(t)) return "cottage cheese ≠ other cheese";
+  if (!/\bmehadrin\b/.test(t)) return "cottage cheese is Mehadrin only";
   return null;
 }
 
@@ -639,4 +640,34 @@ export function offerFailsStapleOfferFilters(
     return "needFrozenDepartment";
   }
   return null;
+}
+
+/** Homepage/compare: hide a cached store hit that fails the live product settings. */
+export function offerFailsProductSettings(
+  product: {
+    id: string;
+    label?: string;
+    category?: string;
+    matchMode?: string;
+    matchRules?: {
+      mustIncludeAny?: string[];
+      mustIncludeAll?: string[];
+      mustNotInclude?: string[];
+    };
+  },
+  offer?: StapleOfferFilterInput | null,
+): string | null {
+  if (!offer?.name) return "no_offer";
+  return offerFailsStapleOfferFilters(
+    {
+      id: product.id,
+      label: product.label,
+      category: product.category,
+      matchMode: product.matchMode,
+      mustIncludeAny: product.matchRules?.mustIncludeAny,
+      mustIncludeAll: product.matchRules?.mustIncludeAll,
+      mustNotInclude: product.matchRules?.mustNotInclude,
+    },
+    offer,
+  );
 }

@@ -65,7 +65,7 @@ These are live on **production** `master` (`7d405de` and descendants). Phone dem
 - Fresh parsley is a bunch, not parsley root, flakes, or chopped/jarred herb. Fresh sliced white mushrooms ≠ a 284 ml canned tin (promote the fresh clamshell when it is an alternate). Fresh produce sold in **ml** is canned.
 - `foil_green` is **Folgers coffee** (receipt UPC `082785400724`), not aluminum foil. Unique Pretzels table covers are plastic tablecloths (brand name), not pretzels.
 - San Pellegrino **Aranciata** ≠ **Rossa** (blood orange). 10" wraps ≠ a 320 g 7" 10-count. Dark brown sugar needs `dark` in the title.
-- Mehadrin cottage cheese (`cottage_cheese`) is Category A exact, No Frills `#3660` only (`21387030_EA`). WM Great Value / Nordica / No Name / mozzarella-cheddar (including the NF typo `Mozzerella`) are impostors — `no_match`, not a fill-in. The cottage-form gate requires `cottage` and rejects other cheese forms even when Include is only `cheese`.
+- Mehadrin cottage cheese (`cottage_cheese`) is Category A exact, No Frills `#3660` only (`21387030_EA`). WM Great Value / Nordica / No Name / mozzarella-cheddar (including the NF typo `Mozzerella`) are impostors — `no_match`, not a fill-in. The cottage-form gate requires `cottage` **and** `mehadrin`. Settings cannot flip this card to Category B (`stapleForcesExactMatch`). The homepage hides cached store hits that fail those filters, so Great Value does not stay on the card after choosing А.
 - Incomplete store baskets persist as `null` (UI **N/A**), never `$0`. `storeCoverage.checkoutTotal` is already null when the store cannot fill every line.
 
 **Rematch vs prices**

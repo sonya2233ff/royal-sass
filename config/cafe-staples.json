@@ -1704,13 +1704,13 @@
     },
     {
       "id": "cottage_cheese",
-      "label": "Cottage Cheese",
+      "label": "Mehadrin Cottage Cheese",
       "queries": [
-        "mehadrin cottage cheese",
-        "cottage cheese"
+        "mehadrin cottage cheese"
       ],
       "mustIncludeAll": [
-        "cottage"
+        "cottage",
+        "mehadrin"
       ],
       "mustIncludeAny": [
         "mehadrin"
@@ -1732,7 +1732,11 @@
         "marble",
         "string",
         "cream cheese",
-        "ricotta"
+        "ricotta",
+        "great value",
+        "nordica",
+        "no name",
+        "gay lea"
       ],
       "preferNameIncludes": [
         "mehadrin"

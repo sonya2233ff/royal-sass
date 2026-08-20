@@ -385,6 +385,25 @@ async function main() {
     "sliced mushrooms NF must not be canned 284 ml",
   );
 
+  const cottageRow = byId.get("cottage_cheese");
+  assert(cottageRow, "cottage cheese");
+  assert(
+    !/great value|nordica|no name/i.test(wmNameOf("cottage_cheese")),
+    `cottage WM must not be Great Value, got ${wmNameOf("cottage_cheese")}`,
+  );
+  assert(
+    /mehadrin/i.test(
+      String((cottageRow!.noFrills as { name?: string } | undefined)?.name ?? ""),
+    ),
+    `cottage NF must be Mehadrin, got ${(cottageRow!.noFrills as { name?: string } | undefined)?.name}`,
+  );
+  assert(
+    !/nordica|no name|great value/i.test(
+      String((cottageRow!.wholesaleClub as { name?: string } | undefined)?.name ?? ""),
+    ),
+    `cottage WC must not be No Name, got ${(cottageRow!.wholesaleClub as { name?: string } | undefined)?.name}`,
+  );
+
   const complete = rows.filter((r) => r.cheaper !== "incomplete");
 
   const wmSum = complete.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);

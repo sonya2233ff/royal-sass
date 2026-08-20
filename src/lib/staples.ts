@@ -11,6 +11,7 @@ import {
   canonicalizeMatchMode,
   confirmedStoreSku,
   inferUnit,
+  stapleForcesExactMatch,
   stapleWithClientOverride,
   toLegacyMatchMode,
   type ProductOverride,
@@ -289,6 +290,7 @@ export function itemPreferredUpc(item: StapleItem): string | undefined {
 export function resolveMatchMode(
   item: StapleItem,
 ): "preferred" | "cheapest" {
+  if (stapleForcesExactMatch(item)) return "preferred";
   const canonical = canonicalizeMatchMode(item.matchMode);
   if (canonical) return toLegacyMatchMode(canonical);
   if (

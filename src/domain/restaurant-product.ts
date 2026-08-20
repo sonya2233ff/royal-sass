@@ -100,7 +100,13 @@ export function toLegacyMatchMode(mode: MatchMode): LegacyMatchMode {
   return mode === "cheapest_equivalent" ? "cheapest" : "preferred";
 }
 
+/** Mehadrin cottage cheese cannot be flipped to Category B in settings. */
+export function stapleForcesExactMatch(item: { id?: string }): boolean {
+  return (item.id ?? "") === "cottage_cheese";
+}
+
 export function inferMatchMode(item: StapleLike): MatchMode {
+  if (stapleForcesExactMatch(item)) return "exact";
   const explicit = canonicalizeMatchMode(item.matchMode);
   if (explicit) return explicit;
   if (
@@ -276,7 +282,9 @@ export function applyProductOverride(
     ...base,
     ...rest,
     matchRules,
-    matchMode: canonicalizeMatchMode(override.matchMode) ?? base.matchMode,
+    matchMode: stapleForcesExactMatch(base)
+      ? "exact"
+      : (canonicalizeMatchMode(override.matchMode) ?? base.matchMode),
     purchaseStrategy:
       override.purchaseStrategy === "stock_up" ||
       override.purchaseStrategy === "exact_need"
@@ -314,7 +322,8 @@ export function stapleWithClientOverride<T extends StapleLike>(
   if (!override) return item;
   const next: T = { ...item };
   const mode = canonicalizeMatchMode(override.matchMode);
-  if (mode) next.matchMode = mode;
+  if (stapleForcesExactMatch(item)) next.matchMode = "exact";
+  else if (mode) next.matchMode = mode;
   if (override.purchaseStrategy) next.purchaseStrategy = override.purchaseStrategy;
   const rules = override.matchRules;
   if (rules) {
