@@ -373,7 +373,7 @@ export async function runSeedAndMatch(): Promise<{
         updatedAt: existingWm.updatedAt,
       };
       skippedRematch += 1;
-    } else if (conf?.productId) {
+    } else if (conf?.productId && seedMatchMode(item) !== "cheapest") {
       retailers[WALMART_RETAILER] = lockedWalmart({
         item,
         productId: conf.productId,

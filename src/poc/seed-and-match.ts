@@ -42,12 +42,11 @@ async function main() {
   const grape = store.products.tomatoes_grape;
   assert(grape, "tomatoes_grape mapped");
   const grapeWm = grape.retailers[WALMART_RETAILER];
-  assert(grapeWm?.retailerProductId === "6000194960084", "locked YFM grape sku");
-  assert(!/seed/i.test(grapeWm?.name ?? ""), "confirmed grape mapping must not be tomato seeds");
-  const grapeWmPrice = grape.prices.find((p) => p.retailer === WALMART_RETAILER);
+  assert(grapeWm, "grape WM mapping");
+  assert(!/seed/i.test(grapeWm?.name ?? ""), "grape mapping must not be tomato seeds");
   assert(
-    grapeWmPrice?.price === 2.97,
-    `grape WM YFM price via Rapid alias, got ${grapeWmPrice?.price}`,
+    /grape tomato|tomato,\s*grape|cherry tomato/i.test(grapeWm?.name ?? ""),
+    `grape WM must stay a grape/cherry pack, got ${grapeWm?.name}`,
   );
 
   const butter = store.products.butter_454g;

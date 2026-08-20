@@ -15,7 +15,7 @@ import {
   toLegacyMatchMode,
   type ProductOverride,
 } from "@/domain/restaurant-product";
-import { offerFailsStapleOfferFilters, categoryBSearchQueries, retailerTaxonomyText } from "@/domain/catalog-normalize";
+import { offerFailsStapleOfferFilters, categoryBSearchQueries, looksLikeWalmartProductId, retailerTaxonomyText } from "@/domain/catalog-normalize";
 import { extractRetailerImage } from "@/lib/product-image";
 import { RECEIPT_STAPLE_IDS } from "@/lib/receipt-staple-ids";
 import {
@@ -1101,6 +1101,42 @@ export async function searchNoFrills(
   return pickStapleSearchWinner(item, pool, log, lockedNfSku);
 }
 
+function walmartSkuHintIds(item: StapleItem): string[] {
+  const out: string[] = [];
+  for (const q of item.queries) {
+    const id = looksLikeWalmartProductId(q);
+    if (id && !out.includes(id)) out.push(id);
+  }
+  return out;
+}
+
+async function addWalmartSkuHints(
+  wm: ReturnType<typeof createWalmartConnector>,
+  item: StapleItem,
+  seen: Map<string, ProductOffer>,
+  log?: MatchLogEntry,
+): Promise<void> {
+  for (const sku of walmartSkuHintIds(item)) {
+    if ([...seen.values()].some((o) => offerMatchesRetailerSku(o, sku))) continue;
+    try {
+      const direct = await wm.getProduct(sku, "5831");
+      if (direct) {
+        seen.set(direct.productId, direct);
+      } else {
+        log?.rejected.push({
+          productId: sku,
+          reason: "hint SKU not in Rapid store search",
+        });
+      }
+    } catch (e) {
+      log?.rejected.push({
+        productId: sku,
+        reason: `getProduct: ${e instanceof Error ? e.message.slice(0, 100) : String(e)}`,
+      });
+    }
+  }
+}
+
 /** Search Walmart #5831 by staple queries. Category A and B both use this for fallbacks. */
 export async function searchWalmartQueryPool(
   item: StapleItem,
@@ -1117,8 +1153,14 @@ export async function searchWalmartQueryPool(
     return [];
   }
   const seen = new Map<string, ProductOffer>();
+  await addWalmartSkuHints(wm, item, seen, log);
   const queries = categoryBSearchQueries(item, 6);
-  if (log) log.queries = [...queries];
+  if (log) {
+    log.queries = [
+      ...walmartSkuHintIds(item),
+      ...queries.filter((q) => !walmartSkuHintIds(item).includes(q)),
+    ];
+  }
   for (const q of queries) {
     try {
       const hits = await wm.searchProducts(q, "5831");
@@ -1528,7 +1570,8 @@ function applyWalmartRematchMapping(
   const existing = store.products[item.id];
   if (!existing) return;
   const prev = existing.retailers.walmart_ca;
-  if (prev?.verified) return;
+  // Category B rematch may replace a previously 👍 SKU (grape 10 oz ≠ cheapest pack).
+  if (prev?.verified && resolveMatchMode(item) !== "cheapest") return;
   if (!offer) {
     if (prev) {
       existing.retailers.walmart_ca = {
@@ -1659,6 +1702,9 @@ export async function refreshWalmartSelected(
         ov.productId &&
         offerMatchesRetailerSku(pinHitEarly, ov.productId),
     );
+    // Rapid text search often omits grape packs like Devours — fetch SKU hints
+    // before burning the search quota.
+    await addWalmartSkuHints(wm, item, seen, log);
     if (!pinAlreadySeen || pinNotOnShelf) {
       const extra = opts?.skipIdentityLock
         ? queries.filter((q) => q && !/^\d+$/.test(q)).slice(0, 6)

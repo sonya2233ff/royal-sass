@@ -117,6 +117,18 @@ function cleanSearchQuery(q: string): string {
   return q.replace(SEARCH_NOISE, " ").replace(/\s+/g, " ").trim();
 }
 
+/** Numeric WM SKU or Rapid alphanumeric id (e.g. 72CDS4R4V81X). */
+export function looksLikeWalmartProductId(q: string): string | null {
+  const url = q.match(/walmart\.ca\/(?:en|fr)\/ip\/[^/?#]+\/([A-Za-z0-9]+)/i);
+  if (url?.[1]) return url[1];
+  const bare = q.trim();
+  if (/^\d{6,14}$/.test(bare)) return bare;
+  if (/^[A-Z0-9]{10,14}$/i.test(bare) && /\d/.test(bare) && /[A-Za-z]/.test(bare)) {
+    return bare;
+  }
+  return null;
+}
+
 /** "grape tomatoes" → "tomatoes grape" for MVR warehouse titles. */
 function warehouseWordOrder(q: string): string | undefined {
   const parts = q.split(/\s+/).filter(Boolean);
@@ -148,8 +160,13 @@ export function categoryBSearchQueries(
     return out.slice(0, cap);
   }
   // Recall only: fruit token + warehouse order. Filter does precision.
-  for (const q of item.queries) add(cleanSearchQuery(q));
+  // SKU-like queries are WM getProduct hints, not NF/MVR search text.
   for (const q of item.queries) {
+    if (looksLikeWalmartProductId(q)) continue;
+    add(cleanSearchQuery(q));
+  }
+  for (const q of item.queries) {
+    if (looksLikeWalmartProductId(q)) continue;
     const cleaned = cleanSearchQuery(q);
     add(warehouseWordOrder(cleaned));
   }

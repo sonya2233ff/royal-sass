@@ -47,7 +47,10 @@
       "label": "Grape Tomatoes (pack)",
       "queries": [
         "grape tomatoes",
-        "cherry grape tomatoes"
+        "grape tomato",
+        "cherry tomatoes",
+        "devours grape tomato",
+        "72CDS4R4V81X"
       ],
       "mustIncludeAny": [
         "grape tomato",
@@ -55,7 +58,10 @@
         "tomatoes grape",
         "tomato, grape",
         "tomato grape",
-        "organic grape"
+        "organic grape",
+        "cherry tomato",
+        "cherry tomatoes",
+        "tomatoes cherry"
       ],
       "mustNotInclude": [
         "sauce",

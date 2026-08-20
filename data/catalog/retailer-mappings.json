@@ -79,16 +79,15 @@
         "walmart_ca": {
           "retailer": "walmart_ca",
           "storeId": "5831",
-          "retailerProductId": "6000194960084",
-          "name": "Your Fresh Market Tomato, Grape, 10 oz",
-          "matchMethod": "locked_sku",
-          "matchConfidence": 1,
-          "verified": true,
-          "verifiedAt": "2026-08-13T04:59:30.360Z",
+          "retailerProductId": "72CDS4R4V81X",
+          "name": "Nature Fresh Farms - Devours, Premium Red Grape Tomato - 283g, Devours Premium Red Grape Toms",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
           "decision": "auto_linked",
-          "kind": "identity",
-          "skippedRematch": true,
-          "updatedAt": "2026-08-17T04:11:20.993Z"
+          "kind": "staple_winner",
+          "skippedRematch": false,
+          "updatedAt": "2026-08-20T04:26:56.298Z"
         },
         "wholesaleclub": {
           "retailer": "wholesaleclub",
@@ -129,11 +128,11 @@
         {
           "retailer": "walmart_ca",
           "storeId": "5831",
-          "retailerProductId": "6000194960083",
-          "price": 2.97,
-          "checkedAt": "2026-08-14T01:30:32.147Z",
+          "retailerProductId": "72CDS4R4V81X",
+          "price": 2.44,
+          "checkedAt": "2026-08-20T04:26:56.298Z",
           "source": "catalog_walmart_5831_latest",
-          "priceConfidence": "RECEIPT_VERIFIED"
+          "priceConfidence": "LIVE_VERIFIED"
         },
         {
           "retailer": "mvr",

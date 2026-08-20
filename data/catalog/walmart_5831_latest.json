@@ -7,7 +7,7 @@
     "name": "Walmart Supercentre #5831",
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
-  "checkedAt": "2026-08-20T01:47:19.476Z",
+  "checkedAt": "2026-08-20T04:26:56.298Z",
   "itemCount": 30,
   "matched": 22,
   "items": [
@@ -50,19 +50,25 @@
       "label": "Grape Tomatoes (pack)",
       "status": "ok",
       "queriesTried": [
-        "6000194960084"
+        "grape tomatoes",
+        "grape tomato",
+        "cherry tomatoes",
+        "devours grape tomato",
+        "tomatoes grape",
+        "tomato grape"
       ],
       "offer": {
-        "productId": "6000194960083",
-        "name": "Your Fresh Market Tomato, Grape, 10 oz",
-        "brand": "Your Fresh Market",
+        "productId": "72CDS4R4V81X",
+        "name": "Nature Fresh Farms - Devours, Premium Red Grape Tomato - 283g, Devours Premium Red Grape Toms",
+        "brand": "Nature Fresh Farms",
         "packageSize": "283 g",
-        "parsedMassKg": 0.28349523125000003,
-        "price": 2.97,
+        "parsedMassKg": 0.283,
+        "price": 2.44,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:25:56.988Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-tomato-grape/6000194960084?classType=REGULAR&athbdg=L1600",
-        "image": "https://i5.walmartimages.ca/images/Enlarge/039/217/6000203039217.jpg"
+        "checkedAt": "2026-08-20T04:26:40.275Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/nature-fresh-farms-devours-premium-red-grape-tomato-283g/72CDS4R4V81X?classType=REGULAR",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/910/999/6000209910999.jpg"
       },
       "alternates": [],
       "notes": "Produce: cheapest grape tomato pack (brand irrelevant)",

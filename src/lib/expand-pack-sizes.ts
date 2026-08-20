@@ -5,6 +5,7 @@
  */
 import {
   catalogCandidates,
+  cheapestMatchSkipsIdentityLock,
   findOfferForSku,
   mappingIsLockedIdentity,
   offerIsOnShelf,
@@ -41,7 +42,10 @@ export function shouldExpandPackSizes(input: {
 }): boolean {
   if (isSoldByWeightItem(input.item)) return false;
   if (resolveMatchMode(input.item) !== "cheapest") return false;
-  if (mappingIsLockedIdentity(input.link)) {
+  if (
+    mappingIsLockedIdentity(input.link) &&
+    !cheapestMatchSkipsIdentityLock(input.item)
+  ) {
     const sku = input.link?.retailerProductId;
     const hit = sku ? findOfferForSku(input.row, sku) : null;
     if (hit && offerIsOnShelf(hit)) return false;

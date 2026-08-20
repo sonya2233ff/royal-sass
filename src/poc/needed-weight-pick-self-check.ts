@@ -547,16 +547,26 @@ const grapeAlt15 = {
   parsedMassKg: 0.68,
   price: 5.94,
 };
+const grapeDevours = {
+  productId: "72CDS4R4V81X",
+  name: "Nature Fresh Farms - Devours, Premium Red Grape Tomato - 283g",
+  packageSize: "283 g",
+  parsedMassKg: 0.283,
+  price: 2.44,
+};
 const grapeLockedInStock = resolveCatalogOffer({
   item: grapeItem,
-  row: { offer: { ...grapeOos10, availability: undefined }, alternates: [grapeAlt15] },
+  row: {
+    offer: { ...grapeOos10, availability: undefined, price: 2.97 },
+    alternates: [grapeDevours, grapeAlt15],
+  },
   link: grapeLock,
   matchMode: "cheapest",
-  neededGrams: 500,
+  neededGrams: 283,
 });
 assert(
-  grapeLockedInStock.offer?.productId === grapeOos10.productId,
-  `in-stock lock still wins ${grapeLockedInStock.offer?.productId}`,
+  grapeLockedInStock.offer?.productId === grapeDevours.productId,
+  `cheapest grape must skip the 10 oz identity lock, got ${grapeLockedInStock.offer?.productId}`,
 );
 const grapeLockedOos = resolveCatalogOffer({
   item: grapeItem,
@@ -596,7 +606,7 @@ assert(
       alternates: [],
     },
   }) === false,
-  "in-stock locked grape SKU should not rematch",
+  "one 10 oz pack already covers ~500 g with 2×; no expand",
 );
 
 const organicBlue = {

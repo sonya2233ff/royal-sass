@@ -5,6 +5,7 @@
  */
 import {
   categoryBSearchQueries,
+  looksLikeWalmartProductId,
   offerFailsStapleFilters,
   offerFailsStapleOfferFilters,
   stapleBrandHint,
@@ -142,6 +143,44 @@ async function main() {
       raw: grapeRaw,
     }),
     "grape tomatoes identity accepts warehouse title",
+  );
+  assert(
+    offerFailsStapleOfferFilters(grape, {
+      name: "Nature Fresh Farms - Devours, Premium Red Grape Tomato - 283g",
+    }) == null,
+    "Devours grape 283g is the grape tomato pack",
+  );
+  assert(
+    isActualCategoryBOffer(grape, {
+      productId: "72CDS4R4V81X",
+      name: "Nature Fresh Farms - Devours, Premium Red Grape Tomato - 283g, Devours Premium Red Grape Toms",
+      packageSize: "283 g",
+      parsedMassKg: 0.283,
+      sourceUrl:
+        "https://www.walmart.ca/en/ip/nature-fresh-farms-devours-premium-red-grape-tomato/72CDS4R4V81X",
+    }),
+    "grower-branded grape clamshell is still category B produce",
+  );
+  assert(
+    offerFailsStapleOfferFilters(grape, {
+      name: "SUNSET Campari Tomatoes, 1lb",
+    }) === "mustIncludeAny",
+    "Campari is not grape/cherry",
+  );
+  assert(
+    offerFailsStapleOfferFilters(grape, {
+      name: "HJADGG Cherry Pink Grape Tomato Seeds, 200pcs",
+    }) === "mustNotInclude:seed" ||
+      offerFailsStapleOfferFilters(grape, {
+        name: "HJADGG Cherry Pink Grape Tomato Seeds, 200pcs",
+      }) === "mustNotInclude:seeds",
+    "garden seeds are not grape tomatoes",
+  );
+  assert(
+    offerFailsStapleOfferFilters(grape, {
+      name: "Your Fresh Market Cherry Tomatoes 10 oz",
+    }) == null,
+    "cherry tomato clamshell is the same cafe pack as grape",
   );
   const mvrGrapeHandle = {
     productId: "vegetables-grape-tomatoes-case-15-x-1-lb",
@@ -331,6 +370,14 @@ async function main() {
   assert(
     qs.some((q) => /tomatoes grape/i.test(q)),
     "category B search includes warehouse word order",
+  );
+  assert(
+    qs.some((q) => /^grape tomato$/i.test(q)),
+    "category B search includes singular grape tomato (Devours title)",
+  );
+  assert(
+    qs.every((q) => !looksLikeWalmartProductId(q)),
+    "WM Rapid ids stay out of shared NF/MVR search queries",
   );
   const blueQs = categoryBSearchQueries(blueberries);
   assert(

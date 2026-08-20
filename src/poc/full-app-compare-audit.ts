@@ -160,22 +160,22 @@ async function main() {
   assert(grape, "grape row");
   const gWm = grape!.walmart as { shelfPrice?: number; name?: string };
   assert(!/seed/i.test(gWm.name ?? ""), "grape must not show seeds");
-  if (grape!.basketWalmart == null) {
-    assert(
-      grape!.cheaper === "incomplete",
-      `grape without a WM pack is incomplete, got ${grape!.cheaper} / ${grape!.fairBasis}`,
-    );
-  } else {
-    assert(
-      grape!.fairBasis === "per_100g" || grape!.fairBasis === "per_pack",
-      `grape packed basis ${grape!.fairBasis}`,
-    );
-    assert(
-      grape!.cheaper !== "walmart" ||
-        Math.abs((gWm.shelfPrice ?? 0) - 2.97) > 0.05,
-      `OOS 10 oz must not win WM grape compare (cheaper=${grape!.cheaper} shelf=${gWm.shelfPrice})`,
-    );
-  }
+  assert(
+    grape!.basketWalmart != null,
+    "WM grape must be a priced pack, not N/A from the OOS 10 oz lock",
+  );
+  assert(
+    /grape tomato/i.test(gWm.name ?? ""),
+    `WM grape pack name ${gWm.name}`,
+  );
+  assert(
+    grape!.fairBasis === "per_100g" || grape!.fairBasis === "per_pack",
+    `grape packed basis ${grape!.fairBasis}`,
+  );
+  assert(
+    Math.abs((gWm.shelfPrice ?? 0) - 2.97) > 0.05,
+    `OOS 10 oz must not win WM grape compare (shelf=${gWm.shelfPrice})`,
+  );
 
   const ziploc = byId.get("ziploc_sandwich");
   assert(ziploc, "ziploc row");

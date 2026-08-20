@@ -222,8 +222,14 @@ export function offerPassesStapleFilters(
   return offerFailsStapleOfferFilters(item, offer) == null;
 }
 
-function cheapestEggsSkipIdentityLock(item: StapleFilterItem): boolean {
-  return item.category === "eggs" || item.id === "large_eggs_dozen";
+/** Category B / eggs: a verified SKU must not hide a cheaper equivalent pack. */
+export function cheapestMatchSkipsIdentityLock(item: StapleFilterItem): boolean {
+  return (
+    item.category === "eggs" ||
+    item.category === "produce" ||
+    item.category === "frozen" ||
+    item.id === "large_eggs_dozen"
+  );
 }
 
 export function resolveCatalogOffer(input: {
@@ -244,7 +250,7 @@ export function resolveCatalogOffer(input: {
   const mappedSku = input.link?.retailerProductId;
   const lockIdentity =
     mappingIsLockedIdentity(input.link) &&
-    !(input.matchMode === "cheapest" && cheapestEggsSkipIdentityLock(input.item));
+    !(input.matchMode === "cheapest" && cheapestMatchSkipsIdentityLock(input.item));
   if (lockIdentity && mappedSku) {
     const hit = findOfferForSku(input.row, mappedSku);
     if (hit && offerIsOnShelf(hit)) {

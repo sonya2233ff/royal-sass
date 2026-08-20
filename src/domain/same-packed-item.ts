@@ -427,6 +427,8 @@ function looksLikeProduceTitle(
   );
   if (leftoverHasJunk(item, leftover)) return false;
   if (leftover.length === 0) return true;
+  // Grower brand on a real clamshell ("Nature Fresh Farms Devours … 283g").
+  if (packMassKg(offer.name, offer.packageSize, offer.parsedMassKg)) return true;
   // Grower / origin / "premium" — processed junk is already rejected.
   return leftover.length <= 2;
 }
@@ -458,6 +460,7 @@ function looksLikeProduceSlug(
   if (item.category === "frozen") return true;
   const leftover = leftoverTokens(item, slug);
   if (leftoverHasJunk(item, leftover)) return false;
+  if (packMassKg(offer.name, offer.packageSize, offer.parsedMassKg)) return true;
   return leftover.length <= 1;
 }
 
