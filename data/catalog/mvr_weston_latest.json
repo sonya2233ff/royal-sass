@@ -2,7 +2,7 @@
   "retailer": "mvr",
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
-  "checkedAt": "2026-08-18T21:55:20.388Z",
+  "checkedAt": "2026-08-20T00:31:41.999Z",
   "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
@@ -23,14 +23,11 @@
         "brand": "VEGETABLES",
         "packageSize": "1 PINT",
         "price": 1.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:20:56.508Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-grape-1-pint-21?_pos=1&_psq=grape+tomatoes&_psid=4eab33c83&_ss=e",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES",
-        "parsedMassKg": 0.283
+        "checkedAt": "2026-08-20T00:31:17.712Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-grape-1-pint-21"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -42,16 +39,13 @@
         "name": "FRUITS - LEMONS REPACK 6 EA",
         "brand": "FRUITS",
         "packageSize": "6 EA",
-        "price": 3.79,
-        "availability": "in_stock",
+        "price": 2.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:20:58.293Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-lemons-repack-6-ea?_pos=1&_psq=lemons&_psid=cb527adcf&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000001354p_27e81b14-c6d9-4863-aaf9-d8c7745614a7.jpg?v=1785855801",
-        "taxonomyText": "CITRUS FRUITS  CITRUS FRUITS  PRODUCE  FRUITS",
-        "parsedMassKg": 0
+        "checkedAt": "2026-08-20T00:31:17.989Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-lemons-repack-6-ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000001354p_030b771e-a079-4cd0-960e-a8dc4816e2b2.jpg?v=1787145981"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -66,13 +60,11 @@
         "parsedMassKg": 1.1339809250000001,
         "price": 4.99,
         "unitPrice": 4.4,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:20:59.313Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlett-case-13-kg?_pos=8&_psq=pear&_psid=5fde35b0c&_ss=e",
-        "taxonomyText": "APPLES, PEARS  APPLES  PRODUCE PEARS  FRUITS"
+        "checkedAt": "2026-08-20T00:31:18.256Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlett-case-13-kg"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "fruits-pears-bartlet-2-lb",
@@ -102,14 +94,12 @@
         "parsedMassKg": 2.2679618500000003,
         "price": 7.99,
         "unitPrice": 3.52,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:00.437Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-repack-5-lbs?_pos=1&_psq=eggplant&_psid=d871f9743&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001117894p.jpg?v=1782993516",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:18.519Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-repack-5-lbs",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001117894p.jpg?v=1782993516"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -133,8 +123,9 @@
         "price": 2.99,
         "unitPrice": 3.16,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:35.657Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-946-ml"
+        "checkedAt": "2026-08-20T00:31:18.784Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/earths-own-oat-original-946-ml",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062602781402p.jpg?v=1782240016"
       },
       "notes": "Live MVR SKU price refresh",
       "alternates": [
@@ -194,14 +185,12 @@
         "parsedMassKg": 1.1339809250000001,
         "price": 4.99,
         "unitPrice": 4.4,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:02.499Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-red-repack-5-lbs-1?_pos=6&_psq=red+pepper&_psid=848dad7f1&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000073160665p_5a36b3d9-5ad1-4354-a748-4665adbc8c5a.jpg?v=1782304072",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:19.053Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-red-repack-5-lbs-1",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000073160665p_5a36b3d9-5ad1-4354-a748-4665adbc8c5a.jpg?v=1782304072"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -216,14 +205,12 @@
         "parsedMassKg": 2.2679618500000003,
         "price": 7.99,
         "unitPrice": 3.52,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:03.778Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-sweet-repack-5-lbs?_pos=4&_psq=sweet+potato&_psid=2e1361cde&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001116584p.jpg?v=1786636156",
-        "taxonomyText": "ROOT VEGETABLES  ROOT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:19.336Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-sweet-repack-5-lbs",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001116584p.jpg?v=1786636156"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -253,15 +240,12 @@
         "packageSize": "per kg",
         "price": 2.19,
         "unitPrice": 2.19,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:05.070Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-per-kg?_pos=3&_psq=bananas&_psid=b5ee10fa7&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0026588300000p_595a7abe-c199-4f8c-b1c0-3db6b15ec7cb.jpg?v=1776104493",
-        "taxonomyText": "TROPICAL FRUITS AVERAGEWEIGHT:1.10  TROPICAL FRUITS  PRODUCE PERKILO:2.43  FRUITS",
-        "parsedMassKg": 0
+        "checkedAt": "2026-08-20T00:31:19.608Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-per-kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0026588300000p_595a7abe-c199-4f8c-b1c0-3db6b15ec7cb.jpg?v=1776104493"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -274,16 +258,14 @@
         "brand": "FRUITS",
         "packageSize": "600 GR",
         "parsedMassKg": 0.6,
-        "price": 6.99,
-        "unitPrice": 11.65,
-        "availability": "in_stock",
+        "price": 5.99,
+        "unitPrice": 9.98,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:05.836Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-kiwi-600-grams?_pos=6&_psq=kiwi&_psid=ff78493ea&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006623677303p.jpg?v=1783334836",
-        "taxonomyText": "TROPICAL FRUITS  TROPICAL FRUITS  PRODUCE  FRUITS"
+        "checkedAt": "2026-08-20T00:31:19.899Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-kiwi-600-grams",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006623677303p.jpg?v=1787143407"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -296,15 +278,12 @@
         "brand": "VEGETABLES",
         "packageSize": "3 EA",
         "price": 2.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:07.011Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-cucumbers-english-repack-3-ea?_pos=1&_psq=english+cucumber&_psid=1ee25d444&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114597p_7d5a4171-d111-4eff-b842-634d1b9f2966.jpg?v=1787070920",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES",
-        "parsedMassKg": 0
+        "checkedAt": "2026-08-20T00:31:20.187Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-cucumbers-english-repack-3-ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114597p_7d5a4171-d111-4eff-b842-634d1b9f2966.jpg?v=1787070920"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -319,13 +298,11 @@
         "parsedMassKg": 0.90718474,
         "price": 13.99,
         "unitPrice": 15.42,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:08.382Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-garlic-fresh-special-1-lbs?_pos=1&_psq=garlic+bag&_psid=caf5b1994&_ss=e",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:20.471Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-garlic-fresh-special-1-lbs"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -337,16 +314,14 @@
         "name": "FRUITS - BLUEBERRIES SWEETEST BATCH 11OZ",
         "brand": "FRUITS",
         "packageSize": "312 g",
-        "parsedMassKg": 0.312,
+        "parsedMassKg": 0.31184475437500003,
         "price": 7.49,
         "unitPrice": 24.02,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:09.444Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-blueberries-11oz?_pos=3&_psq=blueberries&_psid=9bdd62f5a&_ss=e",
-        "taxonomyText": "BERRIES  BERRIES  PRODUCE  FRUITS"
+        "checkedAt": "2026-08-20T00:31:20.746Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-blueberries-11oz"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -359,16 +334,14 @@
         "brand": "FRUITS",
         "packageSize": "1 LB",
         "parsedMassKg": 0.45359237,
-        "price": 5.49,
-        "unitPrice": 12.1,
-        "availability": "in_stock",
+        "price": 5.99,
+        "unitPrice": 13.21,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:10.001Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-strawberries-1-lb-2?_pos=3&_psq=strawberries&_psid=901b755d4&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0081133402015p_92dde1be-9434-4e0c-8f55-a601d3271800.jpg?v=1786116922",
-        "taxonomyText": "BERRIES  BERRIES  PRODUCE  FRUITS"
+        "checkedAt": "2026-08-20T00:31:21.018Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-strawberries-1-lb-2",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0081133402015p.jpg?v=1787143582"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -400,8 +373,9 @@
         "price": 5.79,
         "unitPrice": 12.75,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:36.822Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-unsalted-454gr"
+        "checkedAt": "2026-08-20T00:31:21.280Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-unsalted-454gr",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006601390561p_fab0f849-34cc-4021-9de5-c6f9174d0e94.jpg?v=1783965746"
       },
       "notes": "Live MVR SKU price refresh",
       "alternates": [
@@ -476,8 +450,9 @@
         "price": 5.99,
         "unitPrice": 4.4,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:37.116Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-orange-juice-no-pulp-1-36lt"
+        "checkedAt": "2026-08-20T00:31:21.542Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-orange-juice-no-pulp-1-36lt",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004850020554p.jpg?v=1786467018"
       },
       "notes": "Live MVR SKU price refresh",
       "alternates": [
@@ -524,7 +499,7 @@
         "price": 1.99,
         "unitPrice": 4.52,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:37.419Z",
+        "checkedAt": "2026-08-20T00:31:21.814Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/realemon-lemon-juice-440ml",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006591258103p.jpg?v=1780318398"
       },
@@ -602,14 +577,12 @@
         "parsedMassKg": 1,
         "price": 7.29,
         "unitPrice": 7.29,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:10.596Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-sliced-apples-1kg?_pos=2&_psq=frozen+sliced+apples&_psid=3725103ba&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088194p.jpg?v=1770363489",
-        "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:22.079Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-sliced-apples-1kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088194p.jpg?v=1770363489"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -624,14 +597,12 @@
         "parsedMassKg": 1,
         "price": 4.99,
         "unitPrice": 4.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:11.866Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-1kg?_pos=1&_psq=frozen+banana+slices&_psid=d01bfebe4&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000194p_6827b841-b7df-42c4-a646-6e5ea55507a4.jpg?v=1785562354",
-        "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:22.355Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-1kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000194p_6827b841-b7df-42c4-a646-6e5ea55507a4.jpg?v=1785562354"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -690,14 +661,12 @@
         "parsedMassKg": 0.90718474,
         "price": 2.99,
         "unitPrice": 3.3,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:15.829Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-2-lb?_pos=2&_psq=frozen+chopped+spinach&_psid=e2071e1e1&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000183p.jpg?v=1783983216",
-        "taxonomyText": "FROZEN VEGETABLES  FROZEN VEGETABLES  FROZEN  FROZEN FRUITS & VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:23.148Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-2-lb",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000183p.jpg?v=1783983216"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -751,20 +720,19 @@
     },
     {
       "id": "large_eggs_dozen",
-      "label": "Large Eggs Dozen",
+      "label": "Large Eggs",
       "status": "ok",
       "offer": {
         "productId": "gray-ridge-eggs-white-large-1doz",
         "name": "GRAY RIDGE - EGGS WHITE LARGE 1DOZ",
         "brand": "GRAY RIDGE",
         "price": 4.19,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:26:28.849Z",
+        "checkedAt": "2026-08-20T00:31:17.400Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/gray-ridge-eggs-white-large-1doz",
-        "taxonomyText": "EGGS  EGGS  REFRIGERATED  EGGS & DAIRY"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734300p.jpg?v=1777575376"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "gray-ridge-eggs-white-large-15x1-doz",
@@ -851,14 +819,12 @@
         "parsedMassKg": 0.34019427750000003,
         "price": 3.69,
         "unitPrice": 10.85,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:37.622Z",
+        "checkedAt": "2026-08-20T00:31:23.440Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-12oz-black-ripple-wall-cup-25ea",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760301070p_4bfafaef-2b6b-473b-b6ba-81814a3acc1d.jpg?v=1786374159",
-        "taxonomyText": "HOT CUPS  HOT CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760301070p_4bfafaef-2b6b-473b-b6ba-81814a3acc1d.jpg?v=1786374159"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "maher-products-12oz-black-double-wall-cup-20x25-ea",
@@ -919,14 +885,12 @@
         "parsedMassKg": 0.34019427750000003,
         "price": 5.19,
         "unitPrice": 15.26,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:17.589Z",
+        "checkedAt": "2026-08-20T00:31:23.742Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/solo-ultra-clear-squat-pet-cup-12oz-50ea",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004159423161p.jpg?v=1780298907",
-        "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004159423161p.jpg?v=1780298907"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "solo-ultra-clear-squat-pet-cup-12oz-20x50-ea",
@@ -970,13 +934,12 @@
         "brand": "WINCO",
         "packageSize": "1EA",
         "price": 3.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:18.248Z",
+        "checkedAt": "2026-08-20T00:31:23.995Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/winco-silicone-oven-mitt-15in-1ea",
-        "taxonomyText": "KITCHEN TEXTILE  KITCHEN TEXTILE  SMALLWARES  KITCHENWARE"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0084216911771p_2c38a0cb-e104-437f-ada0-fd63baf5c92c.jpg?v=1777484502"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "winco-fire-resistant-13in-oven-mitt-ea",
@@ -1042,14 +1005,12 @@
         "parsedMassKg": 0.45359237,
         "price": 4.29,
         "unitPrice": 9.46,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:38.288Z",
+        "checkedAt": "2026-08-20T00:31:24.286Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-16oz-black-ripple-wall-cup-25ct",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760301072p_ea160d3c-d2af-402c-b3e7-a9a9337f3d86.jpg?v=1786374368",
-        "taxonomyText": "HOT CUPS  HOT CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760301072p_ea160d3c-d2af-402c-b3e7-a9a9337f3d86.jpg?v=1786374368"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "maher-products-16oz-black-double-wall-cup-20x25-ea",
@@ -1118,14 +1079,12 @@
         "parsedMassKg": 5,
         "price": 33.99,
         "unitPrice": 6.8,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:19.613Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-pineapple-chunks-5x1-kg?_pos=1&_psq=frozen+pineapple+chunks&_psid=32fe46b92&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800336p_3c6149e7-b455-4272-91ae-ab80717f9f8c.jpg?v=1782889753",
-        "taxonomyText": "FROZEN FRUITS  FROZEN FRUITS  FROZEN  FROZEN FRUITS & VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:24.560Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-pineapple-chunks-5x1-kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800336p_3c6149e7-b455-4272-91ae-ab80717f9f8c.jpg?v=1782889753"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "alasko-pineapple-chunks-1kg",
@@ -1156,13 +1115,12 @@
         "parsedMassKg": 14,
         "price": 71.99,
         "unitPrice": 5.14,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:23.386Z",
+        "checkedAt": "2026-08-20T00:31:24.848Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/lynch-apple-strawberry-jam-14kg",
-        "taxonomyText": "SPREADS AND JAMS  SPREADS AND JAMS  BAKING FILLINGS MILK PRODUCTS  SPREADS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006280212592p.jpg?v=1786422195"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -1177,13 +1135,12 @@
         "parsedMassKg": 0.05669904625,
         "price": 12.99,
         "unitPrice": 229.1,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:39.013Z",
+        "checkedAt": "2026-08-20T00:31:25.110Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-clear-dome-lid-for-bagasse-bowl-24-32oz-50ea",
-        "taxonomyText": "PAPER/ KRAFT CONTAINERS & LIDS  PAPER/ KRAFT CONTAINERS & LIDS  FOOD SERVICE SUPPLIES  TAKE OUT CONTAINERS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300601p.jpg?v=1760683006"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "maher-products-clear-dome-lid-for-bagasse-bowl-24-32oz-8x50-ea",
@@ -1237,13 +1194,12 @@
         "parsedMassKg": 6.300000000000001,
         "price": 32.49,
         "unitPrice": 5.16,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:24.898Z",
+        "checkedAt": "2026-08-20T00:31:25.404Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/ace-bakery-demi-baguette-45x140-gr",
-        "taxonomyText": "BREADS/WRAPS  BREADS/WRAPS  FROZEN  FROZEN BAKED GOODS & DESSERTS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/2062852301291p.jpg?v=1775028361"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "boulart-mini-ciabatta-dinner-roll-140x45-gr-1",
@@ -1315,13 +1271,12 @@
         "brand": "TOUCH",
         "packageSize": "100EA",
         "price": 2.09,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:39.429Z",
+        "checkedAt": "2026-08-20T00:31:25.683Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/touch-bamboo-paddle-3in-100ea",
-        "taxonomyText": "SKEWERS/PICKS  SKEWERS/PICKS  FOOD SERVICE SUPPLIES  DISPOSABLES"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062565982883p.jpg?v=1781273635"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "touch-bamboo-paddle-3in-10x100-ea",
@@ -1370,16 +1325,14 @@
         "name": "FRUITS - PEARS BARTLETT LOCAL CLAM 2L",
         "brand": "FRUITS",
         "packageSize": "2L",
-        "parsedMassKg": 0,
+        "parsedMassKg": 2,
         "price": 5.99,
         "unitPrice": 3,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:25.588Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlet-2-lb?_pos=2&_psq=bartlett+pear&_psid=0f293054c&_ss=e",
-        "taxonomyText": "APPLES, PEARS  APPLES  PRODUCE PEARS  FRUITS"
+        "checkedAt": "2026-08-20T00:31:25.990Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlet-2-lb"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "fruits-pears-bartlett-repack-2-5-lb",
@@ -1428,16 +1381,13 @@
         "name": "FRUITS - CANTALOUPES EACH 1 EA",
         "brand": "FRUITS",
         "packageSize": "1 EA",
-        "parsedMassKg": 0,
         "price": 3.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:27.531Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-sweet-cantaloupes-1-ea?_pos=1&_psq=Cantaloupe&_psid=e6c580c83&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000013212245p_1ca88352-318a-40d5-9f58-d81517bb894c.jpg?v=1786552939",
-        "taxonomyText": "MELONS  MELONS  PRODUCE  FRUITS"
+        "checkedAt": "2026-08-20T00:31:26.248Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-sweet-cantaloupes-1-ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000013212245p_1ca88352-318a-40d5-9f58-d81517bb894c.jpg?v=1786552939"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "fruits-sweet-ontario-cantaloupes-case-15-ea",
@@ -1464,16 +1414,13 @@
         "name": "VEGETABLES - CELERY REPACK 3CT 3 EA",
         "brand": "VEGETABLES",
         "packageSize": "3 EA",
-        "parsedMassKg": 0,
         "price": 5.49,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:27.902Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-celery-repack-3-ea?_pos=1&_psq=Celery&_psid=9312c1345&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114577p_5d90600f-9675-43b2-ba60-00d4829987b7.jpg?v=1786721477",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:26.524Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-celery-repack-3-ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114577p_5d90600f-9675-43b2-ba60-00d4829987b7.jpg?v=1786721477"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-celery-case-24-ea",
@@ -1516,14 +1463,12 @@
         "parsedMassKg": 4,
         "price": 22.99,
         "unitPrice": 5.75,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:28.241Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/cibona-ranch-dressing-4lt?_pos=1&_psq=cibona+ranch+4l&_psid=37674a79b&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006090344410p.jpg?v=1785562092",
-        "taxonomyText": "DRESSINGS  DRESSINGS  PANTRY ESSENTIALS SAUCES  CONDIMENTS"
+        "checkedAt": "2026-08-20T00:31:26.790Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/cibona-ranch-dressing-4lt",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006090344410p.jpg?v=1785562092"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "cibona-ranch-dressing-2x4lt",
@@ -1551,16 +1496,13 @@
         "name": "VEGETABLES - CILANTRO REPACK 3EA  3 EA",
         "brand": "VEGETABLES",
         "packageSize": "3EA 3 EA",
-        "parsedMassKg": 0,
         "price": 4.49,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:29.299Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-cilantro-repack-3-ea?_pos=1&_psq=Cilantro&_psid=b636e8bd2&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114785p_74dad780-42e6-4f64-ba69-417afa962a78.jpg?v=1785331341",
-        "taxonomyText": "HERBS  HERBS  PRODUCE NUTS  HERBS"
+        "checkedAt": "2026-08-20T00:31:27.065Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-cilantro-repack-3-ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114785p_74dad780-42e6-4f64-ba69-417afa962a78.jpg?v=1785331341"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-cilantro-case-24-ea",
@@ -1587,16 +1529,13 @@
         "name": "TALTHI - CLEAR PARTY TRAY 12x12 IN 5 PK",
         "brand": "TALTHI",
         "packageSize": "5 PK",
-        "parsedMassKg": 0,
         "price": 12.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:29.733Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/talthi-clear-party-tray-12x12-in-5-pk?_pos=1&_psq=Clear+Party+Tray+12x12&_psid=c92823e67&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0084081700320p.jpg?v=1780302457",
-        "taxonomyText": "PLASTIC CONTAINERS AND LIDS  PLASTIC CONTAINERS AND LIDS  FOOD SERVICE SUPPLIES  TAKE OUT CONTAINERS"
+        "checkedAt": "2026-08-20T00:31:27.323Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/talthi-clear-party-tray-12x12-in-5-pk",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0084081700320p.jpg?v=1780302457"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "talthi-clear-party-tray-12x12-in-8x5-pk",
@@ -1721,13 +1660,12 @@
         "parsedMassKg": 0.75,
         "price": 5.29,
         "unitPrice": 7.05,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:30.954Z",
+        "checkedAt": "2026-08-20T00:31:27.618Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-2-nordica-cottage-cheese-750gr-1",
-        "taxonomyText": "SOFT,SEMISOFT, SEMIHARD CHEESE  SOFT  REFRIGERATED SEMIHARD CHEESE SEMISOFT  CHEESE"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006601315243p.jpg?v=1782316097"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "gay-lea-nordica-cottage-cheese-4-500gr",
@@ -1841,13 +1779,12 @@
         "parsedMassKg": 2,
         "price": 23.49,
         "unitPrice": 11.75,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:32.393Z",
+        "checkedAt": "2026-08-20T00:31:27.873Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/elite-dairy-deli-cream-cheese-reg-2kg",
-        "taxonomyText": "CREAM CHEESE & SPREADABLES  CREAM CHEESE & SPREADABLES  REFRIGERATED  CHEESE"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0832670005593p_528f874c-df52-4bc5-b2b1-3663b368c527.jpg?v=1770657441"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "kraft-heinz-philadelphia-deli-cream-cheese-pail-3kg",
@@ -1983,13 +1920,12 @@
         "parsedMassKg": 20,
         "price": 31.99,
         "unitPrice": 1.6,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:40.097Z",
+        "checkedAt": "2026-08-20T00:31:28.144Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/redpath-dark-brown-sugar-20kg",
-        "taxonomyText": "SUGAR  SUGAR  BAKING  SUGAR SWEETENERS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006284763260p.jpg?v=1785564630"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "redpath-dark-brown-sugar-20x1-kg",
@@ -2065,14 +2001,12 @@
         "parsedMassKg": 0.6803885550000001,
         "price": 47.99,
         "unitPrice": 70.53,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:33.071Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/maher-4oz-portion-cups-20x50-ea?_pos=7&_psq=dome+lids+12+24+oz&_psid=e4027a855&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300348p_3f1e8900-64f5-45ee-8e74-69e2fcead2c7.jpg?v=1770051912",
-        "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        "checkedAt": "2026-08-20T00:31:28.426Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/maher-4oz-portion-cups-20x50-ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300348p_3f1e8900-64f5-45ee-8e74-69e2fcead2c7.jpg?v=1770051912"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "maher-products-dome-lids-green-10oz-20oz-1000pk",
@@ -2224,14 +2158,12 @@
         "parsedMassKg": 9.071847400000001,
         "price": 25.79,
         "unitPrice": 2.84,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:34.642Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/granaria-fettuccine-4-x-5-lb?_pos=2&_psq=Fettuccine&_psid=ce0a50084&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068022210270c_c9c1e928-9720-48b4-a80a-5f05678df293.jpg?v=1785563580",
-        "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
+        "checkedAt": "2026-08-20T00:31:28.681Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/granaria-fettuccine-4-x-5-lb",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0068022210270c_c9c1e928-9720-48b4-a80a-5f05678df293.jpg?v=1785563580"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "de-cecco-6-fettuccine-4x5lb",
@@ -2352,13 +2284,12 @@
         "parsedMassKg": 4,
         "price": 6.29,
         "unitPrice": 1.57,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:35.275Z",
+        "checkedAt": "2026-08-20T00:31:28.988Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/eco-chemlabs-floor-cleaner-lavender-4lt",
-        "taxonomyText": "COMMERCIAL CLEANERS  COMMERCIAL CLEANERS  FOOD SERVICE SUPPLIES  JANITORIAL/CLEANING"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0079993245526p.jpg?v=1780326618"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "floor-cleaner-lavender-4x4-lt",
@@ -2502,13 +2433,12 @@
         "parsedMassKg": 0.125,
         "price": 4.99,
         "unitPrice": 39.92,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:37.364Z",
+        "checkedAt": "2026-08-20T00:31:29.246Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/santa-lucia-buffalo-mozzarella-125gr",
-        "taxonomyText": "CHEESE SOFT  CHEESE SOFT  CHILLED FROZEN  CHEESE"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062778300331p_f1e90e1a-b07a-485c-bc3f-f4a51c23656c.jpg?v=1755264377"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "santa-lucia-fresh-mozzarella-6x125-gr-1",
@@ -2629,14 +2559,12 @@
         "parsedMassKg": 2,
         "price": 8.29,
         "unitPrice": 4.14,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:37.636Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-butternut-squash-diced-2kg?_pos=2&_psq=Frozen+Butternut+Squash&_psid=de819b6ea&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088830p_1671fa77-0c72-4f87-b84d-7dbe8edf9d46.jpg?v=1770363742",
-        "taxonomyText": "FROZEN VEGETABLES  FROZEN VEGETABLES  FROZEN  FROZEN FRUITS & VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:29.538Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-butternut-squash-diced-2kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088830p_1671fa77-0c72-4f87-b84d-7dbe8edf9d46.jpg?v=1770363742"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "alasko-iqf-crinkle-zucchini-quarters-6x2-kg",
@@ -2772,14 +2700,12 @@
         "parsedMassKg": 2,
         "price": 4.99,
         "unitPrice": 2.5,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:40.302Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-diced-carrots-2kg?_pos=1&_psq=Frozen+Diced+Carrots&_psid=0ad6a6b54&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000010700p_5eee692f-8136-45e7-b008-31ea8cf3906a.jpg?v=1780584257",
-        "taxonomyText": "FROZEN VEGETABLES  FROZEN VEGETABLES  FROZEN  FROZEN FRUITS & VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:29.821Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-diced-carrots-2kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000010700p_5eee692f-8136-45e7-b008-31ea8cf3906a.jpg?v=1780584257"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "alasko-frozen-diced-onions-6x2kg",
@@ -2915,14 +2841,12 @@
         "parsedMassKg": 16.548,
         "price": 24.99,
         "unitPrice": 1.51,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:42.233Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/gatorade-zero-variety-28x591-ml?_pos=1&_psq=gatorade+zero+variety+28&_psid=0e3173a84&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005727116282p.jpg?v=1779476095",
-        "taxonomyText": "SPORTS & HYDRATION  SPORTS & HYDRATION  BEVERAGE ENERGY DRINK  SPORTS & HYDRATION"
+        "checkedAt": "2026-08-20T00:31:30.115Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/gatorade-zero-variety-28x591-ml",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005727116282p.jpg?v=1779476095"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "gatorade-g-zero-cool-blue-710ml",
@@ -3036,13 +2960,11 @@
         "parsedMassKg": 0.1,
         "price": 3.99,
         "unitPrice": 39.9,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:44.874Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-goldenberries-repack-200-g?_pos=1&_psq=gooseberries&_psid=8046a8779&_ss=e",
-        "taxonomyText": "BERRIES  BERRIES  PRODUCE  FRUITS"
+        "checkedAt": "2026-08-20T00:31:30.415Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-goldenberries-repack-200-g"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -3057,14 +2979,12 @@
         "parsedMassKg": 2.2679618500000003,
         "price": 9.99,
         "unitPrice": 4.4,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:41.945Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-apples-granny-smith-5-lbs?_pos=1&_psq=Granny+Smith+Apples&_psid=a8ca1965c&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000015554p.jpg?v=1782142582",
-        "taxonomyText": "APPLES, PEARS  APPLES  PRODUCE PEARS  FRUITS"
+        "checkedAt": "2026-08-20T00:31:30.697Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-apples-granny-smith-5-lbs",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000015554p.jpg?v=1782142582"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -3077,13 +2997,12 @@
         "brand": "LAPACO",
         "packageSize": "40 EA",
         "price": 6.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:42.926Z",
+        "checkedAt": "2026-08-20T00:31:30.998Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/lapaco-guest-towel-napkin-1-6-fold-40-ea",
-        "taxonomyText": "SERVIETTES  SERVIETTES  FOOD SERVICE SUPPLIES  PAPER PRODUCTS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006166655001p_7b28635c-3f67-45a7-8b17-35662a71ad8f.jpg?v=1785564174"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "lapaco-guest-towel-napkin-1-6-fold-12x40-ea",
@@ -3144,13 +3063,12 @@
         "parsedMassKg": 1,
         "price": 6.99,
         "unitPrice": 6.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:51.369Z",
+        "checkedAt": "2026-08-20T00:31:31.269Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/harvest-raw-sunflower-seeds-1kg",
-        "taxonomyText": "DRIED FRUITS, NUTS & SEEDS  DRIED FRUITS  BAKING NUTS & SEEDS  DRY BAKING INGREDIENTS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0043655101413p.jpg?v=1786698155"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "prosperity-sunflower-kernels-raw-2x1-5-kg",
@@ -3208,16 +3126,13 @@
         "name": "FRUITS - HONEYDEW MELON 1EA",
         "brand": "FRUITS",
         "packageSize": "1EA",
-        "parsedMassKg": 0,
         "price": 7.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:43.146Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-honeydew-1ea?_pos=1&_psq=Honeydew+Melons&_psid=220fdf16d&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0009884304329p_04d13163-0200-4391-8aa6-4c50e63d65de.jpg?v=1783334816",
-        "taxonomyText": "MELONS  MELONS  PRODUCE  FRUITS"
+        "checkedAt": "2026-08-20T00:31:31.550Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-honeydew-1ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0009884304329p_04d13163-0200-4391-8aa6-4c50e63d65de.jpg?v=1783334816"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "fruits-honeydew-case-5-ea",
@@ -3255,13 +3170,12 @@
         "parsedMassKg": 3,
         "price": 21.49,
         "unitPrice": 7.16,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:53.709Z",
+        "checkedAt": "2026-08-20T00:31:31.862Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/italia-pomace-oil-3lt",
-        "taxonomyText": "OLIVE OIL  OLIVE OIL  PANTRY ESSENTIALS  OILS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0085111901165p.jpg?v=1785563250"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -3276,14 +3190,12 @@
         "parsedMassKg": 1.1339809250000001,
         "price": 4.99,
         "unitPrice": 4.4,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:53.961Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-jalapeno-repack-2-5-lbs?_pos=2&_psq=jalapeno+peppers&_psid=fbd18ba13&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0022655400000p.jpg?v=1786360632",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:32.138Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-jalapeno-repack-2-5-lbs",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0022655400000p.jpg?v=1786360632"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-peppers-jalapeno-bushel",
@@ -3323,16 +3235,13 @@
         "name": "FRUITS - LIMES REPACK 8CT 8  EA",
         "brand": "FRUITS",
         "packageSize": "8 EA",
-        "parsedMassKg": 0,
-        "price": 1.99,
-        "availability": "in_stock",
+        "price": 2.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:55.346Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-limes-repack-12-ea?_pos=2&_psq=Limes+Lrg&_psid=64ae14c9d&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000011132014p_4f09f146-950e-41d0-b5f9-d5b1e2b64470.jpg?v=1784397694",
-        "taxonomyText": "CITRUS FRUITS  CITRUS FRUITS  PRODUCE  FRUITS"
+        "checkedAt": "2026-08-20T00:31:32.402Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-limes-repack-12-ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000011132014p_99f5271b-4549-472c-b454-b820bc97d937.jpg?v=1787143416"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "fruits-limes-case-230-ea",
@@ -3378,13 +3287,12 @@
         "parsedMassKg": 0.4,
         "price": 2.49,
         "unitPrice": 6.23,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:58.173Z",
+        "checkedAt": "2026-08-20T00:31:32.664Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/kraft-jet-puffed-original-marshmallows-400g",
-        "taxonomyText": "COTTON CANDY, MARSHMALLOW  COTTON CANDY  CONFECTIONARY MARSHMALLOW  CANDIES"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0060069906091p_b6909a80-33b0-48cb-b34d-d13e86bb116c.jpg?v=1778236981"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "fireside-miniature-marshmallows-24x250-gr",
@@ -3514,16 +3422,13 @@
         "name": "LINK - MEASURING CUP 1 EA",
         "brand": "LINK",
         "packageSize": "1 EA",
-        "parsedMassKg": 0,
         "price": 2.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:58.456Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/link-measuring-cup-1-ea?_pos=1&_psq=Measuring+Cup&_psid=78a0ccddc&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0007675320340p.jpg?v=1759761446",
-        "taxonomyText": "KITCHEN SUPPLIES  KITCHEN SUPPLIES  SUPPLIES  JANITORIAL"
+        "checkedAt": "2026-08-20T00:31:32.944Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/link-measuring-cup-1-ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0007675320340p.jpg?v=1759761446"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "winco-measuring-cup-4ea",
@@ -3655,13 +3560,11 @@
         "packageSize": "5ML 100CT",
         "parsedMassKg": 0.005,
         "price": 7.19,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:52:59.390Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/safe-t-wear-black-nitrile-gloves-large-5ml-100ct?_pos=2&_psq=nitrile+gloves+large&_psid=02fe13bb4&_ss=e",
-        "taxonomyText": "DISPOSABLE SAFETY APPAREL  DISPOSABLE SAFETY APPAREL  FOOD SERVICE SUPPLIES  SUPPLIES"
+        "checkedAt": "2026-08-20T00:31:33.231Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/safe-t-wear-black-nitrile-gloves-large-5ml-100ct"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "safe-t-wear-black-nitrile-gloves-medium-5ml-100ct-1",
@@ -3776,13 +3679,11 @@
         "packageSize": "4ML 100 CT",
         "parsedMassKg": 0.004,
         "price": 4.69,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:01.851Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/safe-t-wear-blue-nitrile-gloves-medium-4ml-100-ct",
-        "taxonomyText": "DISPOSABLE SAFETY APPAREL  DISPOSABLE SAFETY APPAREL  FOOD SERVICE SUPPLIES  SUPPLIES"
+        "checkedAt": "2026-08-20T00:31:33.494Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/safe-t-wear-blue-nitrile-gloves-medium-4ml-100-ct"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "advancare-nitrile-gloves-large-3-5mil-100-ct-1",
@@ -3895,13 +3796,12 @@
         "brand": "MAHER",
         "packageSize": "50PK",
         "price": 2.19,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:44.334Z",
+        "checkedAt": "2026-08-20T00:31:33.789Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
-        "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300765p_3a6671c5-ff75-4f85-ad4f-dbd1366ae026.jpg?v=1769548239"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "amhil-16-24-dome-lids-no-hole-50ea",
@@ -4062,13 +3962,12 @@
         "parsedMassKg": 9.071847400000001,
         "price": 26.99,
         "unitPrice": 2.98,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:09.642Z",
+        "checkedAt": "2026-08-20T00:31:34.351Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/italpasta-penne-rigate-20lb",
-        "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0100068062022c.jpg?v=1777380153"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "de-cecco-41-penne-rigate-4x5lb",
@@ -4200,16 +4099,13 @@
         "productId": "vegetables-eggplant-case-25-lbs",
         "name": "VEGETABLES - EGGPLANT BUSHEL CASE",
         "brand": "VEGETABLES",
-        "parsedMassKg": 0,
         "price": 25.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:10.251Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-case-25-lbs?_pos=5&_psq=Pickled+Eggplant&_psid=c02715d00&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001254000001p.jpg?v=1786383323",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:34.606Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-case-25-lbs",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001254000001p.jpg?v=1786383323"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-eggplant-repack-5-lbs",
@@ -4327,13 +4223,12 @@
         "parsedMassKg": 0.64,
         "price": 3.29,
         "unitPrice": 5.14,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:46.022Z",
+        "checkedAt": "2026-08-20T00:31:34.876Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/casa-mendosa-tortillas-original-large-640gr",
-        "taxonomyText": "TORTILLA, FLATBREADS  TORTILLA  PANTRY ESSENTIALS FLATBREADS  BAKED GOODS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006340017010p_437fb54f-4601-4b8f-9b24-5664528c0c03.jpg?v=1765525564"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "sonora-10in-flour-tortillas-144ea",
@@ -4435,13 +4330,12 @@
         "brand": "UNIQUE",
         "packageSize": "54X108 EA",
         "price": 0.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:14.224Z",
+        "checkedAt": "2026-08-20T00:31:35.140Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/unique-lime-green-rect-plastic-tablecover-54x108-ea",
-        "taxonomyText": "PARTY DECOR  PARTY DECOR  SMALLWARE  PARTY SUPPLIES"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001117905098p_d486cf22-7cac-423b-abc4-04d8ebd02f2f.jpg?v=1784745218"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "unique-hot-pink-rect-plastic-tablecover-54x108-1ea",
@@ -4540,13 +4434,12 @@
         "name": "TITAN - PLASTIC FOOD WRAP 17x2500 IN",
         "brand": "TITAN",
         "price": 24.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:14.786Z",
+        "checkedAt": "2026-08-20T00:31:35.432Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/titan-plastic-food-wrap-17x2500-in",
-        "taxonomyText": "ALUMINUM FOIL  ALUMINUM FOIL  FOOD SERVICE SUPPLIES  WRAPS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005921232313p.jpg?v=1761979300"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "wrapit-18x2000-cling-film-1ea",
@@ -4620,16 +4513,13 @@
         "name": "FRUITS - POMEGRANATE RED  1 EA",
         "brand": "FRUITS",
         "packageSize": "1 EA",
-        "parsedMassKg": 0,
         "price": 3.99,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:15.062Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pomegranate-red-1-ea?_pos=1&_psq=pomegranates&_psid=0d0d66d7e&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001310000243p_0ceb9773-b1c0-4105-a52d-7fc5ee1e7170.jpg?v=1779981080",
-        "taxonomyText": "SPECIALTY FRUITS  SPECIALTY FRUITS  PRODUCE  FRUITS"
+        "checkedAt": "2026-08-20T00:31:35.713Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pomegranate-red-1-ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001310000243p_0ceb9773-b1c0-4105-a52d-7fc5ee1e7170.jpg?v=1779981080"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "fruits-pomegranate-red-case-8-ea",
@@ -4655,16 +4545,13 @@
         "name": "UPPER CRUST - PUFF DOUGH SHEETS 10x15 15EA",
         "brand": "UPPER CRUST",
         "packageSize": "15EA",
-        "parsedMassKg": 0,
         "price": 30.49,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:16.517Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/upper-crust-puff-dough-sheets-10x15-15ea?_pos=2&_psq=puff+pastry+sheets&_psid=faf46f4bd&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0077347940213p_2dbd211e-9717-4e8f-b119-5bc65ba096d7.jpg?v=1743166716",
-        "taxonomyText": "PASTRYS COOKIES  PASTRYS COOKIES  CHILLED FROZEN  SNACKS"
+        "checkedAt": "2026-08-20T00:31:35.979Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/upper-crust-puff-dough-sheets-10x15-15ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0077347940213p_2dbd211e-9717-4e8f-b119-5bc65ba096d7.jpg?v=1743166716"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "upper-crust-puff-pastry-dough-sheets-10x15-20ea-1",
@@ -4694,14 +4581,12 @@
         "parsedMassKg": 11.33980925,
         "price": 19.99,
         "unitPrice": 1.76,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:49.789Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-onions-red-25-lbs?_pos=2&_psq=Red+Onions&_psid=341a70014&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003338345098c.jpg?v=1786451897",
-        "taxonomyText": "ROOT VEGETABLES  ROOT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:36.257Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-onions-red-25-lbs",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003338345098c.jpg?v=1786451897"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-onions-red-3-lbs",
@@ -4747,14 +4632,12 @@
         "parsedMassKg": 0.45359237,
         "price": 2.49,
         "unitPrice": 5.49,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:46.277Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-radishes-red-1-lb?_pos=1&_psq=Red+Radish&_psid=729603896&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003338367002p.jpg?v=1781879776",
-        "taxonomyText": "ROOT VEGETABLES  ROOT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:36.556Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-radishes-red-1-lb",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003338367002p.jpg?v=1781879776"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-radishes-red-14-x-1lb",
@@ -4784,14 +4667,12 @@
         "parsedMassKg": 0.90718474,
         "price": 7.99,
         "unitPrice": 8.81,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:20.329Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-grapes-red-bag?_pos=1&_psq=red+seedless+grapes&_psid=02cf6fe0b&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/7754790000094p_2ea3258a-8880-437c-9f7b-f6b12577fd8a.jpg?v=1786380977",
-        "taxonomyText": "BERRIES  BERRIES  PRODUCE  FRUITS"
+        "checkedAt": "2026-08-20T00:31:36.852Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-grapes-red-bag",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/7754790000094p_2ea3258a-8880-437c-9f7b-f6b12577fd8a.jpg?v=1786380977"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "fruits-grapes-green-seedless-bag",
@@ -4822,13 +4703,12 @@
         "parsedMassKg": 0.90718474,
         "price": 56.49,
         "unitPrice": 62.27,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:47.522Z",
+        "checkedAt": "2026-08-20T00:31:37.120Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/nuvo-32oz-deli-round-combo-with-lid-240ea",
-        "taxonomyText": "DELI CONTAINERS  DELI CONTAINERS  FOOD SERVICE SUPPLIES  TAKE OUT CONTAINERS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000010098p.jpg?v=1785561945"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "nuvo-16oz-deli-round-combo-with-lid-240ea",
@@ -4889,13 +4769,12 @@
         "parsedMassKg": 1.98,
         "price": 6.39,
         "unitPrice": 3.23,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:23.073Z",
+        "checkedAt": "2026-08-20T00:31:37.379Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/san-pellegrino-aranciata-rossa-cans-6x330-ml-1",
-        "taxonomyText": "CARBONATED FLAVOURED DRINKS  CARBONATED FLAVOURED DRINKS  BEVERAGE  SODA"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005500020142p.jpg?v=1769274081"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "san-pellegrino-aranciata-cans-24x330ml-1",
@@ -4949,13 +4828,12 @@
         "parsedMassKg": 2,
         "price": 18.99,
         "unitPrice": 9.49,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:24.334Z",
+        "checkedAt": "2026-08-20T00:31:37.632Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/chef-nutri-cheddar-shredded-topping-2kg",
-        "taxonomyText": "CHEESE BLENDS  CHEESE BLENDS  REFRIGERATED  CHEESE"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062823537614p_1abc9487-8245-49c2-85f4-7b926abceed5.jpg?v=1777618456"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "triple-a-cheese-shredded-coloured-cheddar-2-5kg",
@@ -5091,14 +4969,12 @@
         "parsedMassKg": 9.08,
         "price": 129.99,
         "unitPrice": 14.32,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:24.691Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/racolli-shredded-mozzarella-20-4x2-27kg?_pos=1&_psq=Shredded+Mozzarella&_psid=8c4ee5034&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006609635042p_d11e10a1-25b0-4163-8216-13d217b520a7.jpg?v=1786115433",
-        "taxonomyText": "SOFT,SEMISOFT, SEMIHARD CHEESE  SOFT  REFRIGERATED SEMIHARD CHEESE SEMISOFT  CHEESE"
+        "checkedAt": "2026-08-20T00:31:37.892Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/racolli-shredded-mozzarella-20-4x2-27kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006609635042p_d11e10a1-25b0-4163-8216-13d217b520a7.jpg?v=1786115433"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "racolli-shredded-mozzarella-20-2-27kg",
@@ -5231,16 +5107,13 @@
         "name": "0007675324971 - MESH SINK STRAINER 1EA",
         "brand": "0007675324971",
         "packageSize": "1EA",
-        "parsedMassKg": 0,
         "price": 1.69,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:25.216Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/link-mesh-sink-strainer-1ea?_pos=6&_psq=Sink+Strainer&_psid=f52a7048b&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0007675324971p_ed39f772-4012-4943-8f93-bf88e2c2dfdd.jpg?v=1759759479",
-        "taxonomyText": "KITCHEN SUPPLIES  KITCHEN SUPPLIES  SUPPLIES  JANITORIAL"
+        "checkedAt": "2026-08-20T00:31:38.187Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/link-mesh-sink-strainer-1ea",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0007675324971p_ed39f772-4012-4943-8f93-bf88e2c2dfdd.jpg?v=1759759479"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "huashida-sink-strainer-ss-ea",
@@ -5352,14 +5225,12 @@
         "parsedMassKg": 0.68,
         "price": 4.99,
         "unitPrice": 7.34,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:25.759Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-sliced-cremini-680-g-24-oz?_pos=3&_psq=Sliced+White+Mushrooms&_psid=2d4829261&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0077494100260p.jpg?v=1773057257",
-        "taxonomyText": "MUSHROOMS  MUSHROOMS  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:38.454Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-sliced-cremini-680-g-24-oz",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0077494100260p.jpg?v=1773057257"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-mushrooms-blanched-sliced-15-lbs-1",
@@ -5480,14 +5351,12 @@
         "parsedMassKg": 10,
         "price": 40.49,
         "unitPrice": 4.05,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:27.620Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/elegant-sour-cream-10kg?_pos=2&_psq=Sour+Cream&_psid=b41f694d1&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062784301557p.jpg?v=1771965982",
-        "taxonomyText": "MILK, CREAM  MILK CREAM  REFRIGERATED  EGGS & DAIRY"
+        "checkedAt": "2026-08-20T00:31:38.744Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/elegant-sour-cream-10kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062784301557p.jpg?v=1771965982"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "beatrice-sour-cream-14-500ml",
@@ -5639,14 +5508,12 @@
         "parsedMassKg": 14,
         "price": 75.89,
         "unitPrice": 5.42,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:29.430Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/lynch-strawberry-jam-14kg?_pos=3&_psq=strawberry+jam+4kg&_psid=71e622901&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006280212632p.jpg?v=1786114578",
-        "taxonomyText": "SPREADS AND JAMS  SPREADS AND JAMS  BAKING FILLINGS MILK PRODUCTS  SPREADS"
+        "checkedAt": "2026-08-20T00:31:39.029Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/lynch-strawberry-jam-14kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006280212632p.jpg?v=1786114578"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "sener-strawberry-jam-1-5kg",
@@ -5757,13 +5624,12 @@
         "name": "UNIQUE - GOLD ROUND TABLE COVER 84in EA",
         "brand": "UNIQUE",
         "price": 1.09,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:31.880Z",
+        "checkedAt": "2026-08-20T00:31:39.319Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/unique-gold-round-tablecover-84in-ea",
-        "taxonomyText": "PARTY DECOR  PARTY DECOR  SMALLWARE  PARTY SUPPLIES"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001117950035p_0351c426-0443-4175-8e67-71a4d7ec623c.jpg?v=1784742802"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "unique-black-basic-table-cover-54x108in-1ea",
@@ -5824,13 +5690,11 @@
         "parsedMassKg": 5.8967008100000005,
         "price": 13.99,
         "unitPrice": 2.37,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:33.267Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-grape-tomatoes-case-15-x-1-lb?_pos=8&_psq=tomato+on+the+vine&_psid=f0f6a2ea3&_ss=e",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:39.592Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-grape-tomatoes-case-15-x-1-lb"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-tomatoes-5x6-case-25-lbs",
@@ -5887,13 +5751,12 @@
         "name": "TODAYS KITCHEN - 7in MINI TONGS 1UN",
         "brand": "TODAYS KITCHEN",
         "price": 0.79,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:35.159Z",
+        "checkedAt": "2026-08-20T00:31:39.848Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/todays-kitchen-7in-mini-tongs-ea",
-        "taxonomyText": "APPETIZER/ DESSET SERVEWARE  APPETIZER/ DESSET SERVEWARE  SMALLWARES  DINNERWARE"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0077935000912p.jpg?v=1778003447"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "cafe-express-exp-plastic-tongs-36x2-ea",
@@ -6010,13 +5873,12 @@
         "parsedMassKg": 2.84,
         "price": 18.49,
         "unitPrice": 6.51,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:36.118Z",
+        "checkedAt": "2026-08-20T00:31:40.107Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/tropic-isle-coconut-cream-2-84lt",
-        "taxonomyText": "CANNED FRUITS  CANNED FRUITS  PANTRY ESSENTIALS  CANNED FOODS"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000063870p_7759bb6e-dab8-4673-a9ec-2a5e19a49d58.jpg?v=1783517007"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "tropic-isle-coconut-cream-6x2-84lt",
@@ -6047,14 +5909,12 @@
         "parsedMassKg": 0.325,
         "price": 1.99,
         "unitPrice": 6.12,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:36.482Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-apple-juice-325ml?_pos=2&_psq=tropicana+apple+juice&_psid=9943f0f50&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004850000031p.jpg?v=1785857523",
-        "taxonomyText": "CHILLED JUICES  CHILLED JUICES  REFRIGERATED  CHILLED BEVERAGES"
+        "checkedAt": "2026-08-20T00:31:40.386Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-apple-juice-325ml",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004850000031p.jpg?v=1785857523"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "tropicana-apple-juice-12x325-ml",
@@ -6085,13 +5945,12 @@
         "parsedMassKg": 2,
         "price": 10.69,
         "unitPrice": 5.35,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:37.958Z",
+        "checkedAt": "2026-08-20T00:31:40.659Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/unico-pizza-style-olives-2lt",
-        "taxonomyText": "SLICED OLIVES  SLICED OLIVES  PANTRY ESSENTIALS  OLIVES"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006780000573p_faff79d9-a299-4c82-b3dd-9fa1fe678ea2.jpg?v=1786216403"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "unico-pizza-style-olives-6x2-lt",
@@ -6137,14 +5996,12 @@
         "parsedMassKg": 11.4,
         "price": 29.99,
         "unitPrice": 2.63,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:38.329Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/chapmans-ice-cream-vanilla-11-4lt?_pos=3&_psq=vanilla+ice+cream&_psid=fd0871e80&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006294201001p_e166cafb-5dd8-45f7-879f-c67ab69be00f.jpg?v=1782889686",
-        "taxonomyText": "FOOD SERVE  FOOD SERVE  FROZEN  ICE CREAM"
+        "checkedAt": "2026-08-20T00:31:40.938Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/chapmans-ice-cream-vanilla-11-4lt",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006294201001p_e166cafb-5dd8-45f7-879f-c67ab69be00f.jpg?v=1782889686"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "london-ice-cream-vanilla-gelato-5l",
@@ -6234,14 +6091,12 @@
         "parsedMassKg": 5,
         "price": 29.99,
         "unitPrice": 6,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:39.925Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/esma-white-quinoa-5kg?_pos=2&_psq=White+Quinoa+Grains+750gr&_psid=af99664c7&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062825105056p_45ba1807-3166-43ea-a1cb-75c7d527bff0.jpg?v=1786638437",
-        "taxonomyText": "GRAINS, BEANS BEANS  GRAINS  PANTRY ESSENTIALS  DRY PRODUCTS"
+        "checkedAt": "2026-08-20T00:31:41.201Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/esma-white-quinoa-5kg",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062825105056p_45ba1807-3166-43ea-a1cb-75c7d527bff0.jpg?v=1786638437"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "belle-donne-white-quinoa-grains-750gr",
@@ -6375,14 +6230,12 @@
         "parsedMassKg": 1.1339809250000001,
         "price": 4.99,
         "unitPrice": 4.4,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:40.510Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-yellow-repack-2-5-lbs?_pos=1&_psq=yellow+greenhouse+peppers&_psid=be18c5e15&_ss=e",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001365203p_dbedc106-4063-4867-b97f-cf3a6416c026.jpg?v=1786358536",
-        "taxonomyText": "FRUIT VEGETABLES  FRUIT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:41.452Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-yellow-repack-2-5-lbs",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001365203p_dbedc106-4063-4867-b97f-cf3a6416c026.jpg?v=1786358536"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-peppers-yellow-bushel",
@@ -6411,13 +6264,11 @@
         "parsedMassKg": 22.6796185,
         "price": 39.99,
         "unitPrice": 1.76,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:54:48.624Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-onions-cooking-50-lbs-1?_pos=1&_psq=Yellow+Onions&_psid=d65e6418e&_ss=e",
-        "taxonomyText": "ROOT VEGETABLES  ROOT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:41.724Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-onions-cooking-50-lbs-1"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": []
     },
     {
@@ -6432,13 +6283,11 @@
         "parsedMassKg": 4.535923700000001,
         "price": 6.49,
         "unitPrice": 1.43,
-        "availability": "in_stock",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:53:43.721Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-yukon-gold-10-lbs-2?_pos=1&_psq=yukon+gold+potatoes+10+lb&_psid=344faaeb9&_ss=e",
-        "taxonomyText": "ROOT VEGETABLES  ROOT VEGETABLES  PRODUCE  FRESH VEGETABLES"
+        "checkedAt": "2026-08-20T00:31:41.996Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-yukon-gold-10-lbs-2"
       },
-      "notes": "Live MVR Plus Shopify INSTOREPRICE · 3655 Weston Rd",
+      "notes": "Live MVR SKU price refresh",
       "alternates": [
         {
           "productId": "vegetables-potatoes-yukon-gold-50-lbs-2",
@@ -6458,5 +6307,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-08-18T21:55:20.388Z"
+  "updatedAt": "2026-08-20T00:31:41.999Z"
 }

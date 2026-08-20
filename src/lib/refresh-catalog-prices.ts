@@ -316,7 +316,7 @@ export async function refreshCatalogPrices(
     wmSource === "missing_key" ? WALMART_RAPID_MISSING_KEY : null;
 
   let wmN = 0;
-  await runPool(ids, 4, async (id) => {
+  await runPool(ids, 1, async (id) => {
     wmN += 1;
     logRefreshProgress("walmart", wmN, ids.length, id);
     const item = byId.get(id);

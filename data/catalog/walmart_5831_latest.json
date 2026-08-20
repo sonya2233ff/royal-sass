@@ -7,7 +7,7 @@
     "name": "Walmart Supercentre #5831",
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
-  "checkedAt": "2026-08-18T22:13:00.747Z",
+  "checkedAt": "2026-08-20T00:29:52.442Z",
   "itemCount": 30,
   "matched": 22,
   "items": [
@@ -33,7 +33,7 @@
       "alternates": [
         {
           "productId": "6000195508423",
-          "name": "Naturegg Simply Egg Whites\u2122 Free Run Burnbrae Farms",
+          "name": "Naturegg Simply Egg Whites™ Free Run Burnbrae Farms",
           "brand": "Naturegg Simply Egg Whites",
           "price": 5.47,
           "availability": "unknown",
@@ -42,7 +42,7 @@
           "sourceUrl": "https://www.walmart.ca/en/ip/Naturegg-Simply-Egg-Whites-Free-Run-Burnbrae-Farms/6000195508423?classType=REGULAR&athbdg=L1600"
         }
       ],
-      "notes": "Exact branded carton \u2014 Burnbrae Naturegg Simply Egg Whites 1kg (WM 6000196635381). Do not substitute Free Run / cheaper analogue.",
+      "notes": "Exact branded carton — Burnbrae Naturegg Simply Egg Whites 1kg (WM 6000196635381). Do not substitute Free Run / cheaper analogue.",
       "image": "https://i5.walmartimages.ca/asr/27f45e00-d8ab-4e43-8d58-7f154396ec4c.cf834bc8397cfaf849bd3aeab61f9014.jpeg"
     },
     {
@@ -125,7 +125,7 @@
         "taxonomyText": "Eggs Grocery Dairy & Eggs Eggs & Egg Substitutes Whole Egg Cartons"
       },
       "alternates": [],
-      "notes": "Receipt UPC 064767343050 @ $6.98 \u2014 Gray Ridge Premium Large White 18 (WM 6000191268613)",
+      "notes": "Receipt UPC 064767343050 @ $6.98 — Gray Ridge Premium Large White 18 (WM 6000191268613)",
       "image": "/products/grayridge_eggs.jpg"
     },
     {
@@ -147,10 +147,9 @@
         "packageSize": "907 g",
         "parsedMassKg": 0.90718474,
         "price": 4.97,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:21:10.289Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/lemons-your-fresh-market/6000199360630?classType=REGULAR&athbdg=L1600",
+        "checkedAt": "2026-08-20T00:28:30.537Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/lemons-your-fresh-market/6000199360630",
         "image": "https://i5.walmartimages.ca/images/Enlarge/208/926/6000202208926.jpg"
       },
       "alternates": [
@@ -181,15 +180,15 @@
         "Bosc Pear by kg"
       ],
       "offer": {
-        "productId": "6000195494142",
+        "productId": "6000195494141",
         "name": "Pear, Bosc, Sold in singles, 0.18 - 0.30 KG",
-        "brand": "",
         "packageSize": "300 g",
         "parsedMassKg": 0.3,
         "price": 1.57,
         "confidence": "exact",
-        "checkedAt": "2026-08-17T18:52:53.893Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/6000195494142"
+        "checkedAt": "2026-08-20T00:28:44.961Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/pear-bosc/6000195494142",
+        "image": "https://i5.walmartimages.ca/images/Enlarge/414/2_r/6000195494142_R.jpg"
       },
       "alternates": [],
       "notes": "Restored HEAD + live candidates for rematch",
@@ -471,7 +470,7 @@
         }
       ],
       "image": "https://i5.walmartimages.ca/asr/46d23fab-9180-4386-9659-8eef83ee72b9.425e4a0efd5ecd16af087f33dcf0f3b4.jpeg",
-      "notes": "Earth's Own oat \u2014 pair with Earth's Own almond"
+      "notes": "Earth's Own oat — pair with Earth's Own almond"
     },
     {
       "id": "red_peppers_kg",
@@ -559,7 +558,7 @@
       ],
       "offer": {
         "productId": "10184853",
-        "name": "Earth's Own Original\u00a0Almond Milk Alternative, 1.89L",
+        "name": "Earth's Own Original Almond Milk Alternative, 1.89L",
         "brand": "Earth's Own",
         "packageSize": "1.89 kg",
         "parsedMassKg": 1.89,
@@ -581,7 +580,7 @@
           "sourceUrl": "https://www.walmart.ca/en/ip/Silk-Almond-Milk-Alternative-Original-Dairy-Free/10207134?classType=REGULAR&athbdg=L1200"
         }
       ],
-      "notes": "Same brand as oat \u2014 Earth's Own (not Silk)",
+      "notes": "Same brand as oat — Earth's Own (not Silk)",
       "image": "https://i5.walmartimages.ca/asr/4c1bbc24-4b05-41d9-bcc3-abfdafe4c9d6.d986995a54f1c716d0c17845a5c0353e.jpeg"
     },
     {
@@ -757,7 +756,7 @@
         "image": "https://i5.walmartimages.ca/asr/becbd672-036b-4516-9c9c-3386c018be93.fbf92132d0d0c426012fe5d97a39d65e.jpeg"
       },
       "alternates": [],
-      "notes": "Mehadrin 2% 2L \u2014 WM product_id 6000198384699; NF often titled Kosher 2% Milk",
+      "notes": "Mehadrin 2% 2L — WM product_id 6000198384699; NF often titled Kosher 2% Milk",
       "image": "https://i5.walmartimages.ca/asr/becbd672-036b-4516-9c9c-3386c018be93.fbf92132d0d0c426012fe5d97a39d65e.jpeg",
       "preferredProductId": "6000198384699"
     },
@@ -824,7 +823,7 @@
         }
       ],
       "image": "https://i5.walmartimages.ca/asr/a2122e4d-e5c7-4902-9a40-8298592b9f73.7e6e87f5c5642533ae1161770e956e98.jpeg",
-      "notes": "Gay Lea Unsalted Butter 454g \u2014 WM product_id 6000201029320"
+      "notes": "Gay Lea Unsalted Butter 454g — WM product_id 6000201029320"
     },
     {
       "id": "large_eggs_dozen",
@@ -848,7 +847,7 @@
       },
       "alternates": [],
       "image": "/products/large_eggs_dozen.jpg",
-      "notes": "Receipt shell eggs \u2014 cheapest $/egg dozen (not 18/30, not Grayridge lock)"
+      "notes": "Receipt shell eggs — cheapest $/egg dozen (not 18/30, not Grayridge lock)"
     },
     {
       "id": "canola_oil_3l",
@@ -932,7 +931,7 @@
       },
       "alternates": [],
       "image": "https://i5.walmartimages.ca/asr/86a56b6a-8d88-4779-bf1f-7362a66d4ed4.ee3d4d02ac6a29e56b4db89f4a377075.png",
-      "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L \u2014 WM product_id 205804"
+      "notes": "Tropicana 100% Pure Orange Juice No Pulp 2.63L — WM product_id 205804"
     },
     {
       "id": "homo_milk_2l",
@@ -941,7 +940,7 @@
       "queriesTried": [
         "6000198386424"
       ],
-      "notes": "Mehadrin Homogenized 3.25% 2L \u2014 WM product_id 6000198386424; NF often titled Kosher Homogenized",
+      "notes": "Mehadrin Homogenized 3.25% 2L — WM product_id 6000198386424; NF often titled Kosher Homogenized",
       "status": "ok",
       "offer": {
         "productId": "6000198386424",
@@ -995,7 +994,7 @@
       "notes": "Frozen: cheapest sliced banana bag, any brand (not blends)",
       "rejected": {
         "productId": "358UWO1XPQH5",
-        "name": "Evive Protein Smoothie Cubes - Maple Frapp\u00e9, 450g, Vegan, Non-GMO, Frozen Cubes, Blend (banana, mixed fruits, cashews etc.), Evive Protein Smoothie Cubes - Maple Frapp\u00e9, 450g",
+        "name": "Evive Protein Smoothie Cubes - Maple Frappé, 450g, Vegan, Non-GMO, Frozen Cubes, Blend (banana, mixed fruits, cashews etc.), Evive Protein Smoothie Cubes - Maple Frappé, 450g",
         "price": 9.24,
         "reason": "name filter"
       },
@@ -1203,7 +1202,7 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Realemon-Juice-440ml/1BUHM1GPVP5J",
         "image": "https://i5.walmartimages.ca/asr/e44d0d68-9740-4615-bf80-297b6d8a30c1.eddf1524d1e23db79576c7209f4dff8c.jpeg"
       },
-      "notes": "ReaLemon Juice 440ml \u2014 WM product_id 1BUHM1GPVP5J"
+      "notes": "ReaLemon Juice 440ml — WM product_id 1BUHM1GPVP5J"
     },
     {
       "id": "jello_vanilla_instant",
@@ -1224,7 +1223,7 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Jell-O-Vanilla-Instant-Pudding-Mix-Box-Caseine-Free/10306574",
         "image": "https://i5.walmartimages.ca/asr/fc2a01e6-cd25-481d-896f-6c8740c96117.4761d3963e8789353fa80a21755ac19a.jpeg"
       },
-      "notes": "Jell-O Vanilla Instant Pudding Mix 102g casein-free \u2014 WM product_id 10306574"
+      "notes": "Jell-O Vanilla Instant Pudding Mix 102g casein-free — WM product_id 10306574"
     },
     {
       "id": "ziploc_sandwich",
@@ -1236,7 +1235,7 @@
       "status": "ok",
       "offer": {
         "productId": "6000195369895",
-        "name": "Ziploc\u00ae Sandwich Bags with Grip 'n Seal Technology",
+        "name": "Ziploc® Sandwich Bags with Grip 'n Seal Technology",
         "brand": "Ziploc",
         "price": 8,
         "confidence": "exact",
@@ -1244,7 +1243,7 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Ziploc-Sandwich-Bags-with-Grip-n-Seal-Technology/6000195369896",
         "image": "https://i5.walmartimages.ca/asr/c3cfd467-9d97-442b-98f8-f5880a4d1fc9.d7f892c4f82fa126d217f24cbe383c29.jpeg"
       },
-      "notes": "Ziploc Sandwich Bags Grip n Seal \u2014 WM product_id 6000195369896"
+      "notes": "Ziploc Sandwich Bags Grip n Seal — WM product_id 6000195369896"
     },
     {
       "id": "ice_cubes",
@@ -1270,7 +1269,7 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Arctic-Glacier-Cubed-Premium-Ice-2-3-kg-Bagged-Frozen/6HYOGQRD524M?classType=REGULAR&athbdg=L1200",
         "image": "https://i5.walmartimages.ca/asr/119a8500-b4b6-40a0-9783-b15a82c96948.1496c745e232dd66f884b6a2ad4a208f.png"
       },
-      "notes": "Receipt UPC 763679000230 @ $3.98 \u2014 bag of ice, not gum or ice-cube bins",
+      "notes": "Receipt UPC 763679000230 @ $3.98 — bag of ice, not gum or ice-cube bins",
       "alternates": []
     },
     {
@@ -1282,10 +1281,10 @@
       ],
       "status": "no_match",
       "offer": null,
-      "notes": "From receipts catalog (supplies) \u00b7 kept last WM price",
+      "notes": "From receipts catalog (supplies) · kept last WM price",
       "alternates": [],
       "rejected": {
-        "reason": "kept last price \u2014 name filter"
+        "reason": "kept last price — name filter"
       }
     },
     {
@@ -1297,10 +1296,10 @@
       ],
       "status": "no_match",
       "offer": null,
-      "notes": "From receipts catalog (supplies) \u00b7 kept last WM price",
+      "notes": "From receipts catalog (supplies) · kept last WM price",
       "alternates": [],
       "rejected": {
-        "reason": "kept last price \u2014 price $259.12 > max plausible $20"
+        "reason": "kept last price — price $259.12 > max plausible $20"
       }
     },
     {
@@ -1336,10 +1335,10 @@
       ],
       "status": "no_match",
       "offer": null,
-      "notes": "From receipts catalog (supplies) \u00b7 kept last WM price",
+      "notes": "From receipts catalog (supplies) · kept last WM price",
       "alternates": [],
       "rejected": {
-        "reason": "kept last price \u2014 name filter"
+        "reason": "kept last price — name filter"
       }
     },
     {
@@ -1363,10 +1362,10 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Woeilo-2oz-Clear-PET-Cups-20-Count-Durable-Plastic-Shot-Cups-for-Parties-and-Events-Clear-2-oz/1FCER0LGMJ1C?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/asr/a3a95e8f-6256-4bf9-b2cc-790374241021.6a647bd247f31d0fbe09c36af977725e.jpeg"
       },
-      "notes": "From receipts catalog (supplies) \u00b7 kept last WM price",
+      "notes": "From receipts catalog (supplies) · kept last WM price",
       "alternates": [],
       "rejected": {
-        "reason": "kept last price \u2014 price $20.48 > max plausible $20"
+        "reason": "kept last price — price $20.48 > max plausible $20"
       }
     },
     {
@@ -1388,7 +1387,7 @@
         "price": 2.47,
         "reason": "name filter"
       },
-      "notes": "Receipt Alasko pineapple chunks 5x1 \u2014 frozen bag, cheapest $/kg"
+      "notes": "Receipt Alasko pineapple chunks 5x1 — frozen bag, cheapest $/kg"
     },
     {
       "id": "jam_apple_strawberry",
@@ -1959,8 +1958,8 @@
       "status": "ok",
       "offer": {
         "productId": "5QLW9AK2EDS5",
-        "name": "Janitori\u2122 Floor Cleaner, 4L",
-        "brand": "Janitori\u2122",
+        "name": "Janitori™ Floor Cleaner, 4L",
+        "brand": "Janitori™",
         "packageSize": "4 kg",
         "parsedMassKg": 4,
         "price": 18.66,
@@ -2052,10 +2051,10 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Peas-and-Carrots-Mix/6000202249059?classType=REGULAR&athbdg=L1200",
         "image": "https://i5.walmartimages.ca/asr/bff5c6b8-ddf1-46ad-9c29-d82d66d3f767.5ff8e783656acbc38fba163d480389e5.jpeg"
       },
-      "notes": "From receipts catalog (frozen) \u00b7 kept last WM price",
+      "notes": "From receipts catalog (frozen) · kept last WM price",
       "alternates": [],
       "rejected": {
-        "reason": "kept last price \u2014 name filter"
+        "reason": "kept last price — name filter"
       }
     },
     {
@@ -2275,7 +2274,7 @@
       "offer": null,
       "rejected": {
         "productId": "51KCERMTKGZC",
-        "name": "Organic Instant Mushroom Coffee Drink 100g \u2013 4 Mushroom Blend \u2013 30 Servings",
+        "name": "Organic Instant Mushroom Coffee Drink 100g – 4 Mushroom Blend – 30 Servings",
         "price": 11.89,
         "reason": "name filter"
       },
@@ -2292,7 +2291,7 @@
       "offer": null,
       "rejected": {
         "productId": "0U2G9TG8Q7XO",
-        "name": "PAM\u00ae Non\u2011GMO Avocado Oil  \u2013 Expeller-Pressed  \u2013 Non\u2011Stick Cooking Spray Coating \u2013 1 x 141 g",
+        "name": "PAM® Non‑GMO Avocado Oil  – Expeller-Pressed  – Non‑Stick Cooking Spray Coating – 1 x 141 g",
         "price": 7.42,
         "reason": "name filter"
       },
@@ -2300,13 +2299,13 @@
     },
     {
       "id": "jalapeno_peppers_kg",
-      "label": "Jalape\u00f1o Peppers",
+      "label": "Jalapeño Peppers",
       "queriesTried": [
         "jalapeno peppers",
         "jalapeno",
         "peppers jalapeno",
-        "jalape\u00f1o",
-        "Jalape\u00f1o Peppers"
+        "jalapeño",
+        "Jalapeño Peppers"
       ],
       "status": "no_match",
       "offer": null,
@@ -2353,7 +2352,7 @@
       "offer": null,
       "rejected": {
         "productId": "38YWT54CTOXK",
-        "name": "Sch\u00e4r Gluten-Free Pizza Crust",
+        "name": "Schär Gluten-Free Pizza Crust",
         "price": 10.68,
         "reason": "name filter"
       },
@@ -2369,7 +2368,7 @@
       "status": "ok",
       "offer": {
         "productId": "6000207686280",
-        "name": "magic bullet\u00ae 4 Piece Blender",
+        "name": "magic bullet® 4 Piece Blender",
         "brand": "magic bullet",
         "price": 19.98,
         "wasPrice": 26.98,
@@ -2525,7 +2524,7 @@
       "status": "ok",
       "offer": {
         "productId": "6000202891594",
-        "name": "Oreo Mint Cr\u00e8me Sandwich Cookies",
+        "name": "Oreo Mint Crème Sandwich Cookies",
         "brand": "OREO",
         "price": 2.98,
         "availability": "unknown",
@@ -2630,7 +2629,7 @@
       "status": "ok",
       "offer": {
         "productId": "64FXMZAER1AE",
-        "name": "Griss Pasta Canada Griss Pasta Giardino Durum Wheat Semolina Penne Pasta, 4 kg \u2013 Bulk Italian-Style Penne for Sauces & Pasta Dishes",
+        "name": "Griss Pasta Canada Griss Pasta Giardino Durum Wheat Semolina Penne Pasta, 4 kg – Bulk Italian-Style Penne for Sauces & Pasta Dishes",
         "brand": "Griss Pasta Canada",
         "packageSize": "4 kg",
         "parsedMassKg": 4,
@@ -2783,7 +2782,7 @@
       "offer": null,
       "rejected": {
         "productId": "6000202677162",
-        "name": "Webber Naturals Collagen30\u00ae Bioactive Collagen Peptides 2500 mg Elderberry <br>Gummies",
+        "name": "Webber Naturals Collagen30® Bioactive Collagen Peptides 2500 mg Elderberry <br>Gummies",
         "price": 27.98,
         "reason": "name filter"
       },
@@ -3161,10 +3160,10 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/Del-Monte-STRAWBERRY-JAM/2EB3JXW96CZD?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/asr/bf7ace97-4dc6-495c-88fb-1e7c5af7147b.1b368fa269b55d375a260e973656476c.jpeg"
       },
-      "notes": "From receipts catalog (grocery) \u00b7 kept last WM price",
+      "notes": "From receipts catalog (grocery) · kept last WM price",
       "alternates": [],
       "rejected": {
-        "reason": "kept last price \u2014 name filter"
+        "reason": "kept last price — name filter"
       }
     },
     {
@@ -3177,7 +3176,7 @@
       "status": "ok",
       "offer": {
         "productId": "10190643",
-        "name": "Tabasco\u00ae Original Pepper Sauce, 142ml",
+        "name": "Tabasco® Original Pepper Sauce, 142ml",
         "brand": "TABASCO",
         "packageSize": "142 g",
         "parsedMassKg": 0.142,

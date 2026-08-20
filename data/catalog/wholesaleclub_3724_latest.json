@@ -2,7 +2,7 @@
   "retailer": "wholesale_club",
   "storeId": "3724",
   "source": "pcx_bff_wholesaleclub_3724",
-  "checkedAt": "2026-08-18T22:01:18.400Z",
+  "checkedAt": "2026-08-20T00:31:17.059Z",
   "note": "Wholesale Club Richmond Hill #3724 — PCX BFF shelf, same client as No Frills.",
   "items": [
     {
@@ -24,13 +24,12 @@
         "packageSize": "907 g, $0.88/100g",
         "parsedMassKg": 0.907,
         "price": 7.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:43.783Z",
+        "checkedAt": "2026-08-20T00:30:42.030Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/grape-tomato/p/20840038001_EA",
         "image": "https://digital.loblaws.ca/PCX/20840038001_EA/en/1/20840038001_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "21367888001_EA",
@@ -58,13 +57,12 @@
         "packageSize": "1.36 kg, $0.48/100g",
         "parsedMassKg": 1.36,
         "price": 6.49,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:46.511Z",
+        "checkedAt": "2026-08-20T00:30:42.616Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/naturally-imperfect-lemons-3lb-bag/p/21124487001_EA",
         "image": "https://digital.loblaws.ca/PCX/21124487001_EA/en/1/21124487001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20795315001_EA",
@@ -104,13 +102,12 @@
         "packageSize": "1 ea, $5.99/1ea",
         "parsedMassKg": 2,
         "price": 5.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:48.885Z",
+        "checkedAt": "2026-08-20T00:30:43.120Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/bartlett-pear-2-l/p/21111368001_EA",
         "image": "https://digital.loblaws.ca/PCX/21111368001_EA/en/1/21111368001_enfr_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -122,13 +119,12 @@
         "name": "Long Eggplants",
         "packageSize": "$5.49/1kg $2.49/1lb",
         "price": 1.37,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:50.362Z",
+        "checkedAt": "2026-08-20T00:30:43.660Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/long-eggplants/p/20159013001_KG",
         "image": "https://digital.loblaws.ca/PCX/20159013001_KG/en/1/20159013001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -140,13 +136,12 @@
         "name": "Tomato On The Vine Red (1 Bunch)",
         "packageSize": "$5.49/1kg $2.49/1lb",
         "price": 3.9,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:51.690Z",
+        "checkedAt": "2026-08-20T00:30:44.172Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/tomato-on-the-vine-red-1-bunch/p/20026703001_KG",
         "image": "https://digital.loblaws.ca/PCX/20026703001_KG/en/1/20026703001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -161,7 +156,7 @@
         "parsedMassKg": 1.75,
         "price": 4.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:25.485Z",
+        "checkedAt": "2026-08-20T00:30:44.701Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/gluten-free-original-oat-milk-alternative/p/21037796_EA",
         "image": "https://digital.loblaws.ca/PCX/21037796_EA/en/1/21037796_en_1_1200.png"
       },
@@ -177,13 +172,12 @@
         "name": "Red Field Peppers",
         "packageSize": "$5.00/1kg $2.27/1lb",
         "price": 1,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:53.426Z",
+        "checkedAt": "2026-08-20T00:30:45.178Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/red-field-peppers/p/20055557001_KG",
         "image": "https://digital.loblaws.ca/PCX/20055557001_KG/en/1/20055557001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -195,13 +189,12 @@
         "name": "Sweet Potato",
         "packageSize": "$4.39/1kg $1.99/1lb",
         "price": 2.77,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:55.535Z",
+        "checkedAt": "2026-08-20T00:30:45.767Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/sweet-potato/p/20127708001_KG",
         "image": "https://digital.loblaws.ca/PCX/20127708001_KG/en/1/20127708001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -212,15 +205,13 @@
         "productId": "20160992001_EA",
         "name": "Pineapple",
         "packageSize": "1 ea, $4.99/1ea",
-        "parsedMassKg": 1,
         "price": 4.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:57.442Z",
+        "checkedAt": "2026-08-20T00:30:46.203Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/pineapple/p/20160992001_EA",
         "image": "https://digital.loblaws.ca/PCX/20160992001_EA/en/1/20160992001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -240,13 +231,12 @@
         "name": "Bananas, Bunch",
         "packageSize": "$1.52/1kg $0.69/1lb",
         "price": 1.75,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:57.930Z",
+        "checkedAt": "2026-08-20T00:30:46.722Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/bananas-bunch/p/20175355001_KG",
         "image": "https://digital.loblaws.ca/PCX/20175355001_KG/en/1/20175355001_enfr_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -258,13 +248,12 @@
         "name": "Kiwis",
         "packageSize": "1 ea, $1.09/1ea",
         "price": 1.09,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:23:59.235Z",
+        "checkedAt": "2026-08-20T00:30:47.477Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/kiwis/p/20130242001_EA",
         "image": "https://digital.loblaws.ca/PCX/20130242001_EA/en/1/20130242001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -275,15 +264,13 @@
         "productId": "20070132001_EA",
         "name": "English Cucumber",
         "packageSize": "1 ea, $1.29/1ea",
-        "parsedMassKg": 0.35,
         "price": 1.29,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:24:01.746Z",
+        "checkedAt": "2026-08-20T00:30:48.156Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/english-cucumber/p/20070132001_EA",
         "image": "https://digital.loblaws.ca/PCX/20070132001_EA/en/1/20070132001_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "21046471001_EA",
@@ -310,13 +297,12 @@
         "packageSize": "1 kg, $0.60/100g",
         "parsedMassKg": 1,
         "price": 5.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:24:03.529Z",
+        "checkedAt": "2026-08-20T00:30:48.624Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/garlic-bulbs/p/21238843001_EA",
         "image": "https://digital.loblaws.ca/PCX/21238843001_EA/en/1/21238843001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -327,15 +313,14 @@
         "productId": "20080137001_EA",
         "name": "Blueberries 1 pint",
         "packageSize": "1 ea, $1.47/100g",
-        "parsedMassKg": 0.312,
+        "parsedMassKg": 0,
         "price": 4.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:24:05.589Z",
+        "checkedAt": "2026-08-20T00:30:49.153Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/blueberries-1-pint/p/20080137001_EA",
         "image": "https://digital.loblaws.ca/PCX/20080137001_EA/en/1/20080137001_enfr_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20573077_EA",
@@ -360,18 +345,15 @@
         "productId": "21591906001_EA",
         "name": "No Name Naturally Imperfect Strawberries",
         "brand": "No Name",
-        "packageSize": "340 g, $0.88/100g",
+        "packageSize": "340 g, $1.17/100g",
         "parsedMassKg": 0.34,
-        "price": 2.99,
-        "wasPrice": 3.99,
-        "onSale": true,
-        "availability": "unknown",
+        "price": 3.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:24:06.575Z",
+        "checkedAt": "2026-08-20T00:30:49.688Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/naturally-imperfect-strawberries/p/21591906001_EA",
         "image": "https://digital.loblaws.ca/PCX/21591906001_EA/en/1/21591906001_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20049778001_EA",
@@ -427,7 +409,7 @@
         "parsedMassKg": 0.454,
         "price": 8.29,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:31.376Z",
+        "checkedAt": "2026-08-20T00:30:50.179Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/unsalted-butter/p/20559466_EA",
         "image": "https://digital.loblaws.ca/PCX/20559466_EA/en/1/6601390561_en_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
@@ -446,7 +428,7 @@
         "parsedMassKg": 1.36,
         "price": 5.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:31.979Z",
+        "checkedAt": "2026-08-20T00:30:50.852Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/orange-juice-no-pulp/p/21622130_EA",
         "image": "https://digital.loblaws.ca/PCX/21622130_EA/en/1/4850020554_enfr_front_centre_marketing_A_1_GS1_Ecommerce_v2_1200.png"
       },
@@ -480,7 +462,7 @@
         "packageSize": "90 ea, $0.07/1ea",
         "price": 5.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:11:32.641Z",
+        "checkedAt": "2026-08-20T00:30:51.449Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/sandwich-bags-with-grip-n-seal-technology/p/20871415_EA",
         "image": "https://digital.loblaws.ca/PCX/20871415_EA/en/1/20871415_en_1_1200.png"
       },
@@ -514,13 +496,12 @@
         "packageSize": "2 kg, $0.70/100g",
         "parsedMassKg": 2,
         "price": 13.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:24:11.927Z",
+        "checkedAt": "2026-08-20T00:30:52.102Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/blueberries/p/21033164_EA",
         "image": "https://digital.loblaws.ca/PCX/21033164_EA/en/1/21033164_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "21381732_EA",
@@ -548,13 +529,12 @@
         "packageSize": "2 kg, $0.70/100g",
         "parsedMassKg": 2,
         "price": 13.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:24:13.864Z",
+        "checkedAt": "2026-08-20T00:30:52.594Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/whole-strawberries/p/21033168_EA",
         "image": "https://digital.loblaws.ca/PCX/21033168_EA/en/1/21033168_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -568,13 +548,12 @@
         "packageSize": "300 g, $0.66/100g",
         "parsedMassKg": 0.3,
         "price": 1.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T20:24:16.170Z",
+        "checkedAt": "2026-08-20T00:30:53.082Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/chopped-spinach/p/20611796_EA",
         "image": "https://digital.loblaws.ca/PCX/20611796_EA/en/1/20611796_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20104062_EA",
@@ -600,22 +579,20 @@
     },
     {
       "id": "large_eggs_dozen",
-      "label": "Large Eggs Dozen",
+      "label": "Large Eggs",
       "status": "ok",
       "offer": {
         "productId": "20812144001_EA",
         "name": "No Name Large Size Eggs 12 Pack",
         "brand": "No Name",
         "packageSize": "12 ea, $0.33/1ea",
-        "parsedMassKg": 0,
         "price": 3.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:26:24.755Z",
+        "checkedAt": "2026-08-20T00:30:41.287Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/large-size-eggs-12-pack/p/20812144001_EA",
         "image": "https://digital.loblaws.ca/PCX/20812144001_EA/en/1/20812144001_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -630,13 +607,12 @@
         "parsedMassKg": 2.3,
         "price": 3.99,
         "onSale": true,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:26:26.010Z",
+        "checkedAt": "2026-08-20T00:30:53.630Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/cubed-ice/p/21467229_EA",
         "image": "https://digital.loblaws.ca/PCX/21467229_EA/en/1/76367900023_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -681,13 +657,12 @@
         "packageSize": "50 ea, $0.10/1ea",
         "parsedMassKg": 0.45359237,
         "price": 4.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:42.299Z",
+        "checkedAt": "2026-08-20T00:30:54.518Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/16oz-pet-cups-50-per-pack/p/21460797_EA",
         "image": "https://digital.loblaws.ca/PCX/21460797_EA/en/1/21460797_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -701,13 +676,12 @@
         "packageSize": "2 kg, $0.70/100g",
         "parsedMassKg": 2,
         "price": 13.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:43.650Z",
+        "checkedAt": "2026-08-20T00:30:55.008Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/naturally-imperfect-frozen-pineapple-pieces/p/21289951_EA",
         "image": "https://digital.loblaws.ca/PCX/21289951_EA/en/1/21289951_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -730,13 +704,12 @@
         "parsedMassKg": 0.6,
         "price": 11.49,
         "onSale": true,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:46.828Z",
+        "checkedAt": "2026-08-20T00:30:55.847Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/lid-for-600ml-bagasse-container-125-pack/p/21639487_EA",
         "image": "https://digital.loblaws.ca/PCX/21639487_EA/en/1/21639487_enfr_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -750,13 +723,12 @@
         "packageSize": "510 g, $0.49/100g",
         "parsedMassKg": 0.51,
         "price": 2.49,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:47.423Z",
+        "checkedAt": "2026-08-20T00:30:56.409Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/everything-bagels/p/21297831_EA",
         "image": "https://digital.loblaws.ca/PCX/21297831_EA/en/1/21297831_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -784,15 +756,14 @@
         "name": "Farmer's Market Bartlett Pear, 2 L",
         "brand": "Farmer's Market",
         "packageSize": "1 ea, $5.99/1ea",
-        "parsedMassKg": 0,
+        "parsedMassKg": 2,
         "price": 5.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:48.534Z",
+        "checkedAt": "2026-08-20T00:30:56.851Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/bartlett-pear-2-l/p/21111368001_EA",
         "image": "https://digital.loblaws.ca/PCX/21111368001_EA/en/1/21111368001_enfr_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -811,15 +782,13 @@
         "productId": "20167017001_EA",
         "name": "Cantaloupe",
         "packageSize": "1 ea, $4.99/1ea",
-        "parsedMassKg": 0,
         "price": 4.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:50.968Z",
+        "checkedAt": "2026-08-20T00:30:57.498Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/cantaloupe/p/20167017001_EA",
         "image": "https://digital.loblaws.ca/PCX/20167017001_EA/en/1/20167017001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -830,15 +799,13 @@
         "productId": "20163119001_EA",
         "name": "Celery Stalks",
         "packageSize": "1 ea, $3.79/1ea",
-        "parsedMassKg": 0,
         "price": 3.79,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:51.350Z",
+        "checkedAt": "2026-08-20T00:30:57.948Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/celery-stalks/p/20163119001_EA",
         "image": "https://digital.loblaws.ca/PCX/20163119001_EA/en/1/20163119001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20100770001_EA",
@@ -873,13 +840,12 @@
         "packageSize": "28 g",
         "parsedMassKg": 0.028,
         "price": 2.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:52.624Z",
+        "checkedAt": "2026-08-20T00:30:58.462Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/cilantro/p/21184810_EA",
         "image": "https://digital.loblaws.ca/PCX/21184810_EA/en/1/21184810_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20091825001_EA",
@@ -922,13 +888,12 @@
         "packageSize": "500 g, $0.90/100g",
         "parsedMassKg": 0.5,
         "price": 4.49,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:54.959Z",
+        "checkedAt": "2026-08-20T00:30:59.066Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/cottage-cheese/p/20183991002_EA",
         "image": "https://digital.loblaws.ca/PCX/20183991002_EA/en/1/20183991002_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -950,13 +915,12 @@
         "packageSize": "2.4 kg, $1.33/100g",
         "parsedMassKg": 2.4,
         "price": 31.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:56.366Z",
+        "checkedAt": "2026-08-20T00:30:59.593Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/pizza-mozzarella-cheese/p/21383785_EA",
         "image": "https://digital.loblaws.ca/PCX/21383785_EA/en/1/6148300372_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -970,13 +934,12 @@
         "packageSize": "1 kg, $0.38/100g",
         "parsedMassKg": 1,
         "price": 3.79,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:56.682Z",
+        "checkedAt": "2026-08-20T00:31:00.112Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/natural-dark-brown-sugar/p/20169394_EA",
         "image": "https://digital.loblaws.ca/PCX/20169394_EA/en/1/5889165231_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -990,13 +953,12 @@
         "packageSize": "50 ea, $0.06/1ea",
         "parsedMassKg": 0.5669904625000001,
         "price": 3.19,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:57.662Z",
+        "checkedAt": "2026-08-20T00:31:00.728Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/10-oz-20-oz-white-pp-dome-lid-for-cc-pw-paper-cups/p/21669507_EA",
         "image": "https://digital.loblaws.ca/PCX/21669507_EA/en/1/21669507_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1026,13 +988,12 @@
         "packageSize": "900 g, $0.22/100g",
         "parsedMassKg": 0.9,
         "price": 1.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T21:59:59.218Z",
+        "checkedAt": "2026-08-20T00:31:01.427Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/fettuccine/p/20315613007_EA",
         "image": "https://digital.loblaws.ca/PCX/20315613007_EA/en/1/20315613007_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1062,13 +1023,12 @@
         "packageSize": "2 kg, $1.35/100g",
         "parsedMassKg": 2,
         "price": 26.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:02.882Z",
+        "checkedAt": "2026-08-20T00:31:01.960Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/mozzarella-block/p/20812112_EA",
         "image": "https://digital.loblaws.ca/PCX/20812112_EA/en/1/20812112_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1120,15 +1080,14 @@
         "name": "Farmer's Market Granny Smith Apples, 4 lb Bag",
         "brand": "Farmer's Market",
         "packageSize": "1.81 kg, $0.55/100g",
-        "parsedMassKg": 1.81436948,
+        "parsedMassKg": 1.81,
         "price": 9.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:18.267Z",
+        "checkedAt": "2026-08-20T00:31:02.448Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/granny-smith-apples-4-lb-bag/p/20128645001_EA",
         "image": "https://digital.loblaws.ca/PCX/20128645001_EA/en/1/20128645001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1182,13 +1141,12 @@
         "packageSize": "800 g, $0.87/100g",
         "parsedMassKg": 0.8,
         "price": 6.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:24.149Z",
+        "checkedAt": "2026-08-20T00:31:03.039Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/shelled-sunflower-seeds-raw/p/21107679_EA",
         "image": "https://digital.loblaws.ca/PCX/21107679_EA/en/1/21107679_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1199,15 +1157,13 @@
         "productId": "20045276001_EA",
         "name": "Honeydew Melon",
         "packageSize": "1 ea, $5.99/1ea",
-        "parsedMassKg": 0,
         "price": 5.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:24.642Z",
+        "checkedAt": "2026-08-20T00:31:03.866Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/honeydew-melon/p/20045276001_EA",
         "image": "https://digital.loblaws.ca/PCX/20045276001_EA/en/1/20045276001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1234,15 +1190,13 @@
         "productId": "20088387001_KG",
         "name": "Jalapeno Peppers",
         "packageSize": "$11.00/1kg $4.99/1lb",
-        "parsedMassKg": 0,
         "price": 0.55,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:27.743Z",
+        "checkedAt": "2026-08-20T00:31:04.610Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/jalapeno-peppers/p/20088387001_KG",
         "image": "https://digital.loblaws.ca/PCX/20088387001_KG/en/1/20088387001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1256,13 +1210,12 @@
         "packageSize": "680 g, $0.73/100g",
         "parsedMassKg": 0.68,
         "price": 4.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:31.767Z",
+        "checkedAt": "2026-08-20T00:31:05.235Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/naturally-imperfect-limes/p/21673921001_EA",
         "image": "https://digital.loblaws.ca/PCX/21673921001_EA/en/1/21673921001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20040489001_EA",
@@ -1310,15 +1263,13 @@
         "productId": "20797852_EA",
         "name": "Measuring Cup",
         "packageSize": "1 ea, $17.99/1ea",
-        "parsedMassKg": 0,
         "price": 17.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:36.638Z",
+        "checkedAt": "2026-08-20T00:31:05.839Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/measuring-cup/p/20797852_EA",
         "image": "https://digital.loblaws.ca/PCX/20797852_EA/en/1/20797852_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20781312_EA",
@@ -1350,15 +1301,13 @@
         "productId": "21544351_EA",
         "name": "Black Nitrile Gloves L",
         "packageSize": "200 ea, $0.13/1ea",
-        "parsedMassKg": 0,
         "price": 25.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:38.380Z",
+        "checkedAt": "2026-08-20T00:31:06.410Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/black-nitrile-gloves-l/p/21544351_EA",
         "image": "https://digital.loblaws.ca/PCX/21544351_EA/en/1/21544351_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1369,15 +1318,13 @@
         "productId": "21516708_EA",
         "name": "Black Nitrile Gloves",
         "packageSize": "200 ea, $0.13/1ea",
-        "parsedMassKg": 0,
         "price": 25.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:39.239Z",
+        "checkedAt": "2026-08-20T00:31:06.988Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/black-nitrile-gloves/p/21516708_EA",
         "image": "https://digital.loblaws.ca/PCX/21516708_EA/en/1/21516708_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "21544351_EA",
@@ -1412,13 +1359,12 @@
         "packageSize": "261 g, $1.34/100g",
         "parsedMassKg": 0.261,
         "price": 3.49,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:41.099Z",
+        "checkedAt": "2026-08-20T00:31:07.458Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/oreo-double-stuf-sandwich-cookies/p/21358406_EA",
         "image": "https://digital.loblaws.ca/PCX/21358406_EA/en/1/21358406_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1437,15 +1383,13 @@
         "productId": "20167477001_EA",
         "name": "Parsley Root",
         "packageSize": "1 ea, $4.99/1ea",
-        "parsedMassKg": 0,
         "price": 4.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:42.543Z",
+        "checkedAt": "2026-08-20T00:31:07.949Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/parsley-root/p/20167477001_EA",
         "image": "https://digital.loblaws.ca/PCX/20167477001_EA/en/1/20167477001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20139141001_EA",
@@ -1484,13 +1428,12 @@
         "packageSize": "2 kg, $0.20/100g",
         "parsedMassKg": 2,
         "price": 3.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:42.838Z",
+        "checkedAt": "2026-08-20T00:31:08.571Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/penne-rigate-pasta/p/20892100_EA",
         "image": "https://digital.loblaws.ca/PCX/20892100_EA/en/1/20892100_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20315613006_EA",
@@ -1523,18 +1466,15 @@
         "productId": "20955770_EA",
         "name": "Sonora Flour Tortilla, 10 in",
         "brand": "Sonora",
-        "packageSize": "864 g, $0.61/100g",
+        "packageSize": "864 g, $0.69/100g",
         "parsedMassKg": 0.864,
-        "price": 5.29,
-        "wasPrice": 5.69,
-        "onSale": true,
-        "availability": "unknown",
+        "price": 5.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:44.976Z",
+        "checkedAt": "2026-08-20T00:31:09.067Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/flour-tortilla-10-in/p/20955770_EA",
         "image": "https://digital.loblaws.ca/PCX/20955770_EA/en/1/20955770_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1569,15 +1509,13 @@
         "productId": "20134767001_EA",
         "name": "Pomegranate",
         "packageSize": "1 ea, $3.79/1ea",
-        "parsedMassKg": 0,
         "price": 3.79,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:47.375Z",
+        "checkedAt": "2026-08-20T00:31:09.596Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/pomegranate/p/20134767001_EA",
         "image": "https://digital.loblaws.ca/PCX/20134767001_EA/en/1/20134767001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1591,13 +1529,12 @@
         "packageSize": "850 g, $0.76/100g",
         "parsedMassKg": 0.85,
         "price": 6.49,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:50.851Z",
+        "checkedAt": "2026-08-20T00:31:10.108Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/puff-pastry/p/21606988_EA",
         "image": "https://digital.loblaws.ca/PCX/21606988_EA/en/1/520253548300_enfr_front_centre_marketing_1_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20089133_EA",
@@ -1635,16 +1572,15 @@
         "productId": "20171965001_EA",
         "name": "Farmer's Market Red Onions, 10 lb Bag",
         "brand": "Farmer's Market",
-        "packageSize": "4.54 kg, $0.29/100g",
+        "packageSize": "4.54 kg, $0.26/100g",
         "parsedMassKg": 4.54,
-        "price": 13.19,
-        "availability": "unknown",
+        "price": 11.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:51.289Z",
+        "checkedAt": "2026-08-20T00:31:10.734Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/red-onions-10-lb-bag/p/20171965001_EA",
         "image": "https://digital.loblaws.ca/PCX/20171965001_EA/en/1/20171965001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1657,13 +1593,12 @@
         "packageSize": "454 g, $0.66/100g",
         "parsedMassKg": 0.454,
         "price": 2.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:52.785Z",
+        "checkedAt": "2026-08-20T00:31:11.287Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/radish/p/20175513001_EA",
         "image": "https://digital.loblaws.ca/PCX/20175513001_EA/en/1/20175513001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20032320001_EA",
@@ -1687,15 +1622,13 @@
         "productId": "20159199001_KG",
         "name": "Red Seedless Grapes",
         "packageSize": "$9.90/1kg $4.49/1lb",
-        "parsedMassKg": 0,
         "price": 9.8,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:54.041Z",
+        "checkedAt": "2026-08-20T00:31:11.764Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/red-seedless-grapes/p/20159199001_KG",
         "image": "https://digital.loblaws.ca/PCX/20159199001_KG/en/1/20159199001_en_front_v2_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1733,13 +1666,12 @@
         "packageSize": "2 kg, $1.30/100g",
         "parsedMassKg": 2,
         "price": 25.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:59.018Z",
+        "checkedAt": "2026-08-20T00:31:12.433Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/shredded-cheddar-flavoured-topping/p/21764568_EA",
         "image": "https://digital.loblaws.ca/PCX/21764568_EA/en/1/5975606066_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1753,13 +1685,12 @@
         "packageSize": "2 kg, $1.40/100g",
         "parsedMassKg": 2,
         "price": 27.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:00:59.362Z",
+        "checkedAt": "2026-08-20T00:31:13.025Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/silani-shredded-mozzarella/p/20812111_EA",
         "image": "https://digital.loblaws.ca/PCX/20812111_EA/en/1/20812111_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1781,13 +1712,12 @@
         "packageSize": "284 ml, $0.45/100ml",
         "parsedMassKg": 0.284,
         "price": 1.29,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:01:00.713Z",
+        "checkedAt": "2026-08-20T00:31:13.529Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/sliced-mushrooms/p/20299211_EA",
         "image": "https://digital.loblaws.ca/PCX/20299211_EA/en/1/20299211_en_front_v2_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20768283_EA",
@@ -1828,13 +1758,12 @@
         "packageSize": "500 ml, $0.56/100ml",
         "parsedMassKg": 0.5,
         "price": 2.79,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:01:02.198Z",
+        "checkedAt": "2026-08-20T00:31:14.160Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/sour-cream/p/20299657_EA",
         "image": "https://digital.loblaws.ca/PCX/20299657_EA/en/1/20299657_en_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "20160751_EA",
@@ -1909,13 +1838,12 @@
         "packageSize": "1 ea, $999.00/100ea",
         "parsedMassKg": 2.2679618500000003,
         "price": 9.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:01:06.958Z",
+        "checkedAt": "2026-08-20T00:31:14.661Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/tomato-beefsteak-5lb/p/20597200001_EA",
         "image": "https://assets.loblaws.ca/pcx_bronx_fe_assets/images/common/coming-soon-en-web.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1927,13 +1855,12 @@
         "name": "Tong with Red Coated Handle, 12 in",
         "packageSize": "1 ea, $7.99/1ea",
         "price": 7.99,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:01:08.970Z",
+        "checkedAt": "2026-08-20T00:31:15.388Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/tong-with-red-coated-handle-12-in/p/20806319_EA",
         "image": "https://digital.loblaws.ca/PCX/20806319_EA/en/1/20806319_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -1971,13 +1898,12 @@
         "packageSize": "11.4 l, $0.22/100ml",
         "parsedMassKg": 11.4,
         "price": 25,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:01:11.672Z",
+        "checkedAt": "2026-08-20T00:31:16.034Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/vanilla-ice-cream/p/21610068_EA",
         "image": "https://digital.loblaws.ca/PCX/21610068_EA/en/1/21610068_enfr_front_v1_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": [
         {
           "productId": "21513555_EA",
@@ -2036,15 +1962,13 @@
         "productId": "20141814001_KG",
         "name": "Greenhouse Peppers, Yellow",
         "packageSize": "$8.80/1kg $3.99/1lb",
-        "parsedMassKg": 0,
         "price": 2.02,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:01:13.493Z",
+        "checkedAt": "2026-08-20T00:31:16.540Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/greenhouse-peppers-yellow/p/20141814001_KG",
         "image": "https://digital.loblaws.ca/PCX/20141814001_KG/en/1/20141814001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -2057,13 +1981,12 @@
         "packageSize": "11.34 kg, $0.04/100g",
         "parsedMassKg": 11.34,
         "price": 4.49,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-18T22:01:15.258Z",
+        "checkedAt": "2026-08-20T00:31:17.058Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/yellow-onion-25-lbs/p/21649342001_EA",
         "image": "https://digital.loblaws.ca/PCX/21649342001_EA/en/1/21649342001_en_front_1200.png"
       },
-      "notes": "Live Wholesale Club PCX #3724",
+      "notes": "Live WC SKU price refresh",
       "alternates": []
     },
     {
@@ -2075,5 +1998,5 @@
       "alternates": []
     }
   ],
-  "updatedAt": "2026-08-18T22:01:18.400Z"
+  "updatedAt": "2026-08-20T00:31:17.059Z"
 }
