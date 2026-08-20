@@ -231,7 +231,6 @@ function parseOneOverride(value: unknown): ProductOverride | null {
   }
   const maxN = Number(v.maximumAmount);
   if (Number.isFinite(maxN) && maxN > 0) out.maximumAmount = maxN;
-  else if (v.maximumAmount === null) out.maximumAmount = null;
   const rules = parseMatchRules(v.matchRules);
   if (rules) out.matchRules = rules;
   const preferred = String(v.preferredProductId ?? "").trim();
