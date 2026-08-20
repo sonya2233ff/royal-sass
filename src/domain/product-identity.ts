@@ -5,6 +5,7 @@ import {
   isCategoryBStaple,
   nameMatchesFilterPhrase,
   nameMatchesFilterToken,
+  offerHandleHay,
   warehouseTitleView,
 } from "@/domain/catalog-normalize";
 import { identityKeywords } from "@/domain/pack-tokens";
@@ -23,6 +24,7 @@ export interface IdentityOffer {
   packageSize?: string;
   upc?: string;
   parsedMassKg?: number;
+  sourceUrl?: string;
 }
 
 export interface IdentityResult {
@@ -61,15 +63,20 @@ function identitySearchText(
       ? ""
       : (offer.brand ?? "");
     const extra = offer.packageSize ?? "";
+    const handle = offerHandleHay(offer);
     return {
-      text: withFrozenSynonyms(`${brand} ${name} ${extra}`),
+      text: withFrozenSynonyms(`${brand} ${name} ${extra} ${handle}`),
       split: true,
     };
   }
   return { text: hay(offer), split: false };
 }
 
-function bannedFormMismatch(product: RestaurantProduct, text: string): string | null {
+function bannedFormMismatch(
+  product: RestaurantProduct,
+  offer: IdentityOffer,
+): string | null {
+  const text = `${hay(offer)} ${offerHandleHay(offer)}`;
   const form = (product.matchRules?.form ?? product.category ?? "").toLowerCase();
   if (form === "fresh" || product.category === "produce") {
     if (/\b(canned|can|tin|tinned)\b/.test(text)) return "fresh ≠ canned";
@@ -82,6 +89,10 @@ function bannedFormMismatch(product: RestaurantProduct, text: string): string | 
       /\btomato/.test((product.matchRules?.productType ?? "").toLowerCase());
     if (tomato && (/\b\d+(?:\.\d+)?\s*ml\b/i.test(text) || /\bunico\b/i.test(text))) {
       return "fresh ≠ canned";
+    }
+    // Round-tomato card only — grape tomatoes may have "grape" in the handle.
+    if (product.id === "tomato" && /\bgrape\b/.test(text)) {
+      return "fresh ≠ grape tomato";
     }
   }
   if (form === "frozen" || product.category === "frozen") {
@@ -181,7 +192,7 @@ export function offerMatchesIdentity(input: {
     }
     const kw = keywordsPass(product, offer);
     if (kw) return { ok: false, reason: kw };
-    const form = bannedFormMismatch(product, text);
+    const form = bannedFormMismatch(product, offer);
     if (form) return { ok: false, reason: form };
     const size = sizeCompatible(product, offer, true);
     if (size) return { ok: false, reason: size };
@@ -216,7 +227,7 @@ export function offerMatchesIdentity(input: {
 
   const kw = keywordsPass(product, offer);
   if (kw) return { ok: false, reason: kw };
-  const form = bannedFormMismatch(product, text);
+  const form = bannedFormMismatch(product, offer);
   if (form) return { ok: false, reason: form };
   if (usesCategoryBIdentity({ id: product.id, category: product.category })) {
     if (
@@ -234,6 +245,7 @@ export function offerMatchesIdentity(input: {
           brand: offer.brand,
           packageSize: offer.packageSize,
           parsedMassKg: offer.parsedMassKg,
+          sourceUrl: offer.sourceUrl,
         },
       )
     ) {

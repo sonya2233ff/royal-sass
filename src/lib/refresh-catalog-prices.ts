@@ -12,7 +12,12 @@ import {
   WALMART_RAPID_MISSING_KEY,
 } from "@/connectors/walmart-source";
 import { closeWalmartBrowser } from "@/connectors/walmart-browser";
-import { offerMatchesRetailerSku } from "@/domain/compare-resolve";
+import {
+  catalogSkuForPriceRefresh,
+  offerMatchesRetailerSku,
+  type CatalogRowRef,
+} from "@/domain/compare-resolve";
+import { offerFailsStapleOfferFilters } from "@/domain/catalog-normalize";
 import { formatMass, parseMassFromText } from "@/domain/units";
 import { sanityCheckOffer } from "@/domain/sanity";
 import {
@@ -208,65 +213,81 @@ async function fetchMatchingSku(
   return null;
 }
 
+type CatalogSkuRow = {
+  offer?: CatalogOffer | null;
+  alternates?: CatalogOffer[] | null;
+};
+
 function wmSkuFor(
   id: string,
   item: StapleItem,
   confirmed: Awaited<ReturnType<typeof loadConfirmed>>,
   mappings: Awaited<ReturnType<typeof loadRetailerMappings>>,
-  row?: { offer?: CatalogOffer | null } | null,
+  row?: CatalogSkuRow | null,
 ): string | null {
-  const link = mappings.products[id]?.retailers.walmart_ca;
-  if (link?.retailerProductId && isLockedIdentityLink(link)) {
-    return link.retailerProductId;
-  }
-  const conf = lookupConfirmed(confirmed, id);
-  if (conf?.productId) return conf.productId;
-  if (row?.offer?.productId) return row.offer.productId;
-  if (item.preferredProductId) return item.preferredProductId;
-  return null;
+  return catalogSkuForPriceRefresh({
+    item,
+    row: row as CatalogRowRef | null | undefined,
+    link: mappings.products[id]?.retailers.walmart_ca,
+    confirmedProductId: lookupConfirmed(confirmed, id)?.productId,
+    preferredProductId: item.preferredProductId,
+  });
 }
 
 function nfSkuFor(
   id: string,
+  item: StapleItem,
   mappings: Awaited<ReturnType<typeof loadRetailerMappings>>,
-  row?: { offer?: CatalogOffer | null } | null,
+  row?: CatalogSkuRow | null,
 ): string | null {
-  const link = mappings.products[id]?.retailers.nofrills;
-  if (link?.retailerProductId && isLockedIdentityLink(link)) {
-    return link.retailerProductId;
-  }
-  if (row?.offer?.productId) return row.offer.productId;
-  return null;
+  return catalogSkuForPriceRefresh({
+    item,
+    row: row as CatalogRowRef | null | undefined,
+    link: mappings.products[id]?.retailers.nofrills,
+  });
 }
 
 function wcSkuFor(
   id: string,
+  item: StapleItem,
   mappings: Awaited<ReturnType<typeof loadRetailerMappings>>,
-  row?: { offer?: CatalogOffer | null } | null,
+  row?: CatalogSkuRow | null,
 ): string | null {
-  const link = mappings.products[id]?.retailers.wholesaleclub;
-  if (link?.retailerProductId && isLockedIdentityLink(link)) {
-    return link.retailerProductId;
-  }
-  if (row?.offer?.productId) return row.offer.productId;
-  return null;
+  return catalogSkuForPriceRefresh({
+    item,
+    row: row as CatalogRowRef | null | undefined,
+    link: mappings.products[id]?.retailers.wholesaleclub,
+  });
 }
 
 function mvrSkuFor(
   id: string,
+  item: StapleItem,
   mappings: Awaited<ReturnType<typeof loadRetailerMappings>>,
-  row?: { offer?: CatalogOffer | null } | null,
+  row?: CatalogSkuRow | null,
 ): string | null {
-  const link = mappings.products[id]?.retailers.mvr;
-  if (link?.retailerProductId && isLockedIdentityLink(link)) {
-    return link.retailerProductId;
-  }
-  if (row?.offer?.productId) return row.offer.productId;
-  return null;
+  return catalogSkuForPriceRefresh({
+    item,
+    row: row as CatalogRowRef | null | undefined,
+    link: mappings.products[id]?.retailers.mvr,
+  });
 }
 
 function looksLikeTomatoSeeds(itemId: string, name: string): boolean {
   return itemId === "tomatoes_grape" && /\bseeds?\b/i.test(name);
+}
+
+function refuseUnlockedImpostor(
+  item: StapleItem,
+  offer: CatalogOffer,
+  locked: boolean,
+): string | null {
+  if (looksLikeTomatoSeeds(item.id, offer.name)) {
+    return `refused seed hit for grape tomatoes (${offer.productId})`;
+  }
+  if (locked) return null;
+  const fail = offerFailsStapleOfferFilters(item, offer);
+  return fail ? `refreshed SKU fails ${fail} (${offer.name})` : null;
 }
 
 function logRefreshProgress(store: string, n: number, total: number, id: string) {
@@ -336,7 +357,7 @@ export async function refreshCatalogPrices(
       item,
       confirmed,
       mappings,
-      row as { offer?: CatalogOffer | null } | undefined,
+      row as CatalogSkuRow | undefined,
     );
     if (!sku) {
       result.walmart.skipped.push({ id, reason: "no locked/catalog SKU" });
@@ -356,13 +377,6 @@ export async function refreshCatalogPrices(
         result.walmart.failed.push({
           id,
           reason: `SKU ${sku} not found on refresh`,
-        });
-        return;
-      }
-      if (looksLikeTomatoSeeds(id, live.name)) {
-        result.walmart.failed.push({
-          id,
-          reason: `refused seed hit for grape tomatoes (${live.productId})`,
         });
         return;
       }
@@ -391,6 +405,14 @@ export async function refreshCatalogPrices(
       }
       const prevOffer = row?.offer as CatalogOffer | undefined;
       const offer = slimOffer(live, prevOffer);
+      const wmLocked =
+        isLockedIdentityLink(mappings.products[id]?.retailers.walmart_ca) ||
+        Boolean(lookupConfirmed(confirmed, id)?.productId);
+      const refused = refuseUnlockedImpostor(item, offer, wmLocked);
+      if (refused) {
+        result.walmart.failed.push({ id, reason: refused });
+        return;
+      }
       if (!row) {
         (wmCatalog.items as Array<Record<string, unknown>>).push({
           id,
@@ -446,7 +468,7 @@ export async function refreshCatalogPrices(
       continue;
     }
     const row = nfCatalog?.items.find((r) => r.id === id);
-    const sku = nfSkuFor(id, mappings, row);
+    const sku = nfSkuFor(id, item, mappings, row);
     if (!sku) {
       result.noFrills.skipped.push({ id, reason: "no locked/catalog SKU" });
       continue;
@@ -466,6 +488,15 @@ export async function refreshCatalogPrices(
         continue;
       }
       const offer = slimOffer(live, row?.offer);
+      const refused = refuseUnlockedImpostor(
+        item,
+        offer,
+        isLockedIdentityLink(mappings.products[id]?.retailers.nofrills),
+      );
+      if (refused) {
+        result.noFrills.failed.push({ id, reason: refused });
+        continue;
+      }
       await upsertNoFrillsCatalogItem({
         id,
         label: item.label,
@@ -513,7 +544,7 @@ export async function refreshCatalogPrices(
       continue;
     }
     const row = wcCatalog?.items.find((r) => r.id === id);
-    const sku = wcSkuFor(id, mappings, row);
+    const sku = wcSkuFor(id, item, mappings, row);
     if (!sku) {
       result.wholesaleClub.skipped.push({ id, reason: "no locked/catalog SKU" });
       continue;
@@ -533,6 +564,15 @@ export async function refreshCatalogPrices(
         continue;
       }
       const offer = slimOffer(live, row?.offer);
+      const refused = refuseUnlockedImpostor(
+        item,
+        offer,
+        isLockedIdentityLink(mappings.products[id]?.retailers.wholesaleclub),
+      );
+      if (refused) {
+        result.wholesaleClub.failed.push({ id, reason: refused });
+        continue;
+      }
       await upsertWholesaleClubCatalogItem({
         id,
         label: item.label,
@@ -580,7 +620,7 @@ export async function refreshCatalogPrices(
       continue;
     }
     const row = mvrCatalog?.items.find((r) => r.id === id);
-    const sku = mvrSkuFor(id, mappings, row);
+    const sku = mvrSkuFor(id, item, mappings, row);
     if (!sku) {
       result.mvr.skipped.push({ id, reason: "no locked/catalog SKU" });
       continue;
@@ -600,6 +640,15 @@ export async function refreshCatalogPrices(
         continue;
       }
       const offer = slimOffer(live, row?.offer);
+      const refused = refuseUnlockedImpostor(
+        item,
+        offer,
+        isLockedIdentityLink(mappings.products[id]?.retailers.mvr),
+      );
+      if (refused) {
+        result.mvr.failed.push({ id, reason: refused });
+        continue;
+      }
       await upsertMvrCatalogItem({
         id,
         label: item.label,

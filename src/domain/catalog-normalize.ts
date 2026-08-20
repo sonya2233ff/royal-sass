@@ -180,7 +180,46 @@ export type StapleOfferFilterInput = {
   raw?: unknown;
   /** Persisted Shopify/PCX type+tags so catalog resolve still sees frozen vs produce. */
   taxonomyText?: string;
+  /** Shopify handle / retailer id — titles can be relabeled while the handle stays grape-tomatoes. */
+  productId?: string;
+  sourceUrl?: string;
 };
+
+/**
+ * Last path segment + hyphenated productId, so "vegetables-grape-tomatoes-case"
+ * still reads as grape even when the live title says "TOMATOES LOOSE".
+ */
+export function offerHandleHay(offer: {
+  productId?: string;
+  sourceUrl?: string;
+}): string {
+  const id = (offer.productId ?? "").replace(/[-_]+/g, " ");
+  let slug = "";
+  const url = offer.sourceUrl ?? "";
+  if (url) {
+    try {
+      const parts = new URL(url).pathname.split("/").filter(Boolean);
+      const leaf =
+        [...parts]
+          .reverse()
+          .find(
+            (p) =>
+              p !== "p" &&
+              p !== "en" &&
+              p !== "ip" &&
+              p !== "products" &&
+              !/^\d/.test(p) &&
+              p.length > 2,
+          ) ??
+        parts.at(-1) ??
+        "";
+      slug = leaf.replace(/[-_]+/g, " ");
+    } catch {
+      slug = url.replace(/[-_/]+/g, " ");
+    }
+  }
+  return `${id} ${slug}`.trim();
+}
 
 /** Shopify type/tags, PCX/Walmart category blobs already on offer.raw — no connector change. */
 export function retailerTaxonomyText(raw?: unknown): string {
@@ -336,6 +375,7 @@ export function offerFailsStapleOfferFilters(
     offer.taxonomyText ?? "",
     retailerTaxonomyText(offer.raw),
     frozenHint,
+    offerHandleHay(offer),
   ]
     .filter((s) => s.trim())
     .join(" ");

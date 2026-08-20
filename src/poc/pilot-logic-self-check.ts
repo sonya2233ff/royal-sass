@@ -724,6 +724,16 @@ assert(
   }).ok,
   "fresh tomato != Unico canned jar",
 );
+assert(
+  !offerMatchesIdentity({
+    product: freshTomato,
+    offer: offer("VEGETABLES - TOMATOES LOOSE CASE 13 LB", {
+      packageSize: "13 LB",
+      productId: "vegetables-grape-tomatoes-case-15-x-1-lb",
+    }),
+  }).ok,
+  "fresh tomato != grape tomato Shopify handle",
+);
 
 const redPepper = product({
   id: "red_peppers_kg",

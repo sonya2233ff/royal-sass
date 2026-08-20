@@ -2646,10 +2646,11 @@
         "6in wraps"
       ],
       "mustIncludeAny": [
-        "6 inch",
-        "6in",
-        "6 in",
-        "6\""
+        "wrap",
+        "wraps",
+        "tortilla",
+        "tortillas",
+        "fajita"
       ],
       "mustNotInclude": [
         "10 inch",

@@ -19,6 +19,7 @@ import {
 import { eggCatalogSourceIds, queryLooksLikeShellEggs } from "@/domain/egg-pack";
 import {
   catalogRowForStaple,
+  catalogSkuForPriceRefresh,
   mergeCatalogRows,
   resolveCatalogOffer,
 } from "@/domain/compare-resolve";
@@ -66,6 +67,8 @@ async function main() {
   const ice = cfg.items.find((i) => i.id === "ice_cubes");
   const grayridge = cfg.items.find((i) => i.id === "grayridge_eggs");
   const dozen = cfg.items.find((i) => i.id === "large_eggs_dozen");
+  const tomato = cfg.items.find((i) => i.id === "tomato");
+  const wraps = cfg.items.find((i) => i.id === "wraps_plain_6in");
   if (
     !frozen ||
     !fresh ||
@@ -82,7 +85,9 @@ async function main() {
     !spinach ||
     !ice ||
     !grayridge ||
-    !dozen
+    !dozen ||
+    !tomato ||
+    !wraps
   ) {
     throw new Error("missing staples");
   }
@@ -127,6 +132,70 @@ async function main() {
       raw: grapeRaw,
     }),
     "grape tomatoes identity accepts warehouse title",
+  );
+  const mvrGrapeHandle = {
+    productId: "vegetables-grape-tomatoes-case-15-x-1-lb",
+    name: "VEGETABLES - TOMATOES LOOSE CASE 13 LB",
+    brand: "VEGETABLES",
+    packageSize: "13 LB",
+    price: 13.99,
+    sourceUrl:
+      "https://plus.mvrwholesale.com/products/vegetables-grape-tomatoes-case-15-x-1-lb",
+  };
+  const mvrRoundCase = {
+    productId: "vegetables-tomatoes-5x6-case-25-lbs",
+    name: "VEGETABLES - TOMATOES 5X6 CASE 25 LBS",
+    brand: "VEGETABLES",
+    packageSize: "25 LBS",
+    price: 29.99,
+    sourceUrl:
+      "https://plus.mvrwholesale.com/products/vegetables-tomatoes-5x6-case-25-lbs",
+  };
+  assert(
+    offerFailsStapleOfferFilters(tomato, mvrGrapeHandle) === "mustNotInclude:grape",
+    "fresh tomato rejects grape Shopify handle even if title says loose",
+  );
+  assert(
+    !isActualCategoryBOffer(tomato, mvrGrapeHandle),
+    "category B identity rejects grape handle as round tomato",
+  );
+  assert(
+    isActualCategoryBOffer(tomato, mvrRoundCase),
+    "round tomato still accepts 5x6 tomato case",
+  );
+  assert(
+    isActualCategoryBOffer(grape, mvrGrapeHandle),
+    "grape tomatoes card still accepts a grape Shopify handle",
+  );
+  const tomatoResolved = resolveCatalogOffer({
+    item: tomato,
+    row: { offer: mvrGrapeHandle, alternates: [mvrRoundCase] },
+    matchMode: "cheapest",
+  });
+  assert(
+    tomatoResolved.offer?.productId === mvrRoundCase.productId,
+    `round tomato must not keep grape handle winner, got ${tomatoResolved.offer?.productId}`,
+  );
+  assert(
+    catalogSkuForPriceRefresh({
+      item: tomato,
+      row: { offer: mvrGrapeHandle, alternates: [mvrRoundCase] },
+    }) === mvrRoundCase.productId,
+    "price refresh retargets the filter-passing tomato case",
+  );
+  assert(
+    catalogSkuForPriceRefresh({
+      item: wraps,
+      row: {
+        offer: {
+          productId: "21718133_EA",
+          name: "Foam Pumpkin Decoration 4.75\" x 6\" - Orange",
+          packageSize: "1 ea",
+          price: 6,
+        },
+      },
+    }) == null,
+    "price refresh must not keep a foam pumpkin as 6in wraps",
   );
   assert(
     offerFailsStapleOfferFilters(banana, {

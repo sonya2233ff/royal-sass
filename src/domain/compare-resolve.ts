@@ -307,3 +307,28 @@ export function resolveCatalogOffer(input: {
 
   return { offer: null, reason: "no_offer" };
 }
+
+/**
+ * Price-only refresh: locked/confirmed SKU stays. Otherwise refresh the first
+ * catalog SKU that still passes identity filters (winner, then alternates).
+ * Never keep pumping a grape-tomato handle onto the round-tomato card.
+ */
+export function catalogSkuForPriceRefresh(input: {
+  item: StapleFilterItem;
+  row?: CatalogRowRef | null;
+  link?: MappingLinkRef;
+  confirmedProductId?: string;
+  preferredProductId?: string;
+}): string | null {
+  if (mappingIsLockedIdentity(input.link) && input.link?.retailerProductId) {
+    return input.link.retailerProductId;
+  }
+  if (input.confirmedProductId) return input.confirmedProductId;
+  for (const offer of catalogCandidates(input.row)) {
+    if (!(offer.price > 0)) continue;
+    if (!offerIsOnShelf(offer)) continue;
+    if (offerFailsStapleOfferFilters(input.item, offer)) continue;
+    return offer.productId;
+  }
+  return input.preferredProductId ?? null;
+}

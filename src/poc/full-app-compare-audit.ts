@@ -285,6 +285,19 @@ async function main() {
   assert((ojNf.shelfPrice ?? 0) > 0, `OJ missing NF shelf ${ojNf.shelfPrice}`);
   assert(/tropicana/i.test(ojNf.name ?? ""), `OJ NF name ${ojNf.name}`);
 
+  const tomato = byId.get("tomato");
+  assert(tomato, "tomato");
+  assert(
+    !/unico/i.test(String((tomato!.noFrills as { name?: string }).name ?? "")),
+    `fresh tomato NF must not be Unico canned, got ${(tomato!.noFrills as { name?: string }).name}`,
+  );
+  const wraps = byId.get("wraps_plain_6in");
+  assert(wraps, "wraps");
+  assert(
+    !/pumpkin|foam/i.test(String((wraps!.noFrills as { name?: string }).name ?? "")),
+    `6in wraps NF must not be a foam pumpkin, got ${(wraps!.noFrills as { name?: string }).name}`,
+  );
+
   const complete = rows.filter((r) => r.cheaper !== "incomplete");
 
   const wmSum = complete.reduce((s, r) => s + (r.basketWalmart ?? 0), 0);
