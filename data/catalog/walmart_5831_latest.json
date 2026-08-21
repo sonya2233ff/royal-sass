@@ -7,7 +7,7 @@
     "name": "Walmart Supercentre #5831",
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
-  "checkedAt": "2026-08-20T04:26:56.298Z",
+  "checkedAt": "2026-08-21T02:19:24.654Z",
   "itemCount": 134,
   "matched": 83,
   "items": [
@@ -26,7 +26,7 @@
         "parsedMassKg": 1,
         "price": 9.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:25:55.014Z",
+        "checkedAt": "2026-08-21T02:09:48.500Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Burnbrae-Farms-Naturegg-Simply-Egg-Whites-1KG/6000196635381?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/27f45e00-d8ab-4e43-8d58-7f154396ec4c.cf834bc8397cfaf849bd3aeab61f9014.jpeg"
       },
@@ -70,8 +70,21 @@
         "sourceUrl": "https://www.walmart.ca/en/ip/nature-fresh-farms-devours-premium-red-grape-tomato-283g/72CDS4R4V81X?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/910/999/6000209910999.jpg"
       },
-      "alternates": [],
-      "notes": "Produce: cheapest grape tomato pack (brand irrelevant)",
+      "alternates": [
+        {
+          "productId": "6000194960083",
+          "name": "Your Fresh Market Tomato, Grape, 10 oz",
+          "brand": "Your Fresh Market",
+          "packageSize": "283 g",
+          "parsedMassKg": 0.28349523125000003,
+          "price": 2.97,
+          "confidence": "exact",
+          "checkedAt": "2026-08-21T02:09:50.877Z",
+          "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-tomato-grape/6000194960084?classType=REGULAR&athbdg=L1600",
+          "image": "https://i5.walmartimages.ca/images/Enlarge/039/217/6000203039217.jpg"
+        }
+      ],
+      "notes": "Devours 283g cheapest (YFM 10 oz kept as alternate, live price refresh)",
       "image": "/products/tomatoes_grape.jpg"
     },
     {
@@ -124,7 +137,7 @@
         "brand": "Gray Ridge",
         "price": 6.98,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:45.389Z",
+        "checkedAt": "2026-08-21T02:13:18.054Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Gray-Ridge-Premium-Large-White-18-Eggs/6000191268613?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/27c70176-0bab-4bb4-93c6-6255fc80802e.5a94fcea2b568880f674ff0a285c4413.jpeg"
       },
@@ -150,9 +163,9 @@
         "brand": "Your Fresh Market",
         "packageSize": "907 g",
         "parsedMassKg": 0.90718474,
-        "price": 4.97,
+        "price": 4.44,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:25:58.931Z",
+        "checkedAt": "2026-08-21T02:09:54.449Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/lemons-your-fresh-market/6000199360630?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/208/926/6000202208926.jpg"
       },
@@ -190,7 +203,7 @@
         "parsedMassKg": 0.3,
         "price": 1.57,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:00.868Z",
+        "checkedAt": "2026-08-21T02:09:58.767Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/pear-bosc/6000195494142?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/414/2_r/6000195494142_R.jpg"
       },
@@ -288,7 +301,7 @@
         "parsedMassKg": 0.51,
         "price": 2.17,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:03.815Z",
+        "checkedAt": "2026-08-21T02:10:04.518Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/eggplant/6000191270103?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/094/510/6000200094510.jpg"
       },
@@ -316,7 +329,7 @@
         "parsedMassKg": 0.8,
         "price": 2.9,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:05.767Z",
+        "checkedAt": "2026-08-21T02:10:07.608Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-tomatoes-on-the-vine/6000198459494?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/752/052/628915752052.jpg"
       },
@@ -396,7 +409,7 @@
         "parsedMassKg": 1.75,
         "price": 4.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:07.627Z",
+        "checkedAt": "2026-08-21T02:10:10.848Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Earth-s-Own-Gluten-Free-Zero-Sugar-Original-Oat-Milk-Alternative-1-75L/2ADJVX8MAQ1Q?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/46d23fab-9180-4386-9659-8eef83ee72b9.425e4a0efd5ecd16af087f33dcf0f3b4.jpeg"
       },
@@ -468,9 +481,9 @@
         "name": "SUNSET Red Bell Pepper, Single, 0.12 - 0.24 KG",
         "packageSize": "240 g",
         "parsedMassKg": 0.24,
-        "price": 1.28,
+        "price": 0.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:09.668Z",
+        "checkedAt": "2026-08-21T02:10:13.673Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/sunset-red-bell-pepper/6000191286439?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/_46/886/46886.jpg"
       },
@@ -496,7 +509,7 @@
         "parsedMassKg": 0.57,
         "price": 1.8,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:12.358Z",
+        "checkedAt": "2026-08-21T02:10:16.375Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/sweet-potato/6000190025746?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/898/559/6000206898559.jpg"
       },
@@ -518,7 +531,7 @@
         "parsedMassKg": 2.29,
         "price": 3.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:16.195Z",
+        "checkedAt": "2026-08-21T02:10:21.327Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/pineapple-golden-jumbo/6000191289580?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/198/453/6000200198453.jpg"
       },
@@ -541,7 +554,7 @@
         "parsedMassKg": 1.89,
         "price": 4.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:18.079Z",
+        "checkedAt": "2026-08-21T02:10:27.074Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Earth-s-Own-Original-Almond-Milk-Alternative-1-89L/10184853?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/asr/4c1bbc24-4b05-41d9-bcc3-abfdafe4c9d6.d986995a54f1c716d0c17845a5c0353e.jpeg"
       },
@@ -576,7 +589,7 @@
         "parsedMassKg": 0.23,
         "price": 0.35,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:20.140Z",
+        "checkedAt": "2026-08-21T02:10:33.433Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/banana/875806?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/580/6_r/875806_R.jpg"
       },
@@ -613,8 +626,8 @@
         "name": "Cucumber, English, Sold in Single Wrap",
         "price": 0.94,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:23.415Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/cucumber-english/6000188920596?classType=REGULAR&athbdg=L1600",
+        "checkedAt": "2026-08-21T02:10:39.467Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/cucumber-english/6000188920596?classType=REGULAR&athbdg=L3031",
         "image": "https://i5.walmartimages.ca/images/Enlarge/331/999/6000209331999.jpg"
       },
       "alternates": [],
@@ -640,7 +653,7 @@
         "parsedMassKg": 1,
         "price": 5.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:25.675Z",
+        "checkedAt": "2026-08-21T02:10:42.352Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/garlic/6000196795581?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/094/587/6000200094587.jpg"
       },
@@ -663,8 +676,8 @@
         "parsedMassKg": 0.312,
         "price": 3.44,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:27.894Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/blueberries/6000204089920?classType=REGULAR&athbdg=L3032",
+        "checkedAt": "2026-08-21T02:10:45.047Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/blueberries/6000204089920?classType=REGULAR&athbdg=L3031",
         "image": "https://i5.walmartimages.ca/images/Enlarge/653/137/6000204653137.jpg"
       },
       "alternates": [
@@ -699,8 +712,8 @@
         "parsedMassKg": 0.45359237,
         "price": 3.84,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:29.775Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/strawberries/871284?classType=REGULAR&athbdg=L1600",
+        "checkedAt": "2026-08-21T02:10:49.389Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/strawberries/871284?classType=REGULAR&athbdg=L3031",
         "image": "https://i5.walmartimages.ca/images/Enlarge/005/102/812049005102.jpg"
       },
       "alternates": [],
@@ -722,7 +735,7 @@
         "parsedMassKg": 2,
         "price": 6.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-18T19:10:11.899Z",
+        "checkedAt": "2026-08-21T02:11:00.769Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Mehadrin-2-2LT-milk/6000198384699",
         "image": "https://i5.walmartimages.ca/asr/becbd672-036b-4516-9c9c-3386c018be93.fbf92132d0d0c426012fe5d97a39d65e.jpeg"
       },
@@ -744,7 +757,7 @@
         "brand": "Gay Lea Foods",
         "price": 7.96,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:29:21.371Z",
+        "checkedAt": "2026-08-21T02:11:12.533Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Gay-Lea-Unsalted-Butter/6000201029320?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/a2122e4d-e5c7-4902-9a40-8298592b9f73.7e6e87f5c5642533ae1161770e956e98.jpeg"
       },
@@ -810,7 +823,7 @@
         "brand": "Great Value",
         "price": 3.93,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:29:24.269Z",
+        "checkedAt": "2026-08-21T02:11:15.889Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Large-12-Eggs/10052944?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/bf0abe13-d833-4ceb-be74-8c2444c35a06.217e4c69ecde8c8bba4e8ab7de15a76b.jpeg"
       },
@@ -892,7 +905,7 @@
         "brand": "Tropicana",
         "price": 10.24,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:29:32.030Z",
+        "checkedAt": "2026-08-21T02:11:18.195Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Tropicana-100-Pure-Orange-Juice-No-Pulp/205804?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/86a56b6a-8d88-4779-bf1f-7362a66d4ed4.ee3d4d02ac6a29e56b4db89f4a377075.png"
       },
@@ -917,7 +930,7 @@
         "parsedMassKg": 2,
         "price": 6.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:29:17.847Z",
+        "checkedAt": "2026-08-21T02:11:09.636Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Mehadrin-Homogenized-3-25-2LT-Milk/6000198386424",
         "image": "https://i5.walmartimages.ca/asr/13b0d6bd-d72f-436a-9e5f-6cc34925da30.e91d032ac0f8f3d0948fbec0917eefc8.jpeg"
       },
@@ -987,7 +1000,7 @@
         "parsedMassKg": 0.6,
         "price": 4.66,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:12.789Z",
+        "checkedAt": "2026-08-21T02:11:36.987Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Cultivated-Blueberries/6000197072458?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/37f9ca0c-2ff9-472f-a271-ca21b8ec0d67.0f66655ae55bc486bfd65abd49ddaa9e.jpeg"
       },
@@ -1042,7 +1055,7 @@
         "parsedMassKg": 0.6,
         "price": 4.66,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:18.390Z",
+        "checkedAt": "2026-08-21T02:11:41.194Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Sliced-Frozen-Strawberries/6000191288178?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/c1412b59-0857-47af-bb98-c3dbdfd9054b.369855c125b1f6729134f6cfa409fe8e.jpeg"
       },
@@ -1084,7 +1097,7 @@
         "parsedMassKg": 0.5,
         "price": 3.37,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:21.121Z",
+        "checkedAt": "2026-08-21T02:11:44.911Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Chopped-Spinach-Nuggets/6000198574809?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/asr/0fdcb1ca-91c8-47f8-af4d-5cb71aa134f5.bfe50d880011920d932f1fa8002aa511.jpeg"
       },
@@ -1136,7 +1149,7 @@
         "parsedMassKg": 0.90718474,
         "price": 9.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:26:21.610Z",
+        "checkedAt": "2026-08-21T02:10:36.551Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/green-kiwi/6GYYS29T8E05?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/192/0_1/686201741920_1.jpg"
       },
@@ -1161,7 +1174,7 @@
         "wasPrice": 2.97,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:01.790Z",
+        "checkedAt": "2026-08-21T02:11:23.556Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Realemon-Juice-440ml/1BUHM1GPVP5J",
         "image": "https://i5.walmartimages.ca/asr/e44d0d68-9740-4615-bf80-297b6d8a30c1.eddf1524d1e23db79576c7209f4dff8c.jpeg"
       },
@@ -1181,7 +1194,7 @@
         "brand": "Jell-O",
         "price": 2.07,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:04.450Z",
+        "checkedAt": "2026-08-21T02:11:28.108Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Jell-O-Vanilla-Instant-Pudding-Mix-Box-Caseine-Free/10306574?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/asr/fc2a01e6-cd25-481d-896f-6c8740c96117.4761d3963e8789353fa80a21755ac19a.jpeg"
       },
@@ -1199,9 +1212,9 @@
         "productId": "6000195369895",
         "name": "Ziploc® Sandwich Bags with Grip 'n Seal Technology",
         "brand": "Ziploc",
-        "price": 8,
+        "price": 9.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:10.169Z",
+        "checkedAt": "2026-08-21T02:11:33.776Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Ziploc-Sandwich-Bags-with-Grip-n-Seal-Technology/6000195369896?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/c3cfd467-9d97-442b-98f8-f5880a4d1fc9.d7f892c4f82fa126d217f24cbe383c29.jpeg"
       },
@@ -1226,7 +1239,7 @@
         "parsedMassKg": 2.3,
         "price": 3.98,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:25.505Z",
+        "checkedAt": "2026-08-21T02:11:48.269Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Arctic-Glacier-Cubed-Premium-Ice-2-3-kg-Bagged-Frozen/6HYOGQRD524M?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/asr/119a8500-b4b6-40a0-9783-b15a82c96948.1496c745e232dd66f884b6a2ad4a208f.png"
       },
@@ -1382,7 +1395,7 @@
         "parsedMassKg": 0.45,
         "price": 2.24,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:44.444Z",
+        "checkedAt": "2026-08-21T02:11:50.949Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/great-value-original-bagels-source-of-12-essential-nutrients-6-count-450-g/6000206630029?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/964/928/6000209964928.jpg"
       },
@@ -1415,7 +1428,7 @@
         "brand": "Your Fresh Market",
         "price": 0.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:48.223Z",
+        "checkedAt": "2026-08-21T02:11:56.566Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/your-fresh-market-french-style-wheat-baguette/6000208203620?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/images/Enlarge/471/765/6000208471765.jpg"
       },
@@ -1451,9 +1464,8 @@
         "packageSize": "200 g",
         "parsedMassKg": 0.2,
         "price": 0.41,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:35:12.913Z",
+        "checkedAt": "2026-08-21T02:12:00.885Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/pear-red-bartlett/6000197451748?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/537/916/6000198537916.jpg"
       },
@@ -1508,7 +1520,7 @@
         "name": "Celery, Sold in bunches",
         "price": 1.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:52.904Z",
+        "checkedAt": "2026-08-21T02:12:04.375Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/celery/6000191272227?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/094/529/6000200094529.jpg"
       },
@@ -1556,7 +1568,7 @@
         "name": "Cilantro, Sold in bunches",
         "price": 1.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:30:55.825Z",
+        "checkedAt": "2026-08-21T02:12:06.455Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/cilantro/981708?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/094/548/6000200094548.jpg"
       },
@@ -1671,7 +1683,7 @@
         "brand": "Toastmaster",
         "price": 32.98,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:18.706Z",
+        "checkedAt": "2026-08-21T02:12:07.974Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Toastmaster-Electric-Double-Burner/6000201337639?classType=REGULAR&athbdg=L3028",
         "image": "https://i5.walmartimages.ca/asr/0893d0df-9a6d-495e-b3ba-1c57f2af474a.f70b476eae142c77ef83a803c7022977.jpeg"
       },
@@ -1737,13 +1749,13 @@
         "packageSize": "641 g",
         "parsedMassKg": 0.641,
         "price": 21.96,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:36:16.613Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Folgers-Black-Silk-Dark-Roast-Ground-Coffee-641g/6000205233379",
+        "checkedAt": "2026-08-21T02:12:09.808Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Folgers-Black-Silk-Dark-Roast-Ground-Coffee-641g/6000205233379?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/asr/aeb93b55-ad21-40f7-aa6b-531b1d21bf79.69ded0826952578067cc615f41a452f4.jpeg"
       },
-      "notes": "Receipt UPC 082785400724 Foil Green 4.27 (Folgers)"
+      "notes": "Receipt UPC 082785400724 Foil Green 4.27 (Folgers)",
+      "image": "https://i5.walmartimages.ca/asr/aeb93b55-ad21-40f7-aa6b-531b1d21bf79.69ded0826952578067cc615f41a452f4.jpeg"
     },
     {
       "id": "fresh_mozzarella",
@@ -1760,7 +1772,7 @@
         "wasPrice": 5.78,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:36.137Z",
+        "checkedAt": "2026-08-21T02:12:11.569Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/saputo-mozzarella-fresca-cheese/6000199427254?classType=REGULAR&athbdg=L1300",
         "image": "https://i5.walmartimages.ca/images/Enlarge/217/115/6000200217115.jpg"
       },
@@ -1783,9 +1795,8 @@
         "packageSize": "500 g",
         "parsedMassKg": 0.5,
         "price": 3.37,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:36:25.035Z",
+        "checkedAt": "2026-08-21T02:12:13.325Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Butternut-Squash-Cubes/7DP5GT3VRGYR?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/5cc15ace-7a76-4f98-b594-2813d943fcf7.337c3ff09dad8fe5bd179f0ed52fbc11.jpeg"
       },
@@ -1879,7 +1890,7 @@
         "parsedMassKg": 1.3607771100000001,
         "price": 7.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:42.365Z",
+        "checkedAt": "2026-08-21T02:12:15.107Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/granny-smith-apple/6000194125043?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/094/554/6000200094554.jpg"
       },
@@ -1984,7 +1995,7 @@
         "parsedMassKg": 1,
         "price": 10.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:49.527Z",
+        "checkedAt": "2026-08-21T02:12:17.434Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Yupik-Shelled-Sunflower-Seeds-Raw-1kg/64G597YMHI13?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/asr/9be3460f-2bd7-4cb5-99d1-85d1797b948f.42513349cf81311e48b40be2d4bdf088.jpeg"
       },
@@ -2004,9 +2015,8 @@
         "productId": "6000191463078",
         "name": "Honeydew Melon, Sold in singles",
         "price": 6.94,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:37:40.395Z",
+        "checkedAt": "2026-08-21T02:12:19.478Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/honeydew-melon/6000191463079?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/307/9_r/6000191463079_R.jpg"
       },
@@ -2083,7 +2093,7 @@
         "parsedMassKg": 0.6803885550000001,
         "price": 3.94,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:52.004Z",
+        "checkedAt": "2026-08-21T02:12:21.032Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/limes-bag/1SDG5S3L51WZ?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/929/960/686201929960.jpg"
       },
@@ -2123,7 +2133,7 @@
         "wasPrice": 26.98,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:54.826Z",
+        "checkedAt": "2026-08-21T02:12:23.208Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/magic-bullet-4-Piece-Blender/6000207686280?classType=REGULAR&athbdg=L3028",
         "image": "https://i5.walmartimages.ca/asr/72df6214-fe08-429e-a734-187090b57c9e.f2e76ca6cc969748e680536becd49670.jpeg"
       },
@@ -2143,7 +2153,7 @@
         "brand": "Great Value",
         "price": 2.77,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:31:57.128Z",
+        "checkedAt": "2026-08-21T02:12:25.126Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Mini-Marshmallows/6000196753306?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/74301438-44f4-4668-afa5-9a7f6c263015.705d9efbfaceec10ff898d36b35b2ad4.jpeg"
       },
@@ -2197,7 +2207,7 @@
         "brand": "Flex",
         "price": 12.8,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:04.546Z",
+        "checkedAt": "2026-08-21T02:12:27.091Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Flex-powder-free-nitrile-exam-gloves-Large-2x100-bx/20M5RT3POCKK?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/asr/3c3c437f-1274-4c86-8da3-c766d617468b.ef1b299585bbd35824cd4d15b58db560.jpeg"
       },
@@ -2220,7 +2230,7 @@
         "wasPrice": 43.25,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:11.325Z",
+        "checkedAt": "2026-08-21T02:12:28.907Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Heavy-Duty-9-Inch-Disposable-Nitrile-Gloves-Medium-100-Pack-Powder-Free-Chemical-Puncture-Resistant-for-Cleaning-Cooking-Multi-Purpose-Use/3V0L9T7ZNEUB?classType=VARIANT&athbdg=L1400",
         "image": "https://i5.walmartimages.ca/asr/c2c36366-afa1-4575-912b-1b0085de74bb.39b8176367993c0acc0f4197ed1e0a5e.jpeg"
       },
@@ -2276,7 +2286,7 @@
         "name": "Parsley, Flat, Fresh, Sold in bunches",
         "price": 1.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:27.687Z",
+        "checkedAt": "2026-08-21T02:12:31.272Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/parsley-flat-fresh/6000191272078?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/094/551/6000200094551.jpg"
       },
@@ -2348,7 +2358,7 @@
         "wasPrice": 29.99,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:31.806Z",
+        "checkedAt": "2026-08-21T02:12:32.990Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Griss-Pasta-Giardino-Durum-Wheat-Semolina-Penne-Pasta-4-kg-Bulk-Italian-Style-Penne-for-Sauces-Pasta-Dishes/64FXMZAER1AE?classType=REGULAR&athbdg=L1700",
         "image": "https://i5.walmartimages.ca/asr/0eb7d33e-6be2-4f64-acc7-c8198c52c23b.af666d64d72807618ba416dfff1bcbda.jpeg"
       },
@@ -2393,7 +2403,7 @@
         "brand": "Aurora",
         "price": 4.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:33.987Z",
+        "checkedAt": "2026-08-21T02:12:34.687Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Aurora-Hot-Pickled-Eggplants-in-Oil/6000188761429?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/asr/2b7d0465-41ed-4386-817c-0e87619ceb3d.d4d6fad7d05af310c45ea4ddcd47b40c.jpeg"
       },
@@ -2417,7 +2427,7 @@
         "parsedMassKg": 0.64,
         "price": 3.48,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:36.226Z",
+        "checkedAt": "2026-08-21T02:12:36.505Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/great-value-10-white-tortillas-source-of-7-essential-nutrients-10-count-640-g/6000206630174?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/images/Enlarge/964/944/6000209964944.jpg"
       },
@@ -2440,9 +2450,8 @@
         "packageSize": "340 g",
         "parsedMassKg": 0.34,
         "price": 2.44,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:38:58.542Z",
+        "checkedAt": "2026-08-21T02:12:38.869Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/great-value-7-white-tortillas-source-of-7-essential-nutrients-10-count-340-g/6000206630073?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/images/Enlarge/965/037/6000209965037.jpg"
       },
@@ -2462,7 +2471,7 @@
         "brand": "Unique Pretzels",
         "price": 1.35,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:41.846Z",
+        "checkedAt": "2026-08-21T02:12:40.734Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Ruby-Red-Rectangular-Plastic-Table-Cover-54-x-108/122739?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/asr/c593e947-a1be-4d95-89aa-65d6eb499484.0bea5e438efd0165ed51a587638fc09a.jpeg"
       },
@@ -2481,9 +2490,8 @@
         "name": "Great Value Clear Plastic Wrap",
         "brand": "Great Value",
         "price": 4.43,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:39:18.666Z",
+        "checkedAt": "2026-08-21T02:12:42.613Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Clear-Plastic-Wrap/6000195381860?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/asr/d6f47128-daa0-4547-b368-50d972255df0.54f8b0817a82214d159885279cd0e2ba.jpeg"
       },
@@ -2542,7 +2550,7 @@
         "parsedMassKg": 0.45,
         "price": 3.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:44.906Z",
+        "checkedAt": "2026-08-21T02:12:45.088Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/KHANSAMA-PUFF-PASTRY-SHEETS-450G/3GYSL4IT5V9E?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/asr/a9ca4921-1af4-4355-9392-b30486c90420.c791c9eb4c263bfe8256b658f366c210.png"
       },
@@ -2604,7 +2612,7 @@
         "parsedMassKg": 3.17514659,
         "price": 9.94,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:51.045Z",
+        "checkedAt": "2026-08-21T02:12:47.170Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/red-onions/6000199879130?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/901/2_1/59559699012_1.jpg"
       },
@@ -2653,9 +2661,8 @@
         "packageSize": "1 kg",
         "parsedMassKg": 1,
         "price": 9.79,
-        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:39:30.528Z",
+        "checkedAt": "2026-08-21T02:12:48.909Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/grapes-red-seedless/6000195440985?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/042/489/6000201042489.jpg"
       },
@@ -2724,8 +2731,8 @@
         "brand": "Black Diamond",
         "price": 4.92,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:53.367Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/black-diamond-marble-cheddar-shredded-cheese/6000201234196?classType=REGULAR&athbdg=L3032",
+        "checkedAt": "2026-08-21T02:12:50.788Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/black-diamond-marble-cheddar-shredded-cheese/6000201234196?classType=REGULAR&athbdg=L3031",
         "image": "https://i5.walmartimages.ca/images/Enlarge/310/725/6000201310725.jpg"
       },
       "notes": "From receipts catalog (deli)",
@@ -2744,7 +2751,7 @@
         "brand": "Saputo",
         "price": 21.98,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:56.448Z",
+        "checkedAt": "2026-08-21T02:12:52.813Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/saputo-light-mozzarellissima-pizza-mozzarella-shredded-cheese/10178002?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/353/858/6000202353858.jpg"
       },
@@ -2764,7 +2771,7 @@
         "brand": "TIMIFIS",
         "price": 2.09,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:32:59.168Z",
+        "checkedAt": "2026-08-21T02:12:55.606Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/TIMIFIS-Kitchen-Gadgets-Kitchen-Sink-Strainer-Sink-Strainer-For-Kitchen-Sink-Sink-Strainer-Stainless-Steel-With-Large-Wide-Side/6LRYM69O7Q86?classType=REGULAR&athbdg=L1400",
         "image": "https://i5.walmartimages.ca/asr/6824d4e7-9f03-41fd-8785-804e0781a81c.f85acd576c5fb0bdd34195d990057711.jpeg"
       },
@@ -2790,7 +2797,7 @@
         "parsedMassKg": 0.226796185,
         "price": 2.44,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:03.727Z",
+        "checkedAt": "2026-08-21T02:12:57.687Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/mushrooms-white-sliced-your-fresh-market/6000196142669?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/images/Enlarge/163/460/6000202163460.jpg"
       },
@@ -2815,7 +2822,7 @@
         "brand": "Great Value",
         "price": 2.18,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:06.348Z",
+        "checkedAt": "2026-08-21T02:12:59.626Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Sour-Cream/6000196397986?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/e32a3a3f-6ebf-42e1-bb81-3a6a6cd368f8.6959cde9f44de8979cdb7a86ed90edbc.jpeg"
       },
@@ -2850,7 +2857,7 @@
         "parsedMassKg": 0.675,
         "price": 3.67,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:09.688Z",
+        "checkedAt": "2026-08-21T02:13:01.530Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/farmhouse-sourdough-bread-loaf-no-artificial-preservatives-flavours-or-colours-675-g/1WE3ISQNRQW3?classType=REGULAR&athbdg=L1102",
         "image": "https://i5.walmartimages.ca/images/Enlarge/942/190/6000209942190.jpg"
       },
@@ -2900,7 +2907,7 @@
         "parsedMassKg": 0.142,
         "price": 7.27,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:15.348Z",
+        "checkedAt": "2026-08-21T02:13:03.362Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Tabasco-Original-Pepper-Sauce-142ml/10190643?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/asr/7eabcc6c-2a40-48fa-b616-0741666899b0.24b90d21421e4b6ddc1fc703d2003524.jpeg"
       },
@@ -2920,7 +2927,7 @@
         "brand": "Unique Pretzels",
         "price": 1.35,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:21.169Z",
+        "checkedAt": "2026-08-21T02:13:05.436Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Black-Rectangular-Plastic-Table-Cover-54-x-108/7BHWQWD3XHUV?classType=REGULAR&athbdg=L1600",
         "image": "https://i5.walmartimages.ca/asr/b18d934d-2f49-4457-b53a-b47ed0744f6c.2d17446f2ff4a4c532488559d0eef8d4.jpeg"
       },
@@ -2962,7 +2969,7 @@
         "parsedMassKg": 3,
         "price": 4.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:24.006Z",
+        "checkedAt": "2026-08-21T02:13:07.936Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/tomato/6000197466075?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/459/691/33383459691.jpg"
       },
@@ -3054,8 +3061,8 @@
         "wasPrice": 4.97,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:31.568Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Chapman-s-Markdale-Creamery-French-Vanilla-Ice-Cream/10221969?classType=REGULAR&athbdg=L1300",
+        "checkedAt": "2026-08-21T02:13:09.450Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Chapman-s-Markdale-Creamery-French-Vanilla-Ice-Cream/10221969?classType=REGULAR&athbdg=L3027",
         "image": "https://i5.walmartimages.ca/asr/0486df96-798b-46a0-97e1-facd6a9a402c.d8f66651685c49a22de8f274fd1ad5dc.jpeg"
       },
       "notes": "From receipts catalog (frozen)",
@@ -3148,7 +3155,7 @@
         "parsedMassKg": 0.8,
         "price": 19.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:34.227Z",
+        "checkedAt": "2026-08-21T02:13:11.910Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/White-Quinoa-800g/1KF8X65SNXPW?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/asr/15765330-e4b1-494d-9d52-29e93357dfea.6b5f638035d332cdfeb13150c2e56838.png"
       },
@@ -3172,9 +3179,9 @@
         "name": "SUNSET Yellow Pepper, Single, 0.12 - 0.24 KG",
         "packageSize": "240 g",
         "parsedMassKg": 0.24,
-        "price": 1.28,
+        "price": 0.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:36.670Z",
+        "checkedAt": "2026-08-21T02:13:14.108Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/sunset-yellow-pepper/6000197059668?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/_46/800/46800.jpg"
       },
@@ -3198,7 +3205,7 @@
         "parsedMassKg": 4.54,
         "price": 7.47,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T01:33:43.008Z",
+        "checkedAt": "2026-08-21T02:13:15.908Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/yellow-onions-your-fresh-market/6ZKC6P9V33K9?classType=REGULAR",
         "image": "https://i5.walmartimages.ca/images/Enlarge/530/059/6000209530059.jpg"
       },
