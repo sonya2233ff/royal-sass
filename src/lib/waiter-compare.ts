@@ -52,7 +52,7 @@ function resolveSide(
   row: CatalogRow | null,
   link: RetailerSkuLink | undefined,
   requested: number,
-  packPickGrams: number | null | undefined,
+  packPickGrams?: number,
   unavailable?: boolean,
 ) {
   const resolved = resolveCatalogOffer({
