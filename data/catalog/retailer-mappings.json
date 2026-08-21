@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-20T23:30:00.000Z",
+  "updatedAt": "2026-08-20T23:55:13.093Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -1146,20 +1146,20 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "identity",
-          "updatedAt": "2026-08-18T00:34:49.839Z"
+          "updatedAt": "2026-08-20T23:55:12.434Z"
         },
         "mvr": {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "earths-own-oat-original-946-ml",
-          "name": "EARTH'S OWN - OAT ORIGINAL 946ML",
-          "upc": "0062602781402",
+          "retailerProductId": "earths-own-oat-original-12x946-ml",
+          "name": "EARTH'S OWN - OAT ORIGINAL 12x946 ML",
+          "upc": "1062602781402",
           "matchMethod": "seed_catalog",
           "matchConfidence": 0.9,
           "verified": false,
           "decision": "rejected",
           "kind": "identity",
-          "updatedAt": "2026-08-20T23:30:00.000Z",
+          "updatedAt": "2026-08-20T23:58:00.000Z",
           "filterReason": "oat original 1.75L ≠ 946ml"
         }
       },
@@ -1189,17 +1189,17 @@
           "retailerProductId": "21037796_EA",
           "price": 4.49,
           "availability": "unknown",
-          "checkedAt": "2026-08-18T00:34:48.781Z",
+          "checkedAt": "2026-08-20T23:55:10.772Z",
           "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         },
         {
           "retailer": "mvr",
           "storeId": "weston",
-          "retailerProductId": "earths-own-oat-original-946-ml",
-          "price": 2.99,
+          "retailerProductId": "earths-own-oat-original-12x946-ml",
+          "price": 33.89,
           "availability": "in_stock",
-          "checkedAt": "2026-08-18T19:02:37.828Z",
+          "checkedAt": "2026-08-20T23:55:13.085Z",
           "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }

@@ -14,6 +14,7 @@ import {
   isEggPackItem,
   eggCartonCountOk,
   explicitNeededGrams,
+  withExpectedPackSize,
 } from "@/lib/staples";
 import { offerFailsStapleOfferFilters } from "@/domain/catalog-normalize";
 import { typicalEachGramsOf } from "@/domain/same-packed-item";
@@ -194,7 +195,9 @@ export async function GET() {
         product: restaurantProduct,
         requested: restaurantProduct.defaultAmount,
       });
-      const offer = wmResolved.offer;
+      const offer = wmResolved.offer
+        ? withExpectedPackSize(i, wmResolved.offer)
+        : null;
       const evalStatus = evaluateOfferStatus(i, offer ?? null, {
         unavailable: i.unavailableAtWalmart,
         catalogStatus:
@@ -266,7 +269,9 @@ export async function GET() {
         product: restaurantProduct,
         requested: restaurantProduct.defaultAmount,
       });
-      const nfOffer = nfResolved.offer ?? null;
+      const nfOffer = nfResolved.offer
+        ? withExpectedPackSize(i, nfResolved.offer)
+        : null;
       const nfEval = evaluateOfferStatus(i, nfOffer, {
         catalogStatus:
           nfResolved.reason === "rejected_filter" ? "no_match" : nfCat?.status,
@@ -309,7 +314,9 @@ export async function GET() {
         product: restaurantProduct,
         requested: restaurantProduct.defaultAmount,
       });
-      const wcOffer = wcResolved.offer ?? null;
+      const wcOffer = wcResolved.offer
+        ? withExpectedPackSize(i, wcResolved.offer)
+        : null;
       const wcEval = evaluateOfferStatus(i, wcOffer, {
         catalogStatus:
           wcResolved.reason === "rejected_filter" ? "no_match" : wcCat?.status,
@@ -347,7 +354,9 @@ export async function GET() {
         product: restaurantProduct,
         requested: restaurantProduct.defaultAmount,
       });
-      const mvrOffer = mvrResolved.offer ?? null;
+      const mvrOffer = mvrResolved.offer
+        ? withExpectedPackSize(i, mvrResolved.offer)
+        : null;
       const mvrEval = evaluateOfferStatus(i, mvrOffer, {
         catalogStatus:
           mvrResolved.reason === "rejected_filter" ? "no_match" : mvrCat?.status,

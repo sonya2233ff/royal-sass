@@ -2,7 +2,7 @@
   "retailer": "mvr",
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
-  "checkedAt": "2026-08-20T00:31:41.999Z",
+  "checkedAt": "2026-08-21T00:03:00.196Z",
   "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
@@ -115,11 +115,11 @@
       "label": "Oat Beverage Original 1.75L",
       "status": "no_match",
       "offer": null,
-      "notes": "operator photo audit: 946ml ≠ 1.75L",
+      "notes": "operator photo audit: 946ml / 12x946 ≠ 1.75L",
       "alternates": [],
       "rejected": {
-        "productId": "earths-own-oat-original-946-ml",
-        "name": "EARTH'S OWN - OAT ORIGINAL 946ML",
+        "productId": "earths-own-oat-original-12x946-ml",
+        "name": "EARTH'S OWN - OAT ORIGINAL 12x946 ML",
         "reason": "oat original 1.75L ≠ 946ml"
       }
     },
@@ -1744,10 +1744,40 @@
     {
       "id": "fettuccine",
       "label": "Fettuccine",
-      "status": "no_match",
-      "offer": null,
-      "notes": "operator photo audit: De Cecco/warehouse case ≠ No Name fettuccine",
-      "alternates": [],
+      "status": "ok",
+      "offer": {
+        "productId": "unico-fettuccine-900gr",
+        "name": "UNICO - FETTUCCINE 900GR",
+        "brand": "UNICO",
+        "packageSize": "900GR",
+        "parsedMassKg": 0.9,
+        "price": 2.09,
+        "unitPrice": 2.32,
+        "availability": "in_stock",
+        "confidence": "exact",
+        "checkedAt": "2026-08-21T00:03:00.188Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/unico-fettuccine-900gr?_pos=1&_psq=Fettuccine&_psid=a0e693cf8&_ss=e",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006780000544p_20e54964-7267-4b64-8ddc-f677ee2ff23d.jpg?v=1786362082",
+        "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
+      },
+      "notes": "Unico 900g (not De Cecco / warehouse case)",
+      "alternates": [
+        {
+          "productId": "divella-fettuccine-12-500gr",
+          "name": "DIVELLA - FETTUCCINE #12 500GR",
+          "brand": "DIVELLA",
+          "packageSize": "500GR",
+          "parsedMassKg": 0.5,
+          "price": 1.69,
+          "unitPrice": 3.38,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-21T00:03:00.188Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/divella-fettuccine-12-500gr?_pos=2&_psq=Fettuccine&_psid=a0e693cf8&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/8005121000122p.jpg?v=1780301959",
+          "taxonomyText": "PASTA  PASTA  PANTRY ESSENTIALS  DRY PRODUCTS"
+        }
+      ],
       "rejected": {
         "productId": "de-cecco-233-fettuccine-500gr",
         "name": "DE CECCO - #233 FETTUCCINE 500GR",
@@ -5530,7 +5560,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-08-20T00:31:41.999Z",
+  "updatedAt": "2026-08-21T00:03:00.196Z",
   "matched": 89,
   "itemCount": 125
 }

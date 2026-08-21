@@ -142,7 +142,7 @@ export async function searchMvrPool(
       o.productId === lockedSku &&
       Boolean(link?.verified);
     if (verifiedLock) {
-      if (identityLockAllowsFilterMismatch(item) || passesMvrPrimaryOrAlternate(o, item)) {
+      if (identityLockAllowsFilterMismatch(item, o) || passesMvrPrimaryOrAlternate(o, item)) {
         return true;
       }
     }

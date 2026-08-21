@@ -352,6 +352,12 @@ export function eggplantFormFail(
   if (/\b(long|chinese|indian|japanese|graffiti|fairy\s*tale)\b/.test(t)) {
     return "globe eggplant ≠ long/asian";
   }
+  if (/\b(grilled|jarred|pickled|canned|spanish style|ready veggie)\b/.test(t)) {
+    return "globe eggplant ≠ prepared";
+  }
+  if (/\b(baby|mini)\b/.test(t)) {
+    return "globe eggplant ≠ baby/mini";
+  }
   return null;
 }
 
@@ -362,9 +368,10 @@ export function oatOriginalFormFail(
 ): string | null {
   if ((item.id ?? "").toLowerCase() !== "oat_beverage_original") return null;
   const t = hay.toLowerCase();
+  // `12x946 ML` has no word-boundary before 946 (`x` is a word char).
   if (
-    /\b946\s*ml\b/.test(t) ||
-    /\b946ml\b/.test(t) ||
+    /946\s*ml/.test(t) ||
+    /946ml/.test(t) ||
     /\bsingle\s*serve\b/.test(t)
   ) {
     return "oat original 1.75L ≠ 946ml";

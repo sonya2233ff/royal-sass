@@ -1,6 +1,6 @@
 {
   "storeId": "3660",
-  "checkedAt": "2026-08-20T01:54:41.184Z",
+  "checkedAt": "2026-08-21T00:02:56.909Z",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -35,12 +35,14 @@
         "price": 3.33,
         "wasPrice": 4.29,
         "onSale": true,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:29:57.108Z",
+        "checkedAt": "2026-08-20T23:55:07.110Z",
         "sourceUrl": "https://www.nofrills.ca/en/gluten-free-original-oat-milk-alternative/p/21037796_EA",
         "image": "https://digital.loblaws.ca/PCX/21037796_EA/en/1/21037796_en_1_1200.png"
       },
-      "notes": "Live NF SKU price refresh"
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": []
     },
     {
       "id": "pineapple_whole",
@@ -399,9 +401,20 @@
     {
       "id": "eggplant_kg",
       "label": "Eggplant (by kg)",
-      "status": "no_match",
-      "offer": null,
-      "notes": "operator photo audit: globe eggplant ≠ long",
+      "status": "ok",
+      "offer": {
+        "productId": "20155709001_KG",
+        "name": "Purple Eggplants",
+        "packageSize": "$6.59/1kg $2.99/1lb",
+        "parsedMassKg": 0,
+        "price": 3.76,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-21T00:02:55.610Z",
+        "sourceUrl": "https://www.nofrills.ca/en/purple-eggplants/p/20155709001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20155709001_KG/en/1/20155709001_en_front_1200.png"
+      },
+      "notes": "globe purple eggplant (not long / grilled / baby / jarred)",
       "alternates": [],
       "rejected": {
         "productId": "21681207001_EA",
@@ -2657,7 +2670,7 @@
       "alternates": []
     }
   ],
-  "updatedAt": "2026-08-20T01:54:41.184Z",
+  "updatedAt": "2026-08-21T00:02:56.909Z",
   "matched": 83,
   "itemCount": 134
 }

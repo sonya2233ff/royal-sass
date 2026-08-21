@@ -56,7 +56,7 @@ These are live on **production** `master` (`7d405de` and descendants). Phone dem
 - `grayridge_eggs` / `eggs_30ct` catalog rows still feed `large_eggs_dozen` via `eggCatalogSourceIds`. Fair unit **$/egg**. Checkout buys whole cartons to cover the requested egg count.
 - Do not bring back a second Grayridge card.
 
-**Oat Original (`oat_beverage_original`)** — operator exception. WM #5831 stays identity-locked on Earth's Own **Zero Sugar** 1.75L `2ADJVX8MAQ1Q` `$4.47` (same shelf price as Original `54TFZVS2LHS3`). Catalog `mustNotInclude` still has `zero sugar` so search/rematch will not pick a new Zero Sugar hit. Do **not** rematch this card onto Original. Other identity-locked SKUs must still pass `mustNotInclude` (`identityLockAllowsFilterMismatch`). NF/WC 1.75L Original `21037796_EA` stay. MVR 946 ml Original is too small for the 1.75L card — `no_match`, do not identity-lock it.
+**Oat Original (`oat_beverage_original`)** — operator exception. WM #5831 stays identity-locked on Earth's Own **Zero Sugar** 1.75L `2ADJVX8MAQ1Q` `$4.47` (same shelf price as Original `54TFZVS2LHS3`). Catalog `mustNotInclude` still has `zero sugar` so search/rematch will not pick a new Zero Sugar hit. Do **not** rematch this card onto Original. `identityLockAllowsFilterMismatch` is **that WM SKU only** — not MVR 946 ml / `12x946` cases. NF/WC 1.75L Original `21037796_EA` stay. MVR 946 ml Original is too small for the 1.75L card — `no_match`, do not identity-lock it.
 
 **Supplies / grocery impostors (do not regress)**
 
@@ -93,7 +93,7 @@ These are live on **production** `master` (`7d405de` and descendants). Phone dem
 - `stapleWithClientOverride` / `applyProductOverride` **union** include/exclude with catalog filters (case-insensitive). Old localStorage `orange juice` must not wipe tropicana/no-pulp.
 - Product settings: pack size is not a required keyword; Include **adds** to catalog filters.
 - Exact identity (`src/domain/product-identity.ts`): mini packs fail; a smaller cafe bottle of the same branded product (1.36 L vs 2.63 L) stays valid.
-- Locked WM SKU with empty Rapid `packageSize` may copy `expectedPackKg` onto that SKU only (`withExpectedPackSize`) — do not stamp typical pack onto a different product.
+- Locked WM SKU with empty Rapid `packageSize` may copy `expectedPackKg` onto that SKU only (`withExpectedPackSize`, including GET `/api/staples` card checkout) — do not stamp typical pack onto a different product.
 - Adopt-from-search include tokens skip pack sizes.
 - Match inspector ranks with `staplePickQuery`, not the card label.
 

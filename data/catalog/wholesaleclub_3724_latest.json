@@ -2,8 +2,8 @@
   "retailer": "wholesale_club",
   "storeId": "3724",
   "source": "pcx_bff_wholesaleclub_3724",
-  "checkedAt": "2026-08-20T00:31:17.059Z",
-  "note": "Wholesale Club Richmond Hill #3724 \u2014 PCX BFF shelf, same client as No Frills.",
+  "checkedAt": "2026-08-21T00:02:59.606Z",
+  "note": "Wholesale Club Richmond Hill #3724 — PCX BFF shelf, same client as No Frills.",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -113,9 +113,20 @@
     {
       "id": "eggplant_kg",
       "label": "Eggplant (by kg)",
-      "status": "no_match",
-      "offer": null,
-      "notes": "operator photo audit: globe eggplant ≠ long",
+      "status": "ok",
+      "offer": {
+        "productId": "20155709001_KG",
+        "name": "Purple Eggplants",
+        "packageSize": "$6.59/1kg $2.99/1lb",
+        "parsedMassKg": 0,
+        "price": 3.76,
+        "availability": "unknown",
+        "confidence": "exact",
+        "checkedAt": "2026-08-21T00:02:58.500Z",
+        "sourceUrl": "https://www.wholesaleclub.ca/en/purple-eggplants/p/20155709001_KG",
+        "image": "https://digital.loblaws.ca/PCX/20155709001_KG/en/1/20155709001_en_front_1200.png"
+      },
+      "notes": "globe purple eggplant (not long)",
       "alternates": [],
       "rejected": {
         "productId": "20159013001_KG",
@@ -151,12 +162,13 @@
         "packageSize": "1.75 l, $0.26/100ml",
         "parsedMassKg": 1.75,
         "price": 4.49,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:30:44.701Z",
+        "checkedAt": "2026-08-20T23:55:10.772Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/gluten-free-original-oat-milk-alternative/p/21037796_EA",
         "image": "https://digital.loblaws.ca/PCX/21037796_EA/en/1/21037796_en_1_1200.png"
       },
-      "notes": "Live WC SKU price refresh",
+      "notes": "Live Wholesale Club PCX #3724",
       "alternates": []
     },
     {
@@ -878,7 +890,7 @@
       "label": "Cottage Cheese",
       "status": "no_match",
       "offer": null,
-      "notes": "Exact Mehadrin cottage cheese is NF #3660 only \u2014 do not fill with Great Value / Nordica / No Name / mozzarella",
+      "notes": "Exact Mehadrin cottage cheese is NF #3660 only — do not fill with Great Value / Nordica / No Name / mozzarella",
       "alternates": []
     },
     {
@@ -1147,7 +1159,7 @@
     },
     {
       "id": "jalapeno_peppers_kg",
-      "label": "Jalape\u00f1o Peppers",
+      "label": "Jalapeño Peppers",
       "status": "ok",
       "offer": {
         "productId": "20088387001_KG",
@@ -1660,7 +1672,7 @@
         "sourceUrl": "https://www.wholesaleclub.ca/en/sliced-white-mushrooms/p/20768283_EA",
         "image": "https://digital.loblaws.ca/PCX/20768283_EA/en/1/20768283_en_front_1200.png"
       },
-      "notes": "Live WC SKU price refresh \u00b7 impostor cleared, promoted alternate",
+      "notes": "Live WC SKU price refresh · impostor cleared, promoted alternate",
       "alternates": [
         {
           "productId": "20743653_EA",
@@ -1679,7 +1691,7 @@
       "rejected": {
         "productId": "20299211_EA",
         "name": "No Name Sliced Mushrooms",
-        "reason": "fresh \u2260 canned ml"
+        "reason": "fresh ≠ canned ml"
       }
     },
     {
@@ -1933,7 +1945,7 @@
       "alternates": []
     }
   ],
-  "updatedAt": "2026-08-20T00:31:17.059Z",
+  "updatedAt": "2026-08-21T00:02:59.606Z",
   "matched": 59,
   "itemCount": 125
 }

@@ -158,7 +158,7 @@ export async function searchWholesaleClubPool(
       o.productId === lockedSku &&
       Boolean(wcLink?.verified);
     if (verifiedLock) {
-      if (identityLockAllowsFilterMismatch(item) || passesWcPrimaryOrAlternate(o, item)) {
+      if (identityLockAllowsFilterMismatch(item, o) || passesWcPrimaryOrAlternate(o, item)) {
         return true;
       }
     }

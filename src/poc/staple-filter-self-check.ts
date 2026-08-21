@@ -21,6 +21,7 @@ import {
   isShownStaple,
   loadStaplesConfig,
   resolveMatchMode,
+  withExpectedPackSize,
 } from "@/lib/staples";
 import { eggCatalogSourceIds, queryLooksLikeShellEggs } from "@/domain/egg-pack";
 import { rapidOfferMatchesSku } from "@/connectors/walmart-rapid";
@@ -501,8 +502,15 @@ async function main() {
     "search still rejects Zero Sugar as Original oat",
   );
   assert(
-    identityLockAllowsFilterMismatch(oatItem),
+    identityLockAllowsFilterMismatch(oatItem, "2ADJVX8MAQ1Q"),
     "oat Original is the operator Zero Sugar exception",
+  );
+  assert(
+    !identityLockAllowsFilterMismatch(
+      oatItem,
+      "earths-own-oat-original-12x946-ml",
+    ),
+    "oat exception is WM Zero Sugar only, not an MVR 946 case",
   );
   const oatKeep = resolveCatalogOffer({
     item: oatItem,
@@ -1470,6 +1478,27 @@ async function main() {
     ) == null,
     "globe eggplant singles stay",
   );
+  assert(
+    cafeOfferFormFail(eggplant!, "Purple Eggplants") == null,
+    "purple globe eggplant stays",
+  );
+  assert(
+    cafeOfferFormFail(
+      eggplant!,
+      "President's Choice Grilled Ready Veggie Eggplant",
+    ) === "globe eggplant ≠ prepared",
+    "eggplant rejects grilled-ready",
+  );
+  assert(
+    cafeOfferFormFail(eggplant!, "Baby Eggplants (1 pack)") ===
+      "globe eggplant ≠ baby/mini",
+    "eggplant rejects baby packs",
+  );
+  assert(
+    cafeOfferFormFail(eggplant!, "Kvuzat Yavne Kosher Mini Eggplants") ===
+      "globe eggplant ≠ baby/mini",
+    "eggplant rejects mini jarred",
+  );
 
   const fettuccine = cfg.items.find((i) => i.id === "fettuccine");
   assert(
@@ -1493,12 +1522,21 @@ async function main() {
     cafeOfferFormFail(fettuccine!, "No Name Fettuccine") == null,
     "No Name fettuccine stays",
   );
+  assert(
+    cafeOfferFormFail(fettuccine!, "UNICO - FETTUCCINE 900GR") == null,
+    "Unico 900g fettuccine stays",
+  );
 
   const oatForm = cfg.items.find((i) => i.id === "oat_beverage_original");
   assert(
     cafeOfferFormFail(oatForm!, "EARTH'S OWN - OAT ORIGINAL 946ML") ===
       "oat original 1.75L ≠ 946ml",
     "oat original rejects 946 ml",
+  );
+  assert(
+    cafeOfferFormFail(oatForm!, "EARTH'S OWN - OAT ORIGINAL 12x946 ML") ===
+      "oat original 1.75L ≠ 946ml",
+    "oat original rejects 12x946 case",
   );
   assert(
     cafeOfferFormFail(
@@ -1534,6 +1572,55 @@ async function main() {
   assert(
     oatMvrRejected.offer == null,
     `rejected MVR 946ml oat must not stay locked, got ${oatMvrRejected.offer?.productId}`,
+  );
+  const oatCaseLocked = resolveCatalogOffer({
+    item: oatForm!,
+    row: {
+      offer: {
+        productId: "earths-own-oat-original-12x946-ml",
+        name: "EARTH'S OWN - OAT ORIGINAL 12x946 ML",
+        packageSize: "12x946 ML",
+        parsedMassKg: 11.352,
+        price: 33.89,
+      },
+      alternates: [],
+    },
+    link: {
+      retailerProductId: "earths-own-oat-original-12x946-ml",
+      decision: "auto_linked",
+      kind: "identity",
+    },
+    matchMode: "preferred",
+  });
+  assert(
+    oatCaseLocked.offer == null,
+    `identity-locked MVR 12x946 oat must not skip filters, got ${oatCaseLocked.offer?.productId}`,
+  );
+
+  const butterStampItem = {
+    id: "butter_454g",
+    label: "Gay Lea Unsalted Butter 454g",
+    preferredProductId: "6000201029320",
+    expectedPackKg: 0.454,
+  };
+  const butterStamped = withExpectedPackSize(butterStampItem, {
+    productId: "6000201029320",
+    name: "Gay Lea Unsalted Butter",
+    price: 7.96,
+  });
+  assert(
+    butterStamped.parsedMassKg === 0.454 &&
+      butterStamped.packageSize === "454 g",
+    `locked butter Rapid title stamps 454 g, got ${butterStamped.packageSize} ${butterStamped.parsedMassKg}`,
+  );
+  const butterOther = withExpectedPackSize(butterStampItem, {
+    productId: "6000200959427",
+    name: "Dairy Free Becel Plant Butter Salted 454g",
+    price: 4.48,
+  });
+  assert(
+    butterOther.parsedMassKg == null,
+    "do not stamp expected pack onto a different butter SKU",
   );
 
   const brownSugar = cfg.items.find((i) => i.id === "brown_sugar");

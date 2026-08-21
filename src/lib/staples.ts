@@ -1281,7 +1281,7 @@ export async function searchNoFrillsPool(
   return all.filter((o) => {
     if (lockedNfSku && o.productId === lockedNfSku) {
       if (
-        identityLockAllowsFilterMismatch(item) ||
+        identityLockAllowsFilterMismatch(item, o) ||
         passesPrimaryOrAlternate(o, item)
       ) {
         return true;
@@ -1846,9 +1846,12 @@ export function catalogOfferFromLive(o: ProductOffer): CatalogOffer {
 export function withExpectedPackSize(item: StapleItem, offer: CatalogOffer): CatalogOffer {
   if (offer.parsedMassKg != null && offer.parsedMassKg > 0) return offer;
   if (item.expectedPackKg == null || !(item.expectedPackKg > 0)) return offer;
-  const locked =
-    Boolean(item.preferredProductId) && offer.productId === item.preferredProductId;
-  if (!locked) return offer;
+  if (
+    !item.preferredProductId ||
+    !offerMatchesRetailerSku(offer, item.preferredProductId)
+  ) {
+    return offer;
+  }
   const unit = inferUnit(item);
   const kg = item.expectedPackKg;
   const stamped =
@@ -2079,7 +2082,8 @@ export async function refreshWalmartSelected(
         : undefined;
     const pinHonored =
       Boolean((lockedId || pinHit) && pinHit && !pinNotOnShelf) &&
-      (identityLockAllowsFilterMismatch(item) || passesFilters(pinHit!, item));
+      (identityLockAllowsFilterMismatch(item, pinHit) ||
+        passesFilters(pinHit!, item));
     const allowAlt = hasCategoryAAlternate(item);
     if (pinHonored && pinHit && !allowAlt) {
       const pin = lockedId ?? preferred!;

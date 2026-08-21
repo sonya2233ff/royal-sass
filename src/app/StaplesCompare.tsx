@@ -432,7 +432,7 @@ function withVisibleOffers(item: Staple, product: RestaurantProduct): Staple {
     offer: T | null | undefined,
   ): T | null => {
     if (!offer) return null;
-    if (identityLockAllowsFilterMismatch(product)) return offer;
+    if (identityLockAllowsFilterMismatch(product, offer)) return offer;
     if (offerFailsProductSettings(product, offer)) return null;
     return offer;
   };

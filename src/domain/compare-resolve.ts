@@ -270,13 +270,24 @@ export function offerPassesStapleFilters(
   return offerFailsStapleOfferFilters(item, offer) == null;
 }
 
+/** WM #5831 Earth's Own Zero Sugar 1.75L — the only oat lock that may fail mustNotInclude. */
+export const OAT_WM_ZERO_SUGAR_ID = "2ADJVX8MAQ1Q";
+
 /**
  * Earth's Own Original oat at WM #5831 is locked to Zero Sugar 1.75L
  * `2ADJVX8MAQ1Q` (same shelf as Original `54TFZVS2LHS3`). Operator exception —
  * do not rematch off this SKU even though mustNotInclude has "zero sugar".
+ * Does **not** apply to MVR 946 ml / 12x946 case (or any other oat SKU).
  */
-export function identityLockAllowsFilterMismatch(item: { id: string }): boolean {
-  return item.id === "oat_beverage_original";
+export function identityLockAllowsFilterMismatch(
+  item: { id: string },
+  skuOrOffer?: string | { productId?: string } | null,
+): boolean {
+  if (item.id !== "oat_beverage_original") return false;
+  const sku =
+    typeof skuOrOffer === "string" ? skuOrOffer : skuOrOffer?.productId;
+  if (!sku) return false;
+  return offerMatchesRetailerSku({ productId: sku }, OAT_WM_ZERO_SUGAR_ID);
 }
 
 /** Category B / eggs: a verified SKU must not hide a cheaper equivalent pack. */
@@ -312,7 +323,7 @@ export function resolveCatalogOffer(input: {
     const hit = findOfferForSku(input.row, mappedSku);
     if (hit && offerIsOnShelf(hit)) {
       if (
-        identityLockAllowsFilterMismatch(input.item) ||
+        identityLockAllowsFilterMismatch(input.item, hit) ||
         offerPassesStapleFilters(input.item, hit)
       ) {
         const alias = hit.productId !== mappedSku;
