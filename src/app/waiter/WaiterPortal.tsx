@@ -9,6 +9,8 @@ import { upsertWaiterTicket, type WaiterTicket } from "@/domain/waiter-tickets";
 import {
   REMOVED_STAPLES_STORAGE_KEY,
   WAITER_LIST_STORAGE_KEY,
+  readCustomStaples,
+  readProductOverrides,
 } from "@/lib/product-config";
 import {
   notifyWaiterTicket,
@@ -198,7 +200,11 @@ export function WaiterPortal() {
       const res = await fetch("/api/waiter/tickets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(draft),
+        body: JSON.stringify({
+          ...draft,
+          customStaples: readCustomStaples(),
+          productOverrides: readProductOverrides(),
+        }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         ok?: boolean;
@@ -215,9 +221,13 @@ export function WaiterPortal() {
       notifyWaiterTicket(ticket);
       setPreview(false);
       setNotice(
-        data.persisted === false
-          ? "Надіслано на цьому телефоні. Відкрий Водій. Інший телефон побачить список, якщо сервер пише файл."
-          : "Надіслано водію. Відкрий сторінку Водій.",
+        ticket.compare
+          ? data.persisted === false
+            ? "Надіслано з порівнянням на цьому телефоні. Відкрий Водій."
+            : "Надіслано водію з порівнянням. Водій обирає магазини."
+          : data.persisted === false
+            ? "Надіслано на цьому телефоні. Відкрий Водій. Інший телефон побачить список, якщо сервер пише файл."
+            : "Надіслано водію. Відкрий сторінку Водій.",
       );
     } catch (e) {
       const local = upsertWaiterTicket([], draft);
@@ -243,6 +253,8 @@ export function WaiterPortal() {
         <h1>Список для водія</h1>
         <p className="lede">
           Знайди продукт із каталогу кафе, додай у список і надішли водію.
+          Порівняння береться з каталогу. Водій лише обирає магазини і бачить
+          готові варіанти закупки.
         </p>
       </header>
 
@@ -395,7 +407,7 @@ export function WaiterPortal() {
                 setNotice(null);
               }}
             >
-              Відправити водію
+                {sending ? "Порівнюю і надсилаю…" : "Відправити водію"}
             </button>
           </div>
         </aside>
@@ -414,7 +426,9 @@ export function WaiterPortal() {
           <div className="sheet">
             <h2 id="driver-preview-title">Надіслати водію</h2>
             <p className="lede sm">
-              Цей список зʼявиться на сторінці Водій. Ціни не підставляємо.
+              Порівняємо по полиці в каталозі (без нового пошуку SKU). Водій
+              лише обере магазини і побачить готові варіанти: один заїзд або
+              поділ на два.
             </p>
             <ol className="preview">
               {lines.map((row) => (
@@ -439,7 +453,7 @@ export function WaiterPortal() {
                 disabled={sending || lines.length === 0}
                 onClick={() => void sendToDriver()}
               >
-                {sending ? "Надсилаю…" : "Відправити"}
+                {sending ? "Порівнюю…" : "Відправити"}
               </button>
             </div>
           </div>

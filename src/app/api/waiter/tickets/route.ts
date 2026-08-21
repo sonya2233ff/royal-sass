@@ -6,9 +6,11 @@ import {
   upsertWaiterTicket,
   type WaiterTicket,
 } from "@/domain/waiter-tickets";
+import { compareWaiterLines } from "@/lib/waiter-compare";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 const FILE = path.join(process.cwd(), "data", "catalog", "waiter-tickets.json");
 
@@ -59,6 +61,8 @@ export async function POST(request: Request) {
     waiter?: unknown;
     station?: unknown;
     lines?: unknown;
+    customStaples?: unknown;
+    productOverrides?: unknown;
   };
   const loaded = await loadTickets();
   const result = upsertWaiterTicket(loaded.tickets, {
@@ -73,11 +77,26 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const persisted = await saveTickets(result.tickets);
+
+  let ticket: WaiterTicket = result.ticket;
+  try {
+    const compare = await compareWaiterLines(
+      ticket.lines,
+      body.customStaples,
+      body.productOverrides,
+    );
+    if (compare) ticket = { ...ticket, compare };
+  } catch {
+    /* catalog compare is best-effort; still send the product list */
+  }
+  const tickets = result.tickets.map((row) =>
+    row.id === ticket.id ? ticket : row,
+  );
+  const persisted = await saveTickets(tickets);
   return NextResponse.json({
     ok: true,
     persisted,
-    ticket: result.ticket,
-    tickets: result.tickets,
+    ticket,
+    tickets,
   });
 }

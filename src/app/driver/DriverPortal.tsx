@@ -2,7 +2,22 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  COMPARE_STORES,
+  DRIVER_STORES_STORAGE_KEY,
+  allCompareStoreIds,
+  parseCompareStores,
+  toggleCompareStore,
+  type CompareStoreId,
+} from "@/domain/compare-stores";
+import {
+  recommendPurchasePlans,
+  storePlanLabel,
+  storePlanShort,
+  type PurchasePlan,
+} from "@/domain/purchase-plans";
+import {
   combineWaiterPickList,
+  combineWaiterPlanLines,
   formatTicketWhen,
   mergeWaiterTicketLists,
   type WaiterTicket,
@@ -35,6 +50,41 @@ function ukLineCount(n: number): string {
   return `${n} позицій`;
 }
 
+function money(n: number | null | undefined): string {
+  if (n == null || !Number.isFinite(n) || n <= 0) return "N/A";
+  return `$${n.toFixed(2)}`;
+}
+
+function planHeadline(plan: PurchasePlan): string {
+  if (plan.stopCount === 1 && plan.stops[0]) {
+    return plan.complete
+      ? `Все в ${storePlanLabel(plan.stops[0].store)}`
+      : `${storePlanLabel(plan.stops[0].store)} · неповний кошик`;
+  }
+  return plan.stops.map((s) => storePlanLabel(s.store)).join(" + ");
+}
+
+function planStopItems(labels: string[]): string {
+  const shown = labels.slice(0, 4);
+  const extra = labels.length > 4 ? ` +${labels.length - 4}` : "";
+  return shown.join(", ") + extra;
+}
+
+function lineCosts(
+  costs: Partial<Record<CompareStoreId, number | null | undefined>> | undefined,
+  enabled: ReadonlySet<CompareStoreId>,
+): string | null {
+  if (!costs) return null;
+  const bits = COMPARE_STORES.filter((store) => enabled.has(store.id)).map(
+    (store) => {
+      const n = costs[store.id];
+      if (n == null || !(n > 0)) return `${store.short} N/A`;
+      return `${store.short} $${n.toFixed(2)}`;
+    },
+  );
+  return bits.length ? bits.join(" · ") : null;
+}
+
 export function DriverPortal() {
   const [catalog, setCatalog] = useState<CatalogItem[]>([]);
   const [ready, setReady] = useState(false);
@@ -42,6 +92,32 @@ export function DriverPortal() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [tickets, setTickets] = useState<WaiterTicket[]>([]);
   const [persisted, setPersisted] = useState(true);
+  const [stores, setStores] = useState<Set<CompareStoreId>>(
+    () => new Set(allCompareStoreIds()),
+  );
+  const [storesReady, setStoresReady] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(DRIVER_STORES_STORAGE_KEY);
+      if (raw) setStores(new Set(parseCompareStores(raw)));
+    } catch {
+      /* keep defaults */
+    }
+    setStoresReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!storesReady) return;
+    try {
+      window.localStorage.setItem(
+        DRIVER_STORES_STORAGE_KEY,
+        JSON.stringify([...stores]),
+      );
+    } catch {
+      /* ignore */
+    }
+  }, [stores, storesReady]);
 
   const applyTickets = useCallback((incoming: WaiterTicket[]) => {
     const merged = mergeWaiterTicketLists(incoming, readDriverInbox());
@@ -119,6 +195,19 @@ export function DriverPortal() {
   );
 
   const combined = useMemo(() => combineWaiterPickList(tickets), [tickets]);
+  const planLines = useMemo(() => combineWaiterPlanLines(tickets), [tickets]);
+  const planById = useMemo(
+    () => new Map(planLines.map((row) => [row.id, row])),
+    [planLines],
+  );
+  const purchasePlans = useMemo(
+    () => recommendPurchasePlans(planLines, stores),
+    [planLines, stores],
+  );
+  const openTickets = tickets.filter((t) => t.status !== "done");
+  const missingCompare = openTickets.some((t) => !t.compare);
+  const comparedAt = openTickets.find((t) => t.compare?.comparedAt)?.compare
+    ?.comparedAt;
 
   function labelOf(id: string, fallback?: string): string {
     return byId.get(id)?.label ?? fallback ?? id.replace(/_/g, " ");
@@ -130,8 +219,9 @@ export function DriverPortal() {
         <p className="kicker">Портал водія</p>
         <h1>Списки від офіціантів</h1>
         <p className="lede">
-          Продукти, які офіціант надіслав зі сторінки Офіціант. Прийняття,
-          «в дорозі» і повідомлення офіціанту ще не працюють.
+          Офіціант уже порівняв продукти по каталогу. Ти лише обираєш магазини,
+          куди можеш заїхати, і дивишся готові варіанти закупки. Прийняття і
+          повідомлення офіціанту ще не працюють.
         </p>
       </header>
 
@@ -157,12 +247,122 @@ export function DriverPortal() {
         </div>
       </section>
 
+      <div className="store-picker" role="group" aria-label="Магазини для заїзду">
+        <span className="picker-label">Заїжджаю</span>
+        {COMPARE_STORES.map((store) => {
+          const on = stores.has(store.id);
+          const lastOn = on && stores.size <= 1;
+          return (
+            <button
+              key={store.id}
+              type="button"
+              className={on ? "store-btn on" : "store-btn"}
+              aria-pressed={on}
+              title={
+                lastOn
+                  ? `${store.label} — залиш хоча б один магазин`
+                  : `${store.label} ${store.detail}`
+              }
+              onClick={() =>
+                setStores((prev) => toggleCompareStore(prev, store.id))
+              }
+            >
+              <span className="store-short">{store.short}</span>
+              <span className="store-long">
+                {store.label} {store.detail}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {missingCompare && combined.length > 0 && (
+        <p className="soon">
+          Є список без порівняння. Офіціант має надіслати ще раз, щоб зʼявились
+          усі готові варіанти. Не вигадуємо $0.
+        </p>
+      )}
+
+      {purchasePlans.length > 0 && (
+        <section className="plans" aria-label="Варіанти закупки">
+          <h2>Готові варіанти</h2>
+          <p className="tiny">
+            Офіціант уже порівняв по каталогу. Ти лише вмикаєш магазини, куди
+            заїжджаєш. Прихований магазин не стає $0.
+            {comparedAt
+              ? ` · каталог ${new Date(comparedAt).toLocaleString("uk-UA")}`
+              : ""}
+          </p>
+          {purchasePlans.map((plan) => (
+            <article
+              key={plan.id}
+              className={plan.recommended ? "plan rec" : "plan"}
+            >
+              <div className="plan-head">
+                {plan.recommended ? (
+                  <span className="plan-badge">Рекомендовано</span>
+                ) : (
+                  <span className="plan-badge alt">Варіант</span>
+                )}
+                <strong>{planHeadline(plan)}</strong>
+                <span>
+                  {money(plan.total)}
+                  {` · ${plan.coverage}`}
+                  {plan.complete ? "" : " · неповний"}
+                </span>
+              </div>
+              {plan.kind === "split_cheaper" &&
+                plan.savingsVsBestOneStore != null &&
+                plan.savingsVsBestOneStore > 0 && (
+                  <div className="tiny">
+                    дешевше на ${plan.savingsVsBestOneStore.toFixed(2)} ніж
+                    купити все в одному найдешевшому магазині
+                  </div>
+                )}
+              {plan.kind === "split_fill" && (
+                <div className="tiny">
+                  {plan.complete
+                    ? "один магазин не має всіх позицій — цей поділ закриває список"
+                    : "набрано максимум без чотирьох заїздів"}
+                </div>
+              )}
+              {plan.stops.map((stop) => (
+                <div key={stop.store} className="tiny plan-stop">
+                  {storePlanShort(stop.store)} · {stop.itemCount}{" "}
+                  {stop.itemCount === 1 ? "товар" : "товарів"} · $
+                  {stop.subtotal.toFixed(2)}
+                  {stop.labels.length
+                    ? ` — ${planStopItems(stop.labels)}`
+                    : ""}
+                </div>
+              ))}
+              {plan.missingLabels.length > 0 && (
+                <div className="tiny mute">
+                  немає в цьому наборі: {plan.missingLabels.join(", ")}
+                </div>
+              )}
+            </article>
+          ))}
+        </section>
+      )}
+
+      {combined.length > 0 &&
+        planLines.length > 0 &&
+        purchasePlans.length === 0 &&
+        !missingCompare && (
+          <p className="soon">
+            У каталозі немає цін для обраних магазинів. Прихований магазин не
+            стає $0.
+          </p>
+        )}
+
       {combined.length > 0 && (
         <section className="combined" aria-label="Зведений список">
           <h2>Що набрати</h2>
           <ul>
             {combined.map((row) => {
               const item = byId.get(row.id);
+              const costs = lineCosts(planById.get(row.id)?.costs, stores);
               return (
                 <li key={row.id}>
                   {item?.image ? (
@@ -171,7 +371,10 @@ export function DriverPortal() {
                   ) : (
                     <span className="ph" />
                   )}
-                  <strong>{labelOf(row.id, row.label)}</strong>
+                  <span>
+                    <strong>{labelOf(row.id, row.label)}</strong>
+                    {costs ? <i>{costs}</i> : null}
+                  </span>
                   <em>{row.qty}×</em>
                 </li>
               );
@@ -226,6 +429,11 @@ export function DriverPortal() {
                   <ul className="lines">
                     {ticket.lines.map((line) => {
                       const item = byId.get(line.id);
+                      const costs = lineCosts(
+                        ticket.compare?.lines.find((row) => row.id === line.id)
+                          ?.costs,
+                        stores,
+                      );
                       return (
                         <li key={`${ticket.id}-${line.id}`}>
                           {item?.image ? (
@@ -243,6 +451,7 @@ export function DriverPortal() {
                               {line.qty}× {labelOf(line.id, line.label)}
                             </strong>
                             {line.note ? <i>{line.note}</i> : null}
+                            {costs ? <i>{costs}</i> : null}
                           </span>
                         </li>
                       );
@@ -308,6 +517,96 @@ export function DriverPortal() {
           opacity: 0.78;
           line-height: 1.4;
         }
+        .store-picker {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.35rem;
+          align-items: center;
+          margin: 0.9rem 0 0.35rem;
+        }
+        .picker-label {
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: #2f4a3a;
+          margin-right: 0.2rem;
+        }
+        .store-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          border: 1px solid rgba(47, 74, 58, 0.28);
+          background: transparent;
+          color: #3d4a40;
+          font: inherit;
+          font-size: 0.82rem;
+          font-weight: 650;
+          padding: 0.32rem 0.7rem;
+          border-radius: 999px;
+          cursor: pointer;
+        }
+        .store-btn.on {
+          background: #2f4a3a;
+          color: #f7f3ec;
+          border-color: #2f4a3a;
+        }
+        .store-short {
+          font-variant: all-small-caps;
+          letter-spacing: 0.04em;
+        }
+        .store-long {
+          opacity: 0.92;
+        }
+        .tiny {
+          font-size: 0.78rem;
+          line-height: 1.35;
+        }
+        .tiny.mute {
+          opacity: 0.7;
+        }
+        .plans {
+          margin: 0.75rem 0 1rem;
+          display: grid;
+          gap: 0.45rem;
+        }
+        .plans h2 {
+          margin: 0;
+          font-size: 0.95rem;
+        }
+        .plan {
+          border: 1px solid #d7cfc2;
+          padding: 0.45rem 0.55rem 0.55rem;
+          display: grid;
+          gap: 0.2rem;
+          background: #fffdf8;
+        }
+        .plan.rec {
+          border-color: #1e4030;
+          background: rgba(47, 74, 58, 0.08);
+        }
+        .plan-head {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.35rem 0.55rem;
+          align-items: baseline;
+        }
+        .plan-badge {
+          font-size: 0.68rem;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          background: #1e4030;
+          color: #fff;
+          padding: 0.1rem 0.35rem;
+        }
+        .plan-badge.alt {
+          background: transparent;
+          color: #1e4030;
+          border: 1px solid #1e4030;
+        }
+        .plan-stop {
+          opacity: 0.9;
+        }
         .summary {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -354,6 +653,17 @@ export function DriverPortal() {
           grid-template-columns: 2.4rem 1fr auto;
           gap: 0.55rem;
           align-items: center;
+        }
+        .combined li span strong {
+          display: block;
+        }
+        .combined li span i,
+        .lines i {
+          display: block;
+          font-style: normal;
+          font-size: 0.78rem;
+          opacity: 0.65;
+          margin-top: 0.1rem;
         }
         .lines li {
           grid-template-columns: 2.4rem 1fr;
@@ -473,13 +783,6 @@ export function DriverPortal() {
         .body {
           padding: 0 0.75rem 0.85rem;
         }
-        .lines i {
-          display: block;
-          font-style: normal;
-          font-size: 0.78rem;
-          opacity: 0.65;
-          margin-top: 0.1rem;
-        }
         .actions {
           display: flex;
           gap: 0.45rem;
@@ -533,6 +836,9 @@ export function DriverPortal() {
             grid-template-columns: 1fr auto;
           }
           .qty {
+            display: none;
+          }
+          .store-long {
             display: none;
           }
         }
