@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-20T23:45:54.098Z",
+  "updatedAt": "2026-08-21T02:23:00.368Z",
   "confirmed": {
     "tomatoes": {
       "productId": "6000194960084",
@@ -10,6 +10,11 @@
       "productId": "2ADJVX8MAQ1Q",
       "confirmedAt": "2026-08-20T23:45:54.098Z",
       "label": "Earth's Own Gluten-Free, Zero Sugar Original Oat Milk Alternative, 1.75L"
+    },
+    "tomatoes_grape": {
+      "productId": "72CDS4R4V81X",
+      "confirmedAt": "2026-08-21T02:23:00.367Z",
+      "label": "Nature Fresh Farms - Devours, Premium Red Grape Tomato - 283g, Devours Premium Red Grape Toms"
     }
   }
 }
