@@ -5,7 +5,18 @@ import {
   searchShownCatalog,
   type CatalogSearchItem,
 } from "@/domain/staple-search";
-import { REMOVED_STAPLES_STORAGE_KEY, WAITER_LIST_STORAGE_KEY } from "@/lib/product-config";
+import { upsertWaiterTicket, type WaiterTicket } from "@/domain/waiter-tickets";
+import {
+  REMOVED_STAPLES_STORAGE_KEY,
+  WAITER_LIST_STORAGE_KEY,
+} from "@/lib/product-config";
+import {
+  notifyWaiterTicket,
+  readWaiterClientId,
+  readWaiterName,
+  upsertDriverInbox,
+  writeWaiterName,
+} from "@/lib/waiter-tickets";
 
 type CatalogItem = CatalogSearchItem & {
   image?: string | null;
@@ -90,10 +101,13 @@ export function WaiterPortal() {
   const [category, setCategory] = useState<string>("all");
   const [lines, setLines] = useState<ListLine[]>([]);
   const [preview, setPreview] = useState(false);
-  const [mockNote, setMockNote] = useState(false);
+  const [waiterName, setWaiterName] = useState("");
+  const [sending, setSending] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
     setLines(loadDraft());
+    setWaiterName(readWaiterName());
     fetch("/api/staples")
       .then(async (res) => {
         if (!res.ok) throw new Error(`catalog ${res.status}`);
@@ -163,6 +177,63 @@ export function WaiterPortal() {
     );
   }
 
+  async function sendToDriver() {
+    if (lines.length === 0 || sending) return;
+    setSending(true);
+    setError(null);
+    setNotice(null);
+    const payloadLines = lines.map((row) => ({
+      id: row.id,
+      label: byId.get(row.id)?.label ?? row.id.replace(/_/g, " "),
+      qty: row.qty,
+      note: row.note,
+    }));
+    const draft = {
+      waiterClientId: readWaiterClientId(),
+      waiter: waiterName.trim() || "Офіціант",
+      station: "Зал",
+      lines: payloadLines,
+    };
+    try {
+      const res = await fetch("/api/waiter/tickets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(draft),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        persisted?: boolean;
+        ticket?: WaiterTicket;
+      };
+      const ticket =
+        data.ticket ?? upsertWaiterTicket([], draft)?.ticket ?? null;
+      if (!res.ok || !data.ok || !ticket) {
+        throw new Error(data.error ?? "не вдалося надіслати");
+      }
+      upsertDriverInbox(ticket);
+      notifyWaiterTicket(ticket);
+      setPreview(false);
+      setNotice(
+        data.persisted === false
+          ? "Надіслано на цьому телефоні. Відкрий Водій. Інший телефон побачить список, якщо сервер пише файл."
+          : "Надіслано водію. Відкрий сторінку Водій.",
+      );
+    } catch (e) {
+      const local = upsertWaiterTicket([], draft);
+      if (local) {
+        upsertDriverInbox(local.ticket);
+        notifyWaiterTicket(local.ticket);
+        setPreview(false);
+        setNotice("Збережено на цьому телефоні. Відкрий Водій.");
+      } else {
+        setError(e instanceof Error ? e.message : "Не вдалося надіслати список.");
+      }
+    } finally {
+      setSending(false);
+    }
+  }
+
   const lineCount = lines.length;
 
   return (
@@ -171,12 +242,12 @@ export function WaiterPortal() {
         <p className="kicker">Портал офіціанта</p>
         <h1>Список для водія</h1>
         <p className="lede">
-          Знайди продукт із каталогу кафе, додай у список. Відправка водію поки
-          лише макет.
+          Знайди продукт із каталогу кафе, додай у список і надішли водію.
         </p>
       </header>
 
       {error && <p className="err">{error}</p>}
+      {notice && <p className="ok">{notice}</p>}
 
       <div className="layout">
         <section className="catalog" aria-label="Каталог">
@@ -253,6 +324,20 @@ export function WaiterPortal() {
             <h2>Для водія</h2>
             <span className="count">{ukLineCount(lineCount)}</span>
           </div>
+          <label className="name-lab">
+            Імʼя офіціанта
+            <input
+              type="text"
+              autoComplete="name"
+              placeholder="Офіціант"
+              value={waiterName}
+              onChange={(e) => {
+                const next = e.target.value.slice(0, 40);
+                setWaiterName(next);
+                writeWaiterName(next);
+              }}
+            />
+          </label>
           {lines.length === 0 ? (
             <p className="hint">Порожньо. Натисни продукт у каталозі.</p>
           ) : (
@@ -304,10 +389,10 @@ export function WaiterPortal() {
             <button
               type="button"
               className="send"
-              disabled={lines.length === 0}
+              disabled={lines.length === 0 || sending}
               onClick={() => {
                 setPreview(true);
-                setMockNote(false);
+                setNotice(null);
               }}
             >
               Відправити водію
@@ -327,8 +412,10 @@ export function WaiterPortal() {
           }}
         >
           <div className="sheet">
-            <h2 id="driver-preview-title">Макет для водія</h2>
-            <p className="lede sm">Це як виглядатиме список. Нікому не надсилається.</p>
+            <h2 id="driver-preview-title">Надіслати водію</h2>
+            <p className="lede sm">
+              Цей список зʼявиться на сторінці Водій. Ціни не підставляємо.
+            </p>
             <ol className="preview">
               {lines.map((row) => (
                 <li key={row.id}>
@@ -337,19 +424,22 @@ export function WaiterPortal() {
                 </li>
               ))}
             </ol>
-            {mockNote && (
-              <p className="soon">Поки лише макет — водію нічого не пішло.</p>
-            )}
             <div className="actions">
-              <button type="button" className="ghost" onClick={() => setPreview(false)}>
+              <button
+                type="button"
+                className="ghost"
+                disabled={sending}
+                onClick={() => setPreview(false)}
+              >
                 Назад
               </button>
               <button
                 type="button"
                 className="send"
-                onClick={() => setMockNote(true)}
+                disabled={sending || lines.length === 0}
+                onClick={() => void sendToDriver()}
               >
-                Відправити
+                {sending ? "Надсилаю…" : "Відправити"}
               </button>
             </div>
           </div>
@@ -393,6 +483,22 @@ export function WaiterPortal() {
           padding: 0.55rem 0.75rem;
           margin: 1rem 0 0;
         }
+        .ok {
+          color: #1e4030;
+          background: #e7efe8;
+          padding: 0.55rem 0.75rem;
+          margin: 1rem 0 0;
+        }
+        .name-lab {
+          display: grid;
+          gap: 0.2rem;
+          font-size: 0.78rem;
+          margin: 0.65rem 0 0.2rem;
+        }
+        .name-lab input {
+          padding: 0.45rem 0.55rem;
+          font-size: 0.92rem;
+        }
         .layout {
           display: grid;
           grid-template-columns: minmax(0, 1fr) 20rem;
@@ -401,7 +507,8 @@ export function WaiterPortal() {
           align-items: start;
         }
         .catalog input[type="search"],
-        .line input[type="text"] {
+        .line input[type="text"],
+        .name-lab input {
           width: 100%;
           box-sizing: border-box;
           border: 1px solid rgba(40, 50, 40, 0.22);
@@ -412,7 +519,8 @@ export function WaiterPortal() {
           color: inherit;
         }
         .catalog input[type="search"]:focus,
-        .line input[type="text"]:focus {
+        .line input[type="text"]:focus,
+        .name-lab input:focus {
           outline: 2px solid #2f4a3a;
           outline-offset: 1px;
         }

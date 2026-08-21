@@ -31,7 +31,7 @@ Master product id = cafe staple id (`simply_egg_whites`, `large_eggs_dozen`), **
 - **Do not guess missing prices.** No match → `no_match` / empty cell. Never pick an impostor SKU to fill a hole (Ice Breakers for ice, Sterilite bin for ice, vinegar for marshmallow, watermelon for honeydew, 4 oz cups for 12 oz, gym “Smith machine” for PET cups, etc.).
 - **Do not restore deleted staples** unless they appear in `data/catalog/new-from-receipts.json` (or the operator names them).
 - **Deleting staples is allowed.** Per-card **Видалити** and toolbar **Видалити вибрані** call `POST /api/staples/delete` (confirm first). Hide immediately via `localStorage` `royal-sass-removed-staples-v1` (Vercel source of truth). Disk: `data/catalog/removed-staples.json` (gitignored) plus best-effort `deleteStaplesCompletely`. Do **not** delete hidden egg catalog rows `grayridge_eggs` / `eggs_30ct`. Do not commit leftover catalog deletions unless the operator asked to persist those ids.
-- **Do not commit** `.env`, secrets, `config/custom-staples.json`, `tsconfig.tsbuildinfo`, `data/runs/`, `data/stats/`, `data/catalog/operator-verdicts.json`, receipt photos, `docs/royal-sass-overview.pdf`, leftover catalog dumps, or probe dumps. Do not commit leftover catalog edits unless the task is a rematch/price refresh.
+- **Do not commit** `.env`, secrets, `config/custom-staples.json`, `tsconfig.tsbuildinfo`, `data/runs/`, `data/stats/`, `data/catalog/operator-verdicts.json`, `data/catalog/waiter-tickets.json`, receipt photos, `docs/royal-sass-overview.pdf`, leftover catalog dumps, or probe dumps. Do not commit leftover catalog edits unless the task is a rematch/price refresh.
 - **Do not re-enable Sobeys** as a compare column.
 - **Do not show two shell-egg cards.** Homepage eggs = one `large_eggs_dozen` line. `grayridge_eggs` stays in JSON as a catalog source row only.
 - **Do not invent `maximumAmount` for eggs.** Quantity is eggs (`ea`) via chips; checkout buys whole cartons to cover the count.
@@ -175,6 +175,8 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `src/domain/receipt-import.ts` | Receipt text → `receipt_*` drafts; homepage add → `custom_*` drafts |
 | `src/domain/purchase-plans.ts` | 1–2 stop buy plans (never 4-way cheapest-item split) |
 | `src/lib/receipt-ocr.ts` | Optional OpenAI / OCR.space / tesseract; no photo persistence |
+| `src/domain/waiter-tickets.ts` | Waiter → driver lists (parse, upsert, combined pick) |
+| `src/lib/waiter-tickets.ts` | Waiter client id / driver inbox localStorage |
 | `src/app/ReceiptUpload.tsx` | Homepage **Чек** modal |
 | `src/app/AddProduct.tsx` | Homepage **Додати продукт** modal (`custom_*`, no guessed prices) |
 | `src/lib/receipt-staple-ids.ts` | Receipt ids that are shown |
@@ -206,8 +208,8 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `src/app/OfferAudit.tsx` | Per-store Так/Ні photos on cards and compare columns |
 | `src/app/StaplesCompare.tsx` | Main UI (cart, settings, compare, rematch, stats, match audit) |
 | `src/app/ProductSearch.tsx` | Homepage typeahead over shown staples only; empty query can open add |
-| `src/app/waiter/WaiterPortal.tsx` | Waiter list for the driver (visual send only) |
-| `src/app/driver/DriverPortal.tsx` | Driver inbox of waiter lists (visual only, no accept) |
+| `src/app/waiter/WaiterPortal.tsx` | Waiter catalog list; **Відправити водію** posts a ticket |
+| `src/app/driver/DriverPortal.tsx` | Driver inbox of sent waiter lists (accept/message still visual) |
 | `src/app/ProductSettings.tsx` | Per-card match/quantity settings modal |
 
 **Live data flow**
@@ -233,10 +235,11 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/receipts/adopt` — confirmed `receipt_*` or homepage `custom_*` drafts → `custom: true` (`persisted: false` on Vercel). Does not guess store prices. Does not rematch all 124.
 - `POST /api/staples/adopt` | `confirm` — adopt remains for the match inspector; homepage search does not call it (empty search opens **Додати продукт** instead); 👍/👎 lock
 - `POST /api/staples/delete` — hide/remove shown cafe staples (`ids`). Confirm in UI. Skips `grayridge_eggs` / `eggs_30ct`. `persisted: false` on Vercel; client localStorage still hides.
+- `GET/POST /api/waiter/tickets` — waiter send / driver inbox. Disk `data/catalog/waiter-tickets.json` (gitignored); `persisted: false` on Vercel. Same-phone backup: `royal-sass-driver-inbox-v1`. One active list per waiter device (later send replaces it). No prices. No rematch. Do not commit the disk file.
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
-- `/waiter` — waiter portal: shown catalog search + local list; send-to-driver is visual only (no API)
-- `/driver` — driver portal: mock waiter lists + combined pick list; accept/message is visual only
+- `/waiter` — waiter portal: shown cafe catalog + list; **Відправити водію** creates a driver ticket
+- `/driver` — driver portal: sent waiter lists + combined pick list; poll + same-phone inbox. Accept/message still visual only
 - `GET /api/compare` — **legacy** basket POC, not the staples UI
 
 Refresh/compare/rematch routes use `maxDuration = 60`.
@@ -292,8 +295,8 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - Actions: **Чек**, **Додати продукт**, select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), **Видалити вибрані**, Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
 - Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**. A/B, Include/Exclude, quantity, and the named alternate persist across refresh on that phone (`royal-sass-product-overrides-v1`). They must not reset to catalog defaults on reload.
 - Nav: Cafe staples + **Офіціант** (`/waiter`) + **Водій** (`/driver`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
-- **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.
-- **Driver portal** (`/driver`): visual inbox of waiter product lists (mock tickets; local waiter draft may appear as a this-phone mock). **No accept / in-transit / message-waiter API.**
+- **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local draft (`royal-sass-waiter-list-v1`) then **Відправити водію** (`POST /api/waiter/tickets`). Fake Maria/Oleg lists are gone. No store prices.
+- **Driver portal** (`/driver`): inbox of **sent** waiter lists + combined pick list. Same-phone `royal-sass-driver-inbox-v1`; server file when FS allows. Polls every 5s. **No accept / in-transit / message-waiter API.**
 - Results: columns for the selected stores, then one-store basket totals, then **Як закупити** (1–2 stop plans; 3 only to fill holes), then stats. Catalog `onSale` / `wasPrice` show as **знижка** (and **дешевше · знижка** when that store is the cheapest). Search typeahead uses the same flags. No `/sales` page.
 - Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand. Category A settings can name one **альтернативний продукт** (search + Include/Exclude + cheaper checkbox).
 
@@ -327,6 +330,7 @@ npm run poc:entity-match
 npm run poc:store-connector
 npm run poc:pcx-session
 npm run poc:receipt-import
+npm run poc:waiter-tickets
 npm run poc:purchase-plans
 ```
 

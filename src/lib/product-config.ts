@@ -16,7 +16,7 @@ import {
 
 export const PRODUCT_OVERRIDE_STORAGE_KEY = "royal-sass-product-overrides-v1";
 export const CART_STORAGE_KEY = "royal-sass-cart-v1";
-/** Waiter portal draft list (local only — not sent to a driver). */
+/** Waiter portal draft list (local until «Відправити водію»). */
 export const WAITER_LIST_STORAGE_KEY = "royal-sass-waiter-list-v1";
 /** Hidden cafe cards. Live store on Vercel (read-only FS); disk copy is best-effort. */
 export const REMOVED_STAPLES_STORAGE_KEY = "royal-sass-removed-staples-v1";

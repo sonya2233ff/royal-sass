@@ -1,7 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { WAITER_LIST_STORAGE_KEY } from "@/lib/product-config";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  combineWaiterPickList,
+  formatTicketWhen,
+  mergeWaiterTicketLists,
+  type WaiterTicket,
+  type WaiterTicketStatus,
+} from "@/domain/waiter-tickets";
+import {
+  DRIVER_INBOX_STORAGE_KEY,
+  readDriverInbox,
+  WAITER_TICKETS_CHANNEL,
+  writeDriverInbox,
+} from "@/lib/waiter-tickets";
 
 type CatalogItem = {
   id: string;
@@ -9,94 +21,11 @@ type CatalogItem = {
   image?: string | null;
 };
 
-type Line = {
-  id: string;
-  qty: number;
-  note?: string;
-};
-
-type TicketStatus = "new" | "open" | "done";
-
-type Ticket = {
-  id: string;
-  waiter: string;
-  station: string;
-  when: string;
-  status: TicketStatus;
-  localDraft?: boolean;
-  lines: Line[];
-};
-
-const STATUS_UA: Record<TicketStatus, string> = {
+const STATUS_UA: Record<WaiterTicketStatus, string> = {
   new: "Нове",
   open: "Відкрите",
   done: "Переглянуто",
 };
-
-const MOCK_TICKETS: Ticket[] = [
-  {
-    id: "t-maria",
-    waiter: "Марія",
-    station: "Зал",
-    when: "щойно",
-    status: "new",
-    lines: [
-      { id: "large_eggs_dozen", qty: 24, note: "на випічку" },
-      { id: "simply_egg_whites", qty: 2, note: "1 кг" },
-      { id: "tomatoes_grape", qty: 2 },
-      { id: "lemons_2lb", qty: 1 },
-    ],
-  },
-  {
-    id: "t-oleg",
-    waiter: "Олег",
-    station: "Каса",
-    when: "12 хв тому",
-    status: "open",
-    lines: [
-      { id: "milk_2pct_2l", qty: 3 },
-      { id: "homo_milk_2l", qty: 2 },
-      { id: "butter_454g", qty: 2, note: "несолоне" },
-      { id: "orange_juice_pulp", qty: 1 },
-    ],
-  },
-  {
-    id: "t-sofia",
-    waiter: "Софія",
-    station: "Ранкова зміна",
-    when: "сьогодні, 08:40",
-    status: "done",
-    lines: [
-      { id: "ice_cubes", qty: 4 },
-      { id: "ziploc_sandwich", qty: 1 },
-      { id: "strawberries", qty: 2 },
-    ],
-  },
-];
-
-function readLocalWaiterDraft(): Line[] {
-  try {
-    const raw = window.localStorage.getItem(WAITER_LIST_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed
-      .filter((row) => row && typeof row === "object")
-      .map((row) => {
-        const rec = row as Record<string, unknown>;
-        const id = String(rec.id ?? "");
-        const qty = Number(rec.qty);
-        return {
-          id,
-          qty: Number.isFinite(qty) && qty > 0 ? Math.min(99, Math.round(qty)) : 1,
-          note: typeof rec.note === "string" ? rec.note.slice(0, 80) : "",
-        };
-      })
-      .filter((row) => row.id);
-  } catch {
-    return [];
-  }
-}
 
 function ukLineCount(n: number): string {
   const n10 = n % 10;
@@ -109,12 +38,43 @@ function ukLineCount(n: number): string {
 export function DriverPortal() {
   const [catalog, setCatalog] = useState<CatalogItem[]>([]);
   const [ready, setReady] = useState(false);
-  const [filter, setFilter] = useState<"all" | TicketStatus>("all");
-  const [openId, setOpenId] = useState<string | null>(MOCK_TICKETS[0]?.id ?? null);
-  const [localLines, setLocalLines] = useState<Line[]>([]);
+  const [filter, setFilter] = useState<"all" | WaiterTicketStatus>("all");
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [tickets, setTickets] = useState<WaiterTicket[]>([]);
+  const [persisted, setPersisted] = useState(true);
+
+  const applyTickets = useCallback((incoming: WaiterTicket[]) => {
+    const merged = mergeWaiterTicketLists(incoming, readDriverInbox());
+    writeDriverInbox(merged);
+    setTickets(merged);
+    setOpenId((cur) => {
+      if (cur && merged.some((row) => row.id === cur)) return cur;
+      if (cur) return merged[0]?.id ?? null;
+      return null;
+    });
+  }, []);
+
+  const refresh = useCallback(async () => {
+    try {
+      const res = await fetch("/api/waiter/tickets");
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        persisted?: boolean;
+        tickets?: WaiterTicket[];
+      };
+      if (res.ok && data.ok && Array.isArray(data.tickets)) {
+        setPersisted(data.persisted !== false);
+        applyTickets(data.tickets);
+        return;
+      }
+    } catch {
+      /* local inbox still applies */
+    }
+    applyTickets([]);
+  }, [applyTickets]);
 
   useEffect(() => {
-    setLocalLines(readLocalWaiterDraft());
+    applyTickets([]);
     fetch("/api/staples")
       .then(async (res) => {
         if (!res.ok) throw new Error(`catalog ${res.status}`);
@@ -123,48 +83,45 @@ export function DriverPortal() {
       })
       .catch(() => undefined)
       .finally(() => setReady(true));
-  }, []);
+    void refresh();
+    const tick = window.setInterval(() => void refresh(), 5000);
+    return () => window.clearInterval(tick);
+  }, [applyTickets, refresh]);
+
+  useEffect(() => {
+    function onStorage(e: StorageEvent) {
+      if (e.key === DRIVER_INBOX_STORAGE_KEY) applyTickets([]);
+    }
+    window.addEventListener("storage", onStorage);
+    let ch: BroadcastChannel | null = null;
+    try {
+      ch = new BroadcastChannel(WAITER_TICKETS_CHANNEL);
+      ch.onmessage = (ev: MessageEvent) => {
+        const ticket = (ev.data as { ticket?: WaiterTicket } | null)?.ticket;
+        if (ticket) applyTickets([ticket]);
+      };
+    } catch {
+      /* ignore */
+    }
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      ch?.close();
+    };
+  }, [applyTickets]);
 
   const byId = useMemo(
     () => new Map(catalog.map((item) => [item.id, item])),
     [catalog],
   );
 
-  const tickets = useMemo(() => {
-    const extra: Ticket[] =
-      localLines.length > 0
-        ? [
-            {
-              id: "t-local",
-              waiter: "Цей телефон",
-              station: "Чернетка офіціанта",
-              when: "локально",
-              status: "new",
-              localDraft: true,
-              lines: localLines,
-            },
-          ]
-        : [];
-    return [...extra, ...MOCK_TICKETS];
-  }, [localLines]);
-
   const shown = tickets.filter(
     (ticket) => filter === "all" || ticket.status === filter,
   );
 
-  const combined = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const ticket of tickets) {
-      if (ticket.status === "done") continue;
-      for (const line of ticket.lines) {
-        map.set(line.id, (map.get(line.id) ?? 0) + line.qty);
-      }
-    }
-    return [...map.entries()].map(([id, qty]) => ({ id, qty }));
-  }, [tickets]);
+  const combined = useMemo(() => combineWaiterPickList(tickets), [tickets]);
 
-  function labelOf(id: string): string {
-    return byId.get(id)?.label ?? id.replace(/_/g, " ");
+  function labelOf(id: string, fallback?: string): string {
+    return byId.get(id)?.label ?? fallback ?? id.replace(/_/g, " ");
   }
 
   return (
@@ -173,10 +130,17 @@ export function DriverPortal() {
         <p className="kicker">Портал водія</p>
         <h1>Списки від офіціантів</h1>
         <p className="lede">
-          Тут будуть приходити замовлення з залу. Зараз це лише вигляд списків —
-          прийняття, «в дорозі» і зв’язок з офіціантом ще не працюють.
+          Продукти, які офіціант надіслав зі сторінки Офіціант. Прийняття,
+          «в дорозі» і повідомлення офіціанту ще не працюють.
         </p>
       </header>
+
+      {!persisted && tickets.length > 0 && (
+        <p className="soon">
+          Список з цього телефону. На Vercel інший телефон може не побачити
+          його, доки немає спільного сховища.
+        </p>
+      )}
 
       <section className="summary" aria-label="Зведення">
         <div>
@@ -195,7 +159,7 @@ export function DriverPortal() {
 
       {combined.length > 0 && (
         <section className="combined" aria-label="Зведений список">
-          <h2>Що набрати (макет)</h2>
+          <h2>Що набрати</h2>
           <ul>
             {combined.map((row) => {
               const item = byId.get(row.id);
@@ -207,7 +171,7 @@ export function DriverPortal() {
                   ) : (
                     <span className="ph" />
                   )}
-                  <strong>{labelOf(row.id)}</strong>
+                  <strong>{labelOf(row.id, row.label)}</strong>
                   <em>{row.qty}×</em>
                 </li>
               );
@@ -216,17 +180,22 @@ export function DriverPortal() {
         </section>
       )}
 
-      <div className="chips" role="tablist" aria-label="Фільтр списків">
-        {(["all", "new", "open", "done"] as const).map((key) => (
-          <button
-            key={key}
-            type="button"
-            className={filter === key ? "chip on" : "chip"}
-            onClick={() => setFilter(key)}
-          >
-            {key === "all" ? "Усі" : STATUS_UA[key]}
-          </button>
-        ))}
+      <div className="toolbar">
+        <div className="chips" role="tablist" aria-label="Фільтр списків">
+          {(["all", "new", "open", "done"] as const).map((key) => (
+            <button
+              key={key}
+              type="button"
+              className={filter === key ? "chip on" : "chip"}
+              onClick={() => setFilter(key)}
+            >
+              {key === "all" ? "Усі" : STATUS_UA[key]}
+            </button>
+          ))}
+        </div>
+        <button type="button" className="ghost refresh" onClick={() => void refresh()}>
+          Оновити списки
+        </button>
       </div>
 
       {!ready && <p className="hint">Завантаження каталогу…</p>}
@@ -244,8 +213,7 @@ export function DriverPortal() {
                 <span className="who">
                   <strong>{ticket.waiter}</strong>
                   <em>
-                    {ticket.station} · {ticket.when}
-                    {ticket.localDraft ? " · не відправлено" : ""}
+                    {ticket.station} · {formatTicketWhen(ticket.updatedAt)}
                   </em>
                 </span>
                 <span className={`status ${ticket.status}`}>
@@ -272,7 +240,7 @@ export function DriverPortal() {
                           )}
                           <span>
                             <strong>
-                              {line.qty}× {labelOf(line.id)}
+                              {line.qty}× {labelOf(line.id, line.label)}
                             </strong>
                             {line.note ? <i>{line.note}</i> : null}
                           </span>
@@ -285,7 +253,7 @@ export function DriverPortal() {
                       type="button"
                       className="ghost"
                       disabled
-                      title="Макет"
+                      title="Ще не підключено"
                     >
                       Написати офіціанту
                     </button>
@@ -293,12 +261,12 @@ export function DriverPortal() {
                       type="button"
                       className="send"
                       disabled
-                      title="Макет"
+                      title="Ще не підключено"
                     >
                       Прийняти список
                     </button>
                   </div>
-                  <p className="mockcap">Макет: прийняття і переписка ще не працюють.</p>
+                  <p className="mockcap">Прийняття і переписка ще не працюють.</p>
                 </div>
               )}
             </li>
@@ -306,8 +274,12 @@ export function DriverPortal() {
         })}
       </ul>
 
-      {shown.length === 0 && (
-        <p className="hint">Немає списків у цьому фільтрі.</p>
+      {shown.length === 0 && ready && (
+        <p className="hint">
+          {tickets.length === 0
+            ? "Ще немає списків. Офіціант додає продукти і натискає «Відправити водію»."
+            : "Немає списків у цьому фільтрі."}
+        </p>
       )}
 
       <style jsx>{`
@@ -401,11 +373,18 @@ export function DriverPortal() {
           font-weight: 700;
           color: #2f4a3a;
         }
+        .toolbar {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.55rem;
+          justify-content: space-between;
+          align-items: center;
+          margin: 0 0 0.85rem;
+        }
         .chips {
           display: flex;
           flex-wrap: wrap;
           gap: 0.35rem;
-          margin: 0 0 0.85rem;
         }
         .chip,
         .ghost,
@@ -427,6 +406,11 @@ export function DriverPortal() {
           background: #2f4a3a;
           color: #f7f3ec;
           border-color: #2f4a3a;
+        }
+        .refresh {
+          flex: 0 0 auto;
+          padding: 0.32rem 0.75rem;
+          font-size: 0.8rem;
         }
         .tickets {
           display: grid;
