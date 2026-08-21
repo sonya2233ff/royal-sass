@@ -20,7 +20,7 @@ export const CART_STORAGE_KEY = "royal-sass-cart-v1";
 export const WAITER_LIST_STORAGE_KEY = "royal-sass-waiter-list-v1";
 /** Hidden cafe cards. Live store on Vercel (read-only FS); disk copy is best-effort. */
 export const REMOVED_STAPLES_STORAGE_KEY = "royal-sass-removed-staples-v1";
-/** Custom cards from receipt photos / search adopt. Vercel source of truth. */
+/** Custom cards from receipt photos / homepage add. Vercel source of truth. */
 export const CUSTOM_STAPLES_STORAGE_KEY = "royal-sass-custom-staples-v1";
 
 const CLIENT_CUSTOM_ID = /^(receipt_|custom_)[a-z0-9_]{1,80}$/i;

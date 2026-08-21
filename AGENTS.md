@@ -36,7 +36,7 @@ Master product id = cafe staple id (`simply_egg_whites`, `large_eggs_dozen`), **
 - **Do not show two shell-egg cards.** Homepage eggs = one `large_eggs_dozen` line. `grayridge_eggs` stays in JSON as a catalog source row only.
 - **Do not invent `maximumAmount` for eggs.** Quantity is eggs (`ea`) via chips; checkout buys whole cartons to cover the count.
 - **Do not treat «Оновити ціни» as rematch.** That path is price-only on locked/catalog SKUs.
-- **Do not rematch all visible staples by default** (Rapid/PCX cost). Rematch only the card, the selected cart ids, settings **Зберегти і оновити**, or receipt **Додати і знайти в магазинах** (new ids only). Operator **Так/Ні** photo audit is not rematch and not the WM 👍 lock. After the operator pastes verdicts, fix only the **Ні** cards (filters + drop the SKU). Empty **Ні** still must not invent a SKU.
+- **Do not rematch all visible staples by default** (Rapid/PCX cost). Rematch only the card, the selected cart ids, settings **Зберегти і оновити**, receipt **Додати і знайти в магазинах**, or homepage **Додати і знайти в магазинах** (new ids only). Operator **Так/Ні** photo audit is not rematch and not the WM 👍 lock. After the operator pastes verdicts, fix only the **Ні** cards (filters + drop the SKU). Empty **Ні** still must not invent a SKU.
 - **Do not commit receipt photos** or `config/custom-staples.json`. Homepage **Чек** OCRs in memory; photos are never written to git.
 - **Do not rank hits with the cafe card label.** Size and abbreviations on the card (`OJ`, `2.63L`, `12oz`, `3.25%`) are not identity.
 - **Do not require pack size as an Include keyword.** WM Rapid titles often omit litres. Compare different cafe bottles as `$/L` or `$/kg`. Reject **mini** packs only (`MIN_COMPARABLE_PACK_RATIO` 0.35 in `src/domain/sanity.ts`).
@@ -114,7 +114,7 @@ Shown cards = `PINNED_IDS` **or** `RECEIPT_STAPLE_IDS` **or** `custom: true` (`i
 - `RECEIPT_STAPLE_IDS`: **94** ids from `data/catalog/new-from-receipts.json` (supplies, kosher dairy, branded grocery, more produce/frozen). `ice_cubes` overlaps pinned.
 - **Shown unique ids:** 124 (31 + 94 − 1 overlap) plus operator `custom: true` rows. `config/cafe-staples.json` still contains hidden rows such as `grayridge_eggs` for catalog merge.
 
-Homepage search is **shown-catalog only** (`src/domain/staple-search.ts`): card label, id, queries, and include tokens — never retailer offer names, handles, or live WM/NF/WC/MVR hits. Searching `pumpkin` must not surface wraps because an NF foam pumpkin sat on that SKU. `яйця` / `eggs` hits only `large_eggs_dozen`. The homepage typeahead does **not** adopt a new product; `POST /api/staples/adopt` remains for the match inspector. **Чек** (receipt photo / pasted text) can add `custom: true` `receipt_*` cards after the operator confirms new lines. Custom rows (`config/custom-staples.json` on a writable FS, and `localStorage` `royal-sass-custom-staples-v1` on Vercel) still show if present; do not commit that file unless asked. OCR matching a **deleted** cafe card counts as existing — do not auto-restore it.
+Homepage search is **shown-catalog only** (`src/domain/staple-search.ts`): card label, id, queries, and include tokens — never retailer offer names, handles, or live WM/NF/WC/MVR hits. Searching `pumpkin` must not surface wraps because an NF foam pumpkin sat on that SKU. `яйця` / `eggs` hits only `large_eggs_dozen`. The homepage typeahead does **not** call `POST /api/staples/adopt` (match inspector). Empty catalog search (≥3 chars) can open **Додати продукт** and create a `custom: true` `custom_*` card after confirm. **Чек** (receipt photo / pasted text) can add `receipt_*` cards after the operator confirms new lines. Duplicate names (score ≥ 40) and shell eggs reuse the existing card — never a second egg line. Custom rows (`config/custom-staples.json` on a writable FS, and `localStorage` `royal-sass-custom-staples-v1` on Vercel) still show if present; do not commit that file unless asked. OCR matching a **deleted** cafe card counts as existing — do not auto-restore it.
 
 ## Category A vs Category B
 
@@ -172,10 +172,11 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | --- | --- |
 | `config/cafe-staples.json` | Master staple definitions |
 | `config/stores.json` | Locked stores (Sobeys `active: false`) |
-| `src/domain/receipt-import.ts` | Receipt text → existing vs new `receipt_*` drafts |
+| `src/domain/receipt-import.ts` | Receipt text → `receipt_*` drafts; homepage add → `custom_*` drafts |
 | `src/domain/purchase-plans.ts` | 1–2 stop buy plans (never 4-way cheapest-item split) |
 | `src/lib/receipt-ocr.ts` | Optional OpenAI / OCR.space / tesseract; no photo persistence |
 | `src/app/ReceiptUpload.tsx` | Homepage **Чек** modal |
+| `src/app/AddProduct.tsx` | Homepage **Додати продукт** modal (`custom_*`, no guessed prices) |
 | `src/lib/receipt-staple-ids.ts` | Receipt ids that are shown |
 | `data/catalog/new-from-receipts.json` | Source list of 94 receipt staples |
 | `data/catalog/walmart_5831_latest.json` | WM shelf snapshot |
@@ -204,7 +205,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `src/lib/offer-verdicts.ts` | `royal-sass-offer-verdicts-v1` localStorage |
 | `src/app/OfferAudit.tsx` | Per-store Так/Ні photos on cards and compare columns |
 | `src/app/StaplesCompare.tsx` | Main UI (cart, settings, compare, rematch, stats, match audit) |
-| `src/app/ProductSearch.tsx` | Homepage typeahead over shown staples only |
+| `src/app/ProductSearch.tsx` | Homepage typeahead over shown staples only; empty query can open add |
 | `src/app/waiter/WaiterPortal.tsx` | Waiter list for the driver (visual send only) |
 | `src/app/driver/DriverPortal.tsx` | Driver inbox of waiter lists (visual only, no accept) |
 | `src/app/ProductSettings.tsx` | Per-card match/quantity settings modal |
@@ -214,7 +215,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 1. Offers land in catalog JSON (refresh APIs / `npm run cache:*` / `cache:prices`).
 2. `resolveCatalogOffer` picks the catalog row from mapping + filters. Mapping `decision: needs_review` is **not** a lock. **No Rapid/PCX in this step.**
 3. `buildStapleCompareRow` → identity, then `evaluatePurchase` checkout (not proportional case split).
-4. UI: `GET /api/staples` (base config), `POST /api/staples/compare` with `{ cart, productOverrides, customStaples? }`. Client applies `stapleWithClientOverride` on the server from that body. Client localStorage is the live override store on Vercel (also `royal-sass-custom-staples-v1` for receipt cards). Product settings (A/B, Include, quantity) must survive refresh — hydrate `royal-sass-product-overrides-v1` before writing it.
+4. UI: `GET /api/staples` (base config), `POST /api/staples/compare` with `{ cart, productOverrides, customStaples? }`. Client applies `stapleWithClientOverride` on the server from that body. Client localStorage is the live override store on Vercel (also `royal-sass-custom-staples-v1` for receipt / homepage `custom_*` cards). Product settings (A/B, Include, quantity) must survive refresh — hydrate `royal-sass-product-overrides-v1` before writing it.
 
 ## Live API (`nodejs`)
 
@@ -229,8 +230,8 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/refresh-prices` — price-only SKU refresh (no rematch). Walmart Rapid looks up the locked SKU via store search first; `/product-details` often 456/503 on walmart.ca.
 - `GET /api/staples/search` — shown cafe staples only (no live store hits, empty `walmart`/`noFrills`/`wholesaleClub`/`mvr` arrays)
 - `POST /api/staples/receipts/parse` — receipt photos (base64, not saved) and/or pasted text → line decisions (`existing` / `new` / `skip`). Confirm in UI before add. Eggs → `large_eggs_dozen` only.
-- `POST /api/staples/receipts/adopt` — confirmed `receipt_*` drafts → `custom: true` (`persisted: false` on Vercel). Does not guess store prices. Does not rematch all 124.
-- `POST /api/staples/adopt` | `confirm` — adopt remains for the match inspector; homepage search does not call it; 👍/👎 lock
+- `POST /api/staples/receipts/adopt` — confirmed `receipt_*` or homepage `custom_*` drafts → `custom: true` (`persisted: false` on Vercel). Does not guess store prices. Does not rematch all 124.
+- `POST /api/staples/adopt` | `confirm` — adopt remains for the match inspector; homepage search does not call it (empty search opens **Додати продукт** instead); 👍/👎 lock
 - `POST /api/staples/delete` — hide/remove shown cafe staples (`ids`). Confirm in UI. Skips `grayridge_eggs` / `eggs_30ct`. `persisted: false` on Vercel; client localStorage still hides.
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
@@ -285,9 +286,10 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 
 - Cards: select for compare; grams on weight items; egg chips / pack qty otherwise; 👍/👎 confirm on WM when present (hidden while match-audit is on).
 - **Оцінити фото: так / ні** (homepage): four store photos on the card. **Так** = correct product, or correctly empty. **Ні** = impostor / hole. Filter **Не оцінені** / **Лише ні**. **Скопіювати оцінки** puts `royal-sass-offer-verdicts-v1` JSON on the clipboard for the agent. Does not rematch, does not lock identity, does not invent SKUs. Choice of audit mode is `royal-sass-audit-mode-v1`.
-- Per-card **Видалити** and toolbar **Видалити вибрані** (cart ids), with confirm. Hidden via `royal-sass-removed-staples-v1`. Receipt `receipt_*` cards are also dropped from `royal-sass-custom-staples-v1`.
+- Per-card **Видалити** and toolbar **Видалити вибрані** (cart ids), with confirm. Hidden via `royal-sass-removed-staples-v1`. Receipt `receipt_*` and homepage `custom_*` cards are also dropped from `royal-sass-custom-staples-v1`.
 - **Чек**: camera (`capture="environment"`) or pasted text. Review lines (**вже в каталозі** / **новий** / **пропустити**). **Додати нові** creates `no_match` cards. **Додати і знайти в магазинах** rematches **only those new ids**. Photos are not saved. On Vercel the cards live in `localStorage` `royal-sass-custom-staples-v1`.
-- Actions: **Чек** (photo or pasted text → confirm new cards), select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), **Видалити вибрані**, Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
+- **Додати продукт**: toolbar + empty search («Додати «…» як новий продукт»). Name required; optional extra query, A/B, Include/Exclude (pack-size tokens ignored). Duplicate / яйця → existing `large_eggs_dozen` (no second egg card). **Додати** = `custom_*` `no_match`. **Додати і знайти в магазинах** rematches **only that id**.
+- Actions: **Чек**, **Додати продукт**, select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), **Видалити вибрані**, Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
 - Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**. A/B, Include/Exclude, quantity, and the named alternate persist across refresh on that phone (`royal-sass-product-overrides-v1`). They must not reset to catalog defaults on reload.
 - Nav: Cafe staples + **Офіціант** (`/waiter`) + **Водій** (`/driver`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
 - **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.
