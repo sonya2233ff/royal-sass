@@ -2,7 +2,7 @@
   "retailer": "mvr",
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
-  "checkedAt": "2026-08-21T05:23:03.031Z",
+  "checkedAt": "2026-08-22T05:06:49.803Z",
   "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
@@ -41,7 +41,7 @@
         "packageSize": "6 EA",
         "price": 2.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:31.357Z",
+        "checkedAt": "2026-08-22T05:06:18.575Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-lemons-repack-6-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000001354p_030b771e-a079-4cd0-960e-a8dc4816e2b2.jpg?v=1787145981"
       },
@@ -61,7 +61,7 @@
         "price": 4.99,
         "unitPrice": 4.4,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:31.635Z",
+        "checkedAt": "2026-08-22T05:06:18.896Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlett-case-13-kg"
       },
       "notes": "Live MVR SKU price refresh",
@@ -95,7 +95,7 @@
         "price": 6.49,
         "unitPrice": 2.86,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:31.924Z",
+        "checkedAt": "2026-08-22T05:06:19.200Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-eggplant-repack-5-lbs",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001117894p.jpg?v=1787234718"
       },
@@ -136,7 +136,7 @@
         "price": 4.99,
         "unitPrice": 4.4,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:32.229Z",
+        "checkedAt": "2026-08-22T05:06:19.528Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-red-repack-5-lbs-1",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000073160665p_5a36b3d9-5ad1-4354-a748-4665adbc8c5a.jpg?v=1782304072"
       },
@@ -156,7 +156,7 @@
         "price": 7.99,
         "unitPrice": 3.52,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:32.501Z",
+        "checkedAt": "2026-08-22T05:06:19.827Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-sweet-repack-5-lbs",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001116584p.jpg?v=1786636156"
       },
@@ -191,7 +191,7 @@
         "price": 2.19,
         "unitPrice": 2.19,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:32.795Z",
+        "checkedAt": "2026-08-22T05:06:20.115Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-bananas-per-kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0026588300000p_595a7abe-c199-4f8c-b1c0-3db6b15ec7cb.jpg?v=1776104493"
       },
@@ -211,7 +211,7 @@
         "price": 5.99,
         "unitPrice": 9.98,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:33.100Z",
+        "checkedAt": "2026-08-22T05:06:20.422Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-kiwi-600-grams",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006623677303p.jpg?v=1787143407"
       },
@@ -229,7 +229,7 @@
         "packageSize": "3 EA",
         "price": 2.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:33.393Z",
+        "checkedAt": "2026-08-22T05:06:20.726Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-cucumbers-english-repack-3-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114597p_7d5a4171-d111-4eff-b842-634d1b9f2966.jpg?v=1787070920"
       },
@@ -249,7 +249,7 @@
         "price": 13.99,
         "unitPrice": 15.42,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:33.676Z",
+        "checkedAt": "2026-08-22T05:06:21.063Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-garlic-fresh-special-1-lbs"
       },
       "notes": "Live MVR SKU price refresh",
@@ -265,10 +265,10 @@
         "brand": "FRUITS",
         "packageSize": "312 g",
         "parsedMassKg": 0.31184475437500003,
-        "price": 7.49,
-        "unitPrice": 24.02,
+        "price": 6.99,
+        "unitPrice": 22.41,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:33.953Z",
+        "checkedAt": "2026-08-22T05:06:21.359Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-blueberries-11oz"
       },
       "notes": "Live MVR SKU price refresh",
@@ -287,7 +287,7 @@
         "price": 5.99,
         "unitPrice": 13.21,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:34.256Z",
+        "checkedAt": "2026-08-22T05:06:21.657Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-strawberries-1-lb-2",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0081133402015p.jpg?v=1787143582"
       },
@@ -323,9 +323,9 @@
         "price": 5.79,
         "unitPrice": 12.75,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:34.566Z",
+        "checkedAt": "2026-08-22T05:06:21.939Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/gay-lea-butter-unsalted-454gr",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006601390561p.jpg?v=1787256676"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006601390561p_0d1f90de-4d2f-4201-b02a-a58e333c693c.jpg?v=1787325139"
       },
       "notes": "Live MVR SKU price refresh",
       "alternates": [
@@ -400,7 +400,7 @@
         "price": 5.99,
         "unitPrice": 4.4,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:35.217Z",
+        "checkedAt": "2026-08-22T05:06:22.545Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-orange-juice-no-pulp-1-36lt",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004850020554p.jpg?v=1786467018"
       },
@@ -449,7 +449,7 @@
         "price": 1.99,
         "unitPrice": 4.52,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:35.501Z",
+        "checkedAt": "2026-08-22T05:06:22.848Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/realemon-lemon-juice-440ml",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006591258103p.jpg?v=1780318398"
       },
@@ -528,7 +528,7 @@
         "price": 7.29,
         "unitPrice": 7.29,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:35.814Z",
+        "checkedAt": "2026-08-22T05:06:23.137Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-sliced-apples-1kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088194p.jpg?v=1770363489"
       },
@@ -548,7 +548,7 @@
         "price": 4.99,
         "unitPrice": 4.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:36.157Z",
+        "checkedAt": "2026-08-22T05:06:23.420Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-iqf-sliced-banana-1kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000194p_6827b841-b7df-42c4-a646-6e5ea55507a4.jpg?v=1785562354"
       },
@@ -612,7 +612,7 @@
         "price": 2.99,
         "unitPrice": 3.3,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:37.373Z",
+        "checkedAt": "2026-08-22T05:06:24.635Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-chopped-spinach-2-lb",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000000183p.jpg?v=1783983216"
       },
@@ -630,7 +630,7 @@
         "packageSize": "18EA",
         "price": 6.69,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:03.029Z",
+        "checkedAt": "2026-08-22T05:06:49.801Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/gray-ridge-white-eggs-extra-large-18ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734205p.jpg?v=1777575335"
       },
@@ -675,7 +675,7 @@
         "brand": "GRAY RIDGE",
         "price": 4.19,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:34.936Z",
+        "checkedAt": "2026-08-22T05:06:22.241Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/gray-ridge-eggs-white-large-1doz",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006476734300p.jpg?v=1777575376"
       },
@@ -767,7 +767,7 @@
         "price": 3.69,
         "unitPrice": 10.85,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:37.667Z",
+        "checkedAt": "2026-08-22T05:06:24.922Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-12oz-black-ripple-wall-cup-25ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760301070p_4bfafaef-2b6b-473b-b6ba-81814a3acc1d.jpg?v=1786374159"
       },
@@ -833,7 +833,7 @@
         "price": 5.19,
         "unitPrice": 15.26,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:37.977Z",
+        "checkedAt": "2026-08-22T05:06:25.214Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/solo-ultra-clear-squat-pet-cup-12oz-50ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004159423161p.jpg?v=1780298907"
       },
@@ -882,7 +882,7 @@
         "packageSize": "1EA",
         "price": 3.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:38.276Z",
+        "checkedAt": "2026-08-22T05:06:25.525Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/winco-silicone-oven-mitt-15in-1ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0084216911771p_2c38a0cb-e104-437f-ada0-fd63baf5c92c.jpg?v=1777484502"
       },
@@ -953,7 +953,7 @@
         "price": 4.29,
         "unitPrice": 9.46,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:38.563Z",
+        "checkedAt": "2026-08-22T05:06:25.823Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-16oz-black-ripple-wall-cup-25ct",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760301072p_ea160d3c-d2af-402c-b3e7-a9a9337f3d86.jpg?v=1786374368"
       },
@@ -1027,7 +1027,7 @@
         "price": 33.99,
         "unitPrice": 6.8,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:38.853Z",
+        "checkedAt": "2026-08-22T05:06:26.138Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-pineapple-chunks-5x1-kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1069505800336p_3c6149e7-b455-4272-91ae-ab80717f9f8c.jpg?v=1782889753"
       },
@@ -1063,7 +1063,7 @@
         "price": 71.99,
         "unitPrice": 5.14,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:39.154Z",
+        "checkedAt": "2026-08-22T05:06:26.442Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/lynch-apple-strawberry-jam-14kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006280212592p.jpg?v=1786422195"
       },
@@ -1083,7 +1083,7 @@
         "price": 12.99,
         "unitPrice": 229.1,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:39.496Z",
+        "checkedAt": "2026-08-22T05:06:26.734Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/maher-products-clear-dome-lid-for-bagasse-bowl-24-32oz-50ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300601p.jpg?v=1760683006"
       },
@@ -1142,7 +1142,7 @@
         "price": 32.49,
         "unitPrice": 5.16,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:39.815Z",
+        "checkedAt": "2026-08-22T05:06:27.028Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/ace-bakery-demi-baguette-45x140-gr",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/2062852301291p.jpg?v=1775028361"
       },
@@ -1219,7 +1219,7 @@
         "packageSize": "100EA",
         "price": 2.09,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:40.094Z",
+        "checkedAt": "2026-08-22T05:06:27.371Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/touch-bamboo-paddle-3in-100ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062565982883p.jpg?v=1781273635"
       },
@@ -1276,7 +1276,7 @@
         "price": 5.99,
         "unitPrice": 3,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:40.380Z",
+        "checkedAt": "2026-08-22T05:06:27.671Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pears-bartlet-2-lb"
       },
       "notes": "Live MVR SKU price refresh",
@@ -1330,7 +1330,7 @@
         "packageSize": "1 EA",
         "price": 3.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:40.697Z",
+        "checkedAt": "2026-08-22T05:06:27.980Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-sweet-cantaloupes-1-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000013212245p_1ca88352-318a-40d5-9f58-d81517bb894c.jpg?v=1786552939"
       },
@@ -1363,7 +1363,7 @@
         "packageSize": "3 EA",
         "price": 5.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:40.975Z",
+        "checkedAt": "2026-08-22T05:06:28.283Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-celery-repack-3-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114577p_5d90600f-9675-43b2-ba60-00d4829987b7.jpg?v=1786721477"
       },
@@ -1411,9 +1411,9 @@
         "price": 22.99,
         "unitPrice": 5.75,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T00:31:26.790Z",
+        "checkedAt": "2026-08-22T05:06:28.613Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/cibona-ranch-dressing-4lt",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006090344410p.jpg?v=1785562092"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006090344410p.jpg?v=1787325935"
       },
       "notes": "Live MVR SKU price refresh",
       "alternates": [
@@ -1445,7 +1445,7 @@
         "packageSize": "3EA 3 EA",
         "price": 4.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:42.037Z",
+        "checkedAt": "2026-08-22T05:06:28.901Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-cilantro-repack-3-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114785p_74dad780-42e6-4f64-ba69-417afa962a78.jpg?v=1785331341"
       },
@@ -1478,7 +1478,7 @@
         "packageSize": "5 PK",
         "price": 12.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:42.334Z",
+        "checkedAt": "2026-08-22T05:06:29.191Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/talthi-clear-party-tray-12x12-in-5-pk",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0084081700320p.jpg?v=1780302457"
       },
@@ -1632,7 +1632,7 @@
         "price": 31.99,
         "unitPrice": 1.6,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:42.698Z",
+        "checkedAt": "2026-08-22T05:06:29.498Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/redpath-dark-brown-sugar-20kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006284763260p.jpg?v=1785564630"
       },
@@ -1713,7 +1713,7 @@
         "price": 66.49,
         "unitPrice": 586.34,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:42.996Z",
+        "checkedAt": "2026-08-22T05:06:29.806Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/dart-16-24oz-dome-lid-with-wide-hole-10x100-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004159499476p.jpg?v=1780298988"
       },
@@ -1749,7 +1749,7 @@
         "price": 2.09,
         "unitPrice": 2.32,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:43.346Z",
+        "checkedAt": "2026-08-22T05:06:30.092Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/unico-fettuccine-900gr",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006780000544p_20e54964-7267-4b64-8ddc-f677ee2ff23d.jpg?v=1786362082"
       },
@@ -1790,7 +1790,7 @@
         "price": 6.29,
         "unitPrice": 1.57,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:43.640Z",
+        "checkedAt": "2026-08-22T05:06:30.407Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/eco-chemlabs-floor-cleaner-lavender-4lt",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0079993245526p.jpg?v=1780326618"
       },
@@ -1939,7 +1939,7 @@
         "price": 4.99,
         "unitPrice": 39.92,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:43.931Z",
+        "checkedAt": "2026-08-22T05:06:30.703Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/santa-lucia-buffalo-mozzarella-125gr",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062778300331p_f1e90e1a-b07a-485c-bc3f-f4a51c23656c.jpg?v=1755264377"
       },
@@ -2065,7 +2065,7 @@
         "price": 8.29,
         "unitPrice": 4.14,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:44.276Z",
+        "checkedAt": "2026-08-22T05:06:31.008Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-butternut-squash-diced-2kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000088830p_1671fa77-0c72-4f87-b84d-7dbe8edf9d46.jpg?v=1770363742"
       },
@@ -2206,7 +2206,7 @@
         "price": 4.99,
         "unitPrice": 2.5,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:44.560Z",
+        "checkedAt": "2026-08-22T05:06:31.302Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/alasko-diced-carrots-2kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000010700p_5eee692f-8136-45e7-b008-31ea8cf3906a.jpg?v=1780584257"
       },
@@ -2347,7 +2347,7 @@
         "price": 24.99,
         "unitPrice": 1.51,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:44.847Z",
+        "checkedAt": "2026-08-22T05:06:31.600Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/gatorade-zero-variety-28x591-ml",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005727116282p.jpg?v=1779476095"
       },
@@ -2485,7 +2485,7 @@
         "price": 9.99,
         "unitPrice": 4.4,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:45.495Z",
+        "checkedAt": "2026-08-22T05:06:32.637Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-apples-granny-smith-5-lbs",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000015554p.jpg?v=1782142582"
       },
@@ -2503,7 +2503,7 @@
         "packageSize": "40 EA",
         "price": 6.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:45.780Z",
+        "checkedAt": "2026-08-22T05:06:32.925Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/lapaco-guest-towel-napkin-1-6-fold-40-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006166655001p_7b28635c-3f67-45a7-8b17-35662a71ad8f.jpg?v=1785564174"
       },
@@ -2569,7 +2569,7 @@
         "price": 6.99,
         "unitPrice": 6.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:46.075Z",
+        "checkedAt": "2026-08-22T05:06:33.235Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/harvest-raw-sunflower-seeds-1kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0043655101413p.jpg?v=1786698155"
       },
@@ -2633,7 +2633,7 @@
         "packageSize": "1EA",
         "price": 7.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:46.376Z",
+        "checkedAt": "2026-08-22T05:06:33.526Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-honeydew-1ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0009884304329p_04d13163-0200-4391-8aa6-4c50e63d65de.jpg?v=1783334816"
       },
@@ -2676,7 +2676,7 @@
         "price": 19.99,
         "unitPrice": 6.66,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:46.705Z",
+        "checkedAt": "2026-08-22T05:06:33.818Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/italia-pomace-oil-3lt",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0085111901165p.jpg?v=1787238492"
       },
@@ -2696,7 +2696,7 @@
         "price": 4.99,
         "unitPrice": 4.4,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:46.986Z",
+        "checkedAt": "2026-08-22T05:06:34.114Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-jalapeno-repack-2-5-lbs",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0022655400000p.jpg?v=1786360632"
       },
@@ -2742,7 +2742,7 @@
         "packageSize": "8 EA",
         "price": 2.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:47.269Z",
+        "checkedAt": "2026-08-22T05:06:34.399Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-limes-repack-12-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000011132014p_99f5271b-4549-472c-b454-b820bc97d937.jpg?v=1787143416"
       },
@@ -2793,7 +2793,7 @@
         "price": 2.49,
         "unitPrice": 6.23,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:47.627Z",
+        "checkedAt": "2026-08-22T05:06:34.681Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/kraft-jet-puffed-original-marshmallows-400g",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0060069906091p_b6909a80-33b0-48cb-b34d-d13e86bb116c.jpg?v=1778236981"
       },
@@ -2929,7 +2929,7 @@
         "packageSize": "1 EA",
         "price": 2.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:47.907Z",
+        "checkedAt": "2026-08-22T05:06:34.982Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/link-measuring-cup-1-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0007675320340p.jpg?v=1759761446"
       },
@@ -3066,7 +3066,7 @@
         "parsedMassKg": 0.005,
         "price": 7.19,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:48.209Z",
+        "checkedAt": "2026-08-22T05:06:35.279Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/safe-t-wear-black-nitrile-gloves-large-5ml-100ct"
       },
       "notes": "Live MVR SKU price refresh",
@@ -3302,7 +3302,7 @@
         "packageSize": "50PK",
         "price": 2.19,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:49.267Z",
+        "checkedAt": "2026-08-22T05:06:36.319Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300765p_3a6671c5-ff75-4f85-ad4f-dbd1366ae026.jpg?v=1769548239"
       },
@@ -3404,7 +3404,7 @@
         "packageSize": "3 EA",
         "price": 3.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:49.552Z",
+        "checkedAt": "2026-08-22T05:06:36.615Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-parsley-curly-repack-3-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114902p_f19b77f7-73bb-420e-83fb-1b64c2474f52.jpg?v=1779721227"
       },
@@ -3465,7 +3465,7 @@
         "price": 26.99,
         "unitPrice": 2.98,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:49.865Z",
+        "checkedAt": "2026-08-22T05:06:36.929Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/italpasta-penne-rigate-20lb",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0100068062022c.jpg?v=1777380153"
       },
@@ -3606,7 +3606,7 @@
         "price": 32.49,
         "unitPrice": 8.12,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:50.154Z",
+        "checkedAt": "2026-08-22T05:06:37.221Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/aurora-eggplant-in-oil-hot-4lt",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006165900714p_4f367eef-ea90-4881-bf54-11dd346173ff.jpg?v=1782887903"
       },
@@ -3626,7 +3626,7 @@
         "price": 3.29,
         "unitPrice": 5.14,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:55.093Z",
+        "checkedAt": "2026-08-22T05:06:42.118Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/casa-mendosa-tortillas-original-large-640gr",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006340017010p_437fb54f-4601-4b8f-9b24-5664528c0c03.jpg?v=1765525564"
       },
@@ -3733,7 +3733,7 @@
         "packageSize": "54X108 EA",
         "price": 0.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:55.397Z",
+        "checkedAt": "2026-08-22T05:06:42.396Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/unique-lime-green-rect-plastic-tablecover-54x108-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001117905098p_d486cf22-7cac-423b-abc4-04d8ebd02f2f.jpg?v=1784745218"
       },
@@ -3837,7 +3837,7 @@
         "brand": "TITAN",
         "price": 24.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:55.681Z",
+        "checkedAt": "2026-08-22T05:06:42.706Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/titan-plastic-food-wrap-17x2500-in",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005921232313p.jpg?v=1761979300"
       },
@@ -3917,7 +3917,7 @@
         "packageSize": "1 EA",
         "price": 3.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:55.996Z",
+        "checkedAt": "2026-08-22T05:06:42.996Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-pomegranate-red-1-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001310000243p_0ceb9773-b1c0-4105-a52d-7fc5ee1e7170.jpg?v=1779981080"
       },
@@ -3949,7 +3949,7 @@
         "packageSize": "15EA",
         "price": 30.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:56.302Z",
+        "checkedAt": "2026-08-22T05:06:43.289Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/upper-crust-puff-dough-sheets-10x15-15ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0077347940213p_2dbd211e-9717-4e8f-b119-5bc65ba096d7.jpg?v=1743166716"
       },
@@ -3984,7 +3984,7 @@
         "price": 19.99,
         "unitPrice": 1.76,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:56.588Z",
+        "checkedAt": "2026-08-22T05:06:43.570Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-onions-red-25-lbs",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003338345098c.jpg?v=1786451897"
       },
@@ -4035,7 +4035,7 @@
         "price": 2.49,
         "unitPrice": 5.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:56.882Z",
+        "checkedAt": "2026-08-22T05:06:43.859Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-radishes-red-1-lb",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003338367002p.jpg?v=1781879776"
       },
@@ -4070,7 +4070,7 @@
         "price": 7.99,
         "unitPrice": 8.81,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:57.184Z",
+        "checkedAt": "2026-08-22T05:06:44.152Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/fruits-grapes-red-bag",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/7754790000094p_2ea3258a-8880-437c-9f7b-f6b12577fd8a.jpg?v=1786380977"
       },
@@ -4119,7 +4119,7 @@
         "price": 6.39,
         "unitPrice": 3.23,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:57.477Z",
+        "checkedAt": "2026-08-22T05:06:44.444Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/san-pellegrino-aranciata-cans-6x330ml-1",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0005500020145p.jpg?v=1777739657"
       },
@@ -4168,7 +4168,7 @@
         "price": 18.99,
         "unitPrice": 9.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:57.833Z",
+        "checkedAt": "2026-08-22T05:06:44.748Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/chef-nutri-cheddar-shredded-topping-2kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062823537614p_1abc9487-8245-49c2-85f4-7b926abceed5.jpg?v=1777618456"
       },
@@ -4309,7 +4309,7 @@
         "price": 129.99,
         "unitPrice": 14.32,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:58.125Z",
+        "checkedAt": "2026-08-22T05:06:45.036Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/racolli-shredded-mozzarella-20-4x2-27kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1006609635042p_d11e10a1-25b0-4163-8216-13d217b520a7.jpg?v=1786115433"
       },
@@ -4448,7 +4448,7 @@
         "packageSize": "1EA",
         "price": 1.69,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:58.428Z",
+        "checkedAt": "2026-08-22T05:06:45.331Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/link-mesh-sink-strainer-1ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0007675324971p_ed39f772-4012-4943-8f93-bf88e2c2dfdd.jpg?v=1759759479"
       },
@@ -4565,7 +4565,7 @@
         "price": 3.99,
         "unitPrice": 8.79,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:58.726Z",
+        "checkedAt": "2026-08-22T05:06:45.629Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-mushrooms-sliced-454-g",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0003338345075p_63566bcf-7010-45df-b589-017ae9ec3807.jpg?v=1782139941"
       },
@@ -4601,7 +4601,7 @@
         "price": 40.49,
         "unitPrice": 4.05,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:59.044Z",
+        "checkedAt": "2026-08-22T05:06:45.924Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/elegant-sour-cream-10kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062784301557p.jpg?v=1771965982"
       },
@@ -4758,7 +4758,7 @@
         "price": 75.89,
         "unitPrice": 5.42,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:59.328Z",
+        "checkedAt": "2026-08-22T05:06:46.233Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/lynch-strawberry-jam-14kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006280212632p.jpg?v=1786114578"
       },
@@ -4874,7 +4874,7 @@
         "brand": "UNIQUE",
         "price": 1.09,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:59.613Z",
+        "checkedAt": "2026-08-22T05:06:46.527Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/unique-gold-round-tablecover-84in-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0001117950035p_0351c426-0443-4175-8e67-71a4d7ec623c.jpg?v=1784742802"
       },
@@ -4940,7 +4940,7 @@
         "price": 29.99,
         "unitPrice": 2.64,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:22:59.938Z",
+        "checkedAt": "2026-08-22T05:06:46.823Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-tomatoes-5x6-case-25-lbs",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001114817p_7fd56fcb-2c89-49ec-801e-d5709445259d.jpg?v=1786713683"
       },
@@ -4987,7 +4987,7 @@
         "brand": "TODAYS KITCHEN",
         "price": 0.79,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:00.317Z",
+        "checkedAt": "2026-08-22T05:06:47.147Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/todays-kitchen-7in-mini-tongs-ea",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0077935000912p.jpg?v=1778003447"
       },
@@ -5109,7 +5109,7 @@
         "price": 18.49,
         "unitPrice": 6.51,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:00.607Z",
+        "checkedAt": "2026-08-22T05:06:47.446Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/tropic-isle-coconut-cream-2-84lt",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000063870p_7759bb6e-dab8-4673-a9ec-2a5e19a49d58.jpg?v=1783517007"
       },
@@ -5145,7 +5145,7 @@
         "price": 1.99,
         "unitPrice": 6.12,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:00.907Z",
+        "checkedAt": "2026-08-22T05:06:47.758Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/tropicana-apple-juice-325ml",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004850000031p.jpg?v=1785857523"
       },
@@ -5181,7 +5181,7 @@
         "price": 10.69,
         "unitPrice": 5.35,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:01.186Z",
+        "checkedAt": "2026-08-22T05:06:48.062Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/unico-pizza-style-olives-2lt",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006780000573p_faff79d9-a299-4c82-b3dd-9fa1fe678ea2.jpg?v=1786216403"
       },
@@ -5232,9 +5232,9 @@
         "price": 29.99,
         "unitPrice": 2.63,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:01.473Z",
+        "checkedAt": "2026-08-22T05:06:48.350Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/chapmans-ice-cream-vanilla-11-4lt",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006294201001p_e166cafb-5dd8-45f7-879f-c67ab69be00f.jpg?v=1782889686"
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0006294201001p.jpg?v=1787326218"
       },
       "notes": "Live MVR SKU price refresh",
       "alternates": [
@@ -5327,7 +5327,7 @@
         "price": 29.99,
         "unitPrice": 6,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:01.764Z",
+        "checkedAt": "2026-08-22T05:06:48.651Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/esma-white-quinoa-5kg",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062825105056p_45ba1807-3166-43ea-a1cb-75c7d527bff0.jpg?v=1786638437"
       },
@@ -5466,7 +5466,7 @@
         "price": 4.99,
         "unitPrice": 4.4,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:02.079Z",
+        "checkedAt": "2026-08-22T05:06:48.935Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-peppers-yellow-repack-2-5-lbs",
         "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000001365203p_dbedc106-4063-4867-b97f-cf3a6416c026.jpg?v=1786358536"
       },
@@ -5500,7 +5500,7 @@
         "price": 39.99,
         "unitPrice": 1.76,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:02.362Z",
+        "checkedAt": "2026-08-22T05:06:49.216Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-onions-cooking-50-lbs-1"
       },
       "notes": "Live MVR SKU price refresh",
@@ -5519,7 +5519,7 @@
         "price": 6.49,
         "unitPrice": 1.43,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:23:02.647Z",
+        "checkedAt": "2026-08-22T05:06:49.517Z",
         "sourceUrl": "https://plus.mvrwholesale.com/products/vegetables-potatoes-yukon-gold-10-lbs-2"
       },
       "notes": "Live MVR SKU price refresh",
@@ -5542,7 +5542,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-08-21T05:23:03.031Z",
+  "updatedAt": "2026-08-22T05:06:49.803Z",
   "matched": 89,
   "itemCount": 125
 }

@@ -1,6 +1,6 @@
 {
   "storeId": "3660",
-  "checkedAt": "2026-08-21T05:21:47.359Z",
+  "checkedAt": "2026-08-22T05:05:43.752Z",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -14,7 +14,7 @@
         "parsedMassKg": 0.5,
         "price": 5.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:20:54.361Z",
+        "checkedAt": "2026-08-22T05:05:00.538Z",
         "sourceUrl": "https://www.nofrills.ca/en/naturegg-simply-egg-whites/p/20820355001_EA",
         "image": "https://digital.loblaws.ca/PCX/20820355001_EA/en/1/6565100249_en_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
@@ -35,7 +35,7 @@
         "wasPrice": 4.29,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:20:58.479Z",
+        "checkedAt": "2026-08-22T05:05:04.286Z",
         "sourceUrl": "https://www.nofrills.ca/en/gluten-free-original-oat-milk-alternative/p/21037796_EA",
         "image": "https://digital.loblaws.ca/PCX/21037796_EA/en/1/21037796_en_1_1200.png"
       },
@@ -52,7 +52,7 @@
         "packageSize": "1 ea, $3.99/1ea",
         "price": 3.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:20:59.970Z",
+        "checkedAt": "2026-08-22T05:05:05.469Z",
         "sourceUrl": "https://www.nofrills.ca/en/pineapple/p/20160992001_EA",
         "image": "https://digital.loblaws.ca/PCX/20160992001_EA/en/1/20160992001_en_front_1200.png"
       },
@@ -69,7 +69,7 @@
         "packageSize": "$1.52/1kg $0.69/1lb",
         "price": 1.75,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:01.611Z",
+        "checkedAt": "2026-08-22T05:05:06.877Z",
         "sourceUrl": "https://www.nofrills.ca/en/bananas-bunch/p/20175355001_KG",
         "image": "https://digital.loblaws.ca/PCX/20175355001_KG/en/1/20175355001_enfr_front_v1_1200.png"
       },
@@ -85,10 +85,10 @@
         "name": "English Cucumber",
         "packageSize": "1 ea, $0.94/1ea",
         "price": 0.94,
-        "wasPrice": 1.29,
+        "wasPrice": 0.99,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:03.070Z",
+        "checkedAt": "2026-08-22T05:05:08.064Z",
         "sourceUrl": "https://www.nofrills.ca/en/english-cucumber/p/20070132001_EA",
         "image": "https://digital.loblaws.ca/PCX/20070132001_EA/en/1/20070132001_en_front_v1_1200.png"
       },
@@ -121,7 +121,7 @@
         "parsedMassKg": 2,
         "price": 5.67,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:06.887Z",
+        "checkedAt": "2026-08-22T05:05:11.119Z",
         "sourceUrl": "https://www.nofrills.ca/en/kosher-homogenized-milk/p/20094120002_EA",
         "image": "https://digital.loblaws.ca/PCX/20094120002_EA/en/1/20094120002_en_front_1200.png"
       },
@@ -138,7 +138,7 @@
         "parsedMassKg": 0.907,
         "price": 7.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:04.641Z",
+        "checkedAt": "2026-08-22T05:05:09.309Z",
         "sourceUrl": "https://www.nofrills.ca/en/2-lb-blueberries/p/20141763001_EA",
         "image": "https://digital.loblaws.ca/PCX/20141763001_EA/en/1/20141763001_en_front_1200.png"
       },
@@ -197,7 +197,7 @@
         "wasPrice": 4.49,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:00.641Z",
+        "checkedAt": "2026-08-22T05:05:06.145Z",
         "sourceUrl": "https://www.nofrills.ca/en/original-almond-milk-alternative/p/20299698001_EA",
         "image": "https://digital.loblaws.ca/PCX/20299698001_EA/en/1/20299698001_en_1_1200.png"
       },
@@ -215,7 +215,7 @@
         "parsedMassKg": 2,
         "price": 5.67,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:06.210Z",
+        "checkedAt": "2026-08-22T05:05:10.585Z",
         "sourceUrl": "https://www.nofrills.ca/en/kosher-2-milk/p/20094120003_EA",
         "image": "https://digital.loblaws.ca/PCX/20094120003_EA/en/1/20094120003_en_front_1200.png"
       },
@@ -233,7 +233,7 @@
         "parsedMassKg": 0.907,
         "price": 7.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:20:55.016Z",
+        "checkedAt": "2026-08-22T05:05:01.099Z",
         "sourceUrl": "https://www.nofrills.ca/en/grape-tomato/p/20840038001_EA",
         "image": "https://digital.loblaws.ca/PCX/20840038001_EA/en/1/20840038001_en_front_v1_1200.png"
       },
@@ -293,7 +293,7 @@
         "packageSize": "18 ea, $0.41/1ea",
         "price": 7.29,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:47.357Z",
+        "checkedAt": "2026-08-22T05:05:43.750Z",
         "sourceUrl": "https://www.nofrills.ca/en/extra-large-eggs/p/20823663001_EA",
         "image": "https://digital.loblaws.ca/PCX/20823663001_EA/en/1/20823663001_en_front_1200.png"
       },
@@ -312,7 +312,7 @@
         "parsedMassKg": 1.36,
         "price": 6,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:20:55.738Z",
+        "checkedAt": "2026-08-22T05:05:01.886Z",
         "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-lemons-3lb-bag/p/21124487001_EA",
         "image": "https://digital.loblaws.ca/PCX/21124487001_EA/en/1/21124487001_en_front_1200.png"
       },
@@ -355,7 +355,7 @@
         "packageSize": "$6.59/1kg $2.99/1lb",
         "price": 0.92,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:20:56.421Z",
+        "checkedAt": "2026-08-22T05:05:02.474Z",
         "sourceUrl": "https://www.nofrills.ca/en/rocha-pears/p/20129549001_KG",
         "image": "https://digital.loblaws.ca/PCX/20129549001_KG/en/1/20129549001_en_front_1200.png"
       },
@@ -404,7 +404,7 @@
         "packageSize": "$6.59/1kg $2.99/1lb",
         "price": 3.76,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:20:57.147Z",
+        "checkedAt": "2026-08-22T05:05:03.087Z",
         "sourceUrl": "https://www.nofrills.ca/en/purple-eggplants/p/20155709001_KG",
         "image": "https://digital.loblaws.ca/PCX/20155709001_KG/en/1/20155709001_en_front_1200.png"
       },
@@ -426,7 +426,7 @@
         "packageSize": "$5.49/1kg $2.49/1lb",
         "price": 3.9,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:20:57.787Z",
+        "checkedAt": "2026-08-22T05:05:03.769Z",
         "sourceUrl": "https://www.nofrills.ca/en/tomato-on-the-vine-red-1-bunch/p/20026703001_KG",
         "image": "https://digital.loblaws.ca/PCX/20026703001_KG/en/1/20026703001_en_front_1200.png"
       },
@@ -467,7 +467,7 @@
         "packageSize": "$4.39/1kg $1.99/1lb",
         "price": 2.77,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:20:59.175Z",
+        "checkedAt": "2026-08-22T05:05:04.800Z",
         "sourceUrl": "https://www.nofrills.ca/en/sweet-potato/p/20127708001_KG",
         "image": "https://digital.loblaws.ca/PCX/20127708001_KG/en/1/20127708001_en_front_1200.png"
       },
@@ -485,7 +485,7 @@
         "parsedMassKg": 1,
         "price": 5.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:03.793Z",
+        "checkedAt": "2026-08-22T05:05:08.614Z",
         "sourceUrl": "https://www.nofrills.ca/en/garlic-bulbs/p/21238843001_EA",
         "image": "https://digital.loblaws.ca/PCX/21238843001_EA/en/1/21238843001_en_front_1200.png"
       },
@@ -503,7 +503,7 @@
         "parsedMassKg": 0.517,
         "price": 4.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:05.358Z",
+        "checkedAt": "2026-08-22T05:05:10.049Z",
         "sourceUrl": "https://www.nofrills.ca/en/strawberry-quart/p/20503017001_EA",
         "image": "https://digital.loblaws.ca/PCX/20503017001_EA/en/1/20503017001_en_front_1200.png"
       },
@@ -560,7 +560,7 @@
         "parsedMassKg": 0.454,
         "price": 8.29,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:07.596Z",
+        "checkedAt": "2026-08-22T05:05:11.781Z",
         "sourceUrl": "https://www.nofrills.ca/en/unsalted-butter/p/20559466_EA",
         "image": "https://digital.loblaws.ca/PCX/20559466_EA/en/1/6601390561_en_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
@@ -577,7 +577,7 @@
         "packageSize": "12 ea, $0.33/1ea",
         "price": 3.93,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:08.311Z",
+        "checkedAt": "2026-08-22T05:05:12.331Z",
         "sourceUrl": "https://www.nofrills.ca/en/large-size-eggs-12-pack/p/20812144001_EA",
         "image": "https://digital.loblaws.ca/PCX/20812144001_EA/en/1/20812144001_en_front_v1_1200.png"
       },
@@ -680,7 +680,7 @@
         "parsedMassKg": 2.63,
         "price": 8.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:09.033Z",
+        "checkedAt": "2026-08-22T05:05:12.930Z",
         "sourceUrl": "https://www.nofrills.ca/en/pure-premium-orange-juice-pulp-free/p/20119756001_EA",
         "image": "https://digital.loblaws.ca/PCX/20119756001_EA/en/1/20119756001_enfr_front_v1_1200.png"
       },
@@ -708,7 +708,7 @@
         "wasPrice": 5.5,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:11.262Z",
+        "checkedAt": "2026-08-22T05:05:14.534Z",
         "sourceUrl": "https://www.nofrills.ca/en/banana-sliced/p/21289947_EA",
         "image": "https://digital.loblaws.ca/PCX/21289947_EA/en/1/21289947_en_front_1200.png"
       },
@@ -727,7 +727,7 @@
         "parsedMassKg": 2,
         "price": 15.29,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:11.910Z",
+        "checkedAt": "2026-08-22T05:05:15.114Z",
         "sourceUrl": "https://www.nofrills.ca/en/blueberries/p/21033164_EA",
         "image": "https://digital.loblaws.ca/PCX/21033164_EA/en/1/21033164_en_front_1200.png"
       },
@@ -812,7 +812,7 @@
         "parsedMassKg": 0.4,
         "price": 3,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:12.717Z",
+        "checkedAt": "2026-08-22T05:05:15.669Z",
         "sourceUrl": "https://www.nofrills.ca/en/frozen-sliced-strawberries/p/21545106_EA",
         "image": "https://digital.loblaws.ca/PCX/21545106_EA/en/1/21545106_en_front_v1_1200.png"
       },
@@ -871,7 +871,7 @@
         "parsedMassKg": 0.3,
         "price": 2,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:13.548Z",
+        "checkedAt": "2026-08-22T05:05:16.237Z",
         "sourceUrl": "https://www.nofrills.ca/en/chopped-spinach/p/20611796_EA",
         "image": "https://digital.loblaws.ca/PCX/20611796_EA/en/1/20611796_en_front_1200.png"
       },
@@ -923,7 +923,7 @@
         "parsedMassKg": 0.6,
         "price": 6.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:02.361Z",
+        "checkedAt": "2026-08-22T05:05:07.562Z",
         "sourceUrl": "https://www.nofrills.ca/en/fresh-kiwi-fruit/p/21099138001_EA",
         "image": "https://digital.loblaws.ca/PCX/21099138001_EA/en/1/21099138001_en_front_1200.png"
       },
@@ -950,7 +950,7 @@
         "parsedMassKg": 0.102,
         "price": 1.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:09.914Z",
+        "checkedAt": "2026-08-22T05:05:13.465Z",
         "sourceUrl": "https://www.nofrills.ca/en/vanilla-instant-pudding-mix/p/20307001001_EA",
         "image": "https://digital.loblaws.ca/PCX/20307001001_EA/en/1/20307001001_en_front_v2_1200.png"
       },
@@ -967,7 +967,7 @@
         "packageSize": "270 ea, $0.05/1ea",
         "price": 12.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:10.594Z",
+        "checkedAt": "2026-08-22T05:05:14.002Z",
         "sourceUrl": "https://www.nofrills.ca/en/sandwich-bags-with-grip-n-seal-technology/p/21196100_EA",
         "image": "https://digital.loblaws.ca/PCX/21196100_EA/en/1/21196100_en_1_1200.png"
       },
@@ -985,7 +985,7 @@
         "parsedMassKg": 2.3,
         "price": 3.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:14.260Z",
+        "checkedAt": "2026-08-22T05:05:16.766Z",
         "sourceUrl": "https://www.nofrills.ca/en/cubed-ice/p/21467229_EA",
         "image": "https://digital.loblaws.ca/PCX/21467229_EA/en/1/76367900023_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
@@ -1044,7 +1044,7 @@
         "parsedMassKg": 2,
         "price": 15.29,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:14.978Z",
+        "checkedAt": "2026-08-22T05:05:17.305Z",
         "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-frozen-pineapple-pieces/p/21289951_EA",
         "image": "https://digital.loblaws.ca/PCX/21289951_EA/en/1/21289951_en_front_v1_1200.png"
       },
@@ -1093,7 +1093,7 @@
         "parsedMassKg": 0.51,
         "price": 2.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:15.754Z",
+        "checkedAt": "2026-08-22T05:05:17.805Z",
         "sourceUrl": "https://www.nofrills.ca/en/everything-bagels/p/21297831_EA",
         "image": "https://digital.loblaws.ca/PCX/21297831_EA/en/1/21297831_en_front_1200.png"
       },
@@ -1140,7 +1140,7 @@
         "parsedMassKg": 0.37,
         "price": 3,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:16.572Z",
+        "checkedAt": "2026-08-22T05:05:18.406Z",
         "sourceUrl": "https://www.nofrills.ca/en/sourdough-baguette/p/21638046_EA",
         "image": "https://digital.loblaws.ca/PCX/21638046_EA/en/1/21638046_en_front_v1_1200.png"
       },
@@ -1169,7 +1169,7 @@
         "wasPrice": 7,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:17.228Z",
+        "checkedAt": "2026-08-22T05:05:18.897Z",
         "sourceUrl": "https://www.nofrills.ca/en/bartlett-pear-2-l/p/21111368001_EA",
         "image": "https://digital.loblaws.ca/PCX/21111368001_EA/en/1/21111368001_enfr_front_v1_1200.png"
       },
@@ -1194,7 +1194,7 @@
         "packageSize": "1 ea, $2.99/1ea",
         "price": 2.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:17.887Z",
+        "checkedAt": "2026-08-22T05:05:19.479Z",
         "sourceUrl": "https://www.nofrills.ca/en/cantaloupe/p/20167017001_EA",
         "image": "https://digital.loblaws.ca/PCX/20167017001_EA/en/1/20167017001_en_front_1200.png"
       },
@@ -1213,7 +1213,7 @@
         "wasPrice": 2.99,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:18.542Z",
+        "checkedAt": "2026-08-22T05:05:20.075Z",
         "sourceUrl": "https://www.nofrills.ca/en/celery-stalks/p/20163119001_EA",
         "image": "https://digital.loblaws.ca/PCX/20163119001_EA/en/1/20163119001_en_front_1200.png"
       },
@@ -1266,7 +1266,7 @@
         "parsedMassKg": 0.028,
         "price": 3,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:19.233Z",
+        "checkedAt": "2026-08-22T05:05:20.693Z",
         "sourceUrl": "https://www.nofrills.ca/en/cilantro/p/21184810_EA",
         "image": "https://digital.loblaws.ca/PCX/21184810_EA/en/1/21184810_en_front_1200.png"
       },
@@ -1314,7 +1314,7 @@
         "parsedMassKg": 5.436,
         "price": 11.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:19.997Z",
+        "checkedAt": "2026-08-22T05:05:21.369Z",
         "sourceUrl": "https://www.nofrills.ca/en/cottage-cheese-0-01/p/21387030_EA",
         "image": "https://digital.loblaws.ca/PCX/21387030_EA/en/1/1435300051_en_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
@@ -1341,7 +1341,7 @@
         "parsedMassKg": 1.37,
         "price": 39,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:20.674Z",
+        "checkedAt": "2026-08-22T05:05:21.952Z",
         "sourceUrl": "https://www.nofrills.ca/en/cream-cheese-bars/p/20671277_EA",
         "image": "https://digital.loblaws.ca/PCX/20671277_EA/en/1/20671277_en_front_v1_1200.png"
       },
@@ -1360,7 +1360,7 @@
         "parsedMassKg": 1,
         "price": 3.79,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:21.434Z",
+        "checkedAt": "2026-08-22T05:05:22.488Z",
         "sourceUrl": "https://www.nofrills.ca/en/natural-dark-brown-sugar/p/20169394_EA",
         "image": "https://digital.loblaws.ca/PCX/20169394_EA/en/1/5889165231_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
@@ -1403,7 +1403,7 @@
         "parsedMassKg": 0.9,
         "price": 2,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:22.199Z",
+        "checkedAt": "2026-08-22T05:05:23.024Z",
         "sourceUrl": "https://www.nofrills.ca/en/fettuccine/p/20315613007_EA",
         "image": "https://digital.loblaws.ca/PCX/20315613007_EA/en/1/20315613007_en_front_1200.png"
       },
@@ -1452,7 +1452,7 @@
         "parsedMassKg": 0.227,
         "price": 6.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:22.959Z",
+        "checkedAt": "2026-08-22T05:05:23.639Z",
         "sourceUrl": "https://www.nofrills.ca/en/fresh-mozzarella/p/21632629_EA",
         "image": "https://digital.loblaws.ca/PCX/21632629_EA/en/1/6820086398_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
       },
@@ -1487,7 +1487,7 @@
         "parsedMassKg": 0.4,
         "price": 5,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:23.632Z",
+        "checkedAt": "2026-08-22T05:05:24.214Z",
         "sourceUrl": "https://www.nofrills.ca/en/frozen-butternut-squash-chunks-organic/p/21004391_EA",
         "image": "https://digital.loblaws.ca/PCX/21004391_EA/en/1/21004391_enfr_front_v1_1200.png"
       },
@@ -1529,7 +1529,7 @@
         "parsedMassKg": 0.2,
         "price": 4.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:24.511Z",
+        "checkedAt": "2026-08-22T05:05:24.755Z",
         "sourceUrl": "https://www.nofrills.ca/en/physalis-gooseberries/p/20845869_EA",
         "image": "https://digital.loblaws.ca/PCX/20845869_EA/en/1/20845869_en_front_1200.png"
       },
@@ -1548,7 +1548,7 @@
         "parsedMassKg": 1.81,
         "price": 9.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:25.211Z",
+        "checkedAt": "2026-08-22T05:05:25.298Z",
         "sourceUrl": "https://www.nofrills.ca/en/granny-smith-apples-4-lb-bag/p/20128645001_EA",
         "image": "https://digital.loblaws.ca/PCX/20128645001_EA/en/1/20128645001_en_front_1200.png"
       },
@@ -1591,7 +1591,7 @@
         "parsedMassKg": 1.36,
         "price": 30.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:25.897Z",
+        "checkedAt": "2026-08-22T05:05:26.001Z",
         "sourceUrl": "https://www.nofrills.ca/en/ricotta-cheese/p/20276046_EA",
         "image": "https://digital.loblaws.ca/PCX/20276046_EA/en/1/20276046_en_front_1200.png"
       },
@@ -1610,7 +1610,7 @@
         "parsedMassKg": 0.34,
         "price": 17.5,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:26.600Z",
+        "checkedAt": "2026-08-22T05:05:26.583Z",
         "sourceUrl": "https://www.nofrills.ca/en/sliced-cheese/p/20164279_EA",
         "image": "https://digital.loblaws.ca/PCX/20164279_EA/en/1/20164279_en_front_1200.png"
       },
@@ -1629,7 +1629,7 @@
         "parsedMassKg": 0.45,
         "price": 4.5,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:27.290Z",
+        "checkedAt": "2026-08-22T05:05:27.223Z",
         "sourceUrl": "https://www.nofrills.ca/en/raw-sunflower-seeds-shelled/p/20559162_EA",
         "image": "https://digital.loblaws.ca/PCX/20559162_EA/en/1/20559162_en_front_1200.png"
       },
@@ -1646,7 +1646,7 @@
         "packageSize": "1 ea, $5.99/1ea",
         "price": 5.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:27.969Z",
+        "checkedAt": "2026-08-22T05:05:27.837Z",
         "sourceUrl": "https://www.nofrills.ca/en/honeydew-melon/p/20045276001_EA",
         "image": "https://digital.loblaws.ca/PCX/20045276001_EA/en/1/20045276001_en_front_1200.png"
       },
@@ -1667,7 +1667,7 @@
         "wasPrice": 9.49,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:28.813Z",
+        "checkedAt": "2026-08-22T05:05:28.479Z",
         "sourceUrl": "https://www.nofrills.ca/en/kosher-instant-coffee/p/20081513_EA",
         "image": "https://digital.loblaws.ca/PCX/20081513_EA/en/1/20081513_en_front_1200.png"
       },
@@ -1692,7 +1692,7 @@
         "packageSize": "$11.00/1kg $4.99/1lb",
         "price": 0.55,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:29.543Z",
+        "checkedAt": "2026-08-22T05:05:29.078Z",
         "sourceUrl": "https://www.nofrills.ca/en/jalapeno-peppers/p/20088387001_KG",
         "image": "https://digital.loblaws.ca/PCX/20088387001_KG/en/1/20088387001_en_front_1200.png"
       },
@@ -1711,7 +1711,7 @@
         "parsedMassKg": 0.68,
         "price": 5,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:30.227Z",
+        "checkedAt": "2026-08-22T05:05:29.723Z",
         "sourceUrl": "https://www.nofrills.ca/en/naturally-imperfect-limes/p/21673921001_EA",
         "image": "https://digital.loblaws.ca/PCX/21673921001_EA/en/1/21673921001_en_front_1200.png"
       },
@@ -1743,7 +1743,7 @@
         "parsedMassKg": 1.304,
         "price": 23,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:30.909Z",
+        "checkedAt": "2026-08-22T05:05:30.338Z",
         "sourceUrl": "https://www.nofrills.ca/en/kosher-pizza-bagel-18-pack/p/21055692_EA",
         "image": "https://digital.loblaws.ca/PCX/21055692_EA/en/1/21055692_en_front_1200.png"
       },
@@ -1820,7 +1820,7 @@
         "wasPrice": 3,
         "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:31.631Z",
+        "checkedAt": "2026-08-22T05:05:31.015Z",
         "sourceUrl": "https://www.nofrills.ca/en/oreo-double-stuf-sandwich-cookies/p/21358406_EA",
         "image": "https://digital.loblaws.ca/PCX/21358406_EA/en/1/21358406_en_front_v1_1200.png"
       },
@@ -1845,7 +1845,7 @@
         "packageSize": "1 ea, $2.49/1ea",
         "price": 2.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:32.400Z",
+        "checkedAt": "2026-08-22T05:05:31.648Z",
         "sourceUrl": "https://www.nofrills.ca/en/italian-parsley/p/20139141001_EA",
         "image": "https://digital.loblaws.ca/PCX/20139141001_EA/en/1/20139141001_en_front_1200.png"
       },
@@ -1877,7 +1877,7 @@
         "parsedMassKg": 0.9,
         "price": 2,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:33.111Z",
+        "checkedAt": "2026-08-22T05:05:32.286Z",
         "sourceUrl": "https://www.nofrills.ca/en/penne-rigate-pasta/p/20315613006_EA",
         "image": "https://digital.loblaws.ca/PCX/20315613006_EA/en/1/20315613006_en_front_v3_1200.png"
       },
@@ -1951,7 +1951,7 @@
         "packageSize": "1 ea, $3.94/1ea",
         "price": 3.94,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:33.992Z",
+        "checkedAt": "2026-08-22T05:05:32.837Z",
         "sourceUrl": "https://www.nofrills.ca/en/water-resistant-tablecloth-60-in-x-102-in-stripe/p/21693324_EA",
         "image": "https://digital.loblaws.ca/PCX/21693324_EA/en/1/21693324_en_front_1200.png"
       },
@@ -1976,7 +1976,7 @@
         "packageSize": "1 ea, $3.79/1ea",
         "price": 3.79,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:34.686Z",
+        "checkedAt": "2026-08-22T05:05:33.403Z",
         "sourceUrl": "https://www.nofrills.ca/en/pomegranate/p/20134767001_EA",
         "image": "https://digital.loblaws.ca/PCX/20134767001_EA/en/1/20134767001_en_front_1200.png"
       },
@@ -1995,7 +1995,7 @@
         "parsedMassKg": 0.5,
         "price": 2.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:35.310Z",
+        "checkedAt": "2026-08-22T05:05:33.949Z",
         "sourceUrl": "https://www.nofrills.ca/en/kosher-maison-puff-pastry-dough/p/20072329_EA",
         "image": "https://assets.loblaws.ca/pcx_bronx_fe_assets/images/common/coming-soon-en-web.png"
       },
@@ -2105,7 +2105,7 @@
         "parsedMassKg": 3.18,
         "price": 9.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:36.065Z",
+        "checkedAt": "2026-08-22T05:05:34.497Z",
         "sourceUrl": "https://www.nofrills.ca/en/red-onion/p/21614337001_EA",
         "image": "https://digital.loblaws.ca/PCX/21614337001_EA/en/1/21614337001_en_front_1200.png"
       },
@@ -2123,7 +2123,7 @@
         "parsedMassKg": 0.454,
         "price": 2.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:36.775Z",
+        "checkedAt": "2026-08-22T05:05:35.024Z",
         "sourceUrl": "https://www.nofrills.ca/en/radish/p/20175513001_EA",
         "image": "https://digital.loblaws.ca/PCX/20175513001_EA/en/1/20175513001_en_front_1200.png"
       },
@@ -2153,7 +2153,7 @@
         "packageSize": "$9.90/1kg $4.49/1lb",
         "price": 9.8,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:37.458Z",
+        "checkedAt": "2026-08-22T05:05:35.549Z",
         "sourceUrl": "https://www.nofrills.ca/en/red-seedless-grapes/p/20159199001_KG",
         "image": "https://digital.loblaws.ca/PCX/20159199001_KG/en/1/20159199001_en_front_v2_1200.png"
       },
@@ -2180,7 +2180,7 @@
         "parsedMassKg": 1.98,
         "price": 7,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:38.179Z",
+        "checkedAt": "2026-08-22T05:05:36.115Z",
         "sourceUrl": "https://www.nofrills.ca/en/aranciata-italian-sparkling-fruit-beverage/p/21433205_C06",
         "image": "https://digital.loblaws.ca/PCX/21433205_C06/en/1/21433205_en_front_v1_1200.png"
       },
@@ -2199,7 +2199,7 @@
         "parsedMassKg": 0.142,
         "price": 8.5,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:38.849Z",
+        "checkedAt": "2026-08-22T05:05:36.765Z",
         "sourceUrl": "https://www.nofrills.ca/en/schtark-sliced-cheese-3-cheese-blend/p/20671472_EA",
         "image": "https://digital.loblaws.ca/PCX/20671472_EA/en/1/20671472_en_front_1200.png"
       },
@@ -2218,7 +2218,7 @@
         "parsedMassKg": 0.9,
         "price": 15.5,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:39.486Z",
+        "checkedAt": "2026-08-22T05:05:37.350Z",
         "sourceUrl": "https://www.nofrills.ca/en/shredded-cheddar-and-monterey-jack-cheese-blend-cl/p/20309769_EA",
         "image": "https://digital.loblaws.ca/PCX/20309769_EA/en/1/20309769_en_front_1200.png"
       },
@@ -2237,7 +2237,7 @@
         "parsedMassKg": 0.32,
         "price": 5.79,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:40.170Z",
+        "checkedAt": "2026-08-22T05:05:37.958Z",
         "sourceUrl": "https://www.nofrills.ca/en/shredded-mozzarella/p/21082491_EA",
         "image": "https://digital.loblaws.ca/PCX/21082491_EA/en/1/21082491_en_front_v1_1200.png"
       },
@@ -2278,7 +2278,7 @@
         "parsedMassKg": 0.227,
         "price": 2.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:40.913Z",
+        "checkedAt": "2026-08-22T05:05:38.532Z",
         "sourceUrl": "https://www.nofrills.ca/en/sliced-white-mushrooms/p/20743653_EA",
         "image": "https://digital.loblaws.ca/PCX/20743653_EA/en/1/20743653_en_front_1200.png"
       },
@@ -2302,7 +2302,7 @@
         "parsedMassKg": 0.5,
         "price": 2.79,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:41.896Z",
+        "checkedAt": "2026-08-22T05:05:39.040Z",
         "sourceUrl": "https://www.nofrills.ca/en/sour-cream/p/20299657_EA",
         "image": "https://digital.loblaws.ca/PCX/20299657_EA/en/1/20299657_en_front_v1_1200.png"
       },
@@ -2361,7 +2361,7 @@
         "parsedMassKg": 0.675,
         "price": 3.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:42.544Z",
+        "checkedAt": "2026-08-22T05:05:39.746Z",
         "sourceUrl": "https://www.nofrills.ca/en/sourdough-loaf/p/21740604_EA",
         "image": "https://digital.loblaws.ca/PCX/21740604_EA/en/1/21740604_en_front_1200.png"
       },
@@ -2412,7 +2412,7 @@
         "parsedMassKg": 0.2,
         "price": 14.5,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:43.213Z",
+        "checkedAt": "2026-08-22T05:05:40.262Z",
         "sourceUrl": "https://www.nofrills.ca/en/goat-cheese/p/20172542_EA",
         "image": "https://digital.loblaws.ca/PCX/20172542_EA/en/1/20172542_en_front_v1_1200.png"
       },
@@ -2438,7 +2438,7 @@
         "packageSize": "8 ea, $0.22/1ea",
         "price": 1.74,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:43.890Z",
+        "checkedAt": "2026-08-22T05:05:40.810Z",
         "sourceUrl": "https://www.nofrills.ca/en/mini-silicone-tongs-green/p/21684802_EA",
         "image": "https://digital.loblaws.ca/PCX/21684802_EA/en/1/21684802_en_front_1200.png"
       },
@@ -2465,7 +2465,7 @@
         "parsedMassKg": 1.36,
         "price": 5,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:44.643Z",
+        "checkedAt": "2026-08-22T05:05:41.423Z",
         "sourceUrl": "https://www.nofrills.ca/en/100-fresh-pressed-juice-apple-juice/p/21677467_EA",
         "image": "https://digital.loblaws.ca/PCX/21677467_EA/en/1/21677467_enfr_front_1200.png"
       },
@@ -2492,7 +2492,7 @@
         "parsedMassKg": 2,
         "price": 5.49,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:45.276Z",
+        "checkedAt": "2026-08-22T05:05:41.973Z",
         "sourceUrl": "https://www.nofrills.ca/en/markdale-creamery-vanilla-ice-cream/p/20315236001_EA",
         "image": "https://digital.loblaws.ca/PCX/20315236001_EA/en/1/6294200001_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
       },
@@ -2626,7 +2626,7 @@
         "packageSize": "$8.80/1kg $3.99/1lb",
         "price": 2.02,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:45.917Z",
+        "checkedAt": "2026-08-22T05:05:42.564Z",
         "sourceUrl": "https://www.nofrills.ca/en/greenhouse-peppers-yellow/p/20141814001_KG",
         "image": "https://digital.loblaws.ca/PCX/20141814001_KG/en/1/20141814001_en_front_1200.png"
       },
@@ -2645,7 +2645,7 @@
         "parsedMassKg": 4.54,
         "price": 8.99,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T05:21:46.661Z",
+        "checkedAt": "2026-08-22T05:05:43.141Z",
         "sourceUrl": "https://www.nofrills.ca/en/yellow-onions-10-lb-bag/p/20600991001_EA",
         "image": "https://digital.loblaws.ca/PCX/20600991001_EA/en/1/20600991001_en_front_v1_1200.png"
       },
@@ -2661,7 +2661,7 @@
       "alternates": []
     }
   ],
-  "updatedAt": "2026-08-21T05:21:47.359Z",
+  "updatedAt": "2026-08-22T05:05:43.752Z",
   "matched": 83,
   "itemCount": 134
 }
