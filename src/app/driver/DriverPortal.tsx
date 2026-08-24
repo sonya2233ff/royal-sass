@@ -224,16 +224,13 @@ export function DriverPortal() {
         <p className="kicker">Портал водія</p>
         <h1>Списки від офіціантів</h1>
         <p className="lede">
-          Офіціант уже порівняв продукти по каталогу, або ти вставляєш список з
-          WhatsApp. Ти обираєш магазини, куди можеш заїхати, і дивишся готові
-          варіанти закупки. Прийняття і повідомлення офіціанту ще не працюють.
+          Встав список з WhatsApp — додаток сам знайде продукти. Ти лише обираєш
+          магазини, куди заїжджаєш, і дивишся готові варіанти. Прийняття і
+          повідомлення офіціанту ще не працюють.
         </p>
       </header>
 
-      <WhatsAppPaste
-        catalog={catalog}
-        onTicket={(ticket) => applyTickets([ticket])}
-      />
+      <WhatsAppPaste onTicket={(ticket) => applyTickets([ticket])} />
 
       {!persisted && tickets.length > 0 && (
         <p className="soon">

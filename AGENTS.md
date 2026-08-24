@@ -213,7 +213,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `src/app/ProductSearch.tsx` | Homepage typeahead over shown staples only; empty query can open add |
 | `src/app/waiter/WaiterPortal.tsx` | Waiter catalog list; send compares catalog + posts ticket |
 | `src/app/driver/DriverPortal.tsx` | Driver store chips + WhatsApp paste + ready purchase plans |
-| `src/app/driver/WhatsAppPaste.tsx` | Paste WhatsApp list → confirm Master Products → ticket compare |
+| `src/app/driver/WhatsAppPaste.tsx` | Paste WhatsApp list → app finds Master Products → ticket compare |
 | `src/app/ProductSettings.tsx` | Per-card match/quantity settings modal |
 
 **Live data flow**
@@ -240,11 +240,11 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/adopt` | `confirm` — adopt remains for the match inspector; homepage search does not call it (empty search opens **Додати продукт** instead); 👍/👎 lock
 - `POST /api/staples/delete` — hide/remove shown cafe staples (`ids`). Confirm in UI. Skips `grayridge_eggs` / `eggs_30ct`. `persisted: false` on Vercel; client localStorage still hides.
 - `GET/POST /api/waiter/tickets` — waiter send / driver inbox. POST stamps a **catalog-only** compare (no Rapid/PCX rematch, missing ≠ `$0`) onto the ticket. Disk `data/catalog/waiter-tickets.json` (gitignored); `persisted: false` on Vercel. Same-phone backup: `royal-sass-driver-inbox-v1`. One active list per waiter device (later send replaces it). Driver recomputes **Як закупити** from those line costs and store chips (`royal-sass-driver-stores-v1`). Do not commit the disk file.
-- `POST /api/driver/whatsapp-list` — paste a shopping list → shown Master Products only (qty/unit, merge duplicates). Optional OpenAI maps unsure lines to catalog ids; never invents products or prices. Confirm in UI before `POST /api/waiter/tickets`.
+- `POST /api/driver/whatsapp-list` — paste a shopping list → shown Master Products only (qty/unit, merge duplicates). App auto-picks the best catalog hit. Optional OpenAI maps leftover lines to catalog ids; never invents products or prices. Driver UI then stamps `POST /api/waiter/tickets` without a confirm step.
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
 - `/waiter` — waiter portal: shown cafe catalog + list; **Відправити водію** compares catalog checkout (no rematch) and creates a driver ticket
-- `/driver` — driver portal: sent lists + WhatsApp paste (confirm Master Products, then catalog compare) + store chips (**Заїжджаю**) + ready purchase plans. Accept/message still visual only
+- `/driver` — driver portal: WhatsApp paste (app finds products) + sent lists + store chips (**Заїжджаю**) + ready purchase plans. Accept/message still visual only
 - `GET /api/compare` — **legacy** basket POC, not the staples UI
 
 Refresh/compare/rematch routes use `maxDuration = 60`.
@@ -301,7 +301,7 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**. A/B, Include/Exclude, quantity, and the named alternate persist across refresh on that phone (`royal-sass-product-overrides-v1`). They must not reset to catalog defaults on reload.
 - Nav: Cafe staples + **Офіціант** (`/waiter`) + **Водій** (`/driver`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
 - **Waiter portal** (`/waiter`): shown cafe catalog only. Draft `royal-sass-waiter-list-v1`. **Відправити водію** runs catalog checkout for those lines (qty × cafe default; eggs are egg count) and stamps costs on the ticket. No rematch. No invented prices.
-- **Driver portal** (`/driver`): inbox of sent lists plus **Вставити список з WhatsApp**. Parse maps messy text onto shown Master Products only (merge duplicates, extract qty/unit). Unsure lines wait for a pick — no impostor SKU. Confirm posts a ticket and stamps catalog checkout (no rematch). Store chips **Заїжджаю** (`royal-sass-driver-stores-v1`) recompute 1–2 stop plans. Hidden stores omitted, not `$0`. **No accept / in-transit / message-waiter API.**
+- **Driver portal** (`/driver`): paste a WhatsApp list — the app finds shown Master Products and loads the pick list. Driver only toggles **Заїжджаю** (`royal-sass-driver-stores-v1`) and sees ready 1–2 stop plans. No per-line confirm. Unmatched lines are skipped (not a new card, not `$0`). Hidden stores omitted, not `$0`. **No accept / in-transit / message-waiter API.**
 - Results: columns for the selected stores, then one-store basket totals, then **Як закупити** (1–2 stop plans; 3 only to fill holes), then stats. Catalog `onSale` / `wasPrice` show as **знижка** (and **дешевше · знижка** when that store is the cheapest). Search typeahead uses the same flags. No `/sales` page.
 - Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand. Category A settings can name one **альтернативний продукт** (search + Include/Exclude + cheaper checkbox).
 

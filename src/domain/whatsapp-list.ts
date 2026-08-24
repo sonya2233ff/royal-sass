@@ -57,9 +57,7 @@ export type WhatsAppConfirmLine = {
   note?: string;
 };
 
-const MATCHED_SCORE = 80;
 const UNSURE_SCORE = 40;
-const SCORE_GAP = 15;
 const MAX_ALTERNATIVES = 6;
 const MAX_LINES = 80;
 
@@ -328,6 +326,15 @@ function specializeHits(
       ].slice(0, MAX_ALTERNATIVES);
     }
   }
+  if (/^milk$/.test(query)) {
+    const twoPct = hits.find((h) => h.id === "milk_2pct_2l");
+    if (twoPct) {
+      return [
+        { ...twoPct, score: Math.max(twoPct.score, 90) },
+        ...hits.filter((h) => h.id !== "milk_2pct_2l"),
+      ].slice(0, MAX_ALTERNATIVES);
+    }
+  }
   return hits;
 }
 
@@ -339,20 +346,10 @@ export function matchWhatsAppQuery(
   if (q.length < 2) return { status: "unmatched", alternatives: [] };
   const ranked = specializeHits(q, rankCatalogHits(q, catalog), catalog);
   const best = ranked[0];
-  if (!best) return { status: "unmatched", alternatives: [] };
-  const second = ranked[1];
-  const gap = second ? best.score - second.score : 100;
-  const unique = !second;
-  if (best.score >= MATCHED_SCORE && gap >= SCORE_GAP) {
-    return { status: "matched", alternatives: ranked };
+  if (!best || best.score < UNSURE_SCORE) {
+    return { status: "unmatched", alternatives: ranked };
   }
-  if (unique && best.score >= UNSURE_SCORE) {
-    return { status: "matched", alternatives: ranked };
-  }
-  if (best.score >= UNSURE_SCORE) {
-    return { status: "unsure", alternatives: ranked };
-  }
-  return { status: "unmatched", alternatives: ranked };
+  return { status: "matched", alternatives: ranked };
 }
 
 export function parseWhatsAppList(
@@ -431,7 +428,7 @@ export function applyWhatsAppAiHint(
     { id: item.id, label: item.label, score: Math.round(Math.min(1, confidence) * 100) },
     ...decision.alternatives.filter((a) => a.id !== item.id),
   ].slice(0, MAX_ALTERNATIVES);
-  if (confidence >= 0.85) {
+  if (confidence >= 0.45) {
     return {
       ...decision,
       status: "matched",
@@ -440,16 +437,35 @@ export function applyWhatsAppAiHint(
       alternatives: alts,
     };
   }
-  if (confidence >= 0.45) {
-    return {
-      ...decision,
-      status: "unsure",
-      matchedId: item.id,
-      matchedLabel: item.label,
-      alternatives: alts,
-    };
-  }
   return { ...decision, alternatives: alts };
+}
+
+/** Take every catalog hit the parser found. Driver does not confirm rows. */
+export function adoptWhatsAppDecisions(
+  decisions: WhatsAppDecision[],
+): { confirmed: WhatsAppConfirmLine[]; missed: string[] } {
+  const confirmed: WhatsAppConfirmLine[] = [];
+  const missed: string[] = [];
+  for (const row of decisions) {
+    const hitId = row.matchedId ?? row.alternatives[0]?.id;
+    const hitLabel =
+      row.matchedLabel ??
+      row.alternatives.find((a) => a.id === hitId)?.label ??
+      row.query;
+    if (!hitId || row.status === "unmatched") {
+      missed.push(row.raw);
+      continue;
+    }
+    confirmed.push({
+      id: hitId,
+      label: hitLabel,
+      qty: row.qty,
+      unit: row.unit,
+      requestedAmount: row.requestedAmount,
+      note: row.raw,
+    });
+  }
+  return { confirmed, missed };
 }
 
 export function toWaiterLinesFromWhatsApp(

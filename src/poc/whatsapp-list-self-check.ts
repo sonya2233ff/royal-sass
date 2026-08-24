@@ -5,6 +5,7 @@
 import { catalogSearchHay } from "@/domain/staple-search";
 import { toRestaurantProduct } from "@/domain/restaurant-product";
 import {
+  adoptWhatsAppDecisions,
   applyWhatsAppAiHint,
   foldWhatsAppQuery,
   parseWhatsAppList,
@@ -70,19 +71,8 @@ tomato 5kg
   const milk = byQuery.get("milk");
   assert(milk, "merged milk");
   assert(milk?.qty === 4, `milk merged qty ${milk?.qty}`);
-  assert(
-    milk?.status === "unsure" ||
-      milk?.alternatives.some((a) => a.id === "milk_2pct_2l"),
-    "milk stays unsure or lists 2% (do not guess homo vs 2%)",
-  );
-  assert(
-    milk?.alternatives.some((a) => a.id === "milk_2pct_2l"),
-    "2% milk is an alternative",
-  );
-  assert(
-    milk?.alternatives.some((a) => a.id === "homo_milk_2l"),
-    "homo milk is an alternative",
-  );
+  assert(milk?.status === "matched", `milk status ${milk?.status}`);
+  assert(milk?.matchedId === "milk_2pct_2l", `milk id ${milk?.matchedId}`);
 
   const frozen = byQuery.get("frozen blueberries");
   assert(frozen?.status === "matched", frozen?.status);
@@ -106,6 +96,17 @@ tomato 5kg
     eggs.decisions.every((d) => d.matchedId === "large_eggs_dozen"),
     "яйця / eggs → large_eggs_dozen",
   );
+
+  const adopted = adoptWhatsAppDecisions(parsed.decisions);
+  assert(
+    adopted.confirmed.some((row) => row.id === "milk_2pct_2l" && row.qty === 4),
+    "adopt milk without driver confirm",
+  );
+  assert(
+    adopted.confirmed.some((row) => row.id === "frozen_blueberry" && row.qty === 3),
+    "adopt frozen blueberries",
+  );
+  assert(adopted.missed.length === 0, `missed ${adopted.missed.join(",")}`);
 
   const lines = toWaiterLinesFromWhatsApp([
     {
