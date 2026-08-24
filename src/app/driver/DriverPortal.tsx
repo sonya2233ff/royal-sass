@@ -29,11 +29,16 @@ import {
   WAITER_TICKETS_CHANNEL,
   writeDriverInbox,
 } from "@/lib/waiter-tickets";
+import { WhatsAppPaste } from "./WhatsAppPaste";
 
 type CatalogItem = {
   id: string;
   label: string;
   image?: string | null;
+  searchHay?: string;
+  queries?: string[];
+  mustIncludeAny?: string[];
+  mustIncludeAll?: string[];
 };
 
 const STATUS_UA: Record<WaiterTicketStatus, string> = {
@@ -219,11 +224,16 @@ export function DriverPortal() {
         <p className="kicker">Портал водія</p>
         <h1>Списки від офіціантів</h1>
         <p className="lede">
-          Офіціант уже порівняв продукти по каталогу. Ти лише обираєш магазини,
-          куди можеш заїхати, і дивишся готові варіанти закупки. Прийняття і
-          повідомлення офіціанту ще не працюють.
+          Офіціант уже порівняв продукти по каталогу, або ти вставляєш список з
+          WhatsApp. Ти обираєш магазини, куди можеш заїхати, і дивишся готові
+          варіанти закупки. Прийняття і повідомлення офіціанту ще не працюють.
         </p>
       </header>
+
+      <WhatsAppPaste
+        catalog={catalog}
+        onTicket={(ticket) => applyTickets([ticket])}
+      />
 
       {!persisted && tickets.length > 0 && (
         <p className="soon">
@@ -375,7 +385,12 @@ export function DriverPortal() {
                     <strong>{labelOf(row.id, row.label)}</strong>
                     {costs ? <i>{costs}</i> : null}
                   </span>
-                  <em>{row.qty}×</em>
+                  <em>
+                    {row.requestedAmount != null &&
+                    (row.unit === "kg" || row.unit === "g")
+                      ? `${row.requestedAmount} ${row.unit}`
+                      : `${row.qty}×`}
+                  </em>
                 </li>
               );
             })}

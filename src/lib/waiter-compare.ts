@@ -12,6 +12,7 @@ import {
   type WaiterTicketLine,
 } from "@/domain/waiter-tickets";
 import { loadMvrCatalog } from "@/lib/mvr-catalog";
+import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
 import {
   effectiveProduct,
   parseCustomStapleDrafts,
@@ -35,7 +36,11 @@ import {
   type CatalogOffer,
   type StapleItem,
 } from "@/lib/staples";
-import { loadWholesaleClubCatalog } from "@/lib/wholesaleclub-catalog";
+import {
+  fromBase,
+  sameDimension,
+  toBase,
+} from "@/domain/purchase-units";
 import type { RestaurantProduct } from "@/domain/restaurant-product";
 import type { RetailerSkuLink } from "@/lib/retailer-mappings";
 
@@ -82,10 +87,16 @@ function resolveSide(
 function waiterNeed(
   item: StapleItem,
   product: RestaurantProduct,
-  multiplier: number,
+  line: { qty: number; requestedAmount?: number; unit?: RestaurantProduct["unit"] },
 ) {
-  const n = Math.max(1, Math.round(multiplier));
-  const requestedAmount = product.defaultAmount * n;
+  const n = Math.max(1, Math.round(line.qty));
+  let requestedAmount = product.defaultAmount * n;
+  if (line.requestedAmount != null && line.requestedAmount > 0) {
+    const unit = line.unit ?? product.unit;
+    if (sameDimension(unit, product.unit)) {
+      requestedAmount = fromBase(toBase(line.requestedAmount, unit).amount, product.unit);
+    }
+  }
   const soldByWeight = isSoldByWeightItem(item);
   const packPickGrams = explicitNeededGrams(item);
   const grams = soldByWeight
@@ -142,7 +153,7 @@ export async function compareWaiterLines(
     if (ov?.preferredProductId) item.preferredProductId = ov.preferredProductId;
     const soldByWeight = isSoldByWeightItem(item);
     const product = effectiveProduct({ ...item, soldByWeight }, ov);
-    const need = waiterNeed(item, product, line.qty);
+    const need = waiterNeed(item, product, line);
     const packPickGrams = explicitNeededGrams(item);
     const productMap = mappings.products[line.id];
     const wm = resolveSide(

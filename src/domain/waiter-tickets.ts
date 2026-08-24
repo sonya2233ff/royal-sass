@@ -7,7 +7,7 @@ import {
   COMPARE_STORE_IDS,
 } from "@/domain/compare-stores";
 import type { PlanLine } from "@/domain/purchase-plans";
-import { roundMoney } from "@/domain/purchase-units";
+import { roundMoney, type AmountUnit } from "@/domain/purchase-units";
 
 export const WAITER_TICKETS_KIND = "royal-sass-waiter-tickets-v1";
 export const MAX_WAITER_TICKETS = 40;
@@ -18,6 +18,8 @@ export type WaiterTicketLine = {
   label: string;
   qty: number;
   note: string;
+  requestedAmount?: number;
+  unit?: AmountUnit;
 };
 
 export type WaiterTicketStatus = "new" | "open" | "done";
@@ -43,6 +45,8 @@ export type WaiterPickRow = {
   id: string;
   label: string;
   qty: number;
+  requestedAmount?: number;
+  unit?: AmountUnit;
 };
 
 const STAPLE_ID = /^[a-z0-9_-]{1,80}$/i;
@@ -57,6 +61,8 @@ function clip(raw: unknown, max: number): string {
     .slice(0, max);
 }
 
+const AMOUNT_UNITS = new Set<AmountUnit>(["g", "kg", "ml", "l", "ea", "pack"]);
+
 export function parseWaiterTicketLine(raw: unknown): WaiterTicketLine | null {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
   const rec = raw as Record<string, unknown>;
@@ -66,12 +72,21 @@ export function parseWaiterTicketLine(raw: unknown): WaiterTicketLine | null {
   if (!Number.isFinite(qty) || qty < 1) return null;
   const label = clip(rec.label, 80) || id.replace(/_/g, " ");
   const note = clip(rec.note, 80);
-  return {
+  const line: WaiterTicketLine = {
     id,
     label,
     qty: Math.min(99, Math.round(qty)),
     note,
   };
+  const requested = Number(rec.requestedAmount);
+  if (Number.isFinite(requested) && requested > 0) {
+    line.requestedAmount = requested;
+  }
+  const unit = clip(rec.unit, 8);
+  if (AMOUNT_UNITS.has(unit as AmountUnit)) {
+    line.unit = unit as AmountUnit;
+  }
+  return line;
 }
 
 export function parseWaiterTicketLines(raw: unknown): WaiterTicketLine[] {
@@ -313,8 +328,24 @@ export function combineWaiterPickList(tickets: WaiterTicket[]): WaiterPickRow[] 
       const prev = map.get(line.id);
       if (prev) {
         prev.qty += line.qty;
+        if (
+          line.requestedAmount != null &&
+          prev.requestedAmount != null &&
+          line.unit &&
+          prev.unit === line.unit
+        ) {
+          prev.requestedAmount += line.requestedAmount;
+        }
       } else {
-        map.set(line.id, { id: line.id, label: line.label, qty: line.qty });
+        map.set(line.id, {
+          id: line.id,
+          label: line.label,
+          qty: line.qty,
+          ...(line.requestedAmount != null
+            ? { requestedAmount: line.requestedAmount }
+            : {}),
+          ...(line.unit ? { unit: line.unit } : {}),
+        });
       }
     }
   }

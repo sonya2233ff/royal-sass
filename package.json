@@ -40,6 +40,7 @@
     "poc:pcx-session": "tsx src/poc/pcx-session-self-check.ts",
     "poc:receipt-import": "tsx src/poc/receipt-import-self-check.ts",
     "poc:waiter-tickets": "tsx src/poc/waiter-tickets-self-check.ts",
+    "poc:whatsapp-list": "tsx src/poc/whatsapp-list-self-check.ts",
     "poc:purchase-plans": "tsx src/poc/purchase-plans-self-check.ts",
     "cache:prices": "tsx --env-file=.env src/poc/refresh-locked-prices.ts",
     "db:generate": "prisma generate",

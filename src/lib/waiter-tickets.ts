@@ -10,6 +10,7 @@ import {
 
 export const WAITER_CLIENT_ID_KEY = "royal-sass-waiter-client-id-v1";
 export const WAITER_NAME_KEY = "royal-sass-waiter-name-v1";
+export const DRIVER_CLIENT_ID_KEY = "royal-sass-driver-client-id-v1";
 export const DRIVER_INBOX_STORAGE_KEY = "royal-sass-driver-inbox-v1";
 export const WAITER_TICKETS_CHANNEL = "royal-sass-waiter-tickets";
 
@@ -18,6 +19,18 @@ function randomClientId(): string {
     return crypto.randomUUID();
   } catch {
     return `local-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  }
+}
+
+export function readDriverClientId(): string {
+  try {
+    const existing = window.localStorage.getItem(DRIVER_CLIENT_ID_KEY)?.trim() ?? "";
+    if (/^[a-z0-9-]{8,80}$/i.test(existing)) return existing.toLowerCase();
+    const id = `driver-${randomClientId()}`.toLowerCase();
+    window.localStorage.setItem(DRIVER_CLIENT_ID_KEY, id);
+    return id;
+  } catch {
+    return "local-driver";
   }
 }
 

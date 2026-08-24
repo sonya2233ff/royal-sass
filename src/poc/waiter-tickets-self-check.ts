@@ -10,6 +10,7 @@ import {
   parseWaiterCompare,
   parseWaiterPlanLine,
   parseWaiterTicket,
+  parseWaiterTicketLine,
   parseWaiterTicketLines,
   parseWaiterTickets,
   upsertWaiterTicket,
@@ -163,6 +164,17 @@ function main() {
     compare: snap,
   });
   assert(priced?.compare?.lines.length === 2, "ticket keeps compare");
+
+  const withNeed = parseWaiterTicketLine({
+    id: "tomato",
+    label: "Tomato",
+    qty: 1,
+    note: "WhatsApp",
+    requestedAmount: 5,
+    unit: "kg",
+  });
+  assert(withNeed?.requestedAmount === 5, "requestedAmount kept");
+  assert(withNeed?.unit === "kg", "unit kept");
 
   const secondPriced = parseWaiterTicket({
     ...other!.ticket,
