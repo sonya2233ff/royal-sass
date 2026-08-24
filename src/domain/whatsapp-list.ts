@@ -382,15 +382,21 @@ export function parseWhatsAppList(
     if (byId && (hit.status === "matched" || hit.status === "unsure")) {
       const productUnit = byId.unit ?? "pack";
       if (row.unit === "pack" || row.unit === "ea") {
-        unit = productUnit === "kg" || productUnit === "g" ? "pack" : productUnit;
+        // "2 milk" is two cafe cartons, not 2 L. Checkout uses defaultAmount × qty.
+        unit = "pack";
+        requestedAmount = row.qty;
         if (isEggLike(byId)) {
           unit = "ea";
-          const per = byId.defaultAmount && byId.defaultAmount > 0 ? byId.defaultAmount : 12;
+          const per =
+            byId.defaultAmount && byId.defaultAmount > 0 ? byId.defaultAmount : 12;
           requestedAmount = row.qty * per;
         }
       } else if (sameDimension(row.unit, productUnit)) {
         unit = productUnit;
-        requestedAmount = fromBase(toBase(row.requestedAmount, row.unit).amount, productUnit);
+        requestedAmount = fromBase(
+          toBase(row.requestedAmount, row.unit).amount,
+          productUnit,
+        );
       }
     }
     return {

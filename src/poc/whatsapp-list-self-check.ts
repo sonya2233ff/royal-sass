@@ -73,6 +73,11 @@ tomato 5kg
   assert(milk?.qty === 4, `milk merged qty ${milk?.qty}`);
   assert(milk?.status === "matched", `milk status ${milk?.status}`);
   assert(milk?.matchedId === "milk_2pct_2l", `milk id ${milk?.matchedId}`);
+  assert(
+    milk?.unit === "pack",
+    `milk stays pack count, not ${milk?.unit} (2 milk ≠ 2 L)`,
+  );
+  assert(milk?.requestedAmount === 4, `milk requested ${milk?.requestedAmount}`);
 
   const frozen = byQuery.get("frozen blueberries");
   assert(frozen?.status === "matched", frozen?.status);
@@ -127,6 +132,12 @@ tomato 5kg
   const milkLine = lines.find((l) => l.id === "milk_2pct_2l");
   const tomLine = lines.find((l) => l.id === "tomato");
   assert(milkLine?.qty === 4, `waiter milk qty ${milkLine?.qty}`);
+  assert(milkLine?.unit === "pack", `waiter milk unit ${milkLine?.unit}`);
+  const liveMilk = toWaiterLinesFromWhatsApp(adopted.confirmed).find(
+    (l) => l.id === "milk_2pct_2l",
+  );
+  assert(liveMilk?.qty === 4, `adopted milk qty ${liveMilk?.qty}`);
+  assert(liveMilk?.unit === "pack", `adopted milk unit ${liveMilk?.unit}`);
   assert(tomLine?.qty === 1, `waiter tomato qty ${tomLine?.qty}`);
   assert(tomLine?.requestedAmount === 5, tomLine?.requestedAmount);
   assert(tomLine?.unit === "kg", tomLine?.unit);

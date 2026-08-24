@@ -294,8 +294,8 @@ export function DriverPortal() {
         <section className="plans" aria-label="Варіанти закупки">
           <h2>Готові варіанти</h2>
           <p className="tiny">
-            Офіціант уже порівняв по каталогу. Ти лише вмикаєш магазини, куди
-            заїжджаєш. Прихований магазин не стає $0.
+            Ціни з каталогу. Ти лише вмикаєш магазини, куди заїжджаєш.
+            Прихований магазин не стає $0.
             {comparedAt
               ? ` · каталог ${new Date(comparedAt).toLocaleString("uk-UA")}`
               : ""}
