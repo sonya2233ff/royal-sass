@@ -13,7 +13,7 @@ export function customStaplePlaceholder(item: ClientCustomStaple) {
     mustIncludeAll: item.mustIncludeAll,
     notes: item.notes,
     status: "no_match" as const,
-    statusReason: "з чека — ще без ціни в магазинах",
+    statusReason: "ще без ціни в магазинах",
     custom: true as const,
     matchMode: item.matchMode,
     restaurantProduct: toRestaurantProduct(item),

@@ -34,6 +34,8 @@ type Props = {
   query: string;
   onQueryChange: (q: string) => void;
   onPickStaple: (id: string) => void;
+  /** Open the homepage add-product modal. Does not live-search stores. */
+  onAddNewProduct?: (name: string) => void;
   catalog: CatalogSearchHit[];
   catalogReady?: boolean;
 };
@@ -96,6 +98,7 @@ export function ProductSearch({
   query,
   onQueryChange,
   onPickStaple,
+  onAddNewProduct,
   catalog,
   catalogReady = true,
 }: Props) {
@@ -130,6 +133,14 @@ export function ProductSearch({
 
   const q = query.trim();
   const showPanel = open && q.length >= 2;
+  const canAddNew =
+    Boolean(onAddNewProduct) && catalogReady && staples.length === 0 && q.length >= 3;
+
+  function addNew() {
+    if (!onAddNewProduct || q.length < 3) return;
+    onAddNewProduct(q);
+    setOpen(false);
+  }
 
   return (
     <div className="product-search" ref={wrapRef}>
@@ -158,7 +169,8 @@ export function ProductSearch({
               setActive((n) => Math.max(n - 1, 0));
             } else if (e.key === "Enter") {
               e.preventDefault();
-              choose(active);
+              if (staples.length > 0) choose(active);
+              else if (canAddNew) addNew();
             } else if (e.key === "Escape") {
               setOpen(false);
             }
@@ -209,7 +221,22 @@ export function ProductSearch({
               );
             })}
           {catalogReady && staples.length === 0 && (
-            <div className="search-hint">У списку немає такого продукту</div>
+            <div className="search-hint">
+              У списку немає такого продукту
+              {canAddNew ? (
+                <>
+                  {" "}
+                  <button
+                    type="button"
+                    className="search-add"
+                    onClick={addNew}
+                  >
+                    Додати «{q.length > 42 ? `${q.slice(0, 40)}…` : q}» як новий
+                    продукт
+                  </button>
+                </>
+              ) : null}
+            </div>
           )}
         </div>
       )}
@@ -313,6 +340,19 @@ export function ProductSearch({
         .search-hint {
           padding: 0.55rem 0.7rem;
           font-size: 0.82rem;
+        }
+        .search-add {
+          display: block;
+          margin-top: 0.35rem;
+          width: 100%;
+          text-align: left;
+          border: 0;
+          background: #e7efe8;
+          color: inherit;
+          font: inherit;
+          font-weight: 650;
+          padding: 0.45rem 0.5rem;
+          cursor: pointer;
         }
       `}</style>
     </div>

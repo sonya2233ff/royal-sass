@@ -24,6 +24,8 @@ export const COMPARE_STORES: ReadonlyArray<{
 ];
 
 export const COMPARE_STORES_STORAGE_KEY = "royal-sass-compare-stores-v1";
+/** Driver page: stores the driver can stop at (not homepage compare columns). */
+export const DRIVER_STORES_STORAGE_KEY = "royal-sass-driver-stores-v1";
 
 const ID_SET = new Set<string>(COMPARE_STORE_IDS);
 

@@ -3,7 +3,10 @@
  *   npx tsx src/poc/receipt-import-self-check.ts
  */
 import {
+  customStapleId,
+  decideManualProduct,
   decideReceiptLines,
+  draftStapleFromManualName,
   draftStapleFromReceiptLine,
   isReceiptNoiseLine,
   parseReceiptText,
@@ -109,6 +112,79 @@ async function main() {
     "produce from receipt is Category B",
   );
 
+  const manualEggs = decideManualProduct({ label: "large eggs 18" }, catalog);
+  assert(manualEggs.status === "eggs", `manual eggs ${manualEggs.status}`);
+  assert(
+    manualEggs.status === "eggs" && manualEggs.matchedId === "large_eggs_dozen",
+    "homepage add must not create a second egg card",
+  );
+
+  const manualExisting = decideManualProduct(
+    { label: "Haolam ricotta cheese" },
+    catalog,
+  );
+  assert(
+    manualExisting.status === "existing" &&
+      manualExisting.matchedId === "haolam_ricotta_cheese",
+    `manual existing ${manualExisting.status}`,
+  );
+
+  const tooShort = decideManualProduct({ label: "ab" }, catalog);
+  assert(tooShort.status === "invalid", "short name is invalid");
+
+  const manualNew = decideManualProduct(
+    { label: "ZYZZX QUANTUM MARSHMALLOW WHIP 900G" },
+    catalog,
+  );
+  assert(manualNew.status === "new", "unknown homepage name becomes new");
+  assert(manualNew.status === "new" && manualNew.draft.custom === true);
+  assert(
+    manualNew.status === "new" &&
+      manualNew.draft.id === customStapleId(manualNew.draft.label),
+    `manual id ${manualNew.status === "new" ? manualNew.draft.id : ""}`,
+  );
+
+  const manualCollision = decideManualProduct(
+    { label: "ZYZZX QUANTUM MARSHMALLOW WHIP 900G" },
+    catalog,
+    [manualNew.status === "new" ? manualNew.draft.id : ""],
+  );
+  assert(
+    manualCollision.status === "new" &&
+      manualNew.status === "new" &&
+      manualCollision.draft.id !== manualNew.draft.id,
+    "occupied custom id gets a suffix",
+  );
+
+  const dairyManual = draftStapleFromManualName({
+    label: "Haolam Something New 500g",
+  });
+  assert(dairyManual.matchMode === "exact", "branded dairy homepage add is A");
+  assert(dairyManual.id.startsWith("custom_"), dairyManual.id);
+
+  const produceManual = draftStapleFromManualName({
+    label: "Fresh cilantro bunch",
+  });
+  assert(
+    produceManual.matchMode === "cheapest_equivalent",
+    "produce homepage add is B",
+  );
+
+  const packInclude = draftStapleFromManualName({
+    label: "ZYZZX Whip",
+    mustIncludeAny: ["zyzzx", "2.63L", "900g"],
+    mustNotInclude: ["imitation"],
+  });
+  assert(
+    packInclude.mustIncludeAny?.some((t) => t.toLowerCase() === "zyzzx"),
+    "include keeps brand token",
+  );
+  assert(
+    !packInclude.mustIncludeAny?.some((t) => /2\.63|900/.test(t)),
+    "pack size is not an include token",
+  );
+  assert(packInclude.mustNotInclude?.includes("imitation"), "exclude is kept");
+
   const extras = parseCustomStapleDrafts([
     { id: "large_eggs_dozen", label: "hack", queries: ["x"], custom: true },
     {
@@ -123,10 +199,26 @@ async function main() {
   assert(extras.length === 1, "only receipt_/custom_ drafts accepted");
   assert(extras[0]?.id.startsWith("receipt_"), extras[0]?.id);
 
-  const withExtra = await loadStaplesConfig(extras);
+  const customExtra = parseCustomStapleDrafts([
+    {
+      id: "custom_zyzzx_whip",
+      label: "ZYZZX Whip",
+      queries: ["zyzzx"],
+      custom: true,
+      matchMode: "exact",
+    },
+  ]);
+  assert(customExtra.length === 1, "custom_ drafts accepted");
+  assert(customExtra[0]?.id.startsWith("custom_"), customExtra[0]?.id);
+
+  const withExtra = await loadStaplesConfig([...extras, ...customExtra]);
   assert(
     withExtra.items.some((i) => i.id === extras[0]!.id && i.custom === true),
     "client custom staple merges into config",
+  );
+  assert(
+    withExtra.items.some((i) => i.id === customExtra[0]!.id && i.custom === true),
+    "homepage custom_ staple merges into config",
   );
 
   console.log("receipt-import-self-check: ok");
