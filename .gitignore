@@ -9,6 +9,7 @@ data/walmart-profile
 data/runs
 data/catalog/product-overrides.json
 data/catalog/operator-verdicts.json
+data/catalog/waiter-tickets.json
 data/catalog/removed-staples.json
 data/catalog/*_probe_latest.json
 data/catalog/walmart_5831_20*
