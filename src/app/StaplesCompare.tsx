@@ -9,6 +9,7 @@ import {
 } from "react";
 import { ProductSearch } from "./ProductSearch";
 import { ProductSettings } from "./ProductSettings";
+import { AddProduct } from "./AddProduct";
 import { ReceiptUpload } from "./ReceiptUpload";
 import { OfferAuditGrid, OfferVerdictButtons, storeOfferCell } from "./OfferAudit";
 import {
@@ -803,6 +804,8 @@ export function StaplesCompare() {
   const [query, setQuery] = useState("");
   const [removedIds, setRemovedIds] = useState<string[]>([]);
   const [receiptOpen, setReceiptOpen] = useState(false);
+  const [addProductOpen, setAddProductOpen] = useState(false);
+  const [addProductLabel, setAddProductLabel] = useState("");
   const [walmartSource, setWalmartSource] = useState<
     "rapid" | "browser" | "missing_key" | null
   >(null);
@@ -983,6 +986,11 @@ export function StaplesCompare() {
     const gone = new Set(removedIds);
     return items.filter((item) => !gone.has(item.id));
   }, [items, removedIds]);
+
+  const occupiedStapleIds = useMemo(
+    () => liveItems.map((item) => item.id),
+    [liveItems],
+  );
 
   const auditCellsFor = useCallback(
     (item: Staple): OfferAuditCell[] => {
@@ -1340,7 +1348,7 @@ export function StaplesCompare() {
         items?: ReceiptStapleDraft[];
       };
       if (!res.ok || !data.ok) {
-        throw new Error(data.error ?? "не вдалося додати продукти з чека");
+        throw new Error(data.error ?? "не вдалося додати продукт");
       }
       const addedItems = Array.isArray(data.items) && data.items.length
         ? data.items
@@ -1353,7 +1361,17 @@ export function StaplesCompare() {
       ).filter(Boolean);
       persistRemoved(removedIds.filter((id) => !addedIds.includes(id)));
       setReceiptOpen(false);
+      setAddProductOpen(false);
+      setAddProductLabel("");
       await reload();
+      const focusId = addedIds[0];
+      if (focusId) {
+        window.setTimeout(() => {
+          document
+            .getElementById(`staple-${focusId}`)
+            ?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 80);
+      }
       if (rematch && addedIds.length) {
         rematchItems(addedIds);
       }
@@ -1848,6 +1866,11 @@ export function StaplesCompare() {
           query={query}
           onQueryChange={setQuery}
           onPickStaple={pickStaple}
+          onAddNewProduct={(name) => {
+            setQuery("");
+            setAddProductLabel(name);
+            setAddProductOpen(true);
+          }}
           catalogReady={catalogReady}
           catalog={searchCatalog}
         />
@@ -2393,6 +2416,20 @@ export function StaplesCompare() {
         onAdopt={adoptFromReceipt}
       />
 
+      <AddProduct
+        open={addProductOpen}
+        busy={busy != null}
+        initialLabel={addProductLabel}
+        catalog={searchCatalog}
+        occupiedIds={occupiedStapleIds}
+        onClose={() => {
+          setAddProductOpen(false);
+          setAddProductLabel("");
+        }}
+        onPickExisting={pickStaple}
+        onAdopt={adoptFromReceipt}
+      />
+
       {showCart && (
         <div className="cart-drawer">
           <header>
@@ -2452,6 +2489,18 @@ export function StaplesCompare() {
           onClick={() => setReceiptOpen(true)}
         >
           {busy === "receipt" ? "Чек…" : "Чек"}
+        </button>
+        <button
+          type="button"
+          className="cta secondary"
+          disabled={pending || busy != null}
+          title="Нова картка кафе. Ціну не вигадуємо."
+          onClick={() => {
+            setAddProductLabel("");
+            setAddProductOpen(true);
+          }}
+        >
+          Додати продукт
         </button>
         <button
           type="button"

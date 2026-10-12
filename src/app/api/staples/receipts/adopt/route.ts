@@ -30,12 +30,14 @@ function draftToStaple(draft: ReceiptStapleDraft): StapleItem | null {
     matchMode: draft.matchMode,
     category: draft.category,
     unit: draft.unit,
-    notes: draft.notes || "Added from receipt photo",
+    notes: draft.notes || (draft.id.startsWith("custom_")
+      ? "Added from homepage"
+      : "Added from receipt photo"),
     custom: true,
   };
 }
 
-/** Confirm new receipt lines into custom staples. No store prices guessed. */
+/** Confirm new receipt / homepage drafts into custom staples. No store prices guessed. */
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => ({}))) as {
     drafts?: unknown;

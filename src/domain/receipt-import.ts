@@ -1,7 +1,8 @@
 /**
- * Turn grocery-receipt text into cafe staple drafts.
- * Existing shown cards stay as-is; only unmatched product lines become new
- * `custom: true` rows. Fees, tax, and bag lines are skipped.
+ * Receipt OCR and homepage add → cafe staple drafts.
+ * Existing shown cards stay as-is; unmatched lines / new names become
+ * `custom: true` rows (`receipt_*` or `custom_*`). Fees, tax, and bag lines
+ * are skipped on receipts. Shell eggs always map to `large_eggs_dozen`.
  */
 import { queryLooksLikeShellEggs } from "@/domain/egg-pack";
 import { identityKeywords, stripPackNoise } from "@/domain/pack-tokens";
@@ -31,11 +32,25 @@ export type ReceiptStapleDraft = {
   mustNotInclude?: string[];
   matchMode: "exact" | "cheapest_equivalent";
   category?: string;
-  unit?: "g" | "kg" | "ml" | "l" | "ea" | "pack";
+  unit?: "g" | "kg" | "ml" | "ea" | "pack" | "l";
   soldByWeight?: boolean;
   custom: true;
   notes: string;
 };
+
+export type ManualStapleInput = {
+  label: string;
+  query?: string;
+  matchMode?: "exact" | "cheapest_equivalent";
+  mustIncludeAny?: string[];
+  mustNotInclude?: string[];
+};
+
+export type ManualProductDecision =
+  | { status: "invalid"; reason: string }
+  | { status: "eggs"; matchedId: "large_eggs_dozen"; matchedLabel: string }
+  | { status: "existing"; matchedId: string; matchedLabel: string }
+  | { status: "new"; draft: ReceiptStapleDraft };
 
 export type ReceiptLineDecision = {
   name: string;
@@ -147,13 +162,45 @@ export function parseReceiptText(text: string): ReceiptLineDraft[] {
   });
 }
 
+function stapleSlug(name: string): string {
+  return (
+    stripPackNoise(name)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_|_$/g, "")
+      .slice(0, 42) || "item"
+  );
+}
+
 export function receiptStapleId(name: string): string {
-  const slug = stripPackNoise(name)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "_")
-    .replace(/^_|_$/g, "")
-    .slice(0, 42);
-  return `receipt_${slug || "item"}`;
+  return `receipt_${stapleSlug(name)}`;
+}
+
+/** Homepage / settings add — same slug rules as receipts, `custom_` prefix. */
+export function customStapleId(name: string): string {
+  return `custom_${stapleSlug(name)}`;
+}
+
+function uniqueKeywords(...lists: Array<readonly string[] | undefined>): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const list of lists) {
+    for (const raw of identityKeywords(list)) {
+      const key = raw.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(raw);
+    }
+  }
+  return out;
+}
+
+function inferredIncludeTokens(label: string): string[] {
+  return identityKeywords(
+    stripPackNoise(label)
+      .split(/\s+/)
+      .filter((t) => t.length >= 4),
+  ).slice(0, 4);
 }
 
 function inferCategory(name: string): string | undefined {
@@ -190,12 +237,7 @@ export function draftStapleFromReceiptLine(line: ReceiptLineDraft): ReceiptStapl
     category === "produce" ||
     category === "frozen" ||
     category === "supplies";
-  const tokens = identityKeywords(
-    stripPackNoise(label)
-      .split(/\s+/)
-      .filter((t) => t.length >= 4),
-  );
-  const include = tokens.slice(0, 4);
+  const include = inferredIncludeTokens(label);
   const draft: ReceiptStapleDraft = {
     id: receiptStapleId(label),
     label,
@@ -207,6 +249,92 @@ export function draftStapleFromReceiptLine(line: ReceiptLineDraft): ReceiptStapl
   };
   if (include.length) draft.mustIncludeAny = include;
   return draft;
+}
+
+export function draftStapleFromManualName(
+  input: ManualStapleInput,
+): ReceiptStapleDraft {
+  const label = cleanName(input.label).replace(/\s+/g, " ").slice(0, 80);
+  const category = inferCategory(label);
+  const cheapest =
+    category === "produce" ||
+    category === "frozen" ||
+    category === "supplies";
+  const include = uniqueKeywords(
+    inferredIncludeTokens(label),
+    input.mustIncludeAny,
+  );
+  const exclude = uniqueKeywords(input.mustNotInclude);
+  const queries = [label];
+  const extra = cleanName(input.query ?? "").slice(0, 80);
+  if (extra && extra.toLowerCase() !== label.toLowerCase()) {
+    queries.push(extra);
+  }
+  const draft: ReceiptStapleDraft = {
+    id: customStapleId(label),
+    label,
+    queries,
+    matchMode: input.matchMode ?? (cheapest ? "cheapest_equivalent" : "exact"),
+    category,
+    custom: true,
+    notes: "Added from homepage",
+  };
+  if (include.length) draft.mustIncludeAny = include;
+  if (exclude.length) draft.mustNotInclude = exclude;
+  return draft;
+}
+
+function uniqueDraftId(
+  base: string,
+  occupied: Iterable<string>,
+): string {
+  const taken = occupied instanceof Set ? occupied : new Set(occupied);
+  if (!taken.has(base)) return base;
+  let n = 2;
+  let id = `${base}_${n}`;
+  while (taken.has(id)) {
+    n += 1;
+    id = `${base}_${n}`;
+  }
+  return id;
+}
+
+/** Homepage add: refuse a second egg card; reuse a close catalog hit. */
+export function decideManualProduct(
+  input: ManualStapleInput,
+  catalog: CatalogSearchItem[],
+  occupiedIds?: Iterable<string>,
+): ManualProductDecision {
+  const label = cleanName(input.label).replace(/\s+/g, " ").slice(0, 80);
+  if (label.length < 3) {
+    return { status: "invalid", reason: "name too short" };
+  }
+  const extra = cleanName(input.query ?? "");
+  if (
+    queryLooksLikeShellEggs(label) ||
+    (extra.length >= 3 && queryLooksLikeShellEggs(extra))
+  ) {
+    const eggs = catalog.find((item) => item.id === "large_eggs_dozen");
+    return {
+      status: "eggs",
+      matchedId: "large_eggs_dozen",
+      matchedLabel: eggs?.label ?? "Large eggs dozen",
+    };
+  }
+  const hit = matchReceiptLineToCatalog({ name: label }, catalog);
+  if (hit) {
+    return {
+      status: "existing",
+      matchedId: hit.id,
+      matchedLabel: hit.label,
+    };
+  }
+  const draft = draftStapleFromManualName({ ...input, label });
+  const taken = new Set(
+    [...(occupiedIds ?? []), ...catalog.map((item) => item.id)].filter(Boolean),
+  );
+  draft.id = uniqueDraftId(draft.id, taken);
+  return { status: "new", draft };
 }
 
 export function matchReceiptLineToCatalog(
@@ -278,14 +406,8 @@ export function decideReceiptLines(
       continue;
     }
     const draft = draftStapleFromReceiptLine(line);
-    let id = draft.id;
-    let n = 2;
-    while (taken.has(id)) {
-      id = `${draft.id}_${n}`;
-      n += 1;
-    }
-    draft.id = id;
-    taken.add(id);
+    draft.id = uniqueDraftId(draft.id, taken);
+    taken.add(draft.id);
     out.push({ ...line, status: "new", draft });
   }
   return out;
