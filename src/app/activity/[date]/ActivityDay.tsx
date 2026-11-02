@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { formatDate, money, STORE_UA, summarize, type Day } from "../data";
+import {
+  formatDate,
+  formatEconomy,
+  money,
+  STORE_UA,
+  summarize,
+  type Day,
+} from "../data";
 
 export function ActivityDay({ day }: { day: Day }) {
   const [showReceipt, setShowReceipt] = useState(false);
@@ -21,8 +28,9 @@ export function ActivityDay({ day }: { day: Day }) {
         </p>
         <h1>Деталі покупок</h1>
         <p className="lede">
-          Закупівлю зробив <strong>{day.driver}</strong>. Нижче — кожна позиція:
-          де куплено і скільки заощаджено проти іншого магазину.
+          Закупівлю зробив <strong>{day.driver}</strong>. Економія = найдорожчий
+          план закупівлі мінус рекомендований (найдешевший). Нижче — де куплено
+          кожну позицію.
         </p>
         {day.receipt ? (
           <button
@@ -43,14 +51,23 @@ export function ActivityDay({ day }: { day: Day }) {
           <span>витрачено</span>
         </div>
         <div>
-          <b className="pos">{money(s.saved)}</b>
-          <span>заощаджено</span>
+          <b className="pos">{formatEconomy(s.saved, s.savedPercent)}</b>
+          <span>заощаджено vs найдорожчий</span>
         </div>
         <div>
           <b>{s.count}</b>
           <span>позицій</span>
         </div>
       </section>
+      {(day.expensiveTotal != null || day.cheapTotal != null) && (
+        <p className="eco-note">
+          Найдорожчий план {money(day.expensiveTotal ?? s.spent + s.saved)} −
+          рекомендований {money(day.cheapTotal ?? s.spent)} ={" "}
+          <strong className="pos">
+            {formatEconomy(s.saved, s.savedPercent)}
+          </strong>
+        </p>
+      )}
 
       <section className="split" aria-label="Розподіл по магазинах">
         {(
@@ -72,28 +89,23 @@ export function ActivityDay({ day }: { day: Day }) {
 
       <h2 className="lines-title">Позиції</h2>
       <ul className="rlines">
-        {day.buys.map((buy) => {
-          const other = buy.paid + buy.saved;
-          return (
-            <li key={buy.id}>
-              <span className="rname">
-                <strong>{buy.label}</strong>
-                <em>
-                  {buy.qty}× ·{" "}
-                  <span className={`store ${buy.store}`}>
-                    {STORE_UA[buy.store].short}
-                  </span>{" "}
-                  {STORE_UA[buy.store].name}
-                </em>
-              </span>
-              <span className="rnums">
-                <b>{money(buy.paid)}</b>
-                <em className="pos">− {money(buy.saved)} заощ.</em>
-                <em className="was">в іншому: {money(other)}</em>
-              </span>
-            </li>
-          );
-        })}
+        {day.buys.map((buy) => (
+          <li key={`${buy.id}-${buy.store}`}>
+            <span className="rname">
+              <strong>{buy.label}</strong>
+              <em>
+                {buy.qty}× ·{" "}
+                <span className={`store ${buy.store}`}>
+                  {STORE_UA[buy.store].short}
+                </span>{" "}
+                {STORE_UA[buy.store].name}
+              </em>
+            </span>
+            <span className="rnums">
+              <b>{money(buy.paid)}</b>
+            </span>
+          </li>
+        ))}
       </ul>
 
       <dl className="rtotals">
@@ -102,8 +114,8 @@ export function ActivityDay({ day }: { day: Day }) {
           <dd>{money(s.spent)}</dd>
         </div>
         <div>
-          <dt>Разом заощаджено</dt>
-          <dd className="pos">{money(s.saved)}</dd>
+          <dt>Заощаджено (найдорожчий − рекомендований)</dt>
+          <dd className="pos">{formatEconomy(s.saved, s.savedPercent)}</dd>
         </div>
       </dl>
 
@@ -194,6 +206,15 @@ export function ActivityDay({ day }: { day: Day }) {
           margin: 0.85rem 0 0;
           font-size: 0.86rem;
           opacity: 0.7;
+        }
+        .eco-note {
+          margin: 0 0 1rem;
+          font-size: 0.84rem;
+          opacity: 0.82;
+          line-height: 1.4;
+        }
+        .eco-note .pos {
+          color: #2f6a3a;
         }
         .summary {
           display: grid;

@@ -9,6 +9,7 @@ import {
 } from "@/lib/activity-log";
 import {
   formatDate,
+  formatEconomy,
   money,
   summarize,
   ukProductCount,
@@ -79,8 +80,15 @@ export function ActivityPortal() {
           <span>витрачено разом</span>
         </div>
         <div>
-          <b className="pos">{money(grand.saved)}</b>
-          <span>заощаджено разом</span>
+          <b className="pos">
+            {formatEconomy(
+              grand.saved,
+              grand.spent + grand.saved > 0
+                ? (grand.saved / (grand.spent + grand.saved)) * 100
+                : 0,
+            )}
+          </b>
+          <span>заощаджено vs найдорожчий план</span>
         </div>
       </section>
 
@@ -110,7 +118,9 @@ export function ActivityPortal() {
                   <span className="count">{ukProductCount(s.count)}</span>
                   <span className="totals">
                     <b>{money(s.spent)}</b>
-                    <em className="pos">− {money(s.saved)} заощ.</em>
+                    <em className="pos">
+                      {formatEconomy(s.saved, s.savedPercent)}
+                    </em>
                   </span>
                   <span className="chev" aria-hidden>
                     ›

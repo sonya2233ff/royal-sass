@@ -7,8 +7,6 @@ export type Buy = {
   qty: number;
   /** Total paid for this line (qty included). */
   paid: number;
-  /** Saved on this line vs the next-cheapest other store (qty included). */
-  saved: number;
 };
 
 export type Day = {
@@ -20,6 +18,16 @@ export type Day = {
   /** Public path to the receipt photo the driver uploaded. */
   receipt: string;
   buys: Buy[];
+  /**
+   * Basket economy: most expensive shopping plan − recommended (cheapest).
+   * `savedPercent` is saved / expensive × 100.
+   */
+  saved: number;
+  savedPercent: number;
+  /** Most expensive plan total used in the economy formula. */
+  expensiveTotal?: number;
+  /** Recommended (cheapest) plan total used in the economy formula. */
+  cheapTotal?: number;
 };
 
 export const STORE_UA: Record<Store, { short: string; name: string }> = {
@@ -65,25 +73,33 @@ export function formatDate(iso: string): { full: string; weekday: string } {
 export type DaySummary = {
   spent: number;
   saved: number;
+  savedPercent: number;
   count: number;
   /** Spent per store. */
   byStore: Record<Store, number>;
 };
 
 export function summarize(day: Day): DaySummary {
-  return day.buys.reduce<DaySummary>(
+  const base = day.buys.reduce<Omit<DaySummary, "saved" | "savedPercent">>(
     (acc, buy) => {
       acc.spent += buy.paid;
-      acc.saved += buy.saved;
       acc.count += 1;
       acc.byStore[buy.store] += buy.paid;
       return acc;
     },
     {
       spent: 0,
-      saved: 0,
       count: 0,
       byStore: { walmart: 0, nofrills: 0, mvr: 0 },
     },
   );
+  return {
+    ...base,
+    saved: Number.isFinite(day.saved) ? day.saved : 0,
+    savedPercent: Number.isFinite(day.savedPercent) ? day.savedPercent : 0,
+  };
+}
+
+export function formatEconomy(saved: number, savedPercent: number): string {
+  return `− ${money(saved)} (${savedPercent.toFixed(0)}%)`;
 }

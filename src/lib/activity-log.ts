@@ -4,8 +4,7 @@
  */
 
 import {
-  availableStores,
-  priceOf,
+  computePlans,
   type PlanItem,
 } from "@/app/driver/route-plan";
 import type { Buy, Day, Store } from "@/app/activity/data";
@@ -53,7 +52,6 @@ function parseBuys(raw: unknown): Buy[] {
       }
       const qty = Number(rec.qty);
       const paid = Number(rec.paid);
-      const saved = Number(rec.saved);
       const id = String(rec.id ?? "");
       const label = String(rec.label ?? id);
       if (!id) return null;
@@ -63,10 +61,40 @@ function parseBuys(raw: unknown): Buy[] {
         store: store as Store,
         qty: Number.isFinite(qty) && qty > 0 ? Math.min(99, Math.round(qty)) : 1,
         paid: Number.isFinite(paid) ? round2(Math.max(0, paid)) : 0,
-        saved: Number.isFinite(saved) ? round2(Math.max(0, saved)) : 0,
       } satisfies Buy;
     })
     .filter((row): row is Buy => row != null);
+}
+
+/**
+ * Economy = most expensive shopping-list plan − recommended (cheapest).
+ * Uses the same `computePlans` totals as the driver portal (incl. salary in ranking).
+ */
+export function economyForBasket(
+  basket: { id: string; qty: number }[],
+): {
+  saved: number;
+  savedPercent: number;
+  expensiveTotal: number;
+  cheapTotal: number;
+} {
+  const { plans, recommended } = computePlans(basket);
+  if (!recommended || !plans.length) {
+    return { saved: 0, savedPercent: 0, expensiveTotal: 0, cheapTotal: 0 };
+  }
+  const expensiveTotal = plans.reduce(
+    (max, p) => (p.total > max ? p.total : max),
+    plans[0].total,
+  );
+  const cheapTotal = recommended.total;
+  const saved = Math.max(0, round2(expensiveTotal - cheapTotal));
+  const savedPercent =
+    expensiveTotal > 0 ? round2((saved / expensiveTotal) * 100) : 0;
+  return { saved, savedPercent, expensiveTotal, cheapTotal };
+}
+
+function economyFromBuys(buys: Buy[]) {
+  return economyForBasket(buys.map((b) => ({ id: b.id, qty: b.qty })));
 }
 
 function parseDay(raw: unknown): Day | null {
@@ -76,6 +104,11 @@ function parseDay(raw: unknown): Day | null {
   if (!DATE_RE.test(date)) return null;
   const buys = parseBuys(rec.buys);
   if (!buys.length) return null;
+  const recomputed = economyFromBuys(buys);
+  const savedRaw = Number(rec.saved);
+  const pctRaw = Number(rec.savedPercent);
+  const hasSaved = Number.isFinite(savedRaw);
+  const hasPct = Number.isFinite(pctRaw);
   return {
     date,
     driver:
@@ -91,6 +124,18 @@ function parseDay(raw: unknown): Day | null {
         ? rec.receipt
         : "",
     buys,
+    saved: hasSaved ? round2(Math.max(0, savedRaw)) : recomputed.saved,
+    savedPercent: hasPct
+      ? round2(Math.max(0, pctRaw))
+      : recomputed.savedPercent,
+    expensiveTotal:
+      Number.isFinite(Number(rec.expensiveTotal))
+        ? round2(Math.max(0, Number(rec.expensiveTotal)))
+        : recomputed.expensiveTotal,
+    cheapTotal:
+      Number.isFinite(Number(rec.cheapTotal))
+        ? round2(Math.max(0, Number(rec.cheapTotal)))
+        : recomputed.cheapTotal,
   };
 }
 
@@ -150,18 +195,6 @@ export function findActivityDay(date: string): Day | null {
   return ACTIVITY_DAYS.find((d) => d.date === date) ?? null;
 }
 
-function savedForLine(item: PlanItem): number {
-  const alts = availableStores(item.id).filter((s) => s !== item.store);
-  if (!alts.length) return 0;
-  let altUnit = Infinity;
-  for (const store of alts) {
-    const p = priceOf(item.id, store);
-    if (p != null && p < altUnit) altUnit = p;
-  }
-  if (!Number.isFinite(altUnit)) return 0;
-  return Math.max(0, round2(altUnit * item.qty - item.lineTotal));
-}
-
 export type RecordDriverRunInput = {
   items: PlanItem[];
   labelOf: (id: string) => string;
@@ -180,31 +213,36 @@ export function recordDriverRun(input: RecordDriverRunInput): Day | null {
     store: item.store as Store,
     qty: item.qty,
     paid: round2(item.lineTotal),
-    saved: savedForLine(item),
   }));
 
   const existing = loadLiveActivityDays();
   const prev = existing.find((d) => d.date === date);
   const mergedBuys = [...(prev?.buys ?? [])];
   for (const buy of buys) {
-    const hit = mergedBuys.findIndex((row) => row.id === buy.id && row.store === buy.store);
+    const hit = mergedBuys.findIndex(
+      (row) => row.id === buy.id && row.store === buy.store,
+    );
     if (hit >= 0) {
       const cur = mergedBuys[hit];
       const qty = Math.min(99, cur.qty + buy.qty);
       const paid = round2(cur.paid + buy.paid);
-      const saved = round2(cur.saved + buy.saved);
-      mergedBuys[hit] = { ...cur, qty, paid, saved };
+      mergedBuys[hit] = { ...cur, qty, paid };
     } else {
       mergedBuys.push(buy);
     }
   }
 
+  const eco = economyFromBuys(mergedBuys);
   const day: Day = {
     date,
     driver: (input.driver ?? prev?.driver ?? "Водій").slice(0, 40),
     uploadedAt: torontoUploadedAt(),
     receipt: input.receipt?.trim() || prev?.receipt || "",
     buys: mergedBuys,
+    saved: eco.saved,
+    savedPercent: eco.savedPercent,
+    expensiveTotal: eco.expensiveTotal,
+    cheapTotal: eco.cheapTotal,
   };
 
   const next = [day, ...existing.filter((d) => d.date !== date)].slice(0, 60);
