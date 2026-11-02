@@ -16,14 +16,9 @@ function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
-/** Goods + road — Activity economy basis (no driver salary). */
-function shopperCost(productCost: number, drivingCost: number): number {
-  return round2(productCost + drivingCost);
-}
-
 /**
  * Activity economy = most expensive shopping-list plan − cheapest (recommended).
- * Driver route pick stays distance-only; this is money-only for Activity $/%.
+ * Basis is product $ only (no road, no driver salary). Driver route stays km-only.
  */
 export function economyForBasket(
   basket: { id: string; qty: number }[],
@@ -37,7 +32,7 @@ export function economyForBasket(
   if (!plans.length) {
     return { saved: 0, savedPercent: 0, expensiveTotal: 0, cheapTotal: 0 };
   }
-  const costs = plans.map((p) => shopperCost(p.productCost, p.drivingCost));
+  const costs = plans.map((p) => round2(p.productCost));
   const expensiveTotal = Math.max(...costs);
   const cheapTotal = Math.min(...costs);
   const saved = Math.max(0, round2(expensiveTotal - cheapTotal));

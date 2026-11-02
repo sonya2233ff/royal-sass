@@ -23,13 +23,13 @@ export type Day = {
   buys: Buy[];
   /**
    * Economy = most expensive shopping plan − cheapest (recommended).
-   * `savedPercent` is saved / expensive × 100.
+   * Product $ only (no road). `savedPercent` is saved / expensive × 100.
    */
   saved: number;
   savedPercent: number;
-  /** Most expensive plan (goods + road) used in the economy formula. */
+  /** Most expensive plan product total used in the economy formula. */
   expensiveTotal?: number;
-  /** Cheapest / recommended plan (goods + road). */
+  /** Cheapest / recommended plan product total. */
   cheapTotal?: number;
 };
 
