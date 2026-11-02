@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { findDay } from "../data";
-import { ActivityDay } from "./ActivityDay";
+import { ActivityDayLoader } from "./ActivityDayLoader";
 
 export async function generateMetadata({
   params,
@@ -20,8 +20,7 @@ export default async function ActivityDayPage({
   params: Promise<{ date: string }>;
 }) {
   const { date } = await params;
-  const day = findDay(date);
-  if (!day) notFound();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) notFound();
 
   return (
     <main
@@ -31,7 +30,7 @@ export default async function ActivityDayPage({
           "radial-gradient(1000px 520px at 8% -18%, #d9e4d8 0%, transparent 52%), linear-gradient(165deg, #f3eee4 0%, #e7eee8 46%, #f7f3ec 100%)",
       }}
     >
-      <ActivityDay day={day} />
+      <ActivityDayLoader date={date} seed={findDay(date)} />
     </main>
   );
 }

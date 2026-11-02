@@ -1,4 +1,4 @@
-export type Store = "walmart" | "nofrills";
+export type Store = "walmart" | "nofrills" | "mvr";
 
 export type Buy = {
   id: string;
@@ -7,7 +7,7 @@ export type Buy = {
   qty: number;
   /** Total paid for this line (qty included). */
   paid: number;
-  /** Saved on this line vs the other store (qty included). */
+  /** Saved on this line vs the next-cheapest other store (qty included). */
   saved: number;
 };
 
@@ -25,6 +25,7 @@ export type Day = {
 export const STORE_UA: Record<Store, { short: string; name: string }> = {
   walmart: { short: "WM", name: "Walmart #5831" },
   nofrills: { short: "NF", name: "No Frills #3660" },
+  mvr: { short: "MVR", name: "MVR Cash & Carry" },
 };
 
 const RECEIPT_WM = "/receipts/receipt-walmart.jpg";
@@ -129,6 +130,11 @@ export function summarize(day: Day): DaySummary {
       acc.byStore[buy.store] += buy.paid;
       return acc;
     },
-    { spent: 0, saved: 0, count: 0, byStore: { walmart: 0, nofrills: 0 } },
+    {
+      spent: 0,
+      saved: 0,
+      count: 0,
+      byStore: { walmart: 0, nofrills: 0, mvr: 0 },
+    },
   );
 }

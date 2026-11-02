@@ -1,20 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-  ACTIVITY_DAYS,
+  listActivityDays,
+  subscribeActivity,
+} from "@/lib/activity-log";
+import {
   formatDate,
   money,
   summarize,
   ukProductCount,
+  type Day,
 } from "./data";
 
 export function ActivityPortal() {
-  const days = useMemo(
-    () => ACTIVITY_DAYS.slice().sort((a, b) => (a.date < b.date ? 1 : -1)),
-    [],
-  );
+  const [days, setDays] = useState<Day[]>([]);
+
+  useEffect(() => {
+    const refresh = () => setDays(listActivityDays());
+    refresh();
+    return subscribeActivity(refresh);
+  }, []);
 
   const grand = useMemo(
     () =>
@@ -38,8 +45,9 @@ export function ActivityPortal() {
         <p className="kicker">Activity</p>
         <h1>Історія покупок</h1>
         <p className="lede">
-          Кожен день — окремий лист. Натисни на день, щоб відкрити деталі: де
-          куплено кожен продукт, скільки заощаджено, і фото чека від водія.
+          Кожен день — окремий лист. Після «Здати закупівлю» у розділі Водій
+          сюди падає сьогоднішній пробіг (на цьому телефоні). Натисни день —
+          деталі по магазинах і чек.
         </p>
       </header>
 
@@ -58,34 +66,43 @@ export function ActivityPortal() {
         </div>
       </section>
 
-      <ul className="days">
-        {days.map((day) => {
-          const s = summarize(day);
-          const { full, weekday } = formatDate(day.date);
-          return (
-            <li key={day.date}>
-              <Link
-                href={`/activity/${day.date}`}
-                className="day"
-                aria-label={`Відкрити деталі за ${full}`}
-              >
-                <span className="when">
-                  <strong>{full}</strong>
-                  <em>{weekday}</em>
-                </span>
-                <span className="count">{ukProductCount(s.count)}</span>
-                <span className="totals">
-                  <b>{money(s.spent)}</b>
-                  <em className="pos">− {money(s.saved)} заощ.</em>
-                </span>
-                <span className="chev" aria-hidden>
-                  ›
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      {days.length === 0 ? (
+        <p className="empty">
+          Поки порожньо. Відкрий{" "}
+          <Link href="/driver">Водій</Link>, набери список і здай закупівлю.
+        </p>
+      ) : (
+        <ul className="days">
+          {days.map((day) => {
+            const s = summarize(day);
+            const { full, weekday } = formatDate(day.date);
+            return (
+              <li key={day.date}>
+                <Link
+                  href={`/activity/${day.date}`}
+                  className="day"
+                  aria-label={`Відкрити деталі за ${full}`}
+                >
+                  <span className="when">
+                    <strong>{full}</strong>
+                    <em>
+                      {weekday} · {day.driver}
+                    </em>
+                  </span>
+                  <span className="count">{ukProductCount(s.count)}</span>
+                  <span className="totals">
+                    <b>{money(s.spent)}</b>
+                    <em className="pos">− {money(s.saved)} заощ.</em>
+                  </span>
+                  <span className="chev" aria-hidden>
+                    ›
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
       <style jsx>{`
         .portal {
@@ -113,6 +130,17 @@ export function ActivityPortal() {
           max-width: 40rem;
           opacity: 0.78;
           line-height: 1.4;
+        }
+        .empty {
+          margin: 0.5rem 0 0;
+          padding: 0.9rem 0.85rem;
+          background: #fffdf8;
+          border: 1px dashed rgba(40, 50, 40, 0.25);
+          line-height: 1.45;
+        }
+        .empty :global(a) {
+          color: #2f4a3a;
+          font-weight: 700;
         }
         .summary {
           display: grid;

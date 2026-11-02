@@ -24,13 +24,17 @@ export function ActivityDay({ day }: { day: Day }) {
           Закупівлю зробив <strong>{day.driver}</strong>. Нижче — кожна позиція:
           де куплено і скільки заощаджено проти іншого магазину.
         </p>
-        <button
-          type="button"
-          className="view-receipt"
-          onClick={() => setShowReceipt(true)}
-        >
-          <span aria-hidden>🧾</span> Переглянути чек
-        </button>
+        {day.receipt ? (
+          <button
+            type="button"
+            className="view-receipt"
+            onClick={() => setShowReceipt(true)}
+          >
+            <span aria-hidden>🧾</span> Переглянути чек
+          </button>
+        ) : (
+          <p className="no-receipt">Чек не додано для цього пробігу.</p>
+        )}
       </header>
 
       <section className="summary" aria-label="Підсумок дня">
@@ -49,16 +53,21 @@ export function ActivityDay({ day }: { day: Day }) {
       </section>
 
       <section className="split" aria-label="Розподіл по магазинах">
-        <div>
-          <span className="store walmart">{STORE_UA.walmart.short}</span>
-          <span className="sname">{STORE_UA.walmart.name}</span>
-          <b>{money(s.byStore.walmart)}</b>
-        </div>
-        <div>
-          <span className="store nofrills">{STORE_UA.nofrills.short}</span>
-          <span className="sname">{STORE_UA.nofrills.name}</span>
-          <b>{money(s.byStore.nofrills)}</b>
-        </div>
+        {(
+          [
+            ["walmart", s.byStore.walmart],
+            ["nofrills", s.byStore.nofrills],
+            ["mvr", s.byStore.mvr],
+          ] as const
+        )
+          .filter(([, amount]) => amount > 0)
+          .map(([store, amount]) => (
+            <div key={store}>
+              <span className={`store ${store}`}>{STORE_UA[store].short}</span>
+              <span className="sname">{STORE_UA[store].name}</span>
+              <b>{money(amount)}</b>
+            </div>
+          ))}
       </section>
 
       <h2 className="lines-title">Позиції</h2>
@@ -181,6 +190,11 @@ export function ActivityDay({ day }: { day: Day }) {
           font-weight: 700;
           font-size: 0.9rem;
         }
+        .no-receipt {
+          margin: 0.85rem 0 0;
+          font-size: 0.86rem;
+          opacity: 0.7;
+        }
         .summary {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -205,7 +219,7 @@ export function ActivityDay({ day }: { day: Day }) {
         }
         .split {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
           gap: 0.55rem;
           margin-bottom: 1.3rem;
         }
@@ -235,10 +249,13 @@ export function ActivityDay({ day }: { day: Day }) {
           color: #f7f3ec;
         }
         .store.walmart {
-          background: #2f4a3a;
+          background: #1a5f9e;
         }
         .store.nofrills {
-          background: #8a5a1f;
+          background: #b33b2e;
+        }
+        .store.mvr {
+          background: #6b4f1d;
         }
         .lines-title {
           font-size: 1.05rem;

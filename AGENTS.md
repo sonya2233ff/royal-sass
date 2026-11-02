@@ -236,7 +236,8 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
 - `/waiter` — waiter portal: shown catalog search + local list; live sync to `/driver` on this browser (`localStorage` + BroadcastChannel). **Відправити** locks a job into `royal-sass-driver-jobs-v1` and clears the draft
-- `/driver` — driver portal: live waiter draft + locked jobs as the shopping list (no mock tickets), grouped by WM / NF / **MVR** from the buy plan (supplies like No-Hole Dome Lids → MVR when grocery has `no_match`). Receipt upload / accept still visual only
+- `/driver` — driver portal: live waiter draft + locked jobs as the shopping list (no mock tickets), grouped by WM / NF / **MVR** from the buy plan (supplies like No-Hole Dome Lids → MVR when grocery has `no_match`). **Здати закупівлю** clears the list and appends today’s run to `/activity` (`royal-sass-activity-v1` localStorage)
+- `/activity` — purchase history: seed mock days + live driver runs on this browser (`src/lib/activity-log.ts`)
 - `GET /api/compare` — **legacy** basket POC, not the staples UI
 
 Refresh/compare/rematch routes use `maxDuration = 60`.

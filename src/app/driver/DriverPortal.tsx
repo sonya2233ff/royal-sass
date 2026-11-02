@@ -2,6 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  blobUrlToDataUrl,
+  recordDriverRun,
+} from "@/lib/activity-log";
+import {
   buildDriverPickList,
   completeDriverShopping,
   loadDriverJobs,
@@ -134,7 +138,20 @@ export function DriverPortal() {
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
   }
 
-  function finishShopping() {
+  async function finishShopping() {
+    const plan = activePlan;
+    let receipt = "";
+    if (photos[0]?.url) {
+      receipt = (await blobUrlToDataUrl(photos[0].url)) ?? "";
+    }
+    if (plan?.items.length) {
+      recordDriverRun({
+        items: plan.items,
+        labelOf,
+        driver: "Водій",
+        receipt,
+      });
+    }
     completeDriverShopping();
     setLiveLines([]);
     setJobs(loadDriverJobs());
@@ -406,9 +423,13 @@ export function DriverPortal() {
               <div className="done">
                 <p className="ok">✓ Закупівлю здано · список очищено</p>
                 <p className="soon">
+                  Запис додано в{" "}
+                  <a href="/activity" style={{ color: "#2f4a3a", fontWeight: 700 }}>
+                    Activity
+                  </a>
                   {photos.length
-                    ? `Макет: ${photos.length} фото нікуди не відправляються.`
-                    : "Макет: фото чеків поки не зберігаються на сервер."}
+                    ? ` · ${photos.length} фото збережено локально на цьому телефоні.`
+                    : " · без фото чека."}
                 </p>
               </div>
             ) : (
@@ -457,7 +478,9 @@ export function DriverPortal() {
                   type="button"
                   className="send"
                   disabled={!allBought}
-                  onClick={() => finishShopping()}
+                  onClick={() => {
+                    void finishShopping();
+                  }}
                 >
                   Здати закупівлю
                   {photos.length ? ` · ${photos.length} фото` : ""}
