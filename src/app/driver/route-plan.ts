@@ -246,15 +246,25 @@ export function computePlans(basket: Basket): {
     buildPlan("all-mvr", "Усе в MVR", basket, (id) => assignPrefer("mvr", id)),
     buildPlan("cheapest", "Найдешевше по товарах", basket, cheapestStore),
   ];
-  // Prefer fewer stops when totals are essentially tied (±$0.50).
+  // Best option for the driver = shortest route (km). Fewer stops break ties.
+  // Product $ / salary / road $ do not pick the recommended plan.
   const recommended = plans.reduce((best, p) => {
-    const betterTotal = p.total + 0.5 < best.total;
-    const sameish =
-      Math.abs(p.total - best.total) <= 0.5 &&
-      p.storeIds.length < best.storeIds.length;
-    return betterTotal || sameish ? p : best;
+    if (p.distanceKm < best.distanceKm) return p;
+    if (
+      p.distanceKm === best.distanceKm &&
+      p.storeIds.length < best.storeIds.length
+    ) {
+      return p;
+    }
+    return best;
   }, plans[0]);
-  return { plans: plans.sort((a, b) => a.total - b.total), recommended };
+  return {
+    plans: plans.sort(
+      (a, b) =>
+        a.distanceKm - b.distanceKm || a.storeIds.length - b.storeIds.length,
+    ),
+    recommended,
+  };
 }
 
 export type MapProvider = "google" | "waze" | "apple";

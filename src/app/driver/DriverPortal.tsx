@@ -26,9 +26,10 @@ import {
   type StoreId,
 } from "./route-plan";
 
-/** What the driver card shows: goods + road (salary stays in plan.total for ranking). */
-function shopperTotal(plan: Plan): number {
-  return Math.round((plan.productCost + plan.drivingCost) * 100) / 100;
+function kmDelta(plan: Plan, vs: Plan): string {
+  const d = Math.round((plan.distanceKm - vs.distanceKm) * 10) / 10;
+  if (d === 0) return "той самий км";
+  return d > 0 ? `+${d} км` : `${d} км`;
 }
 
 type CatalogItem = {
@@ -367,9 +368,9 @@ export function DriverPortal() {
         <section className="plan" aria-label="Рекомендований маршрут">
           <h2>Рекомендований маршрут</h2>
           <p className="plan-hint">
-            Авто-вибір найвигіднішого варіанту за товарами й дорогою (оплата
-            водія враховується в порівнянні планів, але тут не показується).
-            Натисни інший план — список вище перегрупується по магазинах.
+            Рекомендовано найкоротший маршрут (км). Ціни товарів і зарплата
+            водія в вибір не входять. Натисни інший план — список вище
+            перегрупується по магазинах.
           </p>
           <button
             type="button"
@@ -401,14 +402,13 @@ export function DriverPortal() {
               {recommended.items.length > 4 ? "…" : ""}
             </span>
             <span className="rec-nums">
-              <span>Товари {money(recommended.productCost)}</span>
               <span>
-                Дорога {recommended.distanceKm} км ·{" "}
-                {money(recommended.drivingCost)}
+                Маршрут <b>{recommended.distanceKm} км</b>
               </span>
+              <span>Товари {money(recommended.productCost)} (довідково)</span>
             </span>
             <span className="rec-total">
-              Разом <b>{money(shopperTotal(recommended))}</b>
+              Найкоротший · {recommended.distanceKm} км
             </span>
             <span className="rec-cta">Прокласти маршрут ›</span>
           </button>
@@ -432,10 +432,8 @@ export function DriverPortal() {
                         {p.distanceKm} км
                       </span>
                       <span className="alt-total">
-                        {money(shopperTotal(p))}{" "}
-                        <em>
-                          +{money(shopperTotal(p) - shopperTotal(recommended))}
-                        </em>
+                        {p.distanceKm} км{" "}
+                        <em>{kmDelta(p, recommended)}</em>
                       </span>
                     </button>
                   </li>

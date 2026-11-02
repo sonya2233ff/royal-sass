@@ -21,16 +21,9 @@ export type Day = {
    */
   receipt: string;
   buys: Buy[];
-  /**
-   * Basket economy: most expensive shopping plan − recommended (cheapest).
-   * `savedPercent` is saved / expensive × 100.
-   */
+  /** Legacy fields — Activity no longer computes or shows economy. */
   saved: number;
   savedPercent: number;
-  /** Most expensive plan total used in the economy formula. */
-  expensiveTotal?: number;
-  /** Recommended (cheapest) plan total used in the economy formula. */
-  cheapTotal?: number;
 };
 
 export const STORE_UA: Record<Store, { short: string; name: string }> = {
@@ -75,15 +68,13 @@ export function formatDate(iso: string): { full: string; weekday: string } {
 
 export type DaySummary = {
   spent: number;
-  saved: number;
-  savedPercent: number;
   count: number;
   /** Spent per store. */
   byStore: Record<Store, number>;
 };
 
 export function summarize(day: Day): DaySummary {
-  const base = day.buys.reduce<Omit<DaySummary, "saved" | "savedPercent">>(
+  return day.buys.reduce<DaySummary>(
     (acc, buy) => {
       acc.spent += buy.paid;
       acc.count += 1;
@@ -96,13 +87,4 @@ export function summarize(day: Day): DaySummary {
       byStore: { walmart: 0, nofrills: 0, mvr: 0 },
     },
   );
-  return {
-    ...base,
-    saved: Number.isFinite(day.saved) ? day.saved : 0,
-    savedPercent: Number.isFinite(day.savedPercent) ? day.savedPercent : 0,
-  };
-}
-
-export function formatEconomy(saved: number, savedPercent: number): string {
-  return `− ${money(saved)} (${savedPercent.toFixed(0)}%)`;
 }

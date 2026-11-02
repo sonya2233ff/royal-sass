@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { isIdbReceiptRef, loadReceipts } from "@/lib/activity-log";
 import {
   formatDate,
-  formatEconomy,
   money,
   STORE_UA,
   summarize,
@@ -79,9 +78,8 @@ export function ActivityDay({ day }: { day: Day }) {
         </p>
         <h1>Деталі покупок</h1>
         <p className="lede">
-          Закупівлю зробив <strong>{day.driver}</strong>. Економія = найдорожчий
-          план закупівлі мінус рекомендований (найдешевший). Нижче — де куплено
-          кожну позицію.
+          Закупівлю зробив <strong>{day.driver}</strong>. Нижче — де куплено
+          кожну позицію. Економію в Activity не рахуємо.
         </p>
         {canView ? (
           <button
@@ -108,23 +106,10 @@ export function ActivityDay({ day }: { day: Day }) {
           <span>витрачено</span>
         </div>
         <div>
-          <b className="pos">{formatEconomy(s.saved, s.savedPercent)}</b>
-          <span>заощаджено vs найдорожчий</span>
-        </div>
-        <div>
           <b>{s.count}</b>
           <span>позицій</span>
         </div>
       </section>
-      {(day.expensiveTotal != null || day.cheapTotal != null) && (
-        <p className="eco-note">
-          Найдорожчий план {money(day.expensiveTotal ?? s.spent + s.saved)} −
-          рекомендований {money(day.cheapTotal ?? s.spent)} ={" "}
-          <strong className="pos">
-            {formatEconomy(s.saved, s.savedPercent)}
-          </strong>
-        </p>
-      )}
 
       <section className="split" aria-label="Розподіл по магазинах">
         {(
@@ -169,10 +154,6 @@ export function ActivityDay({ day }: { day: Day }) {
         <div>
           <dt>Разом витрачено</dt>
           <dd>{money(s.spent)}</dd>
-        </div>
-        <div>
-          <dt>Заощаджено (найдорожчий − рекомендований)</dt>
-          <dd className="pos">{formatEconomy(s.saved, s.savedPercent)}</dd>
         </div>
       </dl>
 
@@ -280,18 +261,9 @@ export function ActivityDay({ day }: { day: Day }) {
           font-size: 0.86rem;
           opacity: 0.7;
         }
-        .eco-note {
-          margin: 0 0 1rem;
-          font-size: 0.84rem;
-          opacity: 0.82;
-          line-height: 1.4;
-        }
-        .eco-note .pos {
-          color: #2f6a3a;
-        }
         .summary {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(2, 1fr);
           gap: 0.55rem;
           margin: 1.2rem 0 0.7rem;
         }
@@ -307,9 +279,6 @@ export function ActivityDay({ day }: { day: Day }) {
         .summary span {
           font-size: 0.75rem;
           opacity: 0.7;
-        }
-        .pos {
-          color: #2f6a3a;
         }
         .split {
           display: grid;

@@ -9,7 +9,6 @@ import {
 } from "@/lib/activity-log";
 import {
   formatDate,
-  formatEconomy,
   money,
   summarize,
   ukProductCount,
@@ -38,24 +37,16 @@ export function ActivityPortal() {
   }
 
   const grand = useMemo(() => {
-    const acc = days.reduce(
+    return days.reduce(
       (sum, day) => {
         const s = summarize(day);
         return {
           spent: sum.spent + s.spent,
-          saved: sum.saved + s.saved,
-          expensive:
-            sum.expensive + (day.expensiveTotal ?? s.spent + s.saved),
           count: sum.count + s.count,
         };
       },
-      { spent: 0, saved: 0, expensive: 0, count: 0 },
+      { spent: 0, count: 0 },
     );
-    return {
-      ...acc,
-      savedPercent:
-        acc.expensive > 0 ? (acc.saved / acc.expensive) * 100 : 0,
-    };
   }, [days]);
 
   return (
@@ -66,7 +57,8 @@ export function ActivityPortal() {
         <p className="lede">
           Кожен день — окремий лист. Після «Здати закупівлю» у розділі Водій
           сюди падає сьогоднішній пробіг (на цьому телефоні). Натисни день —
-          деталі по магазинах і чек.
+          деталі по магазинах і чек. Економію тут не рахуємо — водій обирає
+          маршрут за кілометрами.
         </p>
         {days.length > 0 && (
           <button type="button" className="clear-hist" onClick={clearAll}>
@@ -85,10 +77,8 @@ export function ActivityPortal() {
           <span>витрачено разом</span>
         </div>
         <div>
-          <b className="pos">
-            {formatEconomy(grand.saved, grand.savedPercent)}
-          </b>
-          <span>заощаджено vs найдорожчий план</span>
+          <b>{grand.count}</b>
+          <span>позицій</span>
         </div>
       </section>
 
@@ -118,9 +108,6 @@ export function ActivityPortal() {
                   <span className="count">{ukProductCount(s.count)}</span>
                   <span className="totals">
                     <b>{money(s.spent)}</b>
-                    <em className="pos">
-                      {formatEconomy(s.saved, s.savedPercent)}
-                    </em>
                   </span>
                   <span className="chev" aria-hidden>
                     ›
@@ -201,9 +188,6 @@ export function ActivityPortal() {
           font-size: 0.75rem;
           opacity: 0.7;
         }
-        .pos {
-          color: #2f6a3a;
-        }
         .days {
           list-style: none;
           margin: 0;
@@ -251,12 +235,6 @@ export function ActivityPortal() {
         .totals b {
           display: block;
           font-size: 1.02rem;
-        }
-        .totals em {
-          display: block;
-          font-style: normal;
-          font-size: 0.74rem;
-          margin-top: 0.1rem;
         }
         .chev {
           font-size: 1.4rem;
