@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { WAITER_LIST_STORAGE_KEY } from "@/lib/product-config";
+import {
+  buildDriverPickList,
+  loadDriverJobs,
+  loadWaiterList,
+  subscribeWaiterDriver,
+  type DriverJob,
+  type WaiterLine,
+} from "@/lib/waiter-driver";
 import {
   computePlans,
   DRIVER_SALARY,
@@ -17,89 +24,6 @@ type CatalogItem = {
   image?: string | null;
 };
 
-type Line = {
-  id: string;
-  qty: number;
-  note?: string;
-};
-
-type TicketStatus = "new" | "open" | "done";
-
-type Ticket = {
-  id: string;
-  waiter: string;
-  station: string;
-  when: string;
-  status: TicketStatus;
-  localDraft?: boolean;
-  lines: Line[];
-};
-
-const MOCK_TICKETS: Ticket[] = [
-  {
-    id: "t-maria",
-    waiter: "Марія",
-    station: "Зал",
-    when: "щойно",
-    status: "new",
-    lines: [
-      { id: "large_eggs_dozen", qty: 24, note: "на випічку" },
-      { id: "simply_egg_whites", qty: 2, note: "1 кг" },
-      { id: "tomatoes_grape", qty: 2 },
-      { id: "lemons_2lb", qty: 1 },
-    ],
-  },
-  {
-    id: "t-oleg",
-    waiter: "Олег",
-    station: "Каса",
-    when: "12 хв тому",
-    status: "open",
-    lines: [
-      { id: "milk_2pct_2l", qty: 3 },
-      { id: "homo_milk_2l", qty: 2 },
-      { id: "butter_454g", qty: 2, note: "несолоне" },
-      { id: "orange_juice_pulp", qty: 1 },
-    ],
-  },
-  {
-    id: "t-sofia",
-    waiter: "Софія",
-    station: "Ранкова зміна",
-    when: "сьогодні, 08:40",
-    status: "done",
-    lines: [
-      { id: "ice_cubes", qty: 4 },
-      { id: "ziploc_sandwich", qty: 1 },
-      { id: "strawberries", qty: 2 },
-    ],
-  },
-];
-
-function readLocalWaiterDraft(): Line[] {
-  try {
-    const raw = window.localStorage.getItem(WAITER_LIST_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed
-      .filter((row) => row && typeof row === "object")
-      .map((row) => {
-        const rec = row as Record<string, unknown>;
-        const id = String(rec.id ?? "");
-        const qty = Number(rec.qty);
-        return {
-          id,
-          qty: Number.isFinite(qty) && qty > 0 ? Math.min(99, Math.round(qty)) : 1,
-          note: typeof rec.note === "string" ? rec.note.slice(0, 80) : "",
-        };
-      })
-      .filter((row) => row.id);
-  } catch {
-    return [];
-  }
-}
-
 function ukLineCount(n: number): string {
   const n10 = n % 10;
   const n100 = n % 100;
@@ -110,15 +34,27 @@ function ukLineCount(n: number): string {
 
 export function DriverPortal() {
   const [catalog, setCatalog] = useState<CatalogItem[]>([]);
-  const [localLines, setLocalLines] = useState<Line[]>([]);
+  const [liveLines, setLiveLines] = useState<WaiterLine[]>([]);
+  const [jobs, setJobs] = useState<DriverJob[]>([]);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [submitOpen, setSubmitOpen] = useState(false);
   const [photos, setPhotos] = useState<{ name: string; url: string }[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [mapsFor, setMapsFor] = useState<Plan | null>(null);
 
+  function refreshFromWaiter() {
+    const nextLive = loadWaiterList();
+    const nextJobs = loadDriverJobs();
+    setLiveLines((prev) =>
+      JSON.stringify(prev) === JSON.stringify(nextLive) ? prev : nextLive,
+    );
+    setJobs((prev) =>
+      JSON.stringify(prev) === JSON.stringify(nextJobs) ? prev : nextJobs,
+    );
+  }
+
   useEffect(() => {
-    setLocalLines(readLocalWaiterDraft());
+    refreshFromWaiter();
     fetch("/api/staples")
       .then(async (res) => {
         if (!res.ok) throw new Error(`catalog ${res.status}`);
@@ -126,6 +62,7 @@ export function DriverPortal() {
         if (data.ok && Array.isArray(data.items)) setCatalog(data.items);
       })
       .catch(() => undefined);
+    return subscribeWaiterDriver(refreshFromWaiter);
   }, []);
 
   const byId = useMemo(
@@ -133,39 +70,19 @@ export function DriverPortal() {
     [catalog],
   );
 
-  const tickets = useMemo(() => {
-    const extra: Ticket[] =
-      localLines.length > 0
-        ? [
-            {
-              id: "t-local",
-              waiter: "Цей телефон",
-              station: "Чернетка офіціанта",
-              when: "локально",
-              status: "new",
-              localDraft: true,
-              lines: localLines,
-            },
-          ]
-        : [];
-    return [...extra, ...MOCK_TICKETS];
-  }, [localLines]);
-
-  const combined = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const ticket of tickets) {
-      if (ticket.status === "done") continue;
-      for (const line of ticket.lines) {
-        map.set(line.id, (map.get(line.id) ?? 0) + line.qty);
-      }
-    }
-    return [...map.entries()].map(([id, qty]) => ({ id, qty }));
-  }, [tickets]);
+  const combined = useMemo(
+    () => buildDriverPickList(liveLines, jobs),
+    [liveLines, jobs],
+  );
 
   const { plans, recommended } = useMemo(
-    () => computePlans(combined),
+    () =>
+      computePlans(combined.map((row) => ({ id: row.id, qty: row.qty }))),
     [combined],
   );
+
+  const openJobCount = jobs.filter((j) => j.status === "open").length;
+  const fromWaiterLive = liveLines.length > 0;
 
   function labelOf(id: string): string {
     return byId.get(id)?.label ?? id.replace(/_/g, " ");
@@ -208,22 +125,41 @@ export function DriverPortal() {
       <header className="hero">
         <p className="kicker">Driver&apos;s Portal</p>
         <h1>Shopping List</h1>
+        <p className="lede">
+          Список з порталу офіціанта на цьому телефоні. Нові позиції з’являються
+          самі, щойно офіціант їх додає.
+        </p>
       </header>
 
       <section className="summary" aria-label="Зведення">
         <div>
           <b>{ukLineCount(combined.length)}</b>
-          <span>у зведеному списку</span>
+          <span>у списку від офіціанта</span>
         </div>
         <div>
           <b>{combined.reduce((n, row) => n + row.qty, 0)}</b>
           <span>одиниць набрати</span>
         </div>
+        <div>
+          <b>{openJobCount}</b>
+          <span>зафіксованих партій</span>
+        </div>
       </section>
 
-      {combined.length > 0 && (
+      {combined.length === 0 ? (
+        <section className="empty-list" aria-label="Порожній список">
+          <p>
+            Поки порожньо. Відкрий{" "}
+            <a href="/waiter">Офіціант</a>, додай продукти — вони з’являться
+            тут автоматично.
+          </p>
+        </section>
+      ) : (
         <section className="combined" aria-label="Зведений список">
-          <h2>Що набрати (макет)</h2>
+          <h2>Що набрати</h2>
+          {fromWaiterLive && (
+            <p className="live-hint">● Чернетка офіціанта оновлюється наживо</p>
+          )}
           <ul>
             {combined.map((row) => {
               const item = byId.get(row.id);
@@ -238,6 +174,7 @@ export function DriverPortal() {
                   )}
                   <span className="pick">
                     <strong>{labelOf(row.id)}</strong>
+                    {row.note ? <small>{row.note}</small> : null}
                   </span>
                   <em>{row.qty}×</em>
                   <button
@@ -487,13 +424,52 @@ export function DriverPortal() {
           color: #2f4a3a;
         }
         .lede {
-          margin: 0;
+          margin: 0.35rem 0 0;
+          max-width: 36rem;
           opacity: 0.78;
           line-height: 1.4;
+          font-size: 0.92rem;
+        }
+        .lede.sm {
+          font-size: 0.9rem;
+          margin-bottom: 0.8rem;
+        }
+        .empty-list {
+          background: #fffdf8;
+          border: 1px dashed rgba(40, 50, 40, 0.25);
+          padding: 1rem 0.9rem;
+          margin-bottom: 1rem;
+        }
+        .empty-list p {
+          margin: 0;
+          line-height: 1.45;
+          opacity: 0.85;
+        }
+        .empty-list a {
+          color: #2f4a3a;
+          font-weight: 700;
+        }
+        .live-hint {
+          margin: -0.25rem 0 0.55rem;
+          font-size: 0.78rem;
+          color: #2f4a3a;
+          font-weight: 600;
+        }
+        .pick {
+          display: grid;
+          gap: 0.1rem;
+          min-width: 0;
+        }
+        .pick small {
+          font-size: 0.75rem;
+          opacity: 0.7;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .summary {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
+          grid-template-columns: repeat(3, 1fr);
           gap: 0.55rem;
           margin: 1.15rem 0 1rem;
         }

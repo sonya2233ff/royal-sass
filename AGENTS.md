@@ -205,8 +205,9 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 | `src/app/OfferAudit.tsx` | Per-store Так/Ні photos on cards and compare columns |
 | `src/app/StaplesCompare.tsx` | Main UI (cart, settings, compare, rematch, stats, match audit) |
 | `src/app/ProductSearch.tsx` | Homepage typeahead over shown staples only |
-| `src/app/waiter/WaiterPortal.tsx` | Waiter list for the driver (visual send only) |
-| `src/app/driver/DriverPortal.tsx` | Driver inbox of waiter lists (visual only, no accept) |
+| `src/app/waiter/WaiterPortal.tsx` | Waiter list → driver (same-browser live sync) |
+| `src/app/driver/DriverPortal.tsx` | Driver pick list from waiter draft + locked jobs |
+| `src/lib/waiter-driver.ts` | localStorage bridge (`royal-sass-waiter-list-v1`, `royal-sass-driver-jobs-v1`) |
 | `src/app/ProductSettings.tsx` | Per-card match/quantity settings modal |
 
 **Live data flow**
@@ -234,8 +235,8 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `POST /api/staples/delete` — hide/remove shown cafe staples (`ids`). Confirm in UI. Skips `grayridge_eggs` / `eggs_30ct`. `persisted: false` on Vercel; client localStorage still hides.
 - `GET/POST /api/staples/nofrills-probe` — PCX debug
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
-- `/waiter` — waiter portal: shown catalog search + local list; send-to-driver is visual only (no API)
-- `/driver` — driver portal: mock waiter lists + combined pick list; accept/message is visual only
+- `/waiter` — waiter portal: shown catalog search + local list; live sync to `/driver` on this browser (`localStorage` + BroadcastChannel). **Відправити** locks a job into `royal-sass-driver-jobs-v1` and clears the draft
+- `/driver` — driver portal: live waiter draft + locked jobs as the shopping list (no mock tickets). Receipt upload / accept still visual only
 - `GET /api/compare` — **legacy** basket POC, not the staples UI
 
 Refresh/compare/rematch routes use `maxDuration = 60`.
@@ -290,8 +291,8 @@ Match logs (`data/runs/match-*.json`) are search/audit only, gitignored, not the
 - Actions: **Чек** (photo or pasted text → confirm new cards), select all, **Оновити ціни** (price-only), **Оновити вибрані** (rematch selected), **Видалити вибрані**, Compare, Refresh WM / NF / WC / MVR / Sobeys flyer.
 - Per card: **Оновити** = rematch that id. Settings: **Зберегти** vs **Зберегти і оновити**. A/B, Include/Exclude, quantity, and the named alternate persist across refresh on that phone (`royal-sass-product-overrides-v1`). They must not reset to catalog defaults on reload.
 - Nav: Cafe staples + **Офіціант** (`/waiter`) + **Водій** (`/driver`) + Match inspector (`src/app/SiteNav.tsx`). Homepage nav has a second row of store chips (**Порівнювати**: WM / NF / WC / MVR) to show or hide compare columns. At least one store stays on. Choice is `localStorage` `royal-sass-compare-stores-v1`. Hidden stores are omitted from cards, results, and basket winner — they are not $0. Sobeys flyer is not a compare column.
-- **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds a local list (`royal-sass-waiter-list-v1`) and sees a send-to-driver mock. **No send API** yet.
-- **Driver portal** (`/driver`): visual inbox of waiter product lists (mock tickets; local waiter draft may appear as a this-phone mock). **No accept / in-transit / message-waiter API.**
+- **Waiter portal** (`/waiter`): shown cafe catalog only (same search as the homepage). Waiter builds `royal-sass-waiter-list-v1`; the driver portal on the **same phone/browser** updates live. **Відправити** snapshots into `royal-sass-driver-jobs-v1` and clears the draft. No cross-device server API yet.
+- **Driver portal** (`/driver`): shopping list = live waiter draft + open locked jobs (via `src/lib/waiter-driver.ts`). **No accept / in-transit / message-waiter API.**
 - Results: columns for the selected stores, then one-store basket totals, then **Як закупити** (1–2 stop plans; 3 only to fill holes), then stats. Catalog `onSale` / `wasPrice` show as **знижка** (and **дешевше · знижка** when that store is the cheapest). Search typeahead uses the same flags. No `/sales` page.
 - Product settings hint: exact keeps brand/SKU; pack size is not a required Include word; Include merges with catalog; cheapest ignores brand. Category A settings can name one **альтернативний продукт** (search + Include/Exclude + cheaper checkbox).
 

@@ -5,18 +5,21 @@ import {
   searchShownCatalog,
   type CatalogSearchItem,
 } from "@/domain/staple-search";
-import { REMOVED_STAPLES_STORAGE_KEY, WAITER_LIST_STORAGE_KEY } from "@/lib/product-config";
+import { REMOVED_STAPLES_STORAGE_KEY } from "@/lib/product-config";
+import {
+  loadWaiterList,
+  saveWaiterList,
+  sendWaiterListToDriver,
+  subscribeWaiterDriver,
+  type WaiterLine,
+} from "@/lib/waiter-driver";
 
 type CatalogItem = CatalogSearchItem & {
   image?: string | null;
   restaurantProduct?: { category?: string };
 };
 
-type ListLine = {
-  id: string;
-  qty: number;
-  note: string;
-};
+type ListLine = WaiterLine;
 
 const CATEGORY_UA: Record<string, string> = {
   produce: "Овочі / фрукти",
@@ -58,30 +61,6 @@ function loadRemovedIds(): Set<string> {
   }
 }
 
-function loadDraft(): ListLine[] {
-  try {
-    const raw = window.localStorage.getItem(WAITER_LIST_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed
-      .filter((row) => row && typeof row === "object")
-      .map((row) => {
-        const rec = row as Record<string, unknown>;
-        const id = String(rec.id ?? "");
-        const qty = Number(rec.qty);
-        return {
-          id,
-          qty: Number.isFinite(qty) && qty > 0 ? Math.min(99, Math.round(qty)) : 1,
-          note: typeof rec.note === "string" ? rec.note.slice(0, 80) : "",
-        };
-      })
-      .filter((row) => row.id);
-  } catch {
-    return [];
-  }
-}
-
 export function WaiterPortal() {
   const [items, setItems] = useState<CatalogItem[]>([]);
   const [ready, setReady] = useState(false);
@@ -89,11 +68,13 @@ export function WaiterPortal() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("all");
   const [lines, setLines] = useState<ListLine[]>([]);
+  const [hydrated, setHydrated] = useState(false);
   const [preview, setPreview] = useState(false);
-  const [mockNote, setMockNote] = useState(false);
+  const [sentOk, setSentOk] = useState(false);
 
   useEffect(() => {
-    setLines(loadDraft());
+    setLines(loadWaiterList());
+    setHydrated(true);
     fetch("/api/staples")
       .then(async (res) => {
         if (!res.ok) throw new Error(`catalog ${res.status}`);
@@ -111,12 +92,18 @@ export function WaiterPortal() {
   }, []);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(WAITER_LIST_STORAGE_KEY, JSON.stringify(lines));
-    } catch {
-      /* ignore quota */
-    }
-  }, [lines]);
+    if (!hydrated) return;
+    saveWaiterList(lines);
+  }, [lines, hydrated]);
+
+  useEffect(() => {
+    return subscribeWaiterDriver(() => {
+      const next = loadWaiterList();
+      setLines((prev) =>
+        JSON.stringify(prev) === JSON.stringify(next) ? prev : next,
+      );
+    });
+  }, []);
 
   const byId = useMemo(() => new Map(items.map((item) => [item.id, item])), [items]);
 
@@ -171,8 +158,9 @@ export function WaiterPortal() {
         <p className="kicker">Портал офіціанта</p>
         <h1>Список для водія</h1>
         <p className="lede">
-          Знайди продукт із каталогу кафе, додай у список. Відправка водію поки
-          лише макет.
+          Знайди продукт і додай у список — водій бачить його одразу в розділі
+          «Водій» на цьому телефоні / браузері. «Відправити» фіксує партію, щоб
+          можна було набрати наступну.
         </p>
       </header>
 
@@ -336,7 +324,7 @@ export function WaiterPortal() {
               disabled={lines.length === 0}
               onClick={() => {
                 setPreview(true);
-                setMockNote(false);
+                setSentOk(false);
               }}
             >
               Відправити водію
@@ -356,8 +344,11 @@ export function WaiterPortal() {
           }}
         >
           <div className="sheet">
-            <h2 id="driver-preview-title">Макет для водія</h2>
-            <p className="lede sm">Це як виглядатиме список. Нікому не надсилається.</p>
+            <h2 id="driver-preview-title">Список для водія</h2>
+            <p className="lede sm">
+              Список уже видно водію. Натисни «Відправити», щоб зафіксувати
+              партію й очистити чернетку для наступного набору.
+            </p>
             <ol className="preview">
               {lines.map((row) => (
                 <li key={row.id}>
@@ -366,20 +357,30 @@ export function WaiterPortal() {
                 </li>
               ))}
             </ol>
-            {mockNote && (
-              <p className="soon">Поки лише макет — водію нічого не пішло.</p>
+            {sentOk && (
+              <p className="soon ok-send">
+                ✓ Зафіксовано для водія. Чернетку очищено.
+              </p>
             )}
             <div className="actions">
               <button type="button" className="ghost" onClick={() => setPreview(false)}>
-                Назад
+                {sentOk ? "Закрити" : "Назад"}
               </button>
-              <button
-                type="button"
-                className="send"
-                onClick={() => setMockNote(true)}
-              >
-                Відправити
-              </button>
+              {!sentOk && (
+                <button
+                  type="button"
+                  className="send"
+                  onClick={() => {
+                    const job = sendWaiterListToDriver(lines);
+                    if (job) {
+                      setLines([]);
+                      setSentOk(true);
+                    }
+                  }}
+                >
+                  Відправити
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -687,6 +688,11 @@ export function WaiterPortal() {
           padding: 0.5rem 0.65rem;
           background: #efe6d2;
           font-size: 0.88rem;
+        }
+        .soon.ok-send {
+          background: #e4efe4;
+          color: #1e3a28;
+          font-weight: 600;
         }
         .sr {
           position: absolute;
