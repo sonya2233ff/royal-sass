@@ -1,4 +1,4 @@
-export type StoreId = "walmart" | "nofrills";
+export type StoreId = "walmart" | "nofrills" | "mvr";
 
 export type Geo = { lat: number; lng: number };
 
@@ -33,30 +33,94 @@ export const STORES: Record<StoreId, StoreInfo> = {
     lat: 43.81005,
     lng: -79.46039,
   },
+  mvr: {
+    id: "mvr",
+    name: "MVR Cash & Carry",
+    address: "3655 Weston Rd, North York, ON M9L 1V8",
+    lat: 43.76054,
+    lng: -79.54299,
+  },
 };
+
+export const STORE_ORDER: StoreId[] = ["walmart", "nofrills", "mvr"];
 
 /** Fuel/vehicle cost per km and the flat driver salary per run. */
 export const PER_KM = 0.62;
 export const DRIVER_SALARY = 20;
 
-/** Mock per-unit prices per store (same mock spirit as the rest of the app). */
-const PRICES: Record<string, Record<StoreId, number>> = {
-  large_eggs_dozen: { walmart: 6.29, nofrills: 5.99 },
+/**
+ * Mock per-unit shelf prices. Missing store key = not stocked there
+ * (e.g. No-Hole Dome Lids are MVR-only — not at No Frills).
+ */
+type StorePrices = Partial<Record<StoreId, number>>;
+
+const PRICES: Record<string, StorePrices> = {
+  large_eggs_dozen: { walmart: 6.29, nofrills: 5.99, mvr: 5.49 },
   simply_egg_whites: { walmart: 9.47, nofrills: 10.49 },
-  tomatoes_grape: { walmart: 4.39, nofrills: 3.99 },
-  lemons_2lb: { walmart: 3.99, nofrills: 3.49 },
+  tomatoes_grape: { walmart: 4.39, nofrills: 3.99, mvr: 3.79 },
+  lemons_2lb: { walmart: 3.99, nofrills: 3.49, mvr: 3.29 },
   milk_2pct_2l: { walmart: 4.49, nofrills: 4.79 },
   homo_milk_2l: { walmart: 4.97, nofrills: 5.29 },
   butter_454g: { walmart: 5.99, nofrills: 5.49 },
   orange_juice_pulp: { walmart: 6.97, nofrills: 7.49 },
   ice_cubes: { walmart: 2.99, nofrills: 3.29 },
-  ziploc_sandwich: { walmart: 3.99, nofrills: 4.29 },
-  strawberries: { walmart: 3.99, nofrills: 3.5 },
+  ziploc_sandwich: { walmart: 3.99, nofrills: 4.29, mvr: 3.49 },
+  strawberries: { walmart: 3.99, nofrills: 3.5, mvr: 3.29 },
+  // Cafe supplies — MVR Weston shelf (NF/WM often no_match).
+  lids_dome_no_hole: { mvr: 2.19 },
+  lids_dome_12_24oz: { mvr: 66.49 },
+  cups_12oz_squat_pet: { mvr: 5.19 },
+  cups_16oz_pet: { mvr: 5.49 },
+  cups_12oz_black_ripple: { mvr: 5.49 },
+  cups_16oz_black_ripple: { mvr: 5.99 },
+  lids_bagasse_bowl: { mvr: 6.49 },
+  lids_deli_round: { mvr: 3.29 },
 };
-const DEFAULT_PRICE: Record<StoreId, number> = { walmart: 4.99, nofrills: 4.79 };
 
-function priceOf(id: string, store: StoreId): number {
-  return PRICES[id]?.[store] ?? DEFAULT_PRICE[store];
+/** Defaults only for staples with no explicit row (typical grocery). */
+const DEFAULT_PRICE: StorePrices = { walmart: 4.99, nofrills: 4.79, mvr: 4.49 };
+
+/** Cafe supply / packaging ids that grocery stores usually do not carry. */
+function looksLikeSupply(id: string): boolean {
+  return /^(cups_|lids_|foil_|napkin|mitt|tray|platter|bagasse|guest_towel)/i.test(
+    id,
+  );
+}
+
+/** Shelf price, or null when that store does not stock the staple. */
+export function priceOf(id: string, store: StoreId): number | null {
+  const row = PRICES[id];
+  if (row) {
+    const hit = row[store];
+    return typeof hit === "number" && Number.isFinite(hit) ? hit : null;
+  }
+  if (looksLikeSupply(id)) {
+    return store === "mvr" ? (DEFAULT_PRICE.mvr ?? 4.49) : null;
+  }
+  const hit = DEFAULT_PRICE[store];
+  return typeof hit === "number" ? hit : null;
+}
+
+export function availableStores(id: string): StoreId[] {
+  return STORE_ORDER.filter((store) => priceOf(id, store) != null);
+}
+
+export function cheapestStore(id: string): StoreId {
+  const opts = availableStores(id);
+  if (!opts.length) return "mvr";
+  return opts.reduce((best, store) => {
+    const a = priceOf(id, store);
+    const b = priceOf(id, best);
+    if (a == null) return best;
+    if (b == null) return store;
+    return a < b ? store : best;
+  });
+}
+
+/** Prefer one store when it stocks the item; else cheapest available. */
+function assignPrefer(preferred: StoreId, id: string): StoreId {
+  if (priceOf(id, preferred) != null) return preferred;
+  return cheapestStore(id);
 }
 
 function toRad(d: number): number {
@@ -133,7 +197,7 @@ function buildPlan(
 ): Plan {
   const items: PlanItem[] = basket.map((b) => {
     const store = assign(b.id);
-    const price = priceOf(b.id, store);
+    const price = priceOf(b.id, store) ?? priceOf(b.id, cheapestStore(b.id)) ?? 0;
     return { id: b.id, qty: b.qty, store, price, lineTotal: round2(price * b.qty) };
   });
   const productCost = round2(items.reduce((s, i) => s + i.lineTotal, 0));
@@ -173,16 +237,23 @@ export function computePlans(basket: Basket): {
 } {
   if (!basket.length) return { plans: [], recommended: null };
   const plans: Plan[] = [
-    buildPlan("all-walmart", "Усе в Walmart", basket, () => "walmart"),
-    buildPlan("all-nofrills", "Усе в No Frills", basket, () => "nofrills"),
-    buildPlan("cheapest", "Найдешевше по товарах", basket, (id) =>
-      priceOf(id, "walmart") <= priceOf(id, "nofrills") ? "walmart" : "nofrills",
+    buildPlan("all-walmart", "Усе в Walmart", basket, (id) =>
+      assignPrefer("walmart", id),
     ),
+    buildPlan("all-nofrills", "Усе в No Frills", basket, (id) =>
+      assignPrefer("nofrills", id),
+    ),
+    buildPlan("all-mvr", "Усе в MVR", basket, (id) => assignPrefer("mvr", id)),
+    buildPlan("cheapest", "Найдешевше по товарах", basket, cheapestStore),
   ];
-  const recommended = plans.reduce(
-    (best, p) => (p.total < best.total ? p : best),
-    plans[0],
-  );
+  // Prefer fewer stops when totals are essentially tied (±$0.50).
+  const recommended = plans.reduce((best, p) => {
+    const betterTotal = p.total + 0.5 < best.total;
+    const sameish =
+      Math.abs(p.total - best.total) <= 0.5 &&
+      p.storeIds.length < best.storeIds.length;
+    return betterTotal || sameish ? p : best;
+  }, plans[0]);
   return { plans: plans.sort((a, b) => a.total - b.total), recommended };
 }
 

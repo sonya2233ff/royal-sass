@@ -29,6 +29,7 @@ type CatalogItem = {
 const STORE_SHORT: Record<StoreId, string> = {
   walmart: "WM",
   nofrills: "NF",
+  mvr: "MVR",
 };
 
 function ukLineCount(n: number): string {
@@ -619,6 +620,9 @@ export function DriverPortal() {
         }
         .store-badge.nofrills {
           background: #b33b2e;
+        }
+        .store-badge.mvr {
+          background: #6b4f1d;
         }
         .pick {
           display: grid;
