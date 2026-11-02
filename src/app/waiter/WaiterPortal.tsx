@@ -219,29 +219,58 @@ export function WaiterPortal() {
               const onList = lines.find((row) => row.id === item.id);
               return (
                 <li key={item.id}>
-                  <button
-                    type="button"
-                    className={onList ? "card on" : "card"}
-                    onClick={() => add(item.id)}
-                  >
-                    {item.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={item.image} alt="" referrerPolicy="no-referrer" />
+                  <div className={onList ? "card on" : "card"}>
+                    <button
+                      type="button"
+                      className="card-main"
+                      onClick={() => add(item.id)}
+                      aria-label={
+                        onList
+                          ? `Додати ще одну одиницю: ${item.label}`
+                          : `Додати ${item.label}`
+                      }
+                    >
+                      {item.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={item.image} alt="" referrerPolicy="no-referrer" />
+                      ) : (
+                        <span className="ph" />
+                      )}
+                      <span className="meta">
+                        <strong>{item.label}</strong>
+                        <em>
+                          {onList
+                            ? "У списку"
+                            : categoryLabel(categoryOf(item))}
+                        </em>
+                      </span>
+                    </button>
+                    {onList ? (
+                      <div
+                        className="qty"
+                        role="group"
+                        aria-label={`Кількість: ${item.label}`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setQty(item.id, onList.qty - 1)}
+                          aria-label="Менше"
+                        >
+                          −
+                        </button>
+                        <span aria-live="polite">{onList.qty}</span>
+                        <button
+                          type="button"
+                          onClick={() => setQty(item.id, onList.qty + 1)}
+                          aria-label="Більше"
+                        >
+                          +
+                        </button>
+                      </div>
                     ) : (
-                      <span className="ph" />
+                      <span className="plus">Додати</span>
                     )}
-                    <span className="meta">
-                      <strong>{item.label}</strong>
-                      <em>
-                        {onList
-                          ? `У списку · ${onList.qty}`
-                          : categoryLabel(categoryOf(item))}
-                      </em>
-                    </span>
-                    <span className="plus" aria-hidden>
-                      {onList ? "+" : "Додати"}
-                    </span>
-                  </button>
+                  </div>
                 </li>
               );
             })}
@@ -426,7 +455,8 @@ export function WaiterPortal() {
         .ghost,
         .send,
         .stepper button,
-        .card {
+        .qty button,
+        .card-main {
           font: inherit;
           cursor: pointer;
         }
@@ -457,14 +487,25 @@ export function WaiterPortal() {
         }
         .card {
           display: grid;
-          grid-template-columns: 3rem 1fr auto;
-          gap: 0.7rem;
+          grid-template-columns: minmax(0, 1fr) auto;
+          gap: 0.5rem;
           align-items: center;
           width: 100%;
-          text-align: left;
           border: 1px solid rgba(40, 50, 40, 0.12);
           background: #fffdf8;
           padding: 0.45rem 0.55rem;
+          color: inherit;
+        }
+        .card-main {
+          display: grid;
+          grid-template-columns: 3rem minmax(0, 1fr);
+          gap: 0.7rem;
+          align-items: center;
+          min-width: 0;
+          text-align: left;
+          border: 0;
+          background: transparent;
+          padding: 0;
           color: inherit;
         }
         .card.on {
@@ -496,6 +537,31 @@ export function WaiterPortal() {
           font-weight: 700;
           color: #2f4a3a;
           white-space: nowrap;
+        }
+        .qty {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.15rem;
+          border: 1px solid rgba(47, 74, 58, 0.3);
+          border-radius: 999px;
+          padding: 0.05rem;
+          background: #fffdf8;
+        }
+        .qty button {
+          width: 1.7rem;
+          height: 1.7rem;
+          border: 0;
+          background: transparent;
+          color: #2f4a3a;
+          font-size: 1.05rem;
+          line-height: 1;
+        }
+        .qty span {
+          min-width: 1.5rem;
+          text-align: center;
+          font-weight: 700;
+          font-size: 0.9rem;
+          color: #2f4a3a;
         }
         .ticket {
           position: sticky;
