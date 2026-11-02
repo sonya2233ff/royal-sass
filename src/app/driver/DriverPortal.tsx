@@ -112,6 +112,9 @@ export function DriverPortal() {
   const [filter, setFilter] = useState<"all" | TicketStatus>("all");
   const [openId, setOpenId] = useState<string | null>(MOCK_TICKETS[0]?.id ?? null);
   const [localLines, setLocalLines] = useState<Line[]>([]);
+  const [bought, setBought] = useState<Record<string, number>>({});
+  const [buyFor, setBuyFor] = useState<string | null>(null);
+  const [buyInput, setBuyInput] = useState("");
 
   useEffect(() => {
     setLocalLines(readLocalWaiterDraft());
@@ -167,6 +170,23 @@ export function DriverPortal() {
     return byId.get(id)?.label ?? id.replace(/_/g, " ");
   }
 
+  function openBuy(id: string, need: number) {
+    setBuyFor(id);
+    const existing = bought[id];
+    setBuyInput(String(existing ?? need));
+  }
+
+  function saveBuy() {
+    if (!buyFor) return;
+    const n = Math.max(0, Math.min(999, Math.round(Number(buyInput) || 0)));
+    setBought((prev) => ({ ...prev, [buyFor]: n }));
+    setBuyFor(null);
+  }
+
+  const buyNeed = buyFor
+    ? (combined.find((row) => row.id === buyFor)?.qty ?? 0)
+    : 0;
+
   return (
     <div className="portal">
       <header className="hero">
@@ -199,6 +219,8 @@ export function DriverPortal() {
           <ul>
             {combined.map((row) => {
               const item = byId.get(row.id);
+              const got = bought[row.id];
+              const hasGot = typeof got === "number";
               return (
                 <li key={row.id}>
                   {item?.image ? (
@@ -207,8 +229,22 @@ export function DriverPortal() {
                   ) : (
                     <span className="ph" />
                   )}
-                  <strong>{labelOf(row.id)}</strong>
+                  <span className="pick">
+                    <strong>{labelOf(row.id)}</strong>
+                    {hasGot ? (
+                      <span className={got >= row.qty ? "got full" : "got part"}>
+                        набрано {got} з {row.qty}
+                      </span>
+                    ) : null}
+                  </span>
                   <em>{row.qty}×</em>
+                  <button
+                    type="button"
+                    className={hasGot ? "buy change" : "buy"}
+                    onClick={() => openBuy(row.id, row.qty)}
+                  >
+                    {hasGot ? "Змінити" : "Купити"}
+                  </button>
                 </li>
               );
             })}
@@ -310,6 +346,54 @@ export function DriverPortal() {
         <p className="hint">Немає списків у цьому фільтрі.</p>
       )}
 
+      {buyFor && (
+        <div
+          className="overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="buy-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setBuyFor(null);
+          }}
+        >
+          <div className="sheet">
+            <h2 id="buy-title">Скільки вдалося купити?</h2>
+            <p className="lede sm">
+              {labelOf(buyFor)} · треба {buyNeed}×
+            </p>
+            <label className="buy-field">
+              <span>Куплено / знайдено</span>
+              <input
+                type="number"
+                inputMode="numeric"
+                min={0}
+                max={999}
+                value={buyInput}
+                autoFocus
+                onChange={(e) => setBuyInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") saveBuy();
+                  if (e.key === "Escape") setBuyFor(null);
+                }}
+              />
+              <small>з {buyNeed} замовлених</small>
+            </label>
+            <div className="actions">
+              <button
+                type="button"
+                className="ghost"
+                onClick={() => setBuyFor(null)}
+              >
+                Скасувати
+              </button>
+              <button type="button" className="send" onClick={saveBuy}>
+                Зберегти
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style jsx>{`
         .portal {
           max-width: 820px;
@@ -399,6 +483,45 @@ export function DriverPortal() {
         .combined em {
           font-style: normal;
           font-weight: 700;
+          color: #2f4a3a;
+        }
+        .combined li {
+          grid-template-columns: 2.4rem minmax(0, 1fr) auto auto;
+        }
+        .pick {
+          display: grid;
+          min-width: 0;
+        }
+        .pick strong {
+          font-size: 0.9rem;
+          line-height: 1.2;
+        }
+        .got {
+          display: block;
+          font-size: 0.74rem;
+          font-weight: 650;
+          margin-top: 0.08rem;
+        }
+        .got.full {
+          color: #2f6a3a;
+        }
+        .got.part {
+          color: #8a5a1f;
+        }
+        .buy {
+          font: inherit;
+          cursor: pointer;
+          border: 1px solid #2f4a3a;
+          background: #2f4a3a;
+          color: #f7f3ec;
+          border-radius: 999px;
+          padding: 0.32rem 0.72rem;
+          font-size: 0.78rem;
+          font-weight: 700;
+          white-space: nowrap;
+        }
+        .buy.change {
+          background: transparent;
           color: #2f4a3a;
         }
         .chips {
@@ -540,6 +663,55 @@ export function DriverPortal() {
           margin-top: 0.9rem;
           padding: 0.55rem 0.7rem;
           background: #efe6d2;
+        }
+        .overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 50;
+          background: rgba(20, 24, 20, 0.42);
+          display: grid;
+          place-items: end center;
+        }
+        .sheet {
+          width: min(28rem, 100%);
+          background: #f7f3ec;
+          padding: 1.1rem 1rem 1.3rem;
+          border-top: 1px solid rgba(40, 50, 40, 0.14);
+        }
+        .sheet h2 {
+          margin: 0 0 0.2rem;
+          font-size: 1.1rem;
+        }
+        .lede.sm {
+          font-size: 0.9rem;
+          margin: 0 0 0.9rem;
+        }
+        .buy-field {
+          display: grid;
+          gap: 0.3rem;
+          margin-bottom: 0.3rem;
+        }
+        .buy-field > span {
+          font-size: 0.8rem;
+          font-weight: 650;
+        }
+        .buy-field input {
+          width: 100%;
+          box-sizing: border-box;
+          border: 1px solid rgba(40, 50, 40, 0.22);
+          background: #fffdf8;
+          padding: 0.6rem 0.7rem;
+          font: inherit;
+          font-size: 1.1rem;
+          color: inherit;
+        }
+        .buy-field input:focus {
+          outline: 2px solid #2f4a3a;
+          outline-offset: 1px;
+        }
+        .buy-field small {
+          font-size: 0.75rem;
+          opacity: 0.65;
         }
         @media (max-width: 640px) {
           .summary {
