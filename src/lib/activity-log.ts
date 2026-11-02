@@ -170,6 +170,7 @@ export function clearLiveActivity(): void {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+    void clearReceiptDb();
     notifyActivityChange();
   } catch {
     /* ignore */
@@ -300,23 +301,145 @@ export function subscribeActivity(onChange: () => void): () => void {
   };
 }
 
-/** Best-effort blob: → data: for local receipt preview (skip huge files). */
-export async function blobUrlToDataUrl(
-  url: string,
-  maxBytes = 700_000,
-): Promise<string | null> {
+const RECEIPT_DB = "royal-sass-receipts-v1";
+const RECEIPT_STORE = "byDate";
+
+export function receiptRefForDate(date: string): string {
+  return `idb:${date}`;
+}
+
+export function isIdbReceiptRef(ref: string): boolean {
+  return ref.startsWith("idb:");
+}
+
+function openReceiptDb(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(RECEIPT_DB, 1);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(RECEIPT_STORE)) {
+        db.createObjectStore(RECEIPT_STORE);
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error ?? new Error("idb open failed"));
+  });
+}
+
+/** Persist one or more compressed receipt data-URLs for a calendar day. */
+export async function saveReceipts(
+  date: string,
+  dataUrls: string[],
+): Promise<string> {
+  const clean = dataUrls.filter((u) => u.startsWith("data:image"));
+  if (!clean.length) return "";
+  const existing = await loadReceipts(receiptRefForDate(date));
+  const merged = [...existing, ...clean].slice(0, 20);
+  const db = await openReceiptDb();
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(RECEIPT_STORE, "readwrite");
+    tx.objectStore(RECEIPT_STORE).put(merged, date);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error ?? new Error("idb put failed"));
+  });
+  db.close();
+  return receiptRefForDate(date);
+}
+
+export async function loadReceipts(ref: string): Promise<string[]> {
+  if (!ref) return [];
+  if (ref.startsWith("data:image")) return [ref];
+  if (!isIdbReceiptRef(ref)) return [];
+  const date = ref.slice("idb:".length);
   try {
-    const res = await fetch(url);
-    const blob = await res.blob();
-    if (blob.size > maxBytes) return null;
-    return await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () =>
-        resolve(typeof reader.result === "string" ? reader.result : null);
-      reader.onerror = () => reject(reader.error);
-      reader.readAsDataURL(blob);
+    const db = await openReceiptDb();
+    const rows = await new Promise<unknown>((resolve, reject) => {
+      const tx = db.transaction(RECEIPT_STORE, "readonly");
+      const req = tx.objectStore(RECEIPT_STORE).get(date);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error ?? new Error("idb get failed"));
     });
+    db.close();
+    if (Array.isArray(rows)) {
+      return rows.filter(
+        (u): u is string => typeof u === "string" && u.startsWith("data:image"),
+      );
+    }
+    if (typeof rows === "string" && rows.startsWith("data:image")) return [rows];
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+async function clearReceiptDb(): Promise<void> {
+  try {
+    const db = await openReceiptDb();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(RECEIPT_STORE, "readwrite");
+      tx.objectStore(RECEIPT_STORE).clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error ?? new Error("idb clear failed"));
+    });
+    db.close();
+  } catch {
+    /* ignore */
+  }
+}
+
+function readAsDataUrl(blob: Blob): Promise<string | null> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () =>
+      resolve(typeof reader.result === "string" ? reader.result : null);
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(blob);
+  });
+}
+
+/** Resize + JPEG-compress a File / Blob / blob: URL for local receipt storage. */
+export async function compressImageSource(
+  source: Blob | string,
+  opts: { maxEdge?: number; quality?: number } = {},
+): Promise<string | null> {
+  const maxEdge = opts.maxEdge ?? 1600;
+  const quality = opts.quality ?? 0.72;
+  try {
+    let blob: Blob;
+    if (typeof source === "string") {
+      if (source.startsWith("data:image")) return source;
+      const res = await fetch(source);
+      blob = await res.blob();
+    } else {
+      blob = source;
+    }
+    try {
+      const bitmap = await createImageBitmap(blob);
+      const scale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));
+      const w = Math.max(1, Math.round(bitmap.width * scale));
+      const h = Math.max(1, Math.round(bitmap.height * scale));
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        bitmap.close();
+        return readAsDataUrl(blob);
+      }
+      ctx.drawImage(bitmap, 0, 0, w, h);
+      bitmap.close();
+      const dataUrl = canvas.toDataURL("image/jpeg", quality);
+      return dataUrl.startsWith("data:image") ? dataUrl : readAsDataUrl(blob);
+    } catch {
+      /* HEIC / odd MIME — keep original data URL for IndexedDB */
+      return readAsDataUrl(blob);
+    }
   } catch {
     return null;
   }
+}
+
+/** @deprecated use compressImageSource — kept for older call sites */
+export async function blobUrlToDataUrl(url: string): Promise<string | null> {
+  return compressImageSource(url);
 }

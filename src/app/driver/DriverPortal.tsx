@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  blobUrlToDataUrl,
+  compressImageSource,
   recordDriverRun,
+  saveReceipts,
+  torontoDateIso,
 } from "@/lib/activity-log";
 import {
   buildDriverPickList,
@@ -55,8 +57,13 @@ export function DriverPortal() {
   const [jobs, setJobs] = useState<DriverJob[]>([]);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [submitOpen, setSubmitOpen] = useState(false);
-  const [photos, setPhotos] = useState<{ name: string; url: string }[]>([]);
+  const [photos, setPhotos] = useState<
+    { name: string; url: string; file: File }[]
+  >([]);
   const [submitted, setSubmitted] = useState(false);
+  const [receiptSaved, setReceiptSaved] = useState(0);
+  const [receiptError, setReceiptError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [mapsFor, setMapsFor] = useState<Plan | null>(null);
   const [planKey, setPlanKey] = useState<string | null>(null);
 
@@ -143,35 +150,65 @@ export function DriverPortal() {
   }
 
   async function finishShopping() {
-    const plan = activePlan;
-    let receipt = "";
-    if (photos[0]?.url) {
-      receipt = (await blobUrlToDataUrl(photos[0].url)) ?? "";
+    if (submitting) return;
+    setSubmitting(true);
+    setReceiptError(null);
+    setReceiptSaved(0);
+    try {
+      const plan = activePlan;
+      let receipt = "";
+      if (photos.length) {
+        const compressed: string[] = [];
+        for (const p of photos) {
+          const dataUrl = await compressImageSource(p.file ?? p.url);
+          if (dataUrl) compressed.push(dataUrl);
+        }
+        if (compressed.length) {
+          const date = torontoDateIso();
+          receipt = await saveReceipts(date, compressed);
+          setReceiptSaved(compressed.length);
+        } else {
+          setReceiptError(
+            "Не вдалося стиснути фото чека. Спробуй інше фото або менший файл.",
+          );
+        }
+      }
+      if (plan?.items.length) {
+        recordDriverRun({
+          items: plan.items,
+          labelOf,
+          driver: "Водій",
+          receipt,
+        });
+      }
+      completeDriverShopping();
+      setLiveLines([]);
+      setJobs(loadDriverJobs());
+      setChecked({});
+      setPlanKey(null);
+      setSubmitted(true);
+    } catch (e) {
+      setReceiptError(
+        e instanceof Error ? e.message : "Не вдалося зберегти закупівлю / чек",
+      );
+    } finally {
+      setSubmitting(false);
     }
-    if (plan?.items.length) {
-      recordDriverRun({
-        items: plan.items,
-        labelOf,
-        driver: "Водій",
-        receipt,
-      });
-    }
-    completeDriverShopping();
-    setLiveLines([]);
-    setJobs(loadDriverJobs());
-    setChecked({});
-    setPlanKey(null);
-    setSubmitted(true);
   }
 
   function addPhotos(files: FileList | null) {
     if (!files) return;
     const next = Array.from(files)
-      .filter((f) => f.type.startsWith("image/"))
-      .map((f) => ({ name: f.name, url: URL.createObjectURL(f) }));
+      .filter((f) => f.type.startsWith("image/") || f.type === "")
+      .map((f) => ({
+        name: f.name || "receipt.jpg",
+        url: URL.createObjectURL(f),
+        file: f,
+      }));
     if (next.length) {
       setPhotos((prev) => [...prev, ...next]);
       setSubmitted(false);
+      setReceiptError(null);
     }
   }
 
@@ -432,8 +469,8 @@ export function DriverPortal() {
                   <a href="/activity" style={{ color: "#2f4a3a", fontWeight: 700 }}>
                     Activity
                   </a>
-                  {photos.length
-                    ? ` · ${photos.length} фото збережено локально на цьому телефоні.`
+                  {receiptSaved
+                    ? ` · ${receiptSaved} фото чека збережено на цьому телефоні.`
                     : " · без фото чека."}
                 </p>
               </div>
@@ -443,14 +480,15 @@ export function DriverPortal() {
                   <input
                     type="file"
                     accept="image/*"
+                    capture="environment"
                     multiple
                     onChange={(e) => addPhotos(e.target.files)}
                   />
                   <span className="dz-icon" aria-hidden>
                     📷
                   </span>
-                  <span>Натисни, щоб вибрати фото чеків</span>
-                  <small>Можна кілька за раз (необов’язково в макеті)</small>
+                  <span>Натисни, щоб зробити / вибрати фото чеків</span>
+                  <small>Фото стиснеться і збережеться в Activity на цьому телефоні</small>
                 </label>
 
                 {photos.length > 0 && (
@@ -471,6 +509,7 @@ export function DriverPortal() {
                     ))}
                   </ul>
                 )}
+                {receiptError && <p className="shot-err">{receiptError}</p>}
               </>
             )}
 
@@ -482,13 +521,14 @@ export function DriverPortal() {
                 <button
                   type="button"
                   className="send"
-                  disabled={!allBought}
+                  disabled={!allBought || submitting}
                   onClick={() => {
                     void finishShopping();
                   }}
                 >
-                  Здати закупівлю
-                  {photos.length ? ` · ${photos.length} фото` : ""}
+                  {submitting
+                    ? "Зберігаю…"
+                    : `Здати закупівлю${photos.length ? ` · ${photos.length} фото` : ""}`}
                 </button>
               )}
             </div>
@@ -1209,6 +1249,12 @@ export function DriverPortal() {
           font-size: 0.7rem;
           line-height: 1;
           cursor: pointer;
+        }
+        .shot-err {
+          margin: 0.45rem 0 0;
+          color: #8a2f2f;
+          font-size: 0.84rem;
+          font-weight: 600;
         }
         .done {
           margin: 0.4rem 0 0.2rem;

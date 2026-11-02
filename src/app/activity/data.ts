@@ -15,7 +15,10 @@ export type Day = {
   driver: string;
   /** When the driver uploaded the receipt photo. */
   uploadedAt: string;
-  /** Public path to the receipt photo the driver uploaded. */
+  /**
+   * Receipt photo ref: `idb:YYYY-MM-DD` (IndexedDB on this phone),
+   * a legacy `data:image/…` URL, or a public path.
+   */
   receipt: string;
   buys: Buy[];
   /**

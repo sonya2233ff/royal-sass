@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { isIdbReceiptRef, loadReceipts } from "@/lib/activity-log";
 import {
   formatDate,
   formatEconomy,
@@ -13,8 +14,58 @@ import {
 
 export function ActivityDay({ day }: { day: Day }) {
   const [showReceipt, setShowReceipt] = useState(false);
+  const [receiptUrls, setReceiptUrls] = useState<string[]>([]);
+  const [receiptLoading, setReceiptLoading] = useState(false);
+  const [receiptLoadError, setReceiptLoadError] = useState<string | null>(null);
   const { full, weekday } = formatDate(day.date);
   const s = summarize(day);
+  const hasReceiptRef = Boolean(day.receipt?.trim());
+
+  useEffect(() => {
+    const ref = day.receipt?.trim() ?? "";
+    if (!ref) {
+      setReceiptUrls([]);
+      setReceiptLoadError(null);
+      return;
+    }
+    let cancelled = false;
+    setReceiptLoading(true);
+    setReceiptLoadError(null);
+    void (async () => {
+      try {
+        const fromStore = await loadReceipts(ref);
+        if (cancelled) return;
+        if (fromStore.length) {
+          setReceiptUrls(fromStore);
+          return;
+        }
+        /* Legacy public path / absolute URL still works as <img src>. */
+        if (!isIdbReceiptRef(ref) && !ref.startsWith("data:")) {
+          setReceiptUrls([ref]);
+          return;
+        }
+        setReceiptUrls([]);
+        if (isIdbReceiptRef(ref)) {
+          setReceiptLoadError(
+            "Фото чека не знайдено на цьому телефоні (IndexedDB).",
+          );
+        }
+      } catch {
+        if (!cancelled) {
+          setReceiptUrls([]);
+          setReceiptLoadError("Не вдалося завантажити фото чека.");
+        }
+      } finally {
+        if (!cancelled) setReceiptLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [day.receipt]);
+
+  const canView =
+    hasReceiptRef && (receiptUrls.length > 0 || receiptLoading || !!receiptLoadError);
 
   return (
     <div className="portal">
@@ -32,13 +83,19 @@ export function ActivityDay({ day }: { day: Day }) {
           план закупівлі мінус рекомендований (найдешевший). Нижче — де куплено
           кожну позицію.
         </p>
-        {day.receipt ? (
+        {canView ? (
           <button
             type="button"
             className="view-receipt"
             onClick={() => setShowReceipt(true)}
+            disabled={receiptLoading && !receiptUrls.length}
           >
-            <span aria-hidden>🧾</span> Переглянути чек
+            <span aria-hidden>🧾</span>{" "}
+            {receiptLoading && !receiptUrls.length
+              ? "Завантажую чек…"
+              : receiptUrls.length > 1
+                ? `Переглянути чек (${receiptUrls.length})`
+                : "Переглянути чек"}
           </button>
         ) : (
           <p className="no-receipt">Чек не додано для цього пробігу.</p>
@@ -143,8 +200,20 @@ export function ActivityDay({ day }: { day: Day }) {
                 ✕
               </button>
             </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={day.receipt} alt={`Фото чека за ${full}`} />
+            {receiptLoadError && !receiptUrls.length ? (
+              <p className="lb-err">{receiptLoadError}</p>
+            ) : (
+              <div className="lb-photos">
+                {receiptUrls.map((src, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={`${i}-${src.slice(0, 48)}`}
+                    src={src}
+                    alt={`Фото чека ${i + 1} за ${full}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -201,6 +270,10 @@ export function ActivityDay({ day }: { day: Day }) {
           padding: 0.5rem 0.95rem;
           font-weight: 700;
           font-size: 0.9rem;
+        }
+        .view-receipt:disabled {
+          opacity: 0.65;
+          cursor: wait;
         }
         .no-receipt {
           margin: 0.85rem 0 0;
@@ -385,13 +458,25 @@ export function ActivityDay({ day }: { day: Day }) {
           line-height: 1;
           color: #2f4a3a;
         }
-        .lightbox img {
+        .lb-photos {
+          overflow: auto;
+          max-height: 80vh;
+          background: #11140f;
+        }
+        .lb-photos img {
           width: 100%;
           height: auto;
-          max-height: 80vh;
           object-fit: contain;
           display: block;
-          background: #11140f;
+        }
+        .lb-photos img + img {
+          border-top: 1px solid rgba(247, 243, 236, 0.2);
+        }
+        .lb-err {
+          margin: 0;
+          padding: 1.2rem 0.9rem;
+          font-size: 0.9rem;
+          color: #8a2f2f;
         }
         @media (max-width: 640px) {
           .summary {
