@@ -3,7 +3,7 @@
  * Seed mock days stay in `src/app/activity/data.ts`; live runs append here.
  */
 
-import { type PlanItem } from "@/app/driver/route-plan";
+import { computePlans, type PlanItem } from "@/app/driver/route-plan";
 import type { Buy, Day, Store } from "@/app/activity/data";
 import { ACTIVITY_DAYS } from "@/app/activity/data";
 
@@ -14,6 +14,40 @@ const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 function round2(n: number): number {
   return Math.round(n * 100) / 100;
+}
+
+/** Goods + road — Activity economy basis (no driver salary). */
+function shopperCost(productCost: number, drivingCost: number): number {
+  return round2(productCost + drivingCost);
+}
+
+/**
+ * Activity economy = most expensive shopping-list plan − cheapest (recommended).
+ * Driver route pick stays distance-only; this is money-only for Activity $/%.
+ */
+export function economyForBasket(
+  basket: { id: string; qty: number }[],
+): {
+  saved: number;
+  savedPercent: number;
+  expensiveTotal: number;
+  cheapTotal: number;
+} {
+  const { plans } = computePlans(basket);
+  if (!plans.length) {
+    return { saved: 0, savedPercent: 0, expensiveTotal: 0, cheapTotal: 0 };
+  }
+  const costs = plans.map((p) => shopperCost(p.productCost, p.drivingCost));
+  const expensiveTotal = Math.max(...costs);
+  const cheapTotal = Math.min(...costs);
+  const saved = Math.max(0, round2(expensiveTotal - cheapTotal));
+  const savedPercent =
+    expensiveTotal > 0 ? round2((saved / expensiveTotal) * 100) : 0;
+  return { saved, savedPercent, expensiveTotal, cheapTotal };
+}
+
+function economyFromBuys(buys: Buy[]) {
+  return economyForBasket(buys.map((b) => ({ id: b.id, qty: b.qty })));
 }
 
 /** Calendar date in America/Toronto (YYYY-MM-DD). */
@@ -70,6 +104,7 @@ function parseDay(raw: unknown): Day | null {
   if (!DATE_RE.test(date)) return null;
   const buys = parseBuys(rec.buys);
   if (!buys.length) return null;
+  const eco = economyFromBuys(buys);
   return {
     date,
     driver:
@@ -85,9 +120,10 @@ function parseDay(raw: unknown): Day | null {
         ? rec.receipt
         : "",
     buys,
-    // Economy is not tracked in Activity (driver picks by distance only).
-    saved: 0,
-    savedPercent: 0,
+    saved: eco.saved,
+    savedPercent: eco.savedPercent,
+    expensiveTotal: eco.expensiveTotal,
+    cheapTotal: eco.cheapTotal,
   };
 }
 
@@ -185,14 +221,17 @@ export function recordDriverRun(input: RecordDriverRunInput): Day | null {
     }
   }
 
+  const eco = economyFromBuys(mergedBuys);
   const day: Day = {
     date,
     driver: (input.driver ?? prev?.driver ?? "Водій").slice(0, 40),
     uploadedAt: torontoUploadedAt(),
     receipt: input.receipt?.trim() || prev?.receipt || "",
     buys: mergedBuys,
-    saved: 0,
-    savedPercent: 0,
+    saved: eco.saved,
+    savedPercent: eco.savedPercent,
+    expensiveTotal: eco.expensiveTotal,
+    cheapTotal: eco.cheapTotal,
   };
 
   const next = [day, ...existing.filter((d) => d.date !== date)].slice(0, 60);
