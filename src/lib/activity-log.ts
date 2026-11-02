@@ -110,6 +110,17 @@ export function loadLiveActivityDays(): Day[] {
   }
 }
 
+/** Wipe live Activity history on this browser (keeps seed array empty). */
+export function clearLiveActivity(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+    notifyActivityChange();
+  } catch {
+    /* ignore */
+  }
+}
+
 function writeLiveDays(days: Day[]): void {
   if (typeof window === "undefined") return;
   try {
