@@ -37,21 +37,26 @@ export function ActivityPortal() {
     setDays(listActivityDays());
   }
 
-  const grand = useMemo(
-    () =>
-      days.reduce(
-        (acc, day) => {
-          const s = summarize(day);
-          return {
-            spent: acc.spent + s.spent,
-            saved: acc.saved + s.saved,
-            count: acc.count + s.count,
-          };
-        },
-        { spent: 0, saved: 0, count: 0 },
-      ),
-    [days],
-  );
+  const grand = useMemo(() => {
+    const acc = days.reduce(
+      (sum, day) => {
+        const s = summarize(day);
+        return {
+          spent: sum.spent + s.spent,
+          saved: sum.saved + s.saved,
+          expensive:
+            sum.expensive + (day.expensiveTotal ?? s.spent + s.saved),
+          count: sum.count + s.count,
+        };
+      },
+      { spent: 0, saved: 0, expensive: 0, count: 0 },
+    );
+    return {
+      ...acc,
+      savedPercent:
+        acc.expensive > 0 ? (acc.saved / acc.expensive) * 100 : 0,
+    };
+  }, [days]);
 
   return (
     <div className="portal">
@@ -81,12 +86,7 @@ export function ActivityPortal() {
         </div>
         <div>
           <b className="pos">
-            {formatEconomy(
-              grand.saved,
-              grand.spent + grand.saved > 0
-                ? (grand.saved / (grand.spent + grand.saved)) * 100
-                : 0,
-            )}
+            {formatEconomy(grand.saved, grand.savedPercent)}
           </b>
           <span>заощаджено vs найдорожчий план</span>
         </div>

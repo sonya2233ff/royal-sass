@@ -66,9 +66,15 @@ function parseBuys(raw: unknown): Buy[] {
     .filter((row): row is Buy => row != null);
 }
 
+/** Goods + road — same basis as the driver route card (salary still ranks plans). */
+function shopperCost(productCost: number, drivingCost: number): number {
+  return round2(productCost + drivingCost);
+}
+
 /**
  * Economy = most expensive shopping-list plan − recommended (cheapest).
- * Uses the same `computePlans` totals as the driver portal (incl. salary in ranking).
+ * Plans are ranked with salary inside `computePlans`; the $ / % shown to Activity
+ * use goods+road so the percent is vs the shopping bill, not salary.
  */
 export function economyForBasket(
   basket: { id: string; qty: number }[],
@@ -82,11 +88,15 @@ export function economyForBasket(
   if (!recommended || !plans.length) {
     return { saved: 0, savedPercent: 0, expensiveTotal: 0, cheapTotal: 0 };
   }
-  const expensiveTotal = plans.reduce(
-    (max, p) => (p.total > max ? p.total : max),
-    plans[0].total,
+  // Pick costliest / cheapest by full plan.total (salary included in ranking),
+  // then report shopper-facing goods+road amounts for the $ and % UI.
+  const costliest = plans.reduce((a, b) => (b.total > a.total ? b : a));
+  const cheapest = recommended;
+  const expensiveTotal = shopperCost(
+    costliest.productCost,
+    costliest.drivingCost,
   );
-  const cheapTotal = recommended.total;
+  const cheapTotal = shopperCost(cheapest.productCost, cheapest.drivingCost);
   const saved = Math.max(0, round2(expensiveTotal - cheapTotal));
   const savedPercent =
     expensiveTotal > 0 ? round2((saved / expensiveTotal) * 100) : 0;
