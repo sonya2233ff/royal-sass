@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   buildDriverPickList,
+  completeDriverShopping,
   loadDriverJobs,
   loadWaiterList,
   subscribeWaiterDriver,
@@ -121,6 +122,9 @@ export function DriverPortal() {
 
   const openJobCount = jobs.filter((j) => j.status === "open").length;
   const fromWaiterLive = liveLines.length > 0;
+  const allBought =
+    combined.length > 0 && combined.every((row) => checked[row.id]);
+  const boughtCount = combined.filter((row) => checked[row.id]).length;
 
   function labelOf(id: string): string {
     return byId.get(id)?.label ?? id.replace(/_/g, " ");
@@ -128,6 +132,15 @@ export function DriverPortal() {
 
   function toggleChecked(id: string) {
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
+  }
+
+  function finishShopping() {
+    completeDriverShopping();
+    setLiveLines([]);
+    setJobs(loadDriverJobs());
+    setChecked({});
+    setPlanKey(null);
+    setSubmitted(true);
   }
 
   function addPhotos(files: FileList | null) {
@@ -271,9 +284,16 @@ export function DriverPortal() {
             ))}
           </div>
           <div className="combined-actions">
+            {!allBought && (
+              <p className="buy-hint">
+                Познач усі позиції ✓ ({boughtCount}/{combined.length}), тоді
+                можна здати закупівлю — список очиститься.
+              </p>
+            )}
             <button
               type="button"
               className="submit-shopping"
+              disabled={!allBought}
               onClick={() => {
                 setSubmitted(false);
                 setSubmitOpen(true);
@@ -384,8 +404,12 @@ export function DriverPortal() {
 
             {submitted ? (
               <div className="done">
-                <p className="ok">✓ Надіслано {photos.length} фото (макет)</p>
-                <p className="soon">Макет: фото нікуди не відправляються.</p>
+                <p className="ok">✓ Закупівлю здано · список очищено</p>
+                <p className="soon">
+                  {photos.length
+                    ? `Макет: ${photos.length} фото нікуди не відправляються.`
+                    : "Макет: фото чеків поки не зберігаються на сервер."}
+                </p>
               </div>
             ) : (
               <>
@@ -400,7 +424,7 @@ export function DriverPortal() {
                     📷
                   </span>
                   <span>Натисни, щоб вибрати фото чеків</span>
-                  <small>Можна кілька за раз</small>
+                  <small>Можна кілька за раз (необов’язково в макеті)</small>
                 </label>
 
                 {photos.length > 0 && (
@@ -432,10 +456,11 @@ export function DriverPortal() {
                 <button
                   type="button"
                   className="send"
-                  disabled={photos.length === 0}
-                  onClick={() => setSubmitted(true)}
+                  disabled={!allBought}
+                  onClick={() => finishShopping()}
                 >
-                  Надіслати{photos.length ? ` (${photos.length})` : ""}
+                  Здати закупівлю
+                  {photos.length ? ` · ${photos.length} фото` : ""}
                 </button>
               )}
             </div>
@@ -896,6 +921,12 @@ export function DriverPortal() {
         .combined-actions {
           margin-top: 0.85rem;
         }
+        .buy-hint {
+          margin: 0 0 0.45rem;
+          font-size: 0.8rem;
+          opacity: 0.75;
+          line-height: 1.35;
+        }
         .submit-shopping {
           width: 100%;
           font: inherit;
@@ -908,8 +939,12 @@ export function DriverPortal() {
           font-weight: 700;
           font-size: 0.9rem;
         }
-        .submit-shopping:hover {
+        .submit-shopping:hover:not(:disabled) {
           background: #263b2e;
+        }
+        .submit-shopping:disabled {
+          opacity: 0.45;
+          cursor: not-allowed;
         }
         .plan {
           background: #fffdf8;

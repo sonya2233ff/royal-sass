@@ -123,6 +123,18 @@ export function sendWaiterListToDriver(
   return job;
 }
 
+/**
+ * Driver finished the run: clear the live waiter draft and mark open jobs done
+ * so the shopping list empties on this phone.
+ */
+export function completeDriverShopping(): void {
+  const jobs = loadDriverJobs().map((job) =>
+    job.status === "open" ? { ...job, status: "done" as const } : job,
+  );
+  writeDriverJobs(jobs.slice(0, 40));
+  saveWaiterList([]);
+}
+
 /** Merge live waiter draft + open jobs into one pick list (sum qty, keep notes). */
 export function buildDriverPickList(
   live: WaiterLine[],
