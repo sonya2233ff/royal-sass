@@ -416,6 +416,14 @@ export function DriverPortal() {
             <p className="lede sm">
               {mapsFor.stops.map((s) => s.name).join(" → ")}
             </p>
+            <ol className="stop-list">
+              {mapsFor.stops.map((s, i) => (
+                <li key={`${s.name}-${i}`}>
+                  <strong>{s.name}</strong>
+                  <span>{s.address}</span>
+                </li>
+              ))}
+            </ol>
             <div className="maps">
               {(
                 [
@@ -850,6 +858,44 @@ export function DriverPortal() {
           font-style: normal;
           color: #8a5a1f;
           font-size: 0.78rem;
+        }
+        .stop-list {
+          list-style: none;
+          margin: 0.55rem 0 0.35rem;
+          padding: 0;
+          display: grid;
+          gap: 0.35rem;
+          counter-reset: stop;
+        }
+        .stop-list li {
+          display: grid;
+          grid-template-columns: 1.4rem 1fr;
+          column-gap: 0.45rem;
+          align-items: start;
+          font-size: 0.84rem;
+        }
+        .stop-list li::before {
+          counter-increment: stop;
+          content: counter(stop);
+          width: 1.4rem;
+          height: 1.4rem;
+          border-radius: 999px;
+          background: #2f4a3a;
+          color: #f7f3ec;
+          font-size: 0.72rem;
+          font-weight: 800;
+          display: grid;
+          place-items: center;
+          grid-row: 1 / span 2;
+        }
+        .stop-list strong {
+          font-size: 0.86rem;
+        }
+        .stop-list span {
+          grid-column: 2;
+          opacity: 0.72;
+          font-size: 0.78rem;
+          line-height: 1.35;
         }
         .maps {
           display: grid;

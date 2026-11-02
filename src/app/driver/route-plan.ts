@@ -11,9 +11,10 @@ export type StoreInfo = Geo & {
 /** Where the driver starts and returns (the café). */
 export const CAFE = {
   name: "Royal SASS Café",
-  address: "Thornhill, ON",
-  lat: 43.8205,
-  lng: -79.4295,
+  address: "10 Disera Dr Unit 100, Thornhill, ON L4J 0A7",
+  // Building pin for 10 Disera Dr (SmartCentres Thornhill / L4J 0A7).
+  lat: 43.81035,
+  lng: -79.45394,
 };
 
 export const STORES: Record<StoreId, StoreInfo> = {
