@@ -21,16 +21,17 @@ export const STORES: Record<StoreId, StoreInfo> = {
   walmart: {
     id: "walmart",
     name: "Walmart #5831",
-    address: "700 Centre St, Thornhill, ON",
-    lat: 43.8169,
-    lng: -79.4378,
+    address: "700 Centre St, Thornhill, ON L4J 0A7",
+    lat: 43.81163,
+    lng: -79.45116,
   },
   nofrills: {
     id: "nofrills",
     name: "No Frills #3660",
-    address: "3630 Bathurst St, Thornhill, ON",
-    lat: 43.811,
-    lng: -79.421,
+    // Anthony's No Frills — NOT Bathurst (that was a wrong pin).
+    address: "1054 Centre St, Vaughan, ON L4J 3M8",
+    lat: 43.81005,
+    lng: -79.46039,
   },
 };
 
@@ -187,25 +188,36 @@ export function computePlans(basket: Basket): {
 
 export type MapProvider = "google" | "waze" | "apple";
 
+/** Prefer street address so Maps geocodes the store, not a nearby wrong pin. */
+function stopQuery(stop: Stop): string {
+  return stop.address.trim() || `${stop.lat},${stop.lng}`;
+}
+
 /** Deep-link into a maps app with the café → stores → café route. */
 export function mapUrl(provider: MapProvider, stops: Stop[]): string {
-  const pts = stops.map((s) => `${s.lat},${s.lng}`);
+  if (!stops.length) return "https://www.google.com/maps";
+  const queries = stops.map(stopQuery);
   if (provider === "google") {
-    const origin = pts[0];
-    const destination = pts[pts.length - 1];
-    const waypoints = pts.slice(1, -1).join("|");
+    const origin = encodeURIComponent(queries[0]);
+    const destination = encodeURIComponent(queries[queries.length - 1]);
+    const mid = queries.slice(1, -1);
     let url = `https://www.google.com/maps/dir/?api=1&travelmode=driving&origin=${origin}&destination=${destination}`;
-    if (waypoints) url += `&waypoints=${encodeURIComponent(waypoints)}`;
+    if (mid.length) {
+      url += `&waypoints=${encodeURIComponent(mid.join("|"))}`;
+    }
     return url;
   }
   if (provider === "apple") {
-    const saddr = pts[0];
-    const daddr = pts.slice(1).join("+to:");
+    const saddr = encodeURIComponent(queries[0]);
+    const daddr = queries
+      .slice(1)
+      .map((q) => encodeURIComponent(q))
+      .join("+to:");
     return `https://maps.apple.com/?dirflg=d&saddr=${saddr}&daddr=${daddr}`;
   }
-  // Waze supports a single destination — navigate to the first store.
+  // Waze supports a single destination — navigate to the first store by address.
   const target = stops[1] ?? stops[stops.length - 1];
-  return `https://waze.com/ul?ll=${target.lat},${target.lng}&navigate=yes`;
+  return `https://waze.com/ul?q=${encodeURIComponent(stopQuery(target))}&navigate=yes`;
 }
 
 export function money(n: number): string {
