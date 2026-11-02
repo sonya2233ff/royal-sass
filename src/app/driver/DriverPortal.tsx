@@ -2,6 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { WAITER_LIST_STORAGE_KEY } from "@/lib/product-config";
+import {
+  computePlans,
+  DRIVER_SALARY,
+  mapUrl,
+  money,
+  type MapProvider,
+  type Plan,
+} from "./route-plan";
 
 type CatalogItem = {
   id: string;
@@ -25,12 +33,6 @@ type Ticket = {
   status: TicketStatus;
   localDraft?: boolean;
   lines: Line[];
-};
-
-const STATUS_UA: Record<TicketStatus, string> = {
-  new: "Нове",
-  open: "Відкрите",
-  done: "Переглянуто",
 };
 
 const MOCK_TICKETS: Ticket[] = [
@@ -108,13 +110,14 @@ function ukLineCount(n: number): string {
 
 export function DriverPortal() {
   const [catalog, setCatalog] = useState<CatalogItem[]>([]);
-  const [ready, setReady] = useState(false);
-  const [filter, setFilter] = useState<"all" | TicketStatus>("all");
-  const [openId, setOpenId] = useState<string | null>(MOCK_TICKETS[0]?.id ?? null);
   const [localLines, setLocalLines] = useState<Line[]>([]);
   const [bought, setBought] = useState<Record<string, number>>({});
   const [buyFor, setBuyFor] = useState<string | null>(null);
   const [buyInput, setBuyInput] = useState("");
+  const [submitOpen, setSubmitOpen] = useState(false);
+  const [photos, setPhotos] = useState<{ name: string; url: string }[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+  const [mapsFor, setMapsFor] = useState<Plan | null>(null);
 
   useEffect(() => {
     setLocalLines(readLocalWaiterDraft());
@@ -124,8 +127,7 @@ export function DriverPortal() {
         const data = (await res.json()) as { ok?: boolean; items?: CatalogItem[] };
         if (data.ok && Array.isArray(data.items)) setCatalog(data.items);
       })
-      .catch(() => undefined)
-      .finally(() => setReady(true));
+      .catch(() => undefined);
   }, []);
 
   const byId = useMemo(
@@ -151,10 +153,6 @@ export function DriverPortal() {
     return [...extra, ...MOCK_TICKETS];
   }, [localLines]);
 
-  const shown = tickets.filter(
-    (ticket) => filter === "all" || ticket.status === filter,
-  );
-
   const combined = useMemo(() => {
     const map = new Map<string, number>();
     for (const ticket of tickets) {
@@ -165,6 +163,11 @@ export function DriverPortal() {
     }
     return [...map.entries()].map(([id, qty]) => ({ id, qty }));
   }, [tickets]);
+
+  const { plans, recommended } = useMemo(
+    () => computePlans(combined),
+    [combined],
+  );
 
   function labelOf(id: string): string {
     return byId.get(id)?.label ?? id.replace(/_/g, " ");
@@ -181,6 +184,34 @@ export function DriverPortal() {
     const n = Math.max(0, Math.min(999, Math.round(Number(buyInput) || 0)));
     setBought((prev) => ({ ...prev, [buyFor]: n }));
     setBuyFor(null);
+  }
+
+  function addPhotos(files: FileList | null) {
+    if (!files) return;
+    const next = Array.from(files)
+      .filter((f) => f.type.startsWith("image/"))
+      .map((f) => ({ name: f.name, url: URL.createObjectURL(f) }));
+    if (next.length) {
+      setPhotos((prev) => [...prev, ...next]);
+      setSubmitted(false);
+    }
+  }
+
+  function removePhoto(url: string) {
+    setPhotos((prev) => {
+      const hit = prev.find((p) => p.url === url);
+      if (hit) URL.revokeObjectURL(hit.url);
+      return prev.filter((p) => p.url !== url);
+    });
+  }
+
+  function closeSubmit() {
+    if (submitted) {
+      photos.forEach((p) => URL.revokeObjectURL(p.url));
+      setPhotos([]);
+      setSubmitted(false);
+    }
+    setSubmitOpen(false);
   }
 
   const buyNeed = buyFor
@@ -249,101 +280,71 @@ export function DriverPortal() {
               );
             })}
           </ul>
+          <div className="combined-actions">
+            <button
+              type="button"
+              className="submit-shopping"
+              onClick={() => {
+                setSubmitted(false);
+                setSubmitOpen(true);
+              }}
+            >
+              Submit the shopping
+            </button>
+          </div>
         </section>
       )}
 
-      <div className="chips" role="tablist" aria-label="Фільтр списків">
-        {(["all", "new", "open", "done"] as const).map((key) => (
+      {recommended && (
+        <section className="plan" aria-label="Рекомендований маршрут">
+          <h2>Рекомендований маршрут</h2>
+          <p className="plan-hint">
+            Авто-вибір найвигіднішого варіанту: вартість товарів + дорога (км) +
+            ${DRIVER_SALARY} зарплата водія.
+          </p>
           <button
-            key={key}
             type="button"
-            className={filter === key ? "chip on" : "chip"}
-            onClick={() => setFilter(key)}
+            className="rec"
+            onClick={() => setMapsFor(recommended)}
           >
-            {key === "all" ? "Усі" : STATUS_UA[key]}
+            <span className="rec-badge">Рекомендовано</span>
+            <strong className="rec-title">{recommended.label}</strong>
+            <span className="rec-route">
+              {recommended.stops.map((s) => s.name).join(" → ")}
+            </span>
+            <span className="rec-nums">
+              <span>Товари {money(recommended.productCost)}</span>
+              <span>
+                Дорога {recommended.distanceKm} км ·{" "}
+                {money(recommended.drivingCost)}
+              </span>
+              <span>Зарплата {money(recommended.salary)}</span>
+            </span>
+            <span className="rec-total">
+              Разом <b>{money(recommended.total)}</b>
+            </span>
+            <span className="rec-cta">Прокласти маршрут ›</span>
           </button>
-        ))}
-      </div>
 
-      {!ready && <p className="hint">Завантаження каталогу…</p>}
-
-      <ul className="tickets">
-        {shown.map((ticket) => {
-          const open = openId === ticket.id;
-          return (
-            <li key={ticket.id} className={open ? "ticket open" : "ticket"}>
-              <button
-                type="button"
-                className="ticket-head"
-                onClick={() => setOpenId(open ? null : ticket.id)}
-              >
-                <span className="who">
-                  <strong>{ticket.waiter}</strong>
-                  <em>
-                    {ticket.station} · {ticket.when}
-                    {ticket.localDraft ? " · не відправлено" : ""}
-                  </em>
-                </span>
-                <span className={`status ${ticket.status}`}>
-                  {STATUS_UA[ticket.status]}
-                </span>
-                <span className="qty">{ukLineCount(ticket.lines.length)}</span>
-              </button>
-              {open && (
-                <div className="body">
-                  <ul className="lines">
-                    {ticket.lines.map((line) => {
-                      const item = byId.get(line.id);
-                      return (
-                        <li key={`${ticket.id}-${line.id}`}>
-                          {item?.image ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={item.image}
-                              alt=""
-                              referrerPolicy="no-referrer"
-                            />
-                          ) : (
-                            <span className="ph" />
-                          )}
-                          <span>
-                            <strong>
-                              {line.qty}× {labelOf(line.id)}
-                            </strong>
-                            {line.note ? <i>{line.note}</i> : null}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <div className="actions">
-                    <button
-                      type="button"
-                      className="ghost"
-                      disabled
-                      title="Макет"
-                    >
-                      Написати офіціанту
-                    </button>
-                    <button
-                      type="button"
-                      className="send"
-                      disabled
-                      title="Макет"
-                    >
-                      Прийняти список
-                    </button>
-                  </div>
-                  <p className="mockcap">Макет: прийняття і переписка ще не працюють.</p>
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-
-      {shown.length === 0 && (
-        <p className="hint">Немає списків у цьому фільтрі.</p>
+          {plans.length > 1 && (
+            <ul className="alts">
+              {plans
+                .filter((p) => p.key !== recommended.key)
+                .map((p) => (
+                  <li key={p.key}>
+                    <span className="alt-label">{p.label}</span>
+                    <span className="alt-route">
+                      {p.storeIds.length} зуп. · {p.distanceKm} км
+                    </span>
+                    <span className="alt-total">
+                      {money(p.total)}{" "}
+                      <em>+{money(p.total - recommended.total)}</em>
+                    </span>
+                  </li>
+                ))}
+            </ul>
+          )}
+        </section>
       )}
 
       {buyFor && (
@@ -388,6 +389,139 @@ export function DriverPortal() {
               </button>
               <button type="button" className="send" onClick={saveBuy}>
                 Зберегти
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {submitOpen && (
+        <div
+          className="overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="submit-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeSubmit();
+          }}
+        >
+          <div className="sheet">
+            <h2 id="submit-title">Фото чеків за день</h2>
+            <p className="lede sm">
+              Завантаж фото всіх чеків за сьогоднішні покупки.
+            </p>
+
+            {submitted ? (
+              <div className="done">
+                <p className="ok">✓ Надіслано {photos.length} фото (макет)</p>
+                <p className="soon">Макет: фото нікуди не відправляються.</p>
+              </div>
+            ) : (
+              <>
+                <label className="dropzone">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => addPhotos(e.target.files)}
+                  />
+                  <span className="dz-icon" aria-hidden>
+                    📷
+                  </span>
+                  <span>Натисни, щоб вибрати фото чеків</span>
+                  <small>Можна кілька за раз</small>
+                </label>
+
+                {photos.length > 0 && (
+                  <ul className="shots">
+                    {photos.map((p) => (
+                      <li key={p.url}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={p.url} alt={p.name} />
+                        <button
+                          type="button"
+                          className="rm"
+                          aria-label="Прибрати"
+                          onClick={() => removePhoto(p.url)}
+                        >
+                          ✕
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
+
+            <div className="actions">
+              <button type="button" className="ghost" onClick={closeSubmit}>
+                {submitted ? "Закрити" : "Скасувати"}
+              </button>
+              {!submitted && (
+                <button
+                  type="button"
+                  className="send"
+                  disabled={photos.length === 0}
+                  onClick={() => setSubmitted(true)}
+                >
+                  Надіслати{photos.length ? ` (${photos.length})` : ""}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {mapsFor && (
+        <div
+          className="overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="maps-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setMapsFor(null);
+          }}
+        >
+          <div className="sheet">
+            <h2 id="maps-title">Відкрити маршрут у застосунку</h2>
+            <p className="lede sm">
+              {mapsFor.stops.map((s) => s.name).join(" → ")}
+            </p>
+            <div className="maps">
+              {(
+                [
+                  ["google", "Google Maps"],
+                  ["waze", "Waze"],
+                  ["apple", "Apple Maps"],
+                ] as [MapProvider, string][]
+              ).map(([prov, label]) => (
+                <button
+                  key={prov}
+                  type="button"
+                  className="map-btn"
+                  onClick={() =>
+                    window.open(
+                      mapUrl(prov, mapsFor.stops),
+                      "_blank",
+                      "noopener,noreferrer",
+                    )
+                  }
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <p className="soon">
+              Waze веде до першої зупинки; Google/Apple прокладають весь маршрут
+              між магазинами.
+            </p>
+            <div className="actions">
+              <button
+                type="button"
+                className="ghost"
+                onClick={() => setMapsFor(null)}
+              >
+                Закрити
               </button>
             </div>
           </div>
@@ -677,6 +811,207 @@ export function DriverPortal() {
           background: #f7f3ec;
           padding: 1.1rem 1rem 1.3rem;
           border-top: 1px solid rgba(40, 50, 40, 0.14);
+          max-height: 88vh;
+          overflow: auto;
+        }
+        .combined-actions {
+          margin-top: 0.85rem;
+        }
+        .submit-shopping {
+          width: 100%;
+          font: inherit;
+          cursor: pointer;
+          border: 1px solid #2f4a3a;
+          background: #2f4a3a;
+          color: #f7f3ec;
+          border-radius: 999px;
+          padding: 0.62rem 0.9rem;
+          font-weight: 700;
+          font-size: 0.9rem;
+        }
+        .submit-shopping:hover {
+          background: #263b2e;
+        }
+        .plan {
+          background: #fffdf8;
+          border: 1px solid rgba(40, 50, 40, 0.14);
+          padding: 0.85rem 0.85rem 1rem;
+          margin-bottom: 1rem;
+        }
+        .plan h2 {
+          margin: 0 0 0.3rem;
+          font-size: 1.05rem;
+        }
+        .plan-hint {
+          margin: 0 0 0.7rem;
+          font-size: 0.82rem;
+          opacity: 0.72;
+        }
+        .rec {
+          display: grid;
+          gap: 0.35rem;
+          width: 100%;
+          text-align: left;
+          font: inherit;
+          cursor: pointer;
+          background: #eef4ee;
+          border: 1.5px solid #2f4a3a;
+          border-radius: 8px;
+          padding: 0.75rem 0.8rem;
+          color: inherit;
+        }
+        .rec:hover {
+          background: #e4efe4;
+        }
+        .rec-badge {
+          justify-self: start;
+          font-size: 0.66rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          background: #2f4a3a;
+          color: #f7f3ec;
+          padding: 0.12rem 0.5rem;
+          border-radius: 999px;
+        }
+        .rec-title {
+          font-size: 1.05rem;
+        }
+        .rec-route {
+          font-size: 0.86rem;
+          opacity: 0.85;
+        }
+        .rec-nums {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.2rem 0.9rem;
+          font-size: 0.8rem;
+          opacity: 0.8;
+          margin-top: 0.1rem;
+        }
+        .rec-total {
+          font-size: 0.95rem;
+        }
+        .rec-total b {
+          font-size: 1.15rem;
+        }
+        .rec-cta {
+          justify-self: start;
+          margin-top: 0.25rem;
+          font-weight: 700;
+          color: #2f4a3a;
+        }
+        .alts {
+          list-style: none;
+          margin: 0.8rem 0 0;
+          padding: 0;
+          display: grid;
+          gap: 0.4rem;
+        }
+        .alts li {
+          display: grid;
+          grid-template-columns: 1fr auto auto;
+          gap: 0.6rem;
+          align-items: baseline;
+          font-size: 0.86rem;
+          padding: 0.4rem 0.2rem;
+          border-top: 1px solid rgba(40, 50, 40, 0.08);
+        }
+        .alt-route {
+          opacity: 0.65;
+          font-size: 0.78rem;
+          white-space: nowrap;
+        }
+        .alt-total em {
+          font-style: normal;
+          color: #8a5a1f;
+          font-size: 0.78rem;
+        }
+        .maps {
+          display: grid;
+          gap: 0.45rem;
+          margin: 0.3rem 0 0.2rem;
+        }
+        .map-btn {
+          font: inherit;
+          cursor: pointer;
+          border: 1px solid #2f4a3a;
+          background: #fffdf8;
+          color: #2f4a3a;
+          border-radius: 999px;
+          padding: 0.6rem 0.8rem;
+          font-weight: 700;
+          font-size: 0.9rem;
+        }
+        .map-btn:hover {
+          background: #eef4ee;
+        }
+        .dropzone {
+          display: grid;
+          justify-items: center;
+          gap: 0.2rem;
+          text-align: center;
+          cursor: pointer;
+          border: 1.5px dashed rgba(47, 74, 58, 0.45);
+          background: #fffdf8;
+          border-radius: 8px;
+          padding: 1.1rem 0.9rem;
+          margin-bottom: 0.7rem;
+        }
+        .dropzone input {
+          display: none;
+        }
+        .dz-icon {
+          font-size: 1.5rem;
+        }
+        .dropzone span {
+          font-size: 0.9rem;
+          font-weight: 600;
+        }
+        .dropzone small {
+          font-size: 0.76rem;
+          opacity: 0.65;
+        }
+        .shots {
+          list-style: none;
+          margin: 0 0 0.3rem;
+          padding: 0.3rem 0.3rem 0;
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+          gap: 0.55rem;
+        }
+        .shots li {
+          position: relative;
+        }
+        .shots img {
+          width: 100%;
+          height: 4.5rem;
+          object-fit: cover;
+          border-radius: 6px;
+          border: 1px solid rgba(40, 50, 40, 0.15);
+          display: block;
+        }
+        .shots .rm {
+          position: absolute;
+          top: -0.4rem;
+          right: -0.4rem;
+          width: 1.3rem;
+          height: 1.3rem;
+          border-radius: 999px;
+          border: 0;
+          background: #2f4a3a;
+          color: #f7f3ec;
+          font-size: 0.7rem;
+          line-height: 1;
+          cursor: pointer;
+        }
+        .done {
+          margin: 0.4rem 0 0.2rem;
+        }
+        .ok {
+          margin: 0 0 0.3rem;
+          font-weight: 700;
+          color: #2f6a3a;
         }
         .sheet h2 {
           margin: 0 0 0.2rem;
