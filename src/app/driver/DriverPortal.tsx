@@ -14,14 +14,21 @@ import {
   DRIVER_SALARY,
   mapUrl,
   money,
+  STORES,
   type MapProvider,
   type Plan,
+  type StoreId,
 } from "./route-plan";
 
 type CatalogItem = {
   id: string;
   label: string;
   image?: string | null;
+};
+
+const STORE_SHORT: Record<StoreId, string> = {
+  walmart: "WM",
+  nofrills: "NF",
 };
 
 function ukLineCount(n: number): string {
@@ -41,6 +48,7 @@ export function DriverPortal() {
   const [photos, setPhotos] = useState<{ name: string; url: string }[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [mapsFor, setMapsFor] = useState<Plan | null>(null);
+  const [planKey, setPlanKey] = useState<string | null>(null);
 
   function refreshFromWaiter() {
     const nextLive = loadWaiterList();
@@ -75,11 +83,40 @@ export function DriverPortal() {
     [liveLines, jobs],
   );
 
+  const noteById = useMemo(
+    () => new Map(combined.map((row) => [row.id, row.note])),
+    [combined],
+  );
+
   const { plans, recommended } = useMemo(
     () =>
       computePlans(combined.map((row) => ({ id: row.id, qty: row.qty }))),
     [combined],
   );
+
+  const activePlan = useMemo(() => {
+    if (!plans.length) return null;
+    return plans.find((p) => p.key === planKey) ?? recommended;
+  }, [plans, planKey, recommended]);
+
+  /** Products grouped by store, in route stop order for the active plan. */
+  const storeGroups = useMemo(() => {
+    if (!activePlan) return [];
+    return activePlan.storeIds.map((storeId) => ({
+      store: STORES[storeId],
+      items: activePlan.items.filter((item) => item.store === storeId),
+    }));
+  }, [activePlan]);
+
+  useEffect(() => {
+    if (!recommended) {
+      setPlanKey(null);
+      return;
+    }
+    if (planKey && !plans.some((p) => p.key === planKey)) {
+      setPlanKey(recommended.key);
+    }
+  }, [plans, planKey, recommended]);
 
   const openJobCount = jobs.filter((j) => j.status === "open").length;
   const fromWaiterLive = liveLines.length > 0;
@@ -146,7 +183,7 @@ export function DriverPortal() {
         </div>
       </section>
 
-      {combined.length === 0 ? (
+      {combined.length === 0 || !activePlan ? (
         <section className="empty-list" aria-label="Порожній список">
           <p>
             Поки порожньо. Відкрий{" "}
@@ -157,43 +194,81 @@ export function DriverPortal() {
       ) : (
         <section className="combined" aria-label="Зведений список">
           <h2>Що набрати</h2>
+          <p className="plan-for">
+            За планом: <strong>{activePlan.label}</strong>
+            {activePlan.key === recommended?.key ? " (рекомендовано)" : ""}
+          </p>
           {fromWaiterLive && (
             <p className="live-hint">● Чернетка офіціанта оновлюється наживо</p>
           )}
-          <ul>
-            {combined.map((row) => {
-              const item = byId.get(row.id);
-              const isChecked = checked[row.id] ?? false;
-              return (
-                <li key={row.id} className={isChecked ? "done-row" : undefined}>
-                  {item?.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={item.image} alt="" referrerPolicy="no-referrer" />
-                  ) : (
-                    <span className="ph" />
-                  )}
-                  <span className="pick">
-                    <strong>{labelOf(row.id)}</strong>
-                    {row.note ? <small>{row.note}</small> : null}
+          <div className="store-groups">
+            {storeGroups.map((group) => (
+              <section
+                key={group.store.id}
+                className="store-group"
+                aria-label={group.store.name}
+              >
+                <header className="store-head">
+                  <span className={`store-badge ${group.store.id}`}>
+                    {STORE_SHORT[group.store.id]}
                   </span>
-                  <em>{row.qty}×</em>
-                  <button
-                    type="button"
-                    className={isChecked ? "check on" : "check"}
-                    aria-pressed={isChecked}
-                    aria-label={
-                      isChecked
-                        ? `Прибрати позначку: ${labelOf(row.id)}`
-                        : `Позначити набране: ${labelOf(row.id)}`
-                    }
-                    onClick={() => toggleChecked(row.id)}
-                  >
-                    {isChecked ? "✓" : ""}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                  <div>
+                    <strong>{group.store.name}</strong>
+                    <small>{group.store.address}</small>
+                  </div>
+                  <em className="store-count">
+                    {group.items.length}{" "}
+                    {group.items.length === 1 ? "позиція" : "поз."}
+                  </em>
+                </header>
+                <ul>
+                  {group.items.map((row) => {
+                    const item = byId.get(row.id);
+                    const note = noteById.get(row.id);
+                    const isChecked = checked[row.id] ?? false;
+                    return (
+                      <li
+                        key={row.id}
+                        className={isChecked ? "done-row" : undefined}
+                      >
+                        {item?.image ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={item.image}
+                            alt=""
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <span className="ph" />
+                        )}
+                        <span className="pick">
+                          <strong>{labelOf(row.id)}</strong>
+                          {note ? <small>{note}</small> : null}
+                          <span className="pick-meta">
+                            {STORE_SHORT[row.store]} · {money(row.price)} / шт
+                          </span>
+                        </span>
+                        <em>{row.qty}×</em>
+                        <button
+                          type="button"
+                          className={isChecked ? "check on" : "check"}
+                          aria-pressed={isChecked}
+                          aria-label={
+                            isChecked
+                              ? `Прибрати позначку: ${labelOf(row.id)}`
+                              : `Позначити набране: ${labelOf(row.id)}`
+                          }
+                          onClick={() => toggleChecked(row.id)}
+                        >
+                          {isChecked ? "✓" : ""}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            ))}
+          </div>
           <div className="combined-actions">
             <button
               type="button"
@@ -209,22 +284,42 @@ export function DriverPortal() {
         </section>
       )}
 
-      {recommended && (
+      {activePlan && recommended && (
         <section className="plan" aria-label="Рекомендований маршрут">
           <h2>Рекомендований маршрут</h2>
           <p className="plan-hint">
             Авто-вибір найвигіднішого варіанту: вартість товарів + дорога (км) +
-            ${DRIVER_SALARY} зарплата водія.
+            ${DRIVER_SALARY} зарплата водія. Натисни інший план — список вище
+            перегрупується по магазинах.
           </p>
           <button
             type="button"
-            className="rec"
-            onClick={() => setMapsFor(recommended)}
+            className={
+              activePlan.key === recommended.key ? "rec on-plan" : "rec"
+            }
+            onClick={() => {
+              setPlanKey(recommended.key);
+              setMapsFor(recommended);
+            }}
           >
             <span className="rec-badge">Рекомендовано</span>
             <strong className="rec-title">{recommended.label}</strong>
             <span className="rec-route">
               {recommended.stops.map((s) => s.name).join(" → ")}
+            </span>
+            <span className="rec-stores">
+              {recommended.storeIds
+                .map((id) => STORE_SHORT[id])
+                .join(" + ")}
+              {" · "}
+              {recommended.items
+                .map(
+                  (i) =>
+                    `${labelOf(i.id).slice(0, 18)}→${STORE_SHORT[i.store]}`,
+                )
+                .slice(0, 4)
+                .join(", ")}
+              {recommended.items.length > 4 ? "…" : ""}
             </span>
             <span className="rec-nums">
               <span>Товари {money(recommended.productCost)}</span>
@@ -246,14 +341,23 @@ export function DriverPortal() {
                 .filter((p) => p.key !== recommended.key)
                 .map((p) => (
                   <li key={p.key}>
-                    <span className="alt-label">{p.label}</span>
-                    <span className="alt-route">
-                      {p.storeIds.length} зуп. · {p.distanceKm} км
-                    </span>
-                    <span className="alt-total">
-                      {money(p.total)}{" "}
-                      <em>+{money(p.total - recommended.total)}</em>
-                    </span>
+                    <button
+                      type="button"
+                      className={
+                        activePlan.key === p.key ? "alt-btn on" : "alt-btn"
+                      }
+                      onClick={() => setPlanKey(p.key)}
+                    >
+                      <span className="alt-label">{p.label}</span>
+                      <span className="alt-route">
+                        {p.storeIds.map((id) => STORE_SHORT[id]).join("+")} ·{" "}
+                        {p.distanceKm} км
+                      </span>
+                      <span className="alt-total">
+                        {money(p.total)}{" "}
+                        <em>+{money(p.total - recommended.total)}</em>
+                      </span>
+                    </button>
                   </li>
                 ))}
             </ul>
@@ -450,10 +554,71 @@ export function DriverPortal() {
           font-weight: 700;
         }
         .live-hint {
-          margin: -0.25rem 0 0.55rem;
+          margin: 0 0 0.55rem;
           font-size: 0.78rem;
           color: #2f4a3a;
           font-weight: 600;
+        }
+        .plan-for {
+          margin: -0.2rem 0 0.55rem;
+          font-size: 0.82rem;
+          opacity: 0.8;
+        }
+        .plan-for strong {
+          color: #2f4a3a;
+        }
+        .store-groups {
+          display: grid;
+          gap: 0.75rem;
+        }
+        .store-group {
+          border: 1px solid rgba(40, 50, 40, 0.12);
+          background: #f7faf7;
+          padding: 0.55rem 0.55rem 0.4rem;
+        }
+        .store-head {
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          gap: 0.55rem;
+          align-items: center;
+          margin-bottom: 0.4rem;
+          padding-bottom: 0.4rem;
+          border-bottom: 1px solid rgba(40, 50, 40, 0.1);
+        }
+        .store-head strong {
+          display: block;
+          font-size: 0.92rem;
+        }
+        .store-head small {
+          display: block;
+          font-size: 0.72rem;
+          opacity: 0.65;
+          line-height: 1.3;
+        }
+        .store-count {
+          font-style: normal;
+          font-size: 0.72rem;
+          opacity: 0.65;
+          white-space: nowrap;
+        }
+        .store-badge {
+          display: grid;
+          place-items: center;
+          min-width: 2.2rem;
+          height: 1.6rem;
+          padding: 0 0.35rem;
+          border-radius: 4px;
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          color: #fffdf8;
+          background: #2f4a3a;
+        }
+        .store-badge.walmart {
+          background: #1a5f9e;
+        }
+        .store-badge.nofrills {
+          background: #b33b2e;
         }
         .pick {
           display: grid;
@@ -466,6 +631,12 @@ export function DriverPortal() {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+        }
+        .pick-meta {
+          font-size: 0.72rem;
+          font-weight: 700;
+          color: #2f4a3a;
+          opacity: 0.85;
         }
         .summary {
           display: grid;
@@ -789,6 +960,14 @@ export function DriverPortal() {
           font-size: 0.86rem;
           opacity: 0.85;
         }
+        .rec-stores {
+          font-size: 0.75rem;
+          opacity: 0.72;
+          line-height: 1.35;
+        }
+        .rec.on-plan {
+          box-shadow: inset 0 0 0 2px #2f4a3a;
+        }
         .rec-nums {
           display: flex;
           flex-wrap: wrap;
@@ -817,13 +996,30 @@ export function DriverPortal() {
           gap: 0.4rem;
         }
         .alts li {
+          border-top: 1px solid rgba(40, 50, 40, 0.08);
+        }
+        .alt-btn {
+          width: 100%;
           display: grid;
           grid-template-columns: 1fr auto auto;
           gap: 0.6rem;
           align-items: baseline;
+          font: inherit;
           font-size: 0.86rem;
-          padding: 0.4rem 0.2rem;
-          border-top: 1px solid rgba(40, 50, 40, 0.08);
+          padding: 0.5rem 0.35rem;
+          text-align: left;
+          color: inherit;
+          background: transparent;
+          border: 0;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+        .alt-btn:hover {
+          background: #eef4ee;
+        }
+        .alt-btn.on {
+          background: #e4efe4;
+          box-shadow: inset 0 0 0 1.5px #2f4a3a;
         }
         .alt-route {
           opacity: 0.65;
