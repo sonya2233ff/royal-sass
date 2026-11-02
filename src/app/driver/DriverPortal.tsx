@@ -16,7 +16,6 @@ import {
 } from "@/lib/waiter-driver";
 import {
   computePlans,
-  DRIVER_SALARY,
   mapUrl,
   money,
   STORES,
@@ -24,6 +23,11 @@ import {
   type Plan,
   type StoreId,
 } from "./route-plan";
+
+/** What the driver card shows: goods + road (salary stays in plan.total for ranking). */
+function shopperTotal(plan: Plan): number {
+  return Math.round((plan.productCost + plan.drivingCost) * 100) / 100;
+}
 
 type CatalogItem = {
   id: string;
@@ -326,9 +330,9 @@ export function DriverPortal() {
         <section className="plan" aria-label="Рекомендований маршрут">
           <h2>Рекомендований маршрут</h2>
           <p className="plan-hint">
-            Авто-вибір найвигіднішого варіанту: вартість товарів + дорога (км) +
-            ${DRIVER_SALARY} зарплата водія. Натисни інший план — список вище
-            перегрупується по магазинах.
+            Авто-вибір найвигіднішого варіанту за товарами й дорогою (оплата
+            водія враховується в порівнянні планів, але тут не показується).
+            Натисни інший план — список вище перегрупується по магазинах.
           </p>
           <button
             type="button"
@@ -365,10 +369,9 @@ export function DriverPortal() {
                 Дорога {recommended.distanceKm} км ·{" "}
                 {money(recommended.drivingCost)}
               </span>
-              <span>Зарплата {money(recommended.salary)}</span>
             </span>
             <span className="rec-total">
-              Разом <b>{money(recommended.total)}</b>
+              Разом <b>{money(shopperTotal(recommended))}</b>
             </span>
             <span className="rec-cta">Прокласти маршрут ›</span>
           </button>
@@ -392,8 +395,10 @@ export function DriverPortal() {
                         {p.distanceKm} км
                       </span>
                       <span className="alt-total">
-                        {money(p.total)}{" "}
-                        <em>+{money(p.total - recommended.total)}</em>
+                        {money(shopperTotal(p))}{" "}
+                        <em>
+                          +{money(shopperTotal(p) - shopperTotal(recommended))}
+                        </em>
                       </span>
                     </button>
                   </li>
