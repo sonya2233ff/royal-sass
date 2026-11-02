@@ -625,6 +625,10 @@ export function DriverPortal() {
           gap: 0.1rem;
           min-width: 0;
         }
+        .pick strong {
+          font-size: 0.9rem;
+          line-height: 1.2;
+        }
         .pick small {
           font-size: 0.75rem;
           opacity: 0.7;
@@ -705,14 +709,6 @@ export function DriverPortal() {
         }
         .combined li {
           grid-template-columns: 2.4rem minmax(0, 1fr) auto auto;
-        }
-        .pick {
-          display: grid;
-          min-width: 0;
-        }
-        .pick strong {
-          font-size: 0.9rem;
-          line-height: 1.2;
         }
         .check {
           width: 1.7rem;
