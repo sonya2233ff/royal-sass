@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
+  clearLiveActivity,
   listActivityDays,
   subscribeActivity,
 } from "@/lib/activity-log";
@@ -22,6 +23,18 @@ export function ActivityPortal() {
     refresh();
     return subscribeActivity(refresh);
   }, []);
+
+  function clearAll() {
+    if (
+      !window.confirm(
+        "Очистити всю історію Activity на цьому телефоні (включно з сьогодні)?",
+      )
+    ) {
+      return;
+    }
+    clearLiveActivity();
+    setDays(listActivityDays());
+  }
 
   const grand = useMemo(
     () =>
@@ -49,6 +62,11 @@ export function ActivityPortal() {
           сюди падає сьогоднішній пробіг (на цьому телефоні). Натисни день —
           деталі по магазинах і чек.
         </p>
+        {days.length > 0 && (
+          <button type="button" className="clear-hist" onClick={clearAll}>
+            Очистити історію (і сьогодні)
+          </button>
+        )}
       </header>
 
       <section className="summary" aria-label="Загалом">
@@ -130,6 +148,18 @@ export function ActivityPortal() {
           max-width: 40rem;
           opacity: 0.78;
           line-height: 1.4;
+        }
+        .clear-hist {
+          margin-top: 0.75rem;
+          font: inherit;
+          cursor: pointer;
+          border: 1px solid rgba(138, 31, 31, 0.45);
+          background: #f8e4e0;
+          color: #8a1f1f;
+          border-radius: 999px;
+          padding: 0.4rem 0.85rem;
+          font-weight: 700;
+          font-size: 0.82rem;
         }
         .empty {
           margin: 0.5rem 0 0;
