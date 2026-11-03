@@ -79,9 +79,10 @@ export function ActivityDay({ day }: { day: Day }) {
         </p>
         <h1>Деталі покупок</h1>
         <p className="lede">
-          Закупівлю зробив <strong>{day.driver}</strong>. Економія =
-          найдорожчий план закупівлі мінус найдешевший (рекомендований) — у $ і
-          %. Нижче — де куплено кожну позицію.
+          Закупівлю зробив <strong>{day.driver}</strong>. Економія = найдорожчий
+          товарний план − найдешевший товарний план ($ і %; без дороги). Це не
+          обов’язково той самий план, що «найкоротший км» у водія. Нижче — де
+          куплено кожну позицію.
         </p>
         {canView ? (
           <button
@@ -119,8 +120,7 @@ export function ActivityDay({ day }: { day: Day }) {
       {(day.expensiveTotal != null || day.cheapTotal != null) && (
         <p className="eco-note">
           Найдорожчий план {money(day.expensiveTotal ?? s.spent + s.saved)} −
-          рекомендований (найдешевший){" "}
-          {money(day.cheapTotal ?? s.spent)} ={" "}
+          найдешевший {money(day.cheapTotal ?? s.spent)} ={" "}
           <strong className="pos">
             {formatEconomy(s.saved, s.savedPercent)}
           </strong>
@@ -132,6 +132,7 @@ export function ActivityDay({ day }: { day: Day }) {
           [
             ["walmart", s.byStore.walmart],
             ["nofrills", s.byStore.nofrills],
+            ["wholesaleclub", s.byStore.wholesaleclub],
             ["mvr", s.byStore.mvr],
           ] as const
         )
@@ -348,6 +349,9 @@ export function ActivityDay({ day }: { day: Day }) {
         }
         .store.nofrills {
           background: #b33b2e;
+        }
+        .store.wholesaleclub {
+          background: #3d5a80;
         }
         .store.mvr {
           background: #6b4f1d;

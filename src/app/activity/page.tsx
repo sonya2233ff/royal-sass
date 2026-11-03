@@ -1,7 +1,7 @@
 import { ActivityPortal } from "./ActivityPortal";
 
 export const metadata = {
-  title: "Activity — Royal SASS",
+  title: "Історія — Royal SASS",
   description: "Історія покупок по днях: чек і заощадження по кожному продукту",
 };
 

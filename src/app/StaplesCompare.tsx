@@ -468,22 +468,54 @@ function matchCategory(mode?: string): {
 function statusLabel(s?: OfferStatus | string | null): string {
   switch (s) {
     case "ok":
-      return "ok";
+      return "ок";
     case "unavailable":
       return "немає в магазині";
     case "wrong_pack":
-      return "wrong pack";
+      return "не той пак";
     case "wrong_size":
-      return "wrong size";
+      return "не той розмір";
     case "stale":
-      return "stale cache";
+      return "застарілий кеш";
     case "no_match":
-      return "no match";
+      return "немає збігу";
     case "rejected":
-      return "rejected";
+      return "відхилено";
     default:
       return s ?? "—";
   }
+}
+
+/** Card badge: keep match errors; else stale if any enabled store offer is old. */
+function cardDisplayStatus(
+  item: Staple,
+  isOn: (id: "walmart" | "nofrills" | "wholesaleclub" | "mvr") => boolean,
+): OfferStatus {
+  if (
+    item.status === "no_match" ||
+    item.status === "unavailable" ||
+    item.status === "wrong_pack" ||
+    item.status === "wrong_size" ||
+    item.status === "rejected"
+  ) {
+    return item.status;
+  }
+  const STALE_MS = 72 * 36e5;
+  const isStaleIso = (iso?: string | null) => {
+    if (!iso) return false;
+    const age = Date.now() - new Date(iso).getTime();
+    return Number.isFinite(age) && age > STALE_MS;
+  };
+  const sides = [
+    { on: isOn("walmart"), cached: item.walmartCached },
+    { on: isOn("nofrills"), cached: item.noFrillsCached },
+    { on: isOn("wholesaleclub"), cached: item.wholesaleClubCached },
+    { on: isOn("mvr"), cached: item.mvrCached },
+  ];
+  const present = sides.filter((s) => s.on && s.cached);
+  if (!present.length) return item.status;
+  if (present.some((s) => isStaleIso(s.cached?.checkedAt))) return "stale";
+  return item.status === "stale" ? "ok" : item.status;
 }
 
 function friendlyError(msg: string): string {
@@ -794,6 +826,9 @@ export function StaplesCompare() {
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [busy, setBusy] = useState<string | null>(null);
+  /** Per-card rematch busy set so one card does not freeze every «Знайти знову». */
+  const [rematchIds, setRematchIds] = useState<Set<string>>(() => new Set());
+  const [persistWarn, setPersistWarn] = useState<string | null>(null);
   const [catalogAt, setCatalogAt] = useState<string | null>(null);
   const [nfCatalogAt, setNfCatalogAt] = useState<string | null>(null);
   const [wcCatalogAt, setWcCatalogAt] = useState<string | null>(null);
@@ -1263,59 +1298,93 @@ export function StaplesCompare() {
     ids: string[],
     overrideMap: Record<string, ProductOverride> = overrides,
   ) {
-    if (!ids.length) return;
+    const unique = [...new Set(ids.filter(Boolean))];
+    if (!unique.length) return;
     setError(null);
+    setPersistWarn(null);
     setBusy("rematch");
+    // One id per request — a full 4-store rematch can take ~1 min; bulk used to hit the route timeout.
     startTransition(async () => {
+      let sawPersistFalse = false;
+      let wmN = 0;
+      let nfN = 0;
+      let wcN = 0;
+      let mvrN = 0;
+      let walmartSkipped = false;
+      let lastWmError: string | null = null;
+      let lastNfError: string | null = null;
+      let lastWcError: string | null = null;
+      let lastMvrError: string | null = null;
+      let lastLogId: string | null = null;
+      let lastPreview: unknown[] | null = null;
       try {
-        const res = await fetch("/api/staples/rematch", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ids,
-            productOverrides: overrideMap,
-            customStaples: readCustomStaples(),
-          }),
-        });
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.error ?? "rematch failed");
-        setMatchLogId(data.matchLogId ?? null);
-        setLogPreview(data);
+        for (const id of unique) {
+          setRematchIds((prev) => new Set(prev).add(id));
+          try {
+            const res = await fetch("/api/staples/rematch", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                ids: [id],
+                productOverrides: overrideMap,
+                customStaples: readCustomStaples(),
+              }),
+            });
+            const data = await res.json();
+            if (!data.ok) throw new Error(data.error ?? "rematch failed");
+            if (data.persisted === false) sawPersistFalse = true;
+            lastLogId = data.matchLogId ?? lastLogId;
+            lastPreview = Array.isArray(data) ? data : [data];
+            wmN += data.walmart?.updated?.length ?? 0;
+            nfN += data.noFrills?.updated?.length ?? 0;
+            wcN += data.wholesaleClub?.updated?.length ?? 0;
+            mvrN += data.mvr?.updated?.length ?? 0;
+            if (data.walmartSkipped) walmartSkipped = true;
+            if (data.walmart?.error) lastWmError = String(data.walmart.error);
+            if (data.noFrills?.error) lastNfError = String(data.noFrills.error);
+            if (data.wholesaleClub?.error) {
+              lastWcError = String(data.wholesaleClub.error);
+            }
+            if (data.mvr?.error) lastMvrError = String(data.mvr.error);
+          } finally {
+            setRematchIds((prev) => {
+              const next = new Set(prev);
+              next.delete(id);
+              return next;
+            });
+          }
+        }
+        setMatchLogId(lastLogId);
+        setLogPreview(lastPreview);
         await reload();
-        const wmN = data.walmart?.updated?.length ?? 0;
-        const nfN = data.noFrills?.updated?.length ?? 0;
-        const wcN = data.wholesaleClub?.updated?.length ?? 0;
-        const mvrN = data.mvr?.updated?.length ?? 0;
-        if (data.walmartSkipped) {
+        if (sawPersistFalse) {
+          setPersistWarn(
+            "Vercel не зберігає каталог у git — після redeploy повернуться старі SKU. Для постійного оновлення запускай rematch локально або через PR.",
+          );
+        }
+        if (walmartSkipped) {
           setError(
             `Товар оновлено без Walmart (немає RapidAPI ключа). NF ${nfN}${
               wcN ? ` · WC ${wcN}` : ""
             }${mvrN ? ` · MVR ${mvrN}` : ""}.`,
           );
-        } else if (data.walmart?.error) {
+        } else if (lastWmError) {
           setError(
-            `Walmart: ${String(data.walmart.error).slice(0, 140)}. Інші магазини: NF ${nfN}, WC ${wcN}, MVR ${mvrN}.`,
+            `Walmart: ${lastWmError.slice(0, 140)}. Інші магазини: NF ${nfN}, WC ${wcN}, MVR ${mvrN}.`,
           );
-        } else if (data.noFrills?.error || data.wholesaleClub?.error || data.mvr?.error) {
+        } else if (lastNfError || lastWcError || lastMvrError) {
           setError(
             `Оновлено WM ${wmN}. ${
-              data.noFrills?.error
-                ? `NF: ${String(data.noFrills.error).slice(0, 80)}. `
-                : ""
-            }${
-              data.wholesaleClub?.error
-                ? `WC: ${String(data.wholesaleClub.error).slice(0, 80)}. `
-                : ""
-            }${
-              data.mvr?.error
-                ? `MVR: ${String(data.mvr.error).slice(0, 80)}.`
-                : ""
+              lastNfError ? `NF: ${lastNfError.slice(0, 80)}. ` : ""
+            }${lastWcError ? `WC: ${lastWcError.slice(0, 80)}. ` : ""}${
+              lastMvrError ? `MVR: ${lastMvrError.slice(0, 80)}.` : ""
             }`.trim(),
           );
         }
       } catch (e) {
         setError(e instanceof Error ? friendlyError(e.message) : String(e));
       } finally {
+        setRematchIds(new Set());
         setBusy(null);
       }
     });
@@ -1650,29 +1719,53 @@ export function StaplesCompare() {
     const ids = visibleItems.map((item) => item.id);
     if (!ids.length) return;
     setError(null);
+    setPersistWarn(null);
     setBusy("refresh-prices");
+    const PRICE_CHUNK = 20;
     startTransition(async () => {
+      let wmN = 0;
+      let nfN = 0;
+      let wcN = 0;
+      let mvrN = 0;
+      let sawPersistFalse = false;
+      let missingKey = false;
+      let nfBlock: string | undefined;
+      let wcBlock: string | undefined;
+      let mvrBlock: string | undefined;
+      let lastPreview: unknown[] | null = null;
       try {
-        const res = await fetch("/api/staples/refresh-prices", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ids,
-            customStaples: readCustomStaples(),
-          }),
-        });
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.error ?? "price refresh failed");
-        const wmN = data.walmart?.updated?.length ?? 0;
-        const nfN = data.noFrills?.updated?.length ?? 0;
-        const wcN = data.wholesaleClub?.updated?.length ?? 0;
-        const mvrN = data.mvr?.updated?.length ?? 0;
-        const nfBlock = data.noFrills?.blocked as string | undefined;
-        const wcBlock = data.wholesaleClub?.blocked as string | undefined;
-        const mvrBlock = data.mvr?.blocked as string | undefined;
-        setLogPreview(data);
+        for (let i = 0; i < ids.length; i += PRICE_CHUNK) {
+          const chunk = ids.slice(i, i + PRICE_CHUNK);
+          const res = await fetch("/api/staples/refresh-prices", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ids: chunk,
+              customStaples: readCustomStaples(),
+            }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error ?? "price refresh failed");
+          if (data.persisted === false) sawPersistFalse = true;
+          lastPreview = Array.isArray(data) ? data : [data];
+          wmN += data.walmart?.updated?.length ?? 0;
+          nfN += data.noFrills?.updated?.length ?? 0;
+          wcN += data.wholesaleClub?.updated?.length ?? 0;
+          mvrN += data.mvr?.updated?.length ?? 0;
+          if (data.walmartSource === "missing_key") missingKey = true;
+          nfBlock = (data.noFrills?.blocked as string | undefined) ?? nfBlock;
+          wcBlock =
+            (data.wholesaleClub?.blocked as string | undefined) ?? wcBlock;
+          mvrBlock = (data.mvr?.blocked as string | undefined) ?? mvrBlock;
+        }
+        setLogPreview(lastPreview);
         await reload();
-        if (data.walmartSource === "missing_key") {
+        if (sawPersistFalse) {
+          setPersistWarn(
+            "Vercel не зберігає каталог у git — після redeploy повернуться старі ціни. Для постійного оновлення запускай «Оновити ціни» локально або через nightly Action з ключем.",
+          );
+        }
+        if (missingKey) {
           setError(
             `No Frills ${nfN ? `оновлено ${nfN}` : "без змін"}${
               wcN ? ` · WC ${wcN}` : ""
@@ -1801,7 +1894,7 @@ export function StaplesCompare() {
     <div className="staples">
       <header className="hero">
         <p className="brand">Royal SASS</p>
-        <h1>Cafe staples</h1>
+        <h1>Товари кафе</h1>
         <p className="sub">
           {compareLine || "Оберіть магазини зверху"}. <strong>А</strong> — точний
           продукт. <strong>Б</strong> — найдешевший відповідний (бренд не
@@ -1815,7 +1908,7 @@ export function StaplesCompare() {
               : "meta"
           }
         >
-          Cache TTL {staleHours}h
+          Кеш TTL {staleHours} год
           {walmartSourceLabel(walmartSource)
             ? ` · ${walmartSourceLabel(walmartSource)}`
             : ""}
@@ -1827,15 +1920,15 @@ export function StaplesCompare() {
             : " · NF — після першого Compare"}
           {wcCatalogAt
             ? ` · WC ${new Date(wcCatalogAt).toLocaleString()}`
-            : " · WC — Refresh WC або Compare"}
+            : " · WC — «Оновити WC» або Порівняти"}
           {mvrCatalogAt
             ? ` · MVR ${new Date(mvrCatalogAt).toLocaleString()}`
-            : " · MVR — Refresh MVR або Compare"}
+            : " · MVR — «Оновити MVR» або Порівняти"}
           {sobeysCatalogAt
             ? ` · Sobeys флаєр ${new Date(sobeysCatalogAt).toLocaleString()}`
             : ""}
           {cacheIsOld
-            ? " · кеш застарів — натисни «Оновити ціни» або «Оновити» на картці"
+            ? " · кеш застарів — «Оновити ціни» (SKU) або «Знайти знову» (пошук)"
             : ""}
           {walmartSource === "missing_key" && walmartSourceWarning
             ? " · додай RapidAPI ключ у .env / Vercel"
@@ -1983,7 +2076,7 @@ export function StaplesCompare() {
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <div className="ph">No photo</div>
+                    <div className="ph">Немає фото</div>
                   )}
                   {anySale && (
                     <span className="sale-bang" title={saleTitle(view)}>
@@ -2007,8 +2100,8 @@ export function StaplesCompare() {
                       </span>
                     ) : null}
                   </strong>
-                  <span className={`pill ${item.status}`}>
-                    {statusLabel(item.status)}
+                  <span className={`pill ${cardDisplayStatus(item, isOn)}`}>
+                    {statusLabel(cardDisplayStatus(item, isOn))}
                   </span>
                   <span className={`pill cat-${cat.key}`} title={cat.title}>
                     {cat.short}
@@ -2207,14 +2300,18 @@ export function StaplesCompare() {
                 <button
                   type="button"
                   className="settings-btn"
-                  disabled={pending || busy != null}
+                  disabled={
+                    pending ||
+                    rematchIds.has(item.id) ||
+                    (busy != null && busy !== "rematch")
+                  }
                   title="Знайти товар знову за правилами з Налаштувань (не лише ціну)"
                   onClick={(e) => {
                     e.stopPropagation();
                     rematchItems([item.id]);
                   }}
                 >
-                  {busy === "rematch" ? "Оновлюю…" : "Оновити"}
+                  {rematchIds.has(item.id) ? "Шукаю…" : "Знайти знову"}
                 </button>
                 <button
                   type="button"
@@ -2439,7 +2536,7 @@ export function StaplesCompare() {
           disabled={pending || cartSize(cart) === 0 || busy != null}
           onClick={runCompare}
         >
-          {busy === "compare" ? "Comparing…" : "Порівняти"}
+          {busy === "compare" ? "Порівнюю…" : "Порівняти"}
         </button>
       </div>
 
@@ -2480,7 +2577,9 @@ export function StaplesCompare() {
           title="Знайти вибрані товари знову за правилами з Налаштувань"
           onClick={() => rematchItems([...selected])}
         >
-          {busy === "rematch" ? "Шукаю товари…" : "Оновити вибрані"}
+          {busy === "rematch" || rematchIds.size > 0
+            ? `Шукаю…${rematchIds.size ? ` (${rematchIds.size})` : ""}`
+            : "Знайти вибрані знову"}
         </button>
         <button
           type="button"
@@ -2494,10 +2593,11 @@ export function StaplesCompare() {
       </div>
 
       {error && <p className="err">{error}</p>}
+      {persistWarn && <p className="err">{persistWarn}</p>}
 
       {displayRows && (
         <section className="results">
-          <h2>Results</h2>
+          <h2>Результати</h2>
           {displayRows.map((r) => (
             <article key={r.id} className="row">
               <div className="row-head">
@@ -2513,7 +2613,7 @@ export function StaplesCompare() {
                 <div>
                   <strong>
                     {r.label}
-                    {r.confirmed ? " · locked" : ""}
+                    {r.confirmed ? " · закріплено" : ""}
                     {r.requestedAmount != null
                       ? ` · треба ${
                           isEggPackStaple({ id: r.id })
@@ -3516,7 +3616,7 @@ function Side({
             referrerPolicy="no-referrer"
           />
         ) : (
-          <div className="product-ph">No photo</div>
+          <div className="product-ph">Немає фото</div>
         )}
         <div className="product-name">
           {productName ? tidyOfferName(productName) : "немає товару"}

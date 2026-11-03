@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
   compressImageSource,
@@ -10,6 +11,7 @@ import {
 import {
   buildDriverPickList,
   completeDriverShopping,
+  importDriverJobsPayload,
   loadDriverJobs,
   loadWaiterList,
   subscribeWaiterDriver,
@@ -18,8 +20,10 @@ import {
 } from "@/lib/waiter-driver";
 import {
   computePlans,
+  livePriceTableFromStaples,
   mapUrl,
   money,
+  setLivePriceTable,
   STORES,
   type MapProvider,
   type Plan,
@@ -36,11 +40,16 @@ type CatalogItem = {
   id: string;
   label: string;
   image?: string | null;
+  walmartCached?: { price?: number } | null;
+  noFrillsCached?: { price?: number } | null;
+  wholesaleClubCached?: { price?: number } | null;
+  mvrCached?: { price?: number } | null;
 };
 
 const STORE_SHORT: Record<StoreId, string> = {
   walmart: "WM",
   nofrills: "NF",
+  wholesaleclub: "WC",
   mvr: "MVR",
 };
 
@@ -91,6 +100,13 @@ export function DriverPortal() {
     return subscribeWaiterDriver(refreshFromWaiter);
   }, []);
 
+  useEffect(() => {
+    setLivePriceTable(
+      catalog.length ? livePriceTableFromStaples(catalog) : null,
+    );
+    return () => setLivePriceTable(null);
+  }, [catalog]);
+
   const byId = useMemo(
     () => new Map(catalog.map((item) => [item.id, item])),
     [catalog],
@@ -101,15 +117,31 @@ export function DriverPortal() {
     [liveLines, jobs],
   );
 
+  // Drop ✓ for items no longer on the pick list (waiter removed them).
+  useEffect(() => {
+    const ids = new Set(combined.map((row) => row.id));
+    setChecked((prev) => {
+      let changed = false;
+      const next: Record<string, boolean> = {};
+      for (const [id, on] of Object.entries(prev)) {
+        if (ids.has(id)) next[id] = on;
+        else changed = true;
+      }
+      return changed ? next : prev;
+    });
+  }, [combined]);
+
   const noteById = useMemo(
     () => new Map(combined.map((row) => [row.id, row.note])),
     [combined],
   );
 
+  // Recompute when live shelf table changes (setLivePriceTable from catalog).
   const { plans, recommended } = useMemo(
     () =>
       computePlans(combined.map((row) => ({ id: row.id, qty: row.qty }))),
-    [combined],
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- catalog feeds livePriceTable
+    [combined, catalog],
   );
 
   const activePlan = useMemo(() => {
@@ -168,10 +200,11 @@ export function DriverPortal() {
           const date = torontoDateIso();
           receipt = await saveReceipts(date, compressed);
           setReceiptSaved(compressed.length);
-        } else {
+        } else if (photos.length) {
           setReceiptError(
-            "Не вдалося стиснути фото чека. Спробуй інше фото або менший файл.",
+            "Не вдалося стиснути фото чека — закупівлю не здано. Спробуй інше фото.",
           );
+          return;
         }
       }
       if (plan?.items.length) {
@@ -194,6 +227,21 @@ export function DriverPortal() {
       );
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function pasteDriverJobs() {
+    try {
+      const text = await navigator.clipboard.readText();
+      const n = importDriverJobsPayload(text);
+      if (!n) {
+        setReceiptError(null);
+        window.alert("У буфері немає списку від офіціанта.");
+        return;
+      }
+      refreshFromWaiter();
+    } catch {
+      window.alert("Не вдалося прочитати буфер обміну.");
     }
   }
 
@@ -233,12 +281,16 @@ export function DriverPortal() {
   return (
     <div className="portal">
       <header className="hero">
-        <p className="kicker">Driver&apos;s Portal</p>
-        <h1>Shopping List</h1>
+        <p className="kicker">Портал водія</p>
+        <h1>Список закупівлі</h1>
         <p className="lede">
-          Список з порталу офіціанта на цьому телефоні. Нові позиції з’являються
-          самі, щойно офіціант їх додає.
+          Список з порталу офіціанта на <strong>цьому телефоні</strong>. Інший
+          телефон — встав список з буфера (офіціант копіює JSON). Ціни планів
+          беруться з живого каталогу; маршрут рекомендується за найкоротшими км.
         </p>
+        <button type="button" className="paste-jobs" onClick={() => void pasteDriverJobs()}>
+          Вставити список з буфера
+        </button>
       </header>
 
       <section className="summary" aria-label="Зведення">
@@ -260,8 +312,8 @@ export function DriverPortal() {
         <section className="empty-list" aria-label="Порожній список">
           <p>
             Поки порожньо. Відкрий{" "}
-            <a href="/waiter">Офіціант</a>, додай продукти — вони з’являться
-            тут автоматично.
+            <Link href="/waiter">Офіціант</Link> на цьому телефоні або встав
+            список з буфера обміну.
           </p>
         </section>
       ) : (
@@ -358,7 +410,7 @@ export function DriverPortal() {
                 setSubmitOpen(true);
               }}
             >
-              Submit the shopping
+              Здати закупівлю
             </button>
           </div>
         </section>
@@ -464,9 +516,9 @@ export function DriverPortal() {
                 <p className="ok">✓ Закупівлю здано · список очищено</p>
                 <p className="soon">
                   Запис додано в{" "}
-                  <a href="/activity" style={{ color: "#2f4a3a", fontWeight: 700 }}>
-                    Activity
-                  </a>
+                  <Link href="/activity" style={{ color: "#2f4a3a", fontWeight: 700 }}>
+                    Історію
+                  </Link>
                   {receiptSaved
                     ? ` · ${receiptSaved} фото чека збережено на цьому телефоні.`
                     : " · без фото чека."}
@@ -486,7 +538,9 @@ export function DriverPortal() {
                     📷
                   </span>
                   <span>Натисни, щоб зробити / вибрати фото чеків</span>
-                  <small>Фото стиснеться і збережеться в Activity на цьому телефоні</small>
+                  <small>
+                    Фото стиснеться і збережеться в Історії на цьому телефоні
+                  </small>
                 </label>
 
                 {photos.length > 0 && (
@@ -611,6 +665,18 @@ export function DriverPortal() {
           font-size: 1.7rem;
           letter-spacing: -0.02em;
         }
+        .paste-jobs {
+          margin-top: 0.75rem;
+          font: inherit;
+          cursor: pointer;
+          border: 1px solid #2f4a3a;
+          background: #fffdf8;
+          color: #2f4a3a;
+          border-radius: 999px;
+          padding: 0.4rem 0.85rem;
+          font-weight: 700;
+          font-size: 0.84rem;
+        }
         .kicker {
           margin: 0;
           font-size: 0.72rem;
@@ -711,6 +777,9 @@ export function DriverPortal() {
         }
         .store-badge.nofrills {
           background: #b33b2e;
+        }
+        .store-badge.wholesaleclub {
+          background: #3d5a80;
         }
         .store-badge.mvr {
           background: #6b4f1d;

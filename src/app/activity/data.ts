@@ -1,4 +1,4 @@
-export type Store = "walmart" | "nofrills" | "mvr";
+export type Store = "walmart" | "nofrills" | "wholesaleclub" | "mvr";
 
 export type Buy = {
   id: string;
@@ -36,6 +36,7 @@ export type Day = {
 export const STORE_UA: Record<Store, { short: string; name: string }> = {
   walmart: { short: "WM", name: "Walmart #5831" },
   nofrills: { short: "NF", name: "No Frills #3660" },
+  wholesaleclub: { short: "WC", name: "Wholesale Club #3724" },
   mvr: { short: "MVR", name: "MVR Cash & Carry" },
 };
 
@@ -93,7 +94,7 @@ export function summarize(day: Day): DaySummary {
     {
       spent: 0,
       count: 0,
-      byStore: { walmart: 0, nofrills: 0, mvr: 0 },
+      byStore: { walmart: 0, nofrills: 0, wholesaleclub: 0, mvr: 0 },
     },
   );
   return {

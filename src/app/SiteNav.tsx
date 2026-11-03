@@ -6,11 +6,11 @@ import { COMPARE_STORES } from "@/domain/compare-stores";
 import { useCompareStores } from "./CompareStoresContext";
 
 const LINKS = [
-  { href: "/", label: "Cafe staples" },
+  { href: "/", label: "Кафе" },
   { href: "/waiter", label: "Офіціант" },
   { href: "/driver", label: "Водій" },
-  { href: "/activity", label: "Activity" },
-  { href: "/dev/match-inspector", label: "Match inspector" },
+  { href: "/activity", label: "Історія" },
+  { href: "/dev/match-inspector", label: "Інспектор" },
 ] as const;
 
 function isActive(pathname: string, href: string): boolean {

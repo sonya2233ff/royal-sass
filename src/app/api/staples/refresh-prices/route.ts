@@ -6,7 +6,7 @@ import { collectPriceRefreshIds, loadStaplesConfig } from "@/lib/staples";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 /** Re-fetch prices for already mapped/catalog SKUs. Does not rematch. */
 export async function POST(request: Request) {
@@ -31,6 +31,8 @@ export async function POST(request: Request) {
     const result = await refreshCatalogPrices(ids, { extraItems: extras });
     return NextResponse.json({
       ok: true,
+      // Vercel serverless FS is ephemeral — catalogs do not survive redeploy.
+      persisted: process.env.VERCEL !== "1",
       ...walmartSourceApiFields(),
       ...result,
     });

@@ -73,7 +73,12 @@ function parseBuys(raw: unknown): Buy[] {
     .map((row) => {
       const rec = row as Record<string, unknown>;
       const store = String(rec.store ?? "");
-      if (store !== "walmart" && store !== "nofrills" && store !== "mvr") {
+      if (
+        store !== "walmart" &&
+        store !== "nofrills" &&
+        store !== "wholesaleclub" &&
+        store !== "mvr"
+      ) {
         return null;
       }
       const qty = Number(rec.qty);

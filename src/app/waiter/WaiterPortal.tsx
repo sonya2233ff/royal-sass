@@ -7,6 +7,7 @@ import {
 } from "@/domain/staple-search";
 import { REMOVED_STAPLES_STORAGE_KEY } from "@/lib/product-config";
 import {
+  exportWaiterJobPayload,
   loadWaiterList,
   saveWaiterList,
   sendWaiterListToDriver,
@@ -158,9 +159,10 @@ export function WaiterPortal() {
         <p className="kicker">Портал офіціанта</p>
         <h1>Список для водія</h1>
         <p className="lede">
-          Знайди продукт і додай у список — водій бачить його одразу в розділі
-          «Водій» на цьому телефоні / браузері. «Відправити» фіксує партію, щоб
-          можна було набрати наступну.
+          Знайди продукт і додай у список — водій бачить його одразу в «Водій»
+          на <strong>цьому телефоні</strong>. Інший телефон: «Скопіювати для
+          іншого телефону», тоді водій вставляє в буфер. «Відправити» фіксує
+          партію на цьому браузері.
         </p>
       </header>
 
@@ -314,9 +316,35 @@ export function WaiterPortal() {
               type="button"
               className="ghost"
               disabled={lines.length === 0}
-              onClick={() => setLines([])}
+              onClick={() => {
+                if (
+                  !window.confirm(
+                    "Очистити чернетку? Якщо водій уже набирає ці позиції на цьому телефоні — вони зникнуть зі списку.",
+                  )
+                ) {
+                  return;
+                }
+                setLines([]);
+              }}
             >
               Очистити
+            </button>
+            <button
+              type="button"
+              className="ghost"
+              disabled={lines.length === 0}
+              onClick={() => {
+                const payload = exportWaiterJobPayload(lines);
+                void navigator.clipboard.writeText(payload).then(
+                  () =>
+                    window.alert(
+                      "Список скопійовано. На телефоні водія: «Вставити список з буфера».",
+                    ),
+                  () => window.alert("Не вдалося скопіювати в буфер."),
+                );
+              }}
+            >
+              Скопіювати для іншого телефону
             </button>
             <button
               type="button"

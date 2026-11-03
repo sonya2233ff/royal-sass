@@ -6,7 +6,7 @@ import { isShownStaple, loadStaplesConfig } from "@/lib/staples";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 /** Live rematch selected staples using in-app product settings. Not price-only. */
 export async function POST(request: Request) {
@@ -55,6 +55,8 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({
       ok: true,
+      // Vercel serverless FS is ephemeral — catalogs do not survive redeploy.
+      persisted: process.env.VERCEL !== "1",
       ...walmartSourceApiFields(),
       ...result,
     });

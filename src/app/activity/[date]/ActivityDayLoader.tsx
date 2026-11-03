@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { findActivityDay, subscribeActivity } from "@/lib/activity-log";
 import type { Day } from "../data";
@@ -35,15 +36,15 @@ export function ActivityDayLoader({
       <div style={{ padding: "2rem 1rem", maxWidth: 820, margin: "0 auto" }}>
         <p style={{ margin: 0 }}>
           Немає запису за цю дату. Здай закупівлю в розділі{" "}
-          <a href="/driver" style={{ color: "#2f4a3a", fontWeight: 700 }}>
+          <Link href="/driver" style={{ color: "#2f4a3a", fontWeight: 700 }}>
             Водій
-          </a>
+          </Link>
           .
         </p>
         <p style={{ marginTop: "0.8rem" }}>
-          <a href="/activity" style={{ color: "#2f4a3a" }}>
+          <Link href="/activity" style={{ color: "#2f4a3a" }}>
             ‹ Історія покупок
-          </a>
+          </Link>
         </p>
       </div>
     );

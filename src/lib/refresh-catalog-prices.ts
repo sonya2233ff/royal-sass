@@ -490,7 +490,9 @@ export async function refreshCatalogPrices(
         previousPrice: prev,
         price: offer.price,
       });
-      (wmCatalog as { checkedAt: string }).checkedAt = new Date().toISOString();
+      // Persist after each SKU so a crash keeps progress, but do not bump the
+      // catalog-level checkedAt until the loop finishes (avoids "fresh file,
+      // stale offers" badges).
       await saveWalmartCatalog(wmCatalog);
     } catch (e) {
       const msg = e instanceof Error ? e.message.slice(0, 160) : String(e);
@@ -500,6 +502,14 @@ export async function refreshCatalogPrices(
       result.walmart.failed.push({ id, reason: msg });
     }
   });
+  if (result.walmart.updated.length) {
+    (wmCatalog as { checkedAt: string; updatedAt?: string }).checkedAt =
+      new Date().toISOString();
+    (wmCatalog as { updatedAt?: string }).updatedAt = (
+      wmCatalog as { checkedAt: string }
+    ).checkedAt;
+    await saveWalmartCatalog(wmCatalog);
+  }
   await closeWalmartBrowser().catch(() => undefined);
   }
 

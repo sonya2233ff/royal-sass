@@ -124,15 +124,78 @@ export function sendWaiterListToDriver(
 }
 
 /**
- * Driver finished the run: clear the live waiter draft and mark open jobs done
- * so the shopping list empties on this phone.
+ * Driver finished the run: mark open jobs done.
+ * Does NOT clear the waiter's live draft (a new list may already be in progress).
  */
 export function completeDriverShopping(): void {
   const jobs = loadDriverJobs().map((job) =>
     job.status === "open" ? { ...job, status: "done" as const } : job,
   );
   writeDriverJobs(jobs.slice(0, 40));
-  saveWaiterList([]);
+}
+
+const DRIVER_JOBS_CLIP_KIND = "royal-sass-driver-jobs-v1";
+
+/** Clipboard payload so waiter can hand a list to a driver on another phone. */
+export function exportWaiterJobPayload(
+  lines: WaiterLine[],
+  waiter = "Офіціант",
+): string {
+  const clean = parseWaiterLines(lines);
+  return JSON.stringify(
+    {
+      kind: DRIVER_JOBS_CLIP_KIND,
+      at: Date.now(),
+      job: {
+        id: `job_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`,
+        createdAt: Date.now(),
+        waiter: waiter.slice(0, 40),
+        status: "open",
+        lines: clean,
+      },
+    },
+    null,
+    2,
+  );
+}
+
+/** Import a clipboard job from another phone into this driver's inbox. */
+export function importDriverJobsPayload(raw: string): number {
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!parsed || typeof parsed !== "object") return 0;
+    const rec = parsed as Record<string, unknown>;
+    if (rec.kind !== DRIVER_JOBS_CLIP_KIND) return 0;
+    const jobRaw = rec.job;
+    if (!jobRaw || typeof jobRaw !== "object") return 0;
+    const j = jobRaw as Record<string, unknown>;
+    const lines = parseWaiterLines(j.lines);
+    if (!lines.length) return 0;
+    const job: DriverJob = {
+      id:
+        typeof j.id === "string" && j.id
+          ? j.id.slice(0, 80)
+          : `job_${Date.now().toString(36)}`,
+      createdAt:
+        typeof j.createdAt === "number" && Number.isFinite(j.createdAt)
+          ? j.createdAt
+          : Date.now(),
+      waiter:
+        typeof j.waiter === "string" && j.waiter.trim()
+          ? j.waiter.trim().slice(0, 40)
+          : "Офіціант",
+      status: "open",
+      lines,
+    };
+    const next = [job, ...loadDriverJobs().filter((x) => x.id !== job.id)].slice(
+      0,
+      40,
+    );
+    writeDriverJobs(next);
+    return lines.length;
+  } catch {
+    return 0;
+  }
 }
 
 /** Merge live waiter draft + open jobs into one pick list (sum qty, keep notes). */

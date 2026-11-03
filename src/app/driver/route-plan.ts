@@ -1,4 +1,4 @@
-export type StoreId = "walmart" | "nofrills" | "mvr";
+export type StoreId = "walmart" | "nofrills" | "wholesaleclub" | "mvr";
 
 export type Geo = { lat: number; lng: number };
 
@@ -33,6 +33,13 @@ export const STORES: Record<StoreId, StoreInfo> = {
     lat: 43.81005,
     lng: -79.46039,
   },
+  wholesaleclub: {
+    id: "wholesaleclub",
+    name: "Wholesale Club #3724",
+    address: "10909 Yonge St, Richmond Hill, ON L4C 3E3",
+    lat: 43.88055,
+    lng: -79.43935,
+  },
   mvr: {
     id: "mvr",
     name: "MVR Cash & Carry",
@@ -42,31 +49,35 @@ export const STORES: Record<StoreId, StoreInfo> = {
   },
 };
 
-export const STORE_ORDER: StoreId[] = ["walmart", "nofrills", "mvr"];
+export const STORE_ORDER: StoreId[] = [
+  "walmart",
+  "nofrills",
+  "wholesaleclub",
+  "mvr",
+];
 
 /** Fuel/vehicle cost per km and the flat driver salary per run. */
 export const PER_KM = 0.62;
 export const DRIVER_SALARY = 20;
 
 /**
- * Mock per-unit shelf prices. Missing store key = not stocked there
- * (e.g. No-Hole Dome Lids are MVR-only — not at No Frills).
+ * Fallback mock prices when live catalog has no SKU for that store.
+ * Missing store key = not stocked there (e.g. dome lids → MVR only).
  */
 type StorePrices = Partial<Record<StoreId, number>>;
 
-const PRICES: Record<string, StorePrices> = {
-  large_eggs_dozen: { walmart: 6.29, nofrills: 5.99, mvr: 5.49 },
-  simply_egg_whites: { walmart: 9.47, nofrills: 10.49 },
-  tomatoes_grape: { walmart: 4.39, nofrills: 3.99, mvr: 3.79 },
-  lemons_2lb: { walmart: 3.99, nofrills: 3.49, mvr: 3.29 },
-  milk_2pct_2l: { walmart: 4.49, nofrills: 4.79 },
-  homo_milk_2l: { walmart: 4.97, nofrills: 5.29 },
-  butter_454g: { walmart: 5.99, nofrills: 5.49 },
-  orange_juice_pulp: { walmart: 6.97, nofrills: 7.49 },
-  ice_cubes: { walmart: 2.99, nofrills: 3.29 },
-  ziploc_sandwich: { walmart: 3.99, nofrills: 4.29, mvr: 3.49 },
-  strawberries: { walmart: 3.99, nofrills: 3.5, mvr: 3.29 },
-  // Cafe supplies — MVR Weston shelf (NF/WM often no_match).
+const FALLBACK_PRICES: Record<string, StorePrices> = {
+  large_eggs_dozen: { walmart: 6.29, nofrills: 5.99, wholesaleclub: 5.79, mvr: 5.49 },
+  simply_egg_whites: { walmart: 9.47, nofrills: 10.49, wholesaleclub: 9.99 },
+  tomatoes_grape: { walmart: 4.39, nofrills: 3.99, wholesaleclub: 3.89, mvr: 3.79 },
+  lemons_2lb: { walmart: 3.99, nofrills: 3.49, wholesaleclub: 3.39, mvr: 3.29 },
+  milk_2pct_2l: { walmart: 4.49, nofrills: 4.79, wholesaleclub: 4.29 },
+  homo_milk_2l: { walmart: 4.97, nofrills: 5.29, wholesaleclub: 4.79 },
+  butter_454g: { walmart: 5.99, nofrills: 5.49, wholesaleclub: 5.29 },
+  orange_juice_pulp: { walmart: 6.97, nofrills: 7.49, wholesaleclub: 6.49 },
+  ice_cubes: { walmart: 2.99, nofrills: 3.29, wholesaleclub: 2.79 },
+  ziploc_sandwich: { walmart: 3.99, nofrills: 4.29, wholesaleclub: 3.69, mvr: 3.49 },
+  strawberries: { walmart: 3.99, nofrills: 3.5, wholesaleclub: 3.39, mvr: 3.29 },
   lids_dome_no_hole: { mvr: 2.19 },
   lids_dome_12_24oz: { mvr: 66.49 },
   cups_12oz_squat_pet: { mvr: 5.19 },
@@ -77,10 +88,49 @@ const PRICES: Record<string, StorePrices> = {
   lids_deli_round: { mvr: 3.29 },
 };
 
-/** Defaults only for staples with no explicit row (typical grocery). */
-const DEFAULT_PRICE: StorePrices = { walmart: 4.99, nofrills: 4.79, mvr: 4.49 };
+const DEFAULT_PRICE: StorePrices = {
+  walmart: 4.99,
+  nofrills: 4.79,
+  wholesaleclub: 4.59,
+  mvr: 4.49,
+};
 
-/** Cafe supply / packaging ids that grocery stores usually do not carry. */
+/** Live shelf table from GET /api/staples (preferred over FALLBACK_PRICES). */
+export type LivePriceTable = Record<string, StorePrices>;
+
+let livePrices: LivePriceTable | null = null;
+
+export function setLivePriceTable(table: LivePriceTable | null): void {
+  livePrices = table;
+}
+
+export function livePriceTableFromStaples(
+  items: Array<{
+    id: string;
+    walmartCached?: { price?: number } | null;
+    noFrillsCached?: { price?: number } | null;
+    wholesaleClubCached?: { price?: number } | null;
+    mvrCached?: { price?: number } | null;
+  }>,
+): LivePriceTable {
+  const out: LivePriceTable = {};
+  for (const item of items) {
+    const row: StorePrices = {};
+    const wm = item.walmartCached?.price;
+    const nf = item.noFrillsCached?.price;
+    const wc = item.wholesaleClubCached?.price;
+    const mvr = item.mvrCached?.price;
+    if (typeof wm === "number" && Number.isFinite(wm) && wm > 0) row.walmart = wm;
+    if (typeof nf === "number" && Number.isFinite(nf) && nf > 0) row.nofrills = nf;
+    if (typeof wc === "number" && Number.isFinite(wc) && wc > 0) {
+      row.wholesaleclub = wc;
+    }
+    if (typeof mvr === "number" && Number.isFinite(mvr) && mvr > 0) row.mvr = mvr;
+    if (Object.keys(row).length) out[item.id] = row;
+  }
+  return out;
+}
+
 function looksLikeSupply(id: string): boolean {
   return /^(cups_|lids_|foil_|napkin|mitt|tray|platter|bagasse|guest_towel)/i.test(
     id,
@@ -89,7 +139,9 @@ function looksLikeSupply(id: string): boolean {
 
 /** Shelf price, or null when that store does not stock the staple. */
 export function priceOf(id: string, store: StoreId): number | null {
-  const row = PRICES[id];
+  const live = livePrices?.[id]?.[store];
+  if (typeof live === "number" && Number.isFinite(live) && live > 0) return live;
+  const row = FALLBACK_PRICES[id];
   if (row) {
     const hit = row[store];
     return typeof hit === "number" && Number.isFinite(hit) ? hit : null;
@@ -97,6 +149,8 @@ export function priceOf(id: string, store: StoreId): number | null {
   if (looksLikeSupply(id)) {
     return store === "mvr" ? (DEFAULT_PRICE.mvr ?? 4.49) : null;
   }
+  // No live hit and no fallback row — do not invent a fake grocery price.
+  if (livePrices && livePrices[id]) return null;
   const hit = DEFAULT_PRICE[store];
   return typeof hit === "number" ? hit : null;
 }
@@ -121,6 +175,39 @@ export function cheapestStore(id: string): StoreId {
 function assignPrefer(preferred: StoreId, id: string): StoreId {
   if (priceOf(id, preferred) != null) return preferred;
   return cheapestStore(id);
+}
+
+const STORE_SHORT: Record<StoreId, string> = {
+  walmart: "WM",
+  nofrills: "NF",
+  wholesaleclub: "WC",
+  mvr: "MVR",
+};
+
+function preferredName(preferred: StoreId): string {
+  if (preferred === "walmart") return "Walmart";
+  if (preferred === "nofrills") return "No Frills";
+  if (preferred === "wholesaleclub") return "Wholesale Club";
+  return "MVR";
+}
+
+function planLabel(preferred: StoreId | "cheapest", storeIds: StoreId[]): string {
+  if (preferred === "cheapest") {
+    return storeIds.length <= 1
+      ? `Найдешевше · ${STORE_SHORT[storeIds[0] ?? "mvr"]}`
+      : `Найдешевше · ${storeIds.map((s) => STORE_SHORT[s]).join("+")}`;
+  }
+  const name = preferredName(preferred);
+  if (storeIds.length === 1 && storeIds[0] === preferred) {
+    return `Усе в ${name}`;
+  }
+  if (storeIds.includes(preferred) && storeIds.length > 1) {
+    return `${name} + ${storeIds
+      .filter((s) => s !== preferred)
+      .map((s) => STORE_SHORT[s])
+      .join("+")}`;
+  }
+  return storeIds.map((s) => STORE_SHORT[s]).join("+") || name;
 }
 
 function toRad(d: number): number {
@@ -191,7 +278,7 @@ export type Basket = { id: string; qty: number }[];
 
 function buildPlan(
   key: string,
-  label: string,
+  preferred: StoreId | "cheapest",
   basket: Basket,
   assign: (id: string) => StoreId,
 ): Plan {
@@ -201,8 +288,10 @@ function buildPlan(
     return { id: b.id, qty: b.qty, store, price, lineTotal: round2(price * b.qty) };
   });
   const productCost = round2(items.reduce((s, i) => s + i.lineTotal, 0));
-  const storeIds = [...new Set(items.map((i) => i.store))] as StoreId[];
-  const { km, ordered } = routeThrough(storeIds.map((id) => STORES[id]));
+  const uniqueStores = [...new Set(items.map((i) => i.store))] as StoreId[];
+  const { km, ordered } = routeThrough(uniqueStores.map((id) => STORES[id]));
+  // Route order (not first-seen item order) drives pick-list grouping.
+  const storeIds = ordered.map((s) => s.id);
   const distanceKm = Math.round(km * 10) / 10;
   const drivingCost = round2(distanceKm * PER_KM);
   const salary = DRIVER_SALARY;
@@ -219,7 +308,7 @@ function buildPlan(
   ];
   return {
     key,
-    label,
+    label: planLabel(preferred, storeIds),
     storeIds,
     stops,
     items,
@@ -237,17 +326,19 @@ export function computePlans(basket: Basket): {
 } {
   if (!basket.length) return { plans: [], recommended: null };
   const plans: Plan[] = [
-    buildPlan("all-walmart", "Усе в Walmart", basket, (id) =>
+    buildPlan("all-walmart", "walmart", basket, (id) =>
       assignPrefer("walmart", id),
     ),
-    buildPlan("all-nofrills", "Усе в No Frills", basket, (id) =>
+    buildPlan("all-nofrills", "nofrills", basket, (id) =>
       assignPrefer("nofrills", id),
     ),
-    buildPlan("all-mvr", "Усе в MVR", basket, (id) => assignPrefer("mvr", id)),
-    buildPlan("cheapest", "Найдешевше по товарах", basket, cheapestStore),
+    buildPlan("all-wholesaleclub", "wholesaleclub", basket, (id) =>
+      assignPrefer("wholesaleclub", id),
+    ),
+    buildPlan("all-mvr", "mvr", basket, (id) => assignPrefer("mvr", id)),
+    buildPlan("cheapest", "cheapest", basket, cheapestStore),
   ];
   // Best option for the driver = shortest route (km). Fewer stops break ties.
-  // Product $ / salary / road $ do not pick the recommended plan.
   const recommended = plans.reduce((best, p) => {
     if (p.distanceKm < best.distanceKm) return p;
     if (
