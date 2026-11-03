@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { COMPARE_STORES } from "@/domain/compare-stores";
+import { AuthCorner } from "./AuthCorner";
 import { useCompareStores } from "./CompareStoresContext";
 
 const LINKS = [
@@ -44,6 +45,7 @@ export function SiteNav() {
             );
           })}
         </div>
+        <AuthCorner />
       </div>
       {showStorePicker && (
         <div className="store-picker" role="group" aria-label="Магазини для порівняння">
