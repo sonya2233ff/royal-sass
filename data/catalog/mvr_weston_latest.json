@@ -2,7 +2,7 @@
   "retailer": "mvr",
   "storeId": "weston",
   "source": "shopify_plus_mvrwholesale",
-  "checkedAt": "2026-11-02T23:29:36.131Z",
+  "checkedAt": "2026-11-02T23:41:20.626Z",
   "note": "MVR Cash & Carry 3655 Weston Rd — INSTOREPRICE from plus.mvrwholesale.com. Case packs kept.",
   "items": [
     {
@@ -749,9 +749,9 @@
     {
       "id": "ice_cubes",
       "label": "Ice Cubes",
-      "status": "no_match",
+      "status": "rejected",
       "offer": null,
-      "notes": "no relevant hits after filters",
+      "notes": "price $14.49 > max plausible $8",
       "alternates": []
     },
     {
@@ -3292,92 +3292,6 @@
       ]
     },
     {
-      "id": "lids_dome_no_hole",
-      "label": "No-Hole Dome Lids",
-      "status": "ok",
-      "offer": {
-        "productId": "maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
-        "name": "MAHER - NO-HOLE CLEAR DOME LIDS FOR CUP 98mm 50PK",
-        "brand": "MAHER",
-        "packageSize": "50PK",
-        "price": 2.19,
-        "confidence": "exact",
-        "checkedAt": "2026-11-02T23:29:27.431Z",
-        "sourceUrl": "https://plus.mvrwholesale.com/products/maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
-        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300765p.jpg?v=1790958961"
-      },
-      "notes": "Live MVR SKU price refresh",
-      "alternates": [
-        {
-          "productId": "amhil-16-24-dome-lids-no-hole-50ea",
-          "name": "AMHIL - 16/24 DOME LIDS NO HOLE 50EA",
-          "brand": "AMHIL",
-          "packageSize": "50EA",
-          "price": 3.79,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:54:43.966Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/amhil-16-24-dome-lids-no-hole-50ea?_pos=1&_psq=no+hole+dome+lids&_psid=e2f9f254f&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000040053p.jpg?v=1786548561",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "amhil-16-24-dome-lids-no-hole-20x50ea",
-          "name": "AMHIL - 16/24 DOME LIDS NO HOLE 20x50 EA",
-          "brand": "AMHIL",
-          "packageSize": "20x50 EA",
-          "price": 69.99,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:54:43.966Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/amhil-16-24-dome-lids-no-hole-20x50ea?_pos=2&_psq=no+hole+dome+lids&_psid=e2f9f254f&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1082402400535c.jpg?v=1786548437",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "maher-no-hole-clear-dome-lids-for-cup-98mm-50x20-pk",
-          "name": "MAHER - NO-HOLE CLEAR DOME LIDS FOR CUP 98mm 20x50 PK",
-          "brand": "MAHER",
-          "packageSize": "20x50 PK",
-          "price": 40.49,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:54:43.966Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/maher-no-hole-clear-dome-lids-for-cup-98mm-50x20-pk?_pos=5&_psq=no+hole+dome+lids&_psid=e2f9f254f&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300157p_756686e7-e9a8-40b2-bad8-ec0fe27b7b68.jpg?v=1777483046",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "dart-solo-dome-lid-no-hole-5-8oz-100ea",
-          "name": "DART - SOLO DOME LID NO HOLE 6/8/10oz 100EA",
-          "brand": "DART",
-          "packageSize": "100EA",
-          "parsedMassKg": 0,
-          "price": 6.09,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:54:43.966Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/dart-solo-dome-lid-no-hole-5-8oz-100ea?_pos=7&_psq=no+hole+dome+lids&_psid=e2f9f254f&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004116521011p_13c905cf-0346-4c95-869a-f163a867af19.jpg?v=1780298913",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        },
-        {
-          "productId": "solo-dome-lid-no-hole-5-8oz-1000ea",
-          "name": "DART - SOLO DOME LID NO HOLE 6/8/10oz 10x100 EA",
-          "brand": "DART",
-          "packageSize": "10x100 EA",
-          "parsedMassKg": 0,
-          "price": 55.99,
-          "availability": "in_stock",
-          "confidence": "exact",
-          "checkedAt": "2026-08-18T21:54:44.221Z",
-          "sourceUrl": "https://plus.mvrwholesale.com/products/solo-dome-lid-no-hole-5-8oz-1000ea?_pos=10&_psq=dome+lid+no+hole&_psid=d5ed3723f&_ss=e",
-          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004116521010p_e9782912-1756-40ab-982b-0ac56a5b534f.jpg?v=1780298973",
-          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
-        }
-      ]
-    },
-    {
       "id": "oreo_sandwich_cookies",
       "label": "Oreo Sandwich Cookies",
       "status": "no_match",
@@ -5540,9 +5454,95 @@
           "taxonomyText": "ROOT VEGETABLES  ROOT VEGETABLES  PRODUCE  FRESH VEGETABLES"
         }
       ]
+    },
+    {
+      "id": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "status": "ok",
+      "offer": {
+        "productId": "maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
+        "name": "MAHER - NO-HOLE CLEAR DOME LIDS FOR CUP 98mm 50PK",
+        "brand": "MAHER",
+        "packageSize": "50PK",
+        "price": 2.19,
+        "confidence": "exact",
+        "checkedAt": "2026-11-02T23:29:27.431Z",
+        "sourceUrl": "https://plus.mvrwholesale.com/products/maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
+        "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300765p.jpg?v=1790958961"
+      },
+      "notes": "Live MVR SKU price refresh",
+      "alternates": [
+        {
+          "productId": "amhil-16-24-dome-lids-no-hole-50ea",
+          "name": "AMHIL - 16/24 DOME LIDS NO HOLE 50EA",
+          "brand": "AMHIL",
+          "packageSize": "50EA",
+          "price": 3.79,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:54:43.966Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/amhil-16-24-dome-lids-no-hole-50ea?_pos=1&_psq=no+hole+dome+lids&_psid=e2f9f254f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0000000040053p.jpg?v=1786548561",
+          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        },
+        {
+          "productId": "amhil-16-24-dome-lids-no-hole-20x50ea",
+          "name": "AMHIL - 16/24 DOME LIDS NO HOLE 20x50 EA",
+          "brand": "AMHIL",
+          "packageSize": "20x50 EA",
+          "price": 69.99,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:54:43.966Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/amhil-16-24-dome-lids-no-hole-20x50ea?_pos=2&_psq=no+hole+dome+lids&_psid=e2f9f254f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/1082402400535c.jpg?v=1786548437",
+          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        },
+        {
+          "productId": "maher-no-hole-clear-dome-lids-for-cup-98mm-50x20-pk",
+          "name": "MAHER - NO-HOLE CLEAR DOME LIDS FOR CUP 98mm 20x50 PK",
+          "brand": "MAHER",
+          "packageSize": "20x50 PK",
+          "price": 40.49,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:54:43.966Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/maher-no-hole-clear-dome-lids-for-cup-98mm-50x20-pk?_pos=5&_psq=no+hole+dome+lids&_psid=e2f9f254f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0062760300157p_756686e7-e9a8-40b2-bad8-ec0fe27b7b68.jpg?v=1777483046",
+          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        },
+        {
+          "productId": "dart-solo-dome-lid-no-hole-5-8oz-100ea",
+          "name": "DART - SOLO DOME LID NO HOLE 6/8/10oz 100EA",
+          "brand": "DART",
+          "packageSize": "100EA",
+          "parsedMassKg": 0,
+          "price": 6.09,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:54:43.966Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/dart-solo-dome-lid-no-hole-5-8oz-100ea?_pos=7&_psq=no+hole+dome+lids&_psid=e2f9f254f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004116521011p_13c905cf-0346-4c95-869a-f163a867af19.jpg?v=1780298913",
+          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        },
+        {
+          "productId": "solo-dome-lid-no-hole-5-8oz-1000ea",
+          "name": "DART - SOLO DOME LID NO HOLE 6/8/10oz 10x100 EA",
+          "brand": "DART",
+          "packageSize": "10x100 EA",
+          "parsedMassKg": 0,
+          "price": 55.99,
+          "availability": "in_stock",
+          "confidence": "exact",
+          "checkedAt": "2026-08-18T21:54:44.221Z",
+          "sourceUrl": "https://plus.mvrwholesale.com/products/solo-dome-lid-no-hole-5-8oz-1000ea?_pos=10&_psq=dome+lid+no+hole&_psid=d5ed3723f&_ss=e",
+          "image": "https://cdn.shopify.com/s/files/1/0531/2872/4650/files/0004116521010p_e9782912-1756-40ab-982b-0ac56a5b534f.jpg?v=1780298973",
+          "taxonomyText": "COLD CUPS  COLD CUPS  FOOD SERVICE SUPPLIES  CUPS W/ LIDS"
+        }
+      ]
     }
   ],
-  "updatedAt": "2026-11-02T23:29:36.131Z",
+  "updatedAt": "2026-11-02T23:41:20.626Z",
   "matched": 89,
   "itemCount": 125
 }

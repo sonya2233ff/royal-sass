@@ -7,7 +7,7 @@
     "name": "Walmart Supercentre #5831",
     "address": "700 Centre St, Thornhill, ON L4J 0A7"
   },
-  "checkedAt": "2026-08-21T02:19:24.654Z",
+  "checkedAt": "2026-11-02T23:44:03.579Z",
   "itemCount": 134,
   "matched": 83,
   "items": [
@@ -19,15 +19,15 @@
         "6000196635381"
       ],
       "offer": {
-        "productId": "6000196635381",
+        "productId": "2WGIXGYOMFS7",
         "name": "Burnbrae Farms Naturegg Simply Egg Whites 1KG",
-        "brand": "Burnbrae Farms",
         "packageSize": "1 kg",
         "parsedMassKg": 1,
         "price": 9.47,
+        "unitPrice": 0.9501000000000001,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:09:48.500Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Burnbrae-Farms-Naturegg-Simply-Egg-Whites-1KG/6000196635381?classType=REGULAR&athbdg=L1600",
+        "checkedAt": "2026-11-02T23:33:00.455Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Burnbrae-Farms-Naturegg-Simply-Egg-Whites-1KG/6000196635381",
         "image": "https://i5.walmartimages.ca/asr/27f45e00-d8ab-4e43-8d58-7f154396ec4c.cf834bc8397cfaf849bd3aeab61f9014.jpeg"
       },
       "alternates": [
@@ -60,15 +60,13 @@
       "offer": {
         "productId": "72CDS4R4V81X",
         "name": "Nature Fresh Farms - Devours, Premium Red Grape Tomato - 283g, Devours Premium Red Grape Toms",
-        "brand": "Nature Fresh Farms",
         "packageSize": "283 g",
         "parsedMassKg": 0.283,
-        "price": 2.44,
-        "availability": "unknown",
+        "price": 1.94,
         "confidence": "exact",
-        "checkedAt": "2026-08-20T04:26:40.275Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/nature-fresh-farms-devours-premium-red-grape-tomato-283g/72CDS4R4V81X?classType=REGULAR",
-        "image": "https://i5.walmartimages.ca/images/Enlarge/910/999/6000209910999.jpg"
+        "checkedAt": "2026-11-02T23:33:02.412Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Nature-Fresh-Farms-Devours-Premium-Red-Grape-Tomato-283g-Devours-Premium-Red-Grape-Toms/72CDS4R4V81X",
+        "image": "https://i5.walmartimages.ca/asr/4de7e7b3-27a9-4df0-b526-56b2a08df150.5b1617a8022fcd270ff3fe8b44fa09f7.jpeg"
       },
       "alternates": [
         {
@@ -404,13 +402,13 @@
       "offer": {
         "productId": "2ADJVX8MAQ1Q",
         "name": "Earth's Own Gluten-Free, Zero Sugar Original Oat Milk Alternative, 1.75L",
-        "brand": "Earth's Own",
         "packageSize": "1.75 kg",
         "parsedMassKg": 1.75,
         "price": 4.47,
+        "unitPrice": 0.2601,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:10:10.848Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Earth-s-Own-Gluten-Free-Zero-Sugar-Original-Oat-Milk-Alternative-1-75L/2ADJVX8MAQ1Q?classType=REGULAR&athbdg=L1600",
+        "checkedAt": "2026-11-02T23:36:07.636Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Earth-s-Own-Gluten-Free-Zero-Sugar-Original-Oat-Milk-Alternative-1-75L/2ADJVX8MAQ1Q",
         "image": "https://i5.walmartimages.ca/asr/46d23fab-9180-4386-9659-8eef83ee72b9.425e4a0efd5ecd16af087f33dcf0f3b4.jpeg"
       },
       "alternates": [
@@ -547,15 +545,15 @@
         "10184853"
       ],
       "offer": {
-        "productId": "10184853",
+        "productId": "0XYOI7HWJI4U",
         "name": "Earth's Own Original Almond Milk Alternative, 1.89L",
-        "brand": "Earth's Own",
         "packageSize": "1.89 kg",
         "parsedMassKg": 1.89,
         "price": 4.47,
+        "unitPrice": 0.2401,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:10:27.074Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Earth-s-Own-Original-Almond-Milk-Alternative-1-89L/10184853?classType=REGULAR",
+        "checkedAt": "2026-11-02T23:39:28.530Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Earth-s-Own-Original-Almond-Milk-Alternative-1-89L/10184853",
         "image": "https://i5.walmartimages.ca/asr/4c1bbc24-4b05-41d9-bcc3-abfdafe4c9d6.d986995a54f1c716d0c17845a5c0353e.jpeg"
       },
       "alternates": [
@@ -728,14 +726,14 @@
         "6000198384699"
       ],
       "offer": {
-        "productId": "6000198384699",
+        "productId": "3APDJEOHNVMV",
         "name": "Mehadrin 2% 2LT milk",
-        "brand": "Mehadrin",
         "packageSize": "2 kg",
         "parsedMassKg": 2,
         "price": 6.47,
+        "unitPrice": 0.3201,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:00.769Z",
+        "checkedAt": "2026-11-02T23:43:32.198Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Mehadrin-2-2LT-milk/6000198384699",
         "image": "https://i5.walmartimages.ca/asr/becbd672-036b-4516-9c9c-3386c018be93.fbf92132d0d0c426012fe5d97a39d65e.jpeg"
       },
@@ -752,13 +750,15 @@
         "6000201029320"
       ],
       "offer": {
-        "productId": "6000201029320",
+        "productId": "0XO40VKCMFZW",
         "name": "Gay Lea Unsalted Butter",
-        "brand": "Gay Lea Foods",
-        "price": 7.96,
+        "price": 4.97,
+        "unitPrice": 1.091,
+        "wasPrice": 7.96,
+        "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:12.533Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Gay-Lea-Unsalted-Butter/6000201029320?classType=REGULAR&athbdg=L1600",
+        "checkedAt": "2026-11-02T23:43:40.938Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Gay-Lea-Unsalted-Butter/6000201029320",
         "image": "https://i5.walmartimages.ca/asr/a2122e4d-e5c7-4902-9a40-8298592b9f73.7e6e87f5c5642533ae1161770e956e98.jpeg"
       },
       "alternates": [
@@ -818,14 +818,13 @@
         "grade a large eggs"
       ],
       "offer": {
-        "productId": "10052944",
+        "productId": "32XR7TGHJ12Q",
         "name": "Great Value Large 12 Eggs",
-        "brand": "Great Value",
         "price": 3.93,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:15.889Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Large-12-Eggs/10052944?classType=REGULAR&athbdg=L1600",
-        "image": "https://i5.walmartimages.ca/asr/bf0abe13-d833-4ceb-be74-8c2444c35a06.217e4c69ecde8c8bba4e8ab7de15a76b.jpeg"
+        "checkedAt": "2026-11-02T23:43:43.018Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Large-12-Eggs/10052944",
+        "image": "https://i5.walmartimages.ca/asr/cf0d90a9-bfeb-40fb-99f3-ffa405647402.b0f18a9623a967ab8e0961c08c4a3949.jpeg"
       },
       "alternates": [],
       "image": "/products/large_eggs_dozen.jpg",
@@ -900,13 +899,15 @@
         "205804"
       ],
       "offer": {
-        "productId": "205804",
+        "productId": "1STG76CH983C",
         "name": "Tropicana 100% Pure Orange Juice No Pulp",
-        "brand": "Tropicana",
-        "price": 10.24,
+        "price": 7.97,
+        "unitPrice": 0.30010000000000003,
+        "wasPrice": 8.96,
+        "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:18.195Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Tropicana-100-Pure-Orange-Juice-No-Pulp/205804?classType=REGULAR&athbdg=L1600",
+        "checkedAt": "2026-11-02T23:43:44.458Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Tropicana-100-Pure-Orange-Juice-No-Pulp/205804",
         "image": "https://i5.walmartimages.ca/asr/86a56b6a-8d88-4779-bf1f-7362a66d4ed4.ee3d4d02ac6a29e56b4db89f4a377075.png"
       },
       "alternates": [],
@@ -923,14 +924,14 @@
       "notes": "Mehadrin Homogenized 3.25% 2L — WM product_id 6000198386424; NF often titled Kosher Homogenized",
       "status": "ok",
       "offer": {
-        "productId": "6000198386424",
+        "productId": "332I0F3DLHOL",
         "name": "Mehadrin Homogenized 3,25% 2LT Milk",
-        "brand": "Mehadrin",
         "packageSize": "2 kg",
         "parsedMassKg": 2,
         "price": 6.47,
+        "unitPrice": 0.3201,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:09.636Z",
+        "checkedAt": "2026-11-02T23:43:36.298Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Mehadrin-Homogenized-3-25-2LT-Milk/6000198386424",
         "image": "https://i5.walmartimages.ca/asr/13b0d6bd-d72f-436a-9e5f-6cc34925da30.e91d032ac0f8f3d0948fbec0917eefc8.jpeg"
       },
@@ -993,15 +994,15 @@
       ],
       "status": "ok",
       "offer": {
-        "productId": "6000197072458",
+        "productId": "1OWDTIMW7EKH",
         "name": "Great Value Cultivated Blueberries, 600 g",
-        "brand": "Great Value",
         "packageSize": "600 g",
         "parsedMassKg": 0.6,
-        "price": 4.66,
+        "price": 5.18,
+        "unitPrice": 0.8601000000000001,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:36.987Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Cultivated-Blueberries/6000197072458?classType=REGULAR&athbdg=L1600",
+        "checkedAt": "2026-11-02T23:43:51.119Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Cultivated-Blueberries-600-g/6000197072458",
         "image": "https://i5.walmartimages.ca/asr/37f9ca0c-2ff9-472f-a271-ca21b8ec0d67.0f66655ae55bc486bfd65abd49ddaa9e.jpeg"
       },
       "notes": "Frozen: cheapest blueberry bag, any brand",
@@ -1048,15 +1049,15 @@
       ],
       "status": "ok",
       "offer": {
-        "productId": "6000191288178",
+        "productId": "5LLBSMCX8XC4",
         "name": "Great Value Sliced Frozen Strawberries, 600 g",
-        "brand": "Great Value",
         "packageSize": "600 g",
         "parsedMassKg": 0.6,
-        "price": 4.66,
+        "price": 5.18,
+        "unitPrice": 0.8601000000000001,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:41.194Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Sliced-Frozen-Strawberries/6000191288178?classType=REGULAR&athbdg=L1600",
+        "checkedAt": "2026-11-02T23:43:52.477Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Sliced-Frozen-Strawberries-600-g/6000191288178",
         "image": "https://i5.walmartimages.ca/asr/c1412b59-0857-47af-bb98-c3dbdfd9054b.369855c125b1f6729134f6cfa409fe8e.jpeg"
       },
       "notes": "Frozen: cheapest strawberry bag, any brand",
@@ -1090,16 +1091,16 @@
       ],
       "status": "ok",
       "offer": {
-        "productId": "6000198574809",
+        "productId": "5N96FQ19SZ7G",
         "name": "Great Value Frozen Chopped Spinach Nuggets, 500 g",
-        "brand": "Great Value",
         "packageSize": "500 g",
         "parsedMassKg": 0.5,
         "price": 3.37,
+        "unitPrice": 0.6701,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:44.911Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Chopped-Spinach-Nuggets/6000198574809?classType=REGULAR&athbdg=L1102",
-        "image": "https://i5.walmartimages.ca/asr/0fdcb1ca-91c8-47f8-af4d-5cb71aa134f5.bfe50d880011920d932f1fa8002aa511.jpeg"
+        "checkedAt": "2026-11-02T23:43:55.901Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Great-Value-Frozen-Chopped-Spinach-Nuggets-500-g/6000198574809",
+        "image": "https://i5.walmartimages.ca/asr/c2bfcdb0-717f-458a-a8a4-e3b7bdd483cf.228c245bd16aedd042eae1b179fdb172.jpeg"
       },
       "notes": "Prefer cube/nugget bags; else cheapest chopped spinach, any brand",
       "image": "/products/frozen_spinach.jpg",
@@ -1143,15 +1144,14 @@
       "status": "ok",
       "offer": {
         "productId": "6GYYS29T8E05",
-        "name": "Zespri Green Kiwi, 2 lb",
-        "brand": "Zespri",
+        "name": "Green Kiwi, 2 lb",
         "packageSize": "907 g",
         "parsedMassKg": 0.90718474,
         "price": 9.97,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:10:36.551Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/green-kiwi/6GYYS29T8E05?classType=REGULAR&athbdg=L1600",
-        "image": "https://i5.walmartimages.ca/images/Enlarge/192/0_1/686201741920_1.jpg"
+        "checkedAt": "2026-11-02T23:40:04.449Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Green-Kiwi-2-lb/6GYYS29T8E05",
+        "image": "https://i5.walmartimages.ca/asr/2a53e884-f228-4d67-8ff5-2b1d0f7d2b08.7454d85e1e430f814c4e59341d906698.jpeg"
       },
       "notes": "Produce: cheapest kiwi by kg (brand irrelevant)",
       "alternates": []
@@ -1167,14 +1167,12 @@
       "offer": {
         "productId": "1BUHM1GPVP5J",
         "name": "Realemon Juice 440ml",
-        "brand": "ReaLemon",
         "packageSize": "440 g",
         "parsedMassKg": 0.44,
-        "price": 2.47,
-        "wasPrice": 2.97,
-        "onSale": true,
+        "price": 3.27,
+        "unitPrice": 1.01,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:23.556Z",
+        "checkedAt": "2026-11-02T23:43:45.998Z",
         "sourceUrl": "https://www.walmart.ca/en/ip/Realemon-Juice-440ml/1BUHM1GPVP5J",
         "image": "https://i5.walmartimages.ca/asr/e44d0d68-9740-4615-bf80-297b6d8a30c1.eddf1524d1e23db79576c7209f4dff8c.jpeg"
       },
@@ -1189,13 +1187,15 @@
       ],
       "status": "ok",
       "offer": {
-        "productId": "10306574",
-        "name": "Jell-O Vanilla Instant Pudding Mix, Box, Caseine-Free",
-        "brand": "Jell-O",
+        "productId": "2Y6KBV58VH28",
+        "name": "Jell-O Vanilla Instant Pudding Mix, 102 g Box",
+        "packageSize": "102 g",
+        "parsedMassKg": 0.102,
         "price": 2.07,
+        "unitPrice": 2.031,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:28.108Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Jell-O-Vanilla-Instant-Pudding-Mix-Box-Caseine-Free/10306574?classType=REGULAR&athbdg=L1102",
+        "checkedAt": "2026-11-02T23:43:47.817Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Jell-O-Vanilla-Instant-Pudding-Mix-102-g-Box/10306574",
         "image": "https://i5.walmartimages.ca/asr/fc2a01e6-cd25-481d-896f-6c8740c96117.4761d3963e8789353fa80a21755ac19a.jpeg"
       },
       "notes": "Jell-O Vanilla Instant Pudding Mix 102g casein-free — WM product_id 10306574"
@@ -1203,20 +1203,21 @@
     {
       "id": "ziploc_sandwich",
       "label": "Ziploc Sandwich Bags",
-      "image": "https://i5.walmartimages.ca/asr/c3cfd467-9d97-442b-98f8-f5880a4d1fc9.d7f892c4f82fa126d217f24cbe383c29.jpeg",
+      "image": "https://i5.walmartimages.ca/asr/8a2273c1-6aad-483a-9d3d-9260cf998101.a240ebb23b70d34796636e83f34d8113.jpeg",
       "queriesTried": [
         "6000195369896"
       ],
       "status": "ok",
       "offer": {
-        "productId": "6000195369895",
+        "productId": "2UE0HNRL1HLL",
         "name": "Ziploc® Sandwich Bags with Grip 'n Seal Technology",
-        "brand": "Ziploc",
-        "price": 9.97,
+        "price": 7.97,
+        "wasPrice": 9.97,
+        "onSale": true,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:33.776Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Ziploc-Sandwich-Bags-with-Grip-n-Seal-Technology/6000195369896?classType=REGULAR&athbdg=L1600",
-        "image": "https://i5.walmartimages.ca/asr/c3cfd467-9d97-442b-98f8-f5880a4d1fc9.d7f892c4f82fa126d217f24cbe383c29.jpeg"
+        "checkedAt": "2026-11-02T23:43:49.517Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Ziploc-Sandwich-Bags-with-Grip-n-Seal-Technology/6000195369896",
+        "image": "https://i5.walmartimages.ca/asr/8a2273c1-6aad-483a-9d3d-9260cf998101.a240ebb23b70d34796636e83f34d8113.jpeg"
       },
       "notes": "Ziploc Sandwich Bags Grip n Seal — WM product_id 6000195369896"
     },
@@ -1234,13 +1235,12 @@
       "offer": {
         "productId": "6HYOGQRD524M",
         "name": "Arctic Glacier Cubed Premium Ice 2.3 kg Bagged Frozen, 2.3kg",
-        "brand": "Arctic Glacier",
         "packageSize": "2.3 kg",
         "parsedMassKg": 2.3,
         "price": 3.98,
         "confidence": "exact",
-        "checkedAt": "2026-08-21T02:11:48.269Z",
-        "sourceUrl": "https://www.walmart.ca/en/ip/Arctic-Glacier-Cubed-Premium-Ice-2-3-kg-Bagged-Frozen/6HYOGQRD524M?classType=REGULAR&athbdg=L1102",
+        "checkedAt": "2026-11-02T23:44:03.579Z",
+        "sourceUrl": "https://www.walmart.ca/en/ip/Arctic-Glacier-Cubed-Premium-Ice-2-3-kg-Bagged-Frozen-2-3kg/6HYOGQRD524M",
         "image": "https://i5.walmartimages.ca/asr/119a8500-b4b6-40a0-9783-b15a82c96948.1496c745e232dd66f884b6a2ad4a208f.png"
       },
       "notes": "Receipt UPC 763679000230 @ $3.98 — bag of ice, not gum or ice-cube bins",
@@ -3233,5 +3233,5 @@
       "notes": "From receipts catalog (produce)"
     }
   ],
-  "updatedAt": "2026-08-14T21:43:34.573Z"
+  "updatedAt": "2026-11-02T23:44:03.579Z"
 }

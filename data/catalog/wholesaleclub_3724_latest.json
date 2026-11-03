@@ -2,7 +2,7 @@
   "retailer": "wholesale_club",
   "storeId": "3724",
   "source": "pcx_bff_wholesaleclub_3724",
-  "checkedAt": "2026-11-02T23:29:10.520Z",
+  "checkedAt": "2026-11-02T23:41:19.056Z",
   "note": "Wholesale Club Richmond Hill #3724 — PCX BFF shelf, same client as No Frills.",
   "items": [
     {
@@ -614,12 +614,13 @@
         "parsedMassKg": 2.3,
         "price": 3.99,
         "onSale": true,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-11-02T23:28:41.965Z",
+        "checkedAt": "2026-11-02T23:41:15.188Z",
         "sourceUrl": "https://www.wholesaleclub.ca/en/cubed-ice/p/21467229_EA",
         "image": "https://digital.loblaws.ca/PCX/21467229_EA/en/1/76367900023_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live WC SKU price refresh",
+      "notes": "Live Wholesale Club PCX #3724",
       "alternates": []
     },
     {
@@ -1316,14 +1317,6 @@
       ]
     },
     {
-      "id": "lids_dome_no_hole",
-      "label": "No-Hole Dome Lids",
-      "status": "no_match",
-      "offer": null,
-      "notes": "no relevant hits after filters",
-      "alternates": []
-    },
-    {
       "id": "oreo_sandwich_cookies",
       "label": "Oreo Sandwich Cookies",
       "status": "ok",
@@ -1940,9 +1933,17 @@
       "offer": null,
       "notes": "no relevant hits after filters",
       "alternates": []
+    },
+    {
+      "id": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
     }
   ],
-  "updatedAt": "2026-11-02T23:29:10.520Z",
+  "updatedAt": "2026-11-02T23:41:19.056Z",
   "matched": 59,
   "itemCount": 125
 }

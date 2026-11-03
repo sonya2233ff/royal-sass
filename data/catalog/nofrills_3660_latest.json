@@ -1,6 +1,6 @@
 {
   "storeId": "3660",
-  "checkedAt": "2026-11-02T23:28:22.304Z",
+  "checkedAt": "2026-11-02T23:41:14.004Z",
   "items": [
     {
       "id": "simply_egg_whites",
@@ -992,13 +992,41 @@
         "packageSize": "2.3 kg, $0.17/100g",
         "parsedMassKg": 2.3,
         "price": 3.99,
+        "availability": "unknown",
         "confidence": "exact",
-        "checkedAt": "2026-11-02T23:27:44.067Z",
+        "checkedAt": "2026-11-02T23:41:11.221Z",
         "sourceUrl": "https://www.nofrills.ca/en/cubed-ice/p/21467229_EA",
         "image": "https://digital.loblaws.ca/PCX/21467229_EA/en/1/76367900023_enfr_front_centre_marketing_GS1_Ecommerce_1200.png"
       },
-      "notes": "Live NF SKU price refresh",
-      "alternates": []
+      "notes": "Live NF refresh (TTL 72h)",
+      "alternates": [
+        {
+          "productId": "21710010_EA",
+          "name": "Liebers Ice Poppers (8-pk)",
+          "brand": "Liebers",
+          "packageSize": "600 ml, $0.57/100ml",
+          "parsedMassKg": 0.6,
+          "price": 3.39,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-11-02T23:41:12.389Z",
+          "sourceUrl": "https://www.nofrills.ca/en/ice-poppers-8-pk/p/21710010_EA",
+          "image": "https://digital.loblaws.ca/PCX/21710010_EA/en/1/21710010_en_1_1200.png"
+        },
+        {
+          "productId": "21658770_EA",
+          "name": "Marino's Italian Ices Fat Free, Watermelon",
+          "brand": "Marino's",
+          "packageSize": "170 g, $4.11/100g",
+          "parsedMassKg": 0.17,
+          "price": 6.99,
+          "availability": "unknown",
+          "confidence": "exact",
+          "checkedAt": "2026-11-02T23:41:13.351Z",
+          "sourceUrl": "https://www.nofrills.ca/en/italian-ices-fat-free-watermelon/p/21658770_EA",
+          "image": "https://digital.loblaws.ca/PCX/21658770_EA/en/1/7371800005_enfr_front_centre_marketing_A_1_GS1_Ecommerce_1200.png"
+        }
+      ]
     },
     {
       "id": "cups_12oz_black_ripple",
@@ -1803,14 +1831,6 @@
     {
       "id": "gloves_nitrile_medium",
       "label": "Nitrile Gloves Medium",
-      "status": "no_match",
-      "offer": null,
-      "notes": "no relevant hits after filters",
-      "alternates": []
-    },
-    {
-      "id": "lids_dome_no_hole",
-      "label": "No-Hole Dome Lids",
       "status": "no_match",
       "offer": null,
       "notes": "no relevant hits after filters",
@@ -2673,9 +2693,17 @@
       "offer": null,
       "notes": "no relevant hits after filters",
       "alternates": []
+    },
+    {
+      "id": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "status": "no_match",
+      "offer": null,
+      "notes": "no relevant hits after filters",
+      "alternates": []
     }
   ],
-  "updatedAt": "2026-11-02T23:28:22.304Z",
+  "updatedAt": "2026-11-02T23:41:14.004Z",
   "matched": 83,
   "itemCount": 134
 }

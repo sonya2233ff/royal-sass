@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-20T23:55:13.093Z",
+  "updatedAt": "2026-11-02T23:41:20.630Z",
   "autoLinkThreshold": 0.85,
   "note": "masterId is the cafe staple id, not a No Frills or Walmart SKU",
   "products": {
@@ -3930,7 +3930,20 @@
           "verified": false,
           "decision": "auto_linked",
           "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:26:27.028Z"
+          "updatedAt": "2026-11-02T23:41:19.059Z"
+        },
+        "walmart_ca": {
+          "retailer": "walmart_ca",
+          "storeId": "5831",
+          "retailerProductId": "6HYOGQRD524M",
+          "name": "Arctic Glacier Cubed Premium Ice 2.3 kg Bagged Frozen, 2.3kg",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "skippedRematch": false,
+          "updatedAt": "2026-11-02T23:41:09.840Z"
         }
       },
       "prices": [
@@ -3940,7 +3953,7 @@
           "retailerProductId": "21467229_EA",
           "price": 3.99,
           "availability": "unknown",
-          "checkedAt": "2026-08-18T21:26:26.010Z",
+          "checkedAt": "2026-11-02T23:41:15.188Z",
           "source": "catalog_wholesaleclub_3724_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
@@ -5599,38 +5612,6 @@
         }
       ]
     },
-    "lids_dome_no_hole": {
-      "masterId": "lids_dome_no_hole",
-      "label": "No-Hole Dome Lids",
-      "category": "supplies",
-      "retailers": {
-        "mvr": {
-          "retailer": "mvr",
-          "storeId": "weston",
-          "retailerProductId": "maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
-          "name": "MAHER - NO-HOLE CLEAR DOME LIDS FOR CUP 98mm 50PK",
-          "upc": "0062760300765",
-          "matchMethod": "seed_catalog",
-          "matchConfidence": 0.85,
-          "verified": false,
-          "decision": "auto_linked",
-          "kind": "staple_winner",
-          "updatedAt": "2026-08-18T21:54:44.342Z"
-        }
-      },
-      "prices": [
-        {
-          "retailer": "mvr",
-          "storeId": "weston",
-          "retailerProductId": "maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
-          "price": 2.19,
-          "availability": "in_stock",
-          "checkedAt": "2026-08-18T21:54:44.334Z",
-          "source": "catalog_mvr_weston_latest",
-          "priceConfidence": "LIVE_VERIFIED"
-        }
-      ]
-    },
     "parsley": {
       "masterId": "parsley",
       "label": "Parsley",
@@ -7079,6 +7060,38 @@
           "availability": "unknown",
           "checkedAt": "2026-08-18T22:00:41.099Z",
           "source": "catalog_wholesaleclub_3724_latest",
+          "priceConfidence": "LIVE_VERIFIED"
+        }
+      ]
+    },
+    "lids_dome_no_hole": {
+      "masterId": "lids_dome_no_hole",
+      "label": "No-Hole Dome Lids",
+      "category": "supplies",
+      "retailers": {
+        "mvr": {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
+          "name": "MAHER - NO-HOLE CLEAR DOME LIDS FOR CUP 98mm 50PK",
+          "upc": "0062760300765",
+          "matchMethod": "seed_catalog",
+          "matchConfidence": 0.85,
+          "verified": false,
+          "decision": "auto_linked",
+          "kind": "staple_winner",
+          "updatedAt": "2026-08-18T21:54:44.342Z"
+        }
+      },
+      "prices": [
+        {
+          "retailer": "mvr",
+          "storeId": "weston",
+          "retailerProductId": "maher-no-hole-clear-dome-lids-for-cup-98mm-20pk",
+          "price": 2.19,
+          "availability": "in_stock",
+          "checkedAt": "2026-08-18T21:54:44.334Z",
+          "source": "catalog_mvr_weston_latest",
           "priceConfidence": "LIVE_VERIFIED"
         }
       ]
