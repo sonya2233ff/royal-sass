@@ -147,6 +147,24 @@ model ShoppingListItem {
   product      Product @relation(fields: [productId], references: [id])
 }
 
+/// Cafe customer account. Password is scrypt (`scrypt:salt:hash`), never plaintext.
+model Customer {
+  id           String            @id @default(cuid())
+  name         String
+  email        String            @unique
+  passwordHash String
+  createdAt    DateTime          @default(now())
+  sessions     CustomerSession[]
+}
+
+model CustomerSession {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  customerId String
+  createdAt  DateTime @default(now())
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
 model ComparisonRun {
   id               String   @id @default(cuid())
   listId           String

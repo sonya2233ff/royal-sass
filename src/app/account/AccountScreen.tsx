@@ -4,11 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  loadAccountStore,
-  loginInto,
-  logoutStore,
-  registerInto,
-  writeAccountStore,
+  fetchSession,
+  loginAccount,
+  logoutAccount,
+  registerAccount,
   type AccountPublic,
 } from "@/lib/account-auth";
 
@@ -25,8 +24,15 @@ export function AccountScreen({ mode }: { mode: Mode }) {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    setAccount(loadAccountStore().session);
-    setReady(true);
+    let cancelled = false;
+    fetchSession().then((customer) => {
+      if (cancelled) return;
+      setAccount(customer);
+      setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   async function submit(e: React.FormEvent) {
@@ -34,17 +40,15 @@ export function AccountScreen({ mode }: { mode: Mode }) {
     setBusy(true);
     setError(null);
     try {
-      const store = loadAccountStore();
       const result =
         mode === "register"
-          ? await registerInto(store, { name, email, password })
-          : await loginInto(store, { email, password });
+          ? await registerAccount({ name, email, password })
+          : await loginAccount({ email, password });
       if (!result.ok) {
         setError(result.error);
         return;
       }
-      writeAccountStore(result.store);
-      setAccount(result.account);
+      setAccount(result.customer);
       router.push("/");
     } finally {
       setBusy(false);
@@ -52,9 +56,10 @@ export function AccountScreen({ mode }: { mode: Mode }) {
   }
 
   function logout() {
-    writeAccountStore(logoutStore(loadAccountStore()));
-    setAccount(null);
-    setPassword("");
+    void logoutAccount().then(() => {
+      setAccount(null);
+      setPassword("");
+    });
   }
 
   const title = mode === "register" ? "Реєстрація" : "Вхід";
@@ -70,8 +75,8 @@ export function AccountScreen({ mode }: { mode: Mode }) {
         <p className="kicker">Royal SASS</p>
         <h1 id="account-title">{title}</h1>
         <p className="lede">
-          Обліковий запис зберігається в цьому браузері. Після входу повертає на
-          товари кафе.
+          Ім’я та email зберігаються в базі кафе. Пароль туди не записується
+          відкритим текстом. Після входу повертає на товари кафе.
         </p>
 
         {ready && account ? (

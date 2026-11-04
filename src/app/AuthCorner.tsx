@@ -4,9 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  loadAccountStore,
-  logoutStore,
-  writeAccountStore,
+  fetchSession,
+  logoutAccount,
   type AccountPublic,
 } from "@/lib/account-auth";
 
@@ -16,16 +15,19 @@ export function AuthCorner() {
   const [account, setAccount] = useState<AccountPublic | null>(null);
 
   useEffect(() => {
-    setAccount(loadAccountStore().session);
-    setReady(true);
-    const onStorage = () => setAccount(loadAccountStore().session);
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    let cancelled = false;
+    fetchSession().then((customer) => {
+      if (cancelled) return;
+      setAccount(customer);
+      setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
   function logout() {
-    writeAccountStore(logoutStore(loadAccountStore()));
-    setAccount(null);
+    void logoutAccount().then(() => setAccount(null));
   }
 
   return (
