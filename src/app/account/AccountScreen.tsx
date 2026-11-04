@@ -8,6 +8,8 @@ import {
   loginAccount,
   logoutAccount,
   registerAccount,
+  resendSignupCode,
+  verifySignupCode,
   type AccountPublic,
 } from "@/lib/account-auth";
 import { passwordRuleError } from "@/lib/password-rules";
@@ -22,6 +24,9 @@ export function AccountScreen({ mode }: { mode: Mode }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [code, setCode] = useState("");
+  const [awaitingCode, setAwaitingCode] = useState(false);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -48,16 +53,56 @@ export function AccountScreen({ mode }: { mode: Mode }) {
           return;
         }
       }
-      const result =
-        mode === "register"
-          ? await registerAccount({ name, email, password })
-          : await loginAccount({ email, password });
+      if (mode === "register") {
+        const result = await registerAccount({ name, email, password });
+        if (!result.ok) {
+          setError(result.error);
+          return;
+        }
+        setAwaitingCode(true);
+        setNotice(`Код надіслано на ${result.email}. Він діє 30 хвилин.`);
+        return;
+      }
+      const result = await loginAccount({ email, password });
       if (!result.ok) {
         setError(result.error);
         return;
       }
       setAccount(result.customer);
       router.push("/");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function submitCode(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setError(null);
+    try {
+      const result = await verifySignupCode({ email, code });
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      setAccount(result.customer);
+      router.push("/");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function resend() {
+    setBusy(true);
+    setError(null);
+    try {
+      const result = await resendSignupCode(email);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      setCode("");
+      setNotice(`Новий код надіслано на ${email}. Попередній більше не діє. Код активний 30 хвилин.`);
     } finally {
       setBusy(false);
     }
@@ -81,10 +126,11 @@ export function AccountScreen({ mode }: { mode: Mode }) {
           ‹ Кафе
         </Link>
         <p className="kicker">Royal SASS</p>
-        <h1 id="account-title">{title}</h1>
+        <h1 id="account-title">{awaitingCode ? "Код з листа" : title}</h1>
         <p className="lede">
-          Ім’я та email зберігаються в базі кафе. Пароль туди не записується
-          відкритим текстом. Після входу повертає на товари кафе.
+          {awaitingCode
+            ? "Введи код з листа. Він діє 30 хвилин. Після підтвердження акаунт зберігається в базі."
+            : "Ім’я та email зберігаються в базі кафе після підтвердження коду з листа. Пароль туди не записується відкритим текстом."}
         </p>
 
         {ready && account ? (
@@ -102,6 +148,28 @@ export function AccountScreen({ mode }: { mode: Mode }) {
               </button>
             </div>
           </div>
+        ) : awaitingCode && mode === "register" ? (
+          <form onSubmit={(e) => void submitCode(e)}>
+            {notice && <p className="notice">{notice}</p>}
+            <label>
+              Код
+              <input
+                value={code}
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                required
+              />
+            </label>
+            {error && <p className="err">{error}</p>}
+            <button type="submit" className="solid" disabled={!ready || busy || code.length < 6}>
+              {busy ? "…" : "Підтвердити"}
+            </button>
+            <button type="button" className="ghost" disabled={busy} onClick={() => void resend()}>
+              Надіслати код ще раз
+            </button>
+          </form>
         ) : (
           <form onSubmit={(e) => void submit(e)}>
             {mode === "register" && (
@@ -241,6 +309,10 @@ export function AccountScreen({ mode }: { mode: Mode }) {
         .err {
           margin: 0;
           color: #8a2b22;
+        }
+        .notice {
+          margin: 0;
+          color: #2f4a3a;
         }
         .rules {
           margin: -0.2rem 0 0;

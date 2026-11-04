@@ -9,18 +9,34 @@ type AuthResult =
   | { ok: true; customer: AccountPublic }
   | { ok: false; error: string };
 
-async function postAuth(path: string, body: unknown): Promise<AuthResult> {
+export type RegisterResult =
+  | { ok: true; pending: true; email: string }
+  | { ok: false; error: string };
+
+async function postJson(path: string, body: unknown): Promise<{
+  ok?: boolean;
+  error?: string;
+  customer?: AccountPublic;
+  pending?: boolean;
+  email?: string;
+}> {
   const res = await fetch(path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  const data = (await res.json().catch(() => ({}))) as {
+  return (await res.json().catch(() => ({}))) as {
     ok?: boolean;
     error?: string;
     customer?: AccountPublic;
+    pending?: boolean;
+    email?: string;
   };
-  if (!res.ok || !data.ok || !data.customer) {
+}
+
+async function postAuth(path: string, body: unknown): Promise<AuthResult> {
+  const data = await postJson(path, body);
+  if (!data.ok || !data.customer) {
     return { ok: false, error: data.error ?? "Не вдалося зберегти акаунт." };
   }
   return { ok: true, customer: data.customer };
@@ -37,12 +53,31 @@ export function fetchSession(): Promise<AccountPublic | null> {
     .catch(() => null);
 }
 
-export function registerAccount(input: {
+export async function registerAccount(input: {
   name: string;
   email: string;
   password: string;
+}): Promise<RegisterResult> {
+  const data = await postJson("/api/auth/register", input);
+  if (!data.ok || !data.pending || !data.email) {
+    return { ok: false, error: data.error ?? "Не вдалося надіслати код." };
+  }
+  return { ok: true, pending: true, email: data.email };
+}
+
+export function verifySignupCode(input: {
+  email: string;
+  code: string;
 }): Promise<AuthResult> {
-  return postAuth("/api/auth/register", input);
+  return postAuth("/api/auth/verify", input);
+}
+
+export async function resendSignupCode(
+  email: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const data = await postJson("/api/auth/resend", { email });
+  if (!data.ok) return { ok: false, error: data.error ?? "Не вдалося надіслати код." };
+  return { ok: true };
 }
 
 export function loginAccount(input: {

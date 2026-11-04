@@ -165,6 +165,18 @@ model CustomerSession {
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
+/// Pending signup until the emailed code is confirmed. Code is scrypt, not plaintext.
+model SignupCode {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  codeHash     String
+  expiresAt    DateTime
+  attempts     Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
 model ComparisonRun {
   id               String   @id @default(cuid())
   listId           String

@@ -47,6 +47,28 @@ export async function verifyPassword(password: string, stored: string): Promise<
   return timingSafeEqual(hash, expected);
 }
 
+export async function createCustomerFromHash(input: {
+  name: string;
+  email: string;
+  passwordHash: string;
+}): Promise<{ ok: true; customer: CustomerPublic; token: string } | { ok: false; error: string }> {
+  const email = normalizeEmail(input.email);
+  const existing = await prisma.customer.findUnique({ where: { email } });
+  if (existing) return { ok: false, error: "Такий email уже є. Увійди." };
+  const customer = await prisma.customer.create({
+    data: { name: input.name.trim().slice(0, 40), email, passwordHash: input.passwordHash },
+  });
+  const token = randomBytes(32).toString("hex");
+  await prisma.customerSession.create({
+    data: { token, customerId: customer.id },
+  });
+  return {
+    ok: true,
+    token,
+    customer: { id: customer.id, name: customer.name, email: customer.email },
+  };
+}
+
 export async function registerCustomer(input: {
   name: string;
   email: string;
