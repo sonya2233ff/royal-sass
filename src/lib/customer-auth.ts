@@ -1,5 +1,6 @@
 import { randomBytes, scrypt, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
+import { passwordRuleError } from "@/lib/password-rules";
 import { prisma } from "@/lib/prisma";
 
 const scryptAsync = promisify(scrypt);
@@ -26,9 +27,8 @@ export function validateSignup(input: {
   const email = normalizeEmail(input.email);
   if (name.length < 1) return { ok: false, error: "Вкажи ім'я." };
   if (!EMAIL_RE.test(email)) return { ok: false, error: "Вкажи справжній email." };
-  if (input.password.length < 6) {
-    return { ok: false, error: "Пароль — щонайменше 6 символів." };
-  }
+  const passwordError = passwordRuleError(input.password);
+  if (passwordError) return { ok: false, error: passwordError };
   return { ok: true, name, email, password: input.password };
 }
 

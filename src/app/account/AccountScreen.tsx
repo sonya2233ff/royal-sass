@@ -10,6 +10,7 @@ import {
   registerAccount,
   type AccountPublic,
 } from "@/lib/account-auth";
+import { passwordRuleError } from "@/lib/password-rules";
 
 type Mode = "login" | "register";
 
@@ -40,6 +41,13 @@ export function AccountScreen({ mode }: { mode: Mode }) {
     setBusy(true);
     setError(null);
     try {
+      if (mode === "register") {
+        const passwordError = passwordRuleError(password);
+        if (passwordError) {
+          setError(passwordError);
+          return;
+        }
+      }
       const result =
         mode === "register"
           ? await registerAccount({ name, email, password })
@@ -123,11 +131,19 @@ export function AccountScreen({ mode }: { mode: Mode }) {
                 type="password"
                 value={password}
                 autoComplete={mode === "register" ? "new-password" : "current-password"}
-                minLength={6}
+                minLength={mode === "register" ? 6 : undefined}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </label>
+            {mode === "register" && (
+              <ul className="rules">
+                <li>починається з великої літери</li>
+                <li>є хоча б одна літера</li>
+                <li>є хоча б один спеціальний символ</li>
+                <li>щонайменше 6 символів</li>
+              </ul>
+            )}
             {error && <p className="err">{error}</p>}
             <button type="submit" className="solid" disabled={!ready || busy}>
               {busy ? "…" : mode === "register" ? "Створити акаунт" : "Увійти"}
@@ -225,6 +241,12 @@ export function AccountScreen({ mode }: { mode: Mode }) {
         .err {
           margin: 0;
           color: #8a2b22;
+        }
+        .rules {
+          margin: -0.2rem 0 0;
+          padding-left: 1.1rem;
+          color: #5c6b60;
+          font-size: 0.92rem;
         }
         .signed p {
           margin: 0;
