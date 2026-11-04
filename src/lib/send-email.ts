@@ -17,7 +17,8 @@ export async function sendSignupCode(to: string, code: string): Promise<void> {
   }
   const port = Number(process.env.SMTP_PORT || 587);
   const user = process.env.SMTP_USER?.trim();
-  const pass = process.env.SMTP_PASS ?? "";
+  // Gmail shows app passwords in groups of four; spaces are not part of the secret.
+  const pass = (process.env.SMTP_PASS ?? "").replace(/\s+/g, "");
   const transporter = nodemailer.createTransport({
     host,
     port,
