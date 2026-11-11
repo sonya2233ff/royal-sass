@@ -18,17 +18,31 @@ import {
 } from "./monthly-savings";
 
 const W = 640;
-const H = 248;
-const PAD = { l: 48, r: 52, t: 16, b: 28 };
+const H = 280;
+const PAD = { l: 48, r: 18, t: 18, b: 36 };
+const LINE = "#1e4db7";
+const GRID = "#e3e3e3";
+const AXIS = "#8a8a8a";
 
-function niceMax(value: number): number {
-  if (value <= 0) return 1;
-  const padded = value * 1.1;
-  const exp = Math.floor(Math.log10(padded));
-  const frac = padded / 10 ** exp;
-  const steps = [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+function tickStep(span: number): number {
+  const rough = (span || 1) / 5;
+  const exp = Math.floor(Math.log10(rough));
+  const frac = rough / 10 ** exp;
+  const steps = [1, 2, 2.5, 5, 10];
   const nice = steps.find((step) => step >= frac - 1e-9) ?? 10;
-  return Math.round(nice * 10 ** exp * 100) / 100;
+  return Math.round(nice * 10 ** exp * 1000) / 1000;
+}
+
+/** Tick marks around the data, like a line chart that does not pin the axis at zero. */
+function axisTicks(min: number, max: number): number[] {
+  const step = tickStep(max - min);
+  const start = Math.floor(min / step) * step;
+  const end = Math.ceil((max - 1e-9) / step) * step;
+  const ticks: number[] = [];
+  for (let value = start; value <= end + step * 0.001; value += step) {
+    ticks.push(Math.round(value * 1000) / 1000);
+  }
+  return ticks.length > 1 ? ticks : [min, max];
 }
 
 function axisMoney(n: number): string {
@@ -89,19 +103,33 @@ export function SavingsChart({ days }: { days: Day[] }) {
     return null;
   }, [series, pickedDate]);
 
-  const yMaxDay = niceMax(Math.max(0, ...series.map((point) => point.saved)));
-  const yMaxTotal = niceMax(Math.max(0, ...series.map((point) => point.cumulative)));
+  const plotted = useMemo(() => series.filter((point) => point.hasRun), [series]);
+  const lineChange = useMemo(() => {
+    if (!active) return null;
+    const index = plotted.findIndex((point) => point.date === active.date);
+    if (index <= 0) return null;
+    return Math.round((plotted[index].saved - plotted[index - 1].saved) * 100) / 100;
+  }, [active, plotted]);
+
   const plotW = W - PAD.l - PAD.r;
   const plotH = H - PAD.t - PAD.b;
-  const slot = series.length > 0 ? plotW / series.length : plotW;
-  const yOf = (value: number, max: number) => PAD.t + plotH - (value / max) * plotH;
-  const dayTicks = [0, yMaxDay / 2, yMaxDay];
-  const totalTicks = [yMaxTotal / 2, yMaxTotal];
-  const linePoints = series
-    .map((point, index) => {
-      const x = PAD.l + slot * index + slot / 2;
-      return `${x},${yOf(point.cumulative, yMaxTotal)}`;
-    })
+  const values = plotted.map((point) => point.saved);
+  const low = values.length ? Math.min(...values) : 0;
+  const high = values.length ? Math.max(...values) : 1;
+  const pad = high === low ? Math.max(Math.abs(high) * 0.25, 1) : (high - low) * 0.25;
+  const yTicks = axisTicks(low >= 0 ? Math.max(0, low - pad) : low - pad, high + pad);
+  const yMin = yTicks[0];
+  const yMax = yTicks[yTicks.length - 1];
+  const yOf = (value: number) => {
+    const span = yMax - yMin || 1;
+    return PAD.t + plotH - ((value - yMin) / span) * plotH;
+  };
+  const xOf = (index: number) => {
+    if (plotted.length <= 1) return PAD.l + plotW / 2;
+    return PAD.l + (plotW * index) / (plotted.length - 1);
+  };
+  const linePoints = plotted
+    .map((point, index) => `${xOf(index)},${yOf(point.saved)}`)
     .join(" ");
 
   const activeLabel = active ? formatDate(active.date) : null;
@@ -144,126 +172,94 @@ export function SavingsChart({ days }: { days: Day[] }) {
           </ul>
         </aside>
         <div className="plot">
-          <p className="legend">
-            <span>
-              <i className="swatch bar" /> за день (ліворуч)
-            </span>
-            <span>
-              <i className="swatch line" /> накопичено (праворуч)
-            </span>
-          </p>
           <svg
             viewBox={`0 0 ${W} ${H}`}
             role="img"
             aria-label={`Заощадження по днях, ${monthMeta?.label ?? monthKey}`}
           >
-            {dayTicks.map((tick) => (
-              <g key={`day-${tick}`}>
+            <rect x={PAD.l} y={PAD.t} width={plotW} height={plotH} fill="#fff" stroke={GRID} />
+            {yTicks.map((tick) => (
+              <g key={`y-${tick}`}>
                 <line
                   x1={PAD.l}
                   x2={W - PAD.r}
-                  y1={yOf(tick, yMaxDay)}
-                  y2={yOf(tick, yMaxDay)}
-                  stroke="rgba(40, 50, 40, 0.12)"
+                  y1={yOf(tick)}
+                  y2={yOf(tick)}
+                  stroke={GRID}
                 />
                 <text
-                  x={PAD.l - 6}
-                  y={yOf(tick, yMaxDay) + 4}
+                  x={PAD.l - 8}
+                  y={yOf(tick) + 4}
                   textAnchor="end"
-                  fill="#2f6a3a"
-                  fontSize={11}
+                  fill={AXIS}
+                  fontSize={12}
                 >
                   {axisMoney(tick)}
                 </text>
               </g>
             ))}
-            {totalTicks.map((tick) => (
-              <text
-                key={`total-${tick}`}
-                x={W - PAD.r + 6}
-                y={yOf(tick, yMaxTotal) + 4}
-                textAnchor="start"
-                fill="#c47b2b"
-                fontSize={11}
-              >
-                {axisMoney(tick)}
-              </text>
+            {plotted.map((point, index) => (
+              <line
+                key={`vx-${point.date}`}
+                x1={xOf(index)}
+                x2={xOf(index)}
+                y1={PAD.t}
+                y2={PAD.t + plotH}
+                stroke={GRID}
+              />
             ))}
-            {series.map((point, index) => {
-              const barW = Math.max(2, slot * 0.62);
-              const x = PAD.l + slot * index + (slot - barW) / 2;
-              const height =
-                point.saved > 0
-                  ? Math.max(3, (point.saved / yMaxDay) * plotH)
-                  : point.hasRun
-                    ? 4
-                    : 2;
-              const y = PAD.t + plotH - height;
-              const on = active?.date === point.date;
-              const fill = on
-                ? "#1e4a2c"
-                : !point.hasRun
-                  ? "#e4dfd4"
-                  : point.saved > 0
-                    ? "#2f6a3a"
-                    : "#8d9074";
-              return (
-                <rect
-                  key={point.date}
-                  x={x}
-                  y={y}
-                  width={barW}
-                  height={height}
-                  rx={1.5}
-                  fill={fill}
-                  stroke={on ? "#c47b2b" : "none"}
-                  strokeWidth={on ? 1.5 : 0}
-                  style={{ cursor: "pointer" }}
-                  tabIndex={0}
-                  role="button"
-                  aria-pressed={on}
-                  aria-label={`${formatDate(point.date).full}, за день ${money(point.saved)}, накопичено ${money(point.cumulative)}`}
-                  onClick={() => setPickedDate(point.date)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      setPickedDate(point.date);
-                    }
-                  }}
-                />
-              );
-            })}
             {linePoints && (
               <polyline
                 points={linePoints}
                 fill="none"
-                stroke="#c47b2b"
-                strokeWidth={2.25}
+                stroke={LINE}
+                strokeWidth={2.5}
                 strokeLinejoin="round"
                 strokeLinecap="round"
                 pointerEvents="none"
               />
             )}
-            {series.map((point, index) => {
-              const show =
-                point.day === 1 ||
-                point.day === series.length ||
-                point.day % 5 === 0 ||
-                point.date === active?.date;
-              if (!show) return null;
-              const x = PAD.l + slot * index + slot / 2;
+            {plotted.map((point, index) => {
+              const on = active?.date === point.date;
+              const x = xOf(index);
               return (
-                <text
-                  key={`x-${point.date}`}
-                  x={x}
-                  y={H - 8}
-                  textAnchor="middle"
-                  fill={point.date === active?.date ? "#1e281e" : "#5c665c"}
-                  fontSize={11}
-                  fontWeight={point.date === active?.date ? 700 : 400}
-                >
-                  {point.day}
-                </text>
+                <g key={point.date}>
+                  <text
+                    x={x}
+                    y={H - 12}
+                    textAnchor="middle"
+                    fill={on ? LINE : AXIS}
+                    fontSize={12}
+                    fontWeight={on ? 700 : 400}
+                  >
+                    {point.day}
+                  </text>
+                  <circle
+                    cx={x}
+                    cy={yOf(point.saved)}
+                    r={14}
+                    fill="transparent"
+                    tabIndex={0}
+                    role="button"
+                    aria-pressed={on}
+                    aria-label={`${formatDate(point.date).full}, за день ${money(point.saved)}`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setPickedDate(point.date)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setPickedDate(point.date);
+                      }
+                    }}
+                  />
+                  <circle
+                    cx={x}
+                    cy={yOf(point.saved)}
+                    r={on ? 6 : 4.5}
+                    fill={LINE}
+                    pointerEvents="none"
+                  />
+                </g>
               );
             })}
           </svg>
@@ -279,10 +275,10 @@ export function SavingsChart({ days }: { days: Day[] }) {
                   <span className="muted">{active.hasRun ? "за день" : "закупівель не було"}</span>
                 </div>
                 <div>
-                  <b className={active.change != null && active.change < 0 ? "drop" : "pos"}>
-                    {formatChange(active.change)}
+                  <b className={lineChange != null && lineChange < 0 ? "drop" : "pos"}>
+                    {formatChange(lineChange)}
                   </b>
-                  <span className="muted">проти попереднього дня</span>
+                  <span className="muted">проти попередньої точки</span>
                 </div>
                 <div>
                   <b>{money(active.cumulative)}</b>
@@ -363,30 +359,6 @@ export function SavingsChart({ days }: { days: Day[] }) {
           margin-top: 0.12rem;
           font-size: 0.74rem;
           opacity: 0.8;
-        }
-        .legend {
-          display: flex;
-          gap: 0.9rem;
-          margin: 0 0 0.35rem;
-          font-size: 0.75rem;
-          opacity: 0.8;
-        }
-        .legend span {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.35rem;
-        }
-        .swatch {
-          display: inline-block;
-          width: 0.85rem;
-          height: 0.45rem;
-        }
-        .swatch.bar {
-          background: #2f6a3a;
-        }
-        .swatch.line {
-          height: 0;
-          border-top: 2px solid #c47b2b;
         }
         svg {
           width: 100%;
