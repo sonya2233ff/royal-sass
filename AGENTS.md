@@ -237,7 +237,7 @@ Do not compare different pack masses as raw shelf prices (`src/domain/fair-compa
 - `/dev/match-inspector` — developer Match inspector (site nav). Live retailer query scoring. Off only if `ALLOW_MATCH_INSPECTOR=0`. Linked NF probe at `/nf-probe`.
 - `/waiter` — waiter portal: shown catalog search + local list; live sync to `/driver` on this browser (`localStorage` + BroadcastChannel). **Відправити** locks a job into `royal-sass-driver-jobs-v1` and clears the draft
 - `/driver` — driver portal: live waiter draft + locked jobs as the shopping list (no mock tickets), grouped by WM / NF / **MVR** from the buy plan (supplies like No-Hole Dome Lids → MVR when grocery has `no_match`). **Здати закупівлю** clears the list and appends today’s run to `/activity` (`royal-sass-activity-v1` localStorage)
-- `/activity` — purchase history: seed mock days + live driver runs on this browser (`src/lib/activity-log.ts`)
+- `/activity` — purchase history: seed mock days + live driver runs on this browser (`src/lib/activity-log.ts`). A month chart plots each day's savings and the running total; the month list switches the chart. Economy math is unchanged.
 - `GET /api/compare` — **legacy** basket POC, not the staples UI
 
 Refresh/compare/rematch routes use `maxDuration = 60`.
