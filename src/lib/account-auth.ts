@@ -57,6 +57,7 @@ export async function registerAccount(input: {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }): Promise<RegisterResult> {
   const data = await postJson("/api/auth/register", input);
   if (!data.ok || !data.pending || !data.email) {

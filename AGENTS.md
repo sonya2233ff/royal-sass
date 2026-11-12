@@ -340,7 +340,7 @@ See `.env.example`: `DATABASE_URL`, `WALMART_SOURCE`, `WALMART_USE_BROWSER`, `WA
 
 ## Planned / not live
 
-Catalog compare still does not use Prisma. Customer signup does: `Customer` + `CustomerSession` in SQLite (`prisma/dev.db`, gitignored). `/api/auth/register` emails a 6-digit code (`SignupCode`, 30 minutes) via SMTP (`SMTP_HOST`, `SMTP_FROM`, optional `SMTP_USER` / `SMTP_PASS` / `SMTP_PORT`). `/api/auth/verify` creates the customer; `/api/auth/resend` replaces the code. Password is scrypt, session is an httpOnly cookie. `StoreConnector` (do not wire into `getConnector` yet), Splink/Python, semantic/image entity-match (stub, never auto-link), Uber/Instacart as shelf (not `LIVE_VERIFIED`).
+Catalog compare still does not use Prisma. Customer signup does: `Customer` + `CustomerSession` in SQLite (`prisma/dev.db`, gitignored). `/api/auth/register` asks for the password twice and rejects a mismatch before it emails a 6-digit code (`SignupCode`, 30 minutes) via SMTP (`SMTP_HOST`, `SMTP_FROM`, optional `SMTP_USER` / `SMTP_PASS` / `SMTP_PORT`). `/api/auth/verify` creates the customer; `/api/auth/resend` replaces the code. Password is scrypt, session is an httpOnly cookie. `StoreConnector` (do not wire into `getConnector` yet), Splink/Python, semantic/image entity-match (stub, never auto-link), Uber/Instacart as shelf (not `LIVE_VERIFIED`).
 
 ## Shipped on this line (context for the next agent)
 

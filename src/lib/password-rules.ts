@@ -12,3 +12,9 @@ export function passwordRuleError(password: string): string | null {
   }
   return null;
 }
+
+/** Second signup entry must be the same string. Login does not ask again. */
+export function passwordConfirmError(password: string, confirm: string): string | null {
+  if (password !== confirm) return "Паролі не збігаються.";
+  return null;
+}
