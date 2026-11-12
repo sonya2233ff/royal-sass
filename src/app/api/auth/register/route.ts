@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { passwordConfirmError } from "@/lib/password-rules";
 import { beginSignup } from "@/lib/signup-verification";
 
 export const runtime = "nodejs";
@@ -10,12 +11,18 @@ export async function POST(request: Request) {
     name?: string;
     email?: string;
     password?: string;
+    confirmPassword?: string;
   };
   try {
+    const password = String(body.password ?? "");
+    const mismatch = passwordConfirmError(password, String(body.confirmPassword ?? ""));
+    if (mismatch) {
+      return NextResponse.json({ ok: false, error: mismatch }, { status: 400 });
+    }
     const result = await beginSignup({
       name: String(body.name ?? ""),
       email: String(body.email ?? ""),
-      password: String(body.password ?? ""),
+      password,
     });
     if (!result.ok) {
       return NextResponse.json(result, { status: 400 });

@@ -12,7 +12,7 @@ import {
   verifySignupCode,
   type AccountPublic,
 } from "@/lib/account-auth";
-import { passwordRuleError } from "@/lib/password-rules";
+import { passwordConfirmError, passwordRuleError } from "@/lib/password-rules";
 
 type Mode = "login" | "register";
 
@@ -23,6 +23,7 @@ export function AccountScreen({ mode }: { mode: Mode }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [code, setCode] = useState("");
@@ -47,14 +48,14 @@ export function AccountScreen({ mode }: { mode: Mode }) {
     setError(null);
     try {
       if (mode === "register") {
-        const passwordError = passwordRuleError(password);
+        const passwordError = passwordRuleError(password) ?? passwordConfirmError(password, confirmPassword);
         if (passwordError) {
           setError(passwordError);
           return;
         }
       }
       if (mode === "register") {
-        const result = await registerAccount({ name, email, password });
+        const result = await registerAccount({ name, email, password, confirmPassword });
         if (!result.ok) {
           setError(result.error);
           return;
@@ -112,6 +113,7 @@ export function AccountScreen({ mode }: { mode: Mode }) {
     void logoutAccount().then(() => {
       setAccount(null);
       setPassword("");
+      setConfirmPassword("");
     });
   }
 
@@ -205,11 +207,24 @@ export function AccountScreen({ mode }: { mode: Mode }) {
               />
             </label>
             {mode === "register" && (
+              <label>
+                Повторіть пароль
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  autoComplete="new-password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </label>
+            )}
+            {mode === "register" && (
               <ul className="rules">
                 <li>починається з великої літери</li>
                 <li>є хоча б одна літера</li>
                 <li>є хоча б один спеціальний символ</li>
                 <li>щонайменше 6 символів</li>
+                <li>обидва поля пароля однакові</li>
               </ul>
             )}
             {error && <p className="err">{error}</p>}
