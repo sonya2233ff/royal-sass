@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/waiter", label: "Офіціант" },
   { href: "/driver", label: "Водій" },
   { href: "/activity", label: "Історія" },
+  { href: "/business", label: "Заклад" },
   { href: "/dev/match-inspector", label: "Інспектор" },
 ] as const;
 

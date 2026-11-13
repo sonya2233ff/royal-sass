@@ -87,7 +87,7 @@ export function AccountScreen({ mode }: { mode: Mode }) {
         return;
       }
       setAccount(result.customer);
-      router.push("/");
+      router.push("/onboarding");
     } finally {
       setBusy(false);
     }
