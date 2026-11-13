@@ -11,7 +11,7 @@ export async function GET() {
   if (!customer) return NextResponse.json({ ok: false, error: "Увійди." }, { status: 401 });
   const overview = await businessOverview(customer.id);
   if (!overview.ok) return NextResponse.json(overview, { status: overview.status });
-  return NextResponse.json({ ok: true, ...overview });
+  return NextResponse.json(overview);
 }
 
 export async function POST(request: Request) {
