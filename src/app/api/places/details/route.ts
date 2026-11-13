@@ -6,10 +6,14 @@ import { allowRate } from "@/lib/rate-limit";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+function callerKey(request: Request, customerId: string | null): string {
+  if (customerId) return customerId;
+  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "guest";
+}
+
 export async function POST(request: Request) {
   const customer = await requireCustomer();
-  if (!customer) return NextResponse.json({ ok: false, error: "Увійди." }, { status: 401 });
-  if (!allowRate(`details:${customer.id}`, 20, 60_000)) {
+  if (!allowRate(`details:${callerKey(request, customer?.id ?? null)}`, customer ? 20 : 8, 60_000)) {
     return NextResponse.json({ ok: false, error: "Забагато запитів. Зачекай хвилину." }, { status: 429 });
   }
   const body = (await request.json().catch(() => ({}))) as { placeId?: string; sessionToken?: string };

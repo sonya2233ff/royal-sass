@@ -7,6 +7,7 @@ import {
   verifyPassword,
   type CustomerPublic,
 } from "@/lib/customer-auth";
+import { createBusinessWorkspace, validateLocationInput, type LocationInput } from "@/lib/business-location";
 import { prisma } from "@/lib/prisma";
 import { SIGNUP_CODE_TTL_MS, sendSignupCode } from "@/lib/send-email";
 
@@ -18,12 +19,30 @@ function newCode(): string {
   return randomInt(0, 1_000_000).toString().padStart(6, "0");
 }
 
+function workplaceJson(value: unknown): { ok: true; json: string } | { ok: false; error: string } {
+  if (!value || typeof value !== "object") return { ok: false, error: "Обери заклад, щоб створити акаунт." };
+  const body = value as { businessType?: string; useAsRouteOrigin?: boolean; location?: LocationInput };
+  if (!body.location) return { ok: false, error: "Обери заклад, щоб створити акаунт." };
+  const locationError = validateLocationInput(body.location);
+  if (locationError) return { ok: false, error: locationError };
+  return {
+    ok: true,
+    json: JSON.stringify({
+      businessType: body.businessType,
+      useAsRouteOrigin: Boolean(body.useAsRouteOrigin),
+      location: body.location,
+    }),
+  };
+}
+
 export async function beginSignup(
-  input: { name: string; email: string; password: string },
+  input: { name: string; email: string; password: string; workplace: unknown },
   send: SendSignupCode = sendSignupCode,
 ): Promise<{ ok: true; email: string } | { ok: false; error: string }> {
   const parsed = validateSignup(input);
   if (!parsed.ok) return parsed;
+  const workplace = workplaceJson(input.workplace);
+  if (!workplace.ok) return workplace;
   const existing = await prisma.customer.findUnique({ where: { email: parsed.email } });
   if (existing) return { ok: false, error: "Такий email уже є. Увійди." };
 
@@ -40,6 +59,7 @@ export async function beginSignup(
       name: parsed.name,
       passwordHash,
       codeHash,
+      workplaceJson: workplace.json,
       expiresAt,
       attempts: 0,
     },
@@ -47,6 +67,7 @@ export async function beginSignup(
       name: parsed.name,
       passwordHash,
       codeHash,
+      workplaceJson: workplace.json,
       expiresAt,
       attempts: 0,
     },
@@ -115,11 +136,26 @@ export async function confirmSignupCode(input: {
     });
     return { ok: false, error: "Невірний код." };
   }
+  if (!pending.workplaceJson) {
+    return { ok: false, error: "Обери заклад, щоб створити акаунт." };
+  }
+  let workplace: { businessType: string; useAsRouteOrigin: boolean; location: LocationInput };
+  try {
+    workplace = JSON.parse(pending.workplaceJson) as typeof workplace;
+  } catch {
+    return { ok: false, error: "Обери заклад, щоб створити акаунт." };
+  }
   const created = await createCustomerFromHash({
     name: pending.name,
     email,
     passwordHash: pending.passwordHash,
   });
+  if (!created.ok) return created;
+  const business = await createBusinessWorkspace(created.customer.id, workplace);
+  if (!business.ok) {
+    await prisma.customer.delete({ where: { id: created.customer.id } });
+    return { ok: false, error: business.error };
+  }
   await prisma.signupCode.deleteMany({ where: { email } });
   return created;
 }

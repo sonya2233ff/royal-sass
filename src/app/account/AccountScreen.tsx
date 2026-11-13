@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 import {
   fetchSession,
   loginAccount,
-  logoutAccount,
   registerAccount,
   resendSignupCode,
   verifySignupCode,
   type AccountPublic,
 } from "@/lib/account-auth";
 import { passwordConfirmError, passwordRuleError } from "@/lib/password-rules";
+import { OnboardingWizard } from "../onboarding/OnboardingWizard";
 
 type Mode = "login" | "register";
 
@@ -28,6 +28,7 @@ export function AccountScreen({ mode }: { mode: Mode }) {
   const [notice, setNotice] = useState<string | null>(null);
   const [code, setCode] = useState("");
   const [awaitingCode, setAwaitingCode] = useState(false);
+  const [choosingPlace, setChoosingPlace] = useState(false);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -55,13 +56,7 @@ export function AccountScreen({ mode }: { mode: Mode }) {
         }
       }
       if (mode === "register") {
-        const result = await registerAccount({ name, email, password, confirmPassword });
-        if (!result.ok) {
-          setError(result.error);
-          return;
-        }
-        setAwaitingCode(true);
-        setNotice(`Код надіслано на ${result.email}. Він діє 30 хвилин.`);
+        setChoosingPlace(true);
         return;
       }
       const result = await loginAccount({ email, password });
@@ -87,7 +82,7 @@ export function AccountScreen({ mode }: { mode: Mode }) {
         return;
       }
       setAccount(result.customer);
-      router.push("/onboarding");
+      router.push("/profile");
     } finally {
       setBusy(false);
     }
@@ -109,15 +104,25 @@ export function AccountScreen({ mode }: { mode: Mode }) {
     }
   }
 
-  function logout() {
-    void logoutAccount().then(() => {
-      setAccount(null);
-      setPassword("");
-      setConfirmPassword("");
+  async function chooseWorkplace(choice: {
+    businessType: string;
+    useAsRouteOrigin: boolean;
+    location: unknown;
+  }) {
+    const result = await registerAccount({
+      name,
+      email,
+      password,
+      confirmPassword,
+      workplace: choice,
     });
+    if (!result.ok) throw new Error(result.error);
+    setChoosingPlace(false);
+    setAwaitingCode(true);
+    setNotice(`Код надіслано на ${result.email}. Він діє 30 хвилин. Акаунт збережеться після коду.`);
   }
 
-  const title = mode === "register" ? "Реєстрація" : "Вхід";
+  const title = choosingPlace ? "Де ви працюєте" : mode === "register" ? "Реєстрація" : "Вхід";
   const otherHref = mode === "register" ? "/login" : "/register";
   const otherLabel = mode === "register" ? "Вже є акаунт? Увійти" : "Немає акаунта? Реєстрація";
 
@@ -130,9 +135,11 @@ export function AccountScreen({ mode }: { mode: Mode }) {
         <p className="kicker">Royal SASS</p>
         <h1 id="account-title">{awaitingCode ? "Код з листа" : title}</h1>
         <p className="lede">
-          {awaitingCode
-            ? "Введи код з листа. Він діє 30 хвилин. Після підтвердження акаунт зберігається в базі."
-            : "Ім’я та email зберігаються в базі кафе після підтвердження коду з листа. Пароль туди не записується відкритим текстом."}
+          {choosingPlace
+            ? "Акаунт ще не створено. Обери заклад, потім підтверди код з листа."
+            : awaitingCode
+            ? "Введи код з листа. Він діє 30 хвилин. Акаунт і заклад збережуться разом."
+            : "Спочатку дані акаунта, потім заклад. Пароль не зберігається відкритим текстом."}
         </p>
 
         {ready && account ? (
@@ -145,11 +152,15 @@ export function AccountScreen({ mode }: { mode: Mode }) {
               <Link href="/" className="solid linkish">
                 До товарів
               </Link>
-              <button type="button" className="ghost" onClick={logout}>
-                Вийти
-              </button>
             </div>
           </div>
+        ) : choosingPlace && mode === "register" ? (
+          <>
+            <button type="button" className="ghost" onClick={() => setChoosingPlace(false)}>
+              Назад
+            </button>
+            <OnboardingWizard onChosen={chooseWorkplace} />
+          </>
         ) : awaitingCode && mode === "register" ? (
           <form onSubmit={(e) => void submitCode(e)}>
             {notice && <p className="notice">{notice}</p>}
@@ -229,7 +240,7 @@ export function AccountScreen({ mode }: { mode: Mode }) {
             )}
             {error && <p className="err">{error}</p>}
             <button type="submit" className="solid" disabled={!ready || busy}>
-              {busy ? "…" : mode === "register" ? "Створити акаунт" : "Увійти"}
+              {busy ? "…" : mode === "register" ? "Далі" : "Увійти"}
             </button>
             <Link href={otherHref} className="switch">
               {otherLabel}

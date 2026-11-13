@@ -15,6 +15,7 @@ import {
   validateLocationInput,
   type LocationInput,
 } from "../lib/business-location";
+import { beginSignup, confirmSignupCode } from "../lib/signup-verification";
 
 function assert(cond: unknown, msg: string) {
   if (!cond) throw new Error(msg);
@@ -178,6 +179,9 @@ async function main() {
   const ownerA = await prisma.customer.create({
     data: { name: "Owner A", email: `loc-a-${stamp}@cafe.test`, passwordHash: "scrypt:test:00" },
   });
+  const signupEmail = `signup-place-${stamp}@cafe.test`;
+  let signupCustomerId: string | null = null;
+
   const ownerB = await prisma.customer.create({
     data: { name: "Owner B", email: `loc-b-${stamp}@cafe.test`, passwordHash: "scrypt:test:00" },
   });
@@ -185,6 +189,33 @@ async function main() {
     data: { name: "Driver A", email: `loc-d-${stamp}@cafe.test`, passwordHash: "scrypt:test:00" },
   });
   try {
+    const refused = await beginSignup(
+      { name: "No Place", email: signupEmail, password: "Cafe1!", workplace: null },
+      async () => {},
+    );
+    assert(!refused.ok, "signup without a workplace is refused");
+    let mailed = "";
+    const started = await beginSignup(
+      {
+        name: "With Place",
+        email: signupEmail,
+        password: "Cafe1!",
+        workplace: { businessType: "cafe", useAsRouteOrigin: true, location: cafe },
+      },
+      async (_email, code) => {
+        mailed = code;
+      },
+    );
+    assert(started.ok, started.ok ? "code sent" : started.error);
+    assert(!(await prisma.customer.findUnique({ where: { email: signupEmail } })), "no customer before the code");
+    const confirmed = await confirmSignupCode({ email: signupEmail, code: mailed });
+    assert(confirmed.ok, confirmed.ok ? "confirmed" : confirmed.error);
+    if (confirmed.ok) signupCustomerId = confirmed.customer.id;
+    const member = signupCustomerId
+      ? await prisma.businessMember.findFirst({ where: { customerId: signupCustomerId, role: "owner" } })
+      : null;
+    assert(member, "workplace is saved with the account");
+
     const created = await createBusinessWorkspace(ownerA.id, {
       businessType: "cafe",
       useAsRouteOrigin: true,
@@ -253,7 +284,8 @@ async function main() {
   } finally {
     if (savedKey) process.env.GOOGLE_MAPS_API_KEY = savedKey;
     else delete process.env.GOOGLE_MAPS_API_KEY;
-    const ids = [ownerA.id, ownerB.id, driver.id];
+    const ids = [ownerA.id, ownerB.id, driver.id, signupCustomerId].filter((id): id is string => Boolean(id));
+    await prisma.signupCode.deleteMany({ where: { email: signupEmail } });
     const memberships = await prisma.businessMember.findMany({ where: { customerId: { in: ids } } });
     const businessIds = [...new Set(memberships.map((row) => row.businessId))];
     if (businessIds.length) await prisma.business.deleteMany({ where: { id: { in: businessIds } } });

@@ -260,6 +260,8 @@ model SignupCode {
   name         String
   passwordHash String
   codeHash     String
+  /// Chosen cafe. The customer row is created only when this is set and the code matches.
+  workplaceJson String?
   expiresAt    DateTime
   attempts     Int      @default(0)
   createdAt    DateTime @default(now())

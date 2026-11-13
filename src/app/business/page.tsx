@@ -1,10 +1,5 @@
-import { BusinessLocationScreen } from "./BusinessLocationScreen";
-
-export const metadata = {
-  title: "Заклад — Royal SASS",
-  description: "Адреса закладу і початок маршрутів закупівель",
-};
+import { redirect } from "next/navigation";
 
 export default function BusinessPage() {
-  return <BusinessLocationScreen />;
+  redirect("/profile");
 }

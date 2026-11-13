@@ -46,7 +46,7 @@ function mapSrc(lat: number, lng: number): string {
   return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}`;
 }
 
-export function BusinessLocationScreen() {
+export function BusinessLocationScreen({ section = "profile" }: { section?: "profile" | "settings" }) {
   const [overview, setOverview] = useState<Overview | null>(null);
   const [missing, setMissing] = useState(false);
   const [signedOut, setSignedOut] = useState(false);
@@ -185,7 +185,7 @@ export function BusinessLocationScreen() {
   return (
     <section className="screen">
       <div className="sheet">
-        <p className="kicker">Заклад</p>
+        <p className="kicker">{section === "settings" ? "Налаштування" : "Профіль"}</p>
         {signedOut && (
           <p>
             Увійди, щоб бачити адресу. <Link href="/login">Вхід</Link>
@@ -193,20 +193,22 @@ export function BusinessLocationScreen() {
         )}
         {missing && (
           <p>
-            {error ?? "Заклад ще не створено."} <Link href="/onboarding">Додати заклад</Link>
+            {error ?? "Заклад ще не створено."} <Link href="/register">Реєстрація</Link>
           </p>
         )}
         {overview && (
           <>
-            <h1>{overview.business.name}</h1>
+            <h1>{section === "settings" ? "Налаштування" : overview.business.name}</h1>
             <p className="lede">
-              {owner
-                ? "Цю адресу бачить лише твій заклад. Зміна адреси не переписує вже пораховані маршрути."
-                : "Адресу і початок маршруту може змінювати лише власник."}
+              {section === "settings"
+                ? "Ці параметри бачить лише твій заклад. Вони рахують дорогу і не змінюють ціни товарів."
+                : owner
+                  ? "Цю адресу бачить лише твій заклад. Зміна адреси не переписує вже пораховані маршрути."
+                  : "Адресу і початок маршруту може змінювати лише власник."}
             </p>
             {notice && <p className="notice">{notice}</p>}
             {error && <p className="err">{error}</p>}
-            <div className="cards">
+            {section === "profile" && <div className="cards">
               {overview.locations.map((location) => (
                 <article key={location.id} className="card">
                   <h2>
@@ -242,8 +244,8 @@ export function BusinessLocationScreen() {
                   )}
                 </article>
               ))}
-            </div>
-            {owner && (
+            </div>}
+            {section === "profile" && owner && (
               <>
                 <button type="button" className="ghost" onClick={() => setAdding((value) => !value)}>
                   {adding ? "Сховати форму філії" : "Додати філію"}
@@ -278,7 +280,9 @@ export function BusinessLocationScreen() {
                     </form>
                   </div>
                 )}
-                {transport && (
+              </>
+            )}
+            {section === "settings" && owner && transport && (
                   <form className="stack" onSubmit={(event) => void saveTransport(event)}>
                     <h2>Витрати на дорогу</h2>
                     <p className="muted">
@@ -361,8 +365,6 @@ export function BusinessLocationScreen() {
                       Зберегти витрати
                     </button>
                   </form>
-                )}
-              </>
             )}
           </>
         )}

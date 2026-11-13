@@ -32,10 +32,20 @@ function mapSrc(lat: number, lng: number): string {
   return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}`;
 }
 
-export function OnboardingWizard() {
+export function OnboardingWizard({
+  onChosen,
+}: {
+  /** When set, the cafe is chosen during registration and the account is not created here. */
+  onChosen?: (choice: {
+    businessType: string;
+    useAsRouteOrigin: boolean;
+    location: PlaceDetails;
+  }) => Promise<void>;
+} = {}) {
+  const embedded = Boolean(onChosen);
   const router = useRouter();
-  const [ready, setReady] = useState(false);
-  const [signedIn, setSignedIn] = useState(false);
+  const [ready, setReady] = useState(embedded);
+  const [signedIn, setSignedIn] = useState(embedded);
   const [step, setStep] = useState<Step>("type");
   const [businessType, setBusinessType] = useState<string>("cafe");
   const [draft, setDraft] = useState<Draft | null>(null);
@@ -45,6 +55,7 @@ export function OnboardingWizard() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
+    if (embedded) return;
     let cancelled = false;
     fetchSession().then(async (customer) => {
       if (cancelled) return;
@@ -57,8 +68,8 @@ export function OnboardingWizard() {
       const res = await fetch("/api/business");
       if (res.ok) {
         const data = (await res.json()) as { ok?: boolean };
-        if (data.ok) {
-          router.replace("/business");
+          if (data.ok) {
+          router.replace("/profile");
           return;
         }
       }
@@ -67,7 +78,7 @@ export function OnboardingWizard() {
     return () => {
       cancelled = true;
     };
-  }, [router]);
+  }, [embedded, router]);
 
   async function geocode(event: React.FormEvent) {
     event.preventDefault();
@@ -116,40 +127,45 @@ export function OnboardingWizard() {
     if (!draft || useOrigin == null) return;
     setBusy(true);
     setError(null);
+    const location = {
+      ...draft,
+      formattedAddress:
+        draft.formattedAddress ||
+        [draft.streetAddress, draft.city, draft.province, draft.postalCode, draft.country].filter(Boolean).join(", "),
+    };
     try {
+      if (onChosen) {
+        await onChosen({ businessType, useAsRouteOrigin: useOrigin, location });
+        return;
+      }
       const res = await fetch("/api/business", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          businessType,
-          useAsRouteOrigin: useOrigin,
-          location: {
-            ...draft,
-            formattedAddress:
-              draft.formattedAddress ||
-              [draft.streetAddress, draft.city, draft.province, draft.postalCode, draft.country].filter(Boolean).join(", "),
-          },
-        }),
+        body: JSON.stringify({ businessType, useAsRouteOrigin: useOrigin, location }),
       });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
       if (!data.ok) {
         setError(data.error ?? "Не вдалося створити заклад.");
         return;
       }
-      router.push("/business");
+      router.push("/profile");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Не вдалося продовжити.");
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <section className="screen">
+    <section className={embedded ? "embed" : "screen"}>
       <div className="sheet">
+        {!embedded && (
         <Link href="/" className="back">
           ‹ Кафе
         </Link>
-        <p className="kicker">Заклад</p>
-        <h1>Де ви працюєте</h1>
+        )}
+        {!embedded && <p className="kicker">Заклад</p>}
+        {!embedded && <h1>Де ви працюєте</h1>}
         <p className="lede">
           Знайди ресторан або кафе, перевір адресу і обери, чи звідси починаються закупівлі.
         </p>
@@ -278,12 +294,16 @@ export function OnboardingWizard() {
             </div>
             {error && <p className="err">{error}</p>}
             <button type="button" className="solid" disabled={busy || useOrigin == null} onClick={() => void createWorkspace()}>
-              {busy ? "Створюю…" : "Створити заклад"}
+              {busy ? "…" : embedded ? "Далі" : "Створити заклад"}
             </button>
           </div>
         )}
       </div>
       <style jsx>{`
+        .embed .sheet {
+          width: 100%;
+          padding: 0;
+        }
         .screen {
           min-height: calc(100vh - 3.2rem);
           background:

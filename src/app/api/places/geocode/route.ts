@@ -6,10 +6,14 @@ import { allowRate } from "@/lib/rate-limit";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+function callerKey(request: Request, customerId: string | null): string {
+  if (customerId) return customerId;
+  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "guest";
+}
+
 export async function POST(request: Request) {
   const customer = await requireCustomer();
-  if (!customer) return NextResponse.json({ ok: false, error: "Увійди." }, { status: 401 });
-  if (!allowRate(`geocode:${customer.id}`, 15, 60_000)) {
+  if (!allowRate(`geocode:${callerKey(request, customer?.id ?? null)}`, customer ? 15 : 8, 60_000)) {
     return NextResponse.json({ ok: false, error: "Забагато перевірок адреси. Зачекай хвилину." }, { status: 429 });
   }
   const body = (await request.json().catch(() => ({}))) as {

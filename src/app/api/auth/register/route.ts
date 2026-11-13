@@ -13,6 +13,7 @@ export async function POST(request: Request) {
     email?: string;
     password?: string;
     confirmPassword?: string;
+    workplace?: unknown;
   };
   try {
     const unavailable = databaseConfigError();
@@ -28,6 +29,7 @@ export async function POST(request: Request) {
       name: String(body.name ?? ""),
       email: String(body.email ?? ""),
       password,
+      workplace: body.workplace,
     });
     if (!result.ok) {
       return NextResponse.json(result, { status: 400 });
