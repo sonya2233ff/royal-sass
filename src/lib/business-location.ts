@@ -51,13 +51,14 @@ function isCanada(country: string): boolean {
 let constraintsReady: Promise<void> | null = null;
 
 export function ensureBusinessConstraints(): Promise<void> {
+  const flag = (process.env.DATABASE_URL ?? "").startsWith("postgres") ? "TRUE" : "1";
   constraintsReady ??= prisma
     .$executeRawUnsafe(
-      `CREATE UNIQUE INDEX IF NOT EXISTS business_location_one_primary ON "BusinessLocation" ("businessId") WHERE "isPrimary" = 1`,
+      `CREATE UNIQUE INDEX IF NOT EXISTS business_location_one_primary ON "BusinessLocation" ("businessId") WHERE "isPrimary" = ${flag}`,
     )
     .then(() =>
       prisma.$executeRawUnsafe(
-        `CREATE UNIQUE INDEX IF NOT EXISTS business_location_one_default_origin ON "BusinessLocation" ("businessId") WHERE "isDefaultRouteOrigin" = 1`,
+        `CREATE UNIQUE INDEX IF NOT EXISTS business_location_one_default_origin ON "BusinessLocation" ("businessId") WHERE "isDefaultRouteOrigin" = ${flag}`,
       ),
     )
     .then(() =>
