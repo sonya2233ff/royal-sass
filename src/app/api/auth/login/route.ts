@@ -1,0 +1,29 @@
+import { NextResponse } from "next/server";
+import { loginCustomer } from "@/lib/customer-auth";
+import { writeCustomerToken } from "@/lib/customer-cookie";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export async function POST(request: Request) {
+  const body = (await request.json().catch(() => ({}))) as {
+    email?: string;
+    password?: string;
+  };
+  try {
+    const result = await loginCustomer({
+      email: String(body.email ?? ""),
+      password: String(body.password ?? ""),
+    });
+    if (!result.ok) {
+      return NextResponse.json(result, { status: 400 });
+    }
+    await writeCustomerToken(result.token);
+    return NextResponse.json({ ok: true, customer: result.customer });
+  } catch (e) {
+    return NextResponse.json(
+      { ok: false, error: e instanceof Error ? e.message : "login failed" },
+      { status: 500 },
+    );
+  }
+}
