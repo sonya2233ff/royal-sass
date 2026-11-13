@@ -1,21 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { torontoDateIso } from "@/lib/activity-log";
-import { formatDate, formatEconomy, money, summarize, type Day } from "./data";
-import {
-  monthKeyFromIso,
-  monthSeries,
-  savingsMonths,
-  type MonthPoint,
-} from "./monthly-savings";
+import { formatEconomy, money, summarize, type Day } from "./data";
+import { monthKeyFromIso, monthSeries, savingsMonths } from "./monthly-savings";
 
 const W = 640;
 const H = 260;
 const PAD = { l: 46, r: 16, t: 16, b: 32 };
 const GREEN = "#2f6a3a";
-const INK = "#2f4a3a";
 const GRID = "rgba(47, 74, 58, 0.14)";
 const AXIS = "#5c665c";
 
@@ -39,7 +32,6 @@ export function SavingsChart({ days }: { days: Day[] }) {
   const today = torontoDateIso();
   const months = useMemo(() => savingsMonths(days, today), [days, today]);
   const [pickedMonth, setPickedMonth] = useState<string | null>(null);
-  const [pickedDate, setPickedDate] = useState<string | null>(null);
 
   const monthKey =
     pickedMonth && months.some((month) => month.key === pickedMonth)
@@ -67,17 +59,6 @@ export function SavingsChart({ days }: { days: Day[] }) {
   }, [days, monthKey]);
   const savedPercent = economy.expensive > 0 ? (economy.saved / economy.expensive) * 100 : 0;
 
-  const active: MonthPoint | null = useMemo(() => {
-    if (pickedDate) {
-      const hit = series.find((point) => point.date === pickedDate && point.hasRun);
-      if (hit) return hit;
-    }
-    for (let i = series.length - 1; i >= 0; i -= 1) {
-      if (series[i].hasRun) return series[i];
-    }
-    return null;
-  }, [series, pickedDate]);
-
   const plotW = W - PAD.l - PAD.r;
   const plotH = H - PAD.t - PAD.b;
   const yMax = niceMax(Math.max(0, ...series.map((point) => point.cumulative)));
@@ -94,7 +75,6 @@ export function SavingsChart({ days }: { days: Day[] }) {
       ? `${coords[0].x},${baseline} ${line} ${coords[coords.length - 1].x},${baseline}`
       : "";
   const ticks = [0, yMax / 2, yMax];
-  const activeLabel = active ? formatDate(active.date) : null;
 
   return (
     <section className="chart" aria-label="Заощадження за місяць">
@@ -116,10 +96,7 @@ export function SavingsChart({ days }: { days: Day[] }) {
               type="button"
               role="tab"
               aria-selected={on}
-              onClick={() => {
-                setPickedMonth(month.key);
-                setPickedDate(null);
-              }}
+              onClick={() => setPickedMonth(month.key)}
             >
               <strong>{month.label}</strong>
               <span>{month.runs > 0 ? `− ${money(month.saved)}` : "немає даних"}</span>
@@ -148,7 +125,7 @@ export function SavingsChart({ days }: { days: Day[] }) {
           />
         )}
         {series.map((point) => {
-          const show = point.day === 1 || point.day === series.length || point.day % 5 === 0 || point.date === active?.date;
+          const show = point.day === 1 || point.day === series.length || point.day % 5 === 0;
           if (!show) return null;
           return (
             <text
@@ -156,9 +133,8 @@ export function SavingsChart({ days }: { days: Day[] }) {
               x={xOf(point.day)}
               y={H - 10}
               textAnchor="middle"
-              fill={point.date === active?.date ? INK : AXIS}
+              fill={AXIS}
               fontSize={12}
-              fontWeight={point.date === active?.date ? 700 : 400}
             >
               {point.day}
             </text>
@@ -166,56 +142,16 @@ export function SavingsChart({ days }: { days: Day[] }) {
         })}
         {series
           .filter((point) => point.hasRun)
-          .map((point) => {
-            const on = active?.date === point.date;
-            const x = xOf(point.day);
-            const y = yOf(point.cumulative);
-            return (
-              <g key={point.date}>
-                <circle
-                  cx={x}
-                  cy={y}
-                  r={14}
-                  fill="transparent"
-                  style={{ cursor: "pointer" }}
-                  tabIndex={0}
-                  role="button"
-                  aria-pressed={on}
-                  aria-label={`${formatDate(point.date).full}, за день ${money(point.saved)}, накопичено ${money(point.cumulative)}`}
-                  onClick={() => setPickedDate(point.date)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      setPickedDate(point.date);
-                    }
-                  }}
-                />
-                <circle cx={x} cy={y} r={on ? 6 : 4.5} fill={on ? INK : GREEN} pointerEvents="none" />
-              </g>
-            );
-          })}
+          .map((point) => (
+            <circle
+              key={point.date}
+              cx={xOf(point.day)}
+              cy={yOf(point.cumulative)}
+              r={4.5}
+              fill={GREEN}
+            />
+          ))}
       </svg>
-      <div className="detail">
-        {active && activeLabel ? (
-          <>
-            <div>
-              <strong>{activeLabel.full}</strong>
-              <span className="muted weekday">{activeLabel.weekday}</span>
-            </div>
-            <div>
-              <b>{money(active.saved)}</b>
-              <span className="muted">за день</span>
-            </div>
-            <div>
-              <b className="pos">{money(active.cumulative)}</b>
-              <span className="muted">накопичено за місяць</span>
-            </div>
-            <Link href={`/activity/${active.date}`}>Відкрити день</Link>
-          </>
-        ) : (
-          <p className="muted">У цьому місяці ще немає зданих закупівель.</p>
-        )}
-      </div>
       <style jsx>{`
         .chart {
           margin: 0 0 1.15rem;
@@ -271,39 +207,6 @@ export function SavingsChart({ days }: { days: Day[] }) {
           width: 100%;
           height: auto;
           display: block;
-        }
-        .detail {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.75rem 1.1rem;
-          align-items: end;
-          margin-top: 0.35rem;
-          padding-top: 0.55rem;
-          border-top: 1px solid rgba(40, 50, 40, 0.1);
-        }
-        .detail strong,
-        .detail b {
-          display: block;
-          font-size: 0.95rem;
-        }
-        .muted {
-          display: block;
-          margin-top: 0.1rem;
-          font-size: 0.74rem;
-          opacity: 0.65;
-        }
-        .weekday {
-          text-transform: capitalize;
-        }
-        .pos {
-          color: #2f6a3a;
-        }
-        .detail :global(a) {
-          margin-left: auto;
-          align-self: center;
-          color: #2f4a3a;
-          font-weight: 700;
-          font-size: 0.86rem;
         }
       `}</style>
     </section>
