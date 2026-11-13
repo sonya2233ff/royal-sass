@@ -15,6 +15,7 @@ import {
   ukProductCount,
   type Day,
 } from "./data";
+import { SavingsChart } from "./SavingsChart";
 
 export function ActivityPortal() {
   const [days, setDays] = useState<Day[]>([]);
@@ -92,6 +93,8 @@ export function ActivityPortal() {
           <span>заощаджено vs найдорожчий план</span>
         </div>
       </section>
+
+      <SavingsChart days={days} />
 
       {days.length === 0 ? (
         <p className="empty">
