@@ -155,6 +155,94 @@ model Customer {
   passwordHash String
   createdAt    DateTime          @default(now())
   sessions     CustomerSession[]
+  memberships  BusinessMember[]
+}
+
+/// Cafe / restaurant workspace. One owner creates it after their own account exists.
+model Business {
+  id           String               @id @default(cuid())
+  name         String
+  businessType String
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  members      BusinessMember[]
+  locations    BusinessLocation[]
+  transport    TransportSettings?
+  routeSnapshots RouteSnapshot[]
+}
+
+/// owner may edit locations. waiter and driver may read, not edit.
+model BusinessMember {
+  id         String   @id @default(cuid())
+  businessId String
+  customerId String
+  role       String
+  createdAt  DateTime @default(now())
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, customerId])
+  @@index([customerId])
+}
+
+/// A branch of a business. Address text from Google is refreshed within 30 days.
+/// Place IDs may be kept. Manual addresses are the owner's own text.
+model BusinessLocation {
+  id                   String   @id @default(cuid())
+  businessId           String
+  locationName         String
+  formattedAddress     String
+  streetAddress        String
+  city                 String
+  province             String
+  postalCode           String
+  country              String   @default("CA")
+  latitude             Float?
+  longitude            Float?
+  coordinatesFetchedAt DateTime?
+  contentFetchedAt     DateTime?
+  googlePlaceId        String?
+  isPrimary            Boolean  @default(false)
+  isDefaultRouteOrigin Boolean  @default(false)
+  source               String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  business             Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId])
+  @@index([googlePlaceId])
+}
+
+model TransportSettings {
+  id                      String   @id @default(cuid())
+  businessId              String   @unique
+  fuelLitresPer100Km      Float    @default(8)
+  fuelPricePerLitre       Float    @default(1.6)
+  driverHourlyCost        Float    @default(20)
+  vehicleCostPerKm        Float?
+  useInclusiveVehicleCost Boolean  @default(false)
+  parkingCost             Float    @default(0)
+  tollCost                Float    @default(0)
+  updatedAt               DateTime @updatedAt
+  business                Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+/// Frozen route math. Later address edits must not rewrite these rows.
+model RouteSnapshot {
+  id               String   @id @default(cuid())
+  businessId       String
+  kind             String
+  originLat        Float
+  originLng        Float
+  originLabel      String
+  stopsJson        String
+  distanceMeters   Int?
+  durationSeconds  Int?
+  transportJson    String
+  createdAt        DateTime @default(now())
+  business         Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId])
 }
 
 model CustomerSession {
@@ -172,6 +260,8 @@ model SignupCode {
   name         String
   passwordHash String
   codeHash     String
+  /// Chosen cafe. The customer row is created only when this is set and the code matches.
+  workplaceJson String?
   expiresAt    DateTime
   attempts     Int      @default(0)
   createdAt    DateTime @default(now())

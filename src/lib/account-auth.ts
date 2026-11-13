@@ -58,6 +58,7 @@ export async function registerAccount(input: {
   email: string;
   password: string;
   confirmPassword: string;
+  workplace: unknown;
 }): Promise<RegisterResult> {
   const data = await postJson("/api/auth/register", input);
   if (!data.ok || !data.pending || !data.email) {

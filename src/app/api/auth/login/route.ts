@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { loginCustomer } from "@/lib/customer-auth";
 import { writeCustomerToken } from "@/lib/customer-cookie";
+import { databaseConfigError, publicDbError } from "@/lib/database-url";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,6 +12,10 @@ export async function POST(request: Request) {
     password?: string;
   };
   try {
+    const unavailable = databaseConfigError();
+    if (unavailable) {
+      return NextResponse.json({ ok: false, error: unavailable }, { status: 503 });
+    }
     const result = await loginCustomer({
       email: String(body.email ?? ""),
       password: String(body.password ?? ""),
@@ -22,7 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, customer: result.customer });
   } catch (e) {
     return NextResponse.json(
-      { ok: false, error: e instanceof Error ? e.message : "login failed" },
+      { ok: false, error: publicDbError(e) ?? (e instanceof Error ? e.message : "login failed") },
       { status: 500 },
     );
   }
